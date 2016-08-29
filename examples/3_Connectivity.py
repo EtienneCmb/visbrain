@@ -52,7 +52,7 @@ print('Methods 1 and 2 equivalent :', np.array_equal(c_select, ~c_connect.mask +
 # if c_colorby is 'count', it's the number of connections which pear node
 # drive the colormap. If 'strength', it's the connectivity strength between
 # two nodes. Warning with this second method, which is much much slower...
-c_colorby = 'strength'
+c_colorby = 'count'
 
 vb = vbrain(s_xyz=s_xyz, s_color='crimson', s_data=s_data, s_radiusmin=s_radiusmin, s_radiusmax=s_radiusmax, s_opacity=s_opacity, a_opacity=0.05,
             cmap=cmap, cmap_vmin=cmap_vmin, cmap_vmax=cmap_vmax, cmap_under=cmap_under, cmap_over=cmap_over, c_connect=c_connect, c_colorby=c_colorby,
