@@ -1,15 +1,19 @@
 # visbrain
-Connectivity on a standard MNI brain using vispy (GPU)
+Connectivity on a standard MNI brain using vispy (GPU). Tested on python 3
 
-## Installation:
-
+## Installation
+### Vispy
 Install the developper version of vispy:
 pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
 
-## First step:
-- create a *.ui qt ui (for example: main_visbrain.ui)
-- In a terminal run: pyuic4 main_visbrain.ui -o main_visbrain.py
-- In visbrain.py, we import main_visbrain.py
+### Visbrain
+Clone repository: 
+git clone https://github.com/EtienneCmb/visbrain.git
 
-## TODO
-A to do list :D
+Then, copy directly the visbrain folder to your site-packages folder (usually .../anaconda3/lib/python3.5/site-packages)
+
+
+![alt tag](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+
+
+
