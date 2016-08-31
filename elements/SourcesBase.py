@@ -3,6 +3,7 @@ import os
 from warnings import warn
 
 import vispy.scene.visuals as visu
+import vispy.visuals.transforms as vist
 
 from ..utils import color2vb, normalize
 
@@ -14,25 +15,31 @@ class SourcesBase(object):
     """Class for sources creation
     """
 
-    def __init__(self, canvas, **kwargs):
+    def __init__(self, canvas, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0,
+                 s_scaling=False, s_transform=[], s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), **kwargs):
         # Initialize elements :
         self.canvas = canvas
-        self.xyz = kwargs['s_xyz']
-        self.data = kwargs['s_data']
-        self.color = kwargs['s_color']
-        self.alpha = kwargs['s_alpha']
-        self.scaling = kwargs['s_scaling']
-        self.transform = kwargs['s_transform']
-        self.radiusmin = kwargs['s_radiusmin']*1.5
-        self.radiusmax = kwargs['s_radiusmax']*1.5
+        self.xyz = s_xyz
+        self.data = s_data
+        self.color = s_color
+        self.alpha = s_opacity
+        self.scaling = s_scaling
+        self.transform = s_transform
+        self.radiusmin = s_radiusmin*1.5
+        self.radiusmax = s_radiusmax*1.5
         self._defcolor = 'slateblue'
         self._rescale = 3.0
         self.shading = 'smooth'
+        self.stext = s_text
+        self.stextcolor = s_textcolor
+        self.stextsize = s_textsize
+        self.stextshift = s_textshift
 
         # Plot :
         if self.xyz is not None:
             self.prepare2plot()
             self.plot()
+            self.text_plot()
 
     def __len__(self):
         return len(np.where(self.data.mask == False)[0])
@@ -102,6 +109,12 @@ class SourcesBase(object):
         else:
             self.sData = self.array2radius(self.data.data, vmin=self.radiusmin, vmax=self.radiusmax, rescale=self.scaling)
 
+        # --------------------------------------------------------------------
+        # Check text :
+        if self.stext is not None:
+            if len(self.stext) != len(self):
+                raise ValueError("The length of text data must be the same as the number of electrodes")
+
 
     def array2radius(self, data, vmin=0.02, vmax=0.05, rescale=True):
         """Transform an array of data to source's radius
@@ -156,3 +169,19 @@ class SourcesBase(object):
         """
         """
         self.data.mask = reset_to
+
+    def text_plot(self):
+        """Plot text for each source
+        """
+        if self.stext is not None:
+            self.stextmesh = visu.Text(text=self.stext, color=self.stextcolor, font_size=self.stextsize,
+                             pos=self.xyz, bold=True)
+            self.stextmesh.transform = vist.STTransform(translate=self.stextshift)
+            self.canvas.add(self.stextmesh)
+
+    def text_update(self):
+        """Update text elements
+        """
+        self.stextmesh.font_size = self.stextsize
+        self.stextmesh.color = self.stextcolor
+        self.stextmesh.update()
