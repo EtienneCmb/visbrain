@@ -16,7 +16,7 @@ s_opacity = 0.5 	# Sources opacity
 s_data = np.round(100*np.random.rand(s_xyz.shape[0])-50)
 
 # Control the dynamic range of sources radius :
-s_radiusmin, s_radiusmax = 2, 7
+s_radiusmin, s_radiusmax, s_edgecolor = 2, 7, 'white'
 
 # Colormap properties :
 cmap = 'viridis'				# Matplotlib colormap
@@ -53,8 +53,9 @@ print('Methods 1 and 2 equivalent :', np.array_equal(c_select, ~c_connect.mask +
 # drive the colormap. If 'strength', it's the connectivity strength between
 # two nodes. Warning with this second method, which is much much slower...
 c_colorby = 'count'
+c_radiusmin = 4
 
 vb = vbrain(s_xyz=s_xyz, s_color='crimson', s_data=s_data, s_radiusmin=s_radiusmin, s_radiusmax=s_radiusmax, s_opacity=s_opacity, a_opacity=0.05,
             cmap=cmap, cmap_vmin=cmap_vmin, cmap_vmax=cmap_vmax, cmap_under=cmap_under, cmap_over=cmap_over, c_connect=c_connect, c_colorby=c_colorby,
-            c_radiusmin=2, c_radiusmax=3)
+            c_radiusmin=c_radiusmin)
 vb.show()
