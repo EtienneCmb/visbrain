@@ -24,6 +24,7 @@ class AtlasTransform(object):
         """
         """
         if projection == 'internal':
-            self.atlas.mesh.set_gl_state('translucent', depth_test=False, cull_face=True)
+            self.atlas.mesh.set_gl_state('translucent', depth_test=False, cull_face=True, blend=True, blend_func=('src_alpha', 'one_minus_src_alpha'))
         else:
-            self.atlas.mesh.set_gl_state('translucent', depth_test=True, cull_face=False)
+            self.atlas.mesh.set_gl_state('translucent', depth_test=True, cull_face=False, blend=True, blend_func=('src_alpha', 'one_minus_src_alpha'))
+        self.atlas.mesh.update_gl_state()

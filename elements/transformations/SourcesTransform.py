@@ -1,15 +1,15 @@
 from warnings import warn
 import numpy as np
 
-from ...utils import slider2opacity, array2colormap
+from ...utils import slider2opacity, array2colormap, normalize
 
 class SourcesTransform(object):
 
     """docstring for SourcesTransform
     """
 
-    def __init__(self, **kwargs):
-        self.radius = kwargs['t_radius']
+    def __init__(self, t_radius=10.0, **kwargs):
+        self.radius = t_radius=10.0
         self.current_mask = None
 
 
@@ -129,9 +129,11 @@ class SourcesTransform(object):
         for i, k in enumerate(idxunmasked):
             self.progressbar.setValue(100*k/N)
             # Find index :
-            idx = self._proximal_vertices(vert, xyz[k, :], self.radius, contribute=contribute)
+            idx, eucl = self._proximal_vertices(vert, xyz[k, :], self.radius, contribute=contribute)
             # Update mask :
-            mask[idx] += data[k]
+            fact = 1-(eucl/self.radius)
+            fact = normalize(fact, tomin=0.0, tomax=1)
+            mask[idx] += data[k]*fact
             prop[idx] += 1
         return prop, mask
 
@@ -151,7 +153,7 @@ class SourcesTransform(object):
             idx = np.where((eucl <= radius) & (np.sign(vert[:, 0]) == np.sign(xyz[0])))
         else:
             idx = np.where(eucl <= radius)
-        return idx
+        return idx, eucl[idx]
 
 
     def _closest_vertex(self, vert, xyz, contribute=False):
@@ -209,6 +211,8 @@ class SourcesTransform(object):
         # Set ~non_zero to default brain color :
         if non_zero is not False:
             cmap[np.invert(non_zero), 0:3] = self.atlas.d_vcolor[np.invert(non_zero), 0:3]
+        # from scipy.ndimage.filters import gaussian_filter
+        # cmap[:, 0:3] = gaussian_filter(cmap[:, 0:3], sigma=0.2, mode='reflect')
         # Update mesh with cmap :
         self.atlas.mesh.mesh_data.set_vertex_colors(cmap)
         self.atlas.mesh.mesh_data_changed()
