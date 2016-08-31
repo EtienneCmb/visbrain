@@ -36,7 +36,10 @@ def color2vb(color=None, default=(1,1,1), length=1, alpha=1.0):
         if color is None:
             coltuple = default
         # Static color :
-        elif isinstance(color, tuple):
+        elif isinstance(color, (tuple, list)):
+            if len(color) == 4:
+                alpha=color[-1]
+                color=color[0:-1]
             coltuple = color
         # Matplotlib color :
         elif isinstance(color, str) and (color[0] is not '#'):

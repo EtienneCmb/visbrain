@@ -35,7 +35,7 @@ class vbrain(uiInit, uiElements, elements):
             (N,). If s_data is None, all sources will have the same value. The parameter
             s_data can be masked using numpy.ma module.
 
-        s_color: string/list/ndarray, (def: red)
+        s_color: string/list/ndarray, (def: 'red')
             Color of each source sphere. If s_color is a single string,
             all sphere will have the same color. If it's' a list of strings,
             the length must be N. Alternatively, s_color can be a (N, 3) RGB
@@ -51,6 +51,20 @@ class vbrain(uiInit, uiElements, elements):
         s_scaling: bool, (def: True)
             If s_render is 'marker', control if sources have to be scaled when zooming
             or not.
+
+        s_text: list/tuple, (def: None)
+            Set text to each electrode. s_text should be an iterable object,
+            composed of strings, with the same length as the number of sources.
+
+        s_textcolor: string/list/ndarray, (def: 'k')
+            A single color element for all the text
+
+        s_textsize: int, (def: 3)
+            Fontsize of text elements
+
+        s_textshift: list/tuple, (def: (0,1,0))
+            Translate the text along (x, y, z) coordinates to improve text
+            visibility
 
         a_color: tuple, (def: (1,1,1))
             RGB colors of the MNI brain.
@@ -106,43 +120,26 @@ class vbrain(uiInit, uiElements, elements):
         >>> s_color = ["#3498db", "#e74c3c", "#2ecc71"]
         >>> # Add data to sources :
         >>> s_data = [100, 0.2, 27]
-        >>> # Because in this example there's a small number of sources,
-        >>> # turn the rendering properties to a more realistic one :
-        >>> s_render = 'sphere'
         >>> # Define a visbrain instance with previous parameters :
-        >>> vb = vbrain(s_xyz=s_xyz, s_data=s_data, s_color=s_color, s_render=s_render)
+        >>> vb = vbrain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)
         >>> # Finally, display the interface :
         >>> vb.show()
     """
-
-    def __init__(self, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0, 
-                 s_radiusmax=10.0, s_scaling=False, a_color=(1.0,1.0,1.0), a_opacity=0.1, 
-                 a_projection='internal', a_template='B1', a_vertices=None, a_faces=None, a_shading='smooth',
-                 c_connect=None, c_select=None, c_colorby='count', c_radiusmin=2.0, c_radiusmax=4.0, #c_op
-                 cmap='inferno', cmap_vmin=None, cmap_vmax=None, cmap_under=None, cmap_over=None, 
-                 cb_export=True, cb_fontsize=15, cb_label='', t_radius=10.0, ui_bgcolor=(0.09, 0.09, 0.09)):
+    def __init__(self, *args, **kwargs):
 
         # ------ App creation ------
         # Create the app and initialize all graphical elements :
         self._app = QtGui.QApplication(sys.argv)
-        uiInit.__init__(self, ui_bgcolor)
+        uiInit.__init__(self, kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09)))
 
         # # ------ Objects creation ------
-        elements.__init__(self, self.view.wc, self.progressBar, a_opacity=a_opacity, a_color=a_color, a_template=a_template,
-                          a_projection=a_projection, a_vertices=a_vertices, a_faces=a_faces, a_shading=a_shading,
-                          s_xyz=s_xyz, s_data=s_data, s_color=s_color, s_alpha=s_opacity, s_radiusmin=s_radiusmin,
-                          s_radiusmax=s_radiusmax, c_xyz=s_xyz, c_connect=c_connect,
-                          c_select=c_select, c_colorby=c_colorby, c_radiusmin=c_radiusmin, c_radiusmax=c_radiusmax,
-                          s_scaling=s_scaling, t_radius=t_radius, cmap=cmap, cmap_vmin=cmap_vmin,
-                          cmap_vmax=cmap_vmax, cmap_under=cmap_under, cmap_over=cmap_over, cb_export=cb_export,
-                          cb_fontsize=cb_fontsize, cb_label=cb_label)
+        elements.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
         
 
         # ------ UI to visbrain ------
         # Link UI and visbrain function :
         uiElements.__init__(self)
-        # vbUi2cmd.__init__(self)
 
         # # ------ Cameras ------
         # # Main camera :
