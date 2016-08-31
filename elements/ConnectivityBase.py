@@ -17,16 +17,17 @@ class ConnectivityBase(object):
     """Class for connectivity
     """
 
-    def __init__(self, canvas, **kwargs):
+    def __init__(self, canvas, c_xyz=[], c_connect=None, c_select=None, c_colorby='count', c_radiusmin=2.0,
+                 c_radiusmax=4.0, c_transform=[], cmap='viridis', **kwargs):
         self.canvas = canvas
-        self.xyz = kwargs['c_xyz']
-        self.connect = kwargs['c_connect']
-        self.select = kwargs['c_select']
-        self.colorby = kwargs['c_colorby']
-        self.radiusmin = kwargs['c_radiusmin']
-        self.radiusmax = kwargs['c_radiusmax']
-        self.transform = kwargs['c_transform']
-        self.cmap = kwargs['cmap']
+        self.xyz = c_xyz
+        self.connect = c_connect
+        self.select = c_select
+        self.colorby = c_colorby
+        self.radiusmin = c_radiusmin
+        self.radiusmax = c_radiusmax
+        self.transform = c_transform
+        self.cmap = cmap
 
         if (self.xyz is not None) and (self.connect is not None):
             self.prepare2plot()

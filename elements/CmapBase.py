@@ -9,19 +9,20 @@ class CmapBase(object):
 
     """docstring for CmapBase"""
 
-    def __init__(self, **kwargs):
+    def __init__(self, cmap='inferno', cmap_vmin=None, cmap_vmax=None, cmap_under=None, cmap_over=None, 
+                 cb_export=True, cb_fontsize=15, cb_label='', **kwargs):
         # Colormap elements :
-        self.cmap = kwargs['cmap']
-        self.cmap_vmin = kwargs['cmap_vmin']
-        self.cmap_vmax = kwargs['cmap_vmax']
-        self.cmap_under = kwargs['cmap_under']
-        self.cmap_over = kwargs['cmap_over']
+        self.cmap = cmap
+        self.cmap_vmin = cmap_vmin
+        self.cmap_vmax = cmap_vmax
+        self.cmap_under = cmap_under
+        self.cmap_over = cmap_over
 
         # Colorbar elements :
-        self.cbexport = kwargs['cb_export']
+        self.cbexport = cb_export
+        self.cblabel = cb_label
+        self.cbfontsize = cb_fontsize
         self.cblength = 10
-        self.cblabel = kwargs['cb_label']
-        self.cbfontsize = kwargs['cb_fontsize']
 
         # Create the colorbar :
         self.cbcreate()
@@ -45,8 +46,8 @@ class CmapBase(object):
         self.view.cbwc.add(self.colorbarW)
 
         # Create a more controlable text :
-        self.cbminW = Text(text='', color='w', font_size=self.cbfontsize-2, pos=(4.5,20),anchor_x='left', anchor_y='center')
-        self.cbmaxW = Text(text='', color='w', font_size=self.cbfontsize-2, pos=(4.5,-20-0.5), anchor_x='left', anchor_y='center')
+        self.cbmaxW = Text(text='', color='w', font_size=self.cbfontsize-2, pos=(4.5,20),anchor_x='left', anchor_y='center')
+        self.cbminW = Text(text='', color='w', font_size=self.cbfontsize-2, pos=(4.5,-20-0.5), anchor_x='left', anchor_y='center')
         self.cblabelW = Text(text='', color='w', font_size=self.cbfontsize, pos=(6,0), rotation=-90, anchor_y='center', anchor_x='center')
         self.view.cbwc.add(self.cbminW)
         self.view.cbwc.add(self.cbmaxW)

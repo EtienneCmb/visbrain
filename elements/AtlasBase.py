@@ -3,7 +3,7 @@ import numpy as np
 
 import vispy.scene.visuals as visu
 import vispy.geometry as visg
-import vispy.visuals.transforms as vist 
+import vispy.visuals.transforms as vist
 
 from ..utils import color2vb
 
@@ -15,17 +15,18 @@ class AtlasBase(object):
     """
     """
 
-    def __init__(self, canvas, **kwargs):
+    def __init__(self, canvas, a_color=(1.0,1.0,1.0), a_opacity=0.1, a_projection='internal', a_template='B1',
+                 a_vertices=None, a_faces=None, a_shading='smooth', a_transform=[], **kwargs):
         # Get inputs :
         self.canvas = canvas
-        self.opacity = kwargs['a_opacity']
-        self.color = kwargs['a_color']
-        self.template = kwargs['a_template']
-        self.projection = kwargs['a_projection']
-        self.transform = kwargs['a_transform']
-        self.shading = kwargs['a_shading']
-        self.user_vert = kwargs['a_vertices']
-        self.user_faces = kwargs['a_faces']
+        self.color = a_color
+        self.opacity = a_opacity
+        self.template = a_template
+        self.projection = a_projection
+        self.transform = a_transform
+        self.shading = a_shading
+        self.user_vert = a_vertices
+        self.user_faces = a_faces
 
         # Needed variables :
         self.atlaspath = os.path.dirname(visbrain.__file__)+'/elements/templates/'
