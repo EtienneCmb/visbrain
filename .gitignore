@@ -65,3 +65,4 @@ target/
 Vispy_examples/
 *.ui
 *.svg
+debuging.py
