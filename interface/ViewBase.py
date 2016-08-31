@@ -26,11 +26,11 @@ class vbShortcuts(object):
         def on_key_press(event):
             # Switch between default views : :
             if event.text == '0':
-                self.view.fixed('axial')
+                self.rotate_fixed('axial')
             elif event.text == '1':
-                self.view.fixed('coronal')
+                self.rotate_fixed('coronal')
             elif event.text == '2':
-                self.view.fixed('sagittal')
+                self.rotate_fixed('sagittal')
             # Internal/external view :
             elif event.text == '3':
                 if self.q_internal.isChecked():
@@ -83,48 +83,11 @@ class ViewBase(object):
         self.cbcanvas = scene.SceneCanvas(bgcolor=bgcolor)
         self.cbwc = self.cbcanvas.central_widget.add_view()
 
+        # Add axis (debugging):
+        # ax = scene.visuals.XYZAxis()
+        # self.wc.add(ax)
+
         # Visualization settings :
-        self.sagittal = 0
-        self.coronal = 0
-        self.axial = 0
         self.minOpacity = -10000
         self.maxOpacity = 10000
 
-        
-
-    def fixed(self, vtype='axial'):
-        """Switch between coronal, sagittal or axial view
-        """
-        # Coronal (front, back)
-        if vtype is 'sagittal':
-            if self.coronal == 0: # Top
-                self.wc.camera.azimuth = 180
-                self.wc.camera.elevation = 0
-                self.coronal = 1
-            elif self.coronal == 1: # Bottom
-                self.wc.camera.azimuth = 0
-                self.wc.camera.elevation = 0
-                self.coronal = 0
-            self.sagittal, self.axial = 0, 0
-        # Sagittal (left, right)
-        elif vtype is 'coronal':
-            if self.sagittal == 0: # Top
-                self.wc.camera.azimuth = -90
-                self.wc.camera.elevation = 0
-                self.sagittal = 1
-            elif self.sagittal == 1: # Bottom
-                self.wc.camera.azimuth = 90
-                self.wc.camera.elevation = 0
-                self.sagittal = 0
-            self.coronal, self.axial = 0, 0
-        # Axial (top, bottom)
-        elif vtype is 'axial':
-            if self.axial == 0: # Top
-                self.wc.camera.azimuth = 0
-                self.wc.camera.elevation = 90
-                self.axial = 1
-            elif self.axial == 1: # Bottom
-                self.wc.camera.azimuth = 0
-                self.wc.camera.elevation = -90
-                self.axial = 0
-            self.sagittal, self.coronal = 0, 0

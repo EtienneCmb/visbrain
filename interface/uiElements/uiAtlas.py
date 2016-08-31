@@ -13,6 +13,10 @@ class uiAtlas(object):
     
     def __init__(self,):
         # --------------- MNI ---------------
+        # Show/hide :
+        self.show_MNI.clicked.connect(self.display_MNI)
+        self.Lhemi_only.clicked.connect(self.display_MNI)
+        self.Rhemi_only.clicked.connect(self.display_MNI)
         # Opacity :
         self.OpacitySlider.sliderMoved.connect(self.fcn_opacity)
         self._slmin = self.OpacitySlider.minimum()
@@ -42,6 +46,21 @@ class uiAtlas(object):
         self.xSlices.sliderMoved.connect(self.fcn_xyzSlice)
         self.ySlices.sliderMoved.connect(self.fcn_xyzSlice)
         self.zSlices.sliderMoved.connect(self.fcn_xyzSlice)
+
+
+    def display_MNI(self):
+        """Display/hide MNI
+        """
+        # Show/hide MNI :
+        self.atlas.mesh.visible = self.show_MNI.isChecked()
+        # Hemisphere Left/Right :
+        if self.Lhemi_only.isChecked():
+            self.xInvert.setChecked(False)
+            self.xSlices.setValue(0)
+        elif self.Rhemi_only.isChecked():
+            self.xInvert.setChecked(True)
+            self.xSlices.setValue(0)
+        self.fcn_xyzSlice()
 
 
     def fcn_opacity(self):
@@ -78,19 +97,19 @@ class uiAtlas(object):
     def fcn_coronal(self):
         """Fixed coronal view
         """
-        self.view.fixed(vtype='coronal')
+        self.rotate_fixed(vtype='coronal')
 
 
     def fcn_axial(self):
         """Fixed axial view
         """
-        self.view.fixed(vtype='axial')
+        self.rotate_fixed(vtype='axial')
 
 
     def fcn_sagittal(self):
         """Fixed coronal view
         """
-        self.view.fixed(vtype='sagittal')
+        self.rotate_fixed(vtype='sagittal')
 
 
     def fcn_switch_camera(self):
@@ -112,7 +131,6 @@ class uiAtlas(object):
         """Define x, y and z slices of the brain
         """
         # Get vertices and color :
-        vert = self.atlas.mesh.mesh_data.get_vertices()
         vcolor = self.atlas.mesh.mesh_data.get_vertex_colors()
         # Get slide positions :
         xsl = self.xSlices.value()#
@@ -126,8 +144,8 @@ class uiAtlas(object):
         ysym = '<' if ych else '>'
         zsym = '<' if zch else '>'
         # Find index to process and not to process :
-        formatstr = 'np.where((vert[:, 0] {xsym} xsl) | (vert[:, 1] {ysym} ysl) | (vert[:, 2] {zsym} zsl))[0]'
-        allIdx = set(np.arange(0, vert.shape[0]))
+        formatstr = 'np.where((self.atlas.vert[:, 0] {xsym} xsl) | (self.atlas.vert[:, 1] {ysym} ysl) | (self.atlas.vert[:, 2] {zsym} zsl))[0]'
+        allIdx = set(np.arange(0, self.atlas.vert.shape[0]))
         Idx = eval(formatstr.format(xsym=xsym, ysym=ysym, zsym=zsym))
         nIdx = allIdx.difference(set(Idx))
         # Change alpha :

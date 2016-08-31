@@ -19,7 +19,7 @@ class elements(CmapBase, transformations):
         # Initialize brain, sources and connectivity elements :
         self.atlas = AtlasBase(canvas, a_transform=self.transform, **kwargs)
         self.sources = SourcesBase(canvas, s_transform=self.atlas.transform, **kwargs)
-        self.connect = ConnectivityBase(canvas, c_transform=self.atlas.transform, **kwargs)
+        self.connect = ConnectivityBase(canvas, c_transform=self.atlas.transform, c_xyz=self.sources.xyz, **kwargs)
         CmapBase.__init__(self, **kwargs)
 
         # Add transformations :

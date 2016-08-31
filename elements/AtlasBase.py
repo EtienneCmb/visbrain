@@ -3,7 +3,7 @@ import numpy as np
 
 import vispy.scene.visuals as visu
 import vispy.geometry as visg
-import vispy.visuals.transforms as vist 
+import vispy.visuals.transforms as vist
 
 from ..utils import color2vb
 
@@ -15,17 +15,22 @@ class AtlasBase(object):
     """
     """
 
-    def __init__(self, canvas, **kwargs):
+    def __init__(self, canvas, a_color=(1.0,1.0,1.0), a_opacity=0.1, a_projection='internal', a_template='B1',
+                 a_vertices=None, a_faces=None, a_shading='smooth', a_transform=[], t_transform=None, **kwargs):
         # Get inputs :
         self.canvas = canvas
-        self.opacity = kwargs['a_opacity']
-        self.color = kwargs['a_color']
-        self.template = kwargs['a_template']
-        self.projection = kwargs['a_projection']
-        self.transform = kwargs['a_transform']
-        self.shading = kwargs['a_shading']
-        self.user_vert = kwargs['a_vertices']
-        self.user_faces = kwargs['a_faces']
+        self.color = a_color
+        self.opacity = a_opacity
+        self.template = a_template
+        self.projection = a_projection
+        self.user_transform = t_transform # user transformation
+        self.transform = a_transform      # software transformations
+        self.shading = a_shading
+        self.user_vert = a_vertices
+        self.user_faces = a_faces
+        self.sagittal = 0
+        self.coronal = 0
+        self.axial = 0
 
         # Needed variables :
         self.atlaspath = os.path.dirname(visbrain.__file__)+'/elements/templates/'
@@ -33,7 +38,8 @@ class AtlasBase(object):
         self._scaleMax = 100
 
         # Initialize visualization :
-        self.vert, faces = self.load(self.template, self.user_vert, self.user_faces, self.opacity, self.color, self.transform)
+        self.vert, faces = self.load(self.template, self.user_vert, self.user_faces, self.opacity, self.color,
+                                     self.transform, self.user_transform)
         self.plot(self.vert, faces, self.shading, self.projection)
 
 
@@ -70,7 +76,8 @@ class AtlasBase(object):
         return vertices, faces
 
 
-    def load(self, template='B1', vertices=None, faces=None, opacity=0.1, color=(1,1,1), transform=None):
+    def load(self, template='B1', vertices=None, faces=None, opacity=0.1, color=(1,1,1), transform=None,
+             user_transform=None):
         """Load the atlas to use for the interface.
         """
         # Load a default template :
@@ -83,6 +90,14 @@ class AtlasBase(object):
         else:
             vertices, face = self._load_surf_custom(vertices, faces)
 
+        # Preprocessed vertices/faces :
+        vertices, faces = self._preprocessing(vertices, faces, color, opacity, transform, user_transform)
+
+        return vertices, faces
+
+    def _preprocessing(self, vertices, faces, color, opacity, transform, user_transform):
+        """
+        """
         # Get some usefull variables :
         self._nv = vertices.size//3
 
@@ -93,13 +108,26 @@ class AtlasBase(object):
         vm, vM = np.abs(vertices).min(), np.abs(vertices).max()
         self._factor = self._scaleMax/vM
 
+        # User transformation :
+        if self.user_transform is not None:
+            vertices = self.user_transform.map(vertices)[:, 0:-1]
+
         # Rescale coordinates :
         if transform is not None:
-            transform.append(vist.STTransform(scale=[self._factor]*3))
+            # Set everything around zero :
+            transform.prepend(vist.STTransform(translate=list(-vertices.mean(0))))
+            # Rescale vertices coordinates :
+            transform.prepend(vist.STTransform(scale=[self._factor]*3))
+            # Apply transformation :
             vertices = transform.map(vertices)[:, 0:-1]
 
-        return vertices, faces
+        # Keep maximum/minimum pear coordinates :
+        self._vertsize = [(vertices[:, 0].min(), vertices[:, 0].max()),
+                          (vertices[:, 1].min(), vertices[:, 1].max()),
+                          (vertices[:, 2].min(), vertices[:, 2].max())]
 
+        return vertices, faces
+        
 
     def plot(self, vertices, faces, shading='smooth', projection='internal'):
         """Mesh the brain

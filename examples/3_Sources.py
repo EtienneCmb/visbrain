@@ -18,8 +18,11 @@ s_opacity = 0.9 # Sources opacity
 s_data = np.round(100*np.random.rand(s_xyz.shape[0])-50)
 
 # Control the dynamic range of sources radius :
-s_radiusmin = 2		# Minimum radius
-s_radiusmax = 8		# Maximum radius
+s_radiusmin = 2				# Minimum radius
+s_radiusmax = 8				# Maximum radius
+s_edgecolor = (1,1,1,0.5)	# Color of the edges
+s_edgewidth = 1				# Width of the edges
+
 
 # Cortical projection/repartition :
 # Navigate to the menu to transform -> cortical projection (or CTRL+P)
@@ -35,7 +38,14 @@ cmap_over = (0.1,0.1,0.1, 1)	# Every values over vmax are going to be black
 # and checked the button 'See live changement of colormap settings'
 cb_label = 'Deep sources projection'
 
+# Now, we can labelize each source :
+s_text = subjects			# Each source will show the name of the subject
+s_textcolor = "#f39c12"		# Set to yellow the text color
+s_textsize = 2				# Size of the text
+s_textshift = (1.5,1.5,0)	# To avoid a superposition between the text and sources sphere, we move the text of (x, y, z) points
 
 vb = vbrain(s_xyz=s_xyz, s_color=s_color, s_data=s_data, s_radiusmin=s_radiusmin, s_radiusmax=s_radiusmax, s_opacity=s_opacity,
-            cmap=cmap, cmap_vmin=cmap_vmin, cmap_vmax=cmap_vmax, cmap_under=cmap_under, cmap_over=cmap_over, cb_label=cb_label)
+            cmap=cmap, cmap_vmin=cmap_vmin, cmap_vmax=cmap_vmax, cmap_under=cmap_under, cmap_over=cmap_over, cb_label=cb_label,
+            s_text=s_text, s_textcolor=s_textcolor, s_textsize=s_textsize, s_textshift=s_textshift, s_edgecolor=s_edgecolor,
+            s_edgewidth=s_edgewidth)
 vb.show()

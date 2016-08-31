@@ -24,34 +24,6 @@ class vbrain(uiInit, uiElements, elements):
     'ui_': graphical interface options
 
     Kargs:
-        s_xyz: ndarray, (def: None)
-            Array of talairach or MNI coordinates to display sources
-            into the brain. The shape of the array must be (N, 3) where
-            '3' is for (x, y, z) coordinates and N, the number of sources.
-
-        s_data: ndarray, (def, None)
-            Add some data to sources. As a consequence, the radius of each
-            source will be a function of s_data. must be an array of shape
-            (N,). If s_data is None, all sources will have the same value. The parameter
-            s_data can be masked using numpy.ma module.
-
-        s_color: string/list/ndarray, (def: red)
-            Color of each source sphere. If s_color is a single string,
-            all sphere will have the same color. If it's' a list of strings,
-            the length must be N. Alternatively, s_color can be a (N, 3) RGB
-            or (N, 4) RGBA colors.
-
-        s_alpha: int/float, (def: 1.0)
-            Transparency of all sources. Must be between 0 and 1.
-
-        s_radiusmin/s_radiusmax: int/float, (def: 5.0/10.0)
-            Define the minimum and maximum source's possible radius. By default,
-            if all sources have the same value, the radius will be s_radiusmin.
-
-        s_scaling: bool, (def: True)
-            If s_render is 'marker', control if sources have to be scaled when zooming
-            or not.
-
         a_color: tuple, (def: (1,1,1))
             RGB colors of the MNI brain.
 
@@ -71,6 +43,54 @@ class vbrain(uiInit, uiElements, elements):
 
         a_shading: string, (def: 'smooth')
             Shading method to use for the brain. Switch between 'smooth', 'flat' or None
+
+        s_xyz: ndarray, (def: None)
+            Array of talairach or MNI coordinates to display sources
+            into the brain. The shape of the array must be (N, 3) where
+            '3' is for (x, y, z) coordinates and N, the number of sources.
+
+        s_data: ndarray, (def, None)
+            Add some data to sources. As a consequence, the radius of each
+            source will be a function of s_data. must be an array of shape
+            (N,). If s_data is None, all sources will have the same value. The parameter
+            s_data can be masked using numpy.ma module.
+
+        s_color: string/list/ndarray, (def: 'red')
+            Color of each source sphere. If s_color is a single string,
+            all sphere will have the same color. If it's' a list of strings,
+            the length must be N. Alternatively, s_color can be a (N, 3) RGB
+            or (N, 4) RGBA colors.
+
+        s_alpha: int/float, (def: 1.0)
+            Transparency of all sources. Must be between 0 and 1.
+
+        s_radiusmin/s_radiusmax: int/float, (def: 5.0/10.0)
+            Define the minimum and maximum source's possible radius. By default,
+            if all sources have the same value, the radius will be s_radiusmin.
+
+        s_edgecolor: string/list/ndarray, (def: None)
+            Add an edge to sources
+
+         s_edgewidth: float, (def: 0.4)
+            Edge width of sources
+
+        s_scaling: bool, (def: True)
+            If s_render is 'marker', control if sources have to be scaled when zooming
+            or not.
+
+        s_text: list/tuple, (def: None)
+            Set text to each electrode. s_text should be an iterable object,
+            composed of strings, with the same length as the number of sources.
+
+        s_textcolor: string/list/ndarray, (def: 'k')
+            A single color element for all the text
+
+        s_textsize: int, (def: 3)
+            Fontsize of text elements
+
+        s_textshift: list/tuple, (def: (0,1,0))
+            Translate the text along (x, y, z) coordinates to improve text
+            visibility
 
         c_connect: ndarray, (def: None)
             Connections between sources. Define N sources location using s_xyz of
@@ -94,6 +114,10 @@ class vbrain(uiInit, uiElements, elements):
         t_radius: int/float, (def: 10)
             The projection radius to use (depending on coordinates type)
 
+        t_transform: vispy transformation, (def: None)
+            Define and set a transformation to all displayed elements. This can be
+            usefull to adapt a user template to visbrain.
+
         ui_bgcolor: string/tuple, (def: (0.09, 0.09, 0.09))
             Backgroud color of the ui
 
@@ -106,53 +130,35 @@ class vbrain(uiInit, uiElements, elements):
         >>> s_color = ["#3498db", "#e74c3c", "#2ecc71"]
         >>> # Add data to sources :
         >>> s_data = [100, 0.2, 27]
-        >>> # Because in this example there's a small number of sources,
-        >>> # turn the rendering properties to a more realistic one :
-        >>> s_render = 'sphere'
         >>> # Define a visbrain instance with previous parameters :
-        >>> vb = vbrain(s_xyz=s_xyz, s_data=s_data, s_color=s_color, s_render=s_render)
+        >>> vb = vbrain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)
         >>> # Finally, display the interface :
         >>> vb.show()
     """
-
-    def __init__(self, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0, 
-                 s_radiusmax=10.0, s_scaling=False, a_color=(1.0,1.0,1.0), a_opacity=0.1, 
-                 a_projection='internal', a_template='B1', a_vertices=None, a_faces=None, a_shading='smooth',
-                 c_connect=None, c_select=None, c_colorby='count', c_radiusmin=2.0, c_radiusmax=4.0, #c_op
-                 cmap='inferno', cmap_vmin=None, cmap_vmax=None, cmap_under=None, cmap_over=None, 
-                 cb_export=True, cb_fontsize=15, cb_label='', t_radius=10.0, ui_bgcolor=(0.09, 0.09, 0.09)):
+    def __init__(self, *args, **kwargs):
 
         # ------ App creation ------
         # Create the app and initialize all graphical elements :
         self._app = QtGui.QApplication(sys.argv)
-        uiInit.__init__(self, ui_bgcolor)
+        uiInit.__init__(self, kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09)))
 
         # # ------ Objects creation ------
-        elements.__init__(self, self.view.wc, self.progressBar, a_opacity=a_opacity, a_color=a_color, a_template=a_template,
-                          a_projection=a_projection, a_vertices=a_vertices, a_faces=a_faces, a_shading=a_shading,
-                          s_xyz=s_xyz, s_data=s_data, s_color=s_color, s_alpha=s_opacity, s_radiusmin=s_radiusmin,
-                          s_radiusmax=s_radiusmax, c_xyz=s_xyz, c_connect=c_connect,
-                          c_select=c_select, c_colorby=c_colorby, c_radiusmin=c_radiusmin, c_radiusmax=c_radiusmax,
-                          s_scaling=s_scaling, t_radius=t_radius, cmap=cmap, cmap_vmin=cmap_vmin,
-                          cmap_vmax=cmap_vmax, cmap_under=cmap_under, cmap_over=cmap_over, cb_export=cb_export,
-                          cb_fontsize=cb_fontsize, cb_label=cb_label)
+        elements.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
         
 
         # ------ UI to visbrain ------
         # Link UI and visbrain function :
         uiElements.__init__(self)
-        # vbUi2cmd.__init__(self)
 
         # # ------ Cameras ------
         # # Main camera :
         self.view.wc.camera = viscam.TurntableCamera()
-        self.view.fixed()
         # # Fixed colorbar camera :
         self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90)
-        self.view.wc.camera.set_range(x=(-50,50), y=(-60,30), margin=0)
         self.view.cbwc.camera.set_range(x=(-24,24), y=(-0.5,0.5), margin=0)
 
     def show(self):
         self.showMaximized()
+        self.rotate_fixed()
         visapp.run()

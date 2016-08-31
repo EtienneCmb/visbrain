@@ -1,4 +1,5 @@
 from matplotlib import cm
+from ...utils import textline2color
 
 
 class uiCmap(object):
@@ -54,59 +55,48 @@ class uiCmap(object):
     def select_cmap(self):
         """Apply ui changes to the colormap
         """
-        # Get colormap name :
-        if self.q_cmap_invert.isChecked():
-            self.cmap = self.q_cmap_list.currentText() + '_r'
-        else:
-            self.cmap = self.q_cmap_list.currentText()
-        if self.q_auto_scale.isChecked():
-            self.q_vmin_chk.setChecked(False)
-            self.q_vmax_chk.setChecked(False)
-        else:
-            pass
-        # Get vmin and vmax :
-        if self.q_vmin_chk.isChecked():
-            self.q_vmin.setEnabled(True)
-            self.cmap_vmin = self.q_vmin.value()
-        else:
-            self.q_vmin.setEnabled(False)
-            self.q_under_chk.setChecked(False)
-            self.cmap_vmin = None
-        if self.q_vmax_chk.isChecked():
-            self.q_vmax.setEnabled(True)
-            self.cmap_vmax = self.q_vmax.value()
-        else:
-            self.q_vmax.setEnabled(False)
-            self.q_over_chk.setChecked(False)
-            self.cmap_vmax = None
-        # Get color under/over :
-        if self.q_under_chk.isChecked():
-            self.q_under.setEnabled(True)
-            self.cmap_under = self.q_under.text()
-        else:
-            self.q_under.setEnabled(False)
-            self.cmap_under = None
-        if self.q_over_chk.isChecked():
-            self.q_over.setEnabled(True)
-            self.cmap_over = self.q_over.text()
-        else:
-            self.q_over.setEnabled(False)
-            self.cmap_over = None
-        self.cblabel = self.q_cblabel.text()
-        # Manage tuple type for Under/Over :
         try:
-            if isinstance(eval(self.cmap_under), tuple):
-                self.cmap_under = eval(self.cmap_under)
-        except:
-            pass
-        try:
-            if isinstance(eval(self.cmap_over), tuple):
-                self.cmap_over = eval(self.cmap_over)
-        except:
-            pass
-        # Interact directly with cmap :
-        if self.q_cmap_interact.isChecked():
-            try:
+            # Get colormap name :
+            if self.q_cmap_invert.isChecked():
+                self.cmap = self.q_cmap_list.currentText() + '_r'
+            else:
+                self.cmap = self.q_cmap_list.currentText()
+            if self.q_auto_scale.isChecked():
+                self.q_vmin_chk.setChecked(False)
+                self.q_vmax_chk.setChecked(False)
+            else:
+                pass
+            # Get vmin and vmax :
+            if self.q_vmin_chk.isChecked():
+                self.q_vmin.setEnabled(True)
+                self.cmap_vmin = self.q_vmin.value()
+            else:
+                self.q_vmin.setEnabled(False)
+                self.q_under_chk.setChecked(False)
+                self.cmap_vmin = None
+            if self.q_vmax_chk.isChecked():
+                self.q_vmax.setEnabled(True)
+                self.cmap_vmax = self.q_vmax.value()
+            else:
+                self.q_vmax.setEnabled(False)
+                self.q_over_chk.setChecked(False)
+                self.cmap_vmax = None
+            # Get color under/over :
+            if self.q_under_chk.isChecked():
+                self.q_under.setEnabled(True)
+                self.cmap_under, _ = textline2color(self.q_under.text())
+            else:
+                self.q_under.setEnabled(False)
+                self.cmap_under = None
+            if self.q_over_chk.isChecked():
+                self.q_over.setEnabled(True)
+                self.cmap_over, _ = textline2color(self.q_over.text())
+            else:
+                self.q_over.setEnabled(False)
+                self.cmap_over = None
+            self.cblabel = self.q_cblabel.text()
+            # Interact directly with cmap :
+            if self.q_cmap_interact.isChecked():
                 # If cortical projection never run :
                 if self.current_mask is None:
                     self.cortical_projection()
@@ -117,6 +107,6 @@ class uiCmap(object):
                 # Update colorbar :
                 self.cbupdate(self.current_mask, self.cmap, vmin=self.cmap_vmin, vmax=self.cmap_vmax,
                               under=self.cmap_under, over=self.cmap_over, label=self.cblabel, fontsize=self.cbfontsize)
-            except:
-                pass
+        except:
+            pass
 

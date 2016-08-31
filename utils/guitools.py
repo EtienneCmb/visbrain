@@ -1,6 +1,9 @@
 import numpy as np
+from .color import color2vb
 
-__all__ = ['slider2opacity']
+
+__all__ = ['slider2opacity', 'textline2color']
+
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
                    tomin=-1000.0, tomax=1000.0):
@@ -37,3 +40,29 @@ def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
     else:
         alpha = value/100
     return alpha
+
+
+def textline2color(value):
+    """Transform a Qt text line editor to color
+
+    Args:
+        value: string
+            The edited string
+
+    Return:
+        The processed value
+
+        tuple of RGBA colors
+    """
+    # Remove ' caracter :
+    try:
+        value = value.replace("'", '')
+        # Tuple/list :
+        try:
+            if isinstance(eval(value), (tuple, list)):
+                value = eval(value)
+        except:
+            pass
+        return value, color2vb(color=value)
+    except:
+        return 'w', (1,1,1,1)

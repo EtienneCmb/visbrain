@@ -23,10 +23,13 @@ def normalize(x, tomin=0.0, tomax=1.0):
         xn: ndarray
             The normalized array
     """
-    xm, xM = x.min(), np.abs(x).max()
-    if xm != xM:
-        return tomax - (((tomax - tomin) * (xM - x)) / (xM-xm))
+    if x.size:
+        xm, xM = x.min(), np.abs(x).max()
+        if xm != xM:
+            return tomax - (((tomax - tomin) * (xM - x)) / (xM-xm))
+        else:
+            warn('Normalization has been ignored because minimum '
+                 'and maximum are both equal to '+str(xm))
+            return x
     else:
-        warn('Normalization has been ignored because minimum '
-             'and maximum are both equal to '+str(xm))
         return x
