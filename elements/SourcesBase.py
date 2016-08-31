@@ -15,16 +15,19 @@ class SourcesBase(object):
     """Class for sources creation
     """
 
-    def __init__(self, canvas, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0,
-                 s_scaling=False, s_transform=[], s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), **kwargs):
+    def __init__(self, canvas, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6,
+                 s_scaling=False, s_transform=[], s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), t_transform=None, **kwargs):
         # Initialize elements :
         self.canvas = canvas
         self.xyz = s_xyz
         self.data = s_data
         self.color = s_color
+        self.edgecolor = color2vb(s_edgecolor)
+        self.edgewidth = s_edgewidth
         self.alpha = s_opacity
         self.scaling = s_scaling
         self.transform = s_transform
+        self.user_transform = t_transform
         self.radiusmin = s_radiusmin*1.5
         self.radiusmax = s_radiusmax*1.5
         self._defcolor = 'slateblue'
@@ -66,6 +69,11 @@ class SourcesBase(object):
             self.xyz = self.xyz.T
         self.xyz = self.xyz
         self.nSources = self.xyz.shape[0]
+
+        # --------------------------------------------------------------------
+        # User transformations :
+        if self.user_transform is not None:
+            self.xyz = self.user_transform.map(self.xyz)[:, 0:-1]
         # Apply transformation to coordinates :
         self.xyz = self.transform.map(self.xyz)[:, 0:-1]
 
@@ -137,8 +145,7 @@ class SourcesBase(object):
         xyz, sData, sColor = self._select_unmasked()
         # Render as cloud points :
         self.mesh = visu.Markers()
-        self.mesh.set_data(xyz, edge_color=None, face_color=sColor, size=sData, scaling=self.scaling)
-        # self.mesh.transform = self.transform
+        self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor, size=sData, scaling=self.scaling, edge_width=self.edgewidth)
         self.canvas.add(self.mesh)
 
 

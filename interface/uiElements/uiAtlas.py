@@ -97,19 +97,19 @@ class uiAtlas(object):
     def fcn_coronal(self):
         """Fixed coronal view
         """
-        self.view.fixed(vtype='coronal')
+        self.rotate_fixed(vtype='coronal')
 
 
     def fcn_axial(self):
         """Fixed axial view
         """
-        self.view.fixed(vtype='axial')
+        self.rotate_fixed(vtype='axial')
 
 
     def fcn_sagittal(self):
         """Fixed coronal view
         """
-        self.view.fixed(vtype='sagittal')
+        self.rotate_fixed(vtype='sagittal')
 
 
     def fcn_switch_camera(self):

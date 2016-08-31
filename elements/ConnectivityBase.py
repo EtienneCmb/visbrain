@@ -40,8 +40,6 @@ class ConnectivityBase(object):
     def prepare2plot(self):
         """
         """
-        # 
-        self.xyz = self.transform.map(self.xyz)[:, 0:-1]
         N = self.xyz.shape[0]
         # Chech array :
         if (self.connect.shape != (N, N)) or not isinstance(self.connect, np.ndarray):
@@ -68,7 +66,7 @@ class ConnectivityBase(object):
         if self.colorby == 'count':
             X = self.connect.count(1)
             cmap = array2colormap(self.connect.count(1), cmap=self.cmap)
-            cmap[:, 3] = normalize(X, tomin=0.1, tomax=1)
+            cmap[:, 3] = normalize(X, tomin=0.5, tomax=1)
             self.mesh = visu.Line(pos=self.xyz, color=cmap, connect=self.to_plot, width=self.radiusmin, method='gl')
             self.canvas.add(self.mesh)
         elif self.colorby == 'strength':

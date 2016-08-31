@@ -24,6 +24,26 @@ class vbrain(uiInit, uiElements, elements):
     'ui_': graphical interface options
 
     Kargs:
+        a_color: tuple, (def: (1,1,1))
+            RGB colors of the MNI brain.
+
+        a_opacity: int/float, (def: 0.1)
+            Transparency of the MNI brain. Must be between 0 and 1.
+
+        a_proj: string, (def: 'internal')
+            Turn a_proj to 'internal' for internal projection or 'external' for
+            cortical rendering.
+
+        a_template: string, (def: 'B1')
+            The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
+
+        a_vertices/a_faces: ndarray, (def: None)
+            Specify an alternativ surface to use. Both parameters must be a 2D array,
+            respectively of shapes (N_vertices, 3) and (N_faces, 3)
+
+        a_shading: string, (def: 'smooth')
+            Shading method to use for the brain. Switch between 'smooth', 'flat' or None
+
         s_xyz: ndarray, (def: None)
             Array of talairach or MNI coordinates to display sources
             into the brain. The shape of the array must be (N, 3) where
@@ -48,6 +68,12 @@ class vbrain(uiInit, uiElements, elements):
             Define the minimum and maximum source's possible radius. By default,
             if all sources have the same value, the radius will be s_radiusmin.
 
+        s_edgecolor: string/list/ndarray, (def: None)
+            Add an edge to sources
+
+         s_edgewidth: float, (def: 0.4)
+            Edge width of sources
+
         s_scaling: bool, (def: True)
             If s_render is 'marker', control if sources have to be scaled when zooming
             or not.
@@ -65,26 +91,6 @@ class vbrain(uiInit, uiElements, elements):
         s_textshift: list/tuple, (def: (0,1,0))
             Translate the text along (x, y, z) coordinates to improve text
             visibility
-
-        a_color: tuple, (def: (1,1,1))
-            RGB colors of the MNI brain.
-
-        a_opacity: int/float, (def: 0.1)
-            Transparency of the MNI brain. Must be between 0 and 1.
-
-        a_proj: string, (def: 'internal')
-            Turn a_proj to 'internal' for internal projection or 'external' for
-            cortical rendering.
-
-        a_template: string, (def: 'B1')
-            The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
-
-        a_vertices/a_faces: ndarray, (def: None)
-            Specify an alternativ surface to use. Both parameters must be a 2D array,
-            respectively of shapes (N_vertices, 3) and (N_faces, 3)
-
-        a_shading: string, (def: 'smooth')
-            Shading method to use for the brain. Switch between 'smooth', 'flat' or None
 
         c_connect: ndarray, (def: None)
             Connections between sources. Define N sources location using s_xyz of
@@ -107,6 +113,10 @@ class vbrain(uiInit, uiElements, elements):
 
         t_radius: int/float, (def: 10)
             The projection radius to use (depending on coordinates type)
+
+        t_transform: vispy transformation, (def: None)
+            Define and set a transformation to all displayed elements. This can be
+            usefull to adapt a user template to visbrain.
 
         ui_bgcolor: string/tuple, (def: (0.09, 0.09, 0.09))
             Backgroud color of the ui
@@ -144,12 +154,11 @@ class vbrain(uiInit, uiElements, elements):
         # # ------ Cameras ------
         # # Main camera :
         self.view.wc.camera = viscam.TurntableCamera()
-        self.view.fixed()
         # # Fixed colorbar camera :
         self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90)
-        self.view.wc.camera.set_range(x=(-50,50), y=(-60,30), margin=0)
         self.view.cbwc.camera.set_range(x=(-24,24), y=(-0.5,0.5), margin=0)
 
     def show(self):
         self.showMaximized()
+        self.rotate_fixed()
         visapp.run()
