@@ -63,6 +63,7 @@ target/
 
 # Vispy learning folder :
 Vispy_examples/
+debugging/
 *.ui
 *.svg
 debuging.py

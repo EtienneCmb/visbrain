@@ -24,7 +24,8 @@ def normalize(x, tomin=0.0, tomax=1.0):
             The normalized array
     """
     if x.size:
-        xm, xM = x.min(), np.abs(x).max()
+        x = np.float32(x)
+        xm, xM = np.float32(x.min()), np.float32(x.max())
         if xm != xM:
             return tomax - (((tomax - tomin) * (xM - x)) / (xM-xm))
         else:

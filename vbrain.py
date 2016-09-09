@@ -145,18 +145,21 @@ class vbrain(uiInit, uiElements, elements):
         # # ------ Objects creation ------
         elements.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
-        
-
         # ------ UI to visbrain ------
         # Link UI and visbrain function :
         uiElements.__init__(self)
 
         # # ------ Cameras ------
         # # Main camera :
-        self.view.wc.camera = viscam.TurntableCamera()
+        self.view.wc.camera = viscam.TurntableCamera(azimuth=90, elevation=90)
+        self._vbNode.parent = self.view.wc.scene
+
         # # Fixed colorbar camera :
         self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90)
         self.view.cbwc.camera.set_range(x=(-24,24), y=(-0.5,0.5), margin=0)
+        self.view.wc.scene.children[0].parent = None
+        
+        # print(self.view.wc.scene.describe_tree(with_transform=True))
 
     def show(self):
         self.showMaximized()

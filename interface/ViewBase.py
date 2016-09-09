@@ -49,6 +49,11 @@ class vbShortcuts(object):
 
         @canvas.events.mouse_release.connect
         def on_mouse_press(event):
+            # self.atlas.mesh.mesh_data.set_vertices( reset_normals=True)
+            # self._vbNode.transform = vist.NullTransform()
+            # import vispy.visuals.transforms as vist
+            # st = vist.STTransform(translate=(0.1, 0, 0))
+            # self.view.wc.scene.transform = st
             pass
             # rotation = MatrixTransform()
             # rotation.rotate(self.view.wc.camera.azimuth, (0,0,1))
@@ -56,6 +61,23 @@ class vbShortcuts(object):
             # self.colorbar.transform = rotation
             # self.colorbar.update
             # print(self.view.wc.camera.azimuth, self.view.wc.camera.elevation, self.view.wc.camera.distance)
+
+        @canvas.events.mouse_double_click.connect
+        def on_mouse_double_click(event):
+            pass
+            # self._vbNode.transform = self.view.wc.camera.transform
+
+        @canvas.events.mouse_move.connect
+        def on_mouse_move(event):
+            pass
+            """
+            """
+            # import vispy.visuals.transforms as vist
+            # from vispy.visuals.transforms import MatrixTransform
+            # rotation = MatrixTransform()
+            # rotation.rotate(self.view.wc.camera.azimuth, (0,0,1))
+            # rotation.rotate(self.view.wc.camera.elevation, (1,0,0))
+            # self.view.wc.scene.transform = rotation
 
 
     def show_hide_shortcuts(self):
@@ -74,9 +96,9 @@ class ViewBase(object):
 
     def __init__(self, bgcolor=(0,0,0)):
         # Initialize main canvas:
-        self.canvas = scene.SceneCanvas(keys='interactive', show=True, dpi=300,
-                                        bgcolor=bgcolor, fullscreen=True, px_scale=1,
-                                        resizable=True, position=(0, 250), size=(800, 600))
+        self.canvas = scene.SceneCanvas(keys='interactive', show=True, dpi=600,
+                                        bgcolor=bgcolor, fullscreen=True, #px_scale=2,
+                                        resizable=True, position=(0, 250))
         self.wc = self.canvas.central_widget.add_view()
 
         # Initialize colorbar canvas :

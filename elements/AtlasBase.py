@@ -15,10 +15,9 @@ class AtlasBase(object):
     """
     """
 
-    def __init__(self, canvas, a_color=(1.0,1.0,1.0), a_opacity=0.1, a_projection='internal', a_template='B1',
+    def __init__(self, a_color=(1.0,1.0,1.0), a_opacity=0.1, a_projection='internal', a_template='B1',
                  a_vertices=None, a_faces=None, a_shading='smooth', a_transform=[], t_transform=None, **kwargs):
         # Get inputs :
-        self.canvas = canvas
         self.color = a_color
         self.opacity = a_opacity
         self.template = a_template
@@ -134,18 +133,14 @@ class AtlasBase(object):
         """
         # Get data and mesh :
         meshdata = visg.MeshData(vertices=vertices, faces=faces, vertex_colors=self.d_vcolor)
-        self.mesh = visu.Mesh(meshdata=meshdata, shading=shading, name='BrainMNI')
-        
+        self.mesh = visu.Mesh(meshdata=meshdata, shading=shading, name='Brain')
+        self.mask = np.zeros((len(self),), dtype=bool)
+
         # Internal/external projection :
         if projection is 'internal':
             self.mesh.set_gl_state('translucent', depth_test=False, cull_face=True)
         elif projection is 'external':
-            self.mesh.set_gl_state('translucent', depth_test=True, cull_face=False)
-        self.mesh.update()
-
-        # Add to the canvas :
-        self.canvas.add(self.mesh)
-
+            self.mesh.set_gl_state('translucent', depth_test=True, cull_face=False, polygon_offset_fill=True)
 
     def reload(self):
         """

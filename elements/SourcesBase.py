@@ -15,10 +15,9 @@ class SourcesBase(object):
     """Class for sources creation
     """
 
-    def __init__(self, canvas, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6,
+    def __init__(self, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6,
                  s_scaling=False, s_transform=[], s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), t_transform=None, **kwargs):
         # Initialize elements :
-        self.canvas = canvas
         self.xyz = s_xyz
         self.data = s_data
         self.color = s_color
@@ -34,7 +33,7 @@ class SourcesBase(object):
         self._rescale = 3.0
         self.shading = 'smooth'
         self.stext = s_text
-        self.stextcolor = s_textcolor
+        self.stextcolor = color2vb(s_textcolor)
         self.stextsize = s_textsize
         self.stextshift = s_textshift
 
@@ -43,6 +42,9 @@ class SourcesBase(object):
             self.prepare2plot()
             self.plot()
             self.text_plot()
+        else:
+            self.mesh = visu.Markers(name='Sources')
+            self.stextmesh = visu.Text(name='SourcesText')
 
     def __len__(self):
         return len(np.where(self.data.mask == False)[0])
@@ -142,22 +144,21 @@ class SourcesBase(object):
         """Plot sources on the brain
         """
         # Find only unmasked data :
-        xyz, sData, sColor = self._select_unmasked()
+        xyz, sData, sColor, _ = self._select_unmasked()
         # Render as cloud points :
-        self.mesh = visu.Markers()
+        self.mesh = visu.Markers(name='Sources')
         self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor, size=sData, scaling=self.scaling, edge_width=self.edgewidth)
-        self.canvas.add(self.mesh)
 
 
     def update(self):
         """Update sources plot
         """
         # Find only unmasked data :
-        xyz, sData, sColor = self._select_unmasked()
+        xyz, sData, sColor, _ = self._select_unmasked()
         # Render as cloud points :
         if xyz.size:
             self.mesh.visible = True
-            self.mesh.set_data(xyz, edge_color=None, face_color=sColor, size=sData, scaling=self.scaling)
+            self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor, size=sData, scaling=self.scaling, edge_width=self.edgewidth)
             # self.mesh.transform = self.transform
         else:
             self.mesh.visible = False
@@ -169,7 +170,7 @@ class SourcesBase(object):
         # Get unmasked data :
         mask = self.data.mask == False
         # Select unmasked sData and xyz :
-        return self.xyz[mask, :], self.sData[mask], self.sColor[mask, :]
+        return self.xyz[mask, :], self.sData[mask], self.sColor[mask, :], mask
 
 
     def _reset_mask(self, reset_to=False):
@@ -182,13 +183,19 @@ class SourcesBase(object):
         """
         if self.stext is not None:
             self.stextmesh = visu.Text(text=self.stext, color=self.stextcolor, font_size=self.stextsize,
-                             pos=self.xyz, bold=True)
+                             pos=self.xyz, bold=True, name='SourcesText')
             self.stextmesh.transform = vist.STTransform(translate=self.stextshift)
-            self.canvas.add(self.stextmesh)
+        else:
+            self.stextmesh = visu.Text(name='SourcesText')
 
     def text_update(self):
         """Update text elements
         """
-        self.stextmesh.font_size = self.stextsize
-        self.stextmesh.color = self.stextcolor
-        self.stextmesh.update()
+        if self.stext is not None:
+            idx = self._select_unmasked()[-1]
+            text = np.array(self.stext)
+            text[np.array(~idx, dtype=bool)] = ''
+            self.stextmesh.font_size = self.stextsize
+            self.stextmesh.color = self.stextcolor
+            self.stextmesh.text = text
+            self.stextmesh.update()

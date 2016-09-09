@@ -1,4 +1,5 @@
 import vispy.visuals.transforms as vist
+from vispy.scene import Node
 
 from .AtlasBase import AtlasBase
 from .SourcesBase import SourcesBase
@@ -17,9 +18,9 @@ class elements(CmapBase, transformations):
         self.progressbar = progressbar
 
         # Initialize brain, sources and connectivity elements :
-        self.atlas = AtlasBase(canvas, a_transform=self.transform, **kwargs)
-        self.sources = SourcesBase(canvas, s_transform=self.atlas.transform, **kwargs)
-        self.connect = ConnectivityBase(canvas, c_transform=self.atlas.transform, c_xyz=self.sources.xyz, **kwargs)
+        self.atlas = AtlasBase(a_transform=self.transform, **kwargs)
+        self.sources = SourcesBase(s_transform=self.atlas.transform, **kwargs)
+        self.connect = ConnectivityBase(c_transform=self.atlas.transform, c_xyz=self.sources.xyz, **kwargs)
         CmapBase.__init__(self, **kwargs)
 
         # Add transformations :
@@ -36,5 +37,10 @@ class elements(CmapBase, transformations):
 
         # Update slider with the brain opacity:
         self.OpacitySlider.setValue(self.atlas.opacity*100)
-        # canvas.update()
+
+        self._vbNode = Node(name='visbrain')
+        self.atlas.mesh.parent = self._vbNode
+        self.sources.mesh.parent = self._vbNode
+        self.connect.mesh.parent = self._vbNode
+        self.sources.stextmesh.parent = self._vbNode
 

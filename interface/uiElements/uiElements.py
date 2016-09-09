@@ -3,10 +3,11 @@ from .uiAtlas import uiAtlas
 from .uiSources import uiSources
 from .uiConnectivity import uiConnectivity
 from .uiCmap import uiCmap
+from .uiOpacity import uiOpacity
 
 __all__ = ['uiElements']
 
-class uiElements(uiSettings, uiAtlas, uiSources, uiCmap, uiConnectivity):
+class uiElements(uiSettings, uiAtlas, uiSources, uiCmap, uiConnectivity, uiOpacity):
 
     """Group all ui elements
     """
@@ -17,4 +18,5 @@ class uiElements(uiSettings, uiAtlas, uiSources, uiCmap, uiConnectivity):
         uiSources.__init__(self)
         uiConnectivity.__init__(self)
         uiCmap.__init__(self)
+        uiOpacity.__init__(self)
 

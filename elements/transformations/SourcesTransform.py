@@ -18,7 +18,7 @@ class SourcesTransform(object):
     # DISPLAY
     # ***************************************************************
     # ***************************************************************
-    def display(self, select='all'):
+    def s_display(self, select='all'):
         """Choose which elements to display
         """
 
@@ -51,6 +51,7 @@ class SourcesTransform(object):
 
         # Finally update data :
         self.sources.update()
+        self.sources.text_update()
 
 
     # ***************************************************************

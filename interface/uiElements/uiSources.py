@@ -1,6 +1,6 @@
 import vispy.visuals.transforms as vist
 
-from ...utils import textline2color
+from ...utils import textline2color, color2vb
 
 class uiSources(object):
 
@@ -38,25 +38,25 @@ class uiSources(object):
         """Show/hide sources
         """
         if self.show_Sources.isChecked():
-            self.display(select='all')
+            self.s_display(select='all')
         else:
-            self.display(select='none')
+            self.s_display(select='none')
 
     def left_right_H(self):
         """Display sources either in the left or right hemisphere
         """
         if self.s_LeftH.isChecked():
-            self.display(select='left')
+            self.s_display(select='left')
         if self.s_RightH.isChecked():
-            self.display(select='right')
+            self.s_display(select='right')
 
     def inside_outside_H(self):
         """Display sources either inside or outside the MNI brain
         """
         if self.s_Inside.isChecked():
-            self.display(select='inside')
+            self.s_display(select='inside')
         elif self.s_Outside.isChecked():
-            self.display(select='outside')
+            self.s_display(select='outside')
 
     def fcn_textupdate(self):
         """Update text sources
