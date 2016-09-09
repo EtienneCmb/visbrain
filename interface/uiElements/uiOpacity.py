@@ -4,7 +4,9 @@ import vispy.scene.cameras as viscam
 
 from ...utils import slider2opacity
 
+
 __all__ = ['uiOpacity']
+
 
 class uiOpacity(object):
 
@@ -52,6 +54,10 @@ class uiOpacity(object):
         """
         # Get slider value :
         slval, sl = self._getOpacitySlider(tomin=self.view.minOpacity, tomax=self.view.maxOpacity)
+        # Build a normalize sl value :
+        sl_01 = (sl-self._slmin)/(self._slmax-self._slmin)
+        if sl_01 < 0.05: sl_01 = 0.0
+        if sl_01 > 0.95: sl_01 = 1.0
 
         # Brain opacity :
         # Get vertices and color :
@@ -64,18 +70,21 @@ class uiOpacity(object):
 
         # Sources opacity :
         if self.o_Sources.isChecked():
-            sl_01 = (sl-self._slmin)/(self._slmax-self._slmin)
             self.sources.sColor[:, 3] = sl_01
             self.sources.edgecolor[:, 3] = sl_01
             self.sources.update()
 
         # Text opacity :
         if self.o_Text.isChecked():
-            sl_01 = (sl-self._slmin)/(self._slmax-self._slmin)
             self.sources.stextcolor[:, 3] = sl_01
             self.sources.stextmesh.opacity = sl_01
             self.sources.text_update()
 
+        # Connectivity opacity :
+        if self.o_Connect.isChecked():
+            self.connect.mesh.set_opacity(sl_01)
+
+        self.view.canvas.update()
 
     # def _brain_opacity(self)
 
@@ -142,7 +151,7 @@ class uiOpacity(object):
             self.atlas.mesh.mesh_data.set_vertex_colors(vcolor)
             self.atlas.mesh.mesh_data_changed()     
 
-        # Sources opacity :
+        # Sources/Text opacity :
         if self.o_Sources.isChecked() or self.o_Text.isChecked():
             # Reset mask :
             self.sources.data.mask = np.zeros_like(self.sources.data.mask)
@@ -152,3 +161,21 @@ class uiOpacity(object):
             self.sources.data.mask[tohide] = True
             if self.o_Sources.isChecked(): self.sources.update()
             if self.o_Text.isChecked(): self.sources.text_update()
+
+        # Connectivity opacity :
+        if self.o_Connect.isChecked():
+            # Reset mask :
+            self.connect.connect.mask = self.connect._maskbck
+            # Find sources to remove :
+            tohide = eval(formatstr.format(obj='self.sources.xyz', xsym=xsym, ysym=ysym, zsym=zsym))
+            # Update mask :
+            self.connect.connect.mask[tohide, :] = True
+            self.connect.connect.mask[:, tohide] = True
+            if len(self.connect.connect.compressed()) <= 1:
+                self.connect.mesh.visible = False
+            else:
+                self.connect.mesh.visible = True
+                self.connect.mesh.set_data(self.connect.connect)
+            
+
+        self.view.canvas.update()
