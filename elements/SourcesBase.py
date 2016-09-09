@@ -147,7 +147,9 @@ class SourcesBase(object):
         xyz, sData, sColor, _ = self._select_unmasked()
         # Render as cloud points :
         self.mesh = visu.Markers(name='Sources')
-        self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor, size=sData, scaling=self.scaling, edge_width=self.edgewidth)
+        self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor, size=sData,
+                           scaling=self.scaling, edge_width=self.edgewidth)
+        self.mesh.set_gl_state('translucent', depth_test=False, cull_face=True)
 
 
     def update(self):
@@ -158,7 +160,8 @@ class SourcesBase(object):
         # Render as cloud points :
         if xyz.size:
             self.mesh.visible = True
-            self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor, size=sData, scaling=self.scaling, edge_width=self.edgewidth)
+            self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor, size=sData,
+                               scaling=self.scaling, edge_width=self.edgewidth)
             # self.mesh.transform = self.transform
         else:
             self.mesh.visible = False

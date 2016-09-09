@@ -1,12 +1,11 @@
-import sys
 import numpy as np
-from itertools import product
 from collections import Counter
 
 from vispy import app, gloo, visuals, scene
-from visbrain.utils import array2colormap, normalize
+from ..utils import array2colormap, normalize
 
 
+__all__ = ['ConnectVisual']
 
 
 vertex_shader = """
@@ -44,33 +43,22 @@ class ConnectVisual(visuals.Visual):
         self.cmap = cmap
 
         # Create elements :
-        self._run()
+        self.set_data(self.connect, self.select)
 
         # bind data
         self._draw_mode = 'lines'
-        self.set_gl_state('translucent', depth_test=True, cull_face=False, blend=True, 
-                       blend_func=('src_alpha', 'one_minus_src_alpha'))
+        self.set_gl_state('translucent', depth_test=False, cull_face=True)
 
-    def __iter__(self):
-        for k, i, j in zip(*self._loopIndex):
-            yield k, i, j
 
 
     def _prepare_transforms(self, view):
-        """ This method is called when the user or the scenegraph has assigned
-        new transforms to this visual """
+        """This method is called when the user or the scenegraph has assigned
+        new transforms to this visual
+        """
         tr = view.transforms
         view_vert = view.view_program.vert
         view_frag = view.view_program.frag
         view_vert['transform'] = tr.get_transform()
-
-
-    def _prepare_inputs(self):
-        """Prepare inputs
-        """
-        self._check_position(self.pos)
-        self._check_data(self.connect, self.select)
-        self._check_color(self.colorby, self.cmap, self.dynamic)
 
 
     def _check_position(self, pos):
@@ -84,20 +72,21 @@ class ConnectVisual(visuals.Visual):
     def _check_data(self, connect, select):
         """
         """
-        # Check connect :
-        if connect.shape != tuple([self.pos.shape[0]]*2):
-            raise ValueError("The c_connect matrix must be squared")
-        else:
-            self.connect = connect.astype(np.float32)
-
-        # Check select :
+        N = self.pos.shape[0]
+        # Chech array :
+        if (connect.shape != (N, N)) or not isinstance(connect, np.ndarray):
+            raise ValueError('c_connect must be an array of shape '+str((N, N)))
         if select is None:
-            # Upper triangle matrix
-            select = np.tri(self.pos.shape[0], k=-1, dtype=int).T
-        elif select.shape != tuple([self.pos.shape[0]]*2):
-            raise ValueError("The c_select matrix must be squared")
-        else:
-            self.select = select.astype(int)
+            select = np.ones_like(connect)
+        if (select.shape != (N, N) or not isinstance(select, np.ndarray)):
+            raise ValueError('c_select must be an array of shape '+str((N, N)))
+        # Mask c_connect :
+        try:
+            connect.mask
+        except:
+            connect = np.ma.masked_array(connect, mask=True)
+        connect.mask[select.nonzero()] = False
+        self.connect = connect
 
 
     def _check_color(self, colorby, cmap, dynamic):
@@ -106,8 +95,6 @@ class ConnectVisual(visuals.Visual):
         # Check colorby :
         if self.colorby not in ['count', 'strength']:
             raise ValueError("The colorby parameter must be 'count' or 'strength'")
-        # Test colormap :
-        array2colormap(np.array([0, 1]), cmap=cmap)
         # Test dynamic :
         if not isinstance(dynamic, bool):
             raise ValueError("dynamic bust be an instance of type bool")
@@ -116,7 +103,7 @@ class ConnectVisual(visuals.Visual):
     def _non_zero_select(self):
         """Find non zeros indices and connection values
         """
-        self._nnz_x, self._nnz_y = np.nonzero(self.select)
+        self._nnz_x, self._nnz_y = np.where(~self.connect.mask)
         self._indices = np.c_[self._nnz_x, self._nnz_y].flatten()
         self._Nindices = np.arange(len(self._indices))
 
@@ -128,8 +115,7 @@ class ConnectVisual(visuals.Visual):
         self._check_position(pos)
         # Set and update pos :
         self.a_position = np.zeros((2*len(self._nnz_x), 3), dtype=np.float32)
-        for j, k, l in self:
-            self.a_position[j, :] = self.pos[k, :]
+        self.a_position[self._Nindices, :] = self.pos[self._indices, :]
         self.update_position()
 
 
@@ -156,11 +142,11 @@ class ConnectVisual(visuals.Visual):
         # Colorby strength of connection :
         if colorby == 'strength':
             # Get non-zeros-values :
-            nnz_values = self.connect[self._nnz_x, self._nnz_y]
+            nnz_values = self.connect.compressed()
             # Concatenate in alternance all non-zero values :
             all_nnz = np.c_[nnz_values, nnz_values].flatten()
             # Get looping indices :
-            self._loopIndex = (self._Nindices, self._indices, self._Nindices)
+            self._loopIndex = self._Nindices
 
         # Colorby count on each node :
         elif colorby == 'count':
@@ -168,7 +154,7 @@ class ConnectVisual(visuals.Visual):
             node_count = Counter(np.ravel([self._nnz_x, self._nnz_y]))
             all_nnz = np.array([node_count[k] for k in self._indices])
             # Get looping indices :
-            self._loopIndex = (self._Nindices, self._indices, self._indices)
+            self._loopIndex = self._Nindices
 
         # Get associated colormap :
         colormap = array2colormap(all_nnz, cmap=cmap)
@@ -179,8 +165,7 @@ class ConnectVisual(visuals.Visual):
 
         # Build a_color and send to buffer :
         self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)
-        for j, k, l in self:
-            self.a_color[j, :] = colormap[l, :]
+        self.a_color[self._Nindices, :] = colormap[self._loopIndex, :]
         self.update_color()
 
 
@@ -220,70 +205,10 @@ class ConnectVisual(visuals.Visual):
         """
         return self.shared_program.vert['a_color']
 
-    def _run(self):
-        """
-        """
-        # Set position/data/color :
-        self.set_data(self.connect, self.select)
-        self.set_position(self.pos)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 
 # build your visuals, that's all
-Connect3D = scene.visuals.create_visual_node(ConnectVisual)
+# Connect3D = scene.visuals.create_visual_node(ConnectVisual)
 
-# The real-things : plot using scene
-# build canvas
-canvas = scene.SceneCanvas(keys='interactive', show=True, bgcolor='w')
-canvas.context.set_line_width(5)
-
-# Add a ViewBox to let the user zoom/rotate
-view = canvas.central_widget.add_view()
-view.camera = 'turntable'
-view.camera.fov = 50
-view.camera.distance = 5
-
-# data
-N = 50
-pos = np.random.rand(N, 3)
-connect = np.random.uniform(-10, 10, size=(N, N))
-# connect[(connect < 8)] = 0
-# print(np.nonzero(connect))
-# print(connect)
-# pos = np.array([[-1, 0, 0], [1, 0, 0], [1, 1, 0], [-1, 1, 0]], dtype=np.float32)
-# connect = np.array([[0, 12, 7, 0], [0, 0, 4, 0], [0, 0, 0, 7], [0, 0, 0, 0]])
-
-# plot ! note the parent parameter
-p1 = Connect3D(pos, connect, select=connect.copy(), dynamic=True, parent=view.scene,
-               colorby='count', cmap='viridis')
-
-@canvas.events.mouse_double_click.connect
-def on_mouse_double_click(event):
-    # pos = np.random.rand(N, 3).astype(np.float32)
-    # connect = np.random.uniform(-10, 10, size=(N, N))
-    # connect[(connect < 5)] = 0
-    # p1.set_data(connect=connect, select=connect.copy())
-    # p1.set_position(pos)
-    p1.set_opacity(np.array([0,1]))
-    canvas.update()
-
-# run
-if __name__ == '__main__':
-    if sys.flags.interactive != 1:
-        app.run()
