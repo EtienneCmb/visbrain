@@ -32,8 +32,11 @@ class elements(CmapBase, transformations):
             self.menuTransform.setEnabled(False)
             self.q_TRANS.setEnabled(False)
             self.q_CONNECT.setEnabled(False)
+            self.o_Sources.setEnabled(False)
+            self.o_Text.setEnabled(False)
         if self.connect.connect is None:
             self.q_CONNECT.setEnabled(False)
+            self.o_Connect.setEnabled(False)
 
         # Update slider with the brain opacity:
         self.OpacitySlider.setValue(self.atlas.opacity*100)

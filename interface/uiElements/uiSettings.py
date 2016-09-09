@@ -65,12 +65,11 @@ class uiSettings(object):
         """
         filename = QFileDialog.getSaveFileName(self, 'Save screenshot', os.getenv('HOME'))
 
-        print(self.view.canvas.physical_size)
         backp_size = self.view.canvas.physical_size
         self.view.canvas._backend._physical_size = (6000, 3000)
-        print(self.view.canvas.physical_size)
+
         img = self.view.canvas.render()
-        print(self.view.canvas.physical_size)
+
         io.imsave(filename, img, format='png')
         if self.cbexport:
             cbimg = self.view.cbcanvas.render()
@@ -80,6 +79,7 @@ class uiSettings(object):
                 filename += '_colorbar'
             io.imsave(filename, cbimg, format='png')
         self.view.canvas._backend._physical_size = backp_size
+        self.view.update()
 
 
 
