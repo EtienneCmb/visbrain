@@ -55,16 +55,15 @@ class vbShortcuts(object):
             # st = vist.STTransform(translate=(0.1, 0, 0))
             # self.view.wc.scene.transform = st
             pass
-            # rotation = MatrixTransform()
-            # rotation.rotate(self.view.wc.camera.azimuth, (0,0,1))
-            # rotation.rotate(self.view.wc.camera.elevation, (1,0,0))
-            # self.colorbar.transform = rotation
-            # self.colorbar.update
-            # print(self.view.wc.camera.azimuth, self.view.wc.camera.elevation, self.view.wc.camera.distance)
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
-            pass
+            import numpy as np
+            az = self.view.wc.camera.azimuth
+            el = self.view.wc.camera.elevation
+            print(el)
+            self.atlas.mesh.shared_program.vert['light_dir'] = tuple(np.random.randint(0, el, 3))
+            self.view.canvas.update()
             # self._vbNode.transform = self.view.wc.camera.transform
 
         @canvas.events.mouse_move.connect
@@ -78,6 +77,15 @@ class vbShortcuts(object):
             # rotation.rotate(self.view.wc.camera.azimuth, (0,0,1))
             # rotation.rotate(self.view.wc.camera.elevation, (1,0,0))
             # self.view.wc.scene.transform = rotation
+
+        @canvas.events.mouse_press.connect
+        def on_mouse_press(event):
+            t = self.view.wc.camera.transform
+            ldir = self.atlas.mesh.shared_program.vert['light_dir'] 
+            print(self.atlas.mesh.shared_program.vert['light_dir'])
+            self.atlas.mesh.shared_program.vert['light_dir'] = t.map(ldir)[0:-1]
+            self.atlas.mesh.update()
+
 
 
     def show_hide_shortcuts(self):

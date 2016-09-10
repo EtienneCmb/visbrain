@@ -1,1 +1,1 @@
-from visbrain.vbrain import vbrain
+from .vbrain.vbrain import vbrain

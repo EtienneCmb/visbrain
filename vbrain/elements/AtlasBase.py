@@ -32,7 +32,7 @@ class AtlasBase(object):
         self.axial = 0
 
         # Needed variables :
-        self.atlaspath = os.path.dirname(visbrain.__file__)+'/elements/templates/'
+        self.atlaspath = os.path.dirname(visbrain.__file__)+'/vbrain/elements/templates/'
         self._defcolor = (1,1,1)
         self._scaleMax = 100
 
