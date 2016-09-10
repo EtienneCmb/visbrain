@@ -58,5 +58,5 @@ c_radiusmin = 4
 vb = vbrain(s_xyz=s_xyz, s_color='crimson', s_data=s_data, s_radiusmin=s_radiusmin, s_radiusmax=s_radiusmax,
             s_opacity=s_opacity, a_opacity=0.05, cmap=cmap, cmap_vmin=cmap_vmin, cmap_vmax=cmap_vmax,
             cmap_under=cmap_under, cmap_over=cmap_over, c_connect=c_connect, c_colorby=c_colorby,
-            c_radiusmin=c_radiusmin, a_template='B3')
+            c_radiusmin=c_radiusmin, a_template='B1')
 vb.show()
