@@ -19,7 +19,7 @@ a_position = np.array([time, data, np.zeros_like(data)]).T
 a_position[:, 0] = normalize(a_position[:, 0], tomin=-0.5, tomax=0.5)
 a_position[:, 1] = normalize(a_position[:, 1], tomin=-0.5, tomax=0.5)
 a_position = a_position.astype(np.float32)
-print(data.min(), data.max())
+# print(data.min(), data.max())
 
 
 
