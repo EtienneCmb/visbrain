@@ -1,1 +1,0 @@
-from .lineVisual import CanvasTest
