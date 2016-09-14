@@ -7,7 +7,7 @@ from vispy.scene import Node
 
 import visbrain
 from ..utils import array2colormap, normalize
-from ..visuals import ConnectVisual
+from ..visuals import Connect
 
 
 __all__ = ['ConnectivityBase']
@@ -29,7 +29,6 @@ class ConnectivityBase(object):
         self.cmap = cmap
 
         if (self.xyz is not None) and (self.connect is not None):
-            Connect = visu.create_visual_node(ConnectVisual)
             self.mesh = Connect(self.xyz, self.connect, select=self.select, colorby=self.colorby,
                                 cmap=self.cmap, dynamic=c_dynamic, name='Connectivity')
             self._maskbck = self.mesh.connect.mask.copy()

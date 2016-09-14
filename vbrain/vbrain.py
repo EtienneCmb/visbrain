@@ -143,7 +143,8 @@ class vbrain(uiInit, uiElements, elements):
         self._app = QtGui.QApplication(sys.argv)
         uiInit.__init__(self, kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09)))
 
-        # # ------ Objects creation ------
+        # ------ Objects creation ------
+        camera = viscam.TurntableCamera(azimuth=0, distance=10)
         elements.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
         # ------ UI to visbrain ------
@@ -152,7 +153,8 @@ class vbrain(uiInit, uiElements, elements):
 
         # # ------ Cameras ------
         # # Main camera :
-        self.view.wc.camera = viscam.TurntableCamera(azimuth=90, elevation=90)
+        self.view.wc.camera = camera
+        self.atlas.mesh.set_camera(self.view.wc.camera)
         self._vbNode.parent = self.view.wc.scene
 
         # # Fixed colorbar camera :

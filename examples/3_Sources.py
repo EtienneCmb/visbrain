@@ -47,5 +47,5 @@ s_textshift = (1.5,1.5,0)	# To avoid a superposition between the text and source
 vb = vbrain(s_xyz=s_xyz, s_color=s_color, s_data=s_data, s_radiusmin=s_radiusmin, s_radiusmax=s_radiusmax, s_opacity=s_opacity,
             cmap=cmap, cmap_vmin=cmap_vmin, cmap_vmax=cmap_vmax, cmap_under=cmap_under, cmap_over=cmap_over, cb_label=cb_label,
             s_text=s_text, s_textcolor=s_textcolor, s_textsize=s_textsize, s_textshift=s_textshift, s_edgecolor=s_edgecolor,
-            s_edgewidth=s_edgewidth, a_template='B3')
+            s_edgewidth=s_edgewidth, a_template='B1')
 vb.show()

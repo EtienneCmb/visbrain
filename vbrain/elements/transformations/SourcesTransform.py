@@ -70,6 +70,9 @@ class SourcesTransform(object):
             # Get data and proportional mask :
             prop, mask = self._get_mask(self.atlas._nv, self.atlas.vert, self.sources.xyz,
                                         self.sources.data, set_to=1, contribute=False)
+            from scipy.ndimage.filters import gaussian_filter
+            # prop = gaussian_filter(prop, sigma=10, mode='reflect')
+            # mask = gaussian_filter(mask, sigma=10, mode='reflect')
             # Divide the mask by the number of contributed sources :
             cort_mask = np.divide(mask, prop)
             # Rescale cortical mask data :
@@ -120,10 +123,10 @@ class SourcesTransform(object):
         """
         # Define empty proportional and data mask :
         if set_to == 0:
-            prop = np.zeros((nv,), dtype=int)
+            prop = np.zeros((nv, 3), dtype=int)
         else:
-            prop = set_to*np.ones((nv,), dtype=int)
-        mask = np.zeros((nv,), dtype=float)
+            prop = set_to*np.ones((nv, 3), dtype=int)
+        mask = np.zeros((nv, 3), dtype=float)
         idxunmasked = np.where(data.mask == False)[0]
         N = len(idxunmasked)
         # Find unmasked proximal vertices for each source :
@@ -134,7 +137,7 @@ class SourcesTransform(object):
             # Update mask :
             fact = 1-(eucl/self.radius)
             fact = normalize(fact, tomin=0.0, tomax=1)
-            mask[idx] += data[k]*fact
+            mask[idx] += data[k]#*fact
             prop[idx] += 1
         return prop, mask
 
@@ -147,7 +150,7 @@ class SourcesTransform(object):
         Return the index of under radius vertices.
         """
         # Compute euclidian distance :
-        eucl = np.sqrt(np.square(vert-np.ravel(xyz)).sum(1))
+        eucl = np.sqrt(np.square(vert-np.ravel(xyz)).sum(2))
         # Select under radius sources and those which contribute or not, to the
         # other brain hemisphere :
         if not contribute:
@@ -210,10 +213,11 @@ class SourcesTransform(object):
         # Get the colormap :
         cmap = array2colormap(x, cmap=self.cmap, alpha=alpha, vmin=vmin, vmax=vmax, under=under, over=over)
         # Set ~non_zero to default brain color :
-        if non_zero is not False:
-            cmap[np.invert(non_zero), 0:3] = self.atlas.d_vcolor[np.invert(non_zero), 0:3]
-        # from scipy.ndimage.filters import gaussian_filter
-        # cmap[:, 0:3] = gaussian_filter(cmap[:, 0:3], sigma=0.2, mode='reflect')
+        # if non_zero is not False:
+            # cmap[np.invert(non_zero), 0:3] = self.atlas.d_vcolor[np.invert(non_zero), 0:3]
+        from scipy.ndimage.filters import gaussian_filter
+        cmap[:, 0:3] = gaussian_filter(cmap[:, 0:3], sigma=0.5, mode='reflect')
         # Update mesh with cmap :
-        self.atlas.mesh.mesh_data.set_vertex_colors(cmap)
-        self.atlas.mesh.mesh_data_changed()
+        self.atlas.mesh.set_color(data=cmap)
+        # self.atlas.mesh.mesh_data.set_vertex_colors(cmap)
+        # self.atlas.mesh.mesh_data_changed()

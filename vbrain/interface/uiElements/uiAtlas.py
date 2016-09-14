@@ -43,7 +43,7 @@ class uiAtlas(object):
         """Internal projection
         """
         if self.q_internal.isChecked():
-            self.switch_internal_external('internal')
+            self.atlas.mesh.projection('internal')
         elif self.q_external.isChecked():
-            self.switch_internal_external('external')
+            self.atlas.mesh.projection('external')
         self.atlas.mesh.update()
