@@ -4,8 +4,9 @@ from matplotlib.cm import ScalarMappable
 import matplotlib.colors as mplcol
 from warnings import warn
 
+from .math import normalize
 
-__all__ = ['color2vb', 'array2colormap']
+__all__ = ['color2vb', 'array2colormap', 'dynamic_color']
 
 
 def color2vb(color=None, default=(1,1,1), length=1, alpha=1.0):
@@ -70,7 +71,7 @@ def color2vb(color=None, default=(1,1,1), length=1, alpha=1.0):
 
 
 def array2colormap(x, cmap='inferno', alpha=1.0, vmin=None, vmax=None,
-                   under='dimgray', over='darkred'):
+                   under='dimgray', over='darkred', faces_render=False):
     """Transform an array of data to colormap (array of RGBA)
 
     Args:
@@ -96,6 +97,8 @@ def array2colormap(x, cmap='inferno', alpha=1.0, vmin=None, vmax=None,
         over: tuple/string (def: 'darkred')
             Matplotlib color over vmax
 
+        faces_render: boll, optional, (def: False)
+            Precise if the render should be applied to faces
     Return:
         color: array
             Array of RGBA colors
@@ -105,9 +108,11 @@ def array2colormap(x, cmap='inferno', alpha=1.0, vmin=None, vmax=None,
         v = vmin
         vmax = vmin
         vmin = v
+
     # Normalize x :
     xM = np.abs(x).max()
     x = x/xM
+
     # Define the colormap :
     cm = ScalarMappable(cmap=cmap)
     # Set clim :
@@ -124,10 +129,50 @@ def array2colormap(x, cmap='inferno', alpha=1.0, vmin=None, vmax=None,
     else:
         over = None
     cm.set_clim(vmin=vmin, vmax=vmax)
+
     # Under/over the colorbar :
     if under is not None:
         cm.cmap.set_under(color=under)
     if over is not None:
         cm.cmap.set_over(color=over)
-    return np.array(cm.to_rgba(x, alpha=alpha))
 
+    # Faces render :
+    x_cmap = np.array(cm.to_rgba(x, alpha=alpha))
+    if faces_render:
+        x_cmap = np.transpose(np.tile(x_cmap[..., np.newaxis], (1, 1, 3)), (0, 2, 1))
+
+    return x_cmap
+
+
+def dynamic_color(color, x, dynamic=(0.0, 1.0)):
+    """dynamic color changing
+
+    Args:
+        color: np.ndarray
+            The color to dynamic change. color must have a shape
+            of (N, 4) RGBA colors
+
+        x: np.ndarray
+            Dynamic values for color. x must have a shape of (N,)
+    Kargs:
+        dynamic: tuple, optional, (def: (0.0, 1.0))
+            Control the dynamic of color. 
+            
+    Return
+        colordyn: np.ndarray
+            Dynamic color with a shape of (N, 4)
+    """
+    x = x.ravel()
+    # Check inputs types :
+    if color.shape[1] != 4:
+        raise ValueError("Color must be RGBA")
+    if color.shape[0] != len(x):
+        raise ValueError("The lenght of color must be the same as x: "+str(len(x)))
+    # Normalise x :
+    if dynamic[0] < dynamic[1]:
+        x_norm = normalize(x, tomin=dynamic[0], tomax=dynamic[1])
+    else:
+        x_norm = np.full((len(x),), dynamic[0], dtype=np.float)
+    # Update color :
+    color[:, 3] = x_norm
+    return color
