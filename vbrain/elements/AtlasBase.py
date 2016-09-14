@@ -6,6 +6,7 @@ import vispy.geometry as visg
 import vispy.visuals.transforms as vist
 
 from ..utils import color2vb
+from ..visuals import BrainMesh
 
 import visbrain
 
