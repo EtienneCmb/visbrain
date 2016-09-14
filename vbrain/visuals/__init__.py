@@ -1,1 +1,1 @@
-from .ConnectVisual import ConnectVisual
+from .visual import BrainMesh, Connect
