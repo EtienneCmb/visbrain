@@ -47,8 +47,8 @@ void main() {
 
     // Calculate the cosine of the angle of incidence
     float brightness = dot(v_normal, surfaceToLight) / (length(surfaceToLight) * length(v_normal));
-    brightness = clamp(brightness, 0, 1);
-    // brightness = max(min(brightness,1.0),0.0);
+    // brightness = clamp(brightness, 0, 1);
+    brightness = max(min(brightness,1.0),0.0);
 
     // Get diffuse light :
     vec3 diffuseLight =  v_color.rgb * brightness * $u_light_intensity;
@@ -516,11 +516,11 @@ class BrainMeshVisual(Visual):
                 Use 'internal' or external
         """
         if projection == 'internal':
-            # self.set_gl_state('translucent', depth_test=False, cull_face=False)
-            self.set_gl_state('translucent', depth_test=False, cull_face=True, blend=True,
-                              blend_func=('src_alpha', 'one_minus_src_alpha'))
+            self.set_gl_state('translucent', depth_test=False, cull_face=False)
+            # self.set_gl_state('translucent', depth_test=False, cull_face=True, blend=True,
+                              # blend_func=('src_alpha', 'one_minus_src_alpha'))
         else:
-            # self.set_gl_state('translucent', depth_test=True, cull_face=False)
-            self.set_gl_state('translucent', depth_test=True, cull_face=False, blend=True,
-                              blend_func=('src_alpha', 'one_minus_src_alpha'))
+            self.set_gl_state('translucent', depth_test=True, cull_face=False)
+            # self.set_gl_state('translucent', depth_test=True, cull_face=False, blend=True,
+                              # blend_func=('src_alpha', 'one_minus_src_alpha'))
         self.update_gl_state()

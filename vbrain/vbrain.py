@@ -158,7 +158,7 @@ class vbrain(uiInit, uiElements, elements):
         self._vbNode.parent = self.view.wc.scene
 
         # # Fixed colorbar camera :
-        self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90)
+        self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90, fov=60)
         self.view.cbwc.camera.set_range(x=(-24,24), y=(-0.5,0.5), margin=0)
         self.view.wc.scene.children[0].parent = None
         

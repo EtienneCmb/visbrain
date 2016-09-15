@@ -187,6 +187,7 @@ class SourcesBase(object):
         if self.stext is not None:
             self.stextmesh = visu.Text(text=self.stext, color=self.stextcolor, font_size=self.stextsize,
                                        pos=self.xyz, bold=True, name='SourcesText')
+            self.stextmesh.set_gl_state('translucent', depth_test=True)
             self.stextmesh.transform = vist.STTransform(translate=self.stextshift)
         else:
             self.stextmesh = visu.Text(name='SourcesText')
