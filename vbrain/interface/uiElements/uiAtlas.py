@@ -104,8 +104,7 @@ class uiAtlas(object):
         # Set camera and range :
         self.view.wc.camera.azimuth = azimuth
         self.view.wc.camera.elevation = elevation
-        # self.view.wc.camera.set_range(x=self.atlas._vertsize[0], y=self.atlas._vertsize[1],
-        #                               z=self.atlas._vertsize[2], margin=0.05)
+        self.view.wc.camera.set_range(x=(-50,50), y=(-50,50), z=(-85,85))
 
     def uiSet_light(self):
         """

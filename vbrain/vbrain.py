@@ -156,7 +156,7 @@ class vbrain(uiInit, uiElements, elements):
         uiInit.__init__(self, kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09)))
 
         # ------ Objects creation ------
-        camera = viscam.TurntableCamera(azimuth=0, distance=10, fov=10)
+        camera = viscam.TurntableCamera(azimuth=0, distance=1000)
         elements.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
         # ------ UI to visbrain ------
@@ -170,7 +170,7 @@ class vbrain(uiInit, uiElements, elements):
         self._vbNode.parent = self.view.wc.scene
 
         # # Fixed colorbar camera :
-        self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90, fov=60)
+        self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90)
         self.view.cbwc.camera.set_range(x=(-24,24), y=(-0.5,0.5), margin=0)
         self.view.wc.scene.children[0].parent = None
         
