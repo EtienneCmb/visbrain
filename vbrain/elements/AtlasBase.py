@@ -17,30 +17,29 @@ class AtlasBase(object):
     """
 
     def __init__(self, a_color=(1.0,1.0,1.0), a_opacity=0.1, a_projection='internal', a_template='B1',
-                 a_vertices=None, a_faces=None, a_shading='smooth', a_transform=[], t_transform=None, **kwargs):
+                 a_vertices=None, a_faces=None, a_shading='smooth', a_transform=[], l_position=(10., 10., 10.),
+                 l_intensity=(1., 1., 1.), l_color=(1., 1., 1., 1.), l_coefAmbient=0.07, l_coefSpecular=0.5, **kwargs):
         # Get inputs :
         self.color = a_color
         self.opacity = a_opacity
         self.template = a_template
         self.projection = a_projection
-        self.user_transform = t_transform # user transformation
-        self.transform = a_transform      # software transformations
+        self.transform = a_transform
         self.shading = a_shading
         self.user_vert = a_vertices
         self.user_faces = a_faces
-        self.sagittal = 0
-        self.coronal = 0
-        self.axial = 0
+        self.sagittal, self.coronal, self.axial = (0, 0, 0)
+        self.l_pos, self.l_int, self.l_col = l_position, l_intensity, l_color
+        self.l_amb, self.l_spec = l_coefAmbient, l_coefSpecular
 
         # Needed variables :
         self.atlaspath = os.path.dirname(visbrain.__file__)+'/vbrain/elements/templates/'
         self._defcolor = (1,1,1)
-        self._scaleMax = 10
+        self._scaleMax = 100
 
         # Initialize visualization :
-        self.vert, normals, color, faces = self.load(self.template, self.user_vert, self.user_faces, self.opacity,
-                                                    self.color, self.transform, self.user_transform)
-        self.plot(self.vert, normals, color, faces, a_projection)
+        vertices, normals, color, faces = self.load(self.template, self.user_vert, self.user_faces)
+        self.plot(vertices, normals, color, faces, a_projection)
 
 
     def __len__(self):
@@ -49,17 +48,15 @@ class AtlasBase(object):
 
     def __iter__(self):
         for k in range(len(self)):
-            yield self.vert[k, :]
+            yield self.vert[k, ...]
 
 
     def _load_surf_template(self, path, template):
         """Load a template atlas
         """
         atlas = np.load(path+'atlasGL_{template}.npz'.format(template=template))
-        faces = atlas['faces']
-        normals = atlas['a_normal']
-        vertices = atlas['a_position']
-        color = atlas['a_color']
+        faces, normals, vertices, color = atlas['faces'], atlas['a_normal'], atlas['a_position'], atlas['a_color']
+
         return vertices, normals, color, faces
 
 
@@ -80,8 +77,7 @@ class AtlasBase(object):
         return vertices, faces
 
 
-    def load(self, template='B1', vertices=None, faces=None, opacity=0.1, color=(1,1,1), transform=None,
-             user_transform=None):
+    def load(self, template='B1', vertices=None, faces=None):
         """Load the atlas to use for the interface.
         """
         # Load a default template :
@@ -100,11 +96,14 @@ class AtlasBase(object):
     def plot(self, vertices, normals, color, faces, projection):
         """Mesh the brain
         """
-        # Get data and mesh :
+        # Initialize mesh object : :
         self.mesh = BrainMesh(vertices=vertices, faces=faces, normals=normals, name='Brain',
-                              l_position=(10., 10., 10.), scale_factor=self._scaleMax)
+                              l_position=self.l_pos, l_intensity=self.l_int, l_color=self.l_col,
+                              l_coefAmbient=self.l_amb,  l_coefSpecular=self.l_spec,
+                              scale_factor=self._scaleMax)
+        self.vert = self.mesh.get_vertices
         self.transform = self.mesh._btransform
-        self.mask = np.zeros((len(self.mesh),), dtype=bool)
+        self.mask = np.zeros((len(self.mesh), 3), dtype=bool)
         self._nv = len(self.mesh)
 
         self.mesh.set_alpha(self.opacity)

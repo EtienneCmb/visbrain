@@ -36,7 +36,7 @@ c_connect[np.tril_indices_from(c_connect)] = 0		# Set to zero inferior triangle
 # masking the connection matrix.
 # We are giong to search vealues between umin and umax to
 # limit the number of connections :
-umin, umax = 30, 30.1
+umin, umax = 30, 30.2
 
 # 1 - Using c_select (0: hide, 1: display):
 c_select = np.zeros_like(c_connect)

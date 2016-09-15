@@ -27,7 +27,7 @@ class elements(CmapBase, transformations):
         transformations.__init__(self, **kwargs)
 
         # Manage visible panel :
-        if self.sources.xyz is None:
+        if self.sources.mesh.name is 'NoneSources':
             self.q_SOURCES.setEnabled(False)
             self.menuTransform.setEnabled(False)
             self.q_TRANS.setEnabled(False)
@@ -37,6 +37,9 @@ class elements(CmapBase, transformations):
         if self.connect.connect is None:
             self.q_CONNECT.setEnabled(False)
             self.o_Connect.setEnabled(False)
+        if self.sources.stextmesh.name == 'NoneText':
+            self.o_Text.setEnabled(False)
+            self.grpText.setEnabled(False)
 
         # Update slider with the brain opacity:
         self.OpacitySlider.setValue(self.atlas.opacity*100)

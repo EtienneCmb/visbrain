@@ -38,6 +38,7 @@ class vbShortcuts(object):
                 elif self.q_external.isChecked():
                     self.q_internal.setChecked(True)
                 self.fcn_internal_external()
+                self.uiUpdate_light()
             # Increase/decrease brain opacity :
             elif event.text in ['+', '-']:
                 # Get slider value :
@@ -45,6 +46,7 @@ class vbShortcuts(object):
                 step = 10 if (event.text == '+') else -10
                 self.OpacitySlider.setValue(sl+step)
                 self.fcn_opacity()
+                self.uiUpdate_light()
 
 
         @canvas.events.mouse_release.connect
@@ -83,7 +85,7 @@ class ViewBase(object):
         self.canvas = scene.SceneCanvas(keys='interactive', show=True, dpi=600,
                                         bgcolor=bgcolor, fullscreen=True, #px_scale=2,
                                         resizable=True, position=(0, 250))
-        self.canvas.context.set_line_width(5)
+        self.canvas.context.set_line_width(4)
         self.wc = self.canvas.central_widget.add_view()
 
         # Initialize colorbar canvas :

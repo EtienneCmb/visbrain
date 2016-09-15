@@ -99,7 +99,7 @@ class SourcesTransform(object):
             prop, _ = self._get_mask(self.atlas._nv, self.atlas.vert, self.sources.xyz,
                                      self.sources.data, set_to=0, contribute=False)
             # Finally, set the mask to the surface :
-            non_zero = prop!=0
+            non_zero = prop != 0
             self._array2cmap(prop, non_zero=non_zero, vmin=0, vmax=prop.max())
             # Save this current cmap (for colormap interaction) :
             self.current_mask = prop
