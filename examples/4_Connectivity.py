@@ -36,7 +36,7 @@ c_connect[np.tril_indices_from(c_connect)] = 0		# Set to zero inferior triangle
 # masking the connection matrix.
 # We are giong to search vealues between umin and umax to
 # limit the number of connections :
-umin, umax = 30, 30.05
+umin, umax = 30, 30.1
 
 # 1 - Using c_select (0: hide, 1: display):
 c_select = np.zeros_like(c_connect)
@@ -52,7 +52,7 @@ print('Methods 1 and 2 equivalent :', np.array_equal(c_select, ~c_connect.mask +
 # if c_colorby is 'count', it's the number of connections which pear node
 # drive the colormap. If 'strength', it's the connectivity strength between
 # two nodes.
-c_colorby = 'strength'
+c_colorby = 'count'
 c_radiusmin = 4
 
 vb = vbrain(s_xyz=s_xyz, s_color='crimson', s_data=s_data, s_radiusmin=s_radiusmin, s_radiusmax=s_radiusmax,

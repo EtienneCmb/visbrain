@@ -1,22 +1,23 @@
 import numpy as np
+from warnings import warn
 
 from vispy.scene.cameras import *
-from vispy import app, gloo, visuals, scene, io
+from vispy import app, gloo, scene
 from vispy.visuals import Visual
 from vispy.geometry import MeshData
-from vispy.visuals.transforms import *
+import vispy.visuals.transforms as vist
 
-from visbrain.vbrain.utils import color2vb, array2colormap, dynamic_color
+from visbrain.vbrain.utils import *
 
 
 __all__ = ['BrainMeshVisual']
 
 ############################################################
 # Atlas inputs :
-atlas = np.load('/home/etienne/anaconda3/lib/python3.5/site-packages/visbrain/vbrain/elements/templates/atlasGL_B1.npz')
+atlas = np.load('/home/etienne/anaconda3/lib/python3.5/site-packages/visbrain/vbrain/elements/templates/atlasGL_B3.npz')
 facesI = atlas['faces']
 normalsI = atlas['a_normal'].astype(np.float32)
-verticesI = 10*atlas['a_position'].astype(np.float32)
+verticesI = atlas['a_position'].astype(np.float32)
 colorI = atlas['a_color'].astype(np.float32)
 
 # vertices = 10*data['a_position']
@@ -82,9 +83,9 @@ void main() {
 
 
     // ----------------- Attenuation -----------------
-    // float att = 0.01;
-    // float distanceToLight = length($u_light_position - v_position);
-    // float attenuation = 1.0 / (1.0 + att * pow(distanceToLight, 2));
+    float att = 0.0001;
+    float distanceToLight = length($u_light_position - v_position);
+    float attenuation = 1.0 / (1.0 + att * pow(distanceToLight, 2));
 
 
     // ----------------- Linear color -----------------
@@ -96,15 +97,15 @@ void main() {
     
 
     // ----------------- Gamma correction -----------------
-    // vec3 gamma = vec3(1.0/1.2);
+    vec3 gamma = vec3(1.0/1.2);
 
 
     // ----------------- Final color -----------------
     // Without gamma correction :
-    gl_FragColor = vec4(linearColor, v_color.a);
+    // gl_FragColor = vec4(linearColor, v_color.a);
 
     // With gamma correction :
-    // gl_FragColor = vec4(pow(linearColor, gamma), v_color.a);
+    gl_FragColor = vec4(pow(linearColor, gamma), v_color.a);
 }
 """
 
@@ -135,8 +136,12 @@ class BrainMeshVisual(Visual):
 
     def __init__(self, vertices=None, faces=None, normals=None, vertex_colors=None, camera=None,
                  meshdata=None, l_position=(1., 1., 1.), l_color=(1., 1., 1., 1.), l_intensity=(1., 1., 1.),
-                 l_coefAmbient=0.11, l_coefSpecular=0.5):
+                 l_coefAmbient=0.13, l_coefSpecular=0.5, scale_factor=10):
         Visual.__init__(self, vcode=VERT_SHADER, fcode=FRAG_SHADER)
+
+        # Usefull variables :
+        self._scaleFactor = scale_factor
+        self._btransform = vist.ChainTransform([vist.NullTransform()])
 
         # Define buffers
         self._vertices = gloo.VertexBuffer(np.zeros((0, 3), dtype=np.float32))
@@ -184,48 +189,106 @@ class BrainMeshVisual(Visual):
         self._light_changed = True
         self.update()
 
-    def mesh_camera_changed(self):
-        """Tell if camera changed"""
-        self._camera_changed = True
-        self.update()
-
     # ----------------------------------------------------------------------
     # ----------------------------------------------------------------------
     # Set data/light/camera
     # ----------------------------------------------------------------------
     # ----------------------------------------------------------------------
-    def set_data(self, vertices=None, faces=None, normals=None,
-                 meshdata=None, vertex_colors=None, color=(1., 1., 1., 1.)):
+    def set_data(self, vertices=None, faces=None, normals=None, invert_normals=False,
+                 meshdata=None, vertex_colors=None, color=None):
         """Set data to the mesh
 
         Kargs:
             vertices: ndarray, optional, (def: None)
-                Vertices to set of shape (Nx3)
+                Vertices to set of shape (N, 3) or (M, 3)
 
             faces: ndarray, optional, (def: None)
-                Faces to set of shape (Mx3)
+                Faces to set of shape (M, 3)
 
-            vertex_colors: ndarray, optional, (def: None)
-                Vertex color of shape (Nx4)
+            normals: ndarray, optional, (def: None)
+                The normals to set (same shape as vertices)
+
+            invert_normals: bool, optional, (def: False)
+                Sometimes it appear that the brain color is full
+                black. In that case, turn this parameter to True
+                in order to invert normals.
 
             meshdata: vispy.meshdata, optional, (def: None)
                 Custom vispy mesh data
+
+            vertex_colors: ndarray, optional, (def: None)
+                Vertex color of shape (N, 4) or (M, 3, 4)
+
+            color: tuple/string/hex, optional, (def: None)
+                Alternatively, you can specify a uniform color.
         """
-        # Custom template :
+        # -------------- Check inputs --------------
+        # Check if faces index start at zero (Matlab like):
+        if faces.min() != 0:
+            faces -= faces.min().astype('uint32')
+
+        # Invert normals :
+        if invert_normals:
+            norm_coef = -1
+        else:
+            norm_coef = 1
+
+        # -------------- Vertices/Faces/Normals --------------
+        # Everything to None:
+        if (vertices is None) and (faces is None) and (meshdata is None):
+            raise ValueError('You should at least enter vertices and faces or MeshData.')
+
+        # Only vertices and faces :
+        if (vertices is not None) and (faces is not None) and (normals is None):
+            md = MeshData(vertices=vertices, faces=faces)
+            vertices = md.get_vertices(indexed='faces')
+            normals = md.get_vertex_normals(indexed='faces')
+
+        # Custom meshdata :
         if meshdata is not None:
-            vertices = meshdata.get_vertices()
+            vertices = meshdata.get_vertices(indexed='faces')
             faces = meshdata.get_faces()
-            normals = meshdata.get_vertex_normals()
+            normals = meshdata.get_vertex_normals(indexed='faces')
 
-        # Color management :
+        # -------------- Vertices color --------------
+        # Wrong shape for vertex color :
+        if (vertex_colors is not None) and (vertex_colors.shape != (faces.shape[0], 3, 4)):
+            warn('Wrong shape for vertex color. Default color will be used instead.')
+            vertex_colors = None
+
+        # No vertex color :
         if vertex_colors is None:
-            vertex_colors = np.tile(color, (L, 1))
+            vertex_colors = np.ones((faces.shape[0], 3, 4), dtype=np.float32)
 
+        # Uniform color :
+        if color is not None:
+            vertex_colors = np.tile(color2vb(color)[np.newaxis, ...], (faces.shape[0], 3, 1))
+
+        # -------------- Transformations --------------
+        # Recenter the brain around (0, 0, 0) :
+        xScale, yScale, zScale = vertices[:, :, 0].mean(), vertices[:, :, 1].mean(), vertices[:, :, 2].mean()
+        np.subtract(vertices[:, :, 0], xScale, out=vertices[:, :, 0])
+        np.subtract(vertices[:, :, 1], yScale, out=vertices[:, :, 1])
+        np.subtract(vertices[:, :, 2], zScale, out=vertices[:, :, 2])
+
+        # Inspect minimum and maximum :
+        vm, vM = vertices.min(), vertices.max()
+
+        # Normalize by scaleFactor/max :
+        vertices = normalize(vertices, tomin=-self._scaleFactor, tomax=self._scaleFactor)
+
+        # Save it in a transformation :
+        self._btransform.prepend(vist.STTransform(translate=[-xScale, -yScale, -zScale]))
+        self._btransform.prepend(vist.STTransform(translate=[-vM]*3))
+        self._btransform.prepend(vist.STTransform(scale=[2*self._scaleFactor/(vM-vm)]*3))
+        self._btransform.prepend(vist.STTransform(translate=[self._scaleFactor]*3))
+
+        # -------------- Convert elements --------------
         # Assign elements :
-        self._vertFaces = vertices.astype(np.float32)
-        self._colFaces = vertex_colors.astype(np.float32)
-        self._normFaces = normals.astype(np.float32)
-        self._tri = faces
+        self._vertFaces = np.ascontiguousarray(vertices, dtype=np.float32)
+        self._colFaces = np.ascontiguousarray(vertex_colors, dtype=np.float32)
+        self._normFaces = np.ascontiguousarray(norm_coef*normals, dtype=np.float32)
+        self._tri = faces.astype('uint32')
 
         self.mesh_data_changed()
 
@@ -287,6 +350,16 @@ class BrainMeshVisual(Visual):
         self.mesh_color_changed()
 
 
+    def set_alpha(self, alpha):
+        """Set transparency to the brain
+
+        Args:
+            alpha: float
+                Transparency
+        """
+        self._colFaces[..., :] = np.float32(alpha)
+
+
     def set_light(self, l_position=None, l_color=None, l_intensity=None,
                   l_coefAmbient=None, l_coefSpecular=None):
         """Set light properties
@@ -338,7 +411,7 @@ class BrainMeshVisual(Visual):
             camera = TurntableCamera()
         self._camera = camera
         self._camera_transform = self._camera.transform
-        self.mesh_camera_changed()
+        self.update()
 
 
     # ----------------------------------------------------------------------
@@ -347,8 +420,8 @@ class BrainMeshVisual(Visual):
     # ----------------------------------------------------------------------
     # ----------------------------------------------------------------------
     def _update_data(self):
-        """Update faces/vertices/normals only"""
-
+        """Update faces/vertices/normals only
+        """
         # Define buffers
         self._faces = gloo.IndexBuffer(self._tri)
         self._colors = gloo.VertexBuffer(self._colFaces.astype(np.float32))
@@ -362,15 +435,15 @@ class BrainMeshVisual(Visual):
         self._data_changed = False
 
     def _update_color(self):
-        """Update clor only"""
+        """Update color only
+        """
         self._colors = gloo.VertexBuffer(self._colFaces.astype(np.float32))
         self.shared_program.vert['a_color'] = self._colors
         self._color_changed = False
-        # self._update_data()
 
     def _update_light(self):
-        """Update light only"""
-
+        """Update light only
+        """
         # Define colors and light :
         self.shared_program.vert['u_color'] = self._l_color
         self.shared_program.frag['u_coefAmbient'] = self._l_coefAmbient
@@ -380,28 +453,31 @@ class BrainMeshVisual(Visual):
         self._light_changed = False
 
 
-    def _update_camera(self):
-        self._camera_changed = False
-
-
+    # ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    # Properties
+    # ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     @property
-    def mesh_data(self):
+    def get_vertices(self):
         """The mesh data"""
         return self._vertFaces
 
+    @property
+    def get_normals(self):
+        """The mesh data"""
+        return self._normFaces
 
-    def switch_internal_external(self, projection):
-        """
-        """
-        if projection == 'internal':
-            self.set_gl_state('translucent', depth_test=False, cull_face=True, blend=True,
-                              blend_func=('src_alpha', 'one_minus_src_alpha'))
-        else:
-            self.set_gl_state('translucent', depth_test=True, cull_face=False, blend=True,
-                              blend_func=('src_alpha', 'one_minus_src_alpha'))
-        self.update_gl_state()
+    @property
+    def get_color(self):
+        """The mesh data"""
+        return self._colFaces
 
-
+    # ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    # Drawing functions
+    # ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def draw(self, *args, **kwds):
         """This is call when drawing only
         """
@@ -426,11 +502,6 @@ class BrainMeshVisual(Visual):
             if self._update_light() is False:
                 return False
             self._light_changed = False
-        # Need camera update :
-        if self._camera_changed:
-            if self._update_camera() is False:
-                return False
-            self._camera_changed = False
         view_frag = view.view_program.frag
         view_frag['u_light_position'] = self._camera_transform.map(self._l_position)[0:-1]
 
@@ -446,6 +517,20 @@ class BrainMeshVisual(Visual):
         view_vert['transform'] = transform
 
 
+    def projection(self, projection):
+        """Switch between internal/external rendering
+
+        Args:
+            projection: string
+                Use 'internal' or external
+        """
+        if projection == 'internal':
+            self.set_gl_state('translucent', depth_test=False, cull_face=True, blend=True,
+                              blend_func=('src_alpha', 'one_minus_src_alpha'))
+        else:
+            self.set_gl_state('translucent', depth_test=True, cull_face=False, blend=True,
+                              blend_func=('src_alpha', 'one_minus_src_alpha'))
+        self.update_gl_state()
 
 
 
@@ -474,7 +559,7 @@ view.camera.azimuth = 0.
 
 
 mesh = BrainMesh(verticesI, facesI, vertex_colors=colorI, normals=normalsI, parent=view.scene,
-                 camera=cam, l_position=(10., 10., 10.), l_coefSpecular=0.8)
+                 camera=cam, l_position=(10., 10., 10.), l_coefSpecular=0.5,)
 # mesh.camera = cam
 
 axis = scene.visuals.XYZAxis(parent=view.scene)
@@ -488,14 +573,30 @@ axis = scene.visuals.XYZAxis(parent=view.scene)
 
 @canvas.events.mouse_double_click.connect
 def on_mouse_double_click(event):
-    color = np.arange(len(mesh))
-    # color[:, 3] = 1
-    mesh.set_color(cmap='Spectral', dynamic=None, data=color)
-    canvas.update()
+    file = 'custom_template.npz'
+    atlas = np.load('/home/etienne/anaconda3/lib/python3.5/site-packages/visbrain/examples/'+file)
+    vert, faces = atlas['coord'], atlas['tri']
+    mesh.set_data(vertices=vert, faces=faces, invert_normals=True, color='red')
+    # mesh.projection('internal')
+    # mesh.set_alpha(0.3)
+
+    print(mesh.get_color[0, 0, :])
+
+    # color = np.arange(len(mesh))
+    # # color[:, 3] = 1
+    # mesh.set_color(cmap='Spectral', dynamic=None, data=color)
+    # canvas.update()
+
+    # cam = FlyCamera()
+    # view.camera = cam
+
+    # mesh.set_camera(cam)
+    # canvas.update()
 
 
 # ..and optionally start the event loop
 if __name__ == '__main__':
     import sys
     if sys.flags.interactive != 1:
+        cam.set_range(x=(-10,10), y=(-5,5), z=(-9,9))
         app.run()

@@ -53,40 +53,50 @@ class uiOpacity(object):
         """Change opacity using the slider
         """
         # Get slider value :
-        slval, sl = self._getOpacitySlider(tomin=self.view.minOpacity, tomax=self.view.maxOpacity)
-        # Build a normalize sl value :
+        sl = self.OpacitySlider.value()
         sl_01 = (sl-self._slmin)/(self._slmax-self._slmin)
-        if sl_01 < 0.05: sl_01 = 0.0
-        if sl_01 > 0.95: sl_01 = 1.0
+        if sl_01 < 0.02:
+            sl_01 = 0.
+            visible = False
+            deep_test = False
+        elif sl_01 > 0.92:
+            sl_01 = 1.
+            visible = True
+            deep_test = True
+        else:
+            visible = True
+            deep_test = True
 
         # Brain opacity :
         # Get vertices and color :
         if self.o_Brain.isChecked():
-            vcolor = self.atlas.mesh.mesh_data.get_vertex_colors()
-            # Apply either on all objects or only visible objects :
-            vcolor[~self.atlas.mask, 3] = slval
-            self.atlas.mesh.mesh_data.set_vertex_colors(vcolor)
-            self.atlas.mesh.mesh_data_changed()
+            self.atlas.mesh.set_alpha(sl_01, index=~self.atlas.mask)
+            self.atlas.mesh.visible = visible
 
         # Sources opacity :
         if self.o_Sources.isChecked():
             self.sources.sColor[:, 3] = sl_01
             self.sources.edgecolor[:, 3] = sl_01
+            self.sources.mesh.visible = visible
+            self.sources.mesh.set_gl_state('translucent', depth_test=deep_test)
             self.sources.update()
 
         # Text opacity :
         if self.o_Text.isChecked():
             self.sources.stextcolor[:, 3] = sl_01
             self.sources.stextmesh.opacity = sl_01
+            self.sources.stextmesh = visible
+            self.sources.stextmesh.set_gl_state('translucent', depth_test=deep_test)
             self.sources.text_update()
 
         # Connectivity opacity :
         if self.o_Connect.isChecked():
             self.connect.mesh.set_opacity(sl_01)
+            self.connect.mesh.visible = visible
+            self.connect.mesh.set_gl_state('translucent', depth_test=deep_test)
 
         self.view.canvas.update()
 
-    # def _brain_opacity(self)
 
     def fcn_coronal(self):
         """Fixed coronal view
@@ -111,14 +121,18 @@ class uiOpacity(object):
         """
         # Get radio buttons values :
         if self.c_Turnable.isChecked():
-            self.view.wc.camera = viscam.TurntableCamera(elevation=90, distance=10.0,
+            camera = viscam.TurntableCamera(elevation=90, distance=10.0,
                                                                 fov=0, azimuth=0)
         if self.c_Arcball.isChecked():
-            self.view.wc.camera = viscam.ArcballCamera()
+            camera = viscam.ArcballCamera()
+
         if self.c_Magnify.isChecked():
-            self.view.wc.camera = viscam.MagnifyCamera()
+            camera = viscam.MagnifyCamera()
         if self.c_Fly.isChecked():
-            self.view.wc.camera = viscam.FlyCamera()
+            camera = viscam.FlyCamera()
+        self.view.wc.camera = camera
+        self.atlas.mesh.set_camera(camera)
+        self.view.wc.update()
 
 
     def fcn_xyzSlice(self):
@@ -140,16 +154,15 @@ class uiOpacity(object):
             # Reset mask :
             self.atlas.mask = np.zeros_like(self.atlas.mask)
             # Find vertices to remove :
-            tohide = eval(formatstr.format(obj='self.atlas.vert', xsym=xsym, ysym=ysym, zsym=zsym))
+            tohide = eval(formatstr.format(obj='self.atlas.vert[..., 0]', xsym=xsym, ysym=ysym, zsym=zsym))
             # Update mask :
             self.atlas.mask[tohide] = True
             # Get vertices and color :
-            vcolor = self.atlas.mesh.mesh_data.get_vertex_colors()
+            vcolor = self.atlas.mesh.get_color
             # Update opacity for non-hide vertices :
-            vcolor[self.atlas.mask, 3] = self.view.minOpacity
-            vcolor[~self.atlas.mask, 3] = self._getOpacitySlider(tomin=self.view.minOpacity, tomax=self.view.maxOpacity)[0]
-            self.atlas.mesh.mesh_data.set_vertex_colors(vcolor)
-            self.atlas.mesh.mesh_data_changed()     
+            vcolor[self.atlas.mask, :, 3] = self.view.minOpacity
+            vcolor[~self.atlas.mask, :, 3] = self._getOpacitySlider(tomin=self.view.minOpacity, tomax=self.view.maxOpacity)[0]
+            self.atlas.mesh.set_color(vcolor) 
 
         # Sources/Text opacity :
         if self.o_Sources.isChecked() or self.o_Text.isChecked():

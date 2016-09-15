@@ -9,7 +9,7 @@ class SourcesTransform(object):
     """
 
     def __init__(self, t_radius=10.0, **kwargs):
-        self.radius = t_radius=10.0
+        self.radius = t_radius
         self.current_mask = None
 
 
@@ -120,10 +120,10 @@ class SourcesTransform(object):
         """
         # Define empty proportional and data mask :
         if set_to == 0:
-            prop = np.zeros((nv,), dtype=int)
+            prop = np.zeros((nv, 3), dtype=int)
         else:
-            prop = set_to*np.ones((nv,), dtype=int)
-        mask = np.zeros((nv,), dtype=float)
+            prop = set_to*np.ones((nv, 3), dtype=int)
+        mask = np.zeros((nv, 3), dtype=float)
         idxunmasked = np.where(data.mask == False)[0]
         N = len(idxunmasked)
         # Find unmasked proximal vertices for each source :
@@ -133,8 +133,8 @@ class SourcesTransform(object):
             idx, eucl = self._proximal_vertices(vert, xyz[k, :], self.radius, contribute=contribute)
             # Update mask :
             fact = 1-(eucl/self.radius)
-            fact = normalize(fact, tomin=0.0, tomax=1)
-            mask[idx] += data[k]*fact
+            fact = normalize(fact, tomin=0., tomax=1.)
+            mask[idx] += data[k]#*fact
             prop[idx] += 1
         return prop, mask
 
@@ -147,11 +147,11 @@ class SourcesTransform(object):
         Return the index of under radius vertices.
         """
         # Compute euclidian distance :
-        eucl = np.sqrt(np.square(vert-np.ravel(xyz)).sum(1))
+        eucl = np.sqrt(np.square(vert-np.ravel(xyz)).sum(2))
         # Select under radius sources and those which contribute or not, to the
         # other brain hemisphere :
         if not contribute:
-            idx = np.where((eucl <= radius) & (np.sign(vert[:, 0]) == np.sign(xyz[0])))
+            idx = np.where((eucl <= radius) & (np.sign(vert[:, :, 0]) == np.sign(xyz[0])))
         else:
             idx = np.where(eucl <= radius)
         return idx, eucl[idx]
@@ -161,11 +161,11 @@ class SourcesTransform(object):
         """Find the unique closest vertex from a source
         """
         # Compute euclidian distance :
-        eucl = np.sqrt(np.square(vert-np.ravel(xyz)).sum(1))
+        eucl = np.sqrt(np.square(vert-np.ravel(xyz)).sum(2))
 
         # Set if a source can contribute to the other part of the brain :
         if not contribute:
-            idx = np.where((eucl == eucl.min()) & (np.sign(vert[:, 0]) == np.sign(xyz[0])))
+            idx = np.where((eucl == eucl.min()) & (np.sign(vert[:, :, 0]) == np.sign(xyz[0])))
         else:
             idx = np.where(eucl == eucl.min())
         return idx
@@ -211,9 +211,8 @@ class SourcesTransform(object):
         cmap = array2colormap(x, cmap=self.cmap, alpha=alpha, vmin=vmin, vmax=vmax, under=under, over=over)
         # Set ~non_zero to default brain color :
         if non_zero is not False:
-            cmap[np.invert(non_zero), 0:3] = self.atlas.d_vcolor[np.invert(non_zero), 0:3]
+            cmap[np.invert(non_zero), 0:3] = self.atlas.mesh.get_color[np.invert(non_zero), 0:3]
         # from scipy.ndimage.filters import gaussian_filter
-        # cmap[:, 0:3] = gaussian_filter(cmap[:, 0:3], sigma=0.2, mode='reflect')
+        # cmap[:, 0:3] = gaussian_filter(cmap[:, 0:3], sigma=0.5, mode='reflect')
         # Update mesh with cmap :
-        self.atlas.mesh.mesh_data.set_vertex_colors(cmap)
-        self.atlas.mesh.mesh_data_changed()
+        self.atlas.mesh.set_color(data=cmap)

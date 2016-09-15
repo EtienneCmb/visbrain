@@ -35,7 +35,7 @@ class SourcesBase(object):
         self.stext = s_text
         self.stextcolor = color2vb(s_textcolor)
         self.stextsize = s_textsize
-        self.stextshift = s_textshift
+        self.stextshift = (0,0,0)#s_textshift
 
         # Plot :
         if self.xyz is not None:
@@ -149,7 +149,7 @@ class SourcesBase(object):
         self.mesh = visu.Markers(name='Sources')
         self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor, size=sData,
                            scaling=self.scaling, edge_width=self.edgewidth)
-        self.mesh.set_gl_state('translucent', depth_test=False, cull_face=True)
+        # self.mesh.set_gl_state('translucent', depth_test=False, cull_face=True)
 
 
     def update(self):
@@ -186,7 +186,8 @@ class SourcesBase(object):
         """
         if self.stext is not None:
             self.stextmesh = visu.Text(text=self.stext, color=self.stextcolor, font_size=self.stextsize,
-                             pos=self.xyz, bold=True, name='SourcesText')
+                                       pos=self.xyz, bold=True, name='SourcesText')
+            self.stextmesh.set_gl_state('translucent', depth_test=True)
             self.stextmesh.transform = vist.STTransform(translate=self.stextshift)
         else:
             self.stextmesh = visu.Text(name='SourcesText')

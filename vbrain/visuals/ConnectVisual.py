@@ -47,7 +47,7 @@ class ConnectVisual(visuals.Visual):
 
         # bind data
         self._draw_mode = 'lines'
-        self.set_gl_state('translucent', depth_test=False, cull_face=True)
+        # self.set_gl_state('translucent', depth_test=False, cull_face=False)
 
 
 
