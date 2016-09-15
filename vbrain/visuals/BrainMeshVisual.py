@@ -244,23 +244,24 @@ class BrainMeshVisual(Visual):
             vertex_colors = np.tile(color2vb(color)[np.newaxis, ...], (faces.shape[0], 3, 1))
 
         # -------------- Transformations --------------
-        # Recenter the brain around (0, 0, 0) :
-        xScale, yScale, zScale = vertices[:, :, 0].mean(), vertices[:, :, 1].mean(), vertices[:, :, 2].mean()
-        np.subtract(vertices[:, :, 0], xScale, out=vertices[:, :, 0])
-        np.subtract(vertices[:, :, 1], yScale, out=vertices[:, :, 1])
-        np.subtract(vertices[:, :, 2], zScale, out=vertices[:, :, 2])
-
         # Inspect minimum and maximum :
         vm, vM = vertices.min(), vertices.max()
 
         # Normalize by scaleFactor/max :
         vertices = normalize(vertices, tomin=-self._scaleFactor, tomax=self._scaleFactor)
 
+        # Recenter the brain around (0, 0, 0) :
+        xScale, yScale, zScale = vertices[:, :, 0].mean(), vertices[:, :, 1].mean(), vertices[:, :, 2].mean()
+        np.subtract(vertices[:, :, 0], xScale, out=vertices[:, :, 0])
+        np.subtract(vertices[:, :, 1], yScale, out=vertices[:, :, 1])
+        np.subtract(vertices[:, :, 2], zScale, out=vertices[:, :, 2])
+
+
         # Save it in a transformation :
-        self._btransform.prepend(vist.STTransform(translate=[-xScale, -yScale, -zScale]))
         self._btransform.prepend(vist.STTransform(translate=[-vM]*3))
         self._btransform.prepend(vist.STTransform(scale=[2*self._scaleFactor/(vM-vm)]*3))
         self._btransform.prepend(vist.STTransform(translate=[self._scaleFactor]*3))
+        self._btransform.prepend(vist.STTransform(translate=[-xScale, -yScale, -zScale]))
 
         # Keep maximum/minimum pear coordinates :
         self._vertsize = [(vertices[:, 0, 0].min(), vertices[:, 0, 0].max()),
