@@ -13,6 +13,8 @@ class elements(CmapBase, transformations):
     """
 
     def __init__(self, canvas, progressbar, **kwargs):
+
+        # ---------- Initialize elements ----------
         # Initialize transformation with Null:
         self.transform = vist.ChainTransform([vist.NullTransform()])
         self.progressbar = progressbar
@@ -26,7 +28,8 @@ class elements(CmapBase, transformations):
         # Add transformations :
         transformations.__init__(self, **kwargs)
 
-        # Manage visible panel :
+        # ---------- Panel management ----------
+        # Sources panel:
         if self.sources.mesh.name is 'NoneSources':
             self.q_SOURCES.setEnabled(False)
             self.menuTransform.setEnabled(False)
@@ -34,16 +37,19 @@ class elements(CmapBase, transformations):
             self.q_CONNECT.setEnabled(False)
             self.o_Sources.setEnabled(False)
             self.o_Text.setEnabled(False)
-        if self.connect.connect is None:
-            self.q_CONNECT.setEnabled(False)
-            self.o_Connect.setEnabled(False)
+
+        # Text panel:
         if self.sources.stextmesh.name == 'NoneText':
             self.o_Text.setEnabled(False)
             self.grpText.setEnabled(False)
 
-        # Update slider with the brain opacity:
-        self.OpacitySlider.setValue(self.atlas.opacity*100)
+        # Connectivity panel:
+        if self.connect.mesh.name == 'NoneText':
+            self.q_CONNECT.setEnabled(False)
+            self.o_Connect.setEnabled(False)
+        self._lw = kwargs.get('c_linewidth', 4.)
 
+        # ---------- Put everything in a root node ----------
         self._vbNode = Node(name='visbrain')
         self.atlas.mesh.parent = self._vbNode
         self.sources.mesh.parent = self._vbNode

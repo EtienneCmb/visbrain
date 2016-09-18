@@ -34,5 +34,5 @@ class ConnectivityBase(object):
                                 cmap=self.cmap, dynamic=self.dynamic, name='Connectivity')
             self._maskbck = self.mesh.connect.mask.copy()
         else:
-            self.mesh = visu.Line(name='Connectivity')
+            self.mesh = visu.Line(name='NoneConnect')
 
