@@ -104,6 +104,10 @@ class vbrain(uiInit, uiElements, elements):
             and must have the same shape as c_connect. Alternatively, set a mask to c_connect
             to have the same effect without using this parameter.
 
+        c_dynamic: tuple, optional, (def: None)
+            Control the dynamic opacity. For example, if c_dynamic=(0, 1),
+            strong connections will be more opaque than weak connections.
+
         cmap: string, (def: 'inferno')
             Matplotlib colormap name.
 
@@ -119,7 +123,7 @@ class vbrain(uiInit, uiElements, elements):
         ui_bgcolor: string/tuple, (def: (0.09, 0.09, 0.09))
             Backgroud color of the ui
 
-        l_position: tuple, optional, (def: (10., 10., 10.))
+        l_position: tuple, optional, (def: (100., 100., 100.))
             Position of the light
 
         l_intensity: tuple, optional, (def: (1., 1., 1.))
@@ -128,7 +132,7 @@ class vbrain(uiInit, uiElements, elements):
         l_color: tuple, optional, (def: (1., 1., 1., 1.))
             Color of the light
 
-        l_coefAmbient: float, optional, (def: 0.13)
+        l_coefAmbient: float, optional, (def: 0.05)
             Coefficient for the ambient light
 
         l_coefSpecular: float, optional, (def: 0.5)
