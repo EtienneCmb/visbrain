@@ -27,10 +27,16 @@ def normalize(x, tomin=0.0, tomax=1.0):
         x = np.float32(x)
         xm, xM = np.float32(x.min()), np.float32(x.max())
         if xm != xM:
-            return tomax - (((tomax - tomin) * (xM - x)) / (xM-xm))
+            coef = (tomax - tomin) / (xM-xm)
+            np.subtract(x, xM, out=x)
+            np.multiply(x, coef, out=x)
+            np.add(x, tomax, out=x)
+            return x
+            # return tomax - (((tomax - tomin) * (xM - x)) / (xM-xm))
         else:
             warn('Normalization has been ignored because minimum '
                  'and maximum are both equal to '+str(xm))
             return x
     else:
         return x
+
