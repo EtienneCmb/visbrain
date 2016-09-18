@@ -16,19 +16,20 @@ class vbrain(uiInit, uiElements, elements):
     All possible colors can be a matplotlib color name ('olive', 'slateblue'...),
     an hexadecimal type ('#9b59b6', '#3498db', '#95a5a6'...) or an array of RGB or
     RGBA colors.
-    's_': sources options
-    'a_': atlas options
-    'c_': connectivity options
-    't_': transformations options
-    'cmap_': colormap options
-    'cb_': colorbar
-    'ui_': graphical interface options
+    's_': sources properties
+    'a_': atlas properties
+    'c_': connectivity properties
+    't_': transformations properties
+    'cmap_': colormap properties
+    'cb_': colorbar properties
+    'ui_': graphical interface properties
+    'l_': light properties
 
     Kargs:
         a_color: tuple, (def: (1,1,1))
             RGB colors of the MNI brain.
 
-        a_opacity: int/float, (def: 0.1)
+        a_opacity: int/float, (def: 1.)
             Transparency of the MNI brain. Must be between 0 and 1.
 
         a_proj: string, (def: 'internal')
@@ -72,7 +73,7 @@ class vbrain(uiInit, uiElements, elements):
         s_edgecolor: string/list/ndarray, (def: None)
             Add an edge to sources
 
-         s_edgewidth: float, (def: 0.4)
+        s_edgewidth: float, (def: 0.4)
             Edge width of sources
 
         s_scaling: bool, (def: True)
@@ -103,6 +104,13 @@ class vbrain(uiInit, uiElements, elements):
             and must have the same shape as c_connect. Alternatively, set a mask to c_connect
             to have the same effect without using this parameter.
 
+        c_dynamic: tuple, optional, (def: None)
+            Control the dynamic opacity. For example, if c_dynamic=(0, 1),
+            strong connections will be more opaque than weak connections.
+
+        c_linewidth: float, optional, (def: 4.0)
+            Linewidth of connectivity lines.
+
         cmap: string, (def: 'inferno')
             Matplotlib colormap name.
 
@@ -115,12 +123,23 @@ class vbrain(uiInit, uiElements, elements):
         t_radius: int/float, (def: 10)
             The projection radius to use (depending on coordinates type)
 
-        t_transform: vispy transformation, (def: None)
-            Define and set a transformation to all displayed elements. This can be
-            usefull to adapt a user template to visbrain.
-
         ui_bgcolor: string/tuple, (def: (0.09, 0.09, 0.09))
             Backgroud color of the ui
+
+        l_position: tuple, optional, (def: (100., 100., 100.))
+            Position of the light
+
+        l_intensity: tuple, optional, (def: (1., 1., 1.))
+            Intensity of the light
+
+        l_color: tuple, optional, (def: (1., 1., 1., 1.))
+            Color of the light
+
+        l_coefAmbient: float, optional, (def: 0.05)
+            Coefficient for the ambient light
+
+        l_coefSpecular: float, optional, (def: 0.5)
+            Coefficient for the specular light
 
     Example:
         >>> # Load lirairies :
@@ -144,7 +163,7 @@ class vbrain(uiInit, uiElements, elements):
         uiInit.__init__(self, kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09)))
 
         # ------ Objects creation ------
-        camera = viscam.TurntableCamera(azimuth=0, distance=10)
+        camera = viscam.TurntableCamera(azimuth=0, distance=1000)
         elements.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
         # ------ UI to visbrain ------
@@ -158,7 +177,7 @@ class vbrain(uiInit, uiElements, elements):
         self._vbNode.parent = self.view.wc.scene
 
         # # Fixed colorbar camera :
-        self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90, fov=60)
+        self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90)
         self.view.cbwc.camera.set_range(x=(-24,24), y=(-0.5,0.5), margin=0)
         self.view.wc.scene.children[0].parent = None
         

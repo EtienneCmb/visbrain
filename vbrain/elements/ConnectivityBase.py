@@ -20,18 +20,19 @@ class ConnectivityBase(object):
     """
 
     def __init__(self, c_xyz=[], c_connect=None, c_select=None, c_colorby='count',
-                 c_transform=[], cmap='viridis', c_dynamic=True, **kwargs):
+                 c_transform=[], cmap='viridis', c_dynamic=None, **kwargs):
         self.xyz = c_xyz
         self.connect = c_connect
         self.select = c_select
         self.colorby = c_colorby
         self.transform = c_transform
         self.cmap = cmap
+        self.dynamic = c_dynamic
 
         if (self.xyz is not None) and (self.connect is not None):
             self.mesh = Connect(self.xyz, self.connect, select=self.select, colorby=self.colorby,
-                                cmap=self.cmap, dynamic=c_dynamic, name='Connectivity')
+                                cmap=self.cmap, dynamic=self.dynamic, name='Connectivity')
             self._maskbck = self.mesh.connect.mask.copy()
         else:
-            self.mesh = visu.Line(name='Connectivity')
+            self.mesh = visu.Line(name='NoneConnect')
 

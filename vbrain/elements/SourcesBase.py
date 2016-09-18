@@ -16,7 +16,7 @@ class SourcesBase(object):
     """
 
     def __init__(self, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6,
-                 s_scaling=False, s_transform=[], s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), t_transform=None, **kwargs):
+                 s_scaling=False, s_transform=[], s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), **kwargs):
         # Initialize elements :
         self.xyz = s_xyz
         self.data = s_data
@@ -26,7 +26,6 @@ class SourcesBase(object):
         self.alpha = s_opacity
         self.scaling = s_scaling
         self.transform = s_transform
-        self.user_transform = t_transform
         self.radiusmin = s_radiusmin*1.5
         self.radiusmax = s_radiusmax*1.5
         self._defcolor = 'slateblue'
@@ -35,7 +34,7 @@ class SourcesBase(object):
         self.stext = s_text
         self.stextcolor = color2vb(s_textcolor)
         self.stextsize = s_textsize
-        self.stextshift = (0,0,0)#s_textshift
+        self.stextshift = s_textshift
 
         # Plot :
         if self.xyz is not None:
@@ -43,8 +42,8 @@ class SourcesBase(object):
             self.plot()
             self.text_plot()
         else:
-            self.mesh = visu.Markers(name='Sources')
-            self.stextmesh = visu.Text(name='SourcesText')
+            self.mesh = visu.Markers(name='NoneSources')
+            self.stextmesh = visu.Text(name='NoneText')
 
     def __len__(self):
         return len(np.where(self.data.mask == False)[0])
@@ -73,9 +72,6 @@ class SourcesBase(object):
         self.nSources = self.xyz.shape[0]
 
         # --------------------------------------------------------------------
-        # User transformations :
-        if self.user_transform is not None:
-            self.xyz = self.user_transform.map(self.xyz)[:, 0:-1]
         # Apply transformation to coordinates :
         self.xyz = self.transform.map(self.xyz)[:, 0:-1]
 
@@ -190,7 +186,7 @@ class SourcesBase(object):
             self.stextmesh.set_gl_state('translucent', depth_test=True)
             self.stextmesh.transform = vist.STTransform(translate=self.stextshift)
         else:
-            self.stextmesh = visu.Text(name='SourcesText')
+            self.stextmesh = visu.Text(name='NoneText')
 
     def text_update(self):
         """Update text elements

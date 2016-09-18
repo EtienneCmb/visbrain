@@ -115,7 +115,7 @@ class BrainMeshVisual(Visual):
 
     def __init__(self, vertices=None, faces=None, normals=None, vertex_colors=None, camera=None,
                  meshdata=None, l_position=(1., 1., 1.), l_color=(1., 1., 1., 1.), l_intensity=(1., 1., 1.),
-                 l_coefAmbient=0.13, l_coefSpecular=0.5, scale_factor=10):
+                 l_coefAmbient=0.07, l_coefSpecular=0.5, scale_factor=10):
         Visual.__init__(self, vcode=VERT_SHADER, fcode=FRAG_SHADER)
 
         # Usefull variables :
@@ -244,23 +244,24 @@ class BrainMeshVisual(Visual):
             vertex_colors = np.tile(color2vb(color)[np.newaxis, ...], (faces.shape[0], 3, 1))
 
         # -------------- Transformations --------------
-        # Recenter the brain around (0, 0, 0) :
-        xScale, yScale, zScale = vertices[:, :, 0].mean(), vertices[:, :, 1].mean(), vertices[:, :, 2].mean()
-        np.subtract(vertices[:, :, 0], xScale, out=vertices[:, :, 0])
-        np.subtract(vertices[:, :, 1], yScale, out=vertices[:, :, 1])
-        np.subtract(vertices[:, :, 2], zScale, out=vertices[:, :, 2])
-
         # Inspect minimum and maximum :
         vm, vM = vertices.min(), vertices.max()
 
         # Normalize by scaleFactor/max :
         vertices = normalize(vertices, tomin=-self._scaleFactor, tomax=self._scaleFactor)
 
+        # Recenter the brain around (0, 0, 0) :
+        xScale, yScale, zScale = vertices[:, :, 0].mean(), vertices[:, :, 1].mean(), vertices[:, :, 2].mean()
+        np.subtract(vertices[:, :, 0], xScale, out=vertices[:, :, 0])
+        np.subtract(vertices[:, :, 1], yScale, out=vertices[:, :, 1])
+        np.subtract(vertices[:, :, 2], zScale, out=vertices[:, :, 2])
+
+
         # Save it in a transformation :
-        self._btransform.prepend(vist.STTransform(translate=[-xScale, -yScale, -zScale]))
         self._btransform.prepend(vist.STTransform(translate=[-vM]*3))
         self._btransform.prepend(vist.STTransform(scale=[2*self._scaleFactor/(vM-vm)]*3))
         self._btransform.prepend(vist.STTransform(translate=[self._scaleFactor]*3))
+        self._btransform.prepend(vist.STTransform(translate=[-xScale, -yScale, -zScale]))
 
         # Keep maximum/minimum pear coordinates :
         self._vertsize = [(vertices[:, 0, 0].min(), vertices[:, 0, 0].max()),
@@ -321,6 +322,7 @@ class BrainMeshVisual(Visual):
                                  under=under, over=over).astype(np.float32)
             # Dynamic color :
             if dynamic is not None:
+                print('ok')
                 col = dynamic_color(col, data)
         elif (data.ndim > 1) and (data.shape[1] == 4):
             col = data.astype(np.float32)
@@ -345,8 +347,8 @@ class BrainMeshVisual(Visual):
                 Transparency
         """
         if index is None:
-            index = np.ones((len(self),), dtype=np.bool)
-        self._colFaces[index, :, 3] = np.float32(alpha)
+            index = np.ones((len(self), 3), dtype=np.bool)
+        self._colFaces[index, 3] = np.float32(alpha)
         self.mesh_color_changed()
 
 
@@ -451,18 +453,43 @@ class BrainMeshVisual(Visual):
     # ----------------------------------------------------------------------
     @property
     def get_vertices(self):
-        """The mesh data"""
+        """Mesh data"""
         return self._vertFaces
 
     @property
     def get_normals(self):
-        """The mesh data"""
+        """Normals"""
         return self._normFaces
 
     @property
     def get_color(self):
-        """The mesh data"""
+        """Vertex color"""
         return self._colFaces
+
+    @property
+    def get_l_position(self):
+        """Light position"""
+        return self._l_position
+
+    @property
+    def get_l_intensity(self):
+        """Light intensity"""
+        return self._l_intensity
+
+    @property
+    def get_l_color(self):
+        """Light color"""
+        return self._l_color
+
+    @property
+    def get_l_coef(self):
+        """Light coefficients"""
+        return tuple([self._l_coefAmbient, self._l_coefSpecular])
+
+    @property
+    def get_light(self):
+        """List of all light properties"""
+        return [*self.get_l_position] + [*self.get_l_intensity] + [*self.get_l_color] + [*self.get_l_coef]
 
     # ----------------------------------------------------------------------
     # ----------------------------------------------------------------------
@@ -515,12 +542,16 @@ class BrainMeshVisual(Visual):
             projection: string
                 Use 'internal' or external
         """
+        l_color = list(self.get_l_color)
         if projection == 'internal':
             self.set_gl_state('translucent', depth_test=False, cull_face=False)
+            l_color[3] = 0.1
             # self.set_gl_state('translucent', depth_test=False, cull_face=True, blend=True,
                               # blend_func=('src_alpha', 'one_minus_src_alpha'))
         else:
             self.set_gl_state('translucent', depth_test=True, cull_face=False)
+            l_color[3] = 1
             # self.set_gl_state('translucent', depth_test=True, cull_face=False, blend=True,
                               # blend_func=('src_alpha', 'one_minus_src_alpha'))
+        self.set_light(l_color=l_color)
         self.update_gl_state()

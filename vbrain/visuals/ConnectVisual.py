@@ -29,7 +29,7 @@ class ConnectVisual(visuals.Visual):
     """Template
     """
 
-    def __init__(self, pos, connect, select=None, colorby='strength', dynamic=False,
+    def __init__(self, pos, connect, select=None, colorby='strength', dynamic=None,
                  cmap='viridis'):
 
         visuals.Visual.__init__(self, vertex_shader, fragment_shader)
@@ -96,8 +96,8 @@ class ConnectVisual(visuals.Visual):
         if self.colorby not in ['count', 'strength']:
             raise ValueError("The colorby parameter must be 'count' or 'strength'")
         # Test dynamic :
-        if not isinstance(dynamic, bool):
-            raise ValueError("dynamic bust be an instance of type bool")
+        if (dynamic is not None) and not isinstance(dynamic, tuple):
+            raise ValueError("dynamic bust be a tuple")
 
 
     def _non_zero_select(self):
@@ -160,8 +160,8 @@ class ConnectVisual(visuals.Visual):
         colormap = array2colormap(all_nnz, cmap=cmap)
 
         # Dynamic alpha :
-        if dynamic:
-            colormap[:, 3] = normalize(all_nnz, tomax=1)
+        if (dynamic is not False) and isinstance(dynamic, tuple):
+            colormap[:, 3] = normalize(all_nnz, tomin=dynamic[0], tomax=dynamic[1])
 
         # Build a_color and send to buffer :
         self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)

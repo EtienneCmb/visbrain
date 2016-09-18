@@ -73,8 +73,8 @@ class SourcesTransform(object):
             # Divide the mask by the number of contributed sources :
             cort_mask = np.divide(mask, prop)
             # Rescale cortical mask data :
-            cort_mask, non_zero = self._rescale_cmap(cort_mask, to_min=self.sources.data.min(),
-                                                     to_max=self.sources.data.max(), val=0)
+            cort_mask, non_zero = self._rescale_cmap(cort_mask, tomin=self.sources.data.min(),
+                                                     tomax=self.sources.data.max(), val=0)
             # Finally, set the mask to the surface :
             self._array2cmap(cort_mask, non_zero=non_zero, vmin=self.cmap_vmin, vmax=self.cmap_vmax,
                              under=self.cmap_under, over=self.cmap_over)
@@ -99,7 +99,7 @@ class SourcesTransform(object):
             prop, _ = self._get_mask(self.atlas._nv, self.atlas.vert, self.sources.xyz,
                                      self.sources.data, set_to=0, contribute=False)
             # Finally, set the mask to the surface :
-            non_zero = prop!=0
+            non_zero = prop != 0
             self._array2cmap(prop, non_zero=non_zero, vmin=0, vmax=prop.max())
             # Save this current cmap (for colormap interaction) :
             self.current_mask = prop
@@ -130,10 +130,10 @@ class SourcesTransform(object):
         for i, k in enumerate(idxunmasked):
             self.progressbar.setValue(100*k/N)
             # Find index :
-            idx, eucl = self._proximal_vertices(vert, xyz[k, :], self.radius, contribute=contribute)
+            idx = self._proximal_vertices(vert, xyz[k, :], self.radius, contribute=contribute)
             # Update mask :
-            fact = 1-(eucl/self.radius)
-            fact = normalize(fact, tomin=0., tomax=1.)
+            # fact = 1-(eucl/self.radius)
+            # fact = normalize(fact, tomin=0., tomax=1.)
             mask[idx] += data[k]#*fact
             prop[idx] += 1
         return prop, mask
@@ -146,28 +146,38 @@ class SourcesTransform(object):
         cortical activity from the other part of the brain.
         Return the index of under radius vertices.
         """
-        # Compute euclidian distance :
-        eucl = np.sqrt(np.square(vert-np.ravel(xyz)).sum(2))
+        # Compute manually the euclidian distance (much faster because don't need
+        # the reduce function of numpy) :
+        x = vert[:, :, 0] - xyz[0]
+        y = vert[:, :, 1] - xyz[1]
+        z = vert[:, :, 2] - xyz[2]
+        eucl = np.sqrt(x**2 + y**2 + z**2)
+
         # Select under radius sources and those which contribute or not, to the
         # other brain hemisphere :
         if not contribute:
-            idx = np.where((eucl <= radius) & (np.sign(vert[:, :, 0]) == np.sign(xyz[0])))
+            idx = np.logical_and(eucl <= radius, np.sign(vert[:, :, 0]) == np.sign(xyz[0]))
         else:
-            idx = np.where(eucl <= radius)
-        return idx, eucl[idx]
+            idx = eucl <= radius
+
+        return idx #, eucl[idx]
 
 
     def _closest_vertex(self, vert, xyz, contribute=False):
         """Find the unique closest vertex from a source
         """
-        # Compute euclidian distance :
-        eucl = np.sqrt(np.square(vert-np.ravel(xyz)).sum(2))
+        # Compute manually the euclidian distance (much faster) :
+        x = vert[:, :, 0] - xyz[0]
+        y = vert[:, :, 1] - xyz[1]
+        z = vert[:, :, 2] - xyz[2]
+        eucl = np.sqrt(x**2 + y**2 + z**2)
 
         # Set if a source can contribute to the other part of the brain :
         if not contribute:
-            idx = np.where((eucl == eucl.min()) & (np.sign(vert[:, :, 0]) == np.sign(xyz[0])))
+            idx = np.logical_and(eucl == eucl.min(), np.sign(vert[:, :, 0]) == np.sign(xyz[0]))
         else:
-            idx = np.where(eucl == eucl.min())
+            idx = eucl == eucl.min()
+
         return idx
 
 
@@ -175,29 +185,35 @@ class SourcesTransform(object):
         """Return if a source is inside the MNI brain :
         """
         # Get the index of the closest vertex :
-        idx = self._closest_vertex(vert, xyz, contribute=contribute)[0]
+        idx = self._closest_vertex(vert, xyz, contribute=contribute)
 
         # Compute euclidian distance between 0 and corresponding vertex and source :
-        eucl_vert = np.sqrt(np.square(vert[idx, :]).sum())
-        eucl_xyz = np.sqrt(np.square(xyz).sum())
+        # Euclidian distance for the closest vertex :
+        x_vert, y_vert, z_vert = vert[idx, 0][0], vert[idx, 1][0], vert[idx, 2][0]
+        eucl_vert = np.sqrt(x_vert**2 + y_vert**2 + z_vert**2)
+
+        # Euclidian distance for each source :
+        eucl_xyz = np.sqrt(xyz[0]**2 + xyz[1]**2 + xyz[2]**2)
+
+        # Find where eucl_xyz < eucl_vert :
+        isInside = eucl_xyz < eucl_vert
 
         # Return if it's inside :
-        return eucl_xyz < eucl_vert
+        return isInside
 
 
     # ________________ PROJECTION COLOR ________________
 
 
-    def _rescale_cmap(self, cort, to_min=0, to_max=1, val=0):
-        """Rescale colormap between to_min and to_max
+    def _rescale_cmap(self, cort, tomin=0, tomax=1, val=0):
+        """Rescale colormap between tomin and tomax
         """
         # Find non-zero values :
         non_zero = cort != val
-        # Rescale non-zero data :
-        cort[non_zero] = cort[non_zero] - cort[non_zero].min()
-        cort[non_zero] = cort[non_zero]/cort[non_zero].max()
-        # Rescale data between [to_min, to_max]:
-        cort[non_zero] = cort[non_zero]*(to_max-to_min) + to_min
+
+        # Rescale colormap :
+        cort[non_zero] = normalize(cort[non_zero], tomin=tomin, tomax=tomax)
+
         return cort, non_zero
 
 
@@ -207,12 +223,13 @@ class SourcesTransform(object):
         # Get alpha :
         alpha = slider2opacity(self.OpacitySlider.value(), thmin=0.0, thmax=100.0, vmin=self._slmin,
                                vmax=self._slmax, tomin=self.view.minOpacity, tomax=self.view.maxOpacity)
+
         # Get the colormap :
         cmap = array2colormap(x, cmap=self.cmap, alpha=alpha, vmin=vmin, vmax=vmax, under=under, over=over)
+
         # Set ~non_zero to default brain color :
         if non_zero is not False:
             cmap[np.invert(non_zero), 0:3] = self.atlas.mesh.get_color[np.invert(non_zero), 0:3]
-        # from scipy.ndimage.filters import gaussian_filter
-        # cmap[:, 0:3] = gaussian_filter(cmap[:, 0:3], sigma=0.5, mode='reflect')
+
         # Update mesh with cmap :
         self.atlas.mesh.set_color(data=cmap)

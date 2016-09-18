@@ -70,3 +70,4 @@ debuging.py
 *.sublime*
 *.sublime-workspace
 *.sublime-project
+*.cprof

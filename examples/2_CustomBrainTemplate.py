@@ -15,11 +15,29 @@ mat = np.load(path+file)
 vert, faces = mat['coord'], mat['tri']
 
 # By default, this template is rotated (compared to default templates in visbrain)
-# So, we can add a transformation to correct the default rotation. We are going
-# to rotate about 90° around the z axis :
-trans = vist.MatrixTransform()
-trans.rotate(90, (0,0,1))
+# So, we can add a transformation to correct the default rotation.
 
-vb = visbrain.vbrain(a_vertices=vert, a_faces=faces, t_transform=trans)
+# Define a empty chain of transformations :
+chain = vist.ChainTransform([])
+
+# Define a rotation of 180° arround y axis :
+rot2 = vist.MatrixTransform()
+rot2.rotate(180, (0,1,0))
+chain.append(rot2) # Add it the chain 
+
+# Define an other rotation of 270° arround z axis :
+rot1 = vist.MatrixTransform()
+rot1.rotate(270, (0,0,1))
+chain.append(rot1) # Add it the chain 
+
+# Sometimes the brain appear to be full black. In that
+# case, multiply each dimension with -1.
+scale = vist.STTransform(scale=[-1, -1, -1])
+chain.append(scale)
+
+# Finally apply the transformation to vertices :
+vert = chain.map(vert)[:, 0:-1]
+
+vb = visbrain.vbrain(a_vertices=vert, a_faces=faces)
 
 vb.show()

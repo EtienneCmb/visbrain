@@ -25,21 +25,21 @@ class uiOpacity(object):
         self.q_sagittal.clicked.connect(self.fcn_sagittal)
         # Cameras types :
         self.c_Turnable.clicked.connect(self.fcn_switch_camera)
-        self.c_Arcball.clicked.connect(self.fcn_switch_camera)
-        self.c_Magnify.clicked.connect(self.fcn_switch_camera)
         self.c_Fly.clicked.connect(self.fcn_switch_camera)
         # Slice :
         # Set maximum and minimum for each slice :
         minfact = 1.2
-        self.xSlices.setMinimum(self.atlas.vert[:, 0].min()*minfact)
-        self.xSlices.setMaximum(self.atlas.vert[:, 0].max()*minfact)
-        self.ySlices.setMinimum(self.atlas.vert[:, 1].min()*minfact)
-        self.ySlices.setMaximum(self.atlas.vert[:, 1].max()*minfact)
-        self.zSlices.setMinimum(self.atlas.vert[:, 2].min()*minfact)
-        self.zSlices.setMaximum(self.atlas.vert[:, 2].max()*minfact)
+        self.xSlices.setMinimum(self.atlas.vert[..., 0].min()*minfact)
+        self.xSlices.setMaximum(self.atlas.vert[..., 0].max()*minfact)
+        self.ySlices.setMinimum(self.atlas.vert[..., 1].min()*minfact)
+        self.ySlices.setMaximum(self.atlas.vert[..., 1].max()*minfact)
+        self.zSlices.setMinimum(self.atlas.vert[..., 2].min()*minfact)
+        self.zSlices.setMaximum(self.atlas.vert[..., 2].max()*minfact)
         self.xSlices.sliderMoved.connect(self.fcn_xyzSlice)
         self.ySlices.sliderMoved.connect(self.fcn_xyzSlice)
         self.zSlices.sliderMoved.connect(self.fcn_xyzSlice)
+
+
 
     def _getOpacitySlider(self, tomin=0, tomax=1):
         """
@@ -55,11 +55,11 @@ class uiOpacity(object):
         # Get slider value :
         sl = self.OpacitySlider.value()
         sl_01 = (sl-self._slmin)/(self._slmax-self._slmin)
-        if sl_01 < 0.02:
+        if sl_01 < 0.05:
             sl_01 = 0.
             visible = False
             deep_test = False
-        elif sl_01 > 0.92:
+        elif sl_01 > 0.95:
             sl_01 = 1.
             visible = True
             deep_test = True
@@ -85,7 +85,7 @@ class uiOpacity(object):
         if self.o_Text.isChecked():
             self.sources.stextcolor[:, 3] = sl_01
             self.sources.stextmesh.opacity = sl_01
-            self.sources.stextmesh = visible
+            self.sources.stextmesh.visible = visible
             self.sources.stextmesh.set_gl_state('translucent', depth_test=deep_test)
             self.sources.text_update()
 
@@ -121,15 +121,12 @@ class uiOpacity(object):
         """
         # Get radio buttons values :
         if self.c_Turnable.isChecked():
-            camera = viscam.TurntableCamera(elevation=90, distance=10.0,
-                                                                fov=0, azimuth=0)
-        if self.c_Arcball.isChecked():
-            camera = viscam.ArcballCamera()
-
-        if self.c_Magnify.isChecked():
-            camera = viscam.MagnifyCamera()
+            camera = viscam.TurntableCamera(distance=10.0, fov=10, azimuth=0)
         if self.c_Fly.isChecked():
+            # camera = viscam.PanZoomCamera(aspect=1)
             camera = viscam.FlyCamera()
+
+        # Add camera to the mesh and to the canvas :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(camera)
         self.view.wc.update()
@@ -147,21 +144,21 @@ class uiOpacity(object):
         xsl, ysl, zsl = self.xSlices.value(), self.ySlices.value(), self.zSlices.value()
 
         # Define a default string for all objects :
-        formatstr = 'np.array(({obj}[:, 0] {xsym} xsl) | ({obj}[:, 1] {ysym} ysl) | ({obj}[:, 2] {zsym} zsl))'
+        formatstr = 'np.array(({obj}[..., 0] {xsym} xsl) | ({obj}[..., 1] {ysym} ysl) | ({obj}[..., 2] {zsym} zsl))'
 
         # Slice brain :
         if self.o_Brain.isChecked():
             # Reset mask :
             self.atlas.mask = np.zeros_like(self.atlas.mask)
             # Find vertices to remove :
-            tohide = eval(formatstr.format(obj='self.atlas.vert[..., 0]', xsym=xsym, ysym=ysym, zsym=zsym))
+            tohide = eval(formatstr.format(obj='self.atlas.vert', xsym=xsym, ysym=ysym, zsym=zsym))
             # Update mask :
             self.atlas.mask[tohide] = True
             # Get vertices and color :
             vcolor = self.atlas.mesh.get_color
             # Update opacity for non-hide vertices :
-            vcolor[self.atlas.mask, :, 3] = self.view.minOpacity
-            vcolor[~self.atlas.mask, :, 3] = self._getOpacitySlider(tomin=self.view.minOpacity, tomax=self.view.maxOpacity)[0]
+            vcolor[self.atlas.mask, 3] = self.view.minOpacity
+            vcolor[~self.atlas.mask, 3] = self._getOpacitySlider(tomin=self.view.minOpacity, tomax=self.view.maxOpacity)[0]
             self.atlas.mesh.set_color(vcolor) 
 
         # Sources/Text opacity :

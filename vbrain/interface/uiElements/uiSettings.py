@@ -66,11 +66,19 @@ class uiSettings(object):
         filename = QFileDialog.getSaveFileName(self, 'Save screenshot', os.getenv('HOME'))
 
         backp_size = self.view.canvas.physical_size
-        self.view.canvas._backend._physical_size = (6000, 3000)
+        self.view.canvas._backend._physical_size = (8000, 4000)
+        # self.view.canvas.update()
 
+        # import OpenGL.GL as GL
+        # GL.glEnable(GL.GL_LINE_SMOOTH)
+        # GL.glLineWidth(100)
+
+        # self.view.canvas.context.set_line_width(self._lw*20)
+        # self.view.canvas.context.set_state('translucent', depth_test=True, cull_face=False)
+        # self.view.canvas.context.set_depth_range(-1000,1000)
         img = self.view.canvas.render()
 
-        io.imsave(filename, img, format='png')
+        io.imsave(filename, img, format='tiff')
         if self.cbexport:
             cbimg = self.view.cbcanvas.render()
             if filename.find('.')+1:
@@ -79,7 +87,8 @@ class uiSettings(object):
                 filename += '_colorbar'
             io.imsave(filename, cbimg, format='png')
         self.view.canvas._backend._physical_size = backp_size
-        self.view.update()
+        self.view.canvas.update()
+        self.atlas.mesh.update()
 
 
 
