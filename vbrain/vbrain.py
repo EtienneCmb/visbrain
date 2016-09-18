@@ -29,7 +29,7 @@ class vbrain(uiInit, uiElements, elements):
         a_color: tuple, (def: (1,1,1))
             RGB colors of the MNI brain.
 
-        a_opacity: int/float, (def: 0.1)
+        a_opacity: int/float, (def: 1.)
             Transparency of the MNI brain. Must be between 0 and 1.
 
         a_proj: string, (def: 'internal')
@@ -107,6 +107,9 @@ class vbrain(uiInit, uiElements, elements):
         c_dynamic: tuple, optional, (def: None)
             Control the dynamic opacity. For example, if c_dynamic=(0, 1),
             strong connections will be more opaque than weak connections.
+
+        c_linewidth: float, optional, (def: 4.0)
+            Linewidth of connectivity lines.
 
         cmap: string, (def: 'inferno')
             Matplotlib colormap name.
