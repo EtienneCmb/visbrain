@@ -16,7 +16,7 @@ class AtlasBase(object):
     """
     """
 
-    def __init__(self, a_color=(1.0,1.0,1.0), a_opacity=0.1, a_projection='internal', a_template='B1',
+    def __init__(self, a_color=(1.0,1.0,1.0), a_opacity=1., a_projection='internal', a_template='B1',
                  a_vertices=None, a_faces=None, a_shading='smooth', a_transform=[], l_position=(100., 100., 100.),
                  l_intensity=(1., 1., 1.), l_color=(1., 1., 1., 1.), l_coefAmbient=0.05, l_coefSpecular=0.5, **kwargs):
         # Get inputs :
