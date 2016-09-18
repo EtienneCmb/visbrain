@@ -39,6 +39,8 @@ class uiOpacity(object):
         self.ySlices.sliderMoved.connect(self.fcn_xyzSlice)
         self.zSlices.sliderMoved.connect(self.fcn_xyzSlice)
 
+
+
     def _getOpacitySlider(self, tomin=0, tomax=1):
         """
         """
@@ -121,6 +123,7 @@ class uiOpacity(object):
         if self.c_Turnable.isChecked():
             camera = viscam.TurntableCamera(distance=10.0, fov=10, azimuth=0)
         if self.c_Fly.isChecked():
+            # camera = viscam.PanZoomCamera(aspect=1)
             camera = viscam.FlyCamera()
 
         # Add camera to the mesh and to the canvas :
