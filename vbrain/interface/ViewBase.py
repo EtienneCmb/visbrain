@@ -85,7 +85,6 @@ class ViewBase(object):
         self.canvas = scene.SceneCanvas(keys='interactive', show=True, dpi=600,
                                         bgcolor=bgcolor, fullscreen=True, #px_scale=2,
                                         resizable=True, position=(0, 250))
-        self.canvas.context.set_line_width(4)
         self.wc = self.canvas.central_widget.add_view()
 
         # Initialize colorbar canvas :
