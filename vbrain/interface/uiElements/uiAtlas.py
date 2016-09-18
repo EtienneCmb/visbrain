@@ -12,6 +12,10 @@ class uiAtlas(object):
     """
     
     def __init__(self,):
+
+        # Update opacity slider :
+        self.OpacitySlider.setValue(self.atlas.opacity*100)
+
         # --------------- MNI ---------------
         # Show/hide :
         self.show_MNI.clicked.connect(self.display_MNI)
