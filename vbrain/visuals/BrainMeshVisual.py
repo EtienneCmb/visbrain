@@ -322,6 +322,7 @@ class BrainMeshVisual(Visual):
                                  under=under, over=over).astype(np.float32)
             # Dynamic color :
             if dynamic is not None:
+                print('ok')
                 col = dynamic_color(col, data)
         elif (data.ndim > 1) and (data.shape[1] == 4):
             col = data.astype(np.float32)

@@ -17,8 +17,8 @@ class AtlasBase(object):
     """
 
     def __init__(self, a_color=(1.0,1.0,1.0), a_opacity=0.1, a_projection='internal', a_template='B1',
-                 a_vertices=None, a_faces=None, a_shading='smooth', a_transform=[], l_position=(10., 10., 10.),
-                 l_intensity=(1., 1., 1.), l_color=(1., 1., 1., 1.), l_coefAmbient=0.07, l_coefSpecular=0.5, **kwargs):
+                 a_vertices=None, a_faces=None, a_shading='smooth', a_transform=[], l_position=(100., 100., 100.),
+                 l_intensity=(1., 1., 1.), l_color=(1., 1., 1., 1.), l_coefAmbient=0.05, l_coefSpecular=0.5, **kwargs):
         # Get inputs :
         self.color = a_color
         self.opacity = a_opacity
@@ -51,44 +51,20 @@ class AtlasBase(object):
             yield self.vert[k, ...]
 
 
-    def _load_surf_template(self, path, template):
-        """Load a template atlas
-        """
-        atlas = np.load(path+'atlasGL_{template}.npz'.format(template=template))
-        faces, normals, vertices, color = atlas['faces'], atlas['a_normal'], atlas['a_position'], atlas['a_color']
-
-        return vertices, normals, color, faces
-
-
-    def _load_surf_custom(self, vertices, faces):
-        """Load a custom atlas
-        """
-        # Check shapes :
-        if 3 not in vertices.shape:
-            raise ValueError("Vertices must be (N, 3) array.")
-        if vertices.shape[1] != 3:
-            vertices = vertices.T
-        if 3 not in faces.shape:
-            raise ValueError("Faces must be (N, 3) array.")
-        if faces.shape[1] != 3:
-            faces = faces.T
-        if faces.min() != 0: # Matlab users
-            faces -= faces.min()
-        return vertices, faces
-
-
     def load(self, template='B1', vertices=None, faces=None):
         """Load the atlas to use for the interface.
         """
         # Load a default template :
         if (vertices is None) and (faces is None):
             if (template in ['B1', 'B2', 'B3']):
-                vertices, normals, color, faces = self._load_surf_template(self.atlaspath, template)
+                atlas = np.load(self.atlaspath+'atlasGL_{template}.npz'.format(template=template))
+                faces, normals = atlas['faces'], atlas['a_normal']
+                vertices, color = atlas['a_position'], atlas['a_color']
             else:
                 raise ValueError("a_template should be 'B1', 'B2' or 'B3.'")
         # Load a user template
         else:
-            vertices, face = self._load_surf_custom(vertices, faces)
+            vertices, faces, normals, color = vertices, faces, None, None
 
         return vertices, normals, color, faces
 
