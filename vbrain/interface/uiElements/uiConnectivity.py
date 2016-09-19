@@ -46,12 +46,13 @@ class uiConnectivity(object):
         """
         # Get colorby :
         colorby = self.uiConnect_colorby.currentText()
+        self.connect.colorby = colorby
 
         # Get dynamic :
         self._getMinMax_dyn()
-
+        print(self.connect._cb)
         # Update color :
-        self.connect.mesh.set_color(colorby=colorby, dynamic=self.connect.dynamic)
+        self.connect.mesh.set_color(colorby=colorby, dynamic=self.connect.dynamic, **self.connect._cb)
         self.connect.mesh.update()
 
 

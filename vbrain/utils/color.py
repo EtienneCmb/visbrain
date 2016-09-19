@@ -191,3 +191,12 @@ class _colormap(object):
 
     def __setitem__(self, key, item):
         self._cb[key] = item
+
+    def cbUpdateFrom(self, obj):
+        """
+        """
+        objkeys = obj._cb.keys()
+        for k in self._cb.keys():
+            if k in objkeys:
+                self[k] = obj[k]
+

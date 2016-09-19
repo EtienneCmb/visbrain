@@ -30,7 +30,7 @@ class ConnectVisual(visuals.Visual):
     """
 
     def __init__(self, pos, connect, select=None, colorby='strength', dynamic=None,
-                 cmap='viridis'):
+                 cmap='viridis', vmin=None, vmax=None, under=None, over=None):
 
         visuals.Visual.__init__(self, vertex_shader, fragment_shader)
 
@@ -40,7 +40,9 @@ class ConnectVisual(visuals.Visual):
         self.select = select
         self.colorby = colorby
         self.dynamic = dynamic
-        self.cmap = cmap
+        self._cmap = cmap
+        self._vmin, self._vmax = vmin, vmax
+        self._under, self._over = under, over
 
         # Create elements :
         self.set_data(self.connect, self.select)
@@ -127,13 +129,15 @@ class ConnectVisual(visuals.Visual):
         # Find non-zero elements :
         self._non_zero_select()
         # Update data :
-        self.set_color(colorby=self.colorby, cmap=self.cmap, dynamic=self.dynamic)
+        self.set_color(colorby=self.colorby, dynamic=self.dynamic, cmap=self._cmap, vmin=self._vmin,
+                       vmax=self._vmax, under=self._under, over=self._over)
         # Update position :
         self.set_position(self.pos)
 
 
 
-    def set_color(self, colorby='strength', cmap='viridis', dynamic=False):
+    def set_color(self, colorby='strength', dynamic=False, cmap='viridis', vmin=None,
+                  vmax=None, under=None, over=None):
         """
         """
         # Check color elements :
@@ -144,7 +148,7 @@ class ConnectVisual(visuals.Visual):
             # Get non-zeros-values :
             nnz_values = self.connect.compressed()
             # Concatenate in alternance all non-zero values :
-            all_nnz = np.c_[nnz_values, nnz_values].flatten()
+            self._all_nnz = np.c_[nnz_values, nnz_values].flatten()
             # Get looping indices :
             self._loopIndex = self._Nindices
 
@@ -152,16 +156,16 @@ class ConnectVisual(visuals.Visual):
         elif colorby == 'count':
             # Count the number of occurence for each node :
             node_count = Counter(np.ravel([self._nnz_x, self._nnz_y]))
-            all_nnz = np.array([node_count[k] for k in self._indices])
+            self._all_nnz = np.array([node_count[k] for k in self._indices])
             # Get looping indices :
             self._loopIndex = self._Nindices
 
         # Get associated colormap :
-        colormap = array2colormap(all_nnz, cmap=cmap)
+        colormap = array2colormap(self._all_nnz, cmap=cmap, vmin=vmin, vmax=vmax, under=under, over=over)
 
         # Dynamic alpha :
         if (dynamic is not False) and isinstance(dynamic, tuple):
-            colormap[:, 3] = normalize(all_nnz, tomin=dynamic[0], tomax=dynamic[1])
+            colormap[:, 3] = normalize(self._all_nnz, tomin=dynamic[0], tomax=dynamic[1])
 
         # Build a_color and send to buffer :
         self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)

@@ -36,7 +36,7 @@ class ConnectivityBase(_colormap):
 
         if (self.xyz is not None) and (self.connect is not None):
             self.mesh = Connect(self.xyz, self.connect, select=self.select, colorby=self.colorby,
-                                cmap=self['cmap'], dynamic=self.dynamic, name='Connectivity')
+                                dynamic=self.dynamic, name='Connectivity', **self._cb)
             self._maskbck = self.mesh.connect.mask.copy()
         else:
             self.mesh = visu.Line(name='NoneConnect')
