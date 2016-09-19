@@ -23,7 +23,10 @@ class elements(CmapBase, transformations):
         self.atlas = AtlasBase(a_transform=self.transform, **kwargs)
         self.sources = SourcesBase(s_transform=self.atlas.transform, **kwargs)
         self.connect = ConnectivityBase(c_transform=self.atlas.transform, c_xyz=self.sources.xyz, **kwargs)
-        CmapBase.__init__(self, **kwargs)
+
+        # Initialize colorbar elements :
+        self.cb = CmapBase(self.view.cbwc, **kwargs)
+        # CmapBase.__init__(self, self.view.cbwc, **kwargs)
 
         # Add transformations :
         transformations.__init__(self, **kwargs)

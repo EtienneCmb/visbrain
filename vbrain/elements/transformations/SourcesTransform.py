@@ -76,14 +76,15 @@ class SourcesTransform(object):
             cort_mask, non_zero = self._rescale_cmap(cort_mask, tomin=self.sources.data.min(),
                                                      tomax=self.sources.data.max(), val=0)
             # Finally, set the mask to the surface :
-            self._array2cmap(cort_mask, non_zero=non_zero, vmin=self.cmap_vmin, vmax=self.cmap_vmax,
-                             under=self.cmap_under, over=self.cmap_over)
+            self._array2cmap(cort_mask, non_zero=non_zero, vmin=self.sources['vmin'], vmax=self.sources['vmax'],
+                             under=self.sources['under'], over=self.sources['over'])
             # Save this current cmap (for colormap interaction) :
             self.current_mask = cort_mask
             self.current_non_zero = non_zero
             # Update colorbar :
-            self.cbupdate(cort_mask[non_zero], self.cmap, vmin=self.cmap_vmin, vmax=self.cmap_vmax,
-                          under=self.cmap_under, over=self.cmap_over, label=self.cblabel, fontsize=self.cbfontsize)
+            self.cb.cbupdate(cort_mask[non_zero], self.sources['cmap'], vmin=self.sources['vmin'], vmax=self.sources['vmax'],
+                          under=self.sources['under'], over=self.sources['over'], label=self.cb['cblabel'],
+                          fontsize=self.cb['cbfontsize'])
         else:
             warn("No sources detected. Use s_xyz input parameter to define source's coordinates")
         self.progressbar.hide()
@@ -105,8 +106,9 @@ class SourcesTransform(object):
             self.current_mask = prop
             self.current_non_zero = non_zero
             # Update colorbar :
-            self.cbupdate(prop[non_zero], self.cmap, vmin=self.cmap_vmin, vmax=self.cmap_vmax,
-                          under=self.cmap_under, over=self.cmap_over, label=self.cblabel, fontsize=self.cbfontsize)
+            self.cb.cbupdate(prop[non_zero], self.sources['cmap'], vmin=self.sources['vmin'], vmax=self.sources['vmax'],
+                          under=self.sources['under'], over=self.sources['over'], label=self.cb['cblabel'],
+                          fontsize=self.cb['cbfontsize'])
         else:
             warn("No sources detected. Use s_xyz input parameter to define source's coordinates")
         self.progressbar.hide()
@@ -225,7 +227,7 @@ class SourcesTransform(object):
                                vmax=self._slmax, tomin=self.view.minOpacity, tomax=self.view.maxOpacity)
 
         # Get the colormap :
-        cmap = array2colormap(x, cmap=self.cmap, alpha=alpha, vmin=vmin, vmax=vmax, under=under, over=over)
+        cmap = array2colormap(x, cmap=self.sources['cmap'], alpha=alpha, vmin=vmin, vmax=vmax, under=under, over=over)
 
         # Set ~non_zero to default brain color :
         if non_zero is not False:

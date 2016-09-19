@@ -5,18 +5,21 @@ from warnings import warn
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
 
-from ..utils import color2vb, normalize
+from ..utils import color2vb, normalize, _colormap
 
 __all__ = ['SourcesBase']
 
 
-class SourcesBase(object):
+class SourcesBase(_colormap):
 
     """Class for sources creation
     """
 
-    def __init__(self, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6,
-                 s_scaling=False, s_transform=[], s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), **kwargs):
+    def __init__(self, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0,
+                 s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6, s_scaling=False, s_transform=[],
+                 s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0),
+                 s_cmap='inferno', s_cmap_vmin=None, s_cmap_vmax=None, s_cmap_under=None, s_cmap_over=None,
+                 **kwargs):
         # Initialize elements :
         self.xyz = s_xyz
         self.data = s_data
@@ -35,6 +38,9 @@ class SourcesBase(object):
         self.stextcolor = color2vb(s_textcolor)
         self.stextsize = s_textsize
         self.stextshift = s_textshift
+
+        # Initialize colorbar elements :
+        _colormap.__init__(self, s_cmap, s_cmap_vmin, s_cmap_vmax, s_cmap_under, s_cmap_over)
 
         # Plot :
         if self.xyz is not None:
