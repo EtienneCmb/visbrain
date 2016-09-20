@@ -322,7 +322,6 @@ class BrainMeshVisual(Visual):
                                  under=under, over=over).astype(np.float32)
             # Dynamic color :
             if dynamic is not None:
-                print('ok')
                 col = dynamic_color(col, data)
         elif (data.ndim > 1) and (data.shape[1] == 4):
             col = data.astype(np.float32)
@@ -330,7 +329,7 @@ class BrainMeshVisual(Visual):
         #     raise ValueError("data is not recognized.")
 
         # Adapt for faces :
-        if data.ndim != 3:
+        if  col.ndim != 3:
             col = np.transpose(np.tile(col[..., np.newaxis], (1, 1, 3)), (0, 2, 1))
         else:
             col = data
