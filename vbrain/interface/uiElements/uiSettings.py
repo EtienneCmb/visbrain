@@ -79,7 +79,7 @@ class uiSettings(object):
         img = self.view.canvas.render()
 
         io.imsave(filename, img, format='tiff')
-        if self.cbexport:
+        if self.cb['export']:
             cbimg = self.view.cbcanvas.render()
             if filename.find('.')+1:
                 filename = filename.replace('.', '_colorbar.')
