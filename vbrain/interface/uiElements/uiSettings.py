@@ -5,6 +5,8 @@ from scipy.misc import imresize
 from vispy import io
 import vispy.scene.cameras as viscam
 
+from ...utils import uiSpinValue
+
 __all__ = ['uiSettings']
 
 class uiSettings(object):
@@ -59,6 +61,31 @@ class uiSettings(object):
         self.bgd_green.valueChanged.connect(self.fcn_bgd_color)
         self.bgd_red.valueChanged.connect(self.fcn_bgd_color)
         self.bgd_blue.valueChanged.connect(self.fcn_bgd_color)
+
+
+        # ***********************************************************
+        # LIGHT
+        # ***********************************************************
+        # Position :
+        self.uil_posX.valueChanged.connect(self.uiSet_light)
+        self.uil_posY.valueChanged.connect(self.uiSet_light)
+        self.uil_posZ.valueChanged.connect(self.uiSet_light)
+        # Intensity :
+        self.uil_intX.valueChanged.connect(self.uiSet_light)
+        self.uil_intY.valueChanged.connect(self.uiSet_light)
+        self.uil_intZ.valueChanged.connect(self.uiSet_light)
+        # Color :
+        self.uil_colR.valueChanged.connect(self.uiSet_light)
+        self.uil_colG.valueChanged.connect(self.uiSet_light)
+        self.uil_colB.valueChanged.connect(self.uiSet_light)
+        self.uil_colA.valueChanged.connect(self.uiSet_light)
+        # Coeffient :
+        self.uil_AmbCoef.valueChanged.connect(self.uiSet_light)
+        self.uil_SpecCoef.valueChanged.connect(self.uiSet_light)
+
+        self.uiUpdate_light()
+
+
 
     def screenshot(self):
         """
@@ -126,3 +153,27 @@ class uiSettings(object):
         """
         bgd = (self.bgd_red.value(), self.bgd_green.value(), self.bgd_blue.value())
         self.view.canvas.bgcolor = bgd
+
+
+    def uiSet_light(self):
+        """
+        """
+        # Position :
+        l_pos = (self.uil_posX.value(), self.uil_posY.value(), self.uil_posZ.value())
+        # Intensity :
+        l_int = (self.uil_intX.value(), self.uil_intY.value(), self.uil_intZ.value())
+        # Color :
+        l_col = (self.uil_colR.value(), self.uil_colG.value(), self.uil_colB.value(), self.uil_colA.value())
+        # Coef :
+        l_amb, l_spec = self.uil_AmbCoef.value(), self.uil_SpecCoef.value()
+
+        self.atlas.mesh.set_light(l_position=l_pos, l_color=l_col, l_intensity=l_int,
+                                  l_coefAmbient=l_amb, l_coefSpecular=l_spec)
+
+    def uiUpdate_light(self):
+        """
+        """
+        uiSpinValue([self.uil_posX, self.uil_posY, self.uil_posZ,
+                     self.uil_intX, self.uil_intY, self.uil_intZ,
+                     self.uil_colR, self.uil_colG, self.uil_colB, self.uil_colA,
+                     self.uil_AmbCoef, self.uil_SpecCoef], self.atlas.mesh.get_light)

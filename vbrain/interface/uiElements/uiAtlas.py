@@ -16,11 +16,17 @@ class uiAtlas(object):
         # Update opacity slider :
         self.OpacitySlider.setValue(self.atlas.opacity*100)
 
-        # --------------- MNI ---------------
+        # ***********************************************************
+        # MNI
+        # **********************************************************
         # Show/hide :
         self.show_MNI.clicked.connect(self.display_MNI)
+        self.Both_only.clicked.connect(self.display_MNI)
         self.Lhemi_only.clicked.connect(self.display_MNI)
         self.Rhemi_only.clicked.connect(self.display_MNI)
+
+        self.uiSwitchTemplate.currentIndexChanged.connect(self.display_MNI)
+        self.uiSwitchTemplate.setCurrentIndex(int(self.atlas.template[-1])-1)
 
         # Projection :
         if self.atlas.projection is 'internal':self.q_internal.setChecked(True)
@@ -28,46 +34,25 @@ class uiAtlas(object):
         self.q_internal.clicked.connect(self.fcn_internal_external)
         self.q_external.clicked.connect(self.fcn_internal_external)
 
-        # --------------- LIGHT ---------------
-        # Position :
-        self.uil_posX.valueChanged.connect(self.uiSet_light)
-        self.uil_posY.valueChanged.connect(self.uiSet_light)
-        self.uil_posZ.valueChanged.connect(self.uiSet_light)
-        # Intensity :
-        self.uil_intX.valueChanged.connect(self.uiSet_light)
-        self.uil_intY.valueChanged.connect(self.uiSet_light)
-        self.uil_intZ.valueChanged.connect(self.uiSet_light)
-        # Color :
-        self.uil_colR.valueChanged.connect(self.uiSet_light)
-        self.uil_colG.valueChanged.connect(self.uiSet_light)
-        self.uil_colB.valueChanged.connect(self.uiSet_light)
-        self.uil_colA.valueChanged.connect(self.uiSet_light)
-        # Coeffient :
-        self.uil_AmbCoef.valueChanged.connect(self.uiSet_light)
-        self.uil_SpecCoef.valueChanged.connect(self.uiSet_light)
 
-        self.uiUpdate_light()
+        self.struct_color_edit.setPlaceholderText("Ex: 'red', #ab4642, (1,0,0...)")
 
 
     def display_MNI(self):
         """Display/hide MNI
         """
+        # Get template :
+        self.atlas.template = self.uiSwitchTemplate.currentText()
         # Show/hide MNI :
         self.atlas.mesh.visible = self.show_MNI.isChecked()
-        # Hemisphere Left/Right :
-        if self.Lhemi_only.isChecked():
-            self.atlas.hemisphere = 'left'
-            self.atlas.load(self.atlas.template, self.atlas.user_vert, self.atlas.user_faces,
-                            self.atlas.hemisphere,self.atlas.projection)
-            self.atlas.mesh.update()
-            self.canvas.update()
-            print('ok')
-            # self.xInvert.setChecked(False)
-            # self.xSlices.setValue(0)
+
+        # Hemisphere Both/Left/Right :
+        if self.Both_only.isChecked():
+            self.atlas.reload(hemisphere='both')
+        elif self.Lhemi_only.isChecked():
+            self.atlas.reload(hemisphere='left')
         elif self.Rhemi_only.isChecked():
-            self.xInvert.setChecked(True)
-            self.xSlices.setValue(0)
-        # self.fcn_xyzSlice()
+            self.atlas.reload(hemisphere='right')
 
 
     def fcn_internal_external(self):
@@ -115,26 +100,3 @@ class uiAtlas(object):
         self.view.wc.camera.azimuth = azimuth
         self.view.wc.camera.elevation = elevation
         self.view.wc.camera.set_range(x=(-50,50), y=(-50,50), z=(-85,85))
-
-    def uiSet_light(self):
-        """
-        """
-        # Position :
-        l_pos = (self.uil_posX.value(), self.uil_posY.value(), self.uil_posZ.value())
-        # Intensity :
-        l_int = (self.uil_intX.value(), self.uil_intY.value(), self.uil_intZ.value())
-        # Color :
-        l_col = (self.uil_colR.value(), self.uil_colG.value(), self.uil_colB.value(), self.uil_colA.value())
-        # Coef :
-        l_amb, l_spec = self.uil_AmbCoef.value(), self.uil_SpecCoef.value()
-
-        self.atlas.mesh.set_light(l_position=l_pos, l_color=l_col, l_intensity=l_int,
-                                  l_coefAmbient=l_amb, l_coefSpecular=l_spec)
-
-    def uiUpdate_light(self):
-        """
-        """
-        uiSpinValue([self.uil_posX, self.uil_posY, self.uil_posZ,
-                     self.uil_intX, self.uil_intY, self.uil_intZ,
-                     self.uil_colR, self.uil_colG, self.uil_colB, self.uil_colA,
-                     self.uil_AmbCoef, self.uil_SpecCoef], self.atlas.mesh.get_light)

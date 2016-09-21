@@ -32,6 +32,11 @@ class uiCmap(object):
         self.cmapSources.clicked.connect(self.select_object_cmap)
         self.cmapConnect.clicked.connect(self.select_object_cmap)
 
+        # Default properties :
+        self.q_under.setPlaceholderText("'red',  #ab4642...")
+        self.q_over.setPlaceholderText("(1,0,0), 'black'...")
+        self.q_cblabel.setPlaceholderText("My colorbar")
+
 
 
     def set_default_cmap(self):

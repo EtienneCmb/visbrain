@@ -181,6 +181,7 @@ class vbrain(uiInit, uiElements, elements):
         self.view.cbwc.camera.set_range(x=(-24,24), y=(-0.5,0.5), margin=0)
         self.view.wc.scene.children[0].parent = None
         
+        
         # print(self.view.wc.scene.describe_tree(with_transform=True))
 
     def show(self):

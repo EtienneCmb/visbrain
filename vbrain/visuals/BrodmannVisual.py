@@ -32,7 +32,7 @@ class BrodmannBase(object):
         self._selectAll = True
         self._unicolor = True
         self.atlaspath = os.path.dirname(visbrain.__file__)+'/vbrain/elements/templates/'
-        self.file = 'AAL_label2.npz'
+        self.file = 'AAL_label.npz'
         self.color = color
         self.cmap = cmap
 

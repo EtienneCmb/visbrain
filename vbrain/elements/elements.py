@@ -44,11 +44,13 @@ class elements(CmapBase, transformations):
         if self.sources.stextmesh.name == 'NoneText':
             self.o_Text.setEnabled(False)
             self.grpText.setEnabled(False)
+            self.cmapSources.setEnabled(False)
 
         # Connectivity panel:
-        if self.connect.mesh.name == 'NoneText':
+        if self.connect.mesh.name == 'NoneConnect':
             self.q_CONNECT.setEnabled(False)
             self.o_Connect.setEnabled(False)
+            self.cmapConnect.setEnabled(False)
         self._lw = kwargs.get('c_linewidth', 4.)
 
         # ---------- Put everything in a root node ----------

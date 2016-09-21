@@ -39,8 +39,8 @@ class AtlasBase(object):
         self._scaleMax = 100
 
         # Initialize visualization :
-        self.load(self.template, self.user_vert, self.user_faces, self.hemisphere, self.projection)
-        # self.plot(vertices, normals, color, faces, a_projection)
+        vertices, faces, normals, color = self.load(self.template, self.user_vert,self.user_faces)
+        self.plot(vertices, faces, normals, color, a_projection, a_hemisphere)
 
 
     def __len__(self):
@@ -52,13 +52,13 @@ class AtlasBase(object):
             yield self.vert[k, ...]
 
 
-    def load(self, template='B1', vertices=None, faces=None, hemisphere='both', projection='internal'):
+    def load(self, template='B1', vertices=None, faces=None):
         """Load the atlas to use for the interface.
         """
         # Load a default template :
         if (vertices is None) and (faces is None):
             if (template in ['B1', 'B2', 'B3']):
-                atlas = np.load(self.atlaspath+'atlasGL_{template}.npz'.format(template=template))
+                atlas = np.load(self.atlaspath+'{template}.npz'.format(template=template))
                 faces, normals = atlas['faces'], atlas['a_normal']
                 vertices, color = atlas['a_position'], atlas['a_color']
             else:
@@ -67,7 +67,13 @@ class AtlasBase(object):
         else:
             vertices, faces, normals, color = vertices, faces, None, None
 
-        # Initialize mesh object : :
+        return vertices, faces, normals, color
+
+
+    def plot(self, vertices=None, faces=None, normals=None, color=None, projection='internal', hemisphere='both'):
+        """Plot data
+        """
+        # Initialize mesh object :
         self.mesh = BrainMesh(vertices=vertices, faces=faces, normals=normals, name='Brain',
                               l_position=self.l_pos, l_intensity=self.l_int, l_color=self.l_col,
                               l_coefAmbient=self.l_amb,  l_coefSpecular=self.l_spec,
@@ -80,3 +86,19 @@ class AtlasBase(object):
         self.mesh.set_alpha(self.opacity)
         # Internal/external projection :
         self.mesh.projection(projection)
+
+
+    def reload(self, template=None, hemisphere=None, projection=None, vertices=None, faces=None):
+        """
+        """
+        if template is not None:
+            self.template = template
+        if hemisphere is not None:
+            self.hemisphere = hemisphere
+        if projection is not None:
+            self.projection = projection
+
+        # Initialize visualization :
+        vertices, faces, normals, color = self.load(self.template, vertices, faces)
+        self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
+                           hemisphere=hemisphere)
