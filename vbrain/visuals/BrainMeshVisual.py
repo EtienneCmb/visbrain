@@ -115,7 +115,7 @@ class BrainMeshVisual(Visual):
 
     def __init__(self, vertices=None, faces=None, normals=None, vertex_colors=None, camera=None,
                  meshdata=None, l_position=(1., 1., 1.), l_color=(1., 1., 1., 1.), l_intensity=(1., 1., 1.),
-                 l_coefAmbient=0.07, l_coefSpecular=0.5, scale_factor=10):
+                 l_coefAmbient=0.07, l_coefSpecular=0.5, scale_factor=10, hemisphere='both'):
         Visual.__init__(self, vcode=VERT_SHADER, fcode=FRAG_SHADER)
 
         # Usefull variables :
@@ -129,10 +129,11 @@ class BrainMeshVisual(Visual):
         self._colors = gloo.VertexBuffer(np.zeros((0, 4), dtype=np.float32))
         self._normals = gloo.VertexBuffer(np.zeros((0, 3), dtype=np.float32))
         self._color_changed = False
+        self._hemisphere = hemisphere
 
         # Set the data :
         BrainMeshVisual.set_data(self, vertices=vertices, faces=faces, normals=normals,
-                                 meshdata=meshdata, vertex_colors=vertex_colors)
+                                 meshdata=meshdata, vertex_colors=vertex_colors, hemisphere=hemisphere)
 
         # Set the light :
         BrainMeshVisual.set_light(self, l_position=l_position, l_color=l_color, l_intensity=l_intensity,
@@ -174,7 +175,7 @@ class BrainMeshVisual(Visual):
     # ----------------------------------------------------------------------
     # ----------------------------------------------------------------------
     def set_data(self, vertices=None, faces=None, normals=None, invert_normals=False,
-                 meshdata=None, vertex_colors=None, color=None):
+                 meshdata=None, vertex_colors=None, color=None, hemisphere='both'):
         """Set data to the mesh
 
         Kargs:
@@ -200,6 +201,9 @@ class BrainMeshVisual(Visual):
 
             color: tuple/string/hex, optional, (def: None)
                 Alternatively, you can specify a uniform color.
+
+            hemisphere: string, optional, (def: 'both')
+                Choose if an hemisphere has to be selected ('both', 'left', 'right')
         """
         # -------------- Check inputs --------------
         # Check if faces index start at zero (Matlab like):
@@ -228,6 +232,7 @@ class BrainMeshVisual(Visual):
             vertices = meshdata.get_vertices(indexed='faces')
             faces = meshdata.get_faces()
             normals = meshdata.get_vertex_normals(indexed='faces')
+
 
         # -------------- Vertices color --------------
         # Wrong shape for vertex color :
@@ -267,6 +272,17 @@ class BrainMeshVisual(Visual):
         self._vertsize = [(vertices[:, 0, 0].min(), vertices[:, 0, 0].max()),
                           (vertices[:, 1, 0].min(), vertices[:, 1, 0].max()),
                           (vertices[:, 2].min(), vertices[:, 2].max())]
+
+        # Load only left/ritgh hemisphere :
+        if hemisphere in ['left', 'right']:
+            if hemisphere == 'left':
+                inf = np.where(vertices[..., 0] <= vertices[:, :, 0].mean())[0]
+            if hemisphere == 'right':
+                inf = np.where(vertices[..., 0] >= vertices[:, :, 0].mean())[0]
+            vertices = vertices[inf, ...]
+            faces = faces[inf, ...]
+            normals = normals[inf, ...]
+            vertex_colors = vertex_colors[inf, ...]
 
         # -------------- Convert elements --------------
         # Assign elements :
@@ -325,14 +341,16 @@ class BrainMeshVisual(Visual):
                 col = dynamic_color(col, data)
         elif (data.ndim > 1) and (data.shape[1] == 4):
             col = data.astype(np.float32)
+        else:
+            col = data
         # else:
         #     raise ValueError("data is not recognized.")
 
         # Adapt for faces :
         if  col.ndim != 3:
             col = np.transpose(np.tile(col[..., np.newaxis], (1, 1, 3)), (0, 2, 1))
-        else:
-            col = data
+        # else:
+        #     col = data
 
         self._colFaces = np.ascontiguousarray(col, dtype=np.float32)
         self.mesh_color_changed()

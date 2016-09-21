@@ -56,12 +56,18 @@ class uiAtlas(object):
         self.atlas.mesh.visible = self.show_MNI.isChecked()
         # Hemisphere Left/Right :
         if self.Lhemi_only.isChecked():
-            self.xInvert.setChecked(False)
-            self.xSlices.setValue(0)
+            self.atlas.hemisphere = 'left'
+            self.atlas.load(self.atlas.template, self.atlas.user_vert, self.atlas.user_faces,
+                            self.atlas.hemisphere,self.atlas.projection)
+            self.atlas.mesh.update()
+            self.canvas.update()
+            print('ok')
+            # self.xInvert.setChecked(False)
+            # self.xSlices.setValue(0)
         elif self.Rhemi_only.isChecked():
             self.xInvert.setChecked(True)
             self.xSlices.setValue(0)
-        self.fcn_xyzSlice()
+        # self.fcn_xyzSlice()
 
 
     def fcn_internal_external(self):
