@@ -5,6 +5,7 @@ from .AtlasBase import AtlasBase
 from .SourcesBase import SourcesBase
 from .ConnectivityBase import ConnectivityBase
 from .CmapBase import CmapBase
+from .AreaBase import AreaBase
 from .transformations import transformations
 
 class elements(CmapBase, transformations):
@@ -23,6 +24,8 @@ class elements(CmapBase, transformations):
         self.atlas = AtlasBase(a_transform=self.transform, **kwargs)
         self.sources = SourcesBase(s_transform=self.atlas.transform, **kwargs)
         self.connect = ConnectivityBase(c_transform=self.atlas.transform, c_xyz=self.sources.xyz, **kwargs)
+        self.area = AreaBase(scale_factor=self.atlas._scaleMax, name='NoneArea', select=[4, 6],
+                             transform=self.atlas.transform, color='#ab4642')
 
         # Initialize colorbar elements  (by default, with sources elements):
         self.cb = CmapBase(self.view.cbwc, **self.sources._cb, **kwargs)

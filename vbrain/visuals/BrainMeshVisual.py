@@ -115,7 +115,7 @@ class BrainMeshVisual(Visual):
 
     def __init__(self, vertices=None, faces=None, normals=None, vertex_colors=None, camera=None,
                  meshdata=None, l_position=(1., 1., 1.), l_color=(1., 1., 1., 1.), l_intensity=(1., 1., 1.),
-                 l_coefAmbient=0.07, l_coefSpecular=0.5, scale_factor=10, hemisphere='both'):
+                 l_coefAmbient=0.07, l_coefSpecular=0.5, scale_factor=10, hemisphere='both', recenter=True):
         Visual.__init__(self, vcode=VERT_SHADER, fcode=FRAG_SHADER)
 
         # Usefull variables :
@@ -130,6 +130,7 @@ class BrainMeshVisual(Visual):
         self._normals = gloo.VertexBuffer(np.zeros((0, 3), dtype=np.float32))
         self._color_changed = False
         self._hemisphere = hemisphere
+        self._recenter = recenter
 
         # Set the data :
         BrainMeshVisual.set_data(self, vertices=vertices, faces=faces, normals=normals,
@@ -249,29 +250,30 @@ class BrainMeshVisual(Visual):
             vertex_colors = np.tile(color2vb(color)[np.newaxis, ...], (faces.shape[0], 3, 1))
 
         # -------------- Transformations --------------
-        # Inspect minimum and maximum :
-        vm, vM = vertices.min(), vertices.max()
+        if self._recenter:
+            # Inspect minimum and maximum :
+            vm, vM = vertices.min(), vertices.max()
 
-        # Normalize by scaleFactor/max :
-        vertices = normalize(vertices, tomin=-self._scaleFactor, tomax=self._scaleFactor)
+            # Normalize by scaleFactor/max :
+            vertices = normalize(vertices, tomin=-self._scaleFactor, tomax=self._scaleFactor)
 
-        # Recenter the brain around (0, 0, 0) :
-        xScale, yScale, zScale = vertices[:, :, 0].mean(), vertices[:, :, 1].mean(), vertices[:, :, 2].mean()
-        np.subtract(vertices[:, :, 0], xScale, out=vertices[:, :, 0])
-        np.subtract(vertices[:, :, 1], yScale, out=vertices[:, :, 1])
-        np.subtract(vertices[:, :, 2], zScale, out=vertices[:, :, 2])
+            # Recenter the brain around (0, 0, 0) :
+            xScale, yScale, zScale = vertices[:, :, 0].mean(), vertices[:, :, 1].mean(), vertices[:, :, 2].mean()
+            np.subtract(vertices[:, :, 0], xScale, out=vertices[:, :, 0])
+            np.subtract(vertices[:, :, 1], yScale, out=vertices[:, :, 1])
+            np.subtract(vertices[:, :, 2], zScale, out=vertices[:, :, 2])
 
 
-        # Save it in a transformation :
-        self._btransform.prepend(vist.STTransform(translate=[-vM]*3))
-        self._btransform.prepend(vist.STTransform(scale=[2*self._scaleFactor/(vM-vm)]*3))
-        self._btransform.prepend(vist.STTransform(translate=[self._scaleFactor]*3))
-        self._btransform.prepend(vist.STTransform(translate=[-xScale, -yScale, -zScale]))
+            # Save it in a transformation :
+            self._btransform.prepend(vist.STTransform(translate=[-vM]*3))
+            self._btransform.prepend(vist.STTransform(scale=[2*self._scaleFactor/(vM-vm)]*3))
+            self._btransform.prepend(vist.STTransform(translate=[self._scaleFactor]*3))
+            self._btransform.prepend(vist.STTransform(translate=[-xScale, -yScale, -zScale]))
 
-        # Keep maximum/minimum pear coordinates :
-        self._vertsize = [(vertices[:, 0, 0].min(), vertices[:, 0, 0].max()),
-                          (vertices[:, 1, 0].min(), vertices[:, 1, 0].max()),
-                          (vertices[:, 2].min(), vertices[:, 2].max())]
+            # Keep maximum/minimum pear coordinates :
+            self._vertsize = [(vertices[:, 0, 0].min(), vertices[:, 0, 0].max()),
+                              (vertices[:, 1, 0].min(), vertices[:, 1, 0].max()),
+                              (vertices[:, 2].min(), vertices[:, 2].max())]
 
         # Load only left/ritgh hemisphere :
         if hemisphere in ['left', 'right']:
@@ -307,7 +309,7 @@ class BrainMeshVisual(Visual):
                 Data to use for the color. If data is None, the color will
                 be uniform using the color parameter. If data is a vector,
                 the color is going to be deduced from this vector. If data
-                is a (N, 4) it will be interprated as a color. 
+                is a (N, 4) it will be interpreted as a color. 
 
             color: tuple/string/hex, optional, (def: 'white')
                 The default uniform color

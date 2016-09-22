@@ -95,6 +95,10 @@ class uiOpacity(object):
             self.connect.mesh.visible = visible
             self.connect.mesh.set_gl_state('translucent', depth_test=deep_test)
 
+        # Areas opacity:
+        if self.o_Areas.isChecked():
+            self.area.set_alpha(sl_01)
+
         self.view.canvas.update()
 
 
