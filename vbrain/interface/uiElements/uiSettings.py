@@ -90,29 +90,30 @@ class uiSettings(object):
     def screenshot(self):
         """
         """
-        filename = QFileDialog.getSaveFileName(self, 'Save screenshot', os.getenv('HOME'))
+        # Manage filename :
+        if self._savename == None:
+            self._savename = QFileDialog.getSaveFileName(self, 'Save screenshot', os.getenv('HOME'))
+        if self._savename.find('.'+self._extension) == -1:
+            self._savename += '.'+self._extension
 
+        # Manage size exportation :
         backp_size = self.view.canvas.physical_size
-        self.view.canvas._backend._physical_size = (8000, 4000)
-        # self.view.canvas.update()
+        ratio = max(6000/backp_size[0], 3000/backp_size[1])
+        new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
+        self.view.canvas._backend._physical_size = new_size
 
-        # import OpenGL.GL as GL
-        # GL.glEnable(GL.GL_LINE_SMOOTH)
-        # GL.glLineWidth(100)
-
-        # self.view.canvas.context.set_line_width(self._lw*20)
-        # self.view.canvas.context.set_state('translucent', depth_test=True, cull_face=False)
-        # self.view.canvas.context.set_depth_range(-1000,1000)
+        # Render and save :
         img = self.view.canvas.render()
+        io.imsave(self._savename, img, format=self._extension)
 
-        io.imsave(filename, img, format='tiff')
+
         if self.cb['export']:
             cbimg = self.view.cbcanvas.render()
-            if filename.find('.')+1:
-                filename = filename.replace('.', '_colorbar.')
+            if self._savename.find('.')+1:
+                filename = self._savename.replace('.', '_colorbar.')
             else:
                 filename += '_colorbar'
-            io.imsave(filename, cbimg, format='png')
+            io.imsave(filename, cbimg, format=self._extension)
         self.view.canvas._backend._physical_size = backp_size
         self.view.canvas.update()
         self.atlas.mesh.update()

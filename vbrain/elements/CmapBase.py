@@ -11,7 +11,7 @@ class CmapBase(_colormap):
     """
 
     def __init__(self, parent, cmap='inferno', vmin=None, vmax=None, under=None, over=None, 
-                 cb_export=True, cb_fontsize=15, cb_label='', **kwargs):
+                 cb_export=False, cb_fontsize=15, cb_label='', **kwargs):
 
         # Initialize colorbar elements :
         _colormap.__init__(self, cmap, vmin, vmax, under, over)

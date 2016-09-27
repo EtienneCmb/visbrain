@@ -545,7 +545,7 @@ class BrainMeshVisual(Visual):
 
     @staticmethod
     def _prepare_transforms(view):
-        """This is call because the first rendering
+        """This is call for the first rendering
         """
         tr = view.transforms
         transform = tr.get_transform()
