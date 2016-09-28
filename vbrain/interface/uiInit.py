@@ -18,6 +18,8 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
         # Create the main window :
         super(uiInit, self).__init__(None)
         self.setupUi(self)
+        if self._savename is not None:
+            self.setWindowTitle('vbrain - '+self._savename)
 
     	# Initlialize view :
         self.view = ViewBase(bgcolor)

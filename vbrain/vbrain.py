@@ -126,6 +126,19 @@ class vbrain(uiInit, uiElements, elements):
         ui_bgcolor: string/tuple, (def: (0.09, 0.09, 0.09))
             Backgroud color of the ui
 
+        ui_savename: string, optional, (def: None)
+            The save name when exporting
+
+        ui_extension: string, optional, (def: '.png')
+            The picture extension when exporting. Choose between 'png'
+            and 'tiff'
+
+        cb_export: bool, optional, (def: True)
+            Control if the colorbor must be exported when doing a screenshot
+
+        cb_fontsize: int, optional, (def: 15)
+            The fontsize of colorbar indications
+
         l_position: tuple, optional, (def: (100., 100., 100.))
             Position of the light
 
@@ -142,7 +155,7 @@ class vbrain(uiInit, uiElements, elements):
             Coefficient for the specular light
 
     Example:
-        >>> # Load lirairies :
+        >>> # Load librairies :
         >>> import numpy as np
         >>> from visbrain import vbrain 
         >>> # Define some coordinates and colors for three deep sources :
@@ -157,10 +170,17 @@ class vbrain(uiInit, uiElements, elements):
     """
     def __init__(self, *args, **kwargs):
 
+        # ------ ui Arguments ------
+        bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
+        self._savename = kwargs.get('ui_savename', None)
+        self._extension = kwargs.get('ui_extension', '.png')
+        if self._extension not in ['png', 'tiff']:
+            self._extension = 'png'
+
         # ------ App creation ------
         # Create the app and initialize all graphical elements :
         self._app = QtGui.QApplication(sys.argv)
-        uiInit.__init__(self, kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09)))
+        uiInit.__init__(self, bgcolor)
 
         # ------ Objects creation ------
         camera = viscam.TurntableCamera(azimuth=0, distance=1000)
@@ -180,6 +200,7 @@ class vbrain(uiInit, uiElements, elements):
         self.view.cbwc.camera = viscam.TurntableCamera(interactive=True, azimuth=0, elevation=90)
         self.view.cbwc.camera.set_range(x=(-24,24), y=(-0.5,0.5), margin=0)
         self.view.wc.scene.children[0].parent = None
+        
         
         # print(self.view.wc.scene.describe_tree(with_transform=True))
 

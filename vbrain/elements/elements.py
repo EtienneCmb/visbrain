@@ -5,6 +5,7 @@ from .AtlasBase import AtlasBase
 from .SourcesBase import SourcesBase
 from .ConnectivityBase import ConnectivityBase
 from .CmapBase import CmapBase
+from .AreaBase import AreaBase
 from .transformations import transformations
 
 class elements(CmapBase, transformations):
@@ -23,7 +24,11 @@ class elements(CmapBase, transformations):
         self.atlas = AtlasBase(a_transform=self.transform, **kwargs)
         self.sources = SourcesBase(s_transform=self.atlas.transform, **kwargs)
         self.connect = ConnectivityBase(c_transform=self.atlas.transform, c_xyz=self.sources.xyz, **kwargs)
-        CmapBase.__init__(self, **kwargs)
+        self.area = AreaBase(scale_factor=self.atlas._scaleMax, name='NoneArea', select=[4, 6],
+                             transform=self.atlas.transform, color='#ab4642')
+
+        # Initialize colorbar elements  (by default, with sources elements):
+        self.cb = CmapBase(self.view.cbwc, **self.sources._cb, **kwargs)
 
         # Add transformations :
         transformations.__init__(self, **kwargs)
@@ -42,11 +47,13 @@ class elements(CmapBase, transformations):
         if self.sources.stextmesh.name == 'NoneText':
             self.o_Text.setEnabled(False)
             self.grpText.setEnabled(False)
+            self.cmapSources.setEnabled(False)
 
         # Connectivity panel:
-        if self.connect.mesh.name == 'NoneText':
+        if self.connect.mesh.name == 'NoneConnect':
             self.q_CONNECT.setEnabled(False)
             self.o_Connect.setEnabled(False)
+            self.cmapConnect.setEnabled(False)
         self._lw = kwargs.get('c_linewidth', 4.)
 
         # ---------- Put everything in a root node ----------

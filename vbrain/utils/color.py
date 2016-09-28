@@ -6,7 +6,7 @@ from warnings import warn
 
 from .math import normalize
 
-__all__ = ['color2vb', 'array2colormap', 'dynamic_color']
+__all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces', '_colormap']
 
 
 def color2vb(color=None, default=(1,1,1), length=1, alpha=1.0):
@@ -176,3 +176,45 @@ def dynamic_color(color, x, dynamic=(0.0, 1.0)):
     # Update color :
     color[:, 3] = x_norm
     return color
+
+
+def color2faces(color, length):
+    """Pass a simple color to faces shape
+
+    Args:
+        color: RGBA tuple
+            Tuple of RGBA colors
+
+        length: tuple
+            Length of faces
+
+    Return
+        colorFace: the color adapted for faces
+    """
+    color = color.ravel()
+    colorL = np.tile(np.array(color)[..., np.newaxis, np.newaxis], (1, length, 3))
+    return np.transpose(colorL, (1, 2, 0))
+
+
+class _colormap(object):
+
+    """Colormap class
+    """
+
+    def __init__(self, cmap=None, vmin=None, vmax=None, under=None, over=None):
+        self._cb = {'cmap':cmap, 'vmin':vmin, 'vmax':vmax, 'under':under, 'over':over}
+
+    def __getitem__(self, key):
+        return self._cb[key]
+
+    def __setitem__(self, key, item):
+        self._cb[key] = item
+
+    def cbUpdateFrom(self, obj):
+        """
+        """
+        objkeys = obj._cb.keys()
+        for k in self._cb.keys():
+            if k in objkeys:
+                self[k] = obj[k]
+

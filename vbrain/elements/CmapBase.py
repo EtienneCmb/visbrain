@@ -2,27 +2,26 @@ import numpy as np
 from vispy.scene.visuals import ColorBar, Text
 from vispy.color import Colormap
 
-from ..utils import slider2opacity, array2colormap, color2vb
+from ..utils import slider2opacity, array2colormap, color2vb, _colormap
 
 
-class CmapBase(object):
+class CmapBase(_colormap):
 
-    """docstring for CmapBase"""
+    """docstring for CmapBase
+    """
 
-    def __init__(self, cmap='inferno', cmap_vmin=None, cmap_vmax=None, cmap_under=None, cmap_over=None, 
-                 cb_export=True, cb_fontsize=15, cb_label='', **kwargs):
-        # Colormap elements :
-        self.cmap = cmap
-        self.cmap_vmin = cmap_vmin
-        self.cmap_vmax = cmap_vmax
-        self.cmap_under = cmap_under
-        self.cmap_over = cmap_over
+    def __init__(self, parent, cmap='inferno', vmin=None, vmax=None, under=None, over=None, 
+                 cb_export=False, cb_fontsize=15, cb_label='', **kwargs):
+
+        # Initialize colorbar elements :
+        _colormap.__init__(self, cmap, vmin, vmax, under, over)
 
         # Colorbar elements :
-        self.cbexport = cb_export
-        self.cblabel = cb_label
-        self.cbfontsize = cb_fontsize
-        self.cblength = 10
+        self.cbwc = parent
+        self._cb['export'] = cb_export
+        self._cb['label'] = cb_label
+        self._cb['fontsize'] = cb_fontsize
+        self._cb['length'] = 10
 
         # Create the colorbar :
         self.cbcreate()
@@ -38,39 +37,49 @@ class CmapBase(object):
         """Create a default colorbar between 0 and 1
         """
         # Define colors :
-        cmap = self.cbcolor(np.array([0,1]), self.cmap, length=self.cblength)
+        cmap = self.cbcolor(np.array([0,1]), length=self['length'])
 
         # Create colorbar object :
         self.colorbarW = ColorBar(cmap=cmap, orientation='right', size=(40,5), label='', clim=('', ''),
                                   border_color="w", padding=-10, margin=-10, border_width=1)
-        self.view.cbwc.add(self.colorbarW)
+        self.cbwc.add(self.colorbarW)
 
         # Create a more controlable text :
-        self.cbmaxW = Text(text='', color='w', font_size=self.cbfontsize-2, pos=(4.5,20),anchor_x='left', anchor_y='center')
-        self.cbminW = Text(text='', color='w', font_size=self.cbfontsize-2, pos=(4.5,-20-0.5), anchor_x='left', anchor_y='center')
-        self.cblabelW = Text(text='', color='w', font_size=self.cbfontsize, pos=(6,0), rotation=-90, anchor_y='center', anchor_x='center')
-        self.view.cbwc.add(self.cbminW)
-        self.view.cbwc.add(self.cbmaxW)
-        self.view.cbwc.add(self.cblabelW)
+        self.cbmaxW = Text(text='', color='w', font_size=self['fontsize']-2, pos=(4.5,20), anchor_x='left',
+                           anchor_y='center')
+        self.cbminW = Text(text='', color='w', font_size=self['fontsize']-2, pos=(4.5,-20-0.5), anchor_x='left',
+                           anchor_y='center')
+        self.cblabelW = Text(text='', color='w', font_size=self['fontsize'], pos=(6,0), rotation=-90,
+                             anchor_y='center', anchor_x='center')
+        self.cbwc.add(self.cbminW)
+        self.cbwc.add(self.cbmaxW)
+        self.cbwc.add(self.cblabelW)
 
         # Set colorbar properties :
-        self.set_cb(None, (0,1), self.cblabel, self.cbfontsize)
+        self.set_cb(None, (0,1), self['label'], self['fontsize'])
 
 
-    def cbcolor(self, data, cmap, length=10, vmin=None, vmax=None, under=None, over=None):
+    def cbcolor(self, data, length=10):
         """
         """
         colval = np.linspace(data.min(), data.max(), num=length)
-        colorbar = array2colormap(colval, vmin=vmin, vmax=vmax, under=under, over=over, cmap=cmap)
+        colorbar = array2colormap(colval, vmin=self['vmin'], vmax=self['vmax'], under=self['under'],
+                                  over=self['over'], cmap=self['cmap'])
         return Colormap(np.flipud(colorbar))
 
 
-    def cbupdate(self, data, cmap, vmin=None, vmax=None, under=None, over=None, label='', fontsize=20):
+    def cbupdate(self, data, cmap, vmin=None, vmax=None, under=None, over=None, label='',
+                 fontsize=20, export=True, length=10):
         """
         """
+        # Set all values :
+        self['cmap'] = cmap
+        self['vmin'], self['vmax'] = vmin, vmax
+        self['under'], self['over'] = under, over
+
         # Get data colors :
-        cmap = self.cbcolor(data, self.cmap, length=self.cblength, vmin=vmin,
-                            vmax=vmax, under=under, over=over)
+        cmap = self.cbcolor(data, length=length)
+
         # Update colorbar proerties :
         clim = (str(data.min()), str(data.max()))
         self.set_cb(cmap=cmap, clim=clim, label=label, fontsize=fontsize)
@@ -86,3 +95,5 @@ class CmapBase(object):
         if label is not None: self.cblabelW.text = label
         if fontsize is not None: self.colorbarW.label.font_size = fontsize
         # self.colorbarW.update()
+
+
