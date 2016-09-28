@@ -155,7 +155,7 @@ class vbrain(uiInit, uiElements, elements):
             Coefficient for the specular light
 
     Example:
-        >>> # Load lirairies :
+        >>> # Load librairies :
         >>> import numpy as np
         >>> from visbrain import vbrain 
         >>> # Define some coordinates and colors for three deep sources :
@@ -172,7 +172,7 @@ class vbrain(uiInit, uiElements, elements):
 
         # ------ ui Arguments ------
         bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
-        self._savename = kwargs.get('ui_savename', 'test_de_nom2')
+        self._savename = kwargs.get('ui_savename', None)
         self._extension = kwargs.get('ui_extension', '.png')
         if self._extension not in ['png', 'tiff']:
             self._extension = 'png'
