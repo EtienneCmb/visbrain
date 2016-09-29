@@ -68,18 +68,19 @@ class SourcesTransform(object):
         if self.sources.xyz is not None:
             self.progressbar.show()
             # Get data and proportional mask :
-            prop, mask = self._get_mask(self.atlas._nv, self.atlas.vert, self.sources.xyz,
-                                        self.sources.data, set_to=1, contribute=False)
+            prop, mask, smask = self._get_mask(self.atlas._nv, self.atlas.vert, self.sources.xyz,
+                                               self.sources.data, set_to=1, contribute=False)
             # Divide the mask by the number of contributed sources :
             cort_mask = np.divide(mask, prop)
             # Rescale cortical mask data :
-            cort_mask, non_zero = self._rescale_cmap(cort_mask, tomin=self.sources.data.min(),
-                                                     tomax=self.sources.data.max(), val=0)
-            # Finally, set the mask to the surface :
-            self._array2cmap(cort_mask, non_zero=non_zero)
+            nnmasked = np.invert(self.sources.smask)
+            cort_mask, non_zero = self._rescale_cmap(cort_mask, tomin=self.sources.data[nnmasked].min(),
+                                                     tomax=self.sources.data[nnmasked].max(), val=0)
             # Save this current cmap (for colormap interaction) :
             self.current_mask = cort_mask
             self.current_non_zero = non_zero
+            # Finally, set the mask to the surface :
+            self._array2cmap(cort_mask, non_zero=non_zero, smask=smask, smaskcolor=self.sources.smaskcolor)
             # Update colorbar :
             self.cb.cbupdate(cort_mask[non_zero], **self.sources._cb, label=self.cb['label'],
                              fontsize=self.cb['fontsize'])
@@ -95,8 +96,8 @@ class SourcesTransform(object):
         if self.sources.xyz is not None:
             self.progressbar.show()
             # Get data and proportional mask :
-            prop, _ = self._get_mask(self.atlas._nv, self.atlas.vert, self.sources.xyz,
-                                     self.sources.data, set_to=0, contribute=False)
+            prop, _, smask = self._get_mask(self.atlas._nv, self.atlas.vert, self.sources.xyz,
+                                            self.sources.data, set_to=0, contribute=False)
             # Finally, set the mask to the surface :
             non_zero = prop != 0
             self.sources['vmin'], self.sources['vmax'] = 0, prop.max()
@@ -119,24 +120,24 @@ class SourcesTransform(object):
         """Create the colormap mask of data to apply to the MNI brain
         """
         # Define empty proportional and data mask :
-        if set_to == 0:
-            prop = np.zeros((nv, 3), dtype=int)
-        else:
-            prop = set_to*np.ones((nv, 3), dtype=int)
+        prop = np.full((nv, 3), set_to, dtype=int)
+        smasked = np.zeros(prop.shape, dtype=bool)
         mask = np.zeros((nv, 3), dtype=float)
+
+        # Find unmasked proximal vertices for each source :
         idxunmasked = np.where(data.mask == False)[0]
         N = len(idxunmasked)
-        # Find unmasked proximal vertices for each source :
         for i, k in enumerate(idxunmasked):
             self.progressbar.setValue(100*k/N)
             # Find index :
             idx = self._proximal_vertices(vert, xyz[k, :], self.radius, contribute=contribute)
-            # Update mask :
-            # fact = 1-(eucl/self.radius)
-            # fact = normalize(fact, tomin=0., tomax=1.)
-            mask[idx] += data[k]#*fact
-            prop[idx] += 1
-        return prop, mask
+            # Add either to prop or to masked array :
+            if not self.sources.smask[k]:
+                mask[idx] += data[k]
+                prop[idx] += 1
+            else:
+                smasked[idx] = True
+        return prop, mask, smasked
 
 
 
@@ -217,7 +218,7 @@ class SourcesTransform(object):
         return cort, non_zero
 
 
-    def _array2cmap(self, x, non_zero=False):
+    def _array2cmap(self, x, non_zero=False, smask=None, smaskcolor=(.7, .7, .7)):
         """Convert the array x to cmap and mesh it
         """
         # Get alpha :
@@ -225,11 +226,24 @@ class SourcesTransform(object):
                                vmax=self._slmax, tomin=self.view.minOpacity, tomax=self.view.maxOpacity)
 
         # Get the colormap :
-        cmap = array2colormap(x, alpha=alpha, **self.sources._cb)
+        cmap = array2colormap(x[non_zero], alpha=alpha, **self.sources._cb)
+
+        # Define cortical mask :
+        cortmask = np.ones((x.shape[0], 3, 4))
+        cortmask[..., 3] = alpha
+
+        # Manage masked sources :
+        if np.any(smask):
+            cortmask[smask, 0:3] = smaskcolor[0, 0:-1]
+        cortmask[non_zero, :] = cmap
+        # cortmask = cmap
 
         # Set ~non_zero to default brain color :
-        if non_zero is not False:
-            cmap[np.invert(non_zero), 0:3] = self.atlas.mesh.get_color[np.invert(non_zero), 0:3]
+        if np.any(smask):
+            nnz = np.logical_and(np.invert(non_zero), np.invert(smask))
+        else:
+            nnz = np.invert(non_zero) 
+        cortmask[nnz, 0:3] = self.atlas.mesh.get_color[nnz, 0:3]
 
         # Update mesh with cmap :
-        self.atlas.mesh.set_color(data=cmap)
+        self.atlas.mesh.set_color(data=cortmask)
