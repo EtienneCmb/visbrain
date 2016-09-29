@@ -1,4 +1,5 @@
 import numpy as np
+from ...utils import textline2color
 
 
 __all__ = ['uiArea']
@@ -13,11 +14,13 @@ class uiArea(object):
         # By default, hide panels :
         self.structPanel.hide()
         self.struct_rmvLst.hide()
+        self.area.color = 'lightgray'
 
         # Get plot properties :
         self.structEnable.clicked.connect(self.fcn_show_hide_struct_panel)
         self.Sub_brod.clicked.connect(self.fcn_buildStruct)
         self.Sub_aal.clicked.connect(self.fcn_buildStruct)
+        self.struct_color_edit.editingFinished.connect(self.fcn_colorStruct)
 
         # List management :
         self.struct2select.itemClicked.connect(self.fcn_lst_add)
@@ -95,7 +98,7 @@ class uiArea(object):
 
 
     #########################################################################
-    # MANAGE LIST
+    # AREA PROCESS
     #########################################################################
     def fcn_buildStruct(self):
         """
@@ -110,11 +113,8 @@ class uiArea(object):
         self.struct2select.clear()
         self.struct2select.addItems(self.area._label)
         self.fcn_rst_struct()
-        self.area.color = 'white' # <-----------------------------------------------
-        self.area.select = [4, 6, 32, 40] # <-----------------------------------------------
             
-        # Reconstruct brodmann structure :
-
+        # Reconstruct structure list :
         self.area._preprocess()
 
     def fcn_applyStruct(self):
@@ -123,7 +123,6 @@ class uiArea(object):
         struct2add = [int(k.split(':')[0]) for k in self._struct2add]
         struct2add.sort()
         self.area.select = struct2add
-        print(self.area.select)
         self.area._get_vertices()
         self.area._plot()
         self.area.mesh.parent = self._vbNode
@@ -138,6 +137,15 @@ class uiArea(object):
         elif self.struct_External.isChecked():
             self.area.mesh.projection('external')
 
+
+    def fcn_colorStruct(self):
+        """
+        """
+        self.area.color = tuple(textline2color(self.struct_color_edit.text())[1][0])
+        try:
+            self.area.set_color(self.area.color)
+        except:
+            pass
 
     #########################################################################
     # PANEL AND VISIBILITY
