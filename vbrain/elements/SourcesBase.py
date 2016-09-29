@@ -15,9 +15,9 @@ class SourcesBase(_colormap):
     """Class for sources creation
     """
 
-    def __init__(self, s_xyz=None, s_data=None, s_color='red', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0,
+    def __init__(self, s_xyz=None, s_data=None, s_color='#ab4652', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0,
                  s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6, s_scaling=False, s_transform=[],
-                 s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0),
+                 s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), s_mask=None, s_maskcolor='gray',
                  s_cmap='inferno', s_cmap_vmin=None, s_cmap_vmax=None, s_cmap_under=None, s_cmap_over=None,
                  **kwargs):
         # Initialize elements :
@@ -38,6 +38,8 @@ class SourcesBase(_colormap):
         self.stextcolor = color2vb(s_textcolor)
         self.stextsize = s_textsize
         self.stextshift = s_textshift
+        self.smask = s_mask
+        self.smaskcolor = color2vb(s_maskcolor)
 
         # Initialize colorbar elements :
         _colormap.__init__(self, s_cmap, s_cmap_vmin, s_cmap_vmax, s_cmap_under, s_cmap_over)
@@ -100,6 +102,19 @@ class SourcesBase(_colormap):
             else:
                 if (self.color.shape[1] is not 4): self.color = self.color.T
                 self.sColor = self.color
+
+        # --------------------------------------------------------------------
+        # Check mask :
+        if self.smask is not None:
+            if len(self.smask) != self.nSources:
+                raise ValueError("The length of mask must be the same as the number of electrodes")
+            elif (len(self.smask) == self.nSources) and (self.smask.dtype != bool):
+                raise ValueError("The mask must be an array of boolean values")
+            else:
+                # Get the RGBA of mask color :
+                self.sColor[self.smask, ...] = self.smaskcolor
+        else:
+            self.smask = np.zeros((self.nSources,), dtype=bool)
 
         # --------------------------------------------------------------------
         # Check radius :

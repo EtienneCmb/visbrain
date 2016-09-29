@@ -94,6 +94,13 @@ class vbrain(uiInit, uiElements, elements):
             Translate the text along (x, y, z) coordinates to improve text
             visibility
 
+        s_mask: ndarray, optional, (def: None)
+            Vector of boolean values, with the same length as the length of s_xyz.
+            Use this parameter to mask some sources but keep it displayed.
+
+        s_maskcolor: list/tuple, optional, (def: 'gray')
+            Color of masked sources when projected on surface.
+
         c_connect: ndarray, (def: None)
             Connections between sources. Define N sources location using s_xyz of
             shape (N, 3). Then, c_connect must be a (N, N) array defining each value of
