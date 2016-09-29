@@ -54,16 +54,16 @@ class AreaBase(object):
                 self._vol = atlas['vol']
                 self._idx = atlas['vol']
                 self._uidx = np.unique(atlas['aal_idx'])
-                label_L = np.array([str(num)+': '+k+' (L)' for num, k in zip(np.arange(0, len(atlas['aal_label'])*2, 2),
+                label_L = np.array(["%.2d" % (num+1)+': '+k+' (L)' for num, k in zip(np.arange(0, len(atlas['aal_label'])*2, 2),
                                                                              atlas['aal_label'])])
-                label_R = np.array([str(num)+': '+k + ' (R)' for num, k in zip(np.arange(1, len(atlas['aal_label'])*2 + 1, 2),
+                label_R = np.array(["%.2d" % (num+1)+': '+k + ' (R)' for num, k in zip(np.arange(1, len(atlas['aal_label'])*2 + 1, 2),
                                                                                atlas['aal_label'])])
                 self._label = np.column_stack((label_L, label_R)).flatten()
             elif self._structure == 'brod':
                 self._vol = atlas['brod_idx']
                 self._idx = atlas['brod_idx']
                 self._uidx = np.unique(self._vol)[1::]
-                self._label = np.array([str(num)+': BA'+str(k) for num, k in enumerate(self._uidx)])
+                self._label = np.array(["%.2d" % k +': BA'+str(k) for num, k in enumerate(self._uidx)])
 
 
 
@@ -213,6 +213,7 @@ class AreaBase(object):
         # Set color to vertex color :
         self.vertex_colors[mask, ...] = color
         self.mesh.set_color(self.vertex_colors)
+        self.mesh.update()
 
     def set_camera(self, camera):
         """
@@ -246,32 +247,3 @@ class AreaBase(object):
         self._color = value
         self._load()
 
-# # Finally we will test the visual by displaying in a scene.
-
-# canvas = scene.SceneCanvas(keys='interactive', show=True, bgcolor='w', size=(2000,1000))
-
-# # Add a ViewBox to let the user zoom/rotate
-# from vispy.scene.cameras import *
-# cam = TurntableCamera()
-# view = canvas.central_widget.add_view()
-# view.camera = cam
-# # view.camera.fov = 1.
-# view.camera.distance = 10
-# view.camera.azimuth = 0.
-# V = view.camera
-
-# e = AreaBase(structure='brod', select=[4, 6, 8, 32, 40, 45], cmap='Spectral') #
-# e.set_color('orange', [4, 6])
-# # e.set_alpha(0.1, [1, 3])
-# # e.mesh.projection('internal')
-# # e.set_alpha(0.5, index=3)
-# e.mesh.parent = view.scene
-# e.mesh.set_camera(cam)
-
-# axis = scene.visuals.XYZAxis(parent=view.scene)
-
-# # ..and optionally start the event loop
-# if __name__ == '__main__':
-#     import sys
-#     if sys.flags.interactive != 1:
-#         app.run()
