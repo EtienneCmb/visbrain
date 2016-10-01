@@ -102,3 +102,4 @@ class AtlasBase(object):
         vertices, faces, normals, color = self.load(self.template, vertices, faces)
         self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                            hemisphere=hemisphere)
+        self.mesh.set_color(color=self.color)

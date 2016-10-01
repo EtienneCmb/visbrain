@@ -140,6 +140,9 @@ class vbrain(uiInit, uiElements, elements):
             The picture extension when exporting. Choose between 'png'
             and 'tiff'
 
+        ui_crop: tuple, optional, (def: None)
+            crop the exportation. Must be  (x, y, width, height)
+
         cb_export: bool, optional, (def: True)
             Control if the colorbor must be exported when doing a screenshot
 
@@ -181,6 +184,7 @@ class vbrain(uiInit, uiElements, elements):
         bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
         self._savename = kwargs.get('ui_savename', None)
         self._extension = kwargs.get('ui_extension', '.png')
+        self._crop = kwargs.get('ui_crop', None)
         if self._extension not in ['png', 'tiff']:
             self._extension = 'png'
 

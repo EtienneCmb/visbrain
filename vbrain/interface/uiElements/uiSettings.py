@@ -103,7 +103,7 @@ class uiSettings(object):
         self.view.canvas._backend._physical_size = new_size
 
         # Render and save :
-        img = self.view.canvas.render()
+        img = self.view.canvas.render(region=self._crop)
         io.imsave(self._savename, img, format=self._extension)
 
 
