@@ -94,6 +94,10 @@ class vbrain(uiInit, uiElements, elements):
             Translate the text along (x, y, z) coordinates to improve text
             visibility
 
+        s_projecton: string, optional, (def: 'surface')
+            Project sources activity either on surface or, if displayed,
+            on deep structures.
+
         s_mask: ndarray, optional, (def: None)
             Vector of boolean values, with the same length as the length of s_xyz.
             Use this parameter to mask some sources but keep it displayed.
