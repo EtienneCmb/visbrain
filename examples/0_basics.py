@@ -7,6 +7,6 @@ from visbrain import vbrain
 # ********************************************************************
 # 0 - Create a visbrain instance without any customization
 # ********************************************************************
-vb = vbrain()
+vb = vbrain(a_template='B3')
 vb.show()
 

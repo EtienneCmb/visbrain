@@ -63,6 +63,15 @@ target/
 
 # Vispy learning folder :
 Vispy_examples/
+debugging/
 *.ui
 *.svg
 debuging.py
+*.sublime*
+*.sublime-workspace
+*.sublime-project
+*.cprof
+atlas_B1.npz
+atlas_B2.npz
+atlas_B3.npz
+AAL_label_bck.npz
