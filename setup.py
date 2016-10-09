@@ -39,7 +39,7 @@ setup(
     long_description=open("README.md").read(),
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
-    install_requires=["numpy", "vispy", "PyQt4", "matplotlib"],
+    install_requires=["numpy", "vispy", "pyqt", "matplotlib"],
     maintainer=AUTHOR,
     maintainer_email=AUTHOR_EMAIL,  
     license='LICENSE.txt',
