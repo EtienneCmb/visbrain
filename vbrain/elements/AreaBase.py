@@ -154,7 +154,6 @@ class AreaBase(object):
                 # Update maximum :
                 q = self.faces.max()
 
-
         # Other case :
         else:
             raise ValueError('Error: cannot match between color and areas to select')

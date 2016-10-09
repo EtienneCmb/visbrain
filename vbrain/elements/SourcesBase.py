@@ -19,7 +19,7 @@ class SourcesBase(_colormap):
                  s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6, s_scaling=False, s_transform=[],
                  s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), s_mask=None, s_maskcolor='gray',
                  s_cmap='inferno', s_cmap_vmin=None, s_cmap_vmax=None, s_cmap_under=None, s_cmap_over=None,
-                 **kwargs):
+                 s_projecton='surface', **kwargs):
         # Initialize elements :
         self.xyz = s_xyz
         self.data = s_data
@@ -40,6 +40,7 @@ class SourcesBase(_colormap):
         self.stextshift = s_textshift
         self.smask = s_mask
         self.smaskcolor = color2vb(s_maskcolor)
+        self.projecton = s_projecton
 
         # Initialize colorbar elements :
         _colormap.__init__(self, s_cmap, s_cmap_vmin, s_cmap_vmax, s_cmap_under, s_cmap_over)

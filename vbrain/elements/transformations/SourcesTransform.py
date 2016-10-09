@@ -67,8 +67,14 @@ class SourcesTransform(object):
         """
         if self.sources.xyz is not None:
             self.progressbar.show()
+            # Switch between surface and deep projection :
+            if self.sources.projecton == 'surface':
+                nv, vertices = self.atlas._nv, self.atlas.vert
+            elif self.sources.projecton == 'deep':
+                vertices = self.area.mesh.get_vertices
+                nv = vertices.shape[0]
             # Get data and proportional mask :
-            prop, mask, smask = self._get_mask(self.atlas._nv, self.atlas.vert, self.sources.xyz,
+            prop, mask, smask = self._get_mask(nv, vertices, self.sources.xyz,
                                                self.sources.data, set_to=1, contribute=False)
             # Divide the mask by the number of contributed sources :
             cort_mask = np.divide(mask, prop)
@@ -242,8 +248,15 @@ class SourcesTransform(object):
         if np.any(smask):
             nnz = np.logical_and(np.invert(non_zero), np.invert(smask))
         else:
-            nnz = np.invert(non_zero) 
-        cortmask[nnz, 0:3] = self.atlas.mesh.get_color[nnz, 0:3]
+            nnz = np.invert(non_zero)
 
-        # Update mesh with cmap :
-        self.atlas.mesh.set_color(data=cortmask)
+        if self.sources.projecton == 'surface':
+            # Apply generale color to the brain :
+            cortmask[nnz, 0:3] = self.atlas.mesh.get_color[nnz, 0:3]
+            # Update mesh with cmap :
+            self.atlas.mesh.set_color(data=cortmask)
+        elif self.sources.projecton == 'deep':
+            # Apply generale color to the brain :
+            cortmask[nnz, 0:3] = self.area.mesh.get_color[nnz, 0:3]
+            # Update mesh with cmap :
+            self.area.mesh.set_color(data=cortmask)
