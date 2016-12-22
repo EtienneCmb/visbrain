@@ -68,24 +68,24 @@ class uiAtlas(object):
     def rotate_fixed(self, vtype='axial'):
         """
         """
-        # Coronal (front, back)
-        if vtype is 'sagittal':
-            if self.atlas.coronal == 0: # Top
-                azimuth, elevation = 180, 0
-                self.atlas.coronal = 1
-            elif self.atlas.coronal == 1: # Bottom
-                azimuth, elevation = 0, 0
-                self.atlas.coronal = 0
-            self.atlas.sagittal, self.atlas.axial = 0, 0
         # Sagittal (left, right)
-        elif vtype is 'coronal':
-            if self.atlas.sagittal == 0: # Top
+        if vtype is 'sagittal':
+            if self.atlas.sagittal == 0: # Left
                 azimuth, elevation = -90, 0
                 self.atlas.sagittal = 1
-            elif self.atlas.sagittal == 1: # Bottom
+            elif self.atlas.sagittal == 1: # Right
                 azimuth, elevation = 90, 0
                 self.atlas.sagittal = 0
             self.atlas.coronal, self.atlas.axial = 0, 0
+        # Coronal (front, back)
+        elif vtype is 'coronal':
+            if self.atlas.coronal == 0: # Front
+                azimuth, elevation = 180, 0
+                self.atlas.coronal = 1
+            elif self.atlas.coronal == 1: # Back
+                azimuth, elevation = 0, 0
+                self.atlas.coronal = 0
+            self.atlas.sagittal, self.atlas.axial = 0, 0
         # Axial (top, bottom)
         elif vtype is 'axial':
             if self.atlas.axial == 0: # Top
