@@ -278,13 +278,13 @@ class BrainMeshVisual(Visual):
         # Load only left/ritgh hemisphere :
         if hemisphere in ['left', 'right']:
             if hemisphere == 'left':
-                inf = np.where(vertices[..., 0] <= vertices[:, :, 0].mean())[0]
+                inf = np.where(vertices[..., 0, 0] <= vertices[:, :, 0].mean())[0]
             if hemisphere == 'right':
-                inf = np.where(vertices[..., 0] >= vertices[:, :, 0].mean())[0]
+                inf = np.where(vertices[..., 0, 0] >= vertices[:, :, 0].mean())[0]
             vertices = vertices[inf, ...]
             faces = faces[inf, ...]
             normals = normals[inf, ...]
-            vertex_colors = vertex_colors[inf, ...]
+            vertex_colors = vertex_colors[inf, :, :]
 
         # -------------- Convert elements --------------
         # Assign elements :
