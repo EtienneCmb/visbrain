@@ -74,6 +74,7 @@ class SourcesTransform(object):
                 vertices = self.area.mesh.get_vertices
                 nv = vertices.shape[0]
             # Get data and proportional mask :
+            print('VERT', nv, vertices.shape)
             prop, mask, smask = self._get_mask(nv, vertices, self.sources.xyz,
                                                self.sources.data, set_to=1, contribute=False)
             # Divide the mask by the number of contributed sources :
