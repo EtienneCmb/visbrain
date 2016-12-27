@@ -9,7 +9,7 @@ from .interface import uiInit, uiElements
 from .elements import elements
 
 
- 
+
 class vbrain(uiInit, uiElements, elements):
 
     """
@@ -23,7 +23,7 @@ class vbrain(uiInit, uiElements, elements):
     'cmap_': colormap properties
     'cb_': colorbar properties
     'ui_': graphical interface properties
-    'l_': light properties
+    'l_': light properties    
 
     Kargs:
         a_color: tuple, (def: (1,1,1))
@@ -125,8 +125,16 @@ class vbrain(uiInit, uiElements, elements):
         cmap: string, (def: 'inferno')
             Matplotlib colormap name.
 
+        cmap_lim: tuple/list, (def: None)
+            Define the limit of the colorbar. This parameter must be a list or tuple
+            containing two float (like (3, 5)...). If cmap_lim stay to None, the minimum
+            and maximum of projected values are going to be used. Alternatively, you can
+            use (3, None) or (None, 5) to ignore one value and force it to be assigned to
+            the minimum or maximum.
+
         cmap_vmin/cmap_vmax: int/float, (def: None/None)
-            Minimum/maximum values for the colormap.
+            Define a threshold to change colors that are under cmap_vmin or over
+            cmap_vmax. See cmap_under/cmap_over to change those colors.
 
         cmap_under/cmap_over: string/tuple, (def: None/None)
             The color to use for values under cmap_vmin and values over cmap_vmax.
