@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import numpy as np
 
 from matplotlib.cm import ScalarMappable
@@ -70,7 +72,7 @@ def color2vb(color=None, default=(1,1,1), length=1, alpha=1.0):
 
 
 
-def array2colormap(x, cmap='inferno', alpha=1.0, vmin=None, vmax=None,
+def array2colormap(x, clim=None, cmap='inferno', alpha=1.0, vmin=None, vmax=None,
                    under='dimgray', over='darkred', faces_render=False):
     """Transform an array of data to colormap (array of RGBA)
 
@@ -83,7 +85,7 @@ def array2colormap(x, cmap='inferno', alpha=1.0, vmin=None, vmax=None,
             Matplotlib colormap
 
         alpha: float, (def: 1.0)
-            The opcaity
+            The opacity
 
         vmin: float (def: None)
             Minimum of the colormap
@@ -103,32 +105,44 @@ def array2colormap(x, cmap='inferno', alpha=1.0, vmin=None, vmax=None,
         color: array
             Array of RGBA colors
     """
-    # Check vmin/vmax :
+    # Default clim :
+    colim = [None, None]
+
+    # Check the limit of the colorbar:
+    if clim is None:
+        clim = (x.min(), x.max())
+    else:
+        if not isinstance(clim, list):
+            clim = list(clim)
+        if len(clim) is not 2:
+            raise ValueError("The length of the climit must be 2 (min, max)")
+        else:
+            if clim[0] is None:
+                clim[0] = x.min()
+            if clim[1] is None:
+                clim[1] = x.max()
+
+    # Invert vmin/vmax if vmin > vmax :
     if (vmin is not None) and (vmax is not None) and (vmax < vmin):
         v = vmin
         vmax = vmin
         vmin = v
 
-    # Normalize x :
-    xM = np.abs(x).max()
-    x = x/xM
+    # Case management :
+    if vmin is None:
+        colim[0] = clim[0]
+    else:
+        x = colorclip(x, clim[0], kind='under')
+        colim[0] = vmin
+    if vmax is None:
+        colim[1] = clim[1]
+    else:
+        x = colorclip(x, clim[1], kind='over')
+        colim[1] = vmax
 
     # Define the colormap :
     cm = ScalarMappable(cmap=cmap)
-    # Set clim :
-    if vmin is not None:
-        if vmin > xM:
-            vmin = x.min()
-        vmin /= xM
-    else:
-        under = None
-    if vmax is not None:
-        if vmax < x.min():
-            vmax = xm
-        vmax /= xM
-    else:
-        over = None
-    cm.set_clim(vmin=vmin, vmax=vmax)
+    cm.set_clim(vmin=colim[0], vmax=colim[1])
 
     # Under/over the colorbar :
     if under is not None:
@@ -201,8 +215,13 @@ class _colormap(object):
     """Colormap class
     """
 
-    def __init__(self, cmap=None, vmin=None, vmax=None, under=None, over=None):
-        self._cb = {'cmap':cmap, 'vmin':vmin, 'vmax':vmax, 'under':under, 'over':over}
+    def __init__(self, cmap=None, clim=None, vmin=None, vmax=None, under=None, over=None, data=None):
+        if data is None:
+            clim, vmin, vmax, under, over = (None, None), None, None, None, None
+        else:
+            if clim is None:
+                clim = [data.min(), data.max()]
+        self._cb = {'cmap':cmap, 'clim':clim, 'vmin':vmin, 'vmax':vmax, 'under':under, 'over':over}
 
     def __getitem__(self, key):
         return self._cb[key]
@@ -218,3 +237,17 @@ class _colormap(object):
             if k in objkeys:
                 self[k] = obj[k]
 
+    
+def colorclip(x, th, kind='under'):
+    """Force an array to have clipping values
+
+    :x: array of data
+    :th: the threshold to use
+    :kind: string, can be either 'under' or 'over'
+    """
+    if kind is 'under':
+        idx = x < th
+    elif kind is 'over':
+        idx = x > th
+    x[idx] = th
+    return x

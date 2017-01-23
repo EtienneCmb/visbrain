@@ -10,11 +10,11 @@ class CmapBase(_colormap):
     """docstring for CmapBase
     """
 
-    def __init__(self, parent, cmap='inferno', vmin=None, vmax=None, under=None, over=None, 
+    def __init__(self, parent, cmap='viridis', clim=None, vmin=None, vmax=None, under=None, over=None, 
                  cb_export=False, cb_fontsize=15, cb_label='', **kwargs):
 
         # Initialize colorbar elements :
-        _colormap.__init__(self, cmap, vmin, vmax, under, over)
+        _colormap.__init__(self, cmap, clim, vmin, vmax, under, over)
 
         # Colorbar elements :
         self.cbwc = parent
@@ -68,12 +68,13 @@ class CmapBase(_colormap):
         return Colormap(np.flipud(colorbar))
 
 
-    def cbupdate(self, data, cmap, vmin=None, vmax=None, under=None, over=None, label='',
+    def cbupdate(self, data, cmap, clim=None, vmin=None, vmax=None, under=None, over=None, label='',
                  fontsize=20, export=True, length=10):
         """
         """
         # Set all values :
         self['cmap'] = cmap
+        self['clim'] = clim
         self['vmin'], self['vmax'] = vmin, vmax
         self['under'], self['over'] = under, over
 
@@ -81,7 +82,7 @@ class CmapBase(_colormap):
         cmap = self.cbcolor(data, length=length)
 
         # Update colorbar proerties :
-        clim = (str(data.min()), str(data.max()))
+        clim = (str(clim[0]), str(clim[1]))
         self.set_cb(cmap=cmap, clim=clim, label=label, fontsize=fontsize)
 
 

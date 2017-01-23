@@ -36,7 +36,7 @@ def normalize(x, tomin=0.0, tomax=1.0):
         else:
             warn('Normalization has been ignored because minimum '
                  'and maximum are both equal to '+str(xm))
-            return x
+            return tomax * x / xM
     else:
         return x
 

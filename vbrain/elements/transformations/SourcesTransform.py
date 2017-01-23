@@ -88,8 +88,9 @@ class SourcesTransform(object):
             # Finally, set the mask to the surface :
             self._array2cmap(cort_mask, non_zero=non_zero, smask=smask, smaskcolor=self.sources.smaskcolor)
             # Update colorbar :
-            self.cb.cbupdate(cort_mask[non_zero], **self.sources._cb, label=self.cb['label'],
-                             fontsize=self.cb['fontsize'])
+            if len(cort_mask[non_zero]):
+                self.cb.cbupdate(cort_mask[non_zero], **self.sources._cb, label=self.cb['label'],
+                                 fontsize=self.cb['fontsize'])
         else:
             warn("No sources detected. Use s_xyz input parameter to define source's coordinates")
         self.progressbar.hide()
@@ -232,7 +233,10 @@ class SourcesTransform(object):
                                vmax=self._slmax, tomin=self.view.minOpacity, tomax=self.view.maxOpacity)
 
         # Get the colormap :
-        cmap = array2colormap(x[non_zero], alpha=alpha, **self.sources._cb)
+        if len(x[non_zero]):
+            cmap = array2colormap(x[non_zero], alpha=alpha, **self.sources._cb)
+        else:
+            cmap = np.array([])
 
         # Define cortical mask :
         cortmask = np.ones((x.shape[0], 3, 4))
@@ -241,7 +245,8 @@ class SourcesTransform(object):
         # Manage masked sources :
         if np.any(smask):
             cortmask[smask, 0:3] = smaskcolor[0, 0:-1]
-        cortmask[non_zero, :] = cmap
+        if len(x[non_zero]):
+            cortmask[non_zero, :] = cmap
         # cortmask = cmap
 
         # Set ~non_zero to default brain color :
