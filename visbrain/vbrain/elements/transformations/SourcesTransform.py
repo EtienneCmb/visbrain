@@ -63,7 +63,7 @@ class SourcesTransform(object):
     # ________________ MAIN FUNCTIONS ________________
 
     def cortical_projection(self):
-        """
+        """Project sources activity on the surface
         """
         if self.sources.xyz is not None:
             self.progressbar.show()

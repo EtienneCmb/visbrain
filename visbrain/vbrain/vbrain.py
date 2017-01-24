@@ -1,3 +1,6 @@
+"""
+"""
+
 from PyQt4 import QtGui
 import sys
 
@@ -13,17 +16,18 @@ from .elements import elements
 class vbrain(uiInit, uiElements, elements):
 
     """
-    All possible colors can be a matplotlib color name ('olive', 'slateblue'...),
-    an hexadecimal type ('#9b59b6', '#3498db', '#95a5a6'...) or an array of RGB or
+    All possible colors can be a matplotlib color name (*'olive', 'slateblue'...*),
+    an hexadecimal type (*'#9b59b6', '#3498db', '#95a5a6'...*) or an array of RGB or
     RGBA colors.
-    's_': sources properties
-    'a_': atlas properties
-    'c_': connectivity properties
-    't_': transformations properties
-    'cmap_': colormap properties
-    'cb_': colorbar properties
-    'ui_': graphical interface properties
-    'l_': light properties    
+
+        * 's_': sources properties
+        * 'a_': atlas properties
+        * 'c_': connectivity properties
+        * 't_': transformations properties
+        * 'cmap_': colormap properties
+        * 'cb_': colorbar properties
+        * 'ui_': graphical interface properties
+        * 'l_': light properties    
 
     Kargs:
         a_color: tuple, (def: (1,1,1))
@@ -227,7 +231,14 @@ class vbrain(uiInit, uiElements, elements):
         
         # print(self.view.wc.scene.describe_tree(with_transform=True))
 
-    def show(self):
-        self.showMaximized()
+    def show(self, maximized=True):
+        """Display the graphical user interface
+
+        Kargs:
+            maximized: bool, optional, (def: True)
+                Specified if the window have to me maximized or not
+        """
+        if maximized:
+            self.showMaximized()
         self.rotate_fixed()
         visapp.run()
