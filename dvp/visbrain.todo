@@ -1,0 +1,37 @@
+doc
+	-5 Documenter chaque fonction
+	-4 Cleaner le self pour ne faire apparaître que ce qui est utile (arriver à virer les éléments pyqt...)
+	-2 Dans la doc, faire un exemple de script bash pour montrer que l'on peut looper
+
+Colorbar
+	-5 La colorbar ne marche toujours pas très bien
+	-5 clim à configurer
+
+
+Projection
+	-5 Vérifier les dernières modifs liées à la projection interne
+	-4 Projection interne
+
+Opacité
+	+5 Mettre les fonction coronale... dans uiAtlas
+
+Structures internes
+	-4 Bug dans les structures internes
+	-3 Structures internes HD
+
+
+Connectivity
+	-5 Fixer le problem de clim avec la connectivité (exemple 4)
+	-3 Renomer ConnectivityBase -> ConnectBase
+
+GUI
+	-5 Ajouter la compatibilité avec du clim
+	-3 Montrer message erreur
+	-3 Montrer azimuth/elevation lors de rotation
+
+Shortcuts
+	-5 Add some shortcuts
+
+Idea:
+	-1 GUI suppémentaire pour afficher les graphes des infos de sources (cf. physiology das brainpipe) + possibilité de faire des graphes de groupe
+	-1 GUI supplémentaire pour modifier chaque source indépendemment? (texte, couleur, taille...)
