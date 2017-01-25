@@ -23,7 +23,7 @@ class AreaBase(object):
 
     def __init__(self, structure='brod', select=None, color='white', cmap=None, scale_factor=1,
                  name='', transform=None):
-        self.atlaspath = os.path.dirname(visbrain.__file__)+'/vbrain/elements/templates/'
+        self.atlaspath = os.path.dirname(visbrain.__file__)+'/vbrain/vbobj/templates/'
         self.file = 'AAL_label.npz'
         self._structure = structure
         self._select = select

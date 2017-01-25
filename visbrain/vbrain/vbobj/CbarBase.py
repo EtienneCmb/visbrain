@@ -1,3 +1,8 @@
+"""Base class for colormap managment:
+- create a colorbar
+- Update it with new color / settings
+"""
+
 import numpy as np
 from vispy.scene.visuals import ColorBar, Text
 from vispy.color import Colormap
@@ -5,13 +10,14 @@ from vispy.color import Colormap
 from ..utils import slider2opacity, array2colormap, color2vb, _colormap
 
 
-class CmapBase(_colormap):
+class CbarBase(_colormap):
 
-    """docstring for CmapBase
+    """Colormap / colorbar main class
     """
 
-    def __init__(self, parent, cmap='viridis', clim=None, vmin=None, vmax=None, under=None, over=None, 
-                 cb_export=False, cb_fontsize=15, cb_label='', **kwargs):
+    def __init__(self, parent, cmap='viridis', clim=None, vmin=None, vmax=None,
+                 under=None, over=None, cb_export=False, cb_fontsize=15, cb_label='',
+                 **kwargs):
 
         # Initialize colorbar elements :
         _colormap.__init__(self, cmap, clim, vmin, vmax, under, over)
@@ -40,17 +46,19 @@ class CmapBase(_colormap):
         cmap = self.cbcolor(np.array([0,1]), length=self['length'])
 
         # Create colorbar object :
-        self.colorbarW = ColorBar(cmap=cmap, orientation='right', size=(40,5), label='', clim=('', ''),
-                                  border_color="w", padding=-10, margin=-10, border_width=1)
+        self.colorbarW = ColorBar(cmap=cmap, orientation='right', size=(40,5),
+                                  label='', clim=('', ''), border_color="w",
+                                  padding=-10, margin=-10, border_width=1)
         self.cbwc.add(self.colorbarW)
 
         # Create a more controlable text :
-        self.cbmaxW = Text(text='', color='w', font_size=self['fontsize']-2, pos=(4.5,20), anchor_x='left',
-                           anchor_y='center')
-        self.cbminW = Text(text='', color='w', font_size=self['fontsize']-2, pos=(4.5,-20-0.5), anchor_x='left',
-                           anchor_y='center')
-        self.cblabelW = Text(text='', color='w', font_size=self['fontsize'], pos=(6,0), rotation=-90,
-                             anchor_y='center', anchor_x='center')
+        self.cbmaxW = Text(text='', color='w', font_size=self['fontsize']-2,
+                           pos=(4.5,20), anchor_x='left', anchor_y='center')
+        self.cbminW = Text(text='', color='w', font_size=self['fontsize']-2,
+                           pos=(4.5,-20-0.5), anchor_x='left', anchor_y='center')
+        self.cblabelW = Text(text='', color='w', font_size=self['fontsize'],
+                             pos=(6,0), rotation=-90, anchor_y='center',
+                             anchor_x='center')
         self.cbwc.add(self.cbminW)
         self.cbwc.add(self.cbmaxW)
         self.cbwc.add(self.cblabelW)
@@ -63,13 +71,13 @@ class CmapBase(_colormap):
         """
         """
         colval = np.linspace(data.min(), data.max(), num=length)
-        colorbar = array2colormap(colval, vmin=self['vmin'], vmax=self['vmax'], under=self['under'],
-                                  over=self['over'], cmap=self['cmap'])
+        colorbar = array2colormap(colval, vmin=self['vmin'], vmax=self['vmax'],
+                                  under=self['under'], over=self['over'], cmap=self['cmap'])
         return Colormap(np.flipud(colorbar))
 
 
-    def cbupdate(self, data, cmap, clim=None, vmin=None, vmax=None, under=None, over=None, label='',
-                 fontsize=20, export=True, length=10):
+    def cbupdate(self, data, cmap, clim=None, vmin=None, vmax=None, under=None,
+                 over=None, label='', fontsize=20, export=True, length=10):
         """
         """
         # Set all values :

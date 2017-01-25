@@ -1,3 +1,8 @@
+"""Base class for connectivity:
+- Create a connectivity object (Connect)
+- colormap managment for connectivity
+"""
+
 import numpy as np
 import os
 from warnings import warn
@@ -16,7 +21,8 @@ __all__ = ['ConnectivityBase']
 
 class ConnectivityBase(_colormap):
 
-    """Class for connectivityd
+    """Base class for connecivity managment. From all inputs arguments,
+    this class use only those containing 'c_' (connectivity). 
     """
 
     def __init__(self, c_xyz=[], c_connect=None, c_select=None, c_colorby='count',
@@ -34,6 +40,7 @@ class ConnectivityBase(_colormap):
         # Initialize colormap :
         _colormap.__init__(self, c_cmap, c_cmap_vmin, c_cmap_vmax, c_cmap_under, c_cmap_over)
 
+        # Object creation :
         if (self.xyz is not None) and (self.connect is not None):
             self.mesh = Connect(self.xyz, self.connect, select=self.select, colorby=self.colorby,
                                 dynamic=self.dynamic, name='Connectivity', **self._cb)

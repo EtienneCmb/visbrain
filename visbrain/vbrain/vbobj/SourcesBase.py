@@ -1,3 +1,6 @@
+"""Base class for sources and text sources managment.
+"""
+
 import numpy as np
 import os
 from warnings import warn
@@ -12,14 +15,18 @@ __all__ = ['SourcesBase']
 
 class SourcesBase(_colormap):
 
-    """Class for sources creation
+    """The SourceBase class is used to initialize the source object and
+    to add some necessary functions like plotting, loading... Each source's
+    input start with 's_'. Other arguments (**kwargs) are ignored.
+    This class is also responsible for associated text of each source.
     """
 
-    def __init__(self, s_xyz=None, s_data=None, s_color='#ab4652', s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0,
-                 s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6, s_scaling=False, s_transform=[],
-                 s_text=None, s_textcolor='black', s_textsize=3, s_textshift=(0,2,0), s_mask=None, s_maskcolor='gray',
-                 s_cmap='inferno', s_cmap_clim=None, s_cmap_vmin=None, s_cmap_vmax=None, s_cmap_under=None, s_cmap_over=None,
-                 s_projecton='surface', **kwargs):
+    def __init__(self, s_xyz=None, s_data=None, s_color='#ab4652', s_radius=0.1,
+                 s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0, s_edgecolor=None,
+                 s_edgewidth=0.6, s_scaling=False, s_transform=[], s_text=None, s_textcolor='black',
+                 s_textsize=3, s_textshift=(0,2,0), s_mask=None, s_maskcolor='gray',
+                 s_cmap='inferno', s_cmap_clim=None, s_cmap_vmin=None, s_cmap_vmax=None,
+                 s_cmap_under=None, s_cmap_over=None, s_projecton='surface', **kwargs):
         # Initialize elements :
         self.xyz = s_xyz
         self.data = s_data
@@ -43,7 +50,8 @@ class SourcesBase(_colormap):
         self.projecton = s_projecton
 
         # Initialize colorbar elements :
-        _colormap.__init__(self, s_cmap, s_cmap_clim, s_cmap_vmin, s_cmap_vmax, s_cmap_under, s_cmap_over, self.data)
+        _colormap.__init__(self, s_cmap, s_cmap_clim, s_cmap_vmin, s_cmap_vmax,
+                           s_cmap_under, s_cmap_over, self.data)
 
         # Plot :
         if self.xyz is not None:
@@ -66,7 +74,8 @@ class SourcesBase(_colormap):
 
 
     def prepare2plot(self):
-        """Prepare data before plotting
+        """Prepare data before plotting. This method check any inputs
+        and raise an error if it's not compatible.
         """      
         # --------------------------------------------------------------------
         # Check xyz :
@@ -94,7 +103,8 @@ class SourcesBase(_colormap):
                 raise ValueError("The length of the color sources list must "
                                  "be the same the number of electrode.")
             else:
-                self.sColor = np.squeeze(np.array([color2vb(color=k, length=1, alpha=self.alpha) for k in self.color]))
+                self.sColor = np.squeeze(np.array([color2vb(color=k, length=1,
+                                                            alpha=self.alpha) for k in self.color]))
                 if (self.sColor.shape[1] is not 4): self.sColor = self.sColor.T
         elif isinstance(self.color, np.ndarray): # array of colors
             if nSource not in self.color.shape:
@@ -135,34 +145,63 @@ class SourcesBase(_colormap):
         if len(self.data) != self.nSources:
             raise ValueError("The length of data must be the same as the number of electrodes")
         else:
-            self.sData = self.array2radius(self.data.data, vmin=self.radiusmin, vmax=self.radiusmax, rescale=self.scaling)
+            self.sData = self.array2radius(self.data.data, vmin=self.radiusmin,
+                                           vmax=self.radiusmax, rescale=self.scaling)
 
         # --------------------------------------------------------------------
         # Check text :
         if self.stext is not None:
             if len(self.stext) != len(self):
-                raise ValueError("The length of text data must be the same as the number of electrodes")
+                raise ValueError("""The length of text data must be the same 
+                                 as the number of electrodes""")
 
 
     def array2radius(self, data, vmin=0.02, vmax=0.05, rescale=True):
-        """Transform an array of data to source's radius
+        """Transform an array of data to source's radius. Each deep source
+        have a corresponding floating value and the ball radius will be
+        proportional to this value.
+
+        Args:
+            data: array of shape (N,)
+                Array of data to use. The data must be a vector of
+                float number.
+
+        Kargs:
+            vmin: float, optional, (def: 0.02)
+                Minimum radius size to use for the sources.
+
+            vmax: float, optional, (def: 0.05)
+                Maximum radius size to use for the sources.
+
+            rescale: bool, optional, (def: True)
+                Rescale data using the _rescale attribute.
+
+        Return:
+            radius: array of shape (N,)
+                The source's radius, proportional to data.
         """
-        # Constant data :
-        if np.unique(data).size == 1:
+        # Find radius either for constant / non-constant data :
+        if np.unique(data).size == 1: # Constant data
             radius = vmin*np.ones((len(data),))
-        # Non-constant values :
-        else:
+        else:                         # Non-constant values
             radius = normalize(data, tomin=vmin, tomax=vmax)
+
         # Rescale data :
-        if rescale: radius /= self._rescale
+        if rescale:
+            radius /= self._rescale
+
         return radius
 
 
     def plot(self):
-        """Plot sources on the brain
+        """Plot non-masked sources in the MNI brain. The sources are
+        considered as a cloud of points to have only one more object
+        on the final scene and make rendering / rotation faster compare
+        to loop over single sources.
         """
         # Find only unmasked data :
         xyz, sData, sColor, _ = self._select_unmasked()
+
         # Render as cloud points :
         self.mesh = visu.Markers(name='Sources')
         self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor, size=sData,
@@ -171,10 +210,14 @@ class SourcesBase(_colormap):
 
 
     def update(self):
-        """Update sources plot
+        """Update sources. The only diffrence with the plot() method
+        is that the update method doesn't recreate the cloud of point,
+        it only re-set the data for non-masked sources. This is faster
+        than re-create the source object.
         """
         # Find only unmasked data :
         xyz, sData, sColor, _ = self._select_unmasked()
+
         # Render as cloud points :
         if xyz.size:
             self.mesh.visible = True
@@ -186,38 +229,74 @@ class SourcesBase(_colormap):
 
 
     def _select_unmasked(self):
-        """Select only unmasked sources
+        """Get some attributes of non-masked sources.
+        Total sources: M
+        Non-masked sources: N
+
+        Returns:
+            xyz: array of shape (N, 3), float
+                Coordinates of the non-masked sources
+
+            data: array of shape (N,), float
+                Data vector of the non-masked sources
+
+            color: array of shape (N, 4), float
+                RGBA color of the non-masked sources
+
+            mask: array of shape (M,), bool
+                The full source's mask                
         """
         # Get unmasked data :
         mask = self.data.mask == False
+
         # Select unmasked sData and xyz :
         return self.xyz[mask, :], self.sData[mask], self.sColor[mask, :], mask
 
 
     def _reset_mask(self, reset_to=False):
-        """
+        """Reset source's mask to a unique input.
+
+        Kargs:
+            reset_to: bool, optional, (def: False)
+                The boolean value to use for reseting the mask.
         """
         self.data.mask = reset_to
 
+
     def text_plot(self):
-        """Plot text for each source
+        """Plot some text for each source. The text is then translate to not
+        cover the source. If no text is detected, a empty text object is created. 
         """
         if self.stext is not None:
-            self.stextmesh = visu.Text(text=self.stext, color=self.stextcolor, font_size=self.stextsize,
-                                       pos=self.xyz, bold=True, name='SourcesText')
+            # Create text object :
+            self.stextmesh = visu.Text(text=self.stext, color=self.stextcolor,
+                                       font_size=self.stextsize, pos=self.xyz, bold=True,
+                                       name='SourcesText')
+
+            # 
             self.stextmesh.set_gl_state('translucent', depth_test=True)
+
+            # Apply a transformation to text elements to not cover sources :
             self.stextmesh.transform = vist.STTransform(translate=self.stextshift)
         else:
             self.stextmesh = visu.Text(name='NoneText')
 
     def text_update(self):
-        """Update text elements
+        """Update text elements of non-masked sources. The updated elements are:
+        * The text
+        * The text color
+        * The font size
         """
         if self.stext is not None:
+            # Get index of non-masked sources :
             idx = self._select_unmasked()[-1]
+
+            # Set masked-sources text to '':
             text = np.array(self.stext)
             text[np.array(~idx, dtype=bool)] = ''
-            self.stextmesh.font_size = self.stextsize
-            self.stextmesh.color = self.stextcolor
+
+            # Update elements :
             self.stextmesh.text = text
+            self.stextmesh.color = self.stextcolor
+            self.stextmesh.font_size = self.stextsize
             self.stextmesh.update()
