@@ -7,6 +7,7 @@ and associated transformations
 
 from PyQt4 import QtGui
 import sys
+import os
 
 from vispy import io, app
 import vispy.app as visapp
@@ -14,6 +15,8 @@ import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
 from .vbobj import vbobj
+
+import visbrain
 
 
 
@@ -203,6 +206,10 @@ class vbrain(uiInit, uiElements, vbobj):
         # Create the app and initialize all graphical elements :
         self._app = QtGui.QApplication(sys.argv)
         uiInit.__init__(self, bgcolor)
+
+        # Set icon :
+        iconpath = os.path.join(os.path.dirname(visbrain.__file__), 'vbrain/interface/gui/vbicon.png')
+        self.setWindowIcon(QtGui.QIcon(iconpath))
 
         # ------ Objects creation ------
         camera = viscam.TurntableCamera(azimuth=0, distance=1000)
