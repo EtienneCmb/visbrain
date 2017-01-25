@@ -9,11 +9,11 @@ class AtlasTransform(object):
         pass
 
 
-    # def rotate_fixed(self, vtype='axial'):
+    # def rotate(self, fixed='axial'):
     #     """
     #     """
     #     # Coronal (front, back)
-    #     if vtype is 'sagittal':
+    #     if fixed is 'sagittal':
     #         if self.atlas.coronal == 0: # Top
     #             azimuth, elevation = 180, 0
     #             self.atlas.coronal = 1
@@ -22,7 +22,7 @@ class AtlasTransform(object):
     #             self.atlas.coronal = 0
     #         self.atlas.sagittal, self.atlas.axial = 0, 0
     #     # Sagittal (left, right)
-    #     elif vtype is 'coronal':
+    #     elif fixed is 'coronal':
     #         if self.atlas.sagittal == 0: # Top
     #             azimuth, elevation = -90, 0
     #             self.atlas.sagittal = 1
@@ -31,7 +31,7 @@ class AtlasTransform(object):
     #             self.atlas.sagittal = 0
     #         self.atlas.coronal, self.atlas.axial = 0, 0
     #     # Axial (top, bottom)
-    #     elif vtype is 'axial':
+    #     elif fixed is 'axial':
     #         if self.atlas.axial == 0: # Top
     #             azimuth, elevation = 0, 90
     #             self.atlas.axial = 1
