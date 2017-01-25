@@ -1,15 +1,14 @@
 import numpy as np
 import warnings
-import os
+import os, sys
 
 import numpy as np
 from vispy import app, visuals, scene
 from vispy.geometry.isosurface import isosurface
 import vispy.visuals.transforms as vist
 
-from visbrain.vbrain.utils import *
-from visbrain.vbrain.visuals import BrainMesh
-import visbrain
+from ..utils import *
+from ..visuals import BrainMesh
 
 # warnings.filterwarnings('ignore', r'with ndim')
 __all__ = ['AreaBase']
@@ -23,7 +22,8 @@ class AreaBase(object):
 
     def __init__(self, structure='brod', select=None, color='white', cmap=None, scale_factor=1,
                  name='', transform=None):
-        self.atlaspath = os.path.dirname(visbrain.__file__)+'/vbrain/vbobj/templates/'
+        self.atlaspath = os.path.join(sys.modules[__name__].__file__.split('Area')[0],
+                                      'templates/')
         self.file = 'AAL_label.npz'
         self._structure = structure
         self._select = select

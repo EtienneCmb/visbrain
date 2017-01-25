@@ -4,7 +4,7 @@
 - reload function to change template
 """
 
-import os
+import os, sys
 import numpy as np
 
 import vispy.scene.visuals as visu
@@ -13,8 +13,6 @@ import vispy.visuals.transforms as vist
 
 from ..utils import color2vb
 from ..visuals import BrainMesh
-
-import visbrain
 
 
 class AtlasBase(object):
@@ -43,7 +41,8 @@ class AtlasBase(object):
         self.l_amb, self.l_spec = l_coefAmbient, l_coefSpecular
 
         # Needed variables :
-        self.atlaspath = os.path.dirname(visbrain.__file__)+'/vbrain/vbobj/templates/'
+        self.atlaspath = os.path.join(sys.modules[__name__].__file__.split('Atlas')[0],
+                                      'templates/')
         self._defcolor = (1,1,1)
         self._scaleMax = 100
 
@@ -93,7 +92,7 @@ class AtlasBase(object):
         # Load a default template :
         if (vertices is None) and (faces is None):
             if (template in ['B1', 'B2', 'B3']):
-                atlas = np.load(self.atlaspath+'{template}.npz'.format(template=template))
+                atlas = np.load(self.atlaspath + '{template}.npz'.format(template=template))
                 faces, normals = atlas['faces'], atlas['a_normal']
                 vertices, color = atlas['a_position'], atlas['a_color']
             else:
