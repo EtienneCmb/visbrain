@@ -26,18 +26,18 @@ class vbShortcuts(object):
         def on_key_press(event):
             # Switch between default views : :
             if event.text == '0':
-                self.rotate_fixed('axial')
+                self.rotate(fixed='axial')
             elif event.text == '1':
-                self.rotate_fixed('coronal')
+                self.rotate(fixed='coronal')
             elif event.text == '2':
-                self.rotate_fixed('sagittal')
+                self.rotate(fixed='sagittal')
             # Internal/external view :
             elif event.text == '3':
                 if self.q_internal.isChecked():
                     self.q_external.setChecked(True)
                 elif self.q_external.isChecked():
                     self.q_internal.setChecked(True)
-                self.fcn_internal_external()
+                self.brain_structure()
                 self.uiUpdate_light()
             # Increase/decrease brain opacity :
             elif event.text in ['+', '-']:

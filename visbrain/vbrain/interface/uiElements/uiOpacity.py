@@ -15,14 +15,11 @@ class uiOpacity(object):
     
     def __init__(self,):
         # --------------- MNI ---------------
-        # Opacity :
+        # Update opacity slider :
+        self.OpacitySlider.setValue(self.atlas.opacity * 100)
         self.OpacitySlider.sliderMoved.connect(self.fcn_opacity)
         self._slmin = self.OpacitySlider.minimum()
         self._slmax = self.OpacitySlider.maximum()
-        # Fixed rotation :
-        self.q_coronal.clicked.connect(self.fcn_coronal)
-        self.q_axial.clicked.connect(self.fcn_axial)
-        self.q_sagittal.clicked.connect(self.fcn_sagittal)
         # Cameras types :
         self.c_Turnable.clicked.connect(self.fcn_switch_camera)
         self.c_Fly.clicked.connect(self.fcn_switch_camera)
@@ -100,24 +97,6 @@ class uiOpacity(object):
             self.area.set_alpha(sl_01)
 
         self.view.canvas.update()
-
-
-    def fcn_coronal(self):
-        """Fixed coronal view
-        """
-        self.rotate_fixed(vtype='coronal')
-
-
-    def fcn_axial(self):
-        """Fixed axial view
-        """
-        self.rotate_fixed(vtype='axial')
-
-
-    def fcn_sagittal(self):
-        """Fixed coronal view
-        """
-        self.rotate_fixed(vtype='sagittal')
 
 
     def fcn_switch_camera(self):
