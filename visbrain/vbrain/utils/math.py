@@ -1,3 +1,6 @@
+"""This script contains some usefull math functions
+"""
+
 import numpy as np
 from warnings import warn
 

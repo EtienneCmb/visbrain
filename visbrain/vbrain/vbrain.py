@@ -1,4 +1,8 @@
-"""
+"""Top level vbrain class.
+uiInit: initialize the graphical interface
+uiElements: interactions between graphical elements and deep functions
+vbobj: initialize all vbrain objects (MNI, sources, connectivity...)
+and associated transformations
 """
 
 from PyQt4 import QtGui
@@ -9,11 +13,11 @@ import vispy.app as visapp
 import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
-from .elements import elements
+from .vbobj import vbobj
 
 
 
-class vbrain(uiInit, uiElements, elements):
+class vbrain(uiInit, uiElements, vbobj):
 
     """
     All possible colors can be a matplotlib color name (*'olive', 'slateblue'...*),
@@ -202,7 +206,7 @@ class vbrain(uiInit, uiElements, elements):
 
         # ------ Objects creation ------
         camera = viscam.TurntableCamera(azimuth=0, distance=1000)
-        elements.__init__(self, self.view.wc, self.progressBar, **kwargs)
+        vbobj.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
         # ------ UI to visbrain ------
         # Link UI and visbrain function :

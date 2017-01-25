@@ -1,3 +1,7 @@
+"""This file contain some usefull tools for the graphical interface
+managment.
+"""
+
 import numpy as np
 from .color import color2vb
 

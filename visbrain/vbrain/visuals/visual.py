@@ -1,3 +1,6 @@
+"""Transform an object into a vispy node
+"""
+
 from vispy.scene.visuals import create_visual_node
 
 from .BrainMeshVisual import BrainMeshVisual

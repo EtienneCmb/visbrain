@@ -1,3 +1,6 @@
+"""
+"""
+
 import numpy as np
 from warnings import warn
 
@@ -559,7 +562,7 @@ class BrainMeshVisual(Visual):
 
         Args:
             projection: string
-                Use 'internal' or external
+                Use either 'internal' or 'external'
         """
         l_color = list(self.get_l_color)
         if projection == 'internal':

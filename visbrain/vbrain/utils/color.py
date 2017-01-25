@@ -1,5 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""Group of functions for color managment
+"""
+
 import numpy as np
 
 from matplotlib.cm import ScalarMappable
@@ -8,7 +9,9 @@ from warnings import warn
 
 from .math import normalize
 
-__all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces', '_colormap']
+__all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
+           '_colormap'
+           ]
 
 
 def color2vb(color=None, default=(1,1,1), length=1, alpha=1.0):
@@ -212,25 +215,76 @@ def color2faces(color, length):
 
 class _colormap(object):
 
-    """Colormap class
+    """This class is used to manage the diffrent inputs for the colormap creation.
+
+    Kargs:
+        cmap: string, optional, (def: None)
+            Matplotlib colormap (like 'viridis', 'inferno'...).
+
+        clim: tuple/list, optional, (def: None)
+            Colorbar limit. Every values under / over clim will
+            clip.
+
+        vmin: float, optional, (def: None)
+            Every values under vmin will have the color defined
+            using the under parameter.
+
+        vmax: float, optional, (def: None)
+            Every values over vmin will have the color defined
+            using the over parameter.
+
+        under: tuple/string, optional, (def: None)
+            Matplotlib color under vmin.
+
+        over: tuple/string, optional, (def: None)
+            Matplotlib color over vmax.
+
+        data: ndarray, optional, (def: None)
+            The data to use. This is only usefull to define automatically
+            the clim parameter.
     """
 
-    def __init__(self, cmap=None, clim=None, vmin=None, vmax=None, under=None, over=None, data=None):
+    def __init__(self, cmap=None, clim=None, vmin=None, vmax=None, under=None,
+                 over=None, data=None):
         if data is None:
             clim, vmin, vmax, under, over = (None, None), None, None, None, None
         else:
             if clim is None:
                 clim = [data.min(), data.max()]
-        self._cb = {'cmap':cmap, 'clim':clim, 'vmin':vmin, 'vmax':vmax, 'under':under, 'over':over}
+        self._cb = {'cmap':cmap, 'clim':clim, 'vmin':vmin, 'vmax':vmax, 'under':under,
+                    'over':over}
 
     def __getitem__(self, key):
+        """Get the item value, specified using the key parameter.
+
+        Arg:
+            key: string
+                Name of the parameter
+
+        Return:
+            The item value
+        """
         return self._cb[key]
 
     def __setitem__(self, key, item):
+        """Set a value to an item
+
+        Arg:
+            key: string
+                Name of the parameter
+
+            item: any
+                The value of the item
+        """
         self._cb[key] = item
 
     def cbUpdateFrom(self, obj):
-        """
+        """Update a _colormap object using the value of an other
+        _colormap object.
+
+        Arg:
+            obj: _colormap object
+                The _colormap object to use to take it values.
         """
         objkeys = obj._cb.keys()
         for k in self._cb.keys():

@@ -1,3 +1,6 @@
+"""This script initialize all ui files 
+"""
+
 from .uiSettings import uiSettings
 from .uiAtlas import uiAtlas
 from .uiSources import uiSources
@@ -11,7 +14,7 @@ __all__ = ['uiElements']
 class uiElements(uiSettings, uiAtlas, uiSources, uiCmap, uiConnectivity,
                  uiOpacity, uiArea):
 
-    """Group all ui elements
+    """Inherit from the diffrent ui files and initialize them
     """
 
     def __init__(self):
