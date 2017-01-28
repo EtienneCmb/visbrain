@@ -1,5 +1,5 @@
 Visbrain documentation
-======================
+######################
 
 Visbrain is a python package in development and it's dedicated to neuroscience visualization tools. Here is the list of the current modules :
 
@@ -7,21 +7,20 @@ Visbrain is a python package in development and it's dedicated to neuroscience v
 * :ref:`vbtimeseries` : okok
 
 Installation:
--------------
+*************
 .. code-block:: python
 
     pip install git+https://github.com/EtienneCmb/visbrain
 
 What's new?
------------
-v0.0.3
-######
+***********
+New in version v0.0.3:
 
 * New documentation
 * Code cleaned
 
 Contents:
----------
+*********
 
 .. toctree::
    :maxdepth: 4
@@ -31,7 +30,7 @@ Contents:
 
 
 Indices and tables
-==================
+##################
 
 * :ref:`genindex`
 * :ref:`modindex`

@@ -42,11 +42,11 @@ class vbShortcuts(object):
             """
             # Switch between default views : :
             if event.text == '0':
-                self.rotate(fixed='axial')
+                self._rotate(fixed='axial')
             elif event.text == '1':
-                self.rotate(fixed='coronal')
+                self._rotate(fixed='coronal')
             elif event.text == '2':
-                self.rotate(fixed='sagittal')
+                self._rotate(fixed='sagittal')
 
             # Internal / external view :
             elif event.text == '3':
@@ -54,7 +54,7 @@ class vbShortcuts(object):
                     self.q_external.setChecked(True)
                 elif self.q_external.isChecked():
                     self.q_internal.setChecked(True)
-                self.brain_structure()
+                self._light_reflection()
                 self.uiUpdate_light()
 
             # Increase / decrease brain opacity :

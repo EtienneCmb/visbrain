@@ -1,7 +1,10 @@
 .. _vbrain:
 
 vbrain
-######
+======
+
+Description
+-----------
 
 .. figure::  picture/example.png
    :align:   center
@@ -25,26 +28,10 @@ All possible inputs use a prefixe :
 
 .. autoclass:: vbrain.vbrain.vbrain
 
-Show graphical interface
-~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.vbrain.vbrain.show
+User functions
+--------------
 
-Brain control
-~~~~~~~~~~~~~~
-.. automethod:: vbrain.interface.uiElements.uiAtlas.uiAtlas.brain_control
-
-Brain rotation
-~~~~~~~~~~~~~~
-.. automethod:: vbrain.interface.uiElements.uiAtlas.uiAtlas.rotate
-
-Brain structure
-~~~~~~~~~~~~~~
-.. automethod:: vbrain.interface.uiElements.uiAtlas.uiAtlas.brain_structure
-
-Cortical projection
-~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.elements.transformations.SourcesTransform.SourcesTransform.cortical_projection
-
-Cortical repartition
-~~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.elements.transformations.SourcesTransform.SourcesTransform.cortical_repartition
+.. toctree::
+   :maxdepth: 4
+   
+   vbfunctions

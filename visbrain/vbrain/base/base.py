@@ -26,7 +26,7 @@ from .transformations import transformations
 
 
 
-class vbobj(CbarBase, transformations):
+class base(CbarBase, transformations):
 
     """Initialize vbrain objects (sources / connectivity / areas / colorbar
     / transformations).
@@ -37,7 +37,7 @@ class vbobj(CbarBase, transformations):
 
     def __init__(self, canvas, progressbar, **kwargs):
 
-        # ---------- Initialize vbobj ----------
+        # ---------- Initialize base ----------
         # Initialize transformation with Null:
         self.transform = vist.ChainTransform([vist.NullTransform()])
         self.progressbar = progressbar
@@ -51,7 +51,7 @@ class vbobj(CbarBase, transformations):
         self.area = AreaBase(scale_factor=self.atlas._scaleMax, name='NoneArea', select=[4, 6],
                              transform=self.atlas.transform, color='#ab4642')
 
-        # Initialize colorbar vbobj  (by default, with sources vbobj):
+        # Initialize colorbar base  (by default, with sources base):
         self.cb = CbarBase(self.view.cbwc, **self.sources._cb, **kwargs)
 
         # Add transformations :
