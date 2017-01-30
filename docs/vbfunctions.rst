@@ -28,6 +28,9 @@ Light reflection
 
 Sources functions
 ^^^^^^^^^^^^^^^^^
+Opacity
+~~~~~~~
+.. automethod:: vbrain.user.userfcn.sources_opacity
 
 *IMAGE ILLUSTRATIVE*
 
