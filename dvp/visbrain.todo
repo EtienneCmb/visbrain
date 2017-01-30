@@ -1,18 +1,24 @@
 doc
 	-5 Documenter chaque fonction
+	-5 Améliorer setup.py (version vispy / python)
 	-4 Cleaner le self pour ne faire apparaître que ce qui est utile (arriver à virer les éléments pyqt...)
 	-2 Dans la doc, faire un exemple de script bash pour montrer que l'on peut looper
 
 Colorbar
+	-1 La gestion de la couleur ne me convient pas. Il devrait y avoir un seul object 'colorbar', dans lequel on mettrait une méthode 'add_oject()' et dans on pourrait ajouter un objet source / connectivité. Pour le moment, l'object de type cb est à l'intérieur de chaque object, donc c'est pas très pratique pour updater les valeurs. 
 	-5 La colorbar ne marche toujours pas très bien
 	-5 clim à configurer
+	-5 Vérifier clim dans utils/color/array2colormap
 
 
 Projection
-	-5 Vérifier les dernières modifs liées à la projection interne
+	-5 Vérifier les dernières modifs liées à la projection corticale / répartition
 	-4 Projection interne
+	-1 Projection temporelle, en tenant compte de la fréquence d'échantillonage
 
 Opacité
+	-4 Configurer les slices pour les Areas.
+	-3 Il faudrait des doubles slider (G->D et D->G) pour pouvoir définir n'importe quel slice.
 	+5 Mettre les fonction coronale... dans uiAtlas
 
 Structures internes
@@ -21,8 +27,9 @@ Structures internes
 
 
 Connectivity
-	-5 Fixer le problem de clim avec la connectivité (exemple 4)
+	-5 Il faut arriver à chopper les min / max de data connect et le mettre dans _climBck()
 	-3 Renomer ConnectivityBase -> ConnectBase
+	+5 Fixer le problem de clim avec la connectivité (exemple 4)
 
 GUI
 	-5 Ajouter la compatibilité avec du clim
@@ -32,6 +39,11 @@ GUI
 Shortcuts
 	-5 Add some shortcuts
 
+
+Settings
+	-5 Load / save configuration
+
 Idea:
+	-5 Ajouter des Nose test
 	-1 GUI suppémentaire pour afficher les graphes des infos de sources (cf. physiology das brainpipe) + possibilité de faire des graphes de groupe
 	-1 GUI supplémentaire pour modifier chaque source indépendemment? (texte, couleur, taille...)
