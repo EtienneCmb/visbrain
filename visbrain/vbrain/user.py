@@ -10,7 +10,6 @@ __all__ = ['userfcn']
 
 
 class userfcn(object):
-
     """Group all functions accessible by the user.
 
     Those functions are grouped in the following categories:
@@ -57,6 +56,16 @@ class userfcn(object):
             >>> vb.show()
         """
         self._rotate(fixed=fixed, custom=custom)
+
+    def background_color(self, color=(.1, .1, .1)):
+        """
+        """
+        pass
+
+    def screenshot(self, name, crop=None):
+        """
+        """
+        pass
 
     ###########################################################################
     ###########################################################################
@@ -145,6 +154,32 @@ class userfcn(object):
     #                              SOURCES
     ###########################################################################
     ###########################################################################
+    def sources_opacity(self, alpha=1., show=True):
+        """Set the level of transparency of sources.
+
+        Kargs:
+            alpha: float, optional, (def: 1.)
+                Transparency level (usually between 0 and 1).
+
+            show: bool, optional, (def: True)
+                Specify if sources has be shown.
+
+        Example:
+            >>> # Define a vbrain instance with 10 random sources:
+            >>> vb = vbrain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Set transparency :
+            >>> vb.sources_opacity(alpha=0.1, show=True)
+            >>> # Show the GUI :
+            >>> vb.show()
+        """
+        if alpha >= 0.95:
+            self.sources.mesh.set_gl_state('translucent', depth_test=False)
+        else:
+            self.sources.mesh.set_gl_state('translucent', depth_test=True)
+        self.sources.sColor[:, 3] = alpha
+        self.sources.edgecolor[:, 3] = alpha
+        self.sources.update()
+        self.sources.mesh.visible = show
 
     ###########################################################################
     ###########################################################################

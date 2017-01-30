@@ -1,21 +1,19 @@
-"""This file contain:
+"""Define some basic viewing elements (canvas / shortcuts).
+
+This file contain:
     * vbShortcuts : main class for shortcuts managment
     * vbCanvas : create vbrain main canvas and the canvas
     for the colorbar
 """
 
 from vispy import scene
-import vispy.visuals.transforms as vist
-
-from PyQt4.QtGui import * 
 
 __all__ = ['vbCanvas', 'vbShortcuts']
 
 
-
 class vbShortcuts(object):
-
     """This class add some shortcuts to the main canvas of vbrain.
+
     It's also use to initialize to panel of shortcuts.
 
     Args:
@@ -24,7 +22,7 @@ class vbShortcuts(object):
     """
 
     def __init__(self, canvas):
-
+        """Init."""
         # Shortcuts panel :
         self.table_panel.hide()
         self.actionShortcuts.triggered.connect(self.shortcuts_panel)
@@ -36,8 +34,8 @@ class vbShortcuts(object):
         # Add shortcuts to vbCanvas :
         @canvas.events.key_press.connect
         def on_key_press(event):
-            """Executed function when a key is pressed on a keyboard over
-            vbrain canvas.
+            """Executed function when a key is pressed on a keyboard over vbrain canvas.
+
             :event: the trigger event
             """
             # Switch between default views : :
@@ -63,45 +61,43 @@ class vbShortcuts(object):
                 sl = self.OpacitySlider.value()
                 step = 10 if (event.text == '+') else -10
                 self.OpacitySlider.setValue(sl+step)
-                self.fcn_opacity()
+                self._fcn_opacity()
                 self.uiUpdate_light()
 
-
         @canvas.events.mouse_release.connect
-        def on_mouse_press(event):
-            """Executed function when the mouse is pressed over
-            vbrain canvas.
+        def on_mouse_release(event):
+            """Executed function when the mouse is pressed over vbrain canvas.
+
             :event: the trigger event
             """
             pass
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
-            """Executed function when double click mouse happens over
-            vbrain canvas.
+            """Executed function when double click mouse over vbrain canvas.
+
             :event: the trigger event
             """
             pass
 
         @canvas.events.mouse_move.connect
         def on_mouse_move(event):
-            """Executed function when the mouse move over
-            vbrain canvas.
+            """Executed function when the mouse move over vbrain canvas.
+
             :event: the trigger event
             """
             pass
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
-            """Executed function when single click mouse happens over
-            vbrain canvas.
+            """Executed function when single click mouse over vbrain canvas.
+
             :event: the trigger event
             """
             pass
 
     def shortcuts_panel(self):
-        """Display or hide the shortcuts panel
-        """
+        """Display or hide the shortcuts panel."""
         isVisible = self.table_panel.isVisible()
         if not isVisible:
             self.table_panel.show()
@@ -110,9 +106,9 @@ class vbShortcuts(object):
 
 
 class vbCanvas(object):
+    """This class is responsible of cannvas creation.
 
-    """This class is responsible of cannvas creation. The main
-    canvas in which the brain is displayed (canvas) and the canvas
+    The main canvas in which the brain is displayed (canvas) and the canvas
     for the colorbar (cbcanvas)
 
     Kargs:
@@ -121,10 +117,11 @@ class vbCanvas(object):
             which the brain is displayed and the canvas for the colorbar)
     """
 
-    def __init__(self, bgcolor=(0,0,0)):
+    def __init__(self, bgcolor=(0, 0, 0)):
+        """Init."""
         # Initialize main canvas:
         self.canvas = scene.SceneCanvas(keys='interactive', show=True, dpi=600,
-                                        bgcolor=bgcolor, fullscreen=True, #px_scale=2,
+                                        bgcolor=bgcolor, fullscreen=True,
                                         resizable=True, position=(0, 250))
         self.wc = self.canvas.central_widget.add_view()
 
@@ -136,9 +133,9 @@ class vbCanvas(object):
         # ax = scene.visuals.XYZAxis()
         # self.wc.add(ax)
 
-        # Visualization settings. The min/maxOpacity attributes are defined because
-        # it seems that OpenGL have trouble with small opacity (usually between 0 and 1).
-        # Defining min and max far away from 0 / 1 solve this problem. 
+        # Visualization settings. The min/maxOpacity attributes are defined
+        # because it seems that OpenGL have trouble with small opacity (usually
+        # between 0 and 1). Defining min and max far away from 0 / 1 solve this
+        # problem.
         self.minOpacity = -10000
         self.maxOpacity = 10000
-

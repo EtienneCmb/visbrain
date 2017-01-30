@@ -42,14 +42,15 @@ class base(CbarBase, transformations):
         self.transform = vist.ChainTransform([vist.NullTransform()])
         self.progressbar = progressbar
 
-        # Initialize brain, sources and connectivity objects and put them in the
-        # relevant attribute :
+        # Initialize brain, sources and connectivity objects and put them in
+        # the relevant attribute :
         self.atlas = AtlasBase(a_transform=self.transform, **kwargs)
         self.sources = SourcesBase(s_transform=self.atlas.transform, **kwargs)
-        self.connect = ConnectivityBase(c_transform=self.atlas.transform, c_xyz=self.sources.xyz,
-                                        **kwargs)
-        self.area = AreaBase(scale_factor=self.atlas._scaleMax, name='NoneArea', select=[4, 6],
-                             transform=self.atlas.transform, color='#ab4642')
+        self.connect = ConnectivityBase(c_transform=self.atlas.transform,
+                                        c_xyz=self.sources.xyz, **kwargs)
+        self.area = AreaBase(scale_factor=self.atlas._scaleMax,
+                             name='NoneArea', select=[4, 6], color='#ab4642',
+                             transform=self.atlas.transform)
 
         # Initialize colorbar base  (by default, with sources base):
         self.cb = CbarBase(self.view.cbwc, **self.sources._cb, **kwargs)
@@ -95,4 +96,3 @@ class base(CbarBase, transformations):
         self.sources.mesh.parent = self._vbNode
         self.connect.mesh.parent = self._vbNode
         self.sources.stextmesh.parent = self._vbNode
-

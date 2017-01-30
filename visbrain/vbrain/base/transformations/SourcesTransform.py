@@ -224,17 +224,20 @@ class SourcesTransform(object):
 
         return cort, non_zero
 
-
-    def _array2cmap(self, x, non_zero=False, smask=None, smaskcolor=(.7, .7, .7)):
+    def _array2cmap(self, x, non_zero=False, smask=None,
+                    smaskcolor=(.7, .7, .7)):
         """Convert the array x to cmap and mesh it
         """
         # Get alpha :
-        alpha = slider2opacity(self.OpacitySlider.value(), thmin=0.0, thmax=100.0, vmin=self._slmin,
-                               vmax=self._slmax, tomin=self.view.minOpacity, tomax=self.view.maxOpacity)
+        alpha = slider2opacity(self.OpacitySlider.value(), thmin=0.0,
+                               thmax=100.0, vmin=self._slmin, vmax=self._slmax,
+                               tomin=self.view.minOpacity,
+                               tomax=self.view.maxOpacity)
 
         # Get the colormap :
         if len(x[non_zero]):
             cmap = array2colormap(x[non_zero], alpha=alpha, **self.sources._cb)
+            self.sources._climBck = (x[non_zero].min(), x[non_zero].max())
         else:
             cmap = np.array([])
 

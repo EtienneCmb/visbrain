@@ -1,8 +1,6 @@
-"""This file contain some usefull tools for the graphical interface
-managment.
+"""This file contain some usefull tools for the graphical interface managment.
 """
 
-import numpy as np
 from .color import color2vb
 
 
@@ -11,23 +9,23 @@ __all__ = ['slider2opacity', 'textline2color', 'uiSpinValue']
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
                    tomin=-1000.0, tomax=1000.0):
-    """Convert a slider value to opacity
+    """Convert a slider value into opacity.
 
     Args:
         value: float
             The slider value
 
     Kargs:
-        thmin: float (def: 0.0)
+        thmin: float, optional, (def: 0.0)
             Minimum threshold to consider
 
-        thmax: float (def: 100.0)
+        thmax: float, optional, (def: 100.0)
             Maximum threshold to consider
 
-        tomin: float (def: -1000.0)
+        tomin: float, optional, (def: -1000.0)
             Set to tomin if value is under vmin
 
-        tomax: float (def: 1000.0)
+        tomax: float, optional, (def: 1000.0)
             Set to tomax if value is over vmax
 
     Return:
@@ -37,17 +35,17 @@ def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
     alpha = 0.0
     # Linear decrease :
     if value < thmin:
-        alpha = value*tomin/vmin
+        alpha = value * tomin / vmin
     # Linear increase :
     elif value > thmax:
-        alpha = value*tomax/vmax
+        alpha = value * tomax / vmax
     else:
-        alpha = value/100
+        alpha = value / 100
     return alpha
 
 
 def textline2color(value):
-    """Transform a Qt text line editor to color
+    """Transform a Qt text line editor into color.
 
     Args:
         value: string
@@ -69,19 +67,20 @@ def textline2color(value):
             pass
         return value, color2vb(color=value)
     except:
-        return 'w', (1,1,1,1)
+        return 'w', (1, 1, 1, 1)
 
 
 def uiSpinValue(elements, values):
-    """Set a list of value to a list of elements
+    """Set a list of value to a list of elements.
 
     Args:
         elements: QtSpin
             List of qt spin elements
 
         values: list
-            List of values per element   
+            List of values per element
     """
     if len(elements) != len(values):
-        raise ValueError('List of Qt spins must have the same length as values')
+        raise ValueError("List of Qt spins must have the same length "
+                         "as values")
     [k.setValue(i) for k, i in zip(elements, values)]

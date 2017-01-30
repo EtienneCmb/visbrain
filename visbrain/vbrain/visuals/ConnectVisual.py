@@ -29,8 +29,9 @@ class ConnectVisual(visuals.Visual):
     """Template
     """
 
-    def __init__(self, pos, connect, select=None, colorby='strength', dynamic=None,
-                 cmap='viridis', vmin=None, vmax=None, under=None, over=None):
+    def __init__(self, pos, connect, select=None, colorby='strength',
+                 dynamic=None, cmap='viridis', vmin=None, vmax=None,
+                 under=None, over=None, clim=None):
 
         visuals.Visual.__init__(self, vertex_shader, fragment_shader)
 
@@ -43,6 +44,7 @@ class ConnectVisual(visuals.Visual):
         self._cmap = cmap
         self._vmin, self._vmax = vmin, vmax
         self._under, self._over = under, over
+        self._clim = clim
 
         # Create elements :
         self.set_data(self.connect, self.select)
@@ -137,7 +139,7 @@ class ConnectVisual(visuals.Visual):
 
 
     def set_color(self, colorby='strength', dynamic=False, cmap='viridis', vmin=None,
-                  vmax=None, under=None, over=None):
+                  vmax=None, under=None, over=None, clim=None):
         """
         """
         # Check color elements :
@@ -161,7 +163,8 @@ class ConnectVisual(visuals.Visual):
             self._loopIndex = self._Nindices
 
         # Get associated colormap :
-        colormap = array2colormap(self._all_nnz, cmap=cmap, vmin=vmin, vmax=vmax, under=under, over=over)
+        colormap = array2colormap(self._all_nnz, cmap=cmap, vmin=vmin,
+                                  vmax=vmax, under=under, over=over, clim=clim)
 
         # Dynamic alpha :
         if (dynamic is not False) and isinstance(dynamic, tuple):

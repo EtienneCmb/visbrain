@@ -1,4 +1,8 @@
-"""Group of functions for color managment
+"""Group functions for color managment.
+
+This file contains a bundle of functions that can be used to have a more
+flexible control of diffrent problem involving colors (like turn an array /
+string / faces into RBGA colors, defining the basic colormap object...)
 """
 
 import numpy as np
@@ -9,36 +13,39 @@ from warnings import warn
 
 from .math import normalize
 
+
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
            '_colormap'
            ]
 
 
-def color2vb(color=None, default=(1,1,1), length=1, alpha=1.0):
-    """Tranform a tuple of RGB, matplotlib color or an
-    hexadecimal color to an array of RGBA colors
+def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
+    """Turn into a RGBA compatible color format.
+
+    This function can tranform a tuple of RGB, a matplotlib color or an
+    hexadecimal color into an array of RGBA colors.
 
     Kargs:
-        color: None, tuple, string (def: None)
+        color: None/tuple/string, optional, (def: None)
             The color to use. Can either be None, or a tuple (R, G, B),
-            a matplotlib color or an hexadecimal color '#...'
+            a matplotlib color or an hexadecimal color '#...'.
 
-        default: tuple, (def: (1,1,1))
+        default: tuple, optional, (def: (1,1,1))
             The default color to use instead.
 
-        length: int (def: 10)
-            The length of the output
+        length: int, optional, (def: 1)
+            The length of the output array.
 
-        alpha: float, (def: 1)
-            The opacity
+        alpha: float, optional, (def: 1)
+            The opacity (Last digit of the RGBA tuple).
 
     Return:
         vcolor: array
-            Array of RGBA colors of shape (length, 4)
+            Array of RGBA colors of shape (length, 4).
     """
     # Default or static color :
     if (color is None) or isinstance(color, (str, tuple)):
-        # Default color : 
+        # Default color :
         if color is None:
             coltuple = default
         # Static color :
@@ -66,44 +73,50 @@ def color2vb(color=None, default=(1,1,1), length=1, alpha=1.0):
                 coltuple = default
         # Set the color :
         vcolor = np.concatenate((np.array([list(coltuple)]*length),
-                                 alpha*np.ones((length, 1), dtype=float)), axis=1)
+                                 alpha*np.ones((length, 1),
+                                               dtype=float)), axis=1)
 
         return vcolor
     else:
-        raise ValueError(str(type(color))+" is not a recognized type of color. "
-                         "Use None, tuple or string")
+        raise ValueError(str(type(color)) + " is not a recognized type of "
+                         "color. Use None, tuple or string")
 
 
-
-def array2colormap(x, clim=None, cmap='inferno', alpha=1.0, vmin=None, vmax=None,
-                   under='dimgray', over='darkred', faces_render=False):
-    """Transform an array of data to colormap (array of RGBA)
+def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
+                   vmax=None, under='dimgray', over='darkred',
+                   faces_render=False):
+    """Transform an array of data into colormap (array of RGBA).
 
     Args:
         x: array
             Array of data
 
     Kargs:
-        cmap: string (def: inferno)
+        cmap: string, optional, (def: inferno)
             Matplotlib colormap
 
-        alpha: float, (def: 1.0)
+        clim: list, optional, (def: None)
+            List of two float in order to control minimum / maximum from which
+            values are peaking.
+
+        alpha: float, optional, (def: 1.0)
             The opacity
 
-        vmin: float (def: None)
+        vmin: float, optional, (def: None)
             Minimum of the colormap
 
-        vmax: float (def: None)
+        vmax: float, optional, (def: None)
             Maximum of the colormap
 
-        under: tuple/string (def: 'dimgray')
+        under: tuple/string, optional, (def: 'dimgray')
             Matplotlib color under vmin
 
-        over: tuple/string (def: 'darkred')
+        over: tuple/string, optional, (def: 'darkred')
             Matplotlib color over vmax
 
         faces_render: boll, optional, (def: False)
             Precise if the render should be applied to faces
+
     Return:
         color: array
             Array of RGBA colors
@@ -112,7 +125,7 @@ def array2colormap(x, clim=None, cmap='inferno', alpha=1.0, vmin=None, vmax=None
     colim = [None, None]
 
     # Check the limit of the colorbar:
-    if clim is None:
+    if (clim is None) or (clim == (None, None)):
         clim = (x.min(), x.max())
     else:
         if not isinstance(clim, list):
@@ -156,13 +169,14 @@ def array2colormap(x, clim=None, cmap='inferno', alpha=1.0, vmin=None, vmax=None
     # Faces render :
     x_cmap = np.array(cm.to_rgba(x, alpha=alpha))
     if faces_render:
-        x_cmap = np.transpose(np.tile(x_cmap[..., np.newaxis], (1, 1, 3)), (0, 2, 1))
+        x_cmap = np.transpose(np.tile(x_cmap[..., np.newaxis],
+                                      (1, 1, 3)), (0, 2, 1))
 
     return x_cmap
 
 
 def dynamic_color(color, x, dynamic=(0.0, 1.0)):
-    """dynamic color changing
+    """Dynamic color changing.
 
     Args:
         color: np.ndarray
@@ -173,8 +187,8 @@ def dynamic_color(color, x, dynamic=(0.0, 1.0)):
             Dynamic values for color. x must have a shape of (N,)
     Kargs:
         dynamic: tuple, optional, (def: (0.0, 1.0))
-            Control the dynamic of color. 
-            
+            Control the dynamic of color.
+
     Return
         colordyn: np.ndarray
             Dynamic color with a shape of (N, 4)
@@ -184,7 +198,8 @@ def dynamic_color(color, x, dynamic=(0.0, 1.0)):
     if color.shape[1] != 4:
         raise ValueError("Color must be RGBA")
     if color.shape[0] != len(x):
-        raise ValueError("The lenght of color must be the same as x: "+str(len(x)))
+        raise ValueError("The length of color must be the same as"
+                         " x: " + str(len(x)))
     # Normalise x :
     if dynamic[0] < dynamic[1]:
         x_norm = normalize(x, tomin=dynamic[0], tomax=dynamic[1])
@@ -196,7 +211,7 @@ def dynamic_color(color, x, dynamic=(0.0, 1.0)):
 
 
 def color2faces(color, length):
-    """Pass a simple color to faces shape
+    """Pass a simple color to faces shape.
 
     Args:
         color: RGBA tuple
@@ -209,13 +224,13 @@ def color2faces(color, length):
         colorFace: the color adapted for faces
     """
     color = color.ravel()
-    colorL = np.tile(np.array(color)[..., np.newaxis, np.newaxis], (1, length, 3))
+    colorL = np.tile(np.array(color)[..., np.newaxis, np.newaxis],
+                     (1, length, 3))
     return np.transpose(colorL, (1, 2, 0))
 
 
 class _colormap(object):
-
-    """This class is used to manage the diffrent inputs for the colormap creation.
+    """Manage the diffrent inputs for the colormap creation.
 
     Kargs:
         cmap: string, optional, (def: None)
@@ -246,13 +261,17 @@ class _colormap(object):
 
     def __init__(self, cmap=None, clim=None, vmin=None, vmax=None, under=None,
                  over=None, data=None):
+        """Init."""
         if data is None:
-            clim, vmin, vmax, under, over = (None, None), None, None, None, None
+            clim = (None, None)
+            vmin, vmax, under, over = None, None, None, None
+            self._climBck = (None, None)
         else:
             if clim is None:
                 clim = [data.min(), data.max()]
-        self._cb = {'cmap':cmap, 'clim':clim, 'vmin':vmin, 'vmax':vmax, 'under':under,
-                    'over':over}
+            self._climBck = (data.min(), data.max())
+        self._cb = {'cmap': cmap, 'clim': clim, 'vmin': vmin, 'vmax': vmax,
+                    'under': under, 'over': over}
 
     def __getitem__(self, key):
         """Get the item value, specified using the key parameter.
@@ -267,7 +286,7 @@ class _colormap(object):
         return self._cb[key]
 
     def __setitem__(self, key, item):
-        """Set a value to an item
+        """Set a value to an item.
 
         Arg:
             key: string
@@ -279,8 +298,7 @@ class _colormap(object):
         self._cb[key] = item
 
     def cbUpdateFrom(self, obj):
-        """Update a _colormap object using the value of an other
-        _colormap object.
+        """Update a _colormap object using based on an other _colormap object.
 
         Arg:
             obj: _colormap object
@@ -290,10 +308,11 @@ class _colormap(object):
         for k in self._cb.keys():
             if k in objkeys:
                 self[k] = obj[k]
+        self._climBck = obj._climBck
 
-    
+
 def colorclip(x, th, kind='under'):
-    """Force an array to have clipping values
+    """Force an array to have clipping values.
 
     :x: array of data
     :th: the threshold to use

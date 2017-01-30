@@ -197,8 +197,8 @@ class vbrain(uiInit, uiElements, base, userfcn):
         >>> vb.show()
     """
     def __init__(self, *args, **kwargs):
-
-        # ------ ui Arguments ------
+        """Init."""
+        # ====================== ui Arguments ======================
         bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
         self._savename = kwargs.get('ui_savename', None)
         self._extension = kwargs.get('ui_extension', '.png')
@@ -206,7 +206,7 @@ class vbrain(uiInit, uiElements, base, userfcn):
         if self._extension not in ['png', 'tiff']:
             self._extension = 'png'
 
-        # ------ App creation ------
+        # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
         self._app = QtGui.QApplication(sys.argv)
         uiInit.__init__(self, bgcolor)
@@ -216,15 +216,15 @@ class vbrain(uiInit, uiElements, base, userfcn):
                                 'vbrain/interface/gui/vbicon.png')
         self.setWindowIcon(QtGui.QIcon(iconpath))
 
-        # ------ Objects creation ------
+        # ====================== Objects creation ======================
         camera = viscam.TurntableCamera(azimuth=0, distance=1000)
         base.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
-        # ------ UI to visbrain ------
+        # ====================== UI to visbrain ======================
         # Link UI and visbrain function :
         uiElements.__init__(self)
 
-        # # ------ Cameras ------
+        # # ====================== Cameras ======================
         # # Main camera :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(self.view.wc.camera)
