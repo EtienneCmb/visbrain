@@ -70,9 +70,13 @@ class CbarBase(_colormap):
     def cbcolor(self, data, length=10):
         """
         """
-        colval = np.linspace(data.min(), data.max(), num=length)
+        try:
+            colval = np.linspace(self['clim'][0], self['clim'][1], num=length)
+        except:
+            colval = np.linspace(data.min(), data.max())
         colorbar = array2colormap(colval, vmin=self['vmin'], vmax=self['vmax'],
-                                  under=self['under'], over=self['over'], cmap=self['cmap'])
+                                  under=self['under'], over=self['over'],
+                                  cmap=self['cmap'], clim=None)
         return Colormap(np.flipud(colorbar))
 
 
