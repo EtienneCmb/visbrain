@@ -11,7 +11,7 @@ import numpy as np
 mat = np.load('xyz_sample.npz')
 s_xyz, subjects = mat['xyz'], mat['subjects']
 
-N = s_xyz.shape[0]	# Number of electrodes
+N = s_xyz.shape[0]  # Number of electrodes
 s_opacity = 0.5 	# Sources opacity
 
 # Now, create some random data between [-50,50]
@@ -57,6 +57,7 @@ s_cmap_under, s_cmap_over = 'midnightblue', "#e74c3c"
 c_cmap = 'gnuplot'				# Matplotlib colormap
 c_cmap_vmin, c_cmap_vmax = 30.02, 30.19
 c_cmap_under, c_cmap_over = 'gray', "white"
+c_cmap_clim = [30, 31]
 
 # Finally, use c_colorby to define how connections have to be colored.
 # if c_colorby is 'count', it's the number of connections which pear node
@@ -70,5 +71,5 @@ vb = vbrain(s_xyz=s_xyz, s_color='crimson', s_data=s_data, s_radiusmin=s_radiusm
             s_opacity=s_opacity, a_opacity=0.05, s_cmap=s_cmap, s_cmap_vmin=s_cmap_vmin, s_cmap_vmax=s_cmap_vmax,
             s_cmap_under=s_cmap_under, s_cmap_over=s_cmap_over, c_connect=c_connect, c_colorby=c_colorby,
             c_radiusmin=c_radiusmin, a_template='B2', c_dynamic=c_dynamic, c_cmap=c_cmap, c_cmap_vmin=c_cmap_vmin,
-            c_cmap_vmax=c_cmap_vmax, c_cmap_under=c_cmap_under, c_cmap_over=c_cmap_over)
+            c_cmap_vmax=c_cmap_vmax, c_cmap_under=c_cmap_under, c_cmap_over=c_cmap_over, c_cmap_clim=c_cmap_clim)
 vb.show()
