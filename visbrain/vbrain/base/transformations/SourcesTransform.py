@@ -237,7 +237,7 @@ class SourcesTransform(object):
         # Get the colormap :
         if len(x[non_zero]):
             cmap = array2colormap(x[non_zero], alpha=alpha, **self.sources._cb)
-            self.sources._climBck = (x[non_zero].min(), x[non_zero].max())
+            self.sources._MinMax = (x[non_zero].min(), x[non_zero].max())
         else:
             cmap = np.array([])
 

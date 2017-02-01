@@ -138,7 +138,7 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
             if clim[1] is None:
                 clim[1] = x.max()
 
-    # Invert vmin/vmax if vmin > vmax :
+    # Invert vmin / vmax if vmin > vmax :
     if (vmin is not None) and (vmax is not None) and (vmax < vmin):
         v = vmin
         vmax = vmin
@@ -265,11 +265,11 @@ class _colormap(object):
         if data is None:
             clim = (None, None)
             vmin, vmax, under, over = None, None, None, None
-            self._climBck = (None, None)
+            self._MinMax = (None, None)
         else:
             if clim is None:
                 clim = [data.min(), data.max()]
-            self._climBck = (data.min(), data.max())
+            self._MinMax = (data.min(), data.max())
         self._cb = {'cmap': cmap, 'clim': clim, 'vmin': vmin, 'vmax': vmax,
                     'under': under, 'over': over}
 
@@ -308,7 +308,7 @@ class _colormap(object):
         for k in self._cb.keys():
             if k in objkeys:
                 self[k] = obj[k]
-        self._climBck = obj._climBck
+        self._MinMax = obj._MinMax
 
 
 def colorclip(x, th, kind='under'):
