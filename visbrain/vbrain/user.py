@@ -6,6 +6,9 @@ really convenient for generating a large number of pictures by looping over a
 vbrain instance.
 """
 
+from .utils import color2vb
+import os.path
+
 __all__ = ['userfcn']
 
 
@@ -36,9 +39,9 @@ class userfcn(object):
                 'sagittal'. As a complement, use the suffixe '_0' or
                 '_1' to switch between possible views.
 
-                * 'axial_0/1': switch between top/bottom view 
-                * 'coronal_0/1': switch between front/back view 
-                * 'sagittal_0/1': switch between left/right view 
+                * 'axial_0/1': switch between top/bottom view
+                * 'coronal_0/1': switch between front/back view
+                * 'sagittal_0/1': switch between left/right view
 
             custom: tuple, optional, (def: None)
                 Custom rotation. The custom parameter must be a
@@ -58,14 +61,114 @@ class userfcn(object):
         self._rotate(fixed=fixed, custom=custom)
 
     def background_color(self, color=(.1, .1, .1)):
-        """
-        """
-        pass
+        """Set the background color of the main canvas and the colorbar.
 
-    def screenshot(self, name, crop=None):
+        The main canvas is defined as the canvas where all objects are
+        displayed. The colorbar has it own canvas and the background set will
+        be the same as the one of the main canvas.
+
+        Kargs:
+            color: tuple/string, optional, (def: (.1, .1, .1))
+                The color to use for the background color of the main canvas.
+                The color can either be a tuple of integers (R, G, B),
+                a matplotlib color (string) or a hexadecimal color (string).
+
+        Example:
+            >>> # Define a vbrain instance :
+            >>> vb = vbrain()
+            >>> # Set the background color (using a RGB tuple) :
+            >>> vb.background_color(color=(1., 1., 1.))
+            >>> # Set the background color (using matplotlib format) :
+            >>> vb.background_color(color='white')
+            >>> # Set the background color (using hexadecimal format) :
+            >>> vb.background_color(color='#ffffff')
+            >>> # Show the GUI :
+            >>> vb.show()
         """
+        bckcolor = color2vb(color).ravel()[0:-1]
+        self.view.canvas.bgcolor = bckcolor
+        self.view.cbcanvas.bgcolor = bckcolor
+
+    def screenshot(self, name, region=None, colorbar=False):
+        """Take a screenshot of the current scene and save it as a picture.
+
+        This method try to make a high-fidelity screenshot of your scene. There
+        might be some strange behaviors (like with connectivity line width).
+        One thing to keep in mind, is that printed picture using a transparent
+        compatible extension (like .png files) produces transparent pictures.
+        This might be quit disturbing especially using internal light
+        reflection. To solve this in your pictures, I recommand putting your
+        transparent brain picture onto a dark background (like black) and see
+        the magic happend.
+        This method requires imageio or PIL (pip install pillow).
+
+        Args:
+            name: str
+                The name of the file to be saved. This file must contains one
+                of the following extension: .png, .tiff
+
+        Kargs:
+            region: tuple, optional, (def: None)
+                Crop the exported picture to a specified region. Must be a
+                tuple of four integers where each one describe the region as
+                (x_start, y_start, width, height) where x_start is where
+                to start along the horizontal axis and y_start where to start
+                along the vertical axis. By default, the entire canvas is
+                rendered.
+
+            colorbar: bool, optional, (def: False)
+                Specify if the colorbar has to be exported too.
+
+        Example:
+            >>> # Define a vbrain instance :
+            >>> vb = vbrain()
+            >>> # Define the filename and the cropped region :
+            >>> filename, crop = 'myfile.png', (1000, 300, 570, 550)
+            >>> # Rotate the brain :
+            >>> vb.rotate('axial')
+            >>> # Take a screenshot and save it (tested on a 17" laptop) and
+            >>> # export the colorbar :
+            >>> vb.screenshot(filename, region=crop, colorbar=True)
+
+        See also:
+            .. seealso:: background_color, rotate
+
+        Note:
+            .. note:: the region argument can be quit difficult to ajust. Be
+                patient, it's possible. Don't forget that .png files contains
+                transparency. For an optimal screenshot, I recommand doing a
+                rotation before the screenshot, so that the canvas can be
+                initialized. 
         """
-        pass
+        # Define the filename :
+        if isinstance(name, str):
+            self._savename, self._extension = os.path.splitext(name)
+            self._extension = self._extension.replace('.', '')
+        else:
+            raise ValueError("The name must be a string and must contains the"
+                             " extension (ex: name='myfile.png')")
+
+        # Define the cropped region :
+        if region is not None:
+            if isinstance(region, (tuple, list)) and (len(region) == 4):
+                self._crop = region
+            else:
+                raise ValueError("The region parameter must be a tuple of four"
+                                 " integers describing (x_start, y_start, "
+                                 "width, height)")
+
+        # Define if the colorbar has to be exported :
+        if isinstance(colorbar, bool):
+            self.cb['export'] = colorbar
+        else:
+            raise ValueError("The colorbar parameter must be a bool describing"
+                             " if the colorbar have to exported too.")
+
+        self._screenshot()
+
+    def quit(self):
+        """Quit the interface."""
+        self._app.quit()
 
     ###########################################################################
     ###########################################################################
@@ -74,6 +177,9 @@ class userfcn(object):
     ###########################################################################
     def brain_control(self, template=None, show=True, hemisphere=None):
         """Control the type of brain to use.
+
+        Use this method to switch between several brain templates. Then, you
+        can to display selected hemisphere (left or right).
 
         Kargs:
             template: string, optional, (def: None)
@@ -115,6 +221,9 @@ class userfcn(object):
             >>> vb.brain_opacity(alpha=0.1, show=True)
             >>> # Show the GUI :
             >>> vb.show()
+
+        Note:
+            .. note:: The brain opacity is only avaible for internal projection
         """
         # Force to have internal projection :
         self.atlas.mesh.projection('internal')
@@ -140,6 +249,9 @@ class userfcn(object):
             >>> vb.light_reflection(reflect_on='external')
             >>> # Show the GUI :
             >>> vb.show()
+
+        See also:
+            .. seealso:: brain_control, brain_opacity
         """
         if reflect_on is not None:
             if reflect_on not in ['internal', 'external']:
