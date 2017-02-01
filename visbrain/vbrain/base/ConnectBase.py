@@ -10,10 +10,10 @@ from ..utils import _colormap
 from ..visuals import Connect
 
 
-__all__ = ['ConnectivityBase']
+__all__ = ['ConnectBase']
 
 
-class ConnectivityBase(_colormap):
+class ConnectBase(_colormap):
     """Base class for connecivity managment.
 
     From all inputs arguments, this class use only those containing 'c_'

@@ -20,7 +20,7 @@ from vispy.scene import Node
 
 from .AtlasBase import AtlasBase
 from .SourcesBase import SourcesBase
-from .ConnectivityBase import ConnectivityBase
+from .ConnectBase import ConnectBase
 from .CbarBase import CbarBase
 from .AreaBase import AreaBase
 from .transformations import transformations
@@ -46,8 +46,8 @@ class base(CbarBase, transformations):
         # the relevant attribute :
         self.atlas = AtlasBase(a_transform=self.transform, **kwargs)
         self.sources = SourcesBase(s_transform=self.atlas.transform, **kwargs)
-        self.connect = ConnectivityBase(c_transform=self.atlas.transform,
-                                        c_xyz=self.sources.xyz, **kwargs)
+        self.connect = ConnectBase(c_transform=self.atlas.transform,
+                                   c_xyz=self.sources.xyz, **kwargs)
         self.area = AreaBase(scale_factor=self.atlas._scaleMax,
                              name='NoneArea', select=[4, 6], color='#ab4642',
                              transform=self.atlas.transform)
