@@ -159,7 +159,7 @@ class vbrain(uiInit, uiElements, base, userfcn):
             and 'tiff'
 
         ui_crop: tuple, optional, (def: None)
-            crop the exportation. Must be  (x, y, width, height)
+            Crop the exportation. Must be  (x, y, width, height)
 
         cb_export: bool, optional, (def: True)
             Control if the colorbor must be exported when doing a screenshot

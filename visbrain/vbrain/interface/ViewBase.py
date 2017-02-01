@@ -53,7 +53,7 @@ class vbShortcuts(object):
                 elif self.q_external.isChecked():
                     self.q_internal.setChecked(True)
                 self._light_reflection()
-                self.uiUpdate_light()
+                self._light_Atlas2Ui()
 
             # Increase / decrease brain opacity :
             elif event.text in ['+', '-']:
@@ -62,7 +62,7 @@ class vbShortcuts(object):
                 step = 10 if (event.text == '+') else -10
                 self.OpacitySlider.setValue(sl+step)
                 self._fcn_opacity()
-                self.uiUpdate_light()
+                self._light_Atlas2Ui()
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):

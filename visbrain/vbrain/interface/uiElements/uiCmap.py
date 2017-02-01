@@ -1,6 +1,7 @@
-"""Interaction between colormap's buttons in the GUI and the user.
+"""Interaction between colormap's variables and the GUI colorbar.
 
-The uiCmap class...
+The uiCmap class is used to control the colormap of several elements (sources /
+connectivity).
 """
 
 from matplotlib import cm
@@ -8,8 +9,10 @@ from ...utils import textline2color
 
 
 class uiCmap(object):
+    """Manage interactions between the GUI colorbar and colormap objects.
 
-    """Main
+    Some objects have their own colormap (sources / connectivity). This class
+    can be used to control their colormap's arguments directly using the GUI.
     """
 
     def __init__(self,):
@@ -35,12 +38,10 @@ class uiCmap(object):
         self.q_vmax.valueChanged.connect(self._GUI2cmap)
         self.q_vmax_chk.clicked.connect(self._GUI2cmap)
         self.q_under.editingFinished.connect(self._GUI2cmap)
-        self.q_under_chk.clicked.connect(self._GUI2cmap)
         self.q_over.editingFinished.connect(self._GUI2cmap)
-        self.q_over_chk.clicked.connect(self._GUI2cmap)
         self.q_cmap_interact.clicked.connect(self._GUI2cmap)
-        self.q_auto_scale.clicked.connect(self._GUI2cmap)
         self.q_cblabel.editingFinished.connect(self._GUI2cmap)
+        self.q_auto_scale.clicked.connect(self._auto_scale)
         self.cmapSources.clicked.connect(self._select_object_cmap)
         self.cmapConnect.clicked.connect(self._select_object_cmap)
 
@@ -85,14 +86,16 @@ class uiCmap(object):
         # Set under / over to the GUI :
         if self.cb['under'] is not None:
             self.q_under.setText(str(self.cb['under']))
-            self.q_under_chk.setChecked(True)
+            self.qUnder_txt.setEnabled(True)
         else:
             self.q_under.setEnabled(False)
+            self.qUnder_txt.setEnabled(False)
         if self.cb['over'] is not None:
             self.q_over.setText(str(self.cb['over']))
-            self.q_over_chk.setChecked(True)
+            self.qOver_txt.setEnabled(True)
         else:
             self.q_over.setEnabled(False)
+            self.qOver_txt.setEnabled(False)
 
         # Set clim to the GUI :
         if self.cb['clim'] != (None, None):
@@ -122,47 +125,40 @@ class uiCmap(object):
                 self.cb['cmap'] = self.q_cmap_list.currentText() + '_r'
             else:
                 self.cb['cmap'] = self.q_cmap_list.currentText()
-            if self.q_auto_scale.isChecked():
-                self.q_vmin_chk.setChecked(False)
-                self.q_vmax_chk.setChecked(False)
-                self.cb['clim'] = self.cb._climBck
-                self.q_cmin.setValue(self.cb['clim'][0])
-                self.q_cmax.setValue(self.cb['clim'][1])
-            else:
-                pass
 
             # Get clim and set to cb object :
             self.cb['clim'] = (self.q_cmin.value(), self.q_cmax.value())
 
-            # Get vmin and vmax and set to cb object :
+            # Get vmin / under and vmax / over and set to cb object :
+            # vmin / under :
             if self.q_vmin_chk.isChecked():
                 self.q_vmin.setEnabled(True)
-                self.cb['vmin'] = self.q_vmin.value()
-            else:
-                self.q_vmin.setEnabled(False)
-                self.q_under_chk.setChecked(False)
-                self.cb['vmin'] = None
-            if self.q_vmax_chk.isChecked():
-                self.q_vmax.setEnabled(True)
-                self.cb['vmax'] = self.q_vmax.value()
-            else:
-                self.q_vmax.setEnabled(False)
-                self.q_over_chk.setChecked(False)
-                self.cb['vmax'] = None
-
-            # Get color under/over and set to cb object :
-            if self.q_under_chk.isChecked():
+                self.qUnder_txt.setEnabled(True)
                 self.q_under.setEnabled(True)
+                self.cb['vmin'] = self.q_vmin.value()
                 self.cb['under'], _ = textline2color(self.q_under.text())
             else:
+                self.q_vmin.setEnabled(False)
+                self.qUnder_txt.setEnabled(False)
                 self.q_under.setEnabled(False)
+                self.cb['vmin'] = None
                 self.cb['under'] = None
-            if self.q_over_chk.isChecked():
+            # vmax :
+            if self.q_vmax_chk.isChecked():
+                self.q_vmax.setEnabled(True)
+                self.qOver_txt.setEnabled(True)
                 self.q_over.setEnabled(True)
+                self.cb['vmax'] = self.q_vmax.value()
                 self.cb['over'], _ = textline2color(self.q_over.text())
             else:
+                self.q_vmax.setEnabled(False)
+                self.q_vmax.setEnabled(False)
+                self.qOver_txt.setEnabled(False)
                 self.q_over.setEnabled(False)
+                self.cb['vmax'] = None
                 self.cb['over'] = None
+
+            # Update colorbar label :
             self.cb['label'] = self.q_cblabel.text()
 
             # Direct interaction : if this button is checked, the user can see
@@ -173,7 +169,10 @@ class uiCmap(object):
                 if self.cmapSources.isChecked():
                     # If cortical projection never run :
                     if self.current_mask is None:
-                        self.cortical_projection()
+                        self._userMsg("To control the colormap of sources, "
+                                      "run either the cortical\nprojection / "
+                                      "repartition first.", 'warn', 10, 9)
+                        # self.cortical_projection()
                     # Otherwise update colormap :
                     else:
                         self.sources.cbUpdateFrom(self.cb)
@@ -182,7 +181,6 @@ class uiCmap(object):
                     # Update colorbar :
                     self.cb.cbupdate(self.current_mask, **self.cb._cb)
                 elif self.cmapConnect.isChecked():
-                    print('PAS OK')
                     self.connect.cbUpdateFrom(self.cb)
                     self.connect.mesh.set_color(colorby=self.connect.colorby,
                                                 dynamic=self.connect.dynamic,
@@ -200,14 +198,51 @@ class uiCmap(object):
         sources. This function can be used to switch between both of this
         object.
         """
+        # First, get the latest (min(), max()) :
+        self._cmap_MinMax()
+
         # The cbUpdateFrom() function take a colorbar object (the one for
         # sources or connectivity), take attributes and set it to be the
         # default colormap / colorbar.
+
         # Sources object :
         if self.cmapSources.isChecked():
             self.cb.cbUpdateFrom(self.sources)
-            # self.cb.cbupdate(self.current_mask, **self.cb._cb)
+
         # Connectivity object :
         elif self.cmapConnect.isChecked():
             self.cb.cbUpdateFrom(self.connect)
+
+        self._cmap2GUI()
+
+    def _cmap_MinMax(self):
+        """Get the (min(), max()) of the selected object.
+
+        The (min(), max()) couple is used for auto-scaling data.
+        """
+        # Sources :
+        if self.cmapSources.isChecked():
+            self.cb.cbUpdateFrom(self.sources)
+        # Connectivity object :
+        elif self.cmapConnect.isChecked():
+            self.connect._MinMax = self.connect.mesh.get_MinMax()
+            self.cb.cbUpdateFrom(self.connect)
+
+    def _auto_scale(self):
+        """Automatically scale the colorbar between (data.min(), data.max()).
+
+        This function turn the user colorbar limits into the most optimal ones
+        i.e those defining by the Minimum and Maximum of the printed data (for
+        the selected object).
+        """
+        # Get latest updated (min(), max()) :
+        self._cmap_MinMax()
+        self.cb['clim'] = self.cb._MinMax
+
+        # Turn vmin / vmax off :
+        self.cb['vmin'], self.cb['vmax'] = None, None
+        self.q_vmin_chk.setChecked(False)
+        self.q_vmax_chk.setChecked(False)
+
+        # Update GUI elements :
         self._cmap2GUI()

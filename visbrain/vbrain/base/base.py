@@ -1,15 +1,16 @@
-"""This script initialize vbrain objects and manage if they are empty. 
+"""This script initialize vbrain objects and manage if they are empty.
+
 The following elements are initialized :
     * Atlas : create the main standard MNI brain.
     * Sources : deep points inside / over the brain. They can materialized
     intracranial electrodes, MEG / EEG sensors...
-    * Connectivity : straight lines which connect the deep sources. 
+    * Connectivity : straight lines which connect the deep sources.
     * Areas : deep structures can be added (like brodmann areas or gyrus...).
-    This can be for processing (like projecting sources activity on it), educational
-    or simply for visualiation purpose.
+    This can be for processing (like projecting sources activity on it),
+    educational or simply for visualiation purpose.
     * Colorbar : initialize the colorbar elements.
-    * Transformations : set of transformations that can be applied on several vbrain
-    objects (like cortical_projection(), cortical_repartition(...))
+    * Transformations : set of transformations that can be applied on several
+    vbrain objects (like cortical_projection(), cortical_repartition(...))
     Those transformations are added here, at the top level, so that they
     can have access to the previously defined elements.
 """
@@ -25,18 +26,17 @@ from .AreaBase import AreaBase
 from .transformations import transformations
 
 
-
 class base(CbarBase, transformations):
+    """Initialize vbrain objects.
 
-    """Initialize vbrain objects (sources / connectivity / areas / colorbar
-    / transformations).
+    Initialize sources / connectivity / areas / colorbar / transformations.
     Organize them at diffrent levels and make the link with the graphical
-    user interface (if no object is detected, the corresponding panel in the GUI
-    has to be deactivate).
+    user interface (if no object is detected, the corresponding panel in the
+    GUI has to be deactivate).
     """
 
     def __init__(self, canvas, progressbar, **kwargs):
-
+        """Init."""
         # ---------- Initialize base ----------
         # Initialize transformation with Null:
         self.transform = vist.ChainTransform([vist.NullTransform()])

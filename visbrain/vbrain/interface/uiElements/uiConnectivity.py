@@ -75,6 +75,11 @@ class uiConnectivity(object):
         self.connect.mesh.set_color(colorby=colorby,
                                     dynamic=self.connect.dynamic,
                                     **self.connect._cb)
+
+        # Be sure to have the latest updated (Min, Max) :
+        self.connect._MinMax = self.connect.mesh.get_MinMax()
+
+        # Update the mesh :
         self.connect.mesh.update()
 
     def _getMinMax_dyn(self):
@@ -105,6 +110,8 @@ class uiConnectivity(object):
             return 1
         else:
             raise ValueError('c_colorby not in ["strength", "count"]')
+
+        self.connect._MinMax = self.connect.mesh.get_MinMax()
 
     def _ShowHide(self):
         """Show or hide connections between nodes."""

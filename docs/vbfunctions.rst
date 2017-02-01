@@ -3,11 +3,23 @@ GUI functions and settings
 
 Show graphical interface
 ~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.vbrain.show
+.. automethod:: vbrain.vbrain.vbrain.show
+
+Quit graphical interface
+~~~~~~~~~~~~~~~~~~~~~~~~
+.. automethod:: vbrain.user.userfcn.quit
 
 Rotation
 ~~~~~~~~
 .. automethod:: vbrain.user.userfcn.rotate
+
+Background color
+~~~~~~~~~~~~~~~~
+.. automethod:: vbrain.user.userfcn.background_color
+
+Screenshot
+~~~~~~~~~~
+.. automethod:: vbrain.user.userfcn.screenshot
 
 Brain functions
 ^^^^^^^^^^^^^^^

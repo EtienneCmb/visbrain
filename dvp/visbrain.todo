@@ -5,10 +5,11 @@ doc
 	-2 Dans la doc, faire un exemple de script bash pour montrer que l'on peut looper
 
 Colorbar
-	-1 La gestion de la couleur ne me convient pas. Il devrait y avoir un seul object 'colorbar', dans lequel on mettrait une méthode 'add_oject()' et dans on pourrait ajouter un objet source / connectivité. Pour le moment, l'object de type cb est à l'intérieur de chaque object, donc c'est pas très pratique pour updater les valeurs. 
-	-5 La colorbar ne marche toujours pas très bien
-	-5 clim à configurer
-	-5 Vérifier clim dans utils/color/array2colormap
+	-5 La couleur du texte de la colorbar devrait pouvoir être fixé ou auto (en fonction de la couleur de fond)
+	+1 La gestion de la couleur ne me convient pas. Il devrait y avoir un seul object 'colorbar', dans lequel on mettrait une méthode 'add_oject()' et dans on pourrait ajouter un objet source / connectivité. Pour le moment, l'object de type cb est à l'intérieur de chaque object, donc c'est pas très pratique pour updater les valeurs. 
+	+5 La colorbar ne marche toujours pas très bien
+	+5 clim à configurer
+	+5 Vérifier clim dans utils/color/array2colormap
 
 
 Projection
@@ -27,14 +28,14 @@ Structures internes
 
 
 Connectivity
-	-5 Il faut arriver à chopper les min / max de data connect et le mettre dans _climBck()
+	+5 Il faut arriver à chopper les min / max de data connect et le mettre dans _MinMax()
 	-3 Renomer ConnectivityBase -> ConnectBase
 	+5 Fixer le problem de clim avec la connectivité (exemple 4)
 
 GUI
-	-5 Ajouter la compatibilité avec du clim
-	-3 Montrer message erreur
 	-3 Montrer azimuth/elevation lors de rotation
+	+3 Montrer message erreur
+	+5 Ajouter la compatibilité avec du clim
 
 Shortcuts
 	-5 Add some shortcuts

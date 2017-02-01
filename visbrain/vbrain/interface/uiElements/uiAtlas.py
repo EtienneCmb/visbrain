@@ -8,8 +8,11 @@ __all__ = ['uiAtlas']
 
 
 class uiAtlas(object):
+    """Link graphical interface with atlas functions.
 
-    """Link graphical interface with atlas functions."""
+    This class can be used to control the part of displayed brain (both / left
+    / right hemisphere), the scene rotation and the light behavior.
+    """
 
     def __init__(self):
         """Init."""
@@ -19,11 +22,7 @@ class uiAtlas(object):
         self.Lhemi_only.clicked.connect(self._brain_control)
         self.Rhemi_only.clicked.connect(self._brain_control)
 
-        # Rotation :
-        self.q_coronal.clicked.connect(self._fcn_coronal)
-        self.q_axial.clicked.connect(self._fcn_axial)
-        self.q_sagittal.clicked.connect(self._fcn_sagittal)
-
+        # Brain template to use :
         self.uiSwitchTemplate.currentIndexChanged.connect(self._brain_control)
         self.uiSwitchTemplate.setCurrentIndex(int(self.atlas.template[-1]) - 1)
 
@@ -33,7 +32,7 @@ class uiAtlas(object):
         self.q_external.clicked.connect(self._light_reflection)
 
         self.struct_color_edit.setPlaceholderText(
-            "Ex: 'red', #ab4642, (1,0,0...)")
+            "Ex: 'red', #ab4642, (1,0,0)...)")
 
     def _brain_control(self, *args, template=None, show=True, hemisphere=None):
         """Control the type of brain to use.
@@ -83,99 +82,15 @@ class uiAtlas(object):
             elif self.Rhemi_only.isChecked():
                 self.atlas.reload(hemisphere='right')
 
-    def _rotate(self, fixed=None, custom=None):
-        """Rotate the scene elements using a predefined or a custom rotation.
-
-        The rotation is applied on every objects on the scene.
-
-        Kargs:
-            fixed: string, optional, (def: 'axial')
-                Predefined rotation. Use either 'axial', 'coronal' or
-                'sagittal'. As a complement, use the suffixe '_0' or
-                '_1' to switch between possible views.
-
-                * 'axial_0/1': switch between top/bottom view 
-                * 'coronal_0/1': switch between front/back view 
-                * 'sagittal_0/1': switch between left/right view 
-
-            custom: tuple, optional, (def: None)
-                Custom rotation. The custom parameter must be a
-                tuple of two float respectively for azimuth and
-                elevation.
-        """
-        # Check the fixed parameter :
-        if fixed is not None:
-            if not isinstance(fixed, str) or not any([bool(fixed.find(
-                            k)+1) for k in ['axial', 'sagittal', 'coronal']]):
-                raise ValueError("fixed must contain 'axial', 'coronal' or "
-                                 "'sagittal")
-            else:
-                if bool(fixed.find('_')+1):
-                    view, side = tuple(fixed.split('_'))
-                    exec('self.atlas.' + view + ' = ' + side)
-                else:
-                    view, side = fixed, None
-        else:
-            view, side = None, None
-        # Check the custom parameter :
-        if custom is not None:
-            if not isinstance(custom, (tuple, list)) or len(custom) is not 2:
-                raise ValueError("The custom parameter must be a tuple of "
-                                 "two floats (azimuth, elevation)")
-
-        azimuth, elevation = 0, 90
-        if view is not None:
-            # Sagittal (left, right)
-            if view == 'sagittal':
-                if self.atlas.sagittal == 0:  # Left
-                    azimuth, elevation = -90, 0
-                    self.atlas.sagittal = 1
-                elif self.atlas.sagittal == 1:  # Right
-                    azimuth, elevation = 90, 0
-                    self.atlas.sagittal = 0
-                self.atlas.coronal, self.atlas.axial = 0, 0
-            # Coronal (front, back)
-            elif view == 'coronal':
-                if self.atlas.coronal == 0:  # Front
-                    azimuth, elevation = 180, 0
-                    self.atlas.coronal = 1
-                elif self.atlas.coronal == 1:  # Back
-                    azimuth, elevation = 0, 0
-                    self.atlas.coronal = 0
-                self.atlas.sagittal, self.atlas.axial = 0, 0
-            # Axial (top, bottom)
-            elif view == 'axial':
-                if self.atlas.axial == 0:  # Top
-                    azimuth, elevation = 0, 90
-                    self.atlas.axial = 1
-                elif self.atlas.axial == 1:  # Bottom
-                    azimuth, elevation = 0, -90
-                    self.atlas.axial = 0
-                self.atlas.sagittal, self.atlas.coronal = 0, 0
-        elif custom is not None:
-            azimuth, elevation = custom[0], custom[1]
-
-        # Set camera and range :
-        self.view.wc.camera.azimuth = azimuth
-        self.view.wc.camera.elevation = elevation
-        self.view.wc.camera.set_range(x=(-50, 50), y=(-50, 50), z=(-85, 85))
-
     def _light_reflection(self):
-        """Change how light is reflected onto the brain."""
+        """Change how light is reflected onto the brain.
+
+        The 'internal' option can be used to observe deep structures with a
+        fully transparent brain. The 'external' option is only usefull for
+        the cortical surface.
+        """
         if self.q_internal.isChecked():
             self.atlas.mesh.projection('internal')
         elif self.q_external.isChecked():
             self.atlas.mesh.projection('external')
         self.atlas.mesh.update()
-
-    def _fcn_coronal(self):
-        """GUI to deep function for a fixed coronal view."""
-        self._rotate(fixed='coronal')
-
-    def _fcn_axial(self):
-        """GUI to deep function for a fixed axial view."""
-        self._rotate(fixed='axial')
-
-    def _fcn_sagittal(self):
-        """GUI to deep function for a fixed sagittal view."""
-        self._rotate(fixed='sagittal')

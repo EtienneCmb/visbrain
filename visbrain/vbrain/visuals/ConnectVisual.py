@@ -1,7 +1,10 @@
+"""
+"""
+
 import numpy as np
 from collections import Counter
 
-from vispy import app, gloo, visuals, scene
+from vispy import gloo, visuals
 from ..utils import array2colormap, normalize
 
 
@@ -53,8 +56,6 @@ class ConnectVisual(visuals.Visual):
         self._draw_mode = 'lines'
         # self.set_gl_state('translucent', depth_test=False, cull_face=False)
 
-
-
     def _prepare_transforms(self, view):
         """This method is called when the user or the scenegraph has assigned
         new transforms to this visual
@@ -64,7 +65,6 @@ class ConnectVisual(visuals.Visual):
         view_frag = view.view_program.frag
         view_vert['transform'] = tr.get_transform()
 
-
     def _check_position(self, pos):
         """Check if position is type float32
         """
@@ -72,18 +72,19 @@ class ConnectVisual(visuals.Visual):
             raise ValueError('Position must be an Nx3 matrix')
         self.pos = pos.astype(np.float32)
 
-
     def _check_data(self, connect, select):
         """
         """
         N = self.pos.shape[0]
         # Chech array :
         if (connect.shape != (N, N)) or not isinstance(connect, np.ndarray):
-            raise ValueError('c_connect must be an array of shape '+str((N, N)))
+            raise ValueError("c_connect must be an array of "
+                             "shape " + str((N, N)))
         if select is None:
             select = np.ones_like(connect)
         if (select.shape != (N, N) or not isinstance(select, np.ndarray)):
-            raise ValueError('c_select must be an array of shape '+str((N, N)))
+            raise ValueError("c_select must be an array of "
+                             "shape " + str((N, N)))
         # Mask c_connect :
         try:
             connect.mask
@@ -92,17 +93,16 @@ class ConnectVisual(visuals.Visual):
         connect.mask[select.nonzero()] = False
         self.connect = connect
 
-
     def _check_color(self, colorby, cmap, dynamic):
         """
         """
         # Check colorby :
         if self.colorby not in ['count', 'strength']:
-            raise ValueError("The colorby parameter must be 'count' or 'strength'")
+            raise ValueError("The colorby parameter must be 'count' or "
+                             "'strength'")
         # Test dynamic :
         if (dynamic is not None) and not isinstance(dynamic, tuple):
             raise ValueError("dynamic bust be a tuple")
-
 
     def _non_zero_select(self):
         """Find non zeros indices and connection values
@@ -110,7 +110,6 @@ class ConnectVisual(visuals.Visual):
         self._nnz_x, self._nnz_y = np.where(~self.connect.mask)
         self._indices = np.c_[self._nnz_x, self._nnz_y].flatten()
         self._Nindices = np.arange(len(self._indices))
-
 
     def set_position(self, pos):
         """
@@ -122,7 +121,6 @@ class ConnectVisual(visuals.Visual):
         self.a_position[self._Nindices, :] = self.pos[self._indices, :]
         self.update_position()
 
-
     def set_data(self, connect, select=None):
         """
         """
@@ -131,15 +129,14 @@ class ConnectVisual(visuals.Visual):
         # Find non-zero elements :
         self._non_zero_select()
         # Update data :
-        self.set_color(colorby=self.colorby, dynamic=self.dynamic, cmap=self._cmap, vmin=self._vmin,
-                       vmax=self._vmax, under=self._under, over=self._over)
+        self.set_color(colorby=self.colorby, dynamic=self.dynamic,
+                       cmap=self._cmap, vmin=self._vmin, vmax=self._vmax,
+                       under=self._under, over=self._over)
         # Update position :
         self.set_position(self.pos)
 
-
-
-    def set_color(self, colorby='strength', dynamic=False, cmap='viridis', vmin=None,
-                  vmax=None, under=None, over=None, clim=None):
+    def set_color(self, colorby='strength', dynamic=False, cmap='viridis',
+                  vmin=None, vmax=None, under=None, over=None, clim=None):
         """
         """
         # Check color elements :
@@ -162,30 +159,34 @@ class ConnectVisual(visuals.Visual):
             # Get looping indices :
             self._loopIndex = self._Nindices
 
+        # Get (min / max) :
+        self._MinMax = (self._all_nnz.min(), self._all_nnz.max())
+
         # Get associated colormap :
         colormap = array2colormap(self._all_nnz, cmap=cmap, vmin=vmin,
                                   vmax=vmax, under=under, over=over, clim=clim)
 
         # Dynamic alpha :
         if (dynamic is not False) and isinstance(dynamic, tuple):
-            colormap[:, 3] = normalize(self._all_nnz, tomin=dynamic[0], tomax=dynamic[1])
+            colormap[:, 3] = normalize(self._all_nnz, tomin=dynamic[0],
+                                       tomax=dynamic[1])
 
         # Build a_color and send to buffer :
         self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)
         self.a_color[self._Nindices, :] = colormap[self._loopIndex, :]
         self.update_color()
 
-
     def update_color(self):
         """
         """
-        self.shared_program.vert['a_color'] = gloo.VertexBuffer(self.a_color.astype(np.float32))
+        self.shared_program.vert['a_color'] = gloo.VertexBuffer(
+                                            self.a_color.astype(np.float32))
 
     def update_position(self):
         """
         """
-        self.shared_program.vert['a_position'] = gloo.VertexBuffer(self.a_position.astype(np.float32))
-
+        self.shared_program.vert['a_position'] = gloo.VertexBuffer(
+                                            self.a_position.astype(np.float32))
 
     def set_opacity(self, alpha=1.0):
         """
@@ -194,28 +195,23 @@ class ConnectVisual(visuals.Visual):
         if isinstance(alpha, (int, float)):
             alpha_vec = np.full((N,), alpha)
         elif isinstance(alpha, np.ndarray) and (len(alpha) != N):
-            raise ValueError("The length of alpha must be "+str(N))
+            raise ValueError("The length of alpha must be " + str(N))
         else:
             alpha_vec = alpha.ravel()
         self.a_color[:, 3] = alpha_vec
         self.update_color()
-
 
     def get_position(self):
         """
         """
         return self.shared_program.vert['a_position']
 
-
     def get_color(self):
         """
         """
         return self.shared_program.vert['a_color']
 
-
-
-
-
-# build your visuals, that's all
-# Connect3D = scene.visuals.create_visual_node(ConnectVisual)
-
+    def get_MinMax(self):
+        """
+        """
+        return self._MinMax
