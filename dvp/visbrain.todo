@@ -1,6 +1,7 @@
 doc
 	-5 Documenter chaque fonction
 	-5 Améliorer setup.py (version vispy / python)
+	-5 Sûr que visual/ doit être à ce niveau? Pourquoi pas dans base/?
 	-4 Cleaner le self pour ne faire apparaître que ce qui est utile (arriver à virer les éléments pyqt...)
 	-2 Dans la doc, faire un exemple de script bash pour montrer que l'on peut looper
 
@@ -29,7 +30,7 @@ Structures internes
 
 Connectivity
 	+5 Il faut arriver à chopper les min / max de data connect et le mettre dans _MinMax()
-	-3 Renomer ConnectivityBase -> ConnectBase
+	+3 Renomer ConnectivityBase -> ConnectBase
 	+5 Fixer le problem de clim avec la connectivité (exemple 4)
 
 GUI
