@@ -149,9 +149,9 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
             warn("vmin must be between clim[0] and clim[1]. vmin will be "
                  "ignored")
     else:
-        if not isinstance(under, str):
+        if not isinstance(under, (str, tuple)):
             raise ValueError("The under parameter must be a string referring "
-                             "to a matplotlib color")
+                             "to a matplotlib color or a (R, G, B) tuple.")
     if vmax is None:
         over = None
     elif (vmax is not None) and (vmax > clim[1]):
@@ -160,9 +160,9 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
             warn("vmax must be between clim[0] and clim[1]. vmax will be "
                  "ignored")
     else:
-        if not isinstance(over, str):
+        if not isinstance(over, (str, tuple)):
             raise ValueError("The over parameter must be a string referring "
-                             "to a matplotlib color")
+                             "to a matplotlib color or a (R, G, B) tuple.")
     if (vmin is not None) and (vmax is not None) and (vmin >= vmax):
         vmin, vmax, under, over = None, None, None, None
         warn("vmin > vmax : both arguments have been ignored.")
@@ -176,9 +176,9 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
 
     # ================== Clip / Peak ==================
     # Force array to clip if x is under / over clim :
-    if clim[0] < x.min():
+    if clim[0] > x.min():
         x = colorclip(x, clim[0], kind='under')
-    if clim[1] > x.max():
+    if clim[1] < x.max():
         x = colorclip(x, clim[1], kind='over')
 
     # ================== Colormap (under, over) ==================
