@@ -13,7 +13,6 @@ __all__ = ['uiElements']
 
 class uiElements(uiSettings, uiAtlas, uiSources, uiCmap, uiConnectivity,
                  uiOpacity, uiArea):
-
     """Inherit from the diffrent ui files and initialize them."""
 
     def __init__(self):

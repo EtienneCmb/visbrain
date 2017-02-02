@@ -8,8 +8,6 @@ objects.
 
 import numpy as np
 
-import vispy.scene.cameras as viscam
-
 from ...utils import slider2opacity
 
 

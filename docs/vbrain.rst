@@ -31,6 +31,9 @@ All possible inputs use a prefixe :
 User functions
 --------------
 
+User functions
+--------------
+
 .. toctree::
    :maxdepth: 4
    

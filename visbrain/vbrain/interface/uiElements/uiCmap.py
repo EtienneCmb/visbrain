@@ -77,11 +77,15 @@ class uiCmap(object):
             self.q_vmin_chk.setChecked(True)
         else:
             self.q_vmin.setEnabled(False)
+            self.cb['vmin'] = None
+            self.cb['under'] = None
         if self.cb['vmax'] is not None:
             self.q_vmax.setValue(self.cb['vmax'])
             self.q_vmax_chk.setChecked(True)
         else:
             self.q_vmax.setEnabled(False)
+            self.cb['vmax'] = None
+            self.cb['over'] = None
 
         # Set under / over to the GUI :
         if self.cb['under'] is not None:
@@ -180,6 +184,8 @@ class uiCmap(object):
                                          non_zero=self.current_non_zero)
                     # Update colorbar :
                     self.cb.cbupdate(self.current_mask, **self.cb._cb)
+
+                # Update connectivity :
                 elif self.cmapConnect.isChecked():
                     self.connect.cbUpdateFrom(self.cb)
                     self.connect.mesh.set_color(colorby=self.connect.colorby,
@@ -225,7 +231,7 @@ class uiCmap(object):
             self.cb.cbUpdateFrom(self.sources)
         # Connectivity object :
         elif self.cmapConnect.isChecked():
-            self.connect._MinMax = self.connect.mesh.get_MinMax()
+            self.connect._MinMax = self.connect.mesh.get_MinMax
             self.cb.cbUpdateFrom(self.connect)
 
     def _auto_scale(self):

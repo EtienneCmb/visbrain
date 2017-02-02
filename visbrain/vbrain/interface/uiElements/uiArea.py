@@ -12,7 +12,6 @@ __all__ = ['uiArea']
 
 
 class uiArea(object):
-
     """Link graphical interface with sub-structures functions."""
 
     def __init__(self,):

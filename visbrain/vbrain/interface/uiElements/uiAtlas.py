@@ -94,3 +94,8 @@ class uiAtlas(object):
         elif self.q_external.isChecked():
             self.atlas.mesh.projection('external')
         self.atlas.mesh.update()
+
+    def _toggle_brain_visible(self):
+        """Toggle to display / hide the brain."""
+        self.atlas.mesh.visible = not self.atlas.mesh.visible
+        self.show_MNI.setChecked(self.atlas.mesh.visible)

@@ -158,14 +158,17 @@ class vbrain(uiInit, uiElements, base, userfcn):
             The picture extension when exporting. Choose between 'png'
             and 'tiff'
 
-        ui_crop: tuple, optional, (def: None)
-            Crop the exportation. Must be  (x, y, width, height)
+        ui_region: tuple, optional, (def: None)
+            Crop the exportation to the region define by (x, y, width, height)
 
         cb_export: bool, optional, (def: True)
             Control if the colorbor must be exported when doing a screenshot
 
         cb_fontsize: int, optional, (def: 15)
-            The fontsize of colorbar indications
+            Font-size of colorbar text (min / max / title)
+
+        cb_fontcolor: string, optional, (def: 'w')
+            Font-color of colorbar text (min / max / title)
 
         l_position: tuple, optional, (def: (100., 100., 100.))
             Position of the light
@@ -199,10 +202,12 @@ class vbrain(uiInit, uiElements, base, userfcn):
     def __init__(self, *args, **kwargs):
         """Init."""
         # ====================== ui Arguments ======================
+        # Background color (for the main and the colorbar canvas) :
         bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
+        # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
         self._extension = kwargs.get('ui_extension', '.png')
-        self._crop = kwargs.get('ui_crop', None)
+        self._crop = kwargs.get('ui_region', None)
         if self._extension not in ['png', 'tiff']:
             self._extension = 'png'
 
@@ -240,6 +245,7 @@ class vbrain(uiInit, uiElements, base, userfcn):
 
     def show(self):
         """Display the graphical user interface."""
+        # This function has to be placed here (and not in the user.py script)
         self.showMaximized()
         self._rotate()
         visapp.run()

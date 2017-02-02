@@ -92,3 +92,9 @@ class uiSources(object):
         self.sources.stextsize = self.q_stextsize.value()
         # Update text :
         self.sources.text_update()
+
+    def _toggle_sources_visible(self):
+        """Toggle to display / hide the brain."""
+        self.sources.mesh.visible = not self.sources.mesh.visible
+        self.sources.stextmesh.visible = not self.sources.mesh.visible
+        self.show_Sources.setChecked(self.sources.mesh.visible)

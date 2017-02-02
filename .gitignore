@@ -65,6 +65,7 @@ target/
 Vispy_examples/
 debugging/
 logo/
+svg/
 *.ui
 *.svg
 debuging.py

@@ -138,7 +138,12 @@ class uiSettings(object):
     # GUI
     # =============================================================
     def _screenshot(self):
-        """
+        """Screenshot using the GUI.
+
+        This function need that a savename is already defined (otherwise, a
+        window appeared so that the user specify the path/name). Then, it needs
+        an extension (png) and a boolean parameter (self.cb['export']) to
+        specify if the colorbar has to be exported.
         """
         # Manage filename :
         if self._savename is None:
@@ -149,25 +154,34 @@ class uiSettings(object):
         else:
             raise ValueError("No extension detected.")
 
-        # Manage size exportation :
+        # Manage size exportation. The dpi option present when creating a
+        # vispy canvas doesn't seems to work. The trick bellow increase the
+        # physical size of the canvas so that the exported figure has a
+        # high-definition :
+        # Get a copy of the actual canvas physical size :
         backp_size = self.view.canvas.physical_size
+        # Increase the physical size :
         ratio = max(6000/backp_size[0], 3000/backp_size[1])
         new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
         self.view.canvas._backend._physical_size = new_size
 
         # Render and save :
-        print('REGION : ', self._crop)
         img = self.view.canvas.render(region=self._crop)
         io.imsave(self._savename, img, format=self._extension)
 
+        # Export the colorbar :
         if self.cb['export']:
+            # Render colorbar panel :
             cbimg = self.view.cbcanvas.render()
-            if self._savename.find('.')+1:
+            # Colorbar file name : filename_colorbar.extension
+            if self._savename.find('.') + 1:
                 filename = self._savename.replace('.', '_colorbar.')
             else:
                 filename += '_colorbar'
             io.imsave(filename, cbimg, format=self._extension)
+        # Set to the canvas it's previous size :
         self.view.canvas._backend._physical_size = backp_size
+        # Update the canvas :
         self.view.canvas.update()
         self.atlas.mesh.update()
 

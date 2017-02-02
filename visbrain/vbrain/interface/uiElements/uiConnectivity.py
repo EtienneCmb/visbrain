@@ -77,7 +77,7 @@ class uiConnectivity(object):
                                     **self.connect._cb)
 
         # Be sure to have the latest updated (Min, Max) :
-        self.connect._MinMax = self.connect.mesh.get_MinMax()
+        self.connect._MinMax = self.connect.mesh.get_MinMax
 
         # Update the mesh :
         self.connect.mesh.update()
@@ -111,8 +111,13 @@ class uiConnectivity(object):
         else:
             raise ValueError('c_colorby not in ["strength", "count"]')
 
-        self.connect._MinMax = self.connect.mesh.get_MinMax()
+        self.connect._MinMax = self.connect.mesh.get_MinMax
 
     def _ShowHide(self):
         """Show or hide connections between nodes."""
         self.connect.mesh.visible = self.uiConnectShow.isChecked()
+
+    def _toggle_connect_visible(self):
+        """Toggle to display / hide the brain."""
+        self.connect.mesh.visible = not self.connect.mesh.visible
+        self.uiConnectShow.setChecked(self.connect.mesh.visible)

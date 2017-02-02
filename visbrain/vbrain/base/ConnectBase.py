@@ -1,13 +1,13 @@
 """Base class for connectivity.
 
-- Create a connectivity object (Connect)
+- Create a connectivity object (ConnectMesh)
 - colormap managment for connectivity
 """
 
 import vispy.scene.visuals as visu
 
+from .visuals import ConnectMesh
 from ..utils import _colormap
-from ..visuals import Connect
 
 
 __all__ = ['ConnectBase']
@@ -40,9 +40,9 @@ class ConnectBase(_colormap):
 
         # Object creation :
         if (self.xyz is not None) and (self.connect is not None):
-            self.mesh = Connect(self.xyz, self.connect, select=self.select,
-                                colorby=self.colorby, dynamic=self.dynamic,
-                                name='Connectivity', **self._cb)
+            self.mesh = ConnectMesh(self.xyz, self.connect, select=self.select,
+                                    colorby=self.colorby, dynamic=self.dynamic,
+                                    name='Connectivity', **self._cb)
             self._maskbck = self.mesh.connect.mask.copy()
         else:
             self.mesh = visu.Line(name='NoneConnect')

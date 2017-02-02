@@ -64,6 +64,18 @@ class vbShortcuts(object):
                 self._fcn_opacity()
                 self._light_Atlas2Ui()
 
+            # Toggle brain visible:
+            elif event.text == '4':
+                self._toggle_brain_visible()
+
+            # Toggle sources visible :
+            elif event.text == '5':
+                self._toggle_sources_visible()
+
+            # Toggle connectivity visible :
+            elif event.text == '6':
+                self._toggle_connect_visible()
+
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
             """Executed function when the mouse is pressed over vbrain canvas.

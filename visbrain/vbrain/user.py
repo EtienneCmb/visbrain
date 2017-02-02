@@ -138,7 +138,7 @@ class userfcn(object):
                 patient, it's possible. Don't forget that .png files contains
                 transparency. For an optimal screenshot, I recommand doing a
                 rotation before the screenshot, so that the canvas can be
-                initialized. 
+                initialized.
         """
         # Define the filename :
         if isinstance(name, str):

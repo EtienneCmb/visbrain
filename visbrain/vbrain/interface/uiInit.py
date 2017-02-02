@@ -1,4 +1,6 @@
-"""This script group the diffrent graphical components :
+"""This script group the diffrent graphical components.
+
+Grouped components :
     * PyQt elements (window, Pyqt functions...)
     * Vispy canvas functions
     * User shortcuts
@@ -6,7 +8,6 @@
 
 from PyQt4 import QtGui
 from vispy import app
-import sys
 
 from .gui import Ui_MainWindow
 from .ViewBase import vbCanvas, vbShortcuts
@@ -16,9 +17,7 @@ __all__ = ['uiInit']
 
 
 class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
-
-    """Group and initialize the graphical elements and embeded functions
-    and shortcuts.
+    """Group and initialize the graphical elements and interactions.
 
     Kargs:
         bgcolor: tuple, optional, (def: (0.1, 0.1, 0.1))
@@ -28,14 +27,14 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
     """
 
     def __init__(self, bgcolor=(0.1, 0.1, 0.1)):
-
+        """Init."""
         # Create the main window :
         super(uiInit, self).__init__(None)
         self.setupUi(self)
         if self._savename is not None:
             self.setWindowTitle('vbrain - '+self._savename)
 
-    	# Initlialize view :
+        # Initlialize view :
         self.view = vbCanvas(bgcolor)
 
         # Add the canvas to the UI (vBrain widget) and colorbar:
@@ -53,4 +52,3 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
 
         # Initialize shortcuts :
         vbShortcuts.__init__(self, self.view.canvas)
-        

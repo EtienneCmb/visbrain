@@ -1,5 +1,4 @@
-"""This script contains some usefull math functions
-"""
+"""This script contains some usefull math functions."""
 
 import numpy as np
 from warnings import warn
@@ -8,18 +7,18 @@ from warnings import warn
 __all__ = ['normalize']
 
 
-def normalize(x, tomin=0.0, tomax=1.0):
-    """Normalize the array x between tomin and tomax
+def normalize(x, tomin=0., tomax=1.):
+    """Normalize the array x between tomin and tomax.
 
     Args:
         x: ndarray
             The array to normalize
 
     Kargs:
-        tomin: int/float (def: 0.0)
+        tomin: int/float (def: 0.)
             Minimum of returned array
 
-        tomax: int/float (def: 1.0)
+        tomax: int/float (def: 1.)
             Maximum of returned array
 
     Return:
@@ -42,4 +41,3 @@ def normalize(x, tomin=0.0, tomax=1.0):
             return tomax * x / xM
     else:
         return x
-

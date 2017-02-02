@@ -1,31 +1,31 @@
-"""Base class for the MNI brain:
+"""Base class for the MNI brain.
+
 - load the template (default or a custom one)
 - create the MNI (BrainMesh)
 - reload function to change template
 """
 
-import os, sys
+import os
+import sys
 import numpy as np
 
-import vispy.scene.visuals as visu
-import vispy.geometry as visg
-import vispy.visuals.transforms as vist
-
-from ..utils import color2vb
-from ..visuals import BrainMesh
+from .visuals import BrainMesh
 
 
 class AtlasBase(object):
+    """Base class for atlas managment.
 
-    """Base class for atlas managment. From all inputs arguments, this class
-    use only those containing 'a_' (atlas) and 'l_' (light). 
+    From all inputs arguments, this class use only those containing 'a_'
+    (atlas) and 'l_' (light).
     """
 
-    def __init__(self, a_color=(1.0,1.0,1.0), a_opacity=1., a_projection='internal',
-                 a_template='B1', a_hemisphere='both', a_vertices=None, a_faces=None,
-                 a_shading='smooth', a_transform=[], l_position=(100., 100., 100.),
-                 l_intensity=(1., 1., 1.), l_color=(1., 1., 1., 1.), l_coefAmbient=0.05,
-                 l_coefSpecular=0.5, **kwargs):
+    def __init__(self, a_color=(1., 1., 1.), a_opacity=1.,
+                 a_projection='internal', a_template='B1', a_hemisphere='both',
+                 a_vertices=None, a_faces=None, a_shading='smooth',
+                 a_transform=[], l_position=(100., 100., 100.),
+                 l_intensity=(1., 1., 1.), l_color=(1., 1., 1., 1.),
+                 l_coefAmbient=0.05, l_coefSpecular=0.5, **kwargs):
+        """Init."""
         # Get inputs :
         self.color = a_color
         self.opacity = a_opacity
@@ -41,29 +41,31 @@ class AtlasBase(object):
         self.l_amb, self.l_spec = l_coefAmbient, l_coefSpecular
 
         # Needed variables :
-        self.atlaspath = os.path.join(sys.modules[__name__].__file__.split('Atlas')[0],
-                                      'templates/')
-        self._defcolor = (1,1,1)
+        self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
+                                                    'Atlas')[0], 'templates/')
+        self._defcolor = (1., 1., 1.)
         self._scaleMax = 100
 
         # Initialize visualization :
-        vertices, faces, normals, color = self.load(self.template, self.user_vert,
+        vertices, faces, normals, color = self.load(self.template,
+                                                    self.user_vert,
                                                     self.user_faces)
         self.plot(vertices, faces, normals, color, a_projection, a_hemisphere)
 
-
     def __len__(self):
+        """Return the number of vertices."""
         return len(self.vert)
 
-
     def __iter__(self):
+        """Iteration over vertices."""
         for k in range(len(self)):
             yield self.vert[k, ...]
 
-
     def load(self, template='B1', vertices=None, faces=None):
-        """Load the atlas to use for the interface. Use either a default
-        or a custom template using the vertices and faces inputs.
+        """Load the atlas to use for the interface.
+
+        Use either a default or a custom template using the vertices and
+        faces inputs.
 
         Kargs:
             template: string, optional, (def: 'B1')
@@ -92,7 +94,8 @@ class AtlasBase(object):
         # Load a default template :
         if (vertices is None) and (faces is None):
             if (template in ['B1', 'B2', 'B3']):
-                atlas = np.load(self.atlaspath + '{template}.npz'.format(template=template))
+                atlas = np.load(self.atlaspath + '{template}.npz'.format(
+                                                            template=template))
                 faces, normals = atlas['faces'], atlas['a_normal']
                 vertices, color = atlas['a_position'], atlas['a_color']
             else:
@@ -103,10 +106,9 @@ class AtlasBase(object):
 
         return vertices, faces, normals, color
 
-
     def plot(self, vertices=None, faces=None, normals=None, color=None,
              projection='internal', hemisphere='both'):
-        """Create the standard MNI brain
+        """Create the standard MNI brain.
 
         Kargs:
             vertices: ndarray, optional, (def: None)
@@ -130,10 +132,13 @@ class AtlasBase(object):
                 'right'
         """
         # Initialize mesh object :
-        self.mesh = BrainMesh(vertices=vertices, faces=faces, normals=normals, name='Brain',
-                              l_position=self.l_pos, l_intensity=self.l_int, l_color=self.l_col,
-                              l_coefAmbient=self.l_amb,  l_coefSpecular=self.l_spec,
-                              scale_factor=self._scaleMax, hemisphere=hemisphere)
+        self.mesh = BrainMesh(vertices=vertices, faces=faces, normals=normals,
+                              name='Brain', l_position=self.l_pos,
+                              l_intensity=self.l_int, l_color=self.l_col,
+                              l_coefAmbient=self.l_amb,
+                              l_coefSpecular=self.l_spec,
+                              scale_factor=self._scaleMax,
+                              hemisphere=hemisphere)
         self.vert = self.mesh.get_vertices
         self.transform = self.mesh._btransform
         self.mask = np.zeros((len(self.mesh), 3), dtype=bool)
@@ -143,10 +148,9 @@ class AtlasBase(object):
         # Internal/external projection :
         self.mesh.projection(projection)
 
-
-    def reload(self, template=None, hemisphere=None, projection=None, vertices=None,
-               faces=None):
-        """Reload an existing MNI brain
+    def reload(self, template=None, hemisphere=None, projection=None,
+               vertices=None, faces=None):
+        """Reload an existing MNI brain.
 
         Karg:
             template: string, optional, (def: 'B1')
@@ -175,7 +179,8 @@ class AtlasBase(object):
             self.projection = projection
 
         # Initialize visualization :
-        vertices, faces, normals, color = self.load(self.template, vertices, faces)
+        vertices, faces, normals, color = self.load(self.template, vertices,
+                                                    faces)
         self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                            hemisphere=hemisphere)
         self.mesh.set_color(color=self.color)

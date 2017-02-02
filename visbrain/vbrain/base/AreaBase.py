@@ -3,12 +3,10 @@ import warnings
 import os, sys
 
 import numpy as np
-from vispy import app, visuals, scene
 from vispy.geometry.isosurface import isosurface
-import vispy.visuals.transforms as vist
 
+from .visuals import BrainMesh
 from ..utils import *
-from ..visuals import BrainMesh
 
 # warnings.filterwarnings('ignore', r'with ndim')
 __all__ = ['AreaBase']
