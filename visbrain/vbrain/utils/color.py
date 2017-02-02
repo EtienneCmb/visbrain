@@ -95,24 +95,28 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         cmap: string, optional, (def: inferno)
             Matplotlib colormap
 
-        clim: list, optional, (def: None)
-            List of two float in order to control minimum / maximum from which
-            values are peaking.
+        clim: tuple/list, optional, (def: None)
+            Limit of the colormap. The clim parameter must be a tuple / list
+            of two float number each one describing respectively the (min, max)
+            of the colormap. Every values under clim[0] or over clim[1] will
+            peaked.
 
         alpha: float, optional, (def: 1.0)
-            The opacity
+            The opacity to use. The alpha parameter must be between 0 and 1.
 
         vmin: float, optional, (def: None)
-            Minimum of the colormap
-
-        vmax: float, optional, (def: None)
-            Maximum of the colormap
+            Threshold from which every color will have the color defined using
+            the under parameter bellow.
 
         under: tuple/string, optional, (def: 'dimgray')
-            Matplotlib color under vmin
+            Matplotlib color for values under vmin.
+
+        vmax: float, optional, (def: None)
+            Threshold from which every color will have the color defined using
+            the over parameter bellow.
 
         over: tuple/string, optional, (def: 'darkred')
-            Matplotlib color over vmax
+            Matplotlib color for values over vmax.
 
         faces_render: boll, optional, (def: False)
             Precise if the render should be applied to faces
@@ -121,53 +125,80 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         color: array
             Array of RGBA colors
     """
-    # Default clim :
-    colim = [None, None]
-
-    # Check the limit of the colorbar:
-    if (clim is None) or (clim == (None, None)):
+    # ================== Check input argument types ==================
+    # Force data to be an array :
+    x = np.array(x)
+    # Check clim :
+    if (clim is None) or (clim is (None, None)):
         clim = (x.min(), x.max())
     else:
-        if not isinstance(clim, list):
-            clim = list(clim)
+        clim = list(clim)
         if len(clim) is not 2:
-            raise ValueError("The length of the climit must be 2 (min, max)")
+            raise ValueError("The length of the clim must be 2: (min, max)")
         else:
             if clim[0] is None:
                 clim[0] = x.min()
             if clim[1] is None:
                 clim[1] = x.max()
-
-    # Invert vmin / vmax if vmin > vmax :
-    if (vmin is not None) and (vmax is not None) and (vmax < vmin):
-        v = vmin
-        vmax = vmin
-        vmin = v
-
-    # Case management :
+    # Check (vmin, under) / (vmax, over) :
     if vmin is None:
-        colim[0] = clim[0]
+        under = None
+    elif (vmin is not None) and (vmin < clim[0]):
+        if (vmin < clim[0]) or (vmin > clim[1]):
+            vmin, under = None, None
+            warn("vmin must be between clim[0] and clim[1]. vmin will be "
+                 "ignored")
     else:
-        x = colorclip(x, clim[0], kind='under')
-        colim[0] = vmin
+        if not isinstance(under, str):
+            raise ValueError("The under parameter must be a string referring "
+                             "to a matplotlib color")
     if vmax is None:
-        colim[1] = clim[1]
+        over = None
+    elif (vmax is not None) and (vmax > clim[1]):
+        if (vmax < clim[0]) or (vmax > clim[1]):
+            vmax, over = None, None
+            warn("vmax must be between clim[0] and clim[1]. vmax will be "
+                 "ignored")
     else:
-        x = colorclip(x, clim[1], kind='over')
-        colim[1] = vmax
+        if not isinstance(over, str):
+            raise ValueError("The over parameter must be a string referring "
+                             "to a matplotlib color")
+    if (vmin is not None) and (vmax is not None) and (vmin >= vmax):
+        vmin, vmax, under, over = None, None, None, None
+        warn("vmin > vmax : both arguments have been ignored.")
+        # vmin, vmax = vmax, vmin
+    # Check alpha :
+    if (alpha < 0) or (alpha > 1):
+        warn("The alpha parameter must be >= 0 and <= 1.")
 
-    # Define the colormap :
+    # ================== Define colormap ==================
     cm = ScalarMappable(cmap=cmap)
-    cm.set_clim(vmin=colim[0], vmax=colim[1])
 
-    # Under/over the colorbar :
-    if under is not None:
+    # ================== Clip / Peak ==================
+    # Force array to clip if x is under / over clim :
+    if clim[0] < x.min():
+        x = colorclip(x, clim[0], kind='under')
+    if clim[1] > x.max():
+        x = colorclip(x, clim[1], kind='over')
+
+    # ================== Colormap (under, over) ==================
+    # Set colormap (vmin, under) :
+    if vmin is None:
+        cm.set_clim(vmin=None)
+    else:
+        cm.set_clim(vmin=vmin)
         cm.cmap.set_under(color=under)
-    if over is not None:
+    # Set colormap (vmax, over) :
+    if vmax is None:
+        cm.set_clim(vmax=None)
+    else:
+        cm.set_clim(vmax=vmax)
         cm.cmap.set_over(color=over)
 
-    # Faces render :
+    # ================== Apply colormap ==================
+    # Apply colormap to x :
     x_cmap = np.array(cm.to_rgba(x, alpha=alpha))
+    # Faces render (repeat the color to other dimensions):
     if faces_render:
         x_cmap = np.transpose(np.tile(x_cmap[..., np.newaxis],
                                       (1, 1, 3)), (0, 2, 1))
