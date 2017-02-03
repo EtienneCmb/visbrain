@@ -88,7 +88,7 @@ class base(CbarBase, transformations):
         # Here, each object is put in a root node so that each transformation
         # can be applied to all elements.
 
-        # Create a roo node :
+        # Create a root node :
         self._vbNode = Node(name='visbrain')
 
         # Make this root node the parent of others vbrain objects :

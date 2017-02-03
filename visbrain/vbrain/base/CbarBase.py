@@ -12,8 +12,11 @@ from ..utils import array2colormap, _colormap, color2vb
 
 
 class CbarBase(_colormap):
+    """Colormap / colorbar main class.
 
-    """Colormap / colorbar main class
+    This class can be used to create a colorbar. The purpose of this colorbar
+    is to visualize and control elements that need colors (like cortical
+    projection / repartition, connectivity...).
     """
 
     def __init__(self, parent, cmap='viridis', clim=None, vmin=None, vmax=None,
