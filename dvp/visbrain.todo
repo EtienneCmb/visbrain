@@ -1,3 +1,12 @@
+Big problem
+	-5 AreaBase contient des propriétés qui load systématiquement le chargement des matrices. Donc ça ralentit considérablement le lancement de l'interface. Soit on ne charge les labels que si le panel est enable, soit je sépare les labels dans une matrices et je ne charge que les labels.
+
+Fichiers restants
+	-5 SourcesTransform
+	+5 AreaBase
+	+5 CbarBase
+	+5 SourceBase
+
 doc
 	-5 Documenter chaque fonction
 	-5 Améliorer setup.py (version vispy / python)
@@ -8,6 +17,7 @@ doc
 Colorbar
 	-5 Exportation de la colorbar ne marche pas bien (si GUI reste fermée). Il faudrait faire une petite opération sur le canvas pour le mettre à jour avant le screenshot
 	-4 Ajouter dans color.py une fonction mpl_colormap(name, invert=False, mymap=None) qui retourne la liste de colorbar et qui teste si mymap est bien dans la liste.
+	-3 Ajouter un paramètre label pour chaque objet.
 	+5 La couleur du texte de la colorbar devrait pouvoir être fixé ou auto (en fonction de la couleur de fond)
 	+1 La gestion de la couleur ne me convient pas. Il devrait y avoir un seul object 'colorbar', dans lequel on mettrait une méthode 'add_oject()' et dans on pourrait ajouter un objet source / connectivité. Pour le moment, l'object de type cb est à l'intérieur de chaque object, donc c'est pas très pratique pour updater les valeurs. 
 	+5 La colorbar ne marche toujours pas très bien
@@ -15,34 +25,53 @@ Colorbar
 	+5 Vérifier clim dans utils/color/array2colormap
 
 Sources
-	-4 Faire une classe SourceVisual car il y a un besoin d'avoir une modulation de la lumière en fonction de la distance à la caméra + lumière spéculaire pour renforcer l'effet de boule. Avoir si il pourra être considéré comme un objet unique.
+	-3 Faire une classe SourceVisual car il y a un besoin d'avoir une modulation de la lumière en fonction de la distance à la caméra + lumière spéculaire pour renforcer l'effet de boule. A voir si il pourra être considéré comme un objet unique.
 
 Projection
 	-5 Vérifier les dernières modifs liées à la projection corticale / répartition
-	-4 Projection interne
+	-4 Projection interne à peaufiner
+	-2 Ajouter un paramètre de smoothing exponentiel + filtre gaussien sur le final
 	-1 Projection temporelle, en tenant compte de la fréquence d'échantillonage
 
 Opacité
+	-4 Il faudrait des doubles slider (G->D et D->G) pour pouvoir définir n'importe quel slice.
 	-4 Configurer les slices pour les Areas.
-	-3 Il faudrait des doubles slider (G->D et D->G) pour pouvoir définir n'importe quel slice.
 	+5 Mettre les fonction coronale... dans uiAtlas
 
 Structures internes
+	-5 Faire une seule fonction permettant de plotter (là on sait pas par où ça passe...)
+	-5 Virer les Load() dans properties qui foutent la merde. Ajouter une fonction reload.
+	-5 Améliorer _get_vertices() dans AreaBase + de manière générale, la gestion des structures internes pourrait largement être améliorée.
+	-4 Dans la couleur renseignée, posibilité de mettre une cmap (si la couleur rentrée est dans la liste de cmap mpl, set cmap paramètre).
 	-4 Bug dans les structures internes
 	-3 Structures internes HD
 
 
 Connectivity
+	-2 Modulation de la lumière
+	-1 C'est obligé de tracer des lignes droites?
 	+5 Il faut arriver à chopper les min / max de data connect et le mettre dans _MinMax()
 	+3 Renomer ConnectivityBase -> ConnectBase
 	+5 Fixer le problem de clim avec la connectivité (exemple 4)
 
 GUI
-	-3 Montrer azimuth/elevation lors de rotation
+	-5 Bug dans le panel colormap les radiobuttons de sources reste désactivé.
+	-3 Onglets :
+		-3 Lien vers doc (html ou pdf?)
+		-3 Navigations directe vers les différents panels
+		-3 "A propos"
+	-2 Montrer azimuth/elevation lors de rotation
 	+3 Montrer message erreur
 	+5 Ajouter la compatibilité avec du clim
 
+Colormap
+	-3 Ajouter un paramètre extend (bool) pour dire si on doit couper la colorbar à clim
+	-3 Ajouter un paramètre clip pour forcer ou non le clip
+
 Shortcuts
+	-5 Les toggle de visiblité ne fonctionneront pas si la source n'est pas présente. S'appuyer sur le nom du noeud.
+	-3 Ajouter les nouveaux shortcuts à la GUI
+	-1 Bouger le panel shortcuts vers une nouvelle fenêtre
 	+5 Add some shortcuts
 
 
