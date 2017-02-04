@@ -1,68 +1,82 @@
+"""
+"""
+
 from warnings import warn
 import numpy as np
 
 from ...utils import slider2opacity, array2colormap, normalize
 
-class SourcesTransform(object):
 
-    """docstring for SourcesTransform
+class SourcesTransform(object):
+    """docstring for SourcesTransform.
     """
 
     def __init__(self, t_radius=10.0, **kwargs):
+        """Init."""
         self.radius = t_radius
         self.current_mask = None
 
-
-    # ***************************************************************
-    # ***************************************************************
+    # ======================================================================
     # DISPLAY
-    # ***************************************************************
-    # ***************************************************************
+    # ======================================================================
     def s_display(self, select='all'):
-        """Choose which elements to display
+        """Choose which part of sources to display.
+
+        Kargs:
+            select: string, optional, (def: 'all')
+                Sources selection to display. Use 'all' or 'none' to display
+                respectively all or none of the sources, 'left' or 'right' for
+                sources in the left or right hemisphere or 'inside' / 'outside'
+                for sources that are inside or outide the brain.
         """
-
-        # All/None :
+        # Display either All / None :
         if select in ['all', 'none']:
-            if select == 'all': self.sources.data.mask = False
-            elif select =='none': self.sources.data.mask = True
+            if select == 'all':
+                self.sources.data.mask = False
+            elif select == 'none':
+                self.sources.data.mask = True
 
-        # Left/Right hemisphere :
+        # Display sources that are either in the Left / Right hemisphere :
         elif select in ['left', 'right']:
-            # Find where x is either > or < :
-            if select == 'left': idx = self.sources.xyz[:, 0] >= 0
-            elif select == 'right': idx = self.sources.xyz[:, 0] <= 0
+            # Find where x is either >= or =< :
+            if select == 'left':
+                idx = self.sources.xyz[:, 0] >= 0
+            elif select == 'right':
+                idx = self.sources.xyz[:, 0] <= 0
             # Update data mask :
             self.sources.data.mask[idx] = True
             self.sources.data.mask[np.invert(idx)] = False
 
+        # Display sources that are either in the inside / outside the brain :
         elif select in ['inside', 'outside']:
+            # Get the number of sources :
             N = len(self.sources)
+            # Display the progress bar :
             self.progressbar.show()
+            # Create an empty mask :
+            mask = np.zeros_like(self.sources.data.mask)
+            # Loop over sources to find if it's inside :
+            for k, i in enumerate(self.sources):
+                # Update progress bar :
+                self.progressbar.setValue(100*k/N)
+                # Find if it's inside :
+                mask[k] = self._isInside(self.atlas.vert, i, contribute=False)
+            # Set mask according to inside / outside :
             if select == 'inside':
-                for k, i in enumerate(self.sources):
-                    self.progressbar.setValue(100*k/N)
-                    self.sources.data.mask[k] = ~self._isInside(self.atlas.vert, i, contribute=False)
+                self.sources.data.mask = np.invert(mask)
             elif select == 'outside':
-                for k, i in enumerate(self.sources):
-                    self.progressbar.setValue(100*k/N)
-                    self.sources.data.mask[k] = self._isInside(self.atlas.vert, i, contribute=False)
+                self.sources.data.mask = mask
+            # Finally, hide the progressbar :
             self.progressbar.hide()
 
-        # Finally update data :
+        # Finally update data sources and text :
         self.sources.update()
         self.sources.text_update()
 
-
-    # ***************************************************************
-    # ***************************************************************
+    # ======================================================================
     # PROJECTIONS
-    # ***************************************************************
-    # ***************************************************************
-
-    # ________________ MAIN FUNCTIONS ________________
-
-    def cortical_projection(self):
+    # ======================================================================
+    def _cortical_projection(self):
         """Project sources activity on the surface
         """
         if self.sources.xyz is not None:
@@ -75,7 +89,8 @@ class SourcesTransform(object):
                 nv = vertices.shape[0]
             # Get data and proportional mask :
             prop, mask, smask = self._get_mask(nv, vertices, self.sources.xyz,
-                                               self.sources.data, set_to=1, contribute=False)
+                                               self.sources.data, set_to=1,
+                                               contribute=False)
             # Divide the mask by the number of contributed sources :
             cort_mask = np.divide(mask, prop)
             # Rescale cortical mask data :
@@ -92,12 +107,13 @@ class SourcesTransform(object):
                 self.cb.cbupdate(cort_mask[non_zero], **self.sources._cb, label=self.cb['label'],
                                  fontsize=self.cb['fontsize'])
         else:
-            warn("No sources detected. Use s_xyz input parameter to define source's coordinates")
+            warn("No sources detected. Use s_xyz input parameter to define "
+                 "source's coordinates")
         self.progressbar.hide()
 
 
 
-    def cortical_repartition(self):
+    def _cortical_repartition(self):
         """
         """
         if self.sources.xyz is not None:
@@ -116,13 +132,13 @@ class SourcesTransform(object):
             self.cb.cbupdate(prop[non_zero], **self.sources._cb, label=self.cb['label'],
                              fontsize=self.cb['fontsize'])
         else:
-            warn("No sources detected. Use s_xyz input parameter to define source's coordinates")
+            warn("No sources detected. Use s_xyz input parameter to define "
+                 "source's coordinates")
         self.progressbar.hide()
 
-
-
-    # ________________ SUB VERTICES FUNCTIONS ________________
-
+    # ======================================================================
+    # SUB-FONCTIONS
+    # ======================================================================
     def _get_mask(self, nv, vert, xyz, data, set_to=0, contribute=False):
         """Create the colormap mask of data to apply to the MNI brain
         """
@@ -209,10 +225,9 @@ class SourcesTransform(object):
         # Return if it's inside :
         return isInside
 
-
-    # ________________ PROJECTION COLOR ________________
-
-
+    # ======================================================================
+    # PROJECTION COLOR
+    # ======================================================================
     def _rescale_cmap(self, cort, tomin=0, tomax=1, val=0):
         """Rescale colormap between tomin and tomax
         """

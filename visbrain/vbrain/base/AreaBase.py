@@ -143,7 +143,6 @@ class AreaBase(object):
         # Select labels :
         self._selectedLabels = self._label[self._selectedIndex]
         # Transform each color into a RGBA format :
-        print(self._color)
         self._color = [color2vb(k) for k in self._color]
         # Initialize variables :
         self._color_idx, self.vertex_colors = np.array([]), np.array([])

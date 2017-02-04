@@ -53,8 +53,8 @@ class uiSettings(object):
         self.menuFiles.addAction(exitAction)
 
         # Transform :
-        self.actionProjection.triggered.connect(self.cortical_projection)
-        self.actionRepartition.triggered.connect(self.cortical_repartition)
+        self.actionProjection.triggered.connect(self._cortical_projection)
+        self.actionRepartition.triggered.connect(self._cortical_repartition)
 
         # =============================================================
         # SETTINGS PANEL

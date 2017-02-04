@@ -27,9 +27,9 @@ class SourcesBase(_colormap):
     """
 
     def __init__(self, s_xyz=None, s_data=None, s_color='#ab4652',
-                 s_radius=0.1, s_opacity=1.0, s_radiusmin=5.0,
-                 s_radiusmax=10.0, s_edgecolor=None, s_edgewidth=0.6,
-                 s_scaling=False, s_transform=[], s_text=None,
+                 s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0,
+                 s_edgecolor=None, s_edgewidth=0.6, s_scaling=False,
+                 s_transform=[], s_text=None, s_symbol='disc',
                  s_textcolor='black', s_textsize=3, s_textshift=(0, 2, 0),
                  s_mask=None, s_maskcolor='gray', s_cmap='inferno',
                  s_cmap_clim=None, s_cmap_vmin=None, s_cmap_vmax=None,
@@ -47,9 +47,7 @@ class SourcesBase(_colormap):
         self.transform = s_transform
         self.radiusmin = s_radiusmin*1.5
         self.radiusmax = s_radiusmax*1.5
-        self._defcolor = 'slateblue'
-        self._rescale = 3.0
-        self.shading = 'smooth'
+        self.symbol = s_symbol
         self.stext = s_text
         self.stextcolor = color2vb(s_textcolor)
         self.stextsize = s_textsize
@@ -57,6 +55,9 @@ class SourcesBase(_colormap):
         self.smask = s_mask
         self.smaskcolor = color2vb(s_maskcolor)
         self.projecton = s_projecton
+        self._xyz_transformed = False
+        self._defcolor = 'slateblue'
+        self._rescale = 3.0
 
         # Initialize colorbar elements :
         _colormap.__init__(self, s_cmap, s_cmap_clim, s_cmap_vmin, s_cmap_vmax,
@@ -102,8 +103,10 @@ class SourcesBase(_colormap):
         self.xyz = self.xyz
         self.nSources = self.xyz.shape[0]
 
-        # Apply transformation to coordinates :
-        self.xyz = self.transform.map(self.xyz)[:, 0:-1]
+        # Apply transformation to coordinates (if not already transformed):
+        if not self._xyz_transformed:
+            self.xyz = self.transform.map(self.xyz)[:, 0:-1]
+            self._xyz_transformed = True
 
         # ======================== Check color ========================
         # Simple string :
@@ -228,7 +231,7 @@ class SourcesBase(_colormap):
         self.mesh = visu.Markers(name='Sources')
         self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor,
                            size=sData, scaling=self.scaling,
-                           edge_width=self.edgewidth)
+                           edge_width=self.edgewidth, symbol=self.symbol)
         # self.mesh.set_gl_state('translucent', depth_test=False,
         #                        cull_face=True)
 
@@ -247,8 +250,9 @@ class SourcesBase(_colormap):
             self.mesh.visible = True
             self.mesh.set_data(xyz, edge_color=self.edgecolor, size=sData,
                                face_color=sColor, scaling=self.scaling,
-                               edge_width=self.edgewidth)
+                               edge_width=self.edgewidth, symbol=self.symbol)
             # self.mesh.transform = self.transform
+            self.mesh.update()
         else:
             self.mesh.visible = False
 

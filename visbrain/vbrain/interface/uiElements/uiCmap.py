@@ -176,7 +176,7 @@ class uiCmap(object):
                         self._userMsg("To control the colormap of sources, "
                                       "run either the cortical\nprojection / "
                                       "repartition first.", 'warn', 10, 9)
-                        # self.cortical_projection()
+                        # self._cortical_projection()
                     # Otherwise update colormap :
                     else:
                         self.sources.cbUpdateFrom(self.cb)

@@ -21,10 +21,10 @@ class AtlasBase(object):
 
     def __init__(self, a_color=(1., 1., 1.), a_opacity=1.,
                  a_projection='internal', a_template='B1', a_hemisphere='both',
-                 a_vertices=None, a_faces=None, a_shading='smooth',
-                 a_transform=[], l_position=(100., 100., 100.),
-                 l_intensity=(1., 1., 1.), l_color=(1., 1., 1., 1.),
-                 l_coefAmbient=0.05, l_coefSpecular=0.5, **kwargs):
+                 a_vertices=None, a_faces=None, a_transform=[],
+                 l_position=(100., 100., 100.), l_intensity=(1., 1., 1.),
+                 l_color=(1., 1., 1., 1.), l_coefAmbient=0.05,
+                 l_coefSpecular=0.5, **kwargs):
         """Init."""
         # Get inputs :
         self.color = a_color
@@ -32,7 +32,6 @@ class AtlasBase(object):
         self.template = a_template
         self.projection = a_projection
         self.transform = a_transform
-        self.shading = a_shading
         self.user_vert = a_vertices
         self.user_faces = a_faces
         self.hemisphere = a_hemisphere
@@ -60,6 +59,10 @@ class AtlasBase(object):
         """Iteration over vertices."""
         for k in range(len(self)):
             yield self.vert[k, ...]
+
+    def __del__(self):
+        """Delete brain mesh."""
+        self.mesh.clean()
 
     def load(self, template='B1', vertices=None, faces=None):
         """Load the atlas to use for the interface.

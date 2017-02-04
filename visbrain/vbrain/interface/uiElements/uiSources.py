@@ -95,6 +95,8 @@ class uiSources(object):
 
     def _toggle_sources_visible(self):
         """Toggle to display / hide the brain."""
-        self.sources.mesh.visible = not self.sources.mesh.visible
-        self.sources.stextmesh.visible = not self.sources.mesh.visible
-        self.show_Sources.setChecked(self.sources.mesh.visible)
+        viz = self.sources.mesh.visible
+        self.sources.mesh.visible = not viz
+        self.sources.stextmesh.visible = not viz
+        self.show_Sources.setChecked(viz)
+        self.q_stextshow.setChecked(viz)

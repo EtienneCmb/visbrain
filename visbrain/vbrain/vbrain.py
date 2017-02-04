@@ -79,8 +79,12 @@ class vbrain(uiInit, uiElements, base, userfcn):
             Edge width of sources
 
         s_scaling: bool, (def: True)
-            If s_render is 'marker', control if sources have to be scaled when
-            zooming or not.
+            If set to True, marker scales when rezooming.
+
+        s_symbol: string, (def: 'disc')
+            Symbol to use for sources. Allowed style strings are: disc, arrow,
+            ring, clobber, square, diamond, vbar, hbar, cross, tailed_arrow, x,
+            triangle_up, triangle_down, and star.
 
         s_text: list/tuple, (def: None)
             Set text to each electrode. s_text should be an iterable object,

@@ -241,7 +241,7 @@ class BrainVisual(Visual):
 
     # =======================================================================
     # =======================================================================
-    # Set data / light / camera
+    # Set data / light / camera / clean
     # =======================================================================
     # =======================================================================
     def set_data(self, vertices=None, faces=None, normals=None,
@@ -520,6 +520,17 @@ class BrainVisual(Visual):
             self.update()
         else:
             self._camera, self._camera_transform = None, None
+
+    def clean(self):
+        """Clean the mesh.
+
+        This method delete the object from GPU memory.
+        """
+        # Delete vertices / faces / colors / normals :
+        self._vertices.delete()
+        self._faces.delete()
+        self._colors.delete()
+        self._normals.delete()
 
     # =======================================================================
     # =======================================================================

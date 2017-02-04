@@ -23,11 +23,11 @@ class userfcn(object):
         * Sub-structures
     """
 
-    ###########################################################################
-    ###########################################################################
+    # =========================================================================
+    # =========================================================================
     #                             SETTINGS
-    ###########################################################################
-    ###########################################################################
+    # =========================================================================
+    # =========================================================================
     def rotate(self, fixed=None, custom=None):
         """Rotate the scene elements using a predefined or a custom rotation.
 
@@ -170,11 +170,11 @@ class userfcn(object):
         """Quit the interface."""
         self._app.quit()
 
-    ###########################################################################
-    ###########################################################################
+    # =========================================================================
+    # =========================================================================
     #                           BRAIN CONTROL
-    ###########################################################################
-    ###########################################################################
+    # =========================================================================
+    # =========================================================================
     def brain_control(self, template=None, show=True, hemisphere=None):
         """Control the type of brain to use.
 
@@ -261,11 +261,94 @@ class userfcn(object):
                 eval('self.q_' + reflect_on + '.setChecked(True)')
         self._light_reflection()
 
-    ###########################################################################
-    ###########################################################################
+    # =========================================================================
+    # =========================================================================
     #                              SOURCES
-    ###########################################################################
-    ###########################################################################
+    # =========================================================================
+    # =========================================================================
+    def sources_data(self, data, color='#ab4652', symbol='disc', radiusmin=5.,
+                     radiusmax=10., edgecolor=None, edgewidth=0.6,
+                     scaling=False, opacity=1.0, mask=None, maskcolor='gray'):
+        """Set data to sources and control source's properties.
+
+        Args
+            data: array
+                Vector of data for each source. Le length of this vector must
+                be same as the number of sources.
+
+        Kargs:
+            color: string/list/ndarray, optional, (def: '#ab4652')
+                Color of each source sphere. If s_color is a single string,
+                all sphere will have the same color. If it's' a list of
+                strings, the length must be N. Alternatively, s_color can be a
+                (N, 3) RGB or (N, 4) RGBA colors.
+
+            symbol: string, optional, (def: 'disc')
+                Symbol to use for sources. Allowed style strings are: disc,
+                arrow, ring, clobber, square, diamond, vbar, hbar, cross,
+                tailed_arrow, x, triangle_up, triangle_down, and star.
+
+            radiusmin/radiusmax: int/float, optional, (def: 5.0/10.0)
+                Define the minimum and maximum source's possible radius. By
+                default if all sources have the same value, the radius will be
+                radiusmin.
+
+            edgecolor: string/list/ndarray, optional, (def: None)
+                Add an edge to sources
+
+            edgewidth: float, optional, (def: 0.4)
+                Edge width of sources
+
+            scaling: bool, optional, (def: True)
+                If set to True, marker scales when rezooming.
+
+            opacity: int/float, optional, (def: 1.0)
+                Transparency of all sources. Must be between 0 and 1.
+
+            mask: ndarray, optional, (def: None)
+                Vector of boolean values, with the same length as the length of
+                xyz. Use this parameter to mask some sources but keep it
+                displayed.
+
+            maskcolor: list/tuple, optional, (def: 'gray')
+                Color of masked sources when projected on surface.
+
+        Example:
+            >>> # Define a vbrain instance with 10 random sources:
+            >>> vb = vbrain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Define some random data :
+            >>> data = 100 * np.random.rand(10)
+            >>> # Define some color :
+            >>> color = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
+            >>> # Set data and properties :
+            >>> vb.sources_data(data=data, symbol='x',
+            >>>                 radiusmin=1., radiusmax=20., color=color,
+            >>>                 edgecolor='orange', edgewidth=2)
+            >>> # Show the GUI :
+            >>> vb.show()
+        """
+        # Update only if sources are already plotted :
+        if self.sources.xyz is not None:
+            # Get inputs :
+            self.sources.data = data
+            self.sources.color = color
+            self.sources.edgecolor = color2vb(edgecolor)
+            self.sources.edgewidth = edgewidth
+            self.sources.alpha = opacity
+            self.sources.scaling = scaling
+            self.sources.radiusmin = radiusmin*1.5
+            self.sources.radiusmax = radiusmax*1.5
+            self.sources.symbol = symbol
+            self.sources.smask = mask
+            self.sources.smaskcolor = color2vb(maskcolor)
+
+            # Check arguments and update plot:
+            self.sources.prepare2plot()
+            self.sources.update()
+        else:
+            raise ValueError("No sources detected. Please, add some sources "
+                             "before trying to update data")
+
     def sources_opacity(self, alpha=1., show=True):
         """Set the level of transparency of sources.
 
@@ -293,17 +376,110 @@ class userfcn(object):
         self.sources.update()
         self.sources.mesh.visible = show
 
-    ###########################################################################
-    ###########################################################################
-    #                            CONNECTIVITY
-    ###########################################################################
-    ###########################################################################
+    def cortical_projection(self, project_on='surface', mask=None):
+        """Project sources activity.
 
-    ###########################################################################
-    ###########################################################################
+        This method can be used to project the sources activity either onto the
+        brain or on deep areas (like gyrus or brodmann areas).
+
+        Kargs:
+            project_on: string, optional, (def: 'surface')
+                Define on which object to project the sources activity. Chose
+                either 'surface' for projecting the sources activity onto the
+                brain or 'deep' to project on deep areas (if defined).
+
+        Example:
+            >>> ...
+
+        See also:
+            area_plot, sources_colormap
+        """
+        if project_on in ['surface', 'deep']:
+            self.sources.projecton = project_on
+        else:
+            raise ValueError("The project_on parameter must be either "
+                             "'surface' or 'deep'")
+
+        # Run the corticale projection :
+        self._cortical_projection()
+
+    def cortical_repartition(self):
+        """Get the number of contributing sources per vertex.
+
+        Kargs:
+
+        Example:
+            >>>
+        """
+        self._cortical_repartition()
+
+    def sources_colormap(self, cmap=None, clim=None, vmin=None,
+                         under=None, vmax=None, over=None):
+        """Change the colormap of cortical projection.
+
+        This method can be used to update paramaters of the colormap. But it's
+        only going to work if the source's activity has been projected (using
+        the cortical projection or repartition).
+
+        Kargs:
+            cmap: string, optional, (def: inferno)
+                Matplotlib colormap
+
+            clim: tuple/list, optional, (def: None)
+                Limit of the colormap. The clim parameter must be a tuple /
+                list of two float number each one describing respectively the
+                (min, max) of the colormap. Every values under clim[0] or over
+                clim[1] will peaked.
+
+            alpha: float, optional, (def: 1.0)
+                The opacity to use. The alpha parameter must be between 0 and
+                1.
+
+            vmin: float, optional, (def: None)
+                Threshold from which every color will have the color defined
+                using the under parameter bellow.
+
+            under: tuple/string, optional, (def: 'dimgray')
+                Matplotlib color for values under vmin.
+
+            vmax: float, optional, (def: None)
+                Threshold from which every color will have the color defined
+                using the over parameter bellow.
+
+            over: tuple/string, optional, (def: 'darkred')
+                Matplotlib color for values over vmax.
+
+        Example:
+            >>> # Define a vbrain instance with 10 random sources:
+            >>> vb = vbrain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Define some random data :
+            >>> data = 100 * np.random.rand(10)
+            >>> # Set data and properties :
+            >>> vb.sources_data(data=data)
+            >>> # Run the cortical projection :
+            >>> vb.cortical_projection()
+            >>> # Set colormap proprties :
+            >>> vb.sources_colormap(cmap='Spectral', vmin=20, vmax=60,
+            >>>                     under='orange', over='black', clim=(10,80))
+            >>> # Show the GUI :
+            >>> vb.show()
+
+        See also:
+            cortical_projection, cortical_repartition
+        """
+        pass
+
+    # =========================================================================
+    # =========================================================================
+    #                            CONNECTIVITY
+    # =========================================================================
+    # =========================================================================
+
+    # =========================================================================
+    # =========================================================================
     #                           SUB-STRUCTURES
-    ###########################################################################
-    ###########################################################################
+    # =========================================================================
+    # =========================================================================
     def area_plot(self, selection=[], subdivision='brod'):
         """Select some area to plot.
 

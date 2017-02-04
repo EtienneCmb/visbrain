@@ -40,19 +40,30 @@ Light reflection
 
 Sources functions
 ^^^^^^^^^^^^^^^^^
+
+*IMAGE ILLUSTRATIVE*
+
+
+Set data
+~~~~~~~~
+
+.. automethod:: vbrain.user.userfcn.sources_data
+
 Opacity
 ~~~~~~~
 .. automethod:: vbrain.user.userfcn.sources_opacity
 
-*IMAGE ILLUSTRATIVE*
-
 Cortical projection
 ~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.base.transformations.SourcesTransform.SourcesTransform.cortical_projection
+.. automethod:: vbrain.user.userfcn.cortical_projection
 
 Cortical repartition
 ~~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.base.transformations.SourcesTransform.SourcesTransform.cortical_repartition
+.. automethod:: vbrain.user.userfcn.cortical_repartition
+
+Colormap
+~~~~~~~~
+.. automethod:: vbrain.user.userfcn.sources_colormap
 
 Connectivity functions
 ^^^^^^^^^^^^^^^^^^^^^^

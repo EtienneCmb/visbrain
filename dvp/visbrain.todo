@@ -1,8 +1,11 @@
 Big problem
 	-5 AreaBase contient des propriétés qui load systématiquement le chargement des matrices. Donc ça ralentit considérablement le lancement de l'interface. Soit on ne charge les labels que si le panel est enable, soit je sépare les labels dans une matrices et je ne charge que les labels.
+	-5 Vérifier partout où il y a des properties
 
 Fichiers restants
 	-5 SourcesTransform
+	-5 AtlasTransfrom
+	-5 transformations
 	+5 AreaBase
 	+5 CbarBase
 	+5 SourceBase
@@ -25,6 +28,7 @@ Colorbar
 	+5 Vérifier clim dans utils/color/array2colormap
 
 Sources
+	-5 Ré-arranger le SourceBase càd découper en fonction, en incluant le checking d'args. Ensuite
 	-3 Faire une classe SourceVisual car il y a un besoin d'avoir une modulation de la lumière en fonction de la distance à la caméra + lumière spéculaire pour renforcer l'effet de boule. A voir si il pourra être considéré comme un objet unique.
 
 Projection
@@ -42,6 +46,8 @@ Structures internes
 	-5 Faire une seule fonction permettant de plotter (là on sait pas par où ça passe...)
 	-5 Virer les Load() dans properties qui foutent la merde. Ajouter une fonction reload.
 	-5 Améliorer _get_vertices() dans AreaBase + de manière générale, la gestion des structures internes pourrait largement être améliorée.
+	-5 Ajouter une méthode area_reference() qui affiche un pandas DataFrame avec toutes les structures possibles.
+	-4 Ajouter des paramètres d'entrées a_ pour contrôler les strustures
 	-4 Dans la couleur renseignée, posibilité de mettre une cmap (si la couleur rentrée est dans la liste de cmap mpl, set cmap paramètre).
 	-4 Bug dans les structures internes
 	-3 Structures internes HD
@@ -56,6 +62,7 @@ Connectivity
 
 GUI
 	-5 Bug dans le panel colormap les radiobuttons de sources reste désactivé.
+	-5 Dans le panel Sources, ajouter les radiobutton All et None et linker avec s_display()
 	-3 Onglets :
 		-3 Lien vers doc (html ou pdf?)
 		-3 Navigations directe vers les différents panels
