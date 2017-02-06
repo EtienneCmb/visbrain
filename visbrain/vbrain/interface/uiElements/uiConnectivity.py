@@ -11,7 +11,7 @@ class uiConnectivity(object):
     def __init__(self,):
         """Init."""
         # Show/hide connectivity :
-        self.uiConnectShow.clicked.connect(self._ShowHide)
+        self.uiConnectShow.clicked.connect(self._toggle_connect_visible)
 
         # Line width :
         self.view.canvas.context.set_line_width(self._lw)
@@ -119,5 +119,7 @@ class uiConnectivity(object):
 
     def _toggle_connect_visible(self):
         """Toggle to display / hide the brain."""
-        self.connect.mesh.visible = not self.connect.mesh.visible
-        self.uiConnectShow.setChecked(self.connect.mesh.visible)
+        viz = not self.connect.mesh.visible
+        self.connect.mesh.visible = viz
+        self.uiConnectShow.setChecked(viz)
+        self.toolBox_5.setEnabled(viz)

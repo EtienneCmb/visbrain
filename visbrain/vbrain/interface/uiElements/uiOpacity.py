@@ -15,6 +15,7 @@ __all__ = ['uiOpacity']
 
 
 class uiOpacity(object):
+
     """Main class for objects slices / opacity managment."""
 
     def __init__(self,):
@@ -25,18 +26,34 @@ class uiOpacity(object):
         self._slmin = self.OpacitySlider.minimum()
         self._slmax = self.OpacitySlider.maximum()
 
-        # Slice :
-        # Set maximum / minimum for each slice :
+        # ============================ Slice ============================
         minfact = 1.2
+        # Set maximum / minimum for each slice :
+        # Across x-axis :
         self.xSlices.setMinimum(self.atlas.vert[..., 0].min()*minfact)
         self.xSlices.setMaximum(self.atlas.vert[..., 0].max()*minfact)
+        self.xSlices_2.setMinimum(self.atlas.vert[..., 0].min()*minfact)
+        self.xSlices_2.setMaximum(self.atlas.vert[..., 0].max()*minfact)
+        # Across y-axis :
         self.ySlices.setMinimum(self.atlas.vert[..., 1].min()*minfact)
         self.ySlices.setMaximum(self.atlas.vert[..., 1].max()*minfact)
+        self.ySlices_2.setMinimum(self.atlas.vert[..., 1].min()*minfact)
+        self.ySlices_2.setMaximum(self.atlas.vert[..., 1].max()*minfact)
+        # Across z-axis :
         self.zSlices.setMinimum(self.atlas.vert[..., 2].min()*minfact)
         self.zSlices.setMaximum(self.atlas.vert[..., 2].max()*minfact)
+        self.zSlices_2.setMinimum(self.atlas.vert[..., 2].min()*minfact)
+        self.zSlices_2.setMaximum(self.atlas.vert[..., 2].max()*minfact)
+        # Set functions :
+        # Across x-axis :
         self.xSlices.sliderMoved.connect(self._fcn_xyzSlice)
+        self.xSlices_2.sliderMoved.connect(self._fcn_xyzSlice)
+        # Across y-axis :
         self.ySlices.sliderMoved.connect(self._fcn_xyzSlice)
+        self.ySlices_2.sliderMoved.connect(self._fcn_xyzSlice)
+        # Across z-axis :
         self.zSlices.sliderMoved.connect(self._fcn_xyzSlice)
+        self.zSlices_2.sliderMoved.connect(self._fcn_xyzSlice)
 
     def _getOpacitySlider(self, tomin=0., tomax=1.):
         """Get and normalize the opacity slider value.
@@ -126,20 +143,22 @@ class uiOpacity(object):
         zsym = '<' if self.zInvert.isChecked() else '>'
 
         # Get slide positions :
-        xsl, ysl, zsl = self.xSlices.value(
-        ), self.ySlices.value(), self.zSlices.value()
+        xsl1, xsl2 = self.xSlices.value(), - self.xSlices_2.value()
+        ysl1, ysl2 = - self.ySlices.value(), self.ySlices_2.value()
+        zsl1, zsl2 = - self.zSlices.value(), self.zSlices_2.value()
 
         # Define a default string for all objects :
-        formatstr = "np.array(({obj}[..., 0] {xsym} xsl) | ({obj}[..., 1] " + \
-            "{ysym} ysl) | ({obj}[..., 2] {zsym} zsl))"
+        formatstr = "np.array(" + \
+            "({obj}[..., 0] < xsl1) | ({obj}[..., 0] > xsl2) | " + \
+            "({obj}[..., 1] > ysl1) | ({obj}[..., 1] < ysl2) | " + \
+            "({obj}[..., 2] > zsl1) | ({obj}[..., 2] < zsl2))"
 
         # =================== Brain slice ===================
         if self.o_Brain.isChecked():
             # Reset mask :
             self.atlas.mask = np.zeros_like(self.atlas.mask)
             # Find vertices to remove :
-            tohide = eval(formatstr.format(obj='self.atlas.vert', xsym=xsym,
-                                           ysym=ysym, zsym=zsym))
+            tohide = eval(formatstr.format(obj='self.atlas.vert'))
             # Update mask :
             self.atlas.mask[tohide] = True
             # Get vertices and color :

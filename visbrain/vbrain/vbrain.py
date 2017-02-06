@@ -207,7 +207,7 @@ class vbrain(uiInit, uiElements, base, userfcn):
         """Init."""
         # ====================== ui Arguments ======================
         # Background color (for the main and the colorbar canvas) :
-        bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
+        bgcolor = kwargs.get('ui_bgcolor', (0.098, 0.098, 0.098))
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
         self._extension = kwargs.get('ui_extension', '.png')

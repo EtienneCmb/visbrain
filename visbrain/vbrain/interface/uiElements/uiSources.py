@@ -17,7 +17,9 @@ class uiSources(object):
     def __init__(self,):
         """Init."""
         # Sources :
-        self.show_Sources.clicked.connect(self._fcn_disp_sources)
+        self.show_Sources.clicked.connect(self._toggle_sources_visible)
+        self.s_uiAll.clicked.connect(self._fcn_left_right_H)
+        self.s_uiNone.clicked.connect(self._fcn_left_right_H)
         self.s_LeftH.clicked.connect(self._fcn_left_right_H)
         self.s_RightH.clicked.connect(self._fcn_left_right_H)
         self.s_Inside.clicked.connect(self._fcn_inside_outside_H)
@@ -42,21 +44,15 @@ class uiSources(object):
         self.y_text.valueChanged.connect(self._fcn_textupdate)
         self.z_text.valueChanged.connect(self._fcn_textupdate)
 
-    def _fcn_disp_sources(self):
-        """Display sources either All or None of the sources.
-
-        This method call the s_display() source's transformation method.
-        """
-        if self.show_Sources.isChecked():
-            self.s_display(select='all')
-        else:
-            self.s_display(select='none')
-
     def _fcn_left_right_H(self):
         """Display sources either in the Left or Right hemisphere.
 
         This method call the s_display() source's transformation method.
         """
+        if self.s_uiAll.isChecked():
+            self.s_display(select='all')
+        if self.s_uiNone.isChecked():
+            self.s_display(select='none')
         if self.s_LeftH.isChecked():
             self.s_display(select='left')
         if self.s_RightH.isChecked():
@@ -95,8 +91,9 @@ class uiSources(object):
 
     def _toggle_sources_visible(self):
         """Toggle to display / hide the brain."""
-        viz = self.sources.mesh.visible
-        self.sources.mesh.visible = not viz
-        self.sources.stextmesh.visible = not viz
+        viz = not self.sources.mesh.visible
+        self.sources.mesh.visible = viz
+        self.sources.stextmesh.visible = viz
         self.show_Sources.setChecked(viz)
         self.q_stextshow.setChecked(viz)
+        self.toolBox.setEnabled(viz)

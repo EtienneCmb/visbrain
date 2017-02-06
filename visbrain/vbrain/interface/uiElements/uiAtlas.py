@@ -17,7 +17,7 @@ class uiAtlas(object):
     def __init__(self):
         """Init."""
         # Brain control :
-        self.show_MNI.clicked.connect(self._brain_control)
+        self.show_MNI.clicked.connect(self._toggle_brain_visible)
         self.Both_only.clicked.connect(self._brain_control)
         self.Lhemi_only.clicked.connect(self._brain_control)
         self.Rhemi_only.clicked.connect(self._brain_control)
@@ -97,5 +97,7 @@ class uiAtlas(object):
 
     def _toggle_brain_visible(self):
         """Toggle to display / hide the brain."""
-        self.atlas.mesh.visible = not self.atlas.mesh.visible
-        self.show_MNI.setChecked(self.atlas.mesh.visible)
+        viz = not self.atlas.mesh.visible
+        self.atlas.mesh.visible = viz
+        self.show_MNI.setChecked(viz)
+        self.toolBox_2.setEnabled(viz)

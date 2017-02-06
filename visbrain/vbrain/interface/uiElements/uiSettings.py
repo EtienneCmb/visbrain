@@ -26,7 +26,7 @@ class uiSettings(object):
         # =============================================================
         self.progressBar.hide()
 
-        # --------------- FILE ---------------
+        # ------------------------------- FILE -------------------------------
         # Screenshot :
         screenshot = QAction("Screenshot", self)
         screenshot.setShortcut("Ctrl+N")
@@ -51,6 +51,13 @@ class uiSettings(object):
         exitAction.setStatusTip('Exit application')
         exitAction.triggered.connect(qApp.quit)
         self.menuFiles.addAction(exitAction)
+
+        # ------------------------------- FILE -------------------------------
+        self.actionUi_settings.triggered.connect(self._fcn_panSettingsViz)
+        self.actionMNI.triggered.connect(self._fcn_panSettingsViz)
+        self.actionSources.triggered.connect(self._fcn_panSettingsViz)
+        self.actionConnectivity.triggered.connect(self._fcn_panSettingsViz)
+        self.actionColormap.triggered.connect(self._fcn_panSettingsViz)
 
         # Transform :
         self.actionProjection.triggered.connect(self._cortical_projection)
@@ -107,7 +114,10 @@ class uiSettings(object):
         # =============================================================
         # ERROR // WARNING MESSAGES
         # =============================================================
+        # Hide Error / warning wessage :
         self.UserMsgBox.setVisible(False)
+        # Hide rotation panel :
+        self.userRotationPanel.setVisible(False)
 
     # =============================================================
     # MENU & FILE MANAGMENT
@@ -133,6 +143,31 @@ class uiSettings(object):
         # filedata = self.text.toPlainText()
         # f.write(filedata)
         # f.close()
+
+    def _fcn_panSettingsViz(self):
+        """
+        """
+        # Ui settings :
+        if self.actionUi_settings.isChecked():
+            self.QuickSettings.setCurrentIndex(0)
+            self.q_widget.setVisible(True)
+            self.actionUi_settings.setChecked(False)
+        elif self.actionMNI.isChecked():
+            self.QuickSettings.setCurrentIndex(1)
+            self.q_widget.setVisible(True)
+            self.actionMNI.setChecked(False)
+        elif self.actionSources.isChecked():
+            self.QuickSettings.setCurrentIndex(2)
+            self.q_widget.setVisible(True)
+            self.actionSources.setChecked(False)
+        elif self.actionConnectivity.isChecked():
+            self.QuickSettings.setCurrentIndex(3)
+            self.q_widget.setVisible(True)
+            self.actionConnectivity.setChecked(False)
+        elif self.actionColormap.isChecked():
+            self.QuickSettings.setCurrentIndex(4)
+            self.q_widget.setVisible(True)
+            self.actionColormap.setChecked(False)
 
     # =============================================================
     # GUI
@@ -408,3 +443,18 @@ class uiSettings(object):
             # Set a pyqt timer to delayed when the message is hide :
             timer = QtCore.QTimer()
             timer.singleShot(during * 1000, _delayedMsg)
+
+    def _fcn_userRotation(self):
+        """Display rotation informations.
+
+        This function display rotation informations (azimuth / elevation /
+        distance) at the bottom of the setting panel.
+        """
+        # Define and set the rotation string :
+        rotstr = 'Azimuth: {az}°, Elevation: {el}°, Distance: {di}'
+        # Get camera Azimuth / Elevation / Distance :
+        az = str(self.view.wc.camera.azimuth)
+        el = str(self.view.wc.camera.elevation)
+        di = str(round(self.view.wc.camera.distance * 100) / 100)
+        # Set the text to the box :
+        self.userRotation.setText(rotstr.format(az=az, el=el, di=di))

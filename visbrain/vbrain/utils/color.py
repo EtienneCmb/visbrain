@@ -141,8 +141,8 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
             if clim[1] is None:
                 clim[1] = x.max()
     # Check (vmin, under) / (vmax, over) :
-    if vmin is None:
-        under = None
+    if (vmin is None) or (under is None):
+        vmin, under = None, None
     elif (vmin is not None) and (vmin < clim[0]):
         if (vmin < clim[0]) or (vmin > clim[1]):
             vmin, under = None, None
@@ -152,8 +152,8 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         if not isinstance(under, (str, tuple)):
             raise ValueError("The under parameter must be a string referring "
                              "to a matplotlib color or a (R, G, B) tuple.")
-    if vmax is None:
-        over = None
+    if (vmax is None) or (over is None):
+        vmax, over = None, None
     elif (vmax is not None) and (vmax > clim[1]):
         if (vmax < clim[0]) or (vmax > clim[1]):
             vmax, over = None, None

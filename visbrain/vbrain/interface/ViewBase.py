@@ -82,7 +82,8 @@ class vbShortcuts(object):
 
             :event: the trigger event
             """
-            pass
+            # Hide the rotation panel :
+            self.userRotationPanel.setVisible(False)
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
@@ -98,7 +99,8 @@ class vbShortcuts(object):
 
             :event: the trigger event
             """
-            pass
+            # Display the rotation panel and set informations :
+            self._fcn_userRotation()
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
@@ -106,7 +108,9 @@ class vbShortcuts(object):
 
             :event: the trigger event
             """
-            pass
+            # Display the rotation panel :
+            self._fcn_userRotation()
+            self.userRotationPanel.setVisible(True)
 
     def shortcuts_panel(self):
         """Display or hide the shortcuts panel."""
