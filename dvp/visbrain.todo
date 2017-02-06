@@ -3,9 +3,9 @@ Big problem
 	-5 Vérifier partout où il y a des properties
 
 Fichiers restants
-	-5 SourcesTransform
 	-5 AtlasTransfrom
-	-5 transformations
+	+5 transformations
+	+5 SourcesTransform
 	+5 AreaBase
 	+5 CbarBase
 	+5 SourceBase
@@ -29,7 +29,7 @@ Colorbar
 
 Sources
 	-5 Ré-arranger le SourceBase càd découper en fonction, en incluant le checking d'args. Ensuite
-	-3 Faire une classe SourceVisual car il y a un besoin d'avoir une modulation de la lumière en fonction de la distance à la caméra + lumière spéculaire pour renforcer l'effet de boule. A voir si il pourra être considéré comme un objet unique.
+	-2 Faire une classe SourceVisual car il y a un besoin d'avoir une modulation de la lumière en fonction de la distance à la caméra + lumière spéculaire pour renforcer l'effet de boule. A voir si il pourra être considéré comme un objet unique.
 
 Projection
 	-5 Vérifier les dernières modifs liées à la projection corticale / répartition
@@ -38,8 +38,9 @@ Projection
 	-1 Projection temporelle, en tenant compte de la fréquence d'échantillonage
 
 Opacité
-	-4 Il faudrait des doubles slider (G->D et D->G) pour pouvoir définir n'importe quel slice.
+	-5 Slice sur opacité ou sur les données??????
 	-4 Configurer les slices pour les Areas.
+	+4 Il faudrait des doubles slider (G->D et D->G) pour pouvoir définir n'importe quel slice.
 	+5 Mettre les fonction coronale... dans uiAtlas
 
 Structures internes
@@ -61,13 +62,14 @@ Connectivity
 	+5 Fixer le problem de clim avec la connectivité (exemple 4)
 
 GUI
-	-5 Bug dans le panel colormap les radiobuttons de sources reste désactivé.
-	-5 Dans le panel Sources, ajouter les radiobutton All et None et linker avec s_display()
+	-5 Compatibilité PyQt5?
 	-3 Onglets :
 		-3 Lien vers doc (html ou pdf?)
-		-3 Navigations directe vers les différents panels
 		-3 "A propos"
-	-2 Montrer azimuth/elevation lors de rotation
+		+3 Navigations directe vers les différents panels
+	+2 Montrer azimuth/elevation lors de rotation
+	+5 Dans le panel Sources, ajouter les radiobutton All et None et linker avec s_display()
+	+5 Bug dans le panel colormap les radiobuttons de sources reste désactivé.
 	+3 Montrer message erreur
 	+5 Ajouter la compatibilité avec du clim
 
