@@ -8,13 +8,18 @@ from ...utils import slider2opacity, array2colormap, normalize
 
 
 class SourcesTransform(object):
+
     """docstring for SourcesTransform.
     """
 
-    def __init__(self, t_radius=10.0, **kwargs):
+    def __init__(self, t_radius=10.0, t_projecton='surface', t_smooth=0.,
+                 **kwargs):
         """Init."""
-        self.radius = t_radius
+        self._tradius = t_radius
+        self._tprojecton = t_projecton
+        self._tsmooth = t_smooth
         self.current_mask = None
+        print('SMOOTH : ', self._tsmooth)
 
     # ======================================================================
     # DISPLAY
@@ -76,17 +81,32 @@ class SourcesTransform(object):
     # ======================================================================
     # PROJECTIONS
     # ======================================================================
+    def _cortical_projecton(self, projecton='surface'):
+        """Get the vertices to project sources activity or repartition."""
+        # Check the projecton parameter :
+        if projecton not in ['surface', 'deep']:
+            raise ValueError("The projecton parameter must either be 'surface'"
+                             " or 'deep'.")
+        # Project on brain surface :
+        if self.sources.projecton == 'surface':
+            nv, vertices = self.atlas._nv, self.atlas.vert
+        # Project on deep areas :
+        elif self.sources.projecton == 'deep':
+            vertices = self.area.mesh.get_vertices
+            nv = vertices.shape[0]
+
+        return vertices, nv
+
     def _cortical_projection(self):
-        """Project sources activity on the surface
+        """Project sources activity.
+
+        This function can be used to project sources activity either on surface
+        or on deep sources.
         """
         if self.sources.xyz is not None:
             self.progressbar.show()
-            # Switch between surface and deep projection :
-            if self.sources.projecton == 'surface':
-                nv, vertices = self.atlas._nv, self.atlas.vert
-            elif self.sources.projecton == 'deep':
-                vertices = self.area.mesh.get_vertices
-                nv = vertices.shape[0]
+            # Get vertices of surface / deep :
+            vertices, nv = self._cortical_projecton(self.sources.projecton)
             # Get data and proportional mask :
             prop, mask, smask = self._get_mask(nv, vertices, self.sources.xyz,
                                                self.sources.data, set_to=1,
@@ -95,32 +115,43 @@ class SourcesTransform(object):
             cort_mask = np.divide(mask, prop)
             # Rescale cortical mask data :
             nnmasked = np.invert(self.sources.smask)
-            cort_mask, non_zero = self._rescale_cmap(cort_mask, tomin=self.sources.data[nnmasked].min(),
-                                                     tomax=self.sources.data[nnmasked].max(), val=0)
+            # Get mi / max of non-masked sources :
+            nnmasked_min = self.sources.data[nnmasked].min()
+            nnmasked_max = self.sources.data[nnmasked].max()
+            # Rescale the colormap :
+            cort_mask, non_zero = self._rescale_cmap(cort_mask,
+                                                     tomin=nnmasked_min,
+                                                     tomax=nnmasked_max, val=0)
             # Save this current cmap (for colormap interaction) :
             self.current_mask = cort_mask
             self.current_non_zero = non_zero
             # Finally, set the mask to the surface :
-            self._array2cmap(cort_mask, non_zero=non_zero, smask=smask, smaskcolor=self.sources.smaskcolor)
+            self._array2cmap(cort_mask, non_zero=non_zero, smask=smask,
+                             smaskcolor=self.sources.smaskcolor)
             # Update colorbar :
             if len(cort_mask[non_zero]):
-                self.cb.cbupdate(cort_mask[non_zero], **self.sources._cb, label=self.cb['label'],
+                self.cb.cbupdate(cort_mask[non_zero], **self.sources._cb,
+                                 label=self.cb['label'],
                                  fontsize=self.cb['fontsize'])
         else:
             warn("No sources detected. Use s_xyz input parameter to define "
                  "source's coordinates")
         self.progressbar.hide()
 
-
-
     def _cortical_repartition(self):
-        """
+        """Get the number of contributing sources per vertex.
+
+        This method evaluate the number of sources that are contrbuting to each
+        vertex, either on the surface or on deep sources.
         """
         if self.sources.xyz is not None:
             self.progressbar.show()
+            # Get vertices of surface / deep :
+            vertices, nv = self._cortical_projecton(self.sources.projecton)
             # Get data and proportional mask :
-            prop, _, smask = self._get_mask(self.atlas._nv, self.atlas.vert, self.sources.xyz,
-                                            self.sources.data, set_to=0, contribute=False)
+            prop, _, smask = self._get_mask(nv, vertices, self.sources.xyz,
+                                            self.sources.data, set_to=0,
+                                            contribute=False)
             # Finally, set the mask to the surface :
             non_zero = prop != 0
             self.sources['vmin'], self.sources['vmax'] = 0, prop.max()
@@ -129,7 +160,8 @@ class SourcesTransform(object):
             self.current_mask = prop
             self.current_non_zero = non_zero
             # Update colorbar :
-            self.cb.cbupdate(prop[non_zero], **self.sources._cb, label=self.cb['label'],
+            self.cb.cbupdate(prop[non_zero], **self.sources._cb,
+                             label=self.cb['label'],
                              fontsize=self.cb['fontsize'])
         else:
             warn("No sources detected. Use s_xyz input parameter to define "
@@ -140,38 +172,100 @@ class SourcesTransform(object):
     # SUB-FONCTIONS
     # ======================================================================
     def _get_mask(self, nv, vert, xyz, data, set_to=0, contribute=False):
-        """Create the colormap mask of data to apply to the MNI brain
+        """Create the colormap maskof sources activity.
+
+        Args:
+            nv: int
+                The number of vertices.
+
+            vert: ndarray
+                The vertices.
+
+            xyz: ndarray
+                The source's coordinates.
+
+            data: ndarray
+                The source's data
+
+        Kargs:
+            set_to: int/float, optional, (def: 0)
+                Value for setting unused values.
+
+            contribute: bool, optional, (def: False)
+                Boolean value to indicate if projected source's activity have
+                to be projected on opposite hemisphere.
+
+        Returns:
+            prop: ndarray
+                Array of integers in order to count the number of contributing
+                sources per vertex.
+
+            mask: ndarray
+                Array of float containing the sum of all activitiesfor
+                contributing sources.
+
+            smasked: ndarray
+                Array of bool in order to indicate if this vertex has to be
+                masked or not.
         """
         # Define empty proportional and data mask :
-        prop = np.full((nv, 3), set_to, dtype=int)
+        prop = np.full((nv, 3), set_to, dtype=float)
         smasked = np.zeros(prop.shape, dtype=bool)
         mask = np.zeros((nv, 3), dtype=float)
 
         # Find unmasked proximal vertices for each source :
-        idxunmasked = np.where(data.mask == False)[0]
+        idxunmasked = np.where(np.invert(data.mask))[0]
         N = len(idxunmasked)
         for i, k in enumerate(idxunmasked):
             self.progressbar.setValue(100*k/N)
             # Find index :
-            idx = self._proximal_vertices(vert, xyz[k, :], self.radius, contribute=contribute)
+            idx, eucl = self._proximal_vertices(vert, xyz[k, :], self._tradius,
+                                                contribute=contribute)
+            # Smoothing :
+            # if len(eucl) and (eucl.max() is not 0):
+            #     smooth = 1-normalize(np.exp(eucl), 1-self._tsmooth, 1.)
+            #     # smooth = 1-np.sin(normalize(eucl**2, 0, np.pi/2))
+            # else:
+            #     smooth = 1.
             # Add either to prop or to masked array :
             if not self.sources.smask[k]:
-                mask[idx] += data[k]
-                prop[idx] += 1
+                mask[idx] += data[k]   # * smooth
+                prop[idx] += 1.
             else:
                 smasked[idx] = True
         return prop, mask, smasked
 
-
-
     def _proximal_vertices(self, vert, xyz, radius, contribute=False):
-        """Find vertices where the distance with xyz is under
-        radius. Use contribute to tell if a source can contribute to the
-        cortical activity from the other part of the brain.
-        Return the index of under radius vertices.
+        """Find vertices where the distance with xyz is under radius.
+
+        Arround each source we define a sphere of activity. Then, we look for
+        vertices that are contained inside this sphere.
+
+        Args:
+            vert: ndarray
+                The vertices.
+
+            xyz: ndarray
+                The source's coordinates.
+
+            radius: int
+                The radius of the sphere.
+
+            contribute: bool, optional, (def: False)
+                Boolean value to indicate if projected source's activity have
+                to be projected on opposite hemisphere.
+
+        Returns:
+            idx: ndarray
+                The index of vertices that are contained inside the sphere of
+                activity of this source.
+
+            eucl: ndarray
+                Euclidian distance between the source and vertices that are
+                only under radius.
         """
-        # Compute manually the euclidian distance (much faster because don't need
-        # the reduce function of numpy) :
+        # Compute manually the euclidian distance (much faster because don't
+        # need the reduce function of numpy) :
         x = vert[:, :, 0] - xyz[0]
         y = vert[:, :, 1] - xyz[1]
         z = vert[:, :, 2] - xyz[2]
@@ -180,15 +274,33 @@ class SourcesTransform(object):
         # Select under radius sources and those which contribute or not, to the
         # other brain hemisphere :
         if not contribute:
-            idx = np.logical_and(eucl <= radius, np.sign(vert[:, :, 0]) == np.sign(xyz[0]))
+            idx = np.logical_and(
+                eucl <= radius, np.sign(vert[:, :, 0]) == np.sign(xyz[0]))
         else:
             idx = eucl <= radius
 
-        return idx #, eucl[idx]
-
+        return idx, eucl[idx]
 
     def _closest_vertex(self, vert, xyz, contribute=False):
-        """Find the unique closest vertex from a source
+        """Find the unique closest vertex from a source.
+
+        This method is used to find if a source is inside or outside of the
+        brain [EXPERIMENTAL].
+
+        Args:
+            vert: ndarray
+                The vertices.
+
+            xyz: ndarray
+                The source's coordinates.
+
+            contribute: bool, optional, (def: False)
+                Boolean value to indicate if projected source's activity have
+                to be projected on opposite hemisphere.
+
+        Returns:
+            idx: ndarray
+                The index of the closest vertex to this source.
         """
         # Compute manually the euclidian distance (much faster) :
         x = vert[:, :, 0] - xyz[0]
@@ -198,22 +310,43 @@ class SourcesTransform(object):
 
         # Set if a source can contribute to the other part of the brain :
         if not contribute:
-            idx = np.logical_and(eucl == eucl.min(), np.sign(vert[:, :, 0]) == np.sign(xyz[0]))
+            idx = np.logical_and(
+                eucl == eucl.min(), np.sign(vert[:, :, 0]) == np.sign(xyz[0]))
         else:
             idx = eucl == eucl.min()
 
         return idx
 
-
     def _isInside(self, vert, xyz, contribute=False):
-        """Return if a source is inside the MNI brain :
+        """Find if a source is inside or outside the MNI brain.
+
+        [EXPERIMENTAL].
+
+        Args:
+            vert: ndarray
+                The vertices.
+
+            xyz: ndarray
+                The source's coordinates.
+
+            contribute: bool, optional, (def: False)
+                Boolean value to indicate if projected source's activity have
+                to be projected on opposite hemisphere.
+
+        Returns:
+            isInside: bool
+                True if the source is inside, False if it's outside.
+
+        Note:
+            For instance, this function is not really working...
         """
         # Get the index of the closest vertex :
         idx = self._closest_vertex(vert, xyz, contribute=contribute)
 
-        # Compute euclidian distance between 0 and corresponding vertex and source :
         # Euclidian distance for the closest vertex :
-        x_vert, y_vert, z_vert = vert[idx, 0][0], vert[idx, 1][0], vert[idx, 2][0]
+        x_vert = vert[idx, 0][0]
+        y_vert = vert[idx, 1][0]
+        z_vert = vert[idx, 2][0]
         eucl_vert = np.sqrt(x_vert**2 + y_vert**2 + z_vert**2)
 
         # Euclidian distance for each source :
@@ -228,20 +361,57 @@ class SourcesTransform(object):
     # ======================================================================
     # PROJECTION COLOR
     # ======================================================================
-    def _rescale_cmap(self, cort, tomin=0, tomax=1, val=0):
-        """Rescale colormap between tomin and tomax
+    def _rescale_cmap(self, cort, tomin=0., tomax=1., val=0):
+        """Rescale colormap between tomin and tomax without touching val.
+
+        Args:
+            cort: ndarray
+                The cortical mask.
+
+        Kargs:
+            tomin: int/float, optional, (def: 0.)
+                Minimum value of the returned mask.
+
+            tomax: int/float, optional, (def: 1.)
+                Maximum value of the returned mask.
+
+            val: int/float, optional, (def: 0)
+                Value that have not to be rescaled.
+
+        Returns:
+            cort: ndarray
+                The rescaled cortical mask between tomin and tomax.
+
+            non_val: ndarray
+                A boolean array where the mask is not val. A true indicate that
+                this vertex contains some source's activity. A False means that
+                this vertex have to be colored with the defaults brain color.
         """
         # Find non-zero values :
-        non_zero = cort != val
+        non_val = cort != val
 
         # Rescale colormap :
-        cort[non_zero] = normalize(cort[non_zero], tomin=tomin, tomax=tomax)
+        cort[non_val] = normalize(cort[non_val], tomin=tomin, tomax=tomax)
 
-        return cort, non_zero
+        return cort, non_val
 
     def _array2cmap(self, x, non_zero=False, smask=None,
                     smaskcolor=(.7, .7, .7)):
-        """Convert the array x to cmap and mesh it
+        """Convert the array x into a proper colormap and set it to the mesh.
+
+        Args:
+            x: ndarray
+                The brut data to convert.
+
+        Kargs:
+            non_zero: ndarray, optional, (def: False)
+                Boolean array of non-touched brain values.
+
+            smask: ndaray, optional, (def: None)
+                Array containing the index of masked vertices.
+
+            smaskcolor: tuple, optional, (def: (.7, .7, .7))
+                The color to use for masked sources.
         """
         # Get alpha :
         alpha = slider2opacity(self.OpacitySlider.value(), thmin=0.0,
