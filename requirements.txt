@@ -1,0 +1,6 @@
+vispy
+pillow
+numpy
+scipy
+matplotlib
+PyQt4
