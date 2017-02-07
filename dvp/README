@@ -1,0 +1,5 @@
+# Update the graphical user interface :
+
+The GUI has been developped using qt-designer. The software generate a
+*.ui file. This file is then transformed in a *.py using :
+pyuic4 path_to_visbrain/visbrain/vbrain/interface/gui/visbrain_gui.ui -o path_to_visbrain/visbrain/vbrain/interface/gui/visbrain_gui.py
