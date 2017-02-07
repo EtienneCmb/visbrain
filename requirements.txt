@@ -2,5 +2,4 @@ vispy
 pillow
 numpy
 scipy
-matplotlib
-pyqt
+matplotlib<=1.5.2
