@@ -20,11 +20,7 @@ from .user import userfcn
 
 
 class vbrain(uiInit, uiElements, base, userfcn):
-
-    """
-    All possible colors can be a matplotlib color name (*'olive',
-    'slateblue'...), an hexadecimal type (*'#9b59b6', '#3498db', '#95a5a6'...*)
-    or an array of RGB or RGBA colors.
+    """Visualization of neuroscientic data on a standard MNI brain.
 
     Kargs:
         a_color: tuple, (def: (1,1,1))
@@ -203,6 +199,7 @@ class vbrain(uiInit, uiElements, base, userfcn):
         >>> # Finally, display the interface :
         >>> vb.show()
     """
+
     def __init__(self, *args, **kwargs):
         """Init."""
         # ====================== ui Arguments ======================

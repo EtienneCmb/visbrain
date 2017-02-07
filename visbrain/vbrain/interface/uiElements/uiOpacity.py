@@ -15,7 +15,6 @@ __all__ = ['uiOpacity']
 
 
 class uiOpacity(object):
-
     """Main class for objects slices / opacity managment."""
 
     def __init__(self,):
