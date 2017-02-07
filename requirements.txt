@@ -3,4 +3,4 @@ pillow
 numpy
 scipy
 matplotlib
-PyQt4
+pyqt
