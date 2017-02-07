@@ -2,6 +2,5 @@ numpy==1.11.3
 scipy==0.18.1
 matplotlib==1.5.1
 pandas==0.19.2
-glumpy==1.0.6
 setuptools==34.1.1
 vispy==0.4.0
