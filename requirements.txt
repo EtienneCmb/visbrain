@@ -1,8 +1,7 @@
-PyQt4==4.11.4
-glumpy==1.0.6
-matplotlib==2.0.0
-numpy==1.12.0
+matplotlib==1.5.1
+numpy==1.11.3
 pandas==0.19.2
 scipy==0.18.1
+glumpy==1.0.6
 setuptools==34.1.1
 vispy==0.4.0
