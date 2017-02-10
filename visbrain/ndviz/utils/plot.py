@@ -2,7 +2,7 @@
 
 import numpy as np
 
-__all__ = ['ndsubplot']
+__all__ = ['ndsubplot', 'combo']
 
 
 def ndsubplot(n, line=4, force_col=None, max_rows=10):
@@ -48,3 +48,29 @@ def ndsubplot(n, line=4, force_col=None, max_rows=10):
                 nrows = int(n/ncols)
 
     return nrows, ncols
+
+
+def combo(lst, idx):
+    """Manage combo box.
+
+    Args:
+        lst: list
+            List of possible values.
+
+        idx: list
+            List of index of several combo box.
+
+    Returns:
+        out: list
+            List of possible values for each combo box.
+
+        ind: list
+            List of the new current index of each combo box.
+    """
+    out, ind, original = [], [], set(lst)
+    for k in range(len(idx)):
+        out.append(list(original.difference(idx[:k])))
+        # ind.append(lst.index(idx[k]))
+        ind.append(list(out)[k][0])
+        # ind.append(out[k].index(idx[k]))
+    return out, ind

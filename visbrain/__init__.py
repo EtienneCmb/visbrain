@@ -2,6 +2,6 @@
 """
 
 from .vbrain.vbrain import vbrain
-from .ndviz import *
+from .ndviz.ndviz import Ndviz
 
 __version__ = "0.0.3"

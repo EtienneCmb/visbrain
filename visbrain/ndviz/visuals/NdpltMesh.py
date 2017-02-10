@@ -5,11 +5,15 @@ import numpy as np
 
 from visbrain.ndviz.utils import ndsubplot
 
-from vispy import app, gloo, visuals, scene
-from vispy.visuals.transforms import *
+from vispy import app, gloo, visuals
+# from vispy.visuals.transforms import *
 from visbrain.vbrain.utils import array2colormap, color2vb
+from vispy.scene.visuals import create_visual_node
 
 from warnings import warn
+
+
+__all__ = ['NdpltMesh']
 
 
 vertex_shader = """
@@ -33,11 +37,7 @@ void main() {
     vec2 b = vec2(-1 + $u_space*($a_index.x+.5) / ncols,
                   -1 + $u_space*($a_index.y+.5) / nrows);
     // Apply the static subplot transformation + scaling.
-    // gl_Position = $transform(vec4(a*$u_scale*position+b, 0.0, 1.0));
-    if ((($u_rect.z - $u_rect.x) < 2*$u_space-1) || (($u_rect.w - $u_rect.y) < 2*$u_space-1))
-        gl_Position = $transform(vec4(a*$u_scale*position+b, 0.0, 1.0));
-    else
-        gl_Position = vec4(a*$u_scale*position+b, 0.0, 1.0);
+    gl_Position = $transform(vec4(a*$u_scale*position+b, 0.0, 1.0));
     v_color = vec4($a_color, 1.);
     v_index = $a_index;
     // For clipping test in the fragment shader.
@@ -62,7 +62,7 @@ void main() {
 """
 
 
-class NdsigVisual(visuals.Visual):
+class NdpltVisual(visuals.Visual):
     """Visual class of nd-signals visualization.
 
     Args:
@@ -92,8 +92,8 @@ class NdsigVisual(visuals.Visual):
 
         color: string/tuple/array, optional, (def: None)
             Choose how to color signals. Use None (or 'rnd', 'random') to
-            generate random colors. Use a matplotlib color or a RGB tuple to
-            define the same color for all sigals. Use 'dyn_time' to have a
+            generate random colors. Use 'uniform' (see the unicolor parameter)
+            to define the same color for all signals. Use 'dyn_time' to have a
             dynamic color according to the time index. This is particulary
             convenient to inspect real time signals (see play parameter). Use
             'dyn_minmax' to a color code acording to the dynamic of the signal.
@@ -157,6 +157,17 @@ class NdsigVisual(visuals.Visual):
         over: tuple/string, optional, (def: 'red')
             Matplotlib color for values over vmax (parameter active for
             'dyn_minmax' and 'dyn_time' color).
+
+        laps: int, optional, (def: 10)
+            Number of points to update every 1/sampling_frequency.
+
+        scale: tuple, optional, (def: (1., 1.))
+            Scale each signal along (x, y) dimensions. The scale parameter must
+            be a tuple of two floats.
+
+        unicolor: string/tuple, optional, (def: 'gray')
+            The color to use in case of uniform color (see color parameter
+            above)
     """
 
     def __len__(self):
@@ -164,13 +175,13 @@ class NdsigVisual(visuals.Visual):
         return self.n
 
     def __init__(self, data, sf, axis=None, color=None, space=2, ax_name=None,
-                 play=False, force_col=None, rnd_dyn=(0.3, 0.9), demean=True,
+                 play=False, force_col=None, rnd_dyn=(.3, .9), demean=True,
                  cmap='viridis', clim=None, vmin=None, under='gray', vmax=None,
-                 over='red'):
+                 over='red', laps=1, scale=(1., 1.), unicolor='gray'):
         """Init."""
         # --------------------------------------------------------------------
         # Get inputs :
-        self._data = data
+        self._data = np.array(data, dtype=np.float32)
         self._sf = sf
         self._color = color
         self._ax_name = ax_name
@@ -182,13 +193,14 @@ class NdsigVisual(visuals.Visual):
         self._demean = demean
         self._cmap, self._clim, self._vmin, self._vmax = cmap, clim, vmin, vmax
         self._under, self._over = under, over
+        self._laps = laps
+        self._uscale = scale
+        self._unicolor = unicolor
 
         # Define attributes :
         self._dim = [0, 0]
         self.nrows = 0
         self.ncols = 0
-        self._laps = 1
-        self._uscale = (1., 1.)
         self.camera = []
 
         # --------------------------------------------------------------------
@@ -210,6 +222,8 @@ class NdsigVisual(visuals.Visual):
         # --------------------------------------------------------------------
         # Link the time the the on_time function :
         self._timer = app.Timer(1/self._sf, connect=self.on_timer, start=play)
+
+        self.freeze()
 
     # ========================================================================
     # ========================================================================
@@ -267,18 +281,19 @@ class NdsigVisual(visuals.Visual):
         self._check()
 
     def set_color(self, color=None, rnd_dyn=(0.3, 0.9), cmap='viridis',
-                  clim=None, vmin=None, under=None, vmax=None, over=None):
+                  clim=None, vmin=None, under=None, vmax=None, over=None,
+                  unicolor='gray'):
         """Set new color parameter to the data.
 
         Kargs:
             color: string/tuple/array, optional, (def: None)
                 Choose how to color signals. Use None (or 'rnd', 'random') to
-                generate random colors. Use a matplotlib color or a RGB tuple
-                to define the same color for all sigals. Use 'dyn_time' to have
-                a dynamic color according to the time index. This is
-                particulary convenient to inspect real time signals (see play
-                parameter). Use 'dyn_minmax' to a color code acording to the
-                dynamic of the signal. This option can be used to detect
+                generate random colors. Use 'uniform' (see the unicolor
+                parameter) to define the same color for all signals. Use
+                'dyn_time' to have a dynamic color according to the time index.
+                This is particulary convenient to inspect real time signals
+                (see play parameter). Use 'dyn_minmax' to a color code acording
+                to the dynamic of the signal. This option can be used to detect
                 extrema and can be futher controled using colormap parameters
                 (cmap, clim, vmin, vmax, under and over).
 
@@ -319,9 +334,12 @@ class NdsigVisual(visuals.Visual):
             over: tuple/string, optional, (def: 'red')
                 Matplotlib color for values over vmax (parameter active for
                 'dyn_minmax' and 'dyn_time' color).
+
+            unicolor: tuple/string, optional, (def: 'gray')
+                The color to use in case of uniform color.
         """
         # Get inputs arguments :
-        self._color, self._rnd_dyn = color, rnd_dyn
+        self._color, self._rnd_dyn, self._unicolor = color, rnd_dyn, unicolor
         self._cmap, self._clim, self._vmin, self._vmax = cmap, clim, vmin, vmax
         self._under, self._over = under, over
         # Check color :
@@ -347,6 +365,14 @@ class NdsigVisual(visuals.Visual):
         else:
             raise ValueError("start must be a bool.")
 
+    def time_reset(self):
+        """Reset time signals."""
+        # Find time 0 :
+        ind = self._time.argmin()
+        # Reset only if not 0 :
+        if ind:
+            self._time_laps(ind)
+
     def set_space(self, space=2):
         """Set space between plots.
 
@@ -359,7 +385,26 @@ class NdsigVisual(visuals.Visual):
             self._space = float(space)
             self.shared_program.vert['u_space'] = self._space
             # Update camera rectangle :
-            self._update_camrect()
+            # self._update_camrect()
+
+    def set_camera(self, camera):
+        """Set a camera to the mesh.
+
+        This is essential to add to the mesh the link between the camera
+        rotations (transformation) to the vertex shader.
+
+        Args:
+            camera: vispy.camera
+                Set a camera to the Mesh for light adaptation
+        """
+        self.camera = camera
+        self.update()
+
+    def clean(self):
+        """Clean buffers."""
+        self._dbuffer.delete()
+        self._ibuffer.delete()
+        self._cbuffer.delete()
 
     # ========================================================================
     # ========================================================================
@@ -414,10 +459,6 @@ class NdsigVisual(visuals.Visual):
                 warn("The ax_names must be composed of strings")
             self._ax_name = ['Time'] + [''] * (L-1)
 
-        # ---------------------------------------------------------------------
-        # Get the number of time points :
-        self._n = self._data.shape[self._axis.index(0)]
-
     def _check_data(self):
         """Check data shape and type.
 
@@ -443,21 +484,35 @@ class NdsigVisual(visuals.Visual):
         # Transform 2D data :
         elif ndim == 2:  # Matrix
             # Transpose if time is on axis 0:
-            if self._axis[0] is 0:
-                self._data = self._data.T
+            if self._axis[0] == 0:
+                # Make copy to be sure to transpose in memory :
+                self._data = np.transpose(self._data, (1, 0)).copy()
+                self._axis = [1, 0]
             # Get optimal subplot number :
             self.dim = ndsubplot(self._data.shape[0],
                                  force_col=self._force_col)
 
         # ---------------------------------------------------------------------
-        # Transform >=3D data :
+        # Transform >= 3D data :
         elif ndim >= 3:  # ndarray
+            # For ndarray with ndim > 3, select certain axis :
+            if ndim > 3:
+                # Build a list of slices :
+                sl = [slice(1)] * ndim
+                for k in self._axis:
+                    sl[k] = slice(None)
+                # Keep only self._axis dimensions :
+                self._data = np.squeeze(self._data[sl])
+                # Now, update the axis by ranking values :
+                self._axis = list(np.argsort(self._axis).argsort())
+                # Order reduced array axis :
+                self._axis = [self._axis.index(k) for k in range(3)]
             # Convert axis into a list (because we index index() method):
             axlst = list(self._axis)
             # Find index for transposing (n_rows, n_cols, n_time) :
             rshidx = [axlst.index(k) for k in [1, 2, 0]]
             # Transpose dimensions the data :
-            self._data = np.transpose(self._data, rshidx)
+            self._data = np.transpose(self._data, rshidx).copy()
             sh = self._data.shape
             # Finally, make the data (n_rows x n_cols, n_time) :
             self._data = np.reshape(self._data, (sh[0]*sh[1], sh[2]))
@@ -468,6 +523,9 @@ class NdsigVisual(visuals.Visual):
             # Get the mean and remove it:
             data_m = np.mean(self._data, axis=1, keepdims=True)
             self._data -= data_m
+
+        # Get the number of time points :
+        self.n = self._data.shape[1]
 
         # Complete data (in case of missing row/col) :
         # print('=================> COMPLETE DATA <=================')
@@ -507,7 +565,7 @@ class NdsigVisual(visuals.Visual):
 
         # ---------------------------------------------------------------------
         # Dynamic minmax color :
-        elif self._color is 'dyn_minmax':
+        elif self._color == 'dyn_minmax':
             # Get colormap as (n, 3):
             self._a_color = array2colormap(self._data.ravel(), cmap=self._cmap,
                                            clim=self._clim, vmin=self._vmin,
@@ -516,7 +574,7 @@ class NdsigVisual(visuals.Visual):
 
         # ---------------------------------------------------------------------
         # Dynamic time color :
-        elif self._color is 'dyn_time':
+        elif self._color == 'dyn_time':
             # Repeat the time vector nrows x ncols times:
             timerep = np.tile(self._time[np.newaxis, ...], (self.m, 1))
             # Get the colormap :
@@ -527,9 +585,9 @@ class NdsigVisual(visuals.Visual):
 
         # ---------------------------------------------------------------------
         # Uniform color :
-        elif isinstance(self._color, (str, tuple, list)):
+        elif self._color == 'uniform':
             # Create a (m, 3) color array :
-            singcol = color2vb(self._color, length=self._m)[:, 0:3]
+            singcol = color2vb(self._unicolor, length=self._m)[:, 0:3]
             # Repeat the array n_times to have a (m*n_times, 3) array :
             self._a_color = np.repeat(singcol, self.n, axis=0)
 
@@ -576,41 +634,44 @@ class NdsigVisual(visuals.Visual):
         view_vert = view.view_program.vert
         view_vert['transform'] = tr.get_transform()
 
-    def _prepare_draw(self, view=None):
-        """Function called everytime there's a camera update."""
-        # Get where the position and size of camera rectangle :
-        pos, size = self.camera.rect.pos, self.camera.rect.size
-        # Get distance :
-        d1, d2 = size[0] - pos[0], size[1] - pos[1]
-        # fix camera if outside of the rectangle :
-        if (d1 > self._space+1) and (d2 > self._space+1):
-            # Reset to default size :
-            pos, size = (-1, -1), (self._space, self._space)
-            # Set to camera and update:
-            self.camera.rect.pos = pos
-            self.camera.rect.size = size
-            self.camera.update()
-        # Update GPU rectangle :
-        self.shared_program.vert['u_rect'] = (pos[0], pos[1], size[0], size[1])
+    # def _prepare_draw(self, view=None):
+    #     """Function called everytime there's a camera update."""
+    #     pass
 
     def on_timer(self, event):
         """Add some data at the end of each signal (real-time signals)."""
+        self._time_laps(self._laps)
+
+    def _time_laps(self, laps):
+        """Introduce a time laps in data / color / time.
+
+        Args:
+            laps: int, optional, (def: 10)
+                Number of points to update every 1/sampling_frequency.
+        """
         # ---------------------------------------------------------------------
         # Update "laps" points of the data :
-        self._data[:, :-self._laps] = self._data[:, self._laps:]
-        self._data[:, -self._laps:] = self._data[:, 0:self._laps]
+        dataC = self._data.copy()
+        self._data[:, :-laps] = self._data[:, laps:]
+        self._data[:, -laps:] = dataC[:, 0:laps]
 
         # ---------------------------------------------------------------------
         # Update "laps" points of the color :
-        self._colsh[:, :-self._laps, :] = self._colsh[:, self._laps:, :]
-        self._colsh[:, -self._laps:, :] = self._colsh[:, 0:self._laps, :]
+        colorC = self._colsh.copy()
+        self._colsh[:, :-laps, :] = self._colsh[:, laps:, :]
+        self._colsh[:, -laps:, :] = colorC[:, 0:laps, :]
         self._a_color = self._colsh
+
+        # ---------------------------------------------------------------------
+        # Update time vector :
+        timeC = self._time.copy()
+        self._time[:-laps] = self._time[laps:]
+        self._time[-laps:] = timeC[0:laps]
 
         # ---------------------------------------------------------------------
         # Buffer updates :
         self._buffer_data()
         self._buffer_color()
-
         self.update()
 
     # ========================================================================
@@ -626,16 +687,18 @@ class NdsigVisual(visuals.Visual):
 
     def _buffer_data(self):
         """Set & Update data buffer."""
-        self.shared_program.vert['a_position'] = gloo.VertexBuffer(self._data)
-        self.shared_program.vert['a_index'] = gloo.VertexBuffer(self._index)
+        self._dbuffer = gloo.VertexBuffer(self._data)
+        self._ibuffer = gloo.VertexBuffer(self._index)
+        self.shared_program.vert['a_position'] = self._dbuffer
+        self.shared_program.vert['a_index'] = self._ibuffer
 
     def _buffer_color(self):
         """Set & Update color buffer."""
-        self.shared_program.vert['a_color'] = gloo.VertexBuffer(self._a_color)
+        self._cbuffer = gloo.VertexBuffer(self._a_color)
+        self.shared_program.vert['a_color'] = self._cbuffer
 
     def _buffer_args(self):
         """Set & Update other args buffer."""
-        self.shared_program.vert['u_rect'] = (-1, -1, self._space, self._space)
         self.shared_program.vert['u_scale'] = self._uscale
         self.shared_program.vert['u_size'] = self.dim
         self.shared_program.vert['u_n'] = self._n
@@ -691,56 +754,12 @@ class NdsigVisual(visuals.Visual):
         """Get the number of time points."""
         return self._n
 
-###############################################################################
-###############################################################################
-###############################################################################
-###############################################################################
-
-# Number of cols and rows in the table.
-nrows = 10
-ncols = 5
-
-# Number of signals.
-m = nrows*ncols
-
-# Number of samples per signal.
-n = 4000
-
-# y = np.tile(np.arange(n)[np.newaxis, ...], (20, 1)).astype(np.float32) / n
-# y -= 0.5
-y = 100 + np.random.rand(10, 20, 4000)
+    @n.setter
+    def n(self, value):
+        """Set n value."""
+        if value < 5:
+            raise ValueError("The number of time points must be at least >= 5")
+        self._n = value
 
 
-# Auto-generate a Visual+Node class for use in the scenegraph.
-MyMesh = scene.visuals.create_visual_node(NdsigVisual)
-
-
-# Finally we will test the visual by displaying in a scene.
-
-canvas = scene.SceneCanvas(keys='interactive', show=True, bgcolor=(.09, .09, .09))
-canvas.context.set_line_width(2)
-
-# Add a ViewBox to let the user zoom/rotate
-from vispy.scene.cameras import *
-view = canvas.central_widget.add_view()
-view.camera = PanZoomCamera(rect=(-1, -1, 2, 2))#TurntableCamera()
-# view.camera.fov = 1.
-view.camera.distance = 100
-# view.camera.azimuth = 0.
-V = view.camera
-
-
-
-
-mesh = MyMesh(y, 1024, space=2, parent=view.scene, force_col=5, axis=[1, 2, 0],
-              demean=True, color=None)
-mesh.camera = view.camera
-mesh._update_camrect()
-mesh.play(True, 15)
-# mesh.set_space(8)
-
-# axis = scene.visuals.XYZAxis(parent=view.scene)
-
-# ..and optionally start the event loop
-if __name__ == '__main__':
-    app.run()
+NdpltMesh = create_visual_node(NdpltVisual)
