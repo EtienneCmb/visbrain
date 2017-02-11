@@ -51,7 +51,7 @@ class Ndviz(uiInit, visuals, uiElements):
         ui_bgcolor: string/tuple, optional, (def: (.09, .09, .09))
             Background color of the main canvas.
 
-        lw: float, optional, (def: 2.)
+        lw: float, optional, (def: 1.)
             Line width of each signal.
     """
 
@@ -67,7 +67,7 @@ class Ndviz(uiInit, visuals, uiElements):
         od_xlabel = kwargs.get('od_xlabel', 'X axis')
         od_ylabel = kwargs.get('od_ylabel', 'Y axis')
         # Default linewidth :
-        self._lw = kwargs.get('lw', 2.)
+        self._lw = kwargs.get('lw', 1.)
         self._oridata = np.array(data.copy(), dtype=np.float32)
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
@@ -96,8 +96,12 @@ class Ndviz(uiInit, visuals, uiElements):
         self._ndCanvas.set_camera(ndcam)
 
         # 1d-plot camera :
-        odcam = viscam.PanZoomCamera(rect=self._1dplt.rect)
-        # self._1dCanvas.set_camera(odcam)
+        odcam = viscam.PanZoomCamera(rect=self._1dplt.mesh.rect)
+        self._1dCanvas.set_camera(odcam)
+
+        # Image-plot camera :
+        # imcam = viscam.PanZoomCamera(rect=self._1dplt.rect)
+        # self._imCanvas.set_camera(imcam)
 
         # Fixed colorbar camera :
         turntable = viscam.TurntableCamera(interactive=True, azimuth=0,
@@ -107,14 +111,19 @@ class Ndviz(uiInit, visuals, uiElements):
                                            margin=0)
         # self._cbCanvas.wc.scene.children[0].parent = None
 
+        ################################################################
         self._NdVizPanel.setVisible(False)
         self._1dVizPanel.setVisible(True)
+        ################################################################
 
-        self._ndCanvas.yaxis.axis.domain = (0, 512)
-        self._ndCanvas.yaxis.axis.update()
-        print(self._ndCanvas.yaxis.axis.domain)
-        self._1dCanvas.set_camera(odcam)
+        # Finally, update each canvas :
         self._ndCanvas.canvas.update()
+        self._1dCanvas.canvas.update()
+
+    def _check_inputs(self, data, sf, **kwargs):
+        """
+        """
+        pass
 
     def show(self):
         """Display the graphical user interface."""

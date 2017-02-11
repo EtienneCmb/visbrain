@@ -15,7 +15,7 @@ from .math import normalize
 
 
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           '_colormap'
+           '_colormap', 'type_coloring'
            ]
 
 
@@ -345,9 +345,21 @@ class _colormap(object):
 def colorclip(x, th, kind='under'):
     """Force an array to have clipping values.
 
-    :x: array of data
-    :th: the threshold to use
-    :kind: string, can be either 'under' or 'over'
+    Args:
+        x: np.ndarray
+            Array of data.
+
+        th: float
+            The threshold to use.
+
+    Kargs:
+        kind: string, optional, (def: 'under')
+            Use eiher 'under' or 'over' for fore the array to clip for every
+            values respectively under or over th.
+
+    Return:
+        x: np.ndarray
+            The clipping array.
     """
     if kind is 'under':
         idx = x < th
@@ -355,3 +367,102 @@ def colorclip(x, th, kind='under'):
         idx = x > th
     x[idx] = th
     return x
+
+
+def type_coloring(color=None, n=1, data=None, rnd_dyn=(0.3, 0.9), clim=None,
+                  cmap='viridis', vmin=None, under=None, vmax=None, over=None,
+                  unicolor='gray'):
+    """Switch between different coloring types.
+
+    This function can be used to color a signal using random, uniform or
+    dynamic colors.
+
+    Arg:
+        n: int
+            The number of color to generate.
+    Kargs:
+        color: string/tuple/array, optional, (def: None)
+            Choose how to color signals. Use None (or 'rnd', 'random') to
+            generate random colors. Use 'uniform' (see the unicolor
+            parameter) to define the same color for all signals. Use
+            'dynamic' to have a dynamic color according to data values.
+
+        n: int, optional, (def: 1)
+            The number of colors to generate in case of random or uniform
+            colors.
+
+        data: np.ndarray, optional, (def: None)
+            The data to convert into color if the color type is dynamic.
+            If this parameter is ignored, a default linear spaced vector of
+            length n will be used instead.
+
+        rnd_dyn: tuple, optional, (def: (.3, .9))
+            Define the dynamic of random color. This parameter is active
+            only if the color parameter is turned to None (or 'rnd' /
+            'random').
+
+        cmap: string, optional, (def: inferno)
+            Matplotlib colormap (parameter active for 'dyn_minmax' and
+            'dyn_time' color).
+
+        clim: tuple/list, optional, (def: None)
+            Limit of the colormap. The clim parameter must be a tuple /
+            list of two float number each one describing respectively the
+            (min, max) of the colormap. Every values under clim[0] or over
+            clim[1] will peaked (parameter active for 'dyn_minmax' and
+            'dyn_time' color).
+
+        alpha: float, optional, (def: 1.0)
+            The opacity to use. The alpha parameter must be between 0 and 1
+            (parameter active for 'dyn_minmax' and 'dyn_time' color).
+
+        vmin: float, optional, (def: None)
+            Threshold from which every color will have the color defined
+            using the under parameter bellow (parameter active for
+            'dyn_minmax' and 'dyn_time' color).
+
+        under: tuple/string, optional, (def: 'gray')
+            Matplotlib color for values under vmin (parameter active for
+            'dyn_minmax' and 'dyn_time' color).
+
+        vmax: float, optional, (def: None)
+            Threshold from which every color will have the color defined
+            using the over parameter bellow (parameter active for
+            'dyn_minmax' and 'dyn_time' color).
+
+        over: tuple/string, optional, (def: 'red')
+            Matplotlib color for values over vmax (parameter active for
+            'dyn_minmax' and 'dyn_time' color).
+
+        unicolor: tuple/string, optional, (def: 'gray')
+            The color to use in case of uniform color.
+    """
+    # ---------------------------------------------------------------------
+    # Random color :
+    if color in [None, 'rnd', 'random']:
+        # Create a (m, 3) color array :
+        colout = np.random.uniform(size=(n, 3), low=rnd_dyn[0], high=rnd_dyn[1]
+                                   )
+
+    # ---------------------------------------------------------------------
+    # Dynamic color :
+    elif color == 'dynamic':
+        # Generate a linearly spaced vecto for None data :
+        if data is None:
+            data = np.arange(n)
+        # Get colormap as (n, 3):
+        colout = array2colormap(data.ravel(), cmap=cmap, clim=clim, vmin=vmin,
+                                vmax=vmax, under=under, over=over)[:, 0:3]
+
+    # ---------------------------------------------------------------------
+    # Uniform color :
+    elif color == 'uniform':
+        # Create a (m, 3) color array :
+        colout = color2vb(unicolor, length=n)[:, 0:3]
+
+    # ---------------------------------------------------------------------
+    # Not found color :
+    else:
+        raise ValueError("The color parameter is not recognized.")
+
+    return colout

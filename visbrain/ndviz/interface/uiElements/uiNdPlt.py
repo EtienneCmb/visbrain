@@ -16,23 +16,25 @@ class uiNdPlt(object):
         # ---------------------------------------------------------------------
         # AXIS :
         # ---------------------------------------------------------------------
-        self._shapetxt = 'data.shape = {sh}'
+        self._shapetxtNd = 'data.shape = {sh}'
         self._ndAxUpdate.setEnabled(False)
-        self._fcn_axis_checking()
-        self._axis_compatibility()
-        self._ndAxTime.currentIndexChanged.connect(self._axis_compatibility)
-        self._ndAxNdRows.currentIndexChanged.connect(self._axis_compatibility)
-        self._ndAxNdCols.currentIndexChanged.connect(self._axis_compatibility)
-        self._ndAx2dRows.valueChanged.connect(self._axis_compatibility)
-        self._ndAx2dCols.valueChanged.connect(self._axis_compatibility)
-        self._ndAxUpdate.clicked.connect(self._fcn_axis_update)
+        # First run of axis checking and compatibility :
+        self._fcn_ndAxis_checking()
+        self._fcn_NdAxis_compat()
+        # Link axis objects with functions :
+        self._ndAxTime.currentIndexChanged.connect(self._fcn_NdAxis_compat)
+        self._ndAxNdRows.currentIndexChanged.connect(self._fcn_NdAxis_compat)
+        self._ndAxNdCols.currentIndexChanged.connect(self._fcn_NdAxis_compat)
+        self._ndAx2dRows.valueChanged.connect(self._fcn_NdAxis_compat)
+        self._ndAx2dCols.valueChanged.connect(self._fcn_NdAxis_compat)
+        self._ndAxUpdate.clicked.connect(self._fcn_ndAxis_update)
 
         # ---------------------------------------------------------------------
         # COLOR :
         # ---------------------------------------------------------------------
         # Color type :
-        color_type = ['random', 'uniform', 'dyn_time', 'dyn_minmax']
-        self._ndColType.setCurrentIndex(color_type.index(self._ndplt.mesh._color))
+        coltype = ['random', 'uniform', 'dyn_time', 'dyn_minmax']
+        self._ndColType.setCurrentIndex(coltype.index(self._ndplt.mesh._color))
         self._ndColType.currentIndexChanged.connect(self._fcn_ndcolor)
         # Get random min / max :
         self._ndplt.mesh._rnd_dyn = (self._ndRndDynMin.value(),
@@ -40,7 +42,7 @@ class uiNdPlt(object):
         self._ndRndDynMin.valueChanged.connect(self._fcn_ndcolor)
         self._ndRndDynMax.valueChanged.connect(self._fcn_ndcolor)
         # New random color :
-        self._NewRnd.clicked.connect(self._fcn_ndcolor)
+        self._ndRndNew.clicked.connect(self._fcn_ndcolor)
         # Uniform color :
         self._ndUniColor.setText(self._ndplt.mesh._unicolor)
         self._ndUniColor.editingFinished.connect(self._fcn_ndcolor)
@@ -68,8 +70,8 @@ class uiNdPlt(object):
         self._ndSetSpace.setValue(self._ndplt.mesh._space)
         # Line width :
         self._ndLineWidth.setValue(self._lw)
-        self._ndLineWidth.valueChanged.connect(self._fcn_linewidth)
-        self._fcn_linewidth()
+        self._ndLineWidth.valueChanged.connect(self._fcn_ndLineWidth)
+        self._fcn_ndLineWidth()
         # Signal scaling :
         self._ndScaleX.setValue(self._ndplt.mesh._uscale[0])
         self._ndScaleY.setValue(self._ndplt.mesh._uscale[1])
@@ -86,7 +88,7 @@ class uiNdPlt(object):
     # =====================================================================
     # AXIS
     # =====================================================================
-    def _fcn_axis_checking(self):
+    def _fcn_ndAxis_checking(self):
         """Display / hide axis panels according to data dimension."""
         # ---------------------------------------------------------------------
         # GET DATA INFO
@@ -100,7 +102,7 @@ class uiNdPlt(object):
         self._ndAxTime.setCurrentIndex(self._ndplt.mesh._axis[0])
 
         # Set shape text :
-        self._ndAxShape.setText(self._shapetxt.format(sh=str(sh)))
+        self._ndAxShape.setText(self._shapetxtNd.format(sh=str(sh)))
 
         # Get rows / cols :
         rows, cols = self._ndplt.mesh.nrows, self._ndplt.mesh.ncols
@@ -147,7 +149,7 @@ class uiNdPlt(object):
             self._ndAxNdRows.setCurrentIndex(self._ndplt.mesh._axis[1])
             self._ndAxNdCols.setCurrentIndex(self._ndplt.mesh._axis[2])
 
-    def _axis_compatibility(self):
+    def _fcn_NdAxis_compat(self):
         """Manage axis'prameters compatibility according to data dimension."""
         # ---------------------------------------------------------------------
         # GET DATA INFO
@@ -192,7 +194,7 @@ class uiNdPlt(object):
                 self._ndAxCheckMsg.setVisible(False)
                 self._ndAxUpdate.setEnabled(True)
 
-    def _fcn_axis_update(self):
+    def _fcn_ndAxis_update(self):
         """Update data according to new settings."""
         # ---------------------------------------------------------------------
         # GET DATA INFO
@@ -238,18 +240,18 @@ class uiNdPlt(object):
             self._ndRndPan.setVisible(False)
             self._ndUniPan.setVisible(False)
             self.q_Cmap.setEnabled(True)
-            self._ndDynTExt.setVisible(True)
+            self._ndDynText.setVisible(True)
         elif col == 'random':
             self._ndRndPan.setVisible(True)
             self._ndUniPan.setVisible(False)
             self.q_Cmap.setEnabled(False)
-            self._ndDynTExt.setVisible(False)
+            self._ndDynText.setVisible(False)
         elif col == 'uniform':
             self._ndRndPan.setVisible(False)
             self._ndUniPan.setVisible(True)
             uni = textline2color(self._ndUniColor.text())[0]
             self.q_Cmap.setEnabled(False)
-            self._ndDynTExt.setVisible(False)
+            self._ndDynText.setVisible(False)
 
         # Get random color dynamic :
         rnd_dyn = (self._ndRndDynMin.value(), self._ndRndDynMax.value())
@@ -289,7 +291,7 @@ class uiNdPlt(object):
         self._ndplt.mesh.set_space(self._ndSetSpace.value())
         self._ndplt.mesh.update()
 
-    def _fcn_linewidth(self):
+    def _fcn_ndLineWidth(self):
         """Increase / decrease plot linewidth."""
         # Get line width (LW) from the button :
         self._lw = self._ndLineWidth.value()
@@ -304,11 +306,8 @@ class uiNdPlt(object):
         self._ndplt.mesh._check_others()
         self._ndplt.mesh.update()
 
-    # =====================================================================
-    # Nd-SETTINGS
-    # =====================================================================
     def _fcn_ndEdit(self):
-        """Update title / labels of the Nd-plot"""
+        """Update title / labels of the Nd-plot."""
         self._ndCanvas.set_info(title=self._ndTitleEdit.text(),
                                 xlabel=self._ndXlabEdit.text(),
                                 ylabel=self._ndYlabEdit.text())

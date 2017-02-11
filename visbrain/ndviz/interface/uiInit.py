@@ -36,7 +36,6 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
             self.setWindowTitle('ndviz - '+self._savename)
 
         # Initlialize all canvas :
-        # Initialize all canvas:
         self._ndCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=nd_title,
                                     x_label=nd_xlabel, y_label=nd_ylabel)
         self._1dCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=od_title,
@@ -63,9 +62,9 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
         self._ndTitleEdit.setText(nd_title)
         self._ndXlabEdit.setText(nd_xlabel)
         self._ndYlabEdit.setText(nd_ylabel)
-        self._odTitleEdit.setText(od_title)
-        self._odXlabEdit.setText(od_xlabel)
-        self._odYlabEdit.setText(od_ylabel)
+        self._1dTitleEdit.setText(od_title)
+        self._1dXlabEdit.setText(od_xlabel)
+        self._1dYlabEdit.setText(od_ylabel)
 
         # Initialize shortcuts :
         vbShortcuts.__init__(self, self._ndCanvas.canvas)

@@ -195,6 +195,9 @@ class NdpltVisual(visuals.Visual):
         self._uscale = scale
         self._unicolor = unicolor
 
+        # Normalize the data for the visualization :
+        self._data = self._data / self._data.max()
+
         # Define attributes :
         self._dim = [0, 0]
         self.nrows = 0
@@ -551,6 +554,7 @@ class NdpltVisual(visuals.Visual):
 
         The color array must be a 2D array organize as follow :
         color.shape = (N_rows x N_cols x N_time, 3)
+        n = N_time, m = N_rows x N_cols
         """
         # ---------------------------------------------------------------------
         # Random color :
@@ -588,11 +592,6 @@ class NdpltVisual(visuals.Visual):
             singcol = color2vb(self._unicolor, length=self._m)[:, 0:3]
             # Repeat the array n_times to have a (m*n_times, 3) array :
             self._a_color = np.repeat(singcol, self.n, axis=0)
-
-        # ---------------------------------------------------------------------
-        # User color :
-        elif isinstance(self._color, np.ndarray):
-            warn('USER COLORS NOT CONFIGURED')
 
         # ---------------------------------------------------------------------
         # Not found color :
