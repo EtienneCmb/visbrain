@@ -5,7 +5,7 @@ import numpy as np
 from vispy import scene, visuals
 import vispy.visuals.transforms as vist
 
-from ...vbrain.utils import color2vb
+from ...utils import color2vb
 
 # Create a visual node :
 Line = scene.visuals.create_visual_node(visuals.LinePlotVisual)

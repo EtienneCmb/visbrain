@@ -2,8 +2,7 @@
 
 import numpy as np
 
-from ....vbrain.utils import textline2color
-from ...utils import ndsubplot, combo
+from ....utils import textline2color
 
 
 __all__ = ['uiNdPlt']

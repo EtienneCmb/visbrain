@@ -13,7 +13,7 @@ import numpy as np
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
 
-from ..utils import color2vb, normalize, _colormap
+from ...utils import color2vb, normalize, _colormap
 
 __all__ = ['SourcesBase']
 

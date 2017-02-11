@@ -7,10 +7,10 @@ Grouped components :
 """
 
 from PyQt4 import QtGui
-from vispy import app, scene, visuals
+from vispy import app, scene
 
 from .gui import Ui_MainWindow
-from ...vbrain.utils import color2vb
+from ...utils import color2vb
 
 __all__ = ['uiInit']
 

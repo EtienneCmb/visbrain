@@ -12,7 +12,7 @@ import numpy as np
 from collections import Counter
 
 from vispy import gloo, visuals
-from ...utils import array2colormap, normalize
+from ....utils import array2colormap, normalize
 
 
 __all__ = ['ConnectVisual']

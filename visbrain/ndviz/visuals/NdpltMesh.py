@@ -3,12 +3,10 @@
 
 import numpy as np
 
-from visbrain.ndviz.utils import ndsubplot
-
 from vispy import app, gloo, visuals
-# from vispy.visuals.transforms import *
-from visbrain.vbrain.utils import array2colormap, color2vb
 from vispy.scene.visuals import create_visual_node
+
+from ...utils import ndsubplot, array2colormap, color2vb
 
 from warnings import warn
 
