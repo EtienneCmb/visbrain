@@ -69,7 +69,7 @@ class OdpltBase(object):
 
     def __init__(self, data, sf, **kwargs):
         """Init."""
-        self.mesh = OdpltMesh(data, sf, plot='line', color='dyn_time')
+        self.mesh = OdpltMesh(data, sf, plot='line', color='uniform')
 
 
 # class ImBase(ImMesh):

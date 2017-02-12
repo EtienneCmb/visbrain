@@ -18,6 +18,7 @@ class ui1dPlt(object):
         # ---------------------------------------------------------------------
         self._shapetxt1d = 'data.shape = {sh}'
         self._1dAxUpdate.setVisible(False)
+        self._1dForceUpdate = False
         # First run of axis checking and compatibility :
         self._fcn_1dAxis_checking()
         self._fcn_1dAxis_update()
@@ -30,6 +31,7 @@ class ui1dPlt(object):
         # PLOT
         # ---------------------------------------------------------------------
         pltype = ['line', 'histogram', 'spectrogram']
+        meth = ['gl', 'agg']
         # Plot type :
         self._1dPltPick.setCurrentIndex(pltype.index(self._1dplt.mesh._plot))
         self._1dPltPick.currentIndexChanged.connect(self._fcn_1dPlt)
@@ -40,9 +42,14 @@ class ui1dPlt(object):
         self._1dPltNfft.valueChanged.connect(self._fcn_1dPlt)
         self._1dPltStep.setValue(self._1dplt.mesh._step)
         self._1dPltStep.valueChanged.connect(self._fcn_1dPlt)
+        self._1dLineMeth.setCurrentIndex(meth.index(self._1dplt.mesh._method))
+        self._1dLineMeth.currentIndexChanged.connect(self._fcn_1dPlt)
         # Line width :
         self._1dLineWidth.setValue(self._lw)
         self._1dLineWidth.valueChanged.connect(self._fcn_1dLineWidth)
+        # Interpolation :
+        self._1dInterType.currentIndexChanged.connect(self._fcn_1dPlt)
+        self._1dInterStep.valueChanged.connect(self._fcn_1dPlt)
 
         self._fcn_1dLineWidth()
         self._fcn_1dPlt()
@@ -65,7 +72,6 @@ class ui1dPlt(object):
         self._1dUniColor.setText(self._ndplt.mesh._unicolor)
         self._1dUniColor.editingFinished.connect(self._fcn_1dcolor)
         self._1dUniColor.setPlaceholderText("red,  green, #ab4642...")
-
         self._fcn_1dcolor()
 
         # ---------------------------------------------------------------------
@@ -74,6 +80,8 @@ class ui1dPlt(object):
         self._1dTitleEdit.editingFinished.connect(self._fcn_1dEdit)
         self._1dXlabEdit.editingFinished.connect(self._fcn_1dEdit)
         self._1dYlabEdit.editingFinished.connect(self._fcn_1dEdit)
+
+        self._1dForceUpdate = True
 
     # =====================================================================
     # AXIS
@@ -135,9 +143,10 @@ class ui1dPlt(object):
                 self._1dplt.mesh._index = self._1dAxInd.value()
 
             # Update plot and canvas :
-            self._1dplt.mesh.update()
-            self._1dCanvas.wc.camera.rect = self._1dplt.mesh.rect
-            self._1dCanvas.canvas.update()
+            if self._1dForceUpdate:
+                self._1dplt.mesh.update()
+                self._1dCanvas.wc.camera.rect = self._1dplt.mesh.rect
+                self._1dCanvas.canvas.update()
 
     # =====================================================================
     # PLOT
@@ -149,6 +158,8 @@ class ui1dPlt(object):
 
         # Line plot :
         if plt == 'line':
+            # Get line method :
+            meth = self._1dLineMeth.currentText()
             # Set only line control visible :
             self._1dPltLine.setVisible(True)
             self._1dPltHist.setVisible(False)
@@ -158,7 +169,7 @@ class ui1dPlt(object):
             self._1dColType.model().item(2).setEnabled(True)
             self._1dColType.model().item(3).setEnabled(True)
             # Set data line type :
-            self._1dplt.mesh.set_type('line')
+            tp, kwargs = 'line', {'method': meth}
 
         # Histogram :
         elif plt == 'histogram':
@@ -174,7 +185,7 @@ class ui1dPlt(object):
             self._1dColType.model().item(3).setEnabled(False)
             self._1dDynText.setVisible(False)
             # Set data histogram type :
-            self._1dplt.mesh.set_type('histogram', bins=bins)
+            tp, kwargs = 'histogram', {'bins': bins}
 
         # Spectrogram :
         elif plt == 'spectrogram':
@@ -189,11 +200,20 @@ class ui1dPlt(object):
             self._1dColBox.setEnabled(False)
             self._1dDynText.setVisible(False)
             # Set data spectrogram type :
-            self._1dplt.mesh.set_type('spectrogram', nfft=nfft, step=step)
+            tp, kwargs = 'spectrogram', {'nfft': nfft, 'step': step}
 
-        self._1dCanvas.canvas.update()
-        self._1dCanvas.wc.camera.rect = self._1dplt.mesh.rect
-        self._1dCanvas.wc.camera.update()
+
+        # Get interpolation type and step :
+        self._1dplt.mesh._itptype = self._1dInterType.currentText()
+        self._1dplt.mesh._itpstep = self._1dInterStep.value()
+
+        if self._1dForceUpdate:
+            # Set type and args :
+            self._1dplt.mesh.set_type(tp, **kwargs)
+            # Update canvas and camera :
+            self._1dCanvas.canvas.update()
+            self._1dCanvas.wc.camera.rect = self._1dplt.mesh.rect
+            self._1dCanvas.wc.camera.update()
 
     # =====================================================================
     # COLOR
@@ -226,7 +246,9 @@ class ui1dPlt(object):
         rnd_dyn = (self._1dRndDynMin.value(), self._1dRndDynMax.value())
 
         # Update color :
-        self._1dplt.mesh.set_color(color=col, rnd_dyn=rnd_dyn, unicolor=uni)
+        if self._1dForceUpdate:
+            self._1dplt.mesh.set_color(color=col, rnd_dyn=rnd_dyn,
+                                       unicolor=uni)
         # self._1dplt.mesh._obj.update()
 
     # =====================================================================
@@ -236,8 +258,13 @@ class ui1dPlt(object):
         """Increase / decrease plot linewidth."""
         # Get line width (LW) from the button :
         self._lw = self._1dLineWidth.value()
-        # Set the LW to the canvas :
-        self._1dCanvas.canvas.context.set_line_width(self._lw)
+        # The method to control linewidth depend of the line method :
+        if self._1dLineMeth.currentText() is 'gl':
+            # Set the LW to the canvas :
+            self._1dCanvas.canvas.context.set_line_width(self._lw)
+        else:
+            self._1dplt.mesh._line._width = self._lw
+            self._1dplt.mesh._line.update()
         self._1dCanvas.canvas.update()
 
     def _fcn_1dEdit(self):

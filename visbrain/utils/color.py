@@ -465,4 +465,4 @@ def type_coloring(color=None, n=1, data=None, rnd_dyn=(0.3, 0.9), clim=None,
     else:
         raise ValueError("The color parameter is not recognized.")
 
-    return colout
+    return colout.astype(np.float32)

@@ -1,6 +1,7 @@
 """This script contains the main class for 1D plotting."""
 
 import numpy as np
+from scipy.interpolate import interp1d
 
 from vispy import scene, visuals
 import vispy.visuals.transforms as vist
@@ -41,10 +42,11 @@ class OdpltMesh(object):
     def __init__(self, data, sf, axis=None, index=0, plot='line', xtype=None,
                  color='uniform', rnd_dyn=(0.3, 0.9), cmap='viridis',
                  clim=None, vmin=None, under=None, vmax=None, over=None,
-                 unicolor='white', bins=10, nfft=256, step=128, **kwargs):
+                 unicolor='white', bins=10, nfft=256, step=128, itp_type=None,
+                 itp_step=1., method='gl', **kwargs):
         """Init."""
         # User inputs :
-        self._data = np.array(data, dtype=float)
+        self._data = np.array(data, dtype=np.float32)
         self._sf = float(sf)
         self._axis = axis
         self._plot = plot
@@ -58,6 +60,8 @@ class OdpltMesh(object):
         self._under, self._over = under, over
         self._nfft, self._step = nfft, step
         self._kwargs = kwargs
+        self._itptype, self._itpstep = itp_type, itp_step
+        self._method = method
 
         # Variables :
         self._l = 0
@@ -65,7 +69,7 @@ class OdpltMesh(object):
         self._viz = [True, False, False]
 
         # Create a default Line, Histogram and spectrogram :
-        self._line = Line([0, 1])
+        self._line = scene.visuals.Line([0, 1], method=method, width=2)
         self._hist = scene.visuals.Histogram([0])
         self._imag = scene.visuals.Image(np.random.rand(2, 2))
 
@@ -77,7 +81,7 @@ class OdpltMesh(object):
     # ========================================================================
     # SET FUNCTIONS
     # ========================================================================
-    def set_data(self, data, axis=None, index=0):
+    def set_data(self, data, axis=None, index=0, itp_type=None, itp_step=1.):
         """Set some data.
 
         Args:
@@ -95,13 +99,16 @@ class OdpltMesh(object):
                 The index along axis[1] for selecting the data.
         """
         self._data, self._axis, self._index = data, axis, index
+        self._itptype, self._itpstep = itp_type, itp_step
         self.update()
 
-    def set_type(self, plot='line', bins=10, nfft=256, step=128, **kwargs):
+    def set_type(self, plot='line', bins=10, nfft=256, step=128, method='gl',
+                 **kwargs):
         """Set the plot type."""
         self._plot = plot
         self._bins = bins
         self._nfft, self._step = nfft, step
+        self._method = method
 
         # Update data and color :
         self.update()
@@ -199,8 +206,9 @@ class OdpltMesh(object):
             # First visible object :
             self._viz = [True, False, False]
             # Set the data :
+            self._line.method = self._method
             self._line.set_data(np.vstack((self._xvec, self._rowdata)).T,
-                                color=self._col, symbol=None, **self._kwargs)
+                                color=self._col, **self._kwargs)
             self._xlab, self._ylab = None, None
             # Update object :
             self._line.update()
@@ -287,12 +295,22 @@ class OdpltMesh(object):
             sl[self._alongIdx] = self._index
 
         # Build the row vector and get the length :
-        self._rowdata = np.squeeze(self._data[sl])
+        self._rowdata = np.squeeze(self._data[sl]).ravel()
         self.n = self._data.shape[self._timeIdx]
         self.l = self._data.shape[self._alongIdx]
 
-        # Build the x vector :
+        # Build the x-vector :
         self._xvec = np.arange(self.n)
+
+        # Data interpolation :
+        if (self._itptype not in [None, 'None']) and (self._itpstep not in [
+                                                      0., 1.]):
+            f = interp1d(self._xvec, self._rowdata, kind=self._itptype)
+            self._xvec = np.arange(0, self.n-1, self._itpstep)
+            self.n = len(self._xvec)
+            self._rowdata = f(self._xvec)
+
+        # Time conversion of thex-axis :
         if self._xtype == 'time':
             self._xvec = np.divide(self._xvec, self._sf)
 
