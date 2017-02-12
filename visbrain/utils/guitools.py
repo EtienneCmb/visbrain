@@ -123,7 +123,8 @@ def ndsubplot(n, line=4, force_col=None, max_rows=10):
             ncols = force_col
             nrows = int(n/ncols)
         else:
-            vec = np.linspace(max_rows, 0, max_rows + 1).astype(int)
+            vec = np.linspace(max_rows, 2, max_rows + 1,
+                              endpoint=False).astype(int)
             nbool = [not bool(n % k) for k in vec]
             if any(nbool):
                 ncols = vec[nbool.index(True)]

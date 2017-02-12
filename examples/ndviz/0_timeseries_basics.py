@@ -3,7 +3,8 @@ import numpy as np
 
 # y = np.random.rand(1000, 10, 20)
 
-y = np.random.normal(size=(1000, 50, 30))
+y = np.random.normal(size=(1000, 100, 100)).astype(np.float32)
+print(y.dtype)
 # y /= y.max()
 
 # y = np.sin(np.arange(1000)*2*np.pi*200/1024) + np.random.rand(1000)

@@ -38,6 +38,7 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
         # Initlialize all canvas :
         self._ndCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=nd_title,
                                     x_label=nd_xlabel, y_label=nd_ylabel)
+        self._ndCanvas.visible_axis(False)
         self._1dCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=od_title,
                                     x_label=od_xlabel, y_label=od_ylabel)
         self._cbCanvas = AxisCanvas(axis=False, bgcolor='white')

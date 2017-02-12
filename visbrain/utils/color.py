@@ -74,9 +74,9 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
         # Set the color :
         vcolor = np.concatenate((np.array([list(coltuple)]*length),
                                  alpha*np.ones((length, 1),
-                                               dtype=float)), axis=1)
+                                               dtype=np.float32)), axis=1)
 
-        return vcolor
+        return vcolor.astype(np.float32)
     else:
         raise ValueError(str(type(color)) + " is not a recognized type of "
                          "color. Use None, tuple or string")
@@ -203,7 +203,7 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         x_cmap = np.transpose(np.tile(x_cmap[..., np.newaxis],
                                       (1, 1, 3)), (0, 2, 1))
 
-    return x_cmap
+    return x_cmap.astype(np.float32)
 
 
 def dynamic_color(color, x, dynamic=(0.0, 1.0)):

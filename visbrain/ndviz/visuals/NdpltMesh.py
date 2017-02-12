@@ -179,7 +179,7 @@ class NdpltVisual(visuals.Visual):
         """Init."""
         # --------------------------------------------------------------------
         # Get inputs :
-        self._data = np.array(data, dtype=np.float32)
+        self._data = data
         self._sf = np.float32(sf)
         self._color = color
         self._ax_name = ax_name
@@ -196,7 +196,8 @@ class NdpltVisual(visuals.Visual):
         self._unicolor = unicolor
 
         # Normalize the data for the visualization :
-        self._data = self._data / self._data.max()
+        # np.divide(self._data, self._data.max(), out=self._data)
+        self._data /= self._data.max()
 
         # Define attributes :
         self._dim = [0, 0]
@@ -219,7 +220,6 @@ class NdpltVisual(visuals.Visual):
         self._check_data()
         self._check_color()
         self._check_others()
-
         # --------------------------------------------------------------------
         # Link the time the the on_time function :
         self._timer = app.Timer(1/self._sf, connect=self.on_timer, start=play)
@@ -522,8 +522,8 @@ class NdpltVisual(visuals.Visual):
         # Remove the mean signal :
         if self._demean:
             # Get the mean and remove it:
-            data_m = np.mean(self._data, axis=1, keepdims=True)
-            self._data -= data_m
+            np.subtract(self._data, np.mean(self._data, axis=1, keepdims=True),
+                        out=self._data)
 
         # Get the number of time points :
         self.n = self._data.shape[1]
@@ -539,12 +539,8 @@ class NdpltVisual(visuals.Visual):
                             np.repeat(np.tile(np.arange(nrows), ncols), n),
                             np.tile(np.arange(n), m)].astype(np.float32)
 
-        # Define the tie vector :
-        self._time = np.arange(n, dtype=np.float(32)) / self._sf
-
-        # Be sure to have a float32 array :
-        self._data = self._data.astype(np.float32)
-        self._index = self._index.astype(np.float32)
+        # Define the time vector :
+        self._time = np.arange(n, dtype=np.float32) / self._sf
 
         # Send to buffer :
         self._buffer_data()
@@ -561,7 +557,8 @@ class NdpltVisual(visuals.Visual):
         if self._color in [None, 'rnd', 'random']:
             # Create a (m, 3) color array :
             singcol = np.random.uniform(size=(self.m, 3), low=self._rnd_dyn[0],
-                                        high=self._rnd_dyn[1])
+                                        high=self._rnd_dyn[1]).astype(
+                                        np.float32)
             # Repeat the array n_times to have a (m*n_times, 3) array :
             self._a_color = np.repeat(singcol, self.n, axis=0)
 
@@ -598,11 +595,8 @@ class NdpltVisual(visuals.Visual):
         else:
             raise ValueError("The color parameter is not recognized.")
 
-        # Be sure to have a float32 array :
-        self._a_color = self._a_color.astype(np.float32)
-
         # Get a (m, n, 3) color array copy :
-        self._colsh = self._a_color.reshape(self.m, self.n, 3).copy()
+        self._colsh = self._a_color.reshape(self.m, self.n, 3)
 
         # Run buffer color :
         self._buffer_color()

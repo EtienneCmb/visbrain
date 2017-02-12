@@ -3,13 +3,10 @@
 import numpy as np
 from scipy.interpolate import interp1d
 
-from vispy import scene, visuals
+from vispy import scene
 import vispy.visuals.transforms as vist
 
 from ...utils import type_coloring
-
-# Create a visual node :
-Line = scene.visuals.create_visual_node(visuals.LinePlotVisual)
 
 __all__ = ['OdpltMesh']
 
@@ -295,7 +292,7 @@ class OdpltMesh(object):
             sl[self._alongIdx] = self._index
 
         # Build the row vector and get the length :
-        self._rowdata = np.squeeze(self._data[sl]).ravel()
+        self._rowdata = np.squeeze(self._data[sl])
         self.n = self._data.shape[self._timeIdx]
         self.l = self._data.shape[self._alongIdx]
 
@@ -305,7 +302,10 @@ class OdpltMesh(object):
         # Data interpolation :
         if (self._itptype not in [None, 'None']) and (self._itpstep not in [
                                                       0., 1.]):
-            f = interp1d(self._xvec, self._rowdata, kind=self._itptype)
+            # Define the interpolation function :
+            f = interp1d(self._xvec, self._rowdata, kind=self._itptype,
+                         copy=False)
+
             self._xvec = np.arange(0, self.n-1, self._itpstep,
                                    dtype=np.float32)
             self.n = len(self._xvec)

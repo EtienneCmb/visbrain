@@ -16,6 +16,8 @@ import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
 from .visuals import visuals
+from ..utils import id
+from warnings import warn
 # from .user import userfcn
 
 
@@ -57,7 +59,16 @@ class Ndviz(uiInit, visuals, uiElements):
 
     def __init__(self, data, sf, *args, **kwargs):
         """Init."""
+        # Be sure to have float arguments :
+        if data.dtype != np.float32:
+            data = data.astype(np.float32, copy=False)
+            warn("Data should be an array of float number. Use "
+                 "data.astype(np.float32) before opening the interface.")
+
         # ====================== ui Arguments ======================
+        print('ON START : ', id(data))
+        data = np.ascontiguousarray(data)
+        print('ON START : ', id(data))
         # Background color (for all of the canvas) :
         bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
         nd_title = kwargs.get('nd_title', 'Nd-plot')
@@ -112,8 +123,8 @@ class Ndviz(uiInit, visuals, uiElements):
         # self._cbCanvas.wc.scene.children[0].parent = None
 
         ################################################################
-        self._NdVizPanel.setVisible(False)
-        self._1dVizPanel.setVisible(True)
+        # self._NdVizPanel.setVisible(False)
+        # self._1dVizPanel.setVisible(True)
         ################################################################
 
         # Finally, update each canvas :

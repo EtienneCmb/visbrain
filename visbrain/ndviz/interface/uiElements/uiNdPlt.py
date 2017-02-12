@@ -18,6 +18,7 @@ class uiNdPlt(object):
         # ---------------------------------------------------------------------
         self._shapetxtNd = 'data.shape = {sh}'
         self._ndAxUpdate.setEnabled(False)
+        self._ndForceUpdate = False
         # First run of axis checking and compatibility :
         self._fcn_ndAxis_checking()
         self._fcn_NdAxis_compat()
@@ -81,10 +82,13 @@ class uiNdPlt(object):
         # ---------------------------------------------------------------------
         # INFO
         # ---------------------------------------------------------------------
+        self._ndGridTog.setChecked(self._ndCanvas._axis)
         self._ndGridTog.clicked.connect(self._fcn_ndGridToggle)
         self._ndTitleEdit.editingFinished.connect(self._fcn_ndEdit)
         self._ndXlabEdit.editingFinished.connect(self._fcn_ndEdit)
         self._ndYlabEdit.editingFinished.connect(self._fcn_ndEdit)
+
+        self._ndForceUpdate = True
 
     # =====================================================================
     # AXIS
@@ -258,8 +262,10 @@ class uiNdPlt(object):
         rnd_dyn = (self._ndRndDynMin.value(), self._ndRndDynMax.value())
 
         # Update color :
-        self._ndplt.mesh.set_color(color=col, rnd_dyn=rnd_dyn, unicolor=uni)
-        self._ndplt.mesh.update()
+        if self._ndForceUpdate:
+            self._ndplt.mesh.set_color(color=col, rnd_dyn=rnd_dyn,
+                                       unicolor=uni)
+            self._ndplt.mesh.update()
 
     # =====================================================================
     # REAL TIME
