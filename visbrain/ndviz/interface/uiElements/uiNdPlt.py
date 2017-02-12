@@ -81,6 +81,7 @@ class uiNdPlt(object):
         # ---------------------------------------------------------------------
         # INFO
         # ---------------------------------------------------------------------
+        self._ndGridTog.clicked.connect(self._fcn_ndGridToggle)
         self._ndTitleEdit.editingFinished.connect(self._fcn_ndEdit)
         self._ndXlabEdit.editingFinished.connect(self._fcn_ndEdit)
         self._ndYlabEdit.editingFinished.connect(self._fcn_ndEdit)
@@ -311,3 +312,7 @@ class uiNdPlt(object):
         self._ndCanvas.set_info(title=self._ndTitleEdit.text(),
                                 xlabel=self._ndXlabEdit.text(),
                                 ylabel=self._ndYlabEdit.text())
+
+    def _fcn_ndGridToggle(self):
+        """Display or hide axis."""
+        self._ndCanvas.visible_axis(self._ndGridTog.isChecked())

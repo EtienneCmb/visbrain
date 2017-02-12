@@ -120,8 +120,8 @@ class AxisCanvas(object):
             grid.add_widget(self.xaxis, row=2, col=1)
 
             # Add right padding :
-            rpad = grid.add_widget(row=1, col=2, row_span=1)
-            rpad.width_max = 50
+            self._rpad = grid.add_widget(row=1, col=2, row_span=1)
+            self._rpad.width_max = 50
 
             # Main plot :
             self.wc = grid.add_view(row=1, col=1, border_color=color)
@@ -157,6 +157,14 @@ class AxisCanvas(object):
             self.canvas.update()
         else:
             raise ValueError("For defining infos, you must use an axis canvas")
+
+    def visible_axis(self, visible=True):
+        """Display or hide the axis."""
+        self._axis = visible
+        self.xaxis.visible = visible
+        self.yaxis.visible = visible
+        self._titleObj.visible = visible
+        self._rpad.visible = visible
 
 
 class vbShortcuts(object):

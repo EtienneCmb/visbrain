@@ -77,6 +77,7 @@ class ui1dPlt(object):
         # ---------------------------------------------------------------------
         # INFO
         # ---------------------------------------------------------------------
+        self._1dGridTog.clicked.connect(self._fcn_1dGridToggle)
         self._1dTitleEdit.editingFinished.connect(self._fcn_1dEdit)
         self._1dXlabEdit.editingFinished.connect(self._fcn_1dEdit)
         self._1dYlabEdit.editingFinished.connect(self._fcn_1dEdit)
@@ -272,3 +273,8 @@ class ui1dPlt(object):
         self._1dCanvas.set_info(title=self._1dTitleEdit.text(),
                                 xlabel=self._1dXlabEdit.text(),
                                 ylabel=self._1dYlabEdit.text())
+
+    def _fcn_1dGridToggle(self):
+        """Display or hide axis."""
+        self._1dCanvas.visible_axis(self._1dGridTog.isChecked())
+        self._1dCanvas.canvas.update()

@@ -68,7 +68,7 @@ class OdpltMesh(object):
         self._col = 'white'
         self._viz = [True, False, False]
 
-        # Create a default Line, Histogram and spectrogram :
+        # Create a minimalistic Line, Histogram and spectrogram objects :
         self._line = scene.visuals.Line([0, 1], method=method, width=2)
         self._hist = scene.visuals.Histogram([0])
         self._imag = scene.visuals.Image(np.random.rand(2, 2))
@@ -246,7 +246,7 @@ class OdpltMesh(object):
             # Set data to the image :
             self._imag.set_data(mesh._data)
             # Define the time / freq vector :
-            time = np.arange(self.n) / self._sf
+            time = np.arange(self.n, dtype=np.float32) / self._sf
             freq = mesh.freqs
             # Re-scale the mesh for fitting in time / frequency :
             sc = (time.max()/mesh.size[0], freq.max()/len(freq), 1)
@@ -300,19 +300,20 @@ class OdpltMesh(object):
         self.l = self._data.shape[self._alongIdx]
 
         # Build the x-vector :
-        self._xvec = np.arange(self.n)
+        self._xvec = np.arange(self.n, dtype=np.float32)
 
         # Data interpolation :
         if (self._itptype not in [None, 'None']) and (self._itpstep not in [
                                                       0., 1.]):
             f = interp1d(self._xvec, self._rowdata, kind=self._itptype)
-            self._xvec = np.arange(0, self.n-1, self._itpstep)
+            self._xvec = np.arange(0, self.n-1, self._itpstep,
+                                   dtype=np.float32)
             self.n = len(self._xvec)
             self._rowdata = f(self._xvec)
 
         # Time conversion of thex-axis :
         if self._xtype == 'time':
-            self._xvec = np.divide(self._xvec, self._sf)
+            self._xvec /= self._sf
 
     def _check_color(self):
         """Check color inputs."""

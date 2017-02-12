@@ -180,7 +180,7 @@ class NdpltVisual(visuals.Visual):
         # --------------------------------------------------------------------
         # Get inputs :
         self._data = np.array(data, dtype=np.float32)
-        self._sf = sf
+        self._sf = np.float32(sf)
         self._color = color
         self._ax_name = ax_name
         self._play = play
@@ -540,7 +540,7 @@ class NdpltVisual(visuals.Visual):
                             np.tile(np.arange(n), m)].astype(np.float32)
 
         # Define the tie vector :
-        self._time = np.arange(n) / self._sf
+        self._time = np.arange(n, dtype=np.float(32)) / self._sf
 
         # Be sure to have a float32 array :
         self._data = self._data.astype(np.float32)
