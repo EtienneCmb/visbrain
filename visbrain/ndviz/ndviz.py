@@ -64,8 +64,6 @@ class Ndviz(uiInit, visuals, uiElements):
             data = data.astype(np.float32, copy=False)
             warn("Data should be an array of float number. Use "
                  "data.astype(np.float32) before opening the interface.")
-        data = np.ascontiguousarray(data)
-        sf = np.float32(sf)
         # ====================== ui Arguments ======================
         # Background color (for all of the canvas) :
         bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
@@ -77,8 +75,9 @@ class Ndviz(uiInit, visuals, uiElements):
         od_ylabel = kwargs.get('od_ylabel', 'Y axis')
         # Default linewidth :
         self._lw = kwargs.get('lw', 1.)
-        self._oridata = data
-        self._sf = sf
+        self._oridata = np.ascontiguousarray(data)
+        self._sf = np.float32(sf)
+        print('ID 0: ', id(self._oridata))
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
         self._extension = kwargs.get('ui_extension', '.png')
@@ -130,11 +129,6 @@ class Ndviz(uiInit, visuals, uiElements):
         # Finally, update each canvas :
         self._ndCanvas.canvas.update()
         self._1dCanvas.canvas.update()
-
-    def _check_inputs(self, data, sf, **kwargs):
-        """
-        """
-        pass
 
     def show(self):
         """Display the graphical user interface."""

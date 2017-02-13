@@ -16,14 +16,12 @@ class uiNdPlt(object):
         # ---------------------------------------------------------------------
         # AXIS :
         # ---------------------------------------------------------------------
-        self._ndargs = {}
         self._shapetxtNd = 'data.shape = {sh}'
         self._ndAxUpdate.setEnabled(False)
         self._ndForceUpdate = False
         # First run of axis checking and compatibility :
         self._fcn_ndAxis_checking()
         self._fcn_NdAxis_compat()
-        self._fcn_ndAxis_update()
         # Link axis objects with functions :
         self._ndAxTime.currentIndexChanged.connect(self._fcn_NdAxis_compat)
         self._ndAxNdRows.currentIndexChanged.connect(self._fcn_NdAxis_compat)
@@ -106,7 +104,7 @@ class uiNdPlt(object):
         self._avaiAxis = [str(k) for k in range(ndim)]
         # Set time axis :
         self._ndAxTime.addItems(self._avaiAxis)
-        self._ndAxTime.setCurrentIndex(self._ndplt.mesh._selectedaxis[0])
+        self._ndAxTime.setCurrentIndex(self._ndplt.mesh._axis[0])
 
         # Set shape text :
         self._ndAxShape.setText(self._shapetxtNd.format(sh=str(sh)))
@@ -153,8 +151,8 @@ class uiNdPlt(object):
             # Set combo box :
             self._ndAxNdRows.addItems(self._avaiAxis)
             self._ndAxNdCols.addItems(self._avaiAxis)
-            self._ndAxNdRows.setCurrentIndex(self._ndplt.mesh._selectedaxis[1])
-            self._ndAxNdCols.setCurrentIndex(self._ndplt.mesh._selectedaxis[2])
+            self._ndAxNdRows.setCurrentIndex(self._ndplt.mesh._axis[1])
+            self._ndAxNdCols.setCurrentIndex(self._ndplt.mesh._axis[2])
 
     def _fcn_NdAxis_compat(self):
         """Manage axis'prameters compatibility according to data dimension."""
@@ -208,7 +206,6 @@ class uiNdPlt(object):
         # ---------------------------------------------------------------------
         # Get the actual data ndim and shape :
         ndim = self._oridata.ndim
-        ax, force_col = None, None
 
         # ---------------------------------------------------------------------
         # UPDATE DATA
@@ -226,13 +223,13 @@ class uiNdPlt(object):
             ax = [self._ndAxTime.currentIndex(),
                   self._ndAxNdRows.currentIndex(),
                   self._ndAxNdCols.currentIndex()]
-
-        # Get axis and force column :
-        self._ndargs['axis'] = ax
-        self._ndargs['force_col'] = force_col
+            force_col = None
+            self._ndplt.mesh.set_data(self._oridata, axis=ax)
 
         # Update plot with new data:
-        self._fcn_ndUpdate()
+        self._ndplt.mesh.clean()
+        self._ndplt.mesh.set_data(self._oridata, axis=ax, force_col=force_col)
+        self._ndplt.mesh.update()
 
     # =====================================================================
     # COLOR
@@ -241,7 +238,7 @@ class uiNdPlt(object):
         """Manage color of nd-signals."""
         # Get color type :
         col = self._ndColType.currentText()
-        uni = 'white'
+        uni = 'gray'
 
         # Manage panel to display :
         if col in ['dyn_time', 'dyn_minmax']:
@@ -261,14 +258,14 @@ class uiNdPlt(object):
             self.q_Cmap.setEnabled(False)
             self._ndDynText.setVisible(False)
 
-        # Get variables :
-        self._ndargs['color'] = col
-        self._ndargs['unicolor'] = uni
-        self._ndargs['rnd_dyn'] = (self._ndRndDynMin.value(),
-                                   self._ndRndDynMax.value())
+        # Get random color dynamic :
+        rnd_dyn = (self._ndRndDynMin.value(), self._ndRndDynMax.value())
 
         # Update color :
-        self._fcn_ndUpdate()
+        if self._ndForceUpdate:
+            self._ndplt.mesh.set_color(color=col, rnd_dyn=rnd_dyn,
+                                       unicolor=uni)
+            self._ndplt.mesh.update()
 
     # =====================================================================
     # REAL TIME
@@ -296,13 +293,6 @@ class uiNdPlt(object):
     # =====================================================================
     # Nd-SETTINGS
     # =====================================================================
-    def _fcn_ndUpdate(self):
-        """Update 1d-plot."""
-        if self._ndForceUpdate:
-            self._ndplt.mesh.clean()
-            self._ndplt.mesh.set_data(self._oridata, self._sf, **self._ndargs)
-            self._ndplt.mesh.update()
-
     def _fcn_set_space(self):
         """Increase / Decrease space between plots."""
         self._ndplt.mesh.set_space(self._ndSetSpace.value())
@@ -318,8 +308,9 @@ class uiNdPlt(object):
 
     def _fcn_scale_sig(self):
         """Scale each signal along (x, y) axis."""
-        self._ndplt.mesh.set_scale((self._ndScaleX.value(),
-                                    self._ndScaleY.value()))
+        self._ndplt.mesh._uscale = (self._ndScaleX.value(),
+                                    self._ndScaleY.value())
+        self._ndplt.mesh._check_others()
         self._ndplt.mesh.update()
 
     def _fcn_ndEdit(self):

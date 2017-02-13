@@ -16,10 +16,10 @@ class ui1dPlt(object):
         # ---------------------------------------------------------------------
         # AXIS
         # ---------------------------------------------------------------------
+        self._1dargs = {}
         self._shapetxt1d = 'data.shape = {sh}'
         self._1dAxUpdate.setVisible(False)
         self._1dForceUpdate = False
-        self._1dargs = {}
         # First run of axis checking and compatibility :
         self._fcn_1dAxis_checking()
         self._fcn_1dAxis_update()
