@@ -1,4 +1,5 @@
 Big problem
+	-5 Projection corticale peut être passée en numpy : https://www.youtube.com/watch?v=EEUXKG97YRw
 	-5 AreaBase contient des propriétés qui load systématiquement le chargement des matrices. Donc ça ralentit considérablement le lancement de l'interface. Soit on ne charge les labels que si le panel est enable, soit je sépare les labels dans une matrices et je ne charge que les labels.
 	-5 Vérifier partout où il y a des properties
 
