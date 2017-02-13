@@ -64,11 +64,9 @@ class Ndviz(uiInit, visuals, uiElements):
             data = data.astype(np.float32, copy=False)
             warn("Data should be an array of float number. Use "
                  "data.astype(np.float32) before opening the interface.")
-
-        # ====================== ui Arguments ======================
-        print('ON START : ', id(data))
         data = np.ascontiguousarray(data)
-        print('ON START : ', id(data))
+        sf = np.float32(sf)
+        # ====================== ui Arguments ======================
         # Background color (for all of the canvas) :
         bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
         nd_title = kwargs.get('nd_title', 'Nd-plot')
@@ -79,7 +77,8 @@ class Ndviz(uiInit, visuals, uiElements):
         od_ylabel = kwargs.get('od_ylabel', 'Y axis')
         # Default linewidth :
         self._lw = kwargs.get('lw', 1.)
-        self._oridata = np.array(data.copy(), dtype=np.float32)
+        self._oridata = data
+        self._sf = sf
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
         self._extension = kwargs.get('ui_extension', '.png')
@@ -105,6 +104,7 @@ class Ndviz(uiInit, visuals, uiElements):
         ndcam = viscam.PanZoomCamera(rect=(-1, -1, 2, 2))
         self._ndplt.mesh.set_camera(ndcam)
         self._ndCanvas.set_camera(ndcam)
+        self._ndCanvas.visible_axis(False)
 
         # 1d-plot camera :
         odcam = viscam.PanZoomCamera(rect=self._1dplt.mesh.rect)
@@ -123,8 +123,8 @@ class Ndviz(uiInit, visuals, uiElements):
         # self._cbCanvas.wc.scene.children[0].parent = None
 
         ################################################################
-        # self._NdVizPanel.setVisible(False)
-        # self._1dVizPanel.setVisible(True)
+        self._NdVizPanel.setVisible(False)
+        self._1dVizPanel.setVisible(True)
         ################################################################
 
         # Finally, update each canvas :

@@ -195,10 +195,6 @@ class NdpltVisual(visuals.Visual):
         self._uscale = scale
         self._unicolor = unicolor
 
-        # Normalize the data for the visualization :
-        # np.divide(self._data, self._data.max(), out=self._data)
-        self._data /= self._data.max()
-
         # Define attributes :
         self._dim = [0, 0]
         self.nrows = 0
@@ -522,8 +518,10 @@ class NdpltVisual(visuals.Visual):
         # Remove the mean signal :
         if self._demean:
             # Get the mean and remove it:
-            np.subtract(self._data, np.mean(self._data, axis=1, keepdims=True),
-                        out=self._data)
+            self._data -= np.mean(self._data, axis=1, keepdims=True)
+
+        # Normalize the data for the visualization :
+        self._data /= self._data.max()
 
         # Get the number of time points :
         self.n = self._data.shape[1]

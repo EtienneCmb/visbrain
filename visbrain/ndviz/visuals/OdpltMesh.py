@@ -14,76 +14,45 @@ __all__ = ['OdpltMesh']
 class OdpltMesh(object):
     """Create a 1D object.
 
-    Args:
-        data: ndarray
-            The array to use
-
-        sf: float
-            The sampling frequency
-
-    Kargs:
-        axis: tuple/list/array, optional, (def: None)
-            The axis parameter must contains two integers. The first one refer
-            to the location of the time axis. All the points over this axis
-            are going to be selected. The second one refer to the axis along
-            which selecting the data.
-
-        index: int, optional, (def: 0)
-            The index along axis[1] for selecting the data.
-
-        xtype: string, optional, (def: None)
-            How to consider the x-axis. Use None for the default, 'time' to get
-            a time scale.
+    This class can be used to create a line, a histogram, a spectrogram or a
+    cloud of points with several graphical and computing options.
     """
 
-    def __init__(self, data, sf, axis=None, index=0, plot='line', xtype=None,
-                 color='uniform', rnd_dyn=(0.3, 0.9), cmap='viridis',
-                 clim=None, vmin=None, under=None, vmax=None, over=None,
-                 unicolor='white', bins=10, nfft=256, step=128, itp_type=None,
-                 itp_step=1., method='gl', **kwargs):
+    def __init__(self, *args, **kwargs):
         """Init."""
-        # User inputs :
-        self._data = np.array(data, dtype=np.float32)
-        self._sf = float(sf)
-        self._axis = axis
-        self._plot = plot
-        self._index = index
-        self._color = color
-        self._xtype = xtype
-        self._bins = bins
-        self._xlab, self._ylab = '', ''
-        self._color, self._rnd_dyn, self._unicolor = color, rnd_dyn, unicolor
-        self._cmap, self._clim, self._vmin, self._vmax = cmap, clim, vmin, vmax
-        self._under, self._over = under, over
-        self._nfft, self._step = nfft, step
-        self._kwargs = kwargs
-        self._itptype, self._itpstep = itp_type, itp_step
-        self._method = method
-
-        # Variables :
-        self._l = 0
-        self._col = 'white'
-        self._viz = [True, False, False]
-
         # Create a minimalistic Line, Histogram and spectrogram objects :
-        self._line = scene.visuals.Line([0, 1], method=method, width=2)
-        self._hist = scene.visuals.Histogram([0])
-        self._imag = scene.visuals.Image(np.random.rand(2, 2))
+        self._line = scene.visuals.Line([0, 1], width=2, name='line')
+        self._hist = scene.visuals.Histogram([0], name='histogram')
+        self._imag = scene.visuals.Image(np.random.rand(2, 2),
+                                         name='spectrogram')
+        self._mark = scene.visuals.Markers(pos=np.random.rand(2, 2),
+                                           name='marker')
+        self._obj = [self._line, self._hist, self._imag, self._mark]
+        self._name = [k.name for k in self._obj]
 
-        self._obj_visible()
-
-        # Check data :
-        self.update()
+        self.set_data(*args, **kwargs)
 
     # ========================================================================
     # SET FUNCTIONS
     # ========================================================================
-    def set_data(self, data, axis=None, index=0, itp_type=None, itp_step=1.):
-        """Set some data.
+
+    def set_data(self, data, sf, axis=None, index=0, plot='line', xtype=None,
+                 color='uniform', rnd_dyn=(.3, .9), cmap='viridis',
+                 clim=None, vmin=None, under=None, vmax=None, over=None,
+                 unicolor='white', bins=10, nfft=256, step=128, itp_type=None,
+                 itp_step=1., method='gl', msize=5., **kwargs):
+        """Set new values to the selected plot.
+
+        Dynamic coloring are only avaible for line type plot but all of the
+        static color type can be applied either on line or histogram. The
+        spectrogram colormap is fixed to 'viridis'.
 
         Args:
             data: ndarray
-                The array to use
+                The array to use. Must be float32.
+
+            sf: float
+                The sampling frequency.
 
         Kargs:
             axis: tuple/list/array, optional, (def: None)
@@ -94,36 +63,15 @@ class OdpltMesh(object):
 
             index: int, optional, (def: 0)
                 The index along axis[1] for selecting the data.
-        """
-        self._data, self._axis, self._index = data, axis, index
-        self._itptype, self._itpstep = itp_type, itp_step
-        self.update()
 
-    def set_type(self, plot='line', bins=10, nfft=256, step=128, method='gl',
-                 **kwargs):
-        """Set the plot type."""
-        self._plot = plot
-        self._bins = bins
-        self._nfft, self._step = nfft, step
-        self._method = method
+            plot: string, optional, (def: 'line')
+                Specify how to plot the data. Use either 'line', 'histogram',
+                'spectrogram' or 'marker'.
 
-        # Update data and color :
-        self.update()
+            xtype: string, optional, (def: None)
+                How to consider the x-axis. Use None for the default, 'time'
+                to get a time scale.
 
-        # Manage visible object :
-        self._viz = [plot is k for k in ['line', 'histogram', 'spectrogram']]
-        self._obj_visible()
-
-    def set_color(self, color='uniform', rnd_dyn=(0.3, 0.9), cmap='viridis',
-                  clim=None, vmin=None, under=None, vmax=None, over=None,
-                  unicolor='white'):
-        """Set new color parameter to the data.
-
-        Dynamic coloring are only avaible for line type plot but all of the
-        static color type can be applied either on line or histogram. The
-        spectrogram colormap is fixed to 'viridis'.
-
-        Kargs:
             color: string/tuple/array, optional, (def: 'uniform')
                 Choose how to color signals. Use None (or 'rnd', 'random') to
                 generate random colors. Use 'uniform' (see the unicolor
@@ -151,10 +99,6 @@ class OdpltMesh(object):
                 clim[1] will peaked (parameter active for 'dyn_minmax' and
                 'dyn_time' color).
 
-            alpha: float, optional, (def: 1.0)
-                The opacity to use. The alpha parameter must be between 0 and 1
-                (parameter active for 'dyn_minmax' and 'dyn_time' color).
-
             vmin: float, optional, (def: None)
                 Threshold from which every color will have the color defined
                 using the under parameter bellow (parameter active for
@@ -175,71 +119,154 @@ class OdpltMesh(object):
 
             unicolor: tuple/string, optional, (def: 'white')
                 The color to use in case of uniform color.
+
+            bins: float, optional, (def: 10.)
+                Number of bins for the histogram.
+
+            nfft: int, optional, (def: 256)
+                Number of fft points for the spectrogram.
+
+            step: int, optional, (def: 128)
+                Time step for the spectrogram.
+
+            itp_type: string, optional, (def: None)
+                Interpolation type. See scipy.interp1d for selecting an
+                appropriate type.
+
+            itp_step: float, optional, (def: 1.)
+                Interpolation step.
+
+            method: string, optional, (def: 'gl')
+                Method for plotting the line. Use 'gl' or 'agg'
+
+            msize: float, optional, (def: 5.)
+                Marker size.
         """
-        # Get inputs arguments :
+        self._axis, self._index, self._sf = axis, index, sf
+        self._itptype, self._itpstep = itp_type, itp_step
+        self._plot, self._bins, self._xtype = plot, bins, xtype
+        self._nfft, self._step, self._method = nfft, step, method
         self._color, self._rnd_dyn, self._unicolor = color, rnd_dyn, unicolor
         self._cmap, self._clim, self._vmin, self._vmax = cmap, clim, vmin, vmax
         self._under, self._over = under, over
-        # Check color :
-        self.update()
+        self._msize = msize
 
-    def update(self):
-        """Update plotting."""
-        # Check arguments :
-        self._check_data()
-        self._check_color()
+        # #############################################################
+        # CHECK DATA
+        # #############################################################
+        # Get the number of dimensions :
+        self.ndim, self.sh = data.ndim, data.shape
 
-        # Set data and color :
-        self._set_data()
+        # Select the data :
+        if self.ndim == 1:
+            self._timeIdx, self._alongIdx = 0, 0
+            sl = slice(None)
+        else:
+            # Check axis :
+            if axis is None:
+                axis = [0, 1]
+                self._axis = axis
+            if len(axis) is not 2:
+                raise ValueError("The length of the axis parameter must be 2.")
+            else:
+                self._timeIdx = axis[0]
+                self._alongIdx = axis[1]
+            # Select nothing in the data data :
+            sl = [slice(1)] * self.ndim
+            # Select everything over the time axis :
+            sl[self._timeIdx] = slice(None)
+            # Select data along the desire axis :
+            sl[self._alongIdx] = self._index
 
-    # ========================================================================
-    # SET SUB-FUNCTIONS
-    # ========================================================================
-    def _set_data(self):
-        """Set data according to plot type."""
-        # --------------------------------------------------------------------
+        # Build the row vector and get the length :
+        rowdata = np.squeeze(data[sl])
+        self.n = data.shape[self._timeIdx]
+        self.l = data.shape[self._alongIdx]
+
+        # Build the x-vector :
+        xvec = np.arange(self.n, dtype=np.float32)
+
+        # Data interpolation :
+        if (itp_type not in [None, 'None']):
+            # Define the interpolation function :
+            f = interp1d(xvec, rowdata, kind=itp_type, copy=False)
+            # Define the new interpolation vector :
+            xvec = np.arange(0, self.n-1, itp_step, dtype=np.float32)
+            self.n = len(xvec)
+            # Build the interpolate data :
+            rowdata = f(xvec)
+
+        # Time conversion of thex-axis :
+        if xtype == 'time':
+            xvec /= self._sf
+
+        # #############################################################
+        # CHECK COLOR
+        # #############################################################
+        # If histogram and dynamic color, set to random :
+        if (plot in ['histogram', 'spectrogram']) and (color in ['dyn_minmax',
+                                                       'dyn_time']):
+            color = 'random'
+
+        # ---------------------------------------------
+        # Static color :
+        if color in [None, 'random', 'rnd', 'uniform']:
+            if color is None:
+                color = 'random'
+            # Get color :
+            a_color = type_coloring(color=color, n=1, rnd_dyn=rnd_dyn,
+                                    unicolor=unicolor)
+            # Repeat across time in case of line :
+            if plot == 'line':
+                a_color = np.tile(a_color, (self.n, 1))
+
+        # ---------------------------------------------
+        # Dynamic color :
+        elif color in ['dyn_minmax', 'dyn_time']:
+            # Minmax -> rowdata :
+            if color == 'dyn_minmax':
+                data = rowdata
+            # Time -> time vector :
+            elif color == 'dyn_time':
+                data = np.arange(self.n)
+            a_color = type_coloring(color='dynamic', data=data, clim=clim,
+                                    cmap=cmap, vmin=vmin, under=under,
+                                    vmax=vmax, over=over)
+
+        # #############################################################
+        # PLOT TYPE
+        # #############################################################
+        # ---------------------------------------------
         # LINE :
-        if self._plot is 'line':
-            # First visible object :
-            self._viz = [True, False, False]
+        if plot == 'line':
             # Set the data :
-            self._line.method = self._method
-            self._line.set_data(np.vstack((self._xvec, self._rowdata)).T,
-                                color=self._col, **self._kwargs)
-            self._xlab, self._ylab = None, None
+            self._line.method = method
+            self._line.set_data(np.vstack((xvec, rowdata)).T, color=a_color)
             # Update object :
             self._line.update()
 
-        # --------------------------------------------------------------------
+        # ---------------------------------------------
         # HISTOGRAM :
-        elif self._plot is 'histogram':
-            # First visible object :
-            self._viz = [False, True, False]
+        elif plot == 'histogram':
             # Compute the mesh :
-            mesh = scene.visuals.Histogram(self._rowdata, self._bins,
-                                           **self._kwargs)
+            mesh = scene.visuals.Histogram(rowdata, bins)
             # Get the vertices and faces of the mesh :
             vert = mesh.mesh_data.get_vertices()
             faces = mesh.mesh_data.get_faces()
             # Pass vertices and faces to the histogram :
-            self._hist.set_data(vert, faces, color=self._col)
+            self._hist.set_data(vert, faces, color=a_color)
             # Compute the histogram :
-            self._rowdata, self._xvec = np.histogram(self._rowdata, self._bins)
-            self._rowdata = np.array([0, self._rowdata.max()])
+            rowdata, xvec = np.histogram(rowdata, bins)
+            rowdata = np.array([0, rowdata.max()])
             # Update object :
             self._hist.update()
 
-        # --------------------------------------------------------------------
+        # ---------------------------------------------
         # SPECTROGRAM :
-        elif self._plot is 'spectrogram':
-            # First visible object :
-            self._viz = [False, False, True]
-            # Define labels :
-            self._xlab, self._ylab = 'Time (ms)', 'Frequency (Hz)'
+        elif plot == 'spectrogram':
             # Compute the mesh :
-            mesh = scene.visuals.Spectrogram(self._rowdata, fs=self._sf,
-                                             n_fft=self._nfft, step=self._step,
-                                             cmap='viridis')
+            mesh = scene.visuals.Spectrogram(rowdata, fs=self._sf, n_fft=nfft,
+                                             step=step, cmap='viridis')
             # Set data to the image :
             self._imag.set_data(mesh._data)
             # Define the time / freq vector :
@@ -249,108 +276,32 @@ class OdpltMesh(object):
             sc = (time.max()/mesh.size[0], freq.max()/len(freq), 1)
             self._imag.transform = vist.STTransform(scale=sc)
             # Save the time and frequency vector :
-            self._xvec = time
-            self._rowdata = freq
+            xvec = time
+            rowdata = freq
             # Update object :
             self._imag.update()
 
-        # Set object visible :
+        # ---------------------------------------------
+        # MARKER :
+        elif plot == 'marker':
+            self._mark.set_data(np.vstack((xvec, rowdata)).T, size=msize,
+                                face_color=a_color, edge_color='white')
+            self._mark.scaling = True
+            # Update object :
+            self._mark.update()
+
+        # Update (xvec, rowdata) limits (for the camera) :
+        self.xlim = (xvec.min(), xvec.max())
+        self.ylim = (rowdata.min(), rowdata.max())
+
+        # Manage visible object :
+        self._viz = [plot == k for k in self._name]
         self._obj_visible()
 
     def _obj_visible(self):
         """Display or hide objects."""
-        self._line.visible = self._viz[0]
-        self._hist.visible = self._viz[1]
-        self._imag.visible = self._viz[2]
-
-    # ========================================================================
-    # CHECK FUNCTIONS
-    # ========================================================================
-    def _check_data(self):
-        """Check the shape of the data acording to the axis parameter."""
-        # Get the number of dimensions :
-        ndim = self._data.ndim
-
-        # Select the data :
-        if ndim == 1:
-            self._timeIdx, self._alongIdx = 0, 0
-            sl = slice(None)
-        else:
-            # Check axis :
-            if self._axis is None:
-                self._axis = [0, 1]
-            if len(self._axis) is not 2:
-                raise ValueError("The length of the axis parameter must be 2.")
-            else:
-                self._timeIdx = self._axis[0]
-                self._alongIdx = self._axis[1]
-            # Select nothing in the data data :
-            sl = [slice(1)] * ndim
-            # Select everything over the time axis :
-            sl[self._timeIdx] = slice(None)
-            # Select data along the desire axis :
-            sl[self._alongIdx] = self._index
-
-        # Build the row vector and get the length :
-        self._rowdata = np.squeeze(self._data[sl])
-        self.n = self._data.shape[self._timeIdx]
-        self.l = self._data.shape[self._alongIdx]
-
-        # Build the x-vector :
-        self._xvec = np.arange(self.n, dtype=np.float32)
-
-        # Data interpolation :
-        if (self._itptype not in [None, 'None']) and (self._itpstep not in [
-                                                      0., 1.]):
-            # Define the interpolation function :
-            f = interp1d(self._xvec, self._rowdata, kind=self._itptype,
-                         copy=False)
-
-            self._xvec = np.arange(0, self.n-1, self._itpstep,
-                                   dtype=np.float32)
-            self.n = len(self._xvec)
-            self._rowdata = f(self._xvec)
-
-        # Time conversion of thex-axis :
-        if self._xtype == 'time':
-            self._xvec /= self._sf
-
-    def _check_color(self):
-        """Check color inputs."""
-        # If histogram and dynamic color, set to random :
-        if (self._plot in ['histogram', 'spectrogram']) and (
-                                    self._color in ['dyn_minmax', 'dyn_time']):
-            self._color = None
-
-        # ---------------------------------------------------------------------
-        # Static color :
-        if self._color in [None, 'random', 'rnd', 'uniform']:
-            if self._color is None:
-                self._color = 'random'
-            # Get color :
-            a_color = type_coloring(color=self._color, n=1,
-                                    rnd_dyn=self._rnd_dyn,
-                                    unicolor=self._unicolor)
-            # Repeat across time in case of line :
-            if self._plot is 'line':
-                a_color = np.tile(a_color, (self.n, 1))
-
-        # ---------------------------------------------------------------------
-        # Dynamic color :
-        elif self._color in ['dyn_minmax', 'dyn_time']:
-            # Minmax -> rowdata :
-            if self._color == 'dyn_minmax':
-                data = self._rowdata
-            # Time -> time vector :
-            elif self._color == 'dyn_time':
-                data = np.arange(self.n)
-            a_color = type_coloring(color='dynamic', data=data,
-                                    clim=self._clim, cmap=self._cmap,
-                                    vmin=self._vmin, under=self._under,
-                                    vmax=self._vmax, over=self._over)
-
-        # Save the color :
-        self._col = a_color
+        for k, i in enumerate(self._obj):
+            i.visible = self._viz[k]
 
     # ========================================================================
     # PROPERTIES
@@ -358,12 +309,39 @@ class OdpltMesh(object):
     @property
     def parent(self):
         """Get doc."""
-        return self._parent
+        return [k.parent for k in self._obj]
 
     @parent.setter
     def parent(self, value):
         """Set parent value."""
-        self._obj.parent = value
+        for k, i in enumerate(self._obj):
+            i.parent = value
+
+    @property
+    def xlim(self):
+        """Get the limit of the x-axis."""
+        return self._xlim
+
+    @xlim.setter
+    def xlim(self, value):
+        """Set xlim value."""
+        self._xlim = value
+
+    @property
+    def ylim(self):
+        """Get the limit of the y-axis."""
+        return self._ylim
+
+    @ylim.setter
+    def ylim(self, value):
+        """Set ylim value."""
+        self._ylim = value
+
+    @property
+    def rect(self):
+        """Get the optimal rectangle to fit to the data."""
+        xlim, ylim = self.xlim, self.ylim
+        return xlim[0], ylim[0], xlim[1]-xlim[0], ylim[1]-ylim[0]
 
     @property
     def n(self):
@@ -374,22 +352,6 @@ class OdpltMesh(object):
     def n(self, value):
         """Set the length of the data."""
         self._n = value
-
-    @property
-    def xlim(self):
-        """Get the limit of the x-axis."""
-        return self._xvec.min(), self._xvec.max()
-
-    @property
-    def ylim(self):
-        """Get the limit of the y-axis."""
-        return self._rowdata.min(), self._rowdata.max()
-
-    @property
-    def rect(self):
-        """Get the optimal rectangle to fit to the data."""
-        xlim, ylim = self.xlim, self.ylim
-        return xlim[0], ylim[0], xlim[1]-xlim[0], ylim[1]-ylim[0]
 
     @property
     def l(self):

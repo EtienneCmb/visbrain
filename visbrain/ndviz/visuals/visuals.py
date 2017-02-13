@@ -10,7 +10,6 @@ parent to their corresponding canvas.
 from .NdpltMesh import NdpltMesh
 from .OdpltMesh import OdpltMesh
 # from .ImMesh import ImMesh
-from vispy.scene import Node
 
 __all__ = ["visuals"]
 
@@ -27,14 +26,9 @@ class visuals(object):
         self._ndplt = NdpltBase(data, sf, **kwargs)
         self._1dplt = OdpltBase(data, sf, **kwargs)
 
-        # Create a root node :
-        self._vbNode = Node(name='ndviz')
-
         # Make this root node the parent of others ndviz objects :
         self._ndplt.mesh.parent = self._ndCanvas.wc.scene
-        self._1dplt.mesh._line.parent = self._1dCanvas.wc.scene
-        self._1dplt.mesh._hist.parent = self._1dCanvas.wc.scene
-        self._1dplt.mesh._imag.parent = self._1dCanvas.wc.scene
+        self._1dplt.mesh.parent = self._1dCanvas.wc.scene
 
 
 class NdpltBase(object):

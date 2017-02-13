@@ -37,11 +37,13 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
 
         # Initlialize all canvas :
         self._ndCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=nd_title,
-                                    x_label=nd_xlabel, y_label=nd_ylabel)
-        self._ndCanvas.visible_axis(False)
+                                    x_label=nd_xlabel, y_label=nd_ylabel,
+                                    name='ndCanvas')
         self._1dCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=od_title,
-                                    x_label=od_xlabel, y_label=od_ylabel)
-        self._cbCanvas = AxisCanvas(axis=False, bgcolor='white')
+                                    x_label=od_xlabel, y_label=od_ylabel,
+                                    name='1dCanvas')
+        self._cbCanvas = AxisCanvas(axis=False, bgcolor='white',
+                                    name='cbCanvas')
 
         # Add the canvas to the UI (_ndVizLayout layout) and colorbar:
         self._NdVizLayout.addWidget(self._ndCanvas.canvas.native)
@@ -69,6 +71,7 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
 
         # Initialize shortcuts :
         vbShortcuts.__init__(self, self._ndCanvas.canvas)
+        vbShortcuts.__init__(self, self._1dCanvas.canvas)
 
 
 class AxisCanvas(object):
@@ -76,7 +79,7 @@ class AxisCanvas(object):
 
     def __init__(self, axis=True, x_label='', x_heightMax=80, y_label='',
                  y_widthMax=80, font_size=12, color='white', title='',
-                 axis_label_margin=50, tick_label_margin=5,
+                 axis_label_margin=50, tick_label_margin=5, name='',
                  bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}):
         """Init."""
         # Save variables :
@@ -87,7 +90,7 @@ class AxisCanvas(object):
 
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
-                                        show=True, **cargs)
+                                        show=True, title=name, **cargs)
 
         # Add axis :
         if axis:
@@ -190,11 +193,15 @@ class vbShortcuts(object):
             if event.text == ' ':
                 self._fcn_TogglePlay()
             if event.text == '0':
-                pass
+                if canvas.title == 'ndCanvas':
+                    self._ndplt.mesh.camera.rect = (-1, -1, 2, 2)
+                elif canvas.title == '1dCanvas':
+                    self._1dCanvas.wc.camera.rect = self._1dplt.mesh.rect
+                    self._1dCanvas.wc.camera.update()
             elif event.text == '1':
-                pass
+                self._ndToggleViz()
             elif event.text == '2':
-                pass
+                self._1dToggleViz()
             elif event.text == '3':
                 pass
 

@@ -322,3 +322,9 @@ class uiNdPlt(object):
     def _fcn_ndGridToggle(self):
         """Display or hide axis."""
         self._ndCanvas.visible_axis(self._ndGridTog.isChecked())
+
+    def _ndToggleViz(self):
+        """Toggle panle."""
+        viz = not self._NdVizPanel.isVisible()
+        self._CanVisNd.setChecked(viz)
+        self._fcn_CanVisToggle()

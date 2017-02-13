@@ -87,7 +87,7 @@ def uiSpinValue(elements, values):
     [k.setValue(i) for k, i in zip(elements, values)]
 
 
-def ndsubplot(n, line=4, force_col=None, max_rows=10):
+def ndsubplot(n, line=4, force_col=None, max_rows=100):
     """Get the optimal number of rows / columns for a given integer.
 
     Note
@@ -125,10 +125,12 @@ def ndsubplot(n, line=4, force_col=None, max_rows=10):
         else:
             vec = np.linspace(max_rows, 2, max_rows + 1,
                               endpoint=False).astype(int)
-            nbool = [not bool(n % k) for k in vec]
+            nbool = np.invert((n % vec).astype(bool))
             if any(nbool):
-                ncols = vec[nbool.index(True)]
+                ncols = vec[nbool.argmax()]
                 nrows = int(n/ncols)
+            else:
+                nrows, ncols = 1, n
 
     return nrows, ncols
 
