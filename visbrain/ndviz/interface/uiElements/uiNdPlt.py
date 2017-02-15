@@ -247,18 +247,15 @@ class uiNdPlt(object):
         if col in ['dyn_time', 'dyn_minmax']:
             self._ndRndPan.setVisible(False)
             self._ndUniPan.setVisible(False)
-            self.q_Cmap.setEnabled(True)
             self._ndDynText.setVisible(True)
         elif col == 'random':
             self._ndRndPan.setVisible(True)
             self._ndUniPan.setVisible(False)
-            self.q_Cmap.setEnabled(False)
             self._ndDynText.setVisible(False)
         elif col == 'uniform':
             self._ndRndPan.setVisible(False)
             self._ndUniPan.setVisible(True)
             uni = textline2color(self._ndUniColor.text())[0]
-            self.q_Cmap.setEnabled(False)
             self._ndDynText.setVisible(False)
 
         # Get variables :
@@ -300,6 +297,7 @@ class uiNdPlt(object):
         """Update 1d-plot."""
         if self._ndForceUpdate:
             self._ndplt.mesh.clean()
+            self._ndargs.update(self._cb.cb_kwargs('ndplt'))
             self._ndplt.mesh.set_data(self._oridata, self._sf, **self._ndargs)
             self._ndplt.mesh.update()
 

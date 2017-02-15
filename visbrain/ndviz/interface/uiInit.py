@@ -10,6 +10,7 @@ from PyQt4 import QtGui
 from vispy import app, scene
 
 from .gui import Ui_MainWindow
+from .cbar import Cbar
 from ...utils import color2vb
 
 __all__ = ['uiInit']
@@ -42,15 +43,23 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
         self._1dCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=od_title,
                                     x_label=od_xlabel, y_label=od_ylabel,
                                     name='1dCanvas')
-        self._cbCanvas = AxisCanvas(axis=False, bgcolor='white',
+        self._cbCanvas = AxisCanvas(axis=False, bgcolor=bgcolor,
                                     name='cbCanvas')
 
         # Add the canvas to the UI (_ndVizLayout layout) and colorbar:
         self._NdVizLayout.addWidget(self._ndCanvas.canvas.native)
         self._NdVizPanel.setVisible(True)
         self._1dVizLayout.addWidget(self._1dCanvas.canvas.native)
-        self._1dVizPanel.setVisible(False)
+        self._1dVizPanel.setVisible(True)
         self.cbpanel.addWidget(self._cbCanvas.canvas.native)
+
+        # Create the colorbar with the different objects :
+        self._cb = Cbar(self._cbCanvas.wc.scene)
+        self._cb.add_object('ndplt', label='Nd-plot', cmap='viridis', clim=(0, 10), fcn=self._fcn_ndUpdate)
+        self._cb.add_object('line', label='Line', cmap='Spectral_r', clim=(11, 17), fcn=self._fcn_1dUpdate)
+        self._cb.add_object('spectrogram', label='Spectrogram', fcn=self._fcn_1dUpdate)
+        self._cb.add_object('marker', label='Marker', fcn=self._fcn_1dUpdate)
+        self._cb.add_object('image', label='Image', fcn=self._fcn_imUpdate)
 
         # Set background color and hide quick settings panel :
         self.bgcolor = tuple(color2vb(color=bgcolor, length=1)[0, 0:3])

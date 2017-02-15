@@ -18,8 +18,8 @@ class ui1dPlt(object):
         # ---------------------------------------------------------------------
         self._1dargs = {}
         self._shapetxt1d = 'data.shape = {sh}'
-        self._1dAxUpdate.setVisible(False)
         self._1dForceUpdate = False
+        self._1dAxCheckTxt.setVisible(False)
         # First run of axis checking and compatibility :
         self._fcn_1dAxis_checking()
         self._fcn_1dAxis_update()
@@ -131,17 +131,21 @@ class ui1dPlt(object):
 
         # Display update buton if both axis are different :
         if self._1dAxX.currentIndex() is self._1dAxY.currentIndex():
-            # self._1dAxUpdate.setVisible(False)
             self._1dAxInd.setEnabled(False)
+            self._1dAxCheckTxt.setVisible(True)
         else:
-            # self._1dAxUpdate.setVisible(True)
+            self._1dAxCheckTxt.setVisible(False)
             self._1dAxInd.setEnabled(True)
 
             # Set selected axis and index :
-            if ndim is 1:
+            if ndim == 1:
+                self._1dAxInd.setEnabled(False)
                 self._1dargs['axis'] = None
                 self._1dargs['index'] = 0
             else:
+                # Set possible axis and index limits :
+                self._1dAxInd.setMinimum(0)
+                self._1dAxInd.setMaximum(self._1dplt.mesh.l-1)
                 ax = (self._1dAxX.currentIndex(), self._1dAxY.currentIndex())
                 self._1dargs['axis'] = ax
                 self._1dargs['index'] = self._1dAxInd.value()
@@ -157,6 +161,10 @@ class ui1dPlt(object):
         # Get plot type :
         plt = self._1dPltPick.currentText()
         self._1dargs['plot'] = plt
+        objlst = [self._1dPltLine, self._1dPltHist, self._1dPltSpec,
+                  self._1dPltMark]
+        enab = [self._1dColBox, self._1dAxInd, self._1dColType.model().item(2),
+                self._1dColType.model().item(3)]
 
         # ----------------------------------------------------
         # LINE :
@@ -164,14 +172,8 @@ class ui1dPlt(object):
             # Get line method :
             self._1dargs['method'] = self._1dLineMeth.currentText()
             # Set only line control visible :
-            self._1dPltLine.setVisible(True)
-            self._1dPltHist.setVisible(False)
-            self._1dPltSpec.setVisible(False)
-            self._1dPltMark.setVisible(False)
-            # Enable coloring :
-            self._1dColBox.setEnabled(True)
-            self._1dColType.model().item(2).setEnabled(True)
-            self._1dColType.model().item(3).setEnabled(True)
+            viz = [True, False, False, False]
+            enabviz = [True, True, True, True]
 
         # ----------------------------------------------------
         # HISTOGRAM :
@@ -179,14 +181,9 @@ class ui1dPlt(object):
             # Get bin number :
             self._1dargs['bins'] = self._1dPltBins.value()
             # Set only histogram control visible :
-            self._1dPltLine.setVisible(False)
-            self._1dPltHist.setVisible(True)
-            self._1dPltSpec.setVisible(False)
-            self._1dPltMark.setVisible(False)
+            viz = [False, True, False, False]
+            enabviz = [True, True, False, False]
             # Disable dynamic coloring :
-            self._1dColBox.setEnabled(True)
-            self._1dColType.model().item(2).setEnabled(False)
-            self._1dColType.model().item(3).setEnabled(False)
             self._1dDynText.setVisible(False)
 
         # ----------------------------------------------------
@@ -196,29 +193,29 @@ class ui1dPlt(object):
             self._1dargs['nfft'] = self._1dPltNfft.value()
             self._1dargs['step'] = self._1dPltStep.value()
             # Set only spectrogram control visible :
-            self._1dPltLine.setVisible(False)
-            self._1dPltHist.setVisible(False)
-            self._1dPltSpec.setVisible(True)
-            self._1dPltMark.setVisible(False)
+            viz = [False, False, True, False]
+            enabviz = [False, True, False, False]
             # Set color disable :
-            self._1dColBox.setEnabled(False)
             self._1dDynText.setVisible(False)
 
         # ----------------------------------------------------
         # MARKER :
         elif plt == 'marker':
-            # Set only spectrogram control visible :
-            self._1dPltLine.setVisible(False)
-            self._1dPltHist.setVisible(False)
-            self._1dPltSpec.setVisible(False)
-            self._1dPltMark.setVisible(True)
-            # Enable coloring :
-            self._1dColBox.setEnabled(True)
+            # Get marker size :
             self._1dargs['msize'] = self._1dMarkSize.value()
+            # Set only spectrogram control visible :
+            viz = [False, False, False, True]
+            enabviz = [True, True, True, True]
+
+        # ----------------------------------------------------
 
         # Get interpolation type and step :
         self._1dargs['itp_type'] = self._1dInterType.currentText()
         self._1dargs['itp_step'] = self._1dInterStep.value()
+
+        # Set visible panels :
+        [k.setVisible(i) for k, i in zip(objlst, viz)]
+        [k.setEnabled(i) for k, i in zip(enab, enabviz)]
 
         # Update plot :
         self._fcn_1dUpdate()
@@ -236,18 +233,15 @@ class ui1dPlt(object):
         if col in ['dyn_time', 'dyn_minmax']:
             self._1dRndPan.setVisible(False)
             self._1dUniPan.setVisible(False)
-            self.q_Cmap.setEnabled(True)
             self._1dDynText.setVisible(True)
         elif col == 'random':
             self._1dRndPan.setVisible(True)
             self._1dUniPan.setVisible(False)
-            self.q_Cmap.setEnabled(False)
             self._1dDynText.setVisible(False)
         elif col == 'uniform':
             self._1dRndPan.setVisible(False)
             self._1dUniPan.setVisible(True)
             uni = textline2color(self._1dUniColor.text())[0]
-            self.q_Cmap.setEnabled(False)
             self._1dDynText.setVisible(False)
             self._1dargs['unicolor'] = uni
 
@@ -265,6 +259,7 @@ class ui1dPlt(object):
         """Update 1d-plot."""
         if self._1dForceUpdate:
             # Set type and args :
+            self._1dargs.update(self._cb.cb_kwargs(self._1dargs['plot']))
             self._1dplt.mesh.set_data(self._oridata, self._sf, **self._1dargs)
             # Update canvas and camera :
             self._1dCanvas.canvas.update()

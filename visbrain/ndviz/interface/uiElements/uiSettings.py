@@ -53,8 +53,11 @@ class uiSettings(object):
         # Set canvas visibility control :
         self._CanVisNd.clicked.connect(self._fcn_CanVisToggle)
         self._CanVis1d.clicked.connect(self._fcn_CanVisToggle)
-        self._CanVisImage.clicked.connect(self._fcn_CanVisToggle)
+        # self._CanVisImage.clicked.connect(self._fcn_CanVisToggle)
         self._CanVisNd.setChecked(True)
+
+        # ------------------------------ TABS ------------------------------
+        self.QuickSettings.currentChanged.connect(self._fcn_tabSelection)
 
         # =====================================================================
         # SETTINGS PANEL
@@ -126,6 +129,15 @@ class uiSettings(object):
         self._NdVizPanel.setVisible(self._CanVisNd.isChecked())
         self._1dVizPanel.setVisible(self._CanVis1d.isChecked())
         # self._ImVizPanel.setVisible(self._CanVis1d.isChecked())
+
+    def _fcn_tabSelection(self):
+        if self.QuickSettings.currentIndex() == 1:
+            self._fcn_ndAxis_update()
+        if self.QuickSettings.currentIndex() == 2:
+            self._fcn_1dAxis_update()
+        elif self.QuickSettings.currentIndex() == 3:
+            self._fcn_imAxis_update()
+        pass
 
     # =====================================================================
     # GUI

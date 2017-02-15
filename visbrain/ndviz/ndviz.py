@@ -77,7 +77,7 @@ class Ndviz(uiInit, visuals, uiElements):
         self._lw = kwargs.get('lw', 1.)
         self._oridata = np.ascontiguousarray(data)
         self._sf = np.float32(sf)
-        print('ID 0: ', id(self._oridata))
+        # print('ID 0: ', id(self._oridata))
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
         self._extension = kwargs.get('ui_extension', '.png')
@@ -122,13 +122,16 @@ class Ndviz(uiInit, visuals, uiElements):
         # self._cbCanvas.wc.scene.children[0].parent = None
 
         ################################################################
-        self._NdVizPanel.setVisible(False)
-        self._1dVizPanel.setVisible(True)
+        self._NdVizPanel.setVisible(True)
+        self._1dVizPanel.setVisible(False)
+        self._1dCanvas.visible_axis(False)
+        self.q_widget.setVisible(True)
         ################################################################
 
-        # Finally, update each canvas :
+        # Finally, update each canvas and tab selection :
         self._ndCanvas.canvas.update()
         self._1dCanvas.canvas.update()
+        self._fcn_tabSelection()
 
     def show(self):
         """Display the graphical user interface."""

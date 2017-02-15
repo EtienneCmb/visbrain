@@ -6,7 +6,7 @@ from scipy.interpolate import interp1d
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from ...utils import type_coloring
+from ...utils import type_coloring, array2colormap
 
 __all__ = ['OdpltMesh']
 
@@ -14,20 +14,25 @@ __all__ = ['OdpltMesh']
 class OdpltMesh(object):
     """Create a 1D object.
 
-    This class can be used to create a line, a histogram, a spectrogram or a
-    cloud of points with several graphical and computing options.
+    This class can be used to create a line, an image, a histogram, a
+    spectrogram or a cloud of points with several graphical and computing
+    options.
     """
 
     def __init__(self, *args, **kwargs):
         """Init."""
         # Create a minimalistic Line, Histogram and spectrogram objects :
         self._line = scene.visuals.Line([0, 1], width=2, name='line')
+        self._imag = scene.visuals.Image(np.random.rand(20, 20),
+                                         name='image')
         self._hist = scene.visuals.Histogram([0], name='histogram')
-        self._imag = scene.visuals.Image(np.random.rand(2, 2),
+        self._spec = scene.visuals.Image(np.random.rand(2, 2),
                                          name='spectrogram')
         self._mark = scene.visuals.Markers(pos=np.random.rand(2, 2),
                                            name='marker')
-        self._obj = [self._line, self._hist, self._imag, self._mark]
+        # Set objects in list :
+        self._obj = [self._line, self._imag, self._hist, self._spec,
+                     self._mark]
         self._name = [k.name for k in self._obj]
 
         self.set_data(*args, **kwargs)
@@ -40,7 +45,7 @@ class OdpltMesh(object):
                  color='uniform', rnd_dyn=(.3, .9), cmap='viridis',
                  clim=None, vmin=None, under=None, vmax=None, over=None,
                  unicolor='white', bins=10, nfft=256, step=128, itp_type=None,
-                 itp_step=1., method='gl', msize=5., **kwargs):
+                 itp_step=1., method='gl', msize=5., imz=None, **kwargs):
         """Set new values to the selected plot.
 
         Dynamic coloring are only avaible for line type plot but all of the
@@ -141,6 +146,9 @@ class OdpltMesh(object):
 
             msize: float, optional, (def: 5.)
                 Marker size.
+
+            imz: int, optional, (def: None)
+                Z-axis for image plot type.
         """
         self._axis, self._index, self._sf = axis, index, sf
         self._itptype, self._itpstep = itp_type, itp_step
@@ -149,7 +157,7 @@ class OdpltMesh(object):
         self._color, self._rnd_dyn, self._unicolor = color, rnd_dyn, unicolor
         self._cmap, self._clim, self._vmin, self._vmax = cmap, clim, vmin, vmax
         self._under, self._over = under, over
-        self._msize = msize
+        self._msize, self._imz = msize, imz
 
         # #############################################################
         # CHECK DATA
@@ -171,41 +179,58 @@ class OdpltMesh(object):
             else:
                 self._timeIdx = axis[0]
                 self._alongIdx = axis[1]
+            # Z-axis for image :
+            if (imz is None) and (self.ndim > 2):
+                self._imz = list(set(range(self.ndim)).difference(
+                                                        set(self._axis)))[0]
+            elif (imz is None):
+                self._imz = 0
+            # -----------------------------------------
+            # 1D Slice :
             # Select nothing in the data data :
             sl = [slice(1)] * self.ndim
             # Select everything over the time axis :
             sl[self._timeIdx] = slice(None)
             # Select data along the desire axis :
             sl[self._alongIdx] = self._index
+            # -----------------------------------------
+            # 2D Slice :
+            sl2d = [slice(1)] * self.ndim
+            sl2d[self._alongIdx] = slice(None)
+            sl2d[self._timeIdx] = slice(None)
+            # Get data of z-axis (for ndim >= 3) :
+            if self.ndim >= 3:
+                sl2d[self._imz] = self._index
 
-        # Build the row vector and get the length :
-        rowdata = np.squeeze(data[sl])
-        self.n = data.shape[self._timeIdx]
-        self.l = data.shape[self._alongIdx]
+        if plot != 'image':
+            # Build the row vector and get the length :
+            rowdata = np.squeeze(data[sl])
+            self.n = data.shape[self._timeIdx]
+            self.l = data.shape[self._alongIdx]
 
-        # Build the x-vector :
-        xvec = np.arange(self.n, dtype=np.float32)
+            # Build the x-vector :
+            xvec = np.arange(self.n, dtype=np.float32)
 
-        # Data interpolation :
-        if (itp_type not in [None, 'None']):
-            # Define the interpolation function :
-            f = interp1d(xvec, rowdata, kind=itp_type, copy=False)
-            # Define the new interpolation vector :
-            xvec = np.arange(0, self.n-1, itp_step, dtype=np.float32)
-            self.n = len(xvec)
-            # Build the interpolate data :
-            rowdata = f(xvec)
+            # Data interpolation :
+            if (itp_type not in [None, 'None']):
+                # Define the interpolation function :
+                f = interp1d(xvec, rowdata, kind=itp_type, copy=False)
+                # Define the new interpolation vector :
+                xvec = np.arange(0, self.n-1, itp_step, dtype=np.float32)
+                self.n = len(xvec)
+                # Build the interpolate data :
+                rowdata = f(xvec)
 
-        # Time conversion of thex-axis :
-        if xtype == 'time':
-            xvec /= self._sf
+            # Time conversion of thex-axis :
+            if xtype == 'time':
+                xvec /= self._sf
 
         # #############################################################
         # CHECK COLOR
         # #############################################################
         # If histogram and dynamic color, set to random :
-        if (plot in ['histogram', 'spectrogram']) and (color in ['dyn_minmax',
-                                                       'dyn_time']):
+        if (plot in ['image', 'histogram', 'spectrogram']) and (color in [
+                                                    'dyn_minmax', 'dyn_time']):
             color = 'random'
 
         # ---------------------------------------------
@@ -246,6 +271,25 @@ class OdpltMesh(object):
             self._line.update()
 
         # ---------------------------------------------
+        # IMAGE :
+        if plot == 'image':
+            # Rank axis :
+            axrk = np.argsort(self._axis).argsort()
+            # Get 2d data :
+            data2d = data[sl2d]
+            # Transpose if needed :
+            if np.array_equal(axrk, np.array([0, 1])):
+                data2d = data2d.T
+            # Set the data :
+            cmap = array2colormap(np.flipud(data2d), cmap=cmap, vmin=vmin,
+                                  under=under, vmax=vmax, over=over, clim=clim)
+            self._imag.set_data(cmap)
+            # Update object :
+            self._imag.update()
+            xvec = np.arange(data2d.shape[1]+1)
+            rowdata = np.arange(data2d.shape[0]+1)
+
+        # ---------------------------------------------
         # HISTOGRAM :
         elif plot == 'histogram':
             # Compute the mesh :
@@ -257,7 +301,8 @@ class OdpltMesh(object):
             self._hist.set_data(vert, faces, color=a_color)
             # Compute the histogram :
             rowdata, xvec = np.histogram(rowdata, bins)
-            rowdata = np.array([0, rowdata.max()])
+            rowdata = np.array([rowdata[np.nonzero(rowdata)].min(),
+                               rowdata.max()])
             # Update object :
             self._hist.update()
 
@@ -266,20 +311,23 @@ class OdpltMesh(object):
         elif plot == 'spectrogram':
             # Compute the mesh :
             mesh = scene.visuals.Spectrogram(rowdata, fs=self._sf, n_fft=nfft,
-                                             step=step, cmap='viridis')
+                                             step=step)
             # Set data to the image :
-            self._imag.set_data(mesh._data)
+            self._spec.set_data(array2colormap(mesh._data, cmap=cmap,
+                                               vmin=vmin, under=under,
+                                               vmax=vmax, over=over, clim=clim)
+                               )
             # Define the time / freq vector :
             time = np.arange(self.n, dtype=np.float32) / self._sf
             freq = mesh.freqs
             # Re-scale the mesh for fitting in time / frequency :
             sc = (time.max()/mesh.size[0], freq.max()/len(freq), 1)
-            self._imag.transform = vist.STTransform(scale=sc)
+            self._spec.transform = vist.STTransform(scale=sc)
             # Save the time and frequency vector :
             xvec = time
             rowdata = freq
             # Update object :
-            self._imag.update()
+            self._spec.update()
 
         # ---------------------------------------------
         # MARKER :

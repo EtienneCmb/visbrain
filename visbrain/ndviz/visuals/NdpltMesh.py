@@ -1,4 +1,8 @@
-"""
+"""Ndplot management.
+
+A large portion of this code was taken from the example developped by the vispy
+team :
+https://github.com/vispy/vispy/blob/master/examples/demo/gloo/realtime_signals.py
 """
 
 import numpy as np
@@ -40,7 +44,6 @@ void main() {
     v_index = $a_index;
     // For clipping test in the fragment shader.
     v_position = gl_Position.xy;
-    v_ab = vec4(a, b);
 }
 """
 
@@ -49,7 +52,6 @@ fragment_shader = """
 varying vec4 v_color;
 varying vec3 v_index;
 varying vec2 v_position;
-varying vec4 v_ab;
 void main() {
     gl_FragColor = v_color;
 
@@ -288,8 +290,8 @@ class NdpltVisual(visuals.Visual):
                 axis = [axis.index(k) for k in range(3)]
             # Find index for transposing (n_rows, n_cols, n_time) :
             rshidx = [axis[k] for k in [1, 2, 0]]
-            # Transpose dimensions the data :
-            data = np.transpose(data, rshidx)
+            # Transpose dimensions the data. :
+            data = np.transpose(data, rshidx).copy()
             sh = data.shape
             # Finally, make the data (n_rows x n_cols, n_time) :
             data = np.reshape(data, (sh[0]*sh[1], sh[2]))
@@ -490,28 +492,18 @@ class NdpltVisual(visuals.Visual):
                 Number of points to update every 1/sampling_frequency.
         """
         # ---------------------------------------------------------------------
-        # Update "laps" points of the data :
-        dataC = self._data.copy()
-        self._data[:, :-laps] = self._data[:, laps:]
-        self._data[:, -laps:] = dataC[:, 0:laps]
-
-        # ---------------------------------------------------------------------
-        # Update "laps" points of the color :
-        colorC = self._colsh.copy()
-        self._colsh[:, :-laps, :] = self._colsh[:, laps:, :]
-        self._colsh[:, -laps:, :] = colorC[:, 0:laps, :]
-        self._a_color = self._colsh
-
-        # ---------------------------------------------------------------------
-        # Update time vector :
+        # Set new time laps :
         timeC = self._time.copy()
         self._time[:-laps] = self._time[laps:]
         self._time[-laps:] = timeC[0:laps]
-
-        # ---------------------------------------------------------------------
-        # Buffer updates :
-        self._buffer_data()
-        self._buffer_color()
+        # Rank values :
+        t = self._time.argsort().argsort()
+        # Update index :
+        cols, rows, n, m = self.ncols, self.nrows, self.n, self.m
+        index = np.c_[np.repeat(np.repeat(np.arange(cols), rows), n),
+                      np.repeat(np.tile(np.arange(rows), cols), n),
+                      np.tile(t, m)].astype(np.float32)
+        self._ibuffer.set_data(index)
         self.update()
 
     def _update_camrect(self):
