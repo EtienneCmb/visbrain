@@ -5,7 +5,7 @@ from .color import color2vb
 
 
 __all__ = ['slider2opacity', 'textline2color', 'uiSpinValue',
-           'ndsubplot', 'combo']
+           'ndsubplot', 'combo', 'is_color']
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -68,7 +68,48 @@ def textline2color(value):
             pass
         return value, color2vb(color=value)
     except:
-        return 'w', (1, 1, 1, 1)
+        return 'white', (1., 1., 1., 1.)
+
+
+def is_color(color, comefrom='color'):
+    """Test if a variable is a color.
+
+    Args:
+        color: str/tuple/list/array
+            The color to test.
+
+    Kargs:
+        comefrom: string, optional, (def: 'color')
+            Where come from the color object. Use either 'color' if it has to
+            be considered directly as a color or 'textline' if it comes from a
+            textline gui objects.
+
+    Returns:
+        iscol: bool
+            A boolean value to indicate if it is a color.
+    """
+    if comefrom is 'color':
+        try:
+            _ = color2vb(color)
+            iscol = True
+        except:
+            iscol = False
+    elif comefrom is 'textline':
+        try:
+            color = color.replace("'", '')
+            try:
+                if isinstance(eval(color), (tuple, list)):
+                    color = eval(color)
+            except:
+                pass
+            _ = color2vb(color=color)
+            iscol = True
+        except:
+            iscol = False
+    else:
+        raise ValueError("The comefrom must either be 'color' or 'textline'.")
+
+    return iscol
 
 
 def uiSpinValue(elements, values):
@@ -123,11 +164,16 @@ def ndsubplot(n, line=4, force_col=None, max_rows=100):
             ncols = force_col
             nrows = int(n/ncols)
         else:
+            # Build a linearly decreasing vector :
             vec = np.linspace(max_rows, 2, max_rows + 1,
                               endpoint=False).astype(int)
-            nbool = np.invert((n % vec).astype(bool))
+            # Compute n modulo each point in vec :
+            mod, div  = n % vec, n / vec
+            # Find where the result is zero :
+            nbool = np.invert(mod.astype(bool))
             if any(nbool):
-                ncols = vec[nbool.argmax()]
+                cmin = np.abs(vec[nbool] - div[nbool]).argmin()
+                ncols = vec[nbool][cmin]
                 nrows = int(n/ncols)
             else:
                 nrows, ncols = 1, n

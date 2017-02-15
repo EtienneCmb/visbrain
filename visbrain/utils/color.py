@@ -7,7 +7,7 @@ string / faces into RBGA colors, defining the basic colormap object...)
 
 import numpy as np
 
-from matplotlib.cm import ScalarMappable
+from matplotlib import cm
 import matplotlib.colors as mplcol
 from warnings import warn
 
@@ -15,7 +15,7 @@ from .math import normalize
 
 
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           '_colormap', 'type_coloring'
+           '_colormap', 'type_coloring', 'mpl_cmap'
            ]
 
 
@@ -172,7 +172,7 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         warn("The alpha parameter must be >= 0 and <= 1.")
 
     # ================== Define colormap ==================
-    cm = ScalarMappable(cmap=cmap)
+    sc = cm.ScalarMappable(cmap=cmap)
 
     # ================== Clip / Peak ==================
     # Force array to clip if x is under / over clim :
@@ -184,20 +184,20 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     # ================== Colormap (under, over) ==================
     # Set colormap (vmin, under) :
     if vmin is None:
-        cm.set_clim(vmin=None)
+        sc.set_clim(vmin=None)
     else:
-        cm.set_clim(vmin=vmin)
-        cm.cmap.set_under(color=under)
+        sc.set_clim(vmin=vmin)
+        sc.cmap.set_under(color=under)
     # Set colormap (vmax, over) :
     if vmax is None:
-        cm.set_clim(vmax=None)
+        sc.set_clim(vmax=None)
     else:
-        cm.set_clim(vmax=vmax)
-        cm.cmap.set_over(color=over)
+        sc.set_clim(vmax=vmax)
+        sc.cmap.set_over(color=over)
 
     # ================== Apply colormap ==================
     # Apply colormap to x :
-    x_cmap = np.array(cm.to_rgba(x, alpha=alpha))
+    x_cmap = np.array(sc.to_rgba(x, alpha=alpha))
     # Faces render (repeat the color to other dimensions):
     if faces_render:
         x_cmap = np.transpose(np.tile(x_cmap[..., np.newaxis],
@@ -466,3 +466,28 @@ def type_coloring(color=None, n=1, data=None, rnd_dyn=(0.3, 0.9), clim=None,
         raise ValueError("The color parameter is not recognized.")
 
     return colout.astype(np.float32)
+
+
+def mpl_cmap(invert=False):
+    """Get the list of matplotlib colormaps.
+
+    Kargs:
+        invert: bool, optional, (def: False)
+            Get the list of inverted colormaps.
+
+    Returns:
+        cmap_lst: list
+            list of avaible matplotlib colormaps.
+    """
+    # Full list of colormaps :
+    fullmpl = list(cm.datad.keys()) + list(cm.cmaps_listed.keys())
+    # Get the list of cmaps (inverted or not) :
+    if invert:
+        cmap_lst = [k for k in fullmpl if k.find('_r') + 1]
+    else:
+        cmap_lst = [k for k in fullmpl if not k.find('_r') + 1]
+
+    # Sort the list :
+    cmap_lst.sort()
+
+    return cmap_lst
