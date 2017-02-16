@@ -40,6 +40,7 @@ Contents:
    :maxdepth: 3
    
    vbrain
+   ndviz
 
 
 Indices and tables
