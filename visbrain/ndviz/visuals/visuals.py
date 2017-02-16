@@ -9,7 +9,7 @@ parent to their corresponding canvas.
 
 from .NdpltMesh import NdpltMesh
 from .OdpltMesh import OdpltMesh
-# from .ImMesh import ImMesh
+from ...utils import vis_args
 
 __all__ = ["visuals"]
 
@@ -39,18 +39,16 @@ class NdpltBase(object):
     class.
     """
 
-    def __init__(self, data, sf, nd_axis=None, nd_color=None, nd_space=2,
-                 nd_play=False, nd_force_col=None, nd_rnd_dyn=(0.3, 0.9),
-                 nd_demean=True, nd_cmap='viridis', nd_clim=None, nd_vmin=None,
-                 nd_under='gray', nd_vmax=None, nd_over='red', nd_laps=1,
-                 nd_unicolor='gray', **kwargs):
+    def __getitem__(self, name):
+        """Get a variable"""
+        pass
+
+    def __init__(self, data, sf, **kwargs):
         """Init."""
-        self.mesh = NdpltMesh(data, sf, axis=nd_axis, color=nd_color,
-                              space=nd_space, play=nd_play,
-                              force_col=nd_force_col, rnd_dyn=nd_rnd_dyn,
-                              demean=nd_demean, cmap=nd_cmap, clim=nd_clim,
-                              vmin=nd_vmin, under=nd_under, vmax=nd_vmax,
-                              over=nd_over, laps=nd_laps, unicolor=nd_unicolor)
+        # Get arguments starting with 'nd_' :
+        ignore = ['nd_grid']
+        self._ndargs, _ = vis_args(kwargs, 'nd_', ignore)
+        self.mesh = NdpltMesh(data, sf, **self._ndargs)
 
 
 class OdpltBase(object):
@@ -63,19 +61,8 @@ class OdpltBase(object):
 
     def __init__(self, data, sf, **kwargs):
         """Init."""
-        self.mesh = OdpltMesh(data, sf, plot='line', color='uniform')
-
-
-# class ImBase(ImMesh):
-#     """Base class for the image-plot.
-
-#     The main idea of this class is to manage user inputs. Basically, it turns
-#     the user inputs (containing im_) into compatible inputs for the ImMesh
-#     class.
-#     This class inherits from the ImMesh class because the mesh object is
-#     already created inside.
-#     """
-
-#     def __init__(self, data, sf, ):
-#         """Init."""
-#         ImMesh.__init__(self, data, sf)
+        # Get arguments starting with 'od_' :
+        ignore = ['od_grid']
+        args, _ = vis_args(kwargs, 'od_', ignore)
+        self.mesh = OdpltMesh(data, sf)
+        self.mesh.set_data(data, sf, **args)

@@ -72,7 +72,7 @@ class uiNdPlt(object):
         self._ndSetSpace.valueChanged.connect(self._fcn_set_space)
         self._ndSetSpace.setValue(self._ndplt.mesh._space)
         # Line width :
-        self._ndLineWidth.setValue(self._lw)
+        self._ndLineWidth.setValue(self._ndlw)
         self._ndLineWidth.valueChanged.connect(self._fcn_ndLineWidth)
         self._fcn_ndLineWidth()
         # Signal scaling :
@@ -306,12 +306,16 @@ class uiNdPlt(object):
         self._ndplt.mesh.set_space(self._ndSetSpace.value())
         self._ndplt.mesh.update()
 
+    def _fcn_get_NdMinmax(self):
+        """Get the minmax variable."""
+        return self._ndplt.mesh.minmax
+
     def _fcn_ndLineWidth(self):
         """Increase / decrease plot linewidth."""
         # Get line width (LW) from the button :
-        self._lw = self._ndLineWidth.value()
+        self._ndlw = self._ndLineWidth.value()
         # Set the LW to the canvas :
-        self._ndCanvas.canvas.context.set_line_width(self._lw)
+        self._ndCanvas.canvas.context.set_line_width(self._ndlw)
         self._ndCanvas.canvas.update()
 
     def _fcn_scale_sig(self):
@@ -328,7 +332,9 @@ class uiNdPlt(object):
 
     def _fcn_ndGridToggle(self):
         """Display or hide axis."""
-        self._ndCanvas.visible_axis(self._ndGridTog.isChecked())
+        viz = not self._ndGridTog.isChecked()
+        self._ndGridTog.setChecked(viz)
+        self._ndCanvas.visible_axis(viz)
 
     def _ndToggleViz(self):
         """Toggle panle."""

@@ -43,12 +43,16 @@ class ui1dPlt(object):
         self._1dPltNfft.valueChanged.connect(self._fcn_1dPlt)
         self._1dPltStep.setValue(self._1dplt.mesh._step)
         self._1dPltStep.valueChanged.connect(self._fcn_1dPlt)
+        self._1dPltfStart.setValue(self._1dplt.mesh._fstart)
+        self._1dPltfStart.valueChanged.connect(self._fcn_1dPlt)
+        self._1dPltfEnd.setValue(self._1dplt.mesh._fend)
+        self._1dPltfEnd.valueChanged.connect(self._fcn_1dPlt)
         self._1dLineMeth.setCurrentIndex(meth.index(self._1dplt.mesh._method))
         self._1dLineMeth.currentIndexChanged.connect(self._fcn_1dPlt)
         self._1dMarkSize.setValue(self._1dplt.mesh._msize)
         self._1dMarkSize.valueChanged.connect(self._fcn_1dPlt)
         # Line width :
-        self._1dLineWidth.setValue(self._lw)
+        self._1dLineWidth.setValue(self._1dlw)
         self._1dLineWidth.valueChanged.connect(self._fcn_1dLineWidth)
         # Interpolation :
         self._1dInterType.currentIndexChanged.connect(self._fcn_1dPlt)
@@ -192,6 +196,8 @@ class ui1dPlt(object):
             # Get nfft, step and color scale :
             self._1dargs['nfft'] = self._1dPltNfft.value()
             self._1dargs['step'] = self._1dPltStep.value()
+            self._1dargs['fstart'] = self._1dPltfStart.value()
+            self._1dargs['fend'] = self._1dPltfEnd.value()
             # Set only spectrogram control visible :
             viz = [False, False, True, False]
             enabviz = [False, True, False, False]
@@ -234,16 +240,19 @@ class ui1dPlt(object):
             self._1dRndPan.setVisible(False)
             self._1dUniPan.setVisible(False)
             self._1dDynText.setVisible(True)
+            [self._cbObjects.model().item(k).setEnabled(True) for k in [1, 2]]
         elif col == 'random':
             self._1dRndPan.setVisible(True)
             self._1dUniPan.setVisible(False)
             self._1dDynText.setVisible(False)
+            [self._cbObjects.model().item(k).setEnabled(False) for k in [1, 2]]
         elif col == 'uniform':
             self._1dRndPan.setVisible(False)
             self._1dUniPan.setVisible(True)
             uni = textline2color(self._1dUniColor.text())[0]
             self._1dDynText.setVisible(False)
             self._1dargs['unicolor'] = uni
+            [self._cbObjects.model().item(k).setEnabled(False) for k in [1, 2]]
 
         # Get random color dynamic :
         self._1dargs['rnd_dyn'] = (self._1dRndDynMin.value(),
@@ -266,16 +275,20 @@ class ui1dPlt(object):
             self._1dCanvas.wc.camera.rect = self._1dplt.mesh.rect
             self._1dCanvas.wc.camera.update()
 
+    def _fcn_get_1dMinmax(self):
+        """Get the minmax variable."""
+        return self._1dplt.mesh.minmax
+
     def _fcn_1dLineWidth(self):
         """Increase / decrease plot linewidth."""
         # Get line width (LW) from the button :
-        self._lw = self._1dLineWidth.value()
+        self._1dlw = self._1dLineWidth.value()
         # The method to control linewidth depend of the line method :
         if self._1dLineMeth.currentText() == 'gl':
             # Set the LW to the canvas :
-            self._1dCanvas.canvas.context.set_line_width(self._lw)
+            self._1dCanvas.canvas.context.set_line_width(self._1dlw)
         else:
-            self._1dplt.mesh._line._width = self._lw
+            self._1dplt.mesh._line._width = self._1dlw
             self._1dplt.mesh._line.update()
         self._1dCanvas.canvas.update()
 
@@ -287,7 +300,9 @@ class ui1dPlt(object):
 
     def _fcn_1dGridToggle(self):
         """Display or hide axis."""
-        self._1dCanvas.visible_axis(self._1dGridTog.isChecked())
+        viz = not self._1dGridTog.isChecked()
+        self._1dGridTog.setChecked(viz)
+        self._1dCanvas.visible_axis(viz)
         self._1dCanvas.canvas.update()
 
     def _1dToggleViz(self):

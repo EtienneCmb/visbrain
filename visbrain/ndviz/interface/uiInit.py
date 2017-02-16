@@ -50,16 +50,24 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
         self._NdVizLayout.addWidget(self._ndCanvas.canvas.native)
         self._NdVizPanel.setVisible(True)
         self._1dVizLayout.addWidget(self._1dCanvas.canvas.native)
-        self._1dVizPanel.setVisible(True)
+        self._1dVizPanel.setVisible(False)
         self.cbpanel.addWidget(self._cbCanvas.canvas.native)
 
         # Create the colorbar with the different objects :
         self._cb = Cbar(self._cbCanvas.wc.scene)
-        self._cb.add_object('ndplt', label='Nd-plot', cmap='viridis', clim=(0, 10), fcn=self._fcn_ndUpdate)
-        self._cb.add_object('line', label='Line', cmap='Spectral_r', clim=(11, 17), fcn=self._fcn_1dUpdate)
-        self._cb.add_object('spectrogram', label='Spectrogram', fcn=self._fcn_1dUpdate)
-        self._cb.add_object('marker', label='Marker', fcn=self._fcn_1dUpdate)
-        self._cb.add_object('image', label='Image', fcn=self._fcn_imUpdate)
+        self._cb.add_object('ndplt', label='Nd-plot',  fcn=self._fcn_ndUpdate,
+                            fcn_minmax=self._fcn_get_NdMinmax)
+        self._cb.add_object('line', label='Line', fcn=self._fcn_1dUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
+        self._cb.add_object('spectrogram', label='Spectrogram',
+                            fcn=self._fcn_1dUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
+        self._cb.add_object('histogram', label='None', fcn=self._fcn_1dUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
+        self._cb.add_object('marker', label='Marker', fcn=self._fcn_1dUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
+        self._cb.add_object('image', label='Image', fcn=self._fcn_imUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
 
         # Set background color and hide quick settings panel :
         self.bgcolor = tuple(color2vb(color=bgcolor, length=1)[0, 0:3])
@@ -200,19 +208,65 @@ class vbShortcuts(object):
             :event: the trigger event
             """
             if event.text == ' ':
+                # Play stop :
                 self._fcn_TogglePlay()
+            if event.text == 'r':
+                # Play stop :
+                self._fcn_rtreset()
             if event.text == '0':
+                # Reset the camera :
                 if canvas.title == 'ndCanvas':
                     self._ndplt.mesh.camera.rect = (-1, -1, 2, 2)
                 elif canvas.title == '1dCanvas':
                     self._1dCanvas.wc.camera.rect = self._1dplt.mesh.rect
                     self._1dCanvas.wc.camera.update()
             elif event.text == '1':
+                # Toggle display nd panel :
                 self._ndToggleViz()
             elif event.text == '2':
+                # Toggle display 1d panel :
                 self._1dToggleViz()
             elif event.text == '3':
                 pass
+            elif event.text == 'g':
+                # Toggle display the grid :
+                if canvas.title == 'ndCanvas':
+                    self._fcn_ndGridToggle()
+                elif canvas.title == '1dCanvas':
+                    self._fcn_1dGridToggle()
+
+            elif event.text == 'l':
+                # Set 1d plot as line :
+                self._cbObjects.setCurrentIndex(1)
+                self._fcn_cbautoscale()
+            elif event.text == 'm':
+                # Set 1d plot as marker :
+                self._cbObjects.setCurrentIndex(2)
+                self._fcn_cbautoscale()
+            elif event.text == 's':
+                # Set 1d plot as spectrogram :
+                self._cbObjects.setCurrentIndex(3)
+                self._fcn_cbautoscale()
+            elif event.text == 'h':
+                # Set 1d plot as histogram :
+                self._1dPltPick.setCurrentIndex(1)
+            elif event.text == 'i':
+                # Set 1d plot as line :
+                self._cbObjects.setCurrentIndex(4)
+                self._fcn_cbautoscale()
+            elif event.text == 'a':
+                # Auto-scale colorbar :
+                self._fcn_cbautoscale()
+            elif event.text == 'n':
+                # Next 1d signal :
+                self._1dAxInd.setValue(self._1dAxInd.value()+1)
+            elif event.text == 'p':
+                # Previous 1d signal :
+                self._1dAxInd.setValue(self._1dAxInd.value()-1)
+            elif event.text == 'N':
+                self._imAxInd.setValue(self._imAxInd.value()+1)
+            elif event.text == 'P':
+                self._imAxInd.setValue(self._imAxInd.value()-1)
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):

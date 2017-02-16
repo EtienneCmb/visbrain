@@ -23,29 +23,29 @@ class OdpltMesh(object):
         """Init."""
         # Create a minimalistic Line, Histogram and spectrogram objects :
         self._line = scene.visuals.Line([0, 1], width=2, name='line')
-        self._imag = scene.visuals.Image(np.random.rand(20, 20),
-                                         name='image')
         self._hist = scene.visuals.Histogram([0], name='histogram')
         self._spec = scene.visuals.Image(np.random.rand(2, 2),
                                          name='spectrogram')
         self._mark = scene.visuals.Markers(pos=np.random.rand(2, 2),
                                            name='marker')
+        self._imag = scene.visuals.Image(np.random.rand(20, 20),
+                                         name='image')
         # Set objects in list :
-        self._obj = [self._line, self._imag, self._hist, self._spec,
-                     self._mark]
+        self._obj = [self._line, self._hist, self._spec, self._mark,
+                     self._imag]
         self._name = [k.name for k in self._obj]
-
-        self.set_data(*args, **kwargs)
+        self._minmax = (0., 1.)
 
     # ========================================================================
     # SET FUNCTIONS
     # ========================================================================
 
-    def set_data(self, data, sf, axis=None, index=0, plot='line', xtype=None,
+    def set_data(self, data, sf, axis=None, index=0, plot='line',
                  color='uniform', rnd_dyn=(.3, .9), cmap='viridis',
                  clim=None, vmin=None, under=None, vmax=None, over=None,
-                 unicolor='white', bins=10, nfft=256, step=128, itp_type=None,
-                 itp_step=1., method='gl', msize=5., imz=None, **kwargs):
+                 unicolor='white', bins=10, nfft=256, step=128, fstart=None,
+                 fend=None, itp_type=None, itp_step=1., method='gl', msize=5.,
+                 imz=None, **kwargs):
         """Set new values to the selected plot.
 
         Dynamic coloring are only avaible for line type plot but all of the
@@ -72,10 +72,6 @@ class OdpltMesh(object):
             plot: string, optional, (def: 'line')
                 Specify how to plot the data. Use either 'line', 'histogram',
                 'spectrogram' or 'marker'.
-
-            xtype: string, optional, (def: None)
-                How to consider the x-axis. Use None for the default, 'time'
-                to get a time scale.
 
             color: string/tuple/array, optional, (def: 'uniform')
                 Choose how to color signals. Use None (or 'rnd', 'random') to
@@ -134,6 +130,12 @@ class OdpltMesh(object):
             step: int, optional, (def: 128)
                 Time step for the spectrogram.
 
+            fstart: float, optional, (def: None)
+                Frequency from which the spectrogram have to start
+
+            fend: float, optional, (def: None)
+                Frequency from which the spectrogram have to finish
+
             itp_type: string, optional, (def: None)
                 Interpolation type. See scipy.interp1d for selecting an
                 appropriate type.
@@ -152,10 +154,12 @@ class OdpltMesh(object):
         """
         self._axis, self._index, self._sf = axis, index, sf
         self._itptype, self._itpstep = itp_type, itp_step
-        self._plot, self._bins, self._xtype = plot, bins, xtype
+        self._plot, self._bins = plot, bins
         self._nfft, self._step, self._method = nfft, step, method
         self._color, self._rnd_dyn, self._unicolor = color, rnd_dyn, unicolor
         self._cmap, self._clim, self._vmin, self._vmax = cmap, clim, vmin, vmax
+        self._fstart = fstart if fstart else 0
+        self._fend = fend if fend else sf / 2
         self._under, self._over = under, over
         self._msize, self._imz = msize, imz
 
@@ -222,8 +226,7 @@ class OdpltMesh(object):
                 rowdata = f(xvec)
 
             # Time conversion of thex-axis :
-            if xtype == 'time':
-                xvec /= self._sf
+            xvec /= self._sf
 
         # #############################################################
         # CHECK COLOR
@@ -257,6 +260,7 @@ class OdpltMesh(object):
             a_color = type_coloring(color='dynamic', data=data, clim=clim,
                                     cmap=cmap, vmin=vmin, under=under,
                                     vmax=vmax, over=over)
+            self.minmax = (data.min(), data.max())
 
         # #############################################################
         # PLOT TYPE
@@ -276,7 +280,7 @@ class OdpltMesh(object):
             # Rank axis :
             axrk = np.argsort(self._axis).argsort()
             # Get 2d data :
-            data2d = data[sl2d]
+            data2d = np.squeeze(data[sl2d])
             # Transpose if needed :
             if np.array_equal(axrk, np.array([0, 1])):
                 data2d = data2d.T
@@ -284,10 +288,15 @@ class OdpltMesh(object):
             cmap = array2colormap(np.flipud(data2d), cmap=cmap, vmin=vmin,
                                   under=under, vmax=vmax, over=over, clim=clim)
             self._imag.set_data(cmap)
+            # Re-define xvec / rowdata :
+            xvec = np.arange(data2d.shape[1]+1) / self._sf
+            rowdata = np.arange(data2d.shape[0]+1)
+            self.minmax = (data2d.min(), data2d.max())
+            # Transform image according to time vector :
+            sc = (xvec.max()/data2d.shape[1], 1, 1)
+            self._imag.transform = vist.STTransform(scale=sc)
             # Update object :
             self._imag.update()
-            xvec = np.arange(data2d.shape[1]+1)
-            rowdata = np.arange(data2d.shape[0]+1)
 
         # ---------------------------------------------
         # HISTOGRAM :
@@ -305,6 +314,7 @@ class OdpltMesh(object):
                                rowdata.max()])
             # Update object :
             self._hist.update()
+            self.minmax = (rowdata.min(), rowdata.max())
 
         # ---------------------------------------------
         # SPECTROGRAM :
@@ -312,22 +322,29 @@ class OdpltMesh(object):
             # Compute the mesh :
             mesh = scene.visuals.Spectrogram(rowdata, fs=self._sf, n_fft=nfft,
                                              step=step)
+            # Select frequencies :
+            freq = mesh.freqs
+            f = [0., 0.]
+            f[0] = np.abs(freq - fstart).argmin() if fstart else 0
+            f[1] = np.abs(freq - fend).argmin() if fend else len(freq)
+            sls = slice(f[0], f[1]+1)
+            freq = freq[sls]
+            self._fstart, self._fend = freq[0], freq[-1]
             # Set data to the image :
-            self._spec.set_data(array2colormap(mesh._data, cmap=cmap,
+            self._spec.set_data(array2colormap(mesh._data[sls, :], cmap=cmap,
                                                vmin=vmin, under=under,
                                                vmax=vmax, over=over, clim=clim)
-                               )
-            # Define the time / freq vector :
-            time = np.arange(self.n, dtype=np.float32) / self._sf
-            freq = mesh.freqs
-            # Re-scale the mesh for fitting in time / frequency :
-            sc = (time.max()/mesh.size[0], freq.max()/len(freq), 1)
-            self._spec.transform = vist.STTransform(scale=sc)
-            # Save the time and frequency vector :
-            xvec = time
+                                )
+            # Re-scale the mesh for fitting in xvec / frequency :
+            fact = (freq.max()-freq.min())/len(freq)
+            sc = (xvec.max()/mesh.size[0], fact, 1)
+            tr = [0, freq.min(), 0]
+            self._spec.transform = vist.STTransform(scale=sc, translate=tr)
+            # Save the xvec and frequency vector :
             rowdata = freq
             # Update object :
             self._spec.update()
+            self.minmax = (mesh._data.min(), mesh._data.max())
 
         # ---------------------------------------------
         # MARKER :
@@ -354,6 +371,7 @@ class OdpltMesh(object):
     # ========================================================================
     # PROPERTIES
     # ========================================================================
+    # ----------- PARENT -----------
     @property
     def parent(self):
         """Get doc."""
@@ -365,6 +383,7 @@ class OdpltMesh(object):
         for k, i in enumerate(self._obj):
             i.parent = value
 
+    # ----------- XLIM -----------
     @property
     def xlim(self):
         """Get the limit of the x-axis."""
@@ -375,6 +394,7 @@ class OdpltMesh(object):
         """Set xlim value."""
         self._xlim = value
 
+    # ----------- YLIM -----------
     @property
     def ylim(self):
         """Get the limit of the y-axis."""
@@ -385,12 +405,14 @@ class OdpltMesh(object):
         """Set ylim value."""
         self._ylim = value
 
+    # ----------- RECT -----------
     @property
     def rect(self):
         """Get the optimal rectangle to fit to the data."""
         xlim, ylim = self.xlim, self.ylim
         return xlim[0], ylim[0], xlim[1]-xlim[0], ylim[1]-ylim[0]
 
+    # ----------- N -----------
     @property
     def n(self):
         """Get the length of the data."""
@@ -401,6 +423,7 @@ class OdpltMesh(object):
         """Set the length of the data."""
         self._n = value
 
+    # ----------- L -----------
     @property
     def l(self):
         """Get the length of the "along" axis."""
@@ -410,3 +433,14 @@ class OdpltMesh(object):
     def l(self, value):
         """Set the length of the "along" axis."""
         self._l = value
+
+    # ----------- MINMAX -----------
+    @property
+    def minmax(self):
+        """Get the minmax value."""
+        return self._minmax
+
+    @minmax.setter
+    def minmax(self, value):
+        """Set minmax value."""
+        self._minmax = value

@@ -22,16 +22,21 @@ from warnings import warn
 
 
 class Ndviz(uiInit, visuals, uiElements):
-    """Visualization of nd-signals.
+    """Signal visualization tool.
+
+    This class to visualize multi-dimentional array or to inspect single
+    signal in several forms (line / markers / histogram / spectrogram / image).
 
     Args:
         data: array
             The array to plot. It can have any dimension.
-
-        sf: float
+    Kargs:
+        sf: float, optionam, (def: 1.)
             The sampling frequency
 
-    Kargs:
+        nd_lw: float, optional, (def: 1.)
+            Line width of each signal for the Nd-plot.
+
         nd_title: string, optional, (def: 'Nd-plot')
             Title of the Nd plot.
 
@@ -40,6 +45,9 @@ class Ndviz(uiInit, visuals, uiElements):
 
         nd_ylabel: string, optional, (def: 'Y axis')
             Label of the y axis for the Nd plot.
+
+        od_lw: float, optional, (def: 1.)
+            Line width of each signal for the 1d-plot line.
 
         on_title: string, optional, (def: '1d-plot')
             Title of the 1d plot.
@@ -52,12 +60,9 @@ class Ndviz(uiInit, visuals, uiElements):
 
         ui_bgcolor: string/tuple, optional, (def: (.09, .09, .09))
             Background color of the main canvas.
-
-        lw: float, optional, (def: 1.)
-            Line width of each signal.
     """
 
-    def __init__(self, data, sf, *args, **kwargs):
+    def __init__(self, data, sf=1, **kwargs):
         """Init."""
         # Be sure to have float arguments :
         if data.dtype != np.float32:
@@ -70,11 +75,16 @@ class Ndviz(uiInit, visuals, uiElements):
         nd_title = kwargs.get('nd_title', 'Nd-plot')
         nd_xlabel = kwargs.get('nd_xlabel', 'X axis')
         nd_ylabel = kwargs.get('nd_ylabel', 'Y axis')
+        nd_grid = kwargs.get('nd_grid', False)
+        nd_visible = kwargs.get('nd_visible', True)
+        od_grid = kwargs.get('od_grid', True)
+        od_visible = kwargs.get('od_visible', False)
         od_title = kwargs.get('od_title', '1d-plot')
         od_xlabel = kwargs.get('od_xlabel', 'X axis')
         od_ylabel = kwargs.get('od_ylabel', 'Y axis')
         # Default linewidth :
-        self._lw = kwargs.get('lw', 1.)
+        self._ndlw = kwargs.get('nd_lw', 2.)
+        self._1dlw = kwargs.get('od_lw', 2.)
         self._oridata = np.ascontiguousarray(data)
         self._sf = np.float32(sf)
         # print('ID 0: ', id(self._oridata))
@@ -92,7 +102,7 @@ class Ndviz(uiInit, visuals, uiElements):
                         od_title, od_xlabel, od_ylabel)
 
         # ====================== Objects creation ======================
-        visuals.__init__(self, data, sf, **kwargs)
+        visuals.__init__(self, data, self._sf, **kwargs)
 
         # ====================== user & GUI interaction  ======================
         # User <-> GUI :
@@ -103,15 +113,10 @@ class Ndviz(uiInit, visuals, uiElements):
         ndcam = viscam.PanZoomCamera(rect=(-1, -1, 2, 2))
         self._ndplt.mesh.set_camera(ndcam)
         self._ndCanvas.set_camera(ndcam)
-        self._ndCanvas.visible_axis(False)
 
         # 1d-plot camera :
         odcam = viscam.PanZoomCamera(rect=self._1dplt.mesh.rect)
         self._1dCanvas.set_camera(odcam)
-
-        # Image-plot camera :
-        # imcam = viscam.PanZoomCamera(rect=self._1dplt.rect)
-        # self._imCanvas.set_camera(imcam)
 
         # Fixed colorbar camera :
         turntable = viscam.TurntableCamera(interactive=True, azimuth=0,
@@ -121,17 +126,22 @@ class Ndviz(uiInit, visuals, uiElements):
                                            margin=0)
         # self._cbCanvas.wc.scene.children[0].parent = None
 
-        ################################################################
-        self._NdVizPanel.setVisible(True)
-        self._1dVizPanel.setVisible(False)
-        self._1dCanvas.visible_axis(False)
-        self.q_widget.setVisible(True)
-        ################################################################
+        # ====================== Visibility ======================
+        # Nd-panel :
+        self._CanVisNd.setChecked(nd_visible)
+        self._NdVizPanel.setVisible(nd_visible)
+        self._ndGridTog.setChecked(nd_grid)
+        self._ndCanvas.visible_axis(nd_grid)
+        # 1d-panel :
+        self._CanVis1d.setChecked(od_visible)
+        self._1dVizPanel.setVisible(od_visible)
+        self._1dGridTog.setChecked(od_grid)
+        self._1dCanvas.visible_axis(od_grid)
 
         # Finally, update each canvas and tab selection :
         self._ndCanvas.canvas.update()
         self._1dCanvas.canvas.update()
-        self._fcn_tabSelection()
+        self._fcn_QuickTabSelec()
 
     def show(self):
         """Display the graphical user interface."""

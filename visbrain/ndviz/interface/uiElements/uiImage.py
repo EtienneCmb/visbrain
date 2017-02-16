@@ -2,9 +2,6 @@
 
 import numpy as np
 
-from ....utils import textline2color
-
-
 __all__ = ['uiImage']
 
 
@@ -40,7 +37,7 @@ class uiImage(object):
 
         # Activate / deactivate some controls :
         if ndim == 1:
-            self.q_Image.setEnabled(False)
+            self._2dSigTab.setEnabled(False)
             self._imForceUpdate = False
         else:
             self._imForceUpdate = True
@@ -72,7 +69,7 @@ class uiImage(object):
               self._imAxZ.currentIndex()]
         ind = self._imAxInd.value()
 
-        if len(np.unique(ax[:ndim])) is ndim:
+        if len(np.unique(ax[:ndim])) == np.min([3, ndim]):
             # Hide check message :
             self._imAxCheckTxt.setVisible(False)
             # Activate / deactivate some controls :

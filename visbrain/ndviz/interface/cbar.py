@@ -2,13 +2,11 @@
 
 import numpy as np
 
-from matplotlib import cm
-
 from vispy.scene.visuals import ColorBar, Text
 from vispy.scene import Node
 from vispy.color import Colormap
 
-from ...utils import array2colormap, color2vb, textline2color
+from ...utils import array2colormap, textline2color
 
 __all__ = ['Cbar']
 
@@ -126,27 +124,39 @@ class Cbar(object):
     # ==================================================================
     def add_object(self, name, cmap='viridis', clim=(0., 1.), vmin=None,
                    vmax=None, under='gray', over='red', label='',
-                   minmax=(0., 0.), fcn=None):
+                   minmax=(0., 0.), fcn=None, fcn_minmax=None):
         """Add a colorbar object."""
         # Create a dictionnary with all arguments :
         obj = {'cmap': cmap, 'clim': clim, 'vmin': vmin, 'vmax': vmax,
                'under': under, 'over': over, 'label': label, 'minmax': minmax,
-               'fcn':fcn}
+               'fcn': fcn, 'fcn_minmax': fcn_minmax}
         # Add the object to the list of surrent objects :
         self._obj[name] = obj
 
-    def set_default(self, name, update=True):
+    def set_default(self, name, update=True, run_fcn=True):
         """Define the colorbar object in name as the default."""
         if self._cname != name:
             self.current = name
             if update:
-                self.update()
+                self.update(run_fcn)
 
-    def update(self):
-        """Update the name object from the main colorbar.
+    def update_from_object(self, name, obj):
+        """Update a dictionary from an object."""
+        if obj._clim:
+            self._obj[name]['clim'] = obj._clim
+        if obj._cmap:
+            self._obj[name]['cmap'] = obj._cmap
+        if obj._vmin:
+            self._obj[name]['vmin'] = obj._vmin
+        if obj._vmax:
+            self._obj[name]['vmax'] = obj._vmax
+        if obj._under:
+            self._obj[name]['under'] = obj._under
+        if obj._over:
+            self._obj[name]['over'] = obj._over
 
-        This function do the opposite to the set_default method.
-        """
+    def update(self, run_fcn=True):
+        """Update the name object from the main colorbar."""
         # Update the name dict :
         self.current = self._cname
         # Update cbar elemtens :
@@ -157,7 +167,7 @@ class Cbar(object):
             self.cbmaxW.text = str(self['clim'][1])
         if self['label'] is not None:
             self.cblabelW.text = self['label']
-        if self['fcn'] is not None:
+        if (self['fcn'] is not None) and (run_fcn):
             self['fcn']()
 
     def objects_defined(self):
@@ -174,6 +184,14 @@ class Cbar(object):
                                                   'vmax', 'under', 'over']}
         return kwargs
 
+    def auto_scale(self, name=None):
+        """Automatically rescale the plot to minmax."""
+        if not name:
+            if self['fcn_minmax'] is not None:
+                self.minmax = self['fcn_minmax']()
+                self.update()
+        else:
+            self._obj[name]['clim'] = self._obj[name]['fcn_minmax']()
 
     # ==================================================================
     # PROPERTIES
@@ -290,3 +308,15 @@ class Cbar(object):
             raise ValueError("label must be a string of a matplolib colormap.")
         # Set label :
         self.maincb['label'] = value
+
+    # ----------- MINMAX -----------
+    @property
+    def minmax(self):
+        """Get the minmax value."""
+        return self['minmax']
+
+    @minmax.setter
+    def minmax(self, value):
+        """Set minmax value."""
+        self.maincb['minmax'] = value
+        self.clim = value

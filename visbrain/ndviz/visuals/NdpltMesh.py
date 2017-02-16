@@ -75,6 +75,7 @@ class NdpltVisual(visuals.Visual):
         self._dim = [0, 0]
         self.nrows = 0
         self.ncols = 0
+        self._minmax = (0., 1.)
         self.camera = []
 
         # --------------------------------------------------------------------
@@ -102,10 +103,10 @@ class NdpltVisual(visuals.Visual):
     # SET DATA
     # ========================================================================
     # ========================================================================
-    def set_data(self, data, sf, axis=None, color=None, space=2, play=False,
+    def set_data(self, data, sf, axis=None, color='random', space=2, play=False,
                  force_col=None, rnd_dyn=(.3, .9), demean=True, cmap='viridis',
                  clim=None, vmin=None, under='gray', vmax=None, over='red',
-                 laps=1, scale=(1., 1.), unicolor='gray'):
+                 laps=1, scale=(1., 1.), unicolor='gray', norm=True, **kwargs):
         """Set some new data to the already existing plot.
 
         Args:
@@ -210,6 +211,9 @@ class NdpltVisual(visuals.Visual):
             unicolor: string/tuple, optional, (def: 'gray')
                 The color to use in case of uniform color (see color parameter
                 above)
+
+            norm: bool, optional, (def: True)
+                Normalize data.
         """
         #######################################################################
         # INPUTS
@@ -220,7 +224,7 @@ class NdpltVisual(visuals.Visual):
         self._cmap, self._clim, self._vmin, self._vmax = cmap, clim, vmin, vmax
         self._under, self._over = under, over
         self._play, self._demean, self._laps = play, demean, laps
-        self._uscale = scale
+        self._uscale, self._norm = scale, norm
 
         #######################################################################
         # CHECK AXIS
@@ -287,11 +291,11 @@ class NdpltVisual(visuals.Visual):
                 # Now, update the axis by ranking values :
                 axis = list(np.argsort(axis).argsort())
                 # Order reduced array axis :
-                axis = [axis.index(k) for k in range(3)]
             # Find index for transposing (n_rows, n_cols, n_time) :
             rshidx = [axis[k] for k in [1, 2, 0]]
-            # Transpose dimensions the data. :
-            data = np.transpose(data, rshidx).copy()
+            if rshidx != [0, 1, 2]:
+                # Transpose dimensions the data. :
+                data = np.transpose(data, rshidx).copy()
             sh = data.shape
             # Finally, make the data (n_rows x n_cols, n_time) :
             data = np.reshape(data, (sh[0]*sh[1], sh[2]))
@@ -301,13 +305,11 @@ class NdpltVisual(visuals.Visual):
         # Data de-mean and normalization :
         # ----------------------------------
         # Remove the mean signal :
-        if demean:
-            # Get the mean and remove it:
-            data -= np.mean(data, axis=1, keepdims=True)
+        data_mean = np.mean(data, axis=1, keepdims=True) if demean else 0
 
         # ----------------------------------
         # Normalize the data for the visualization :
-        data /= data.max()
+        data_max = (data-data_mean).max() if norm else 1
 
         # =====================================================
         # Update variables :
@@ -350,6 +352,7 @@ class NdpltVisual(visuals.Visual):
             a_color = array2colormap(data.ravel(), cmap=cmap, clim=clim,
                                      vmin=vmin, vmax=vmax, under=under,
                                      over=over)[:, 0:3]
+            self.minmax = (data.min(), data.max())
 
         # ----------------------------------
         # Dynamic time color :
@@ -360,6 +363,7 @@ class NdpltVisual(visuals.Visual):
             a_color = array2colormap(timerep.ravel(), cmap=cmap, clim=clim,
                                      vmin=vmin, vmax=vmax, under=under,
                                      over=over)[:, 0:3]
+            self.minmax = (self._time.min(), self._time.max())
 
         # ----------------------------------
         # Uniform color :
@@ -382,7 +386,7 @@ class NdpltVisual(visuals.Visual):
         #######################################################################
         # =====================================================
         # Data buffer :
-        self._dbuffer = gloo.VertexBuffer(data)
+        self._dbuffer = gloo.VertexBuffer((data-data_mean)/data_max)
         self._ibuffer = gloo.VertexBuffer(index)
         self.shared_program.vert['a_position'] = self._dbuffer
         self.shared_program.vert['a_index'] = self._ibuffer
@@ -516,6 +520,7 @@ class NdpltVisual(visuals.Visual):
     # PROPERTIES
     # ========================================================================
     # ========================================================================
+    # ----------- DIM -----------
     @property
     def dim(self):
         """Get the subplot dimension."""
@@ -529,6 +534,7 @@ class NdpltVisual(visuals.Visual):
         self._ncols = self._dim[1]
         self._m = self._nrows * self._ncols
 
+    # ----------- NROWS -----------
     @property
     def nrows(self):
         """Get the number of rows."""
@@ -540,6 +546,7 @@ class NdpltVisual(visuals.Visual):
         self._nrows = value
         self._dim[0] = value
 
+    # ----------- NCOLS -----------
     @property
     def ncols(self):
         """Get the number of columns."""
@@ -551,11 +558,13 @@ class NdpltVisual(visuals.Visual):
         self._ncols = value
         self._dim[1] = value
 
+    # ----------- M -----------
     @property
     def m(self):
         """Get n_rows * n_cols."""
         return self._nrows * self._ncols
 
+    # ----------- N -----------
     @property
     def n(self):
         """Get the number of time points."""
@@ -567,6 +576,17 @@ class NdpltVisual(visuals.Visual):
         if value < 5:
             raise ValueError("The number of time points must be at least >= 5")
         self._n = value
+
+    # ----------- MINMAX -----------
+    @property
+    def minmax(self):
+        """Get the minmax value."""
+        return self._minmax
+
+    @minmax.setter
+    def minmax(self, value):
+        """Set minmax value."""
+        self._minmax = value
 
 
 NdpltMesh = create_visual_node(NdpltVisual)

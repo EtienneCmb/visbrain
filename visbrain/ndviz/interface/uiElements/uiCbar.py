@@ -1,8 +1,6 @@
 """Main class for Colorbar inteactions."""
 
-import numpy as np
-
-from ....utils import textline2color, mpl_cmap, is_color
+from ....utils import mpl_cmap, is_color
 
 
 __all__ = ['uiCbar']
@@ -15,12 +13,26 @@ class uiCbar(object):
         """Init."""
         self._cbForceUpdate = False
         self._able_to_update = True
-        # Add defined objects :
-        obj = self._cb.objects_defined()
-        self._cbObjects.addItems(obj)
+        self._notOnStarting = False
+
+        # ===================================================================
+        # Update objects :
+        # ===================================================================
+        self._cb.update_from_object('ndplt', self._ndplt.mesh)
+        self._cb.update_from_object('line', self._1dplt.mesh)
+
+        # ===================================================================
+        # Predefinitions :
+        # ===================================================================
+        # Add all defined objects (except histogram) :
+        obj = [self._cbObjects.itemText(i) for i in range(
+                                                    self._cbObjects.count())]
+        # Set ndplt as the default view :
         self._cbObjects.setCurrentIndex(obj.index('ndplt'))
-        self._cb.set_default('ndplt')
+        self._cb.set_default('ndplt', run_fcn=False)
+        # Link object selection :
         self._cbObjects.currentIndexChanged.connect(self._fcn_LoadObject)
+        self._cbObjects.currentIndexChanged.connect(self._fcn_PanelObjects)
         # Add the list of existing colormaps :
         self._mplcmaps = mpl_cmap()
         self._cbCmap.addItems(self._mplcmaps)
@@ -44,16 +56,15 @@ class uiCbar(object):
         self._cbUnder.setPlaceholderText("'red',  #ab4642...")
         self._cbOver.setPlaceholderText("(1,0,0), 'black'...")
         self._cbLabel.setPlaceholderText("My colorbar")
+        self._cbAutoScale.clicked.connect(self._fcn_cbautoscale)
 
-        # Default properties :
-        # self._fcn_LoadObject()
         self._cbForceUpdate = True
 
     def _fcn_LoadObject(self):
         """Load an object and set it args to the colorbar."""
         self._cbForceUpdate = False
         # Get current object and update:
-        self._cb.set_default(self._cbObjects.currentText())
+        self._cb.set_default(self._cbObjects.currentText(), update=False)
         # Clim :
         self.uiclim = self._cb['clim']
         # Vmin / under :
@@ -73,6 +84,30 @@ class uiCbar(object):
 
         self._cbForceUpdate = True
         self._fcn_uiCbInteract()
+
+    def _fcn_PanelObjects(self):
+        """Automatically display corresponding panel while interactions."""
+        cobj = self._cbObjects.currentText()
+        # Nd-plt :
+        if cobj == 'ndplt':
+            self._CanVisNd.setChecked(True)
+            self._NdVizPanel.setVisible(True)
+        # Line / Marker / Spectrogram :
+        elif cobj in ['line', 'marker', 'spectrogram']:
+            self._CanVis1d.setChecked(True)
+            self._1dVizPanel.setVisible(True)
+            self._1dPltPick.setCurrentIndex(self._1dplt.mesh._name.index(cobj))
+        # Image :
+        elif cobj == 'image':
+            self._CanVisIm.setChecked(True)
+            self._1dVizPanel.setVisible(True)
+            self._fcn_imAxis_update()
+
+    def _fcn_cbautoscale(self):
+        """Autos-cale current object to [min, max]."""
+        self._cb.auto_scale()
+        # Clim :
+        self.uiclim = self._cb['clim']
 
     # ==================================================================
     # PROPERTIES
@@ -147,7 +182,8 @@ class uiCbar(object):
             # Set label :
             self._cb['label'] = self._label
             # Update object :
-            self._cb.update()
+            self._cb.update(run_fcn=self._notOnStarting)
+            self._notOnStarting = True
 
     # ==================================================================
     # PROPERTIES
