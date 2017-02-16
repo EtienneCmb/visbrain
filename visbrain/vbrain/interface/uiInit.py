@@ -11,7 +11,7 @@ from vispy import app
 
 from .gui import Ui_MainWindow
 from .ViewBase import vbCanvas, vbShortcuts
-from ..utils import color2vb
+from ...utils import color2vb
 
 __all__ = ['uiInit']
 

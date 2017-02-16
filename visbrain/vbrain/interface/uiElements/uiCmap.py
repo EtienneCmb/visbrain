@@ -5,7 +5,7 @@ connectivity).
 """
 
 from matplotlib import cm
-from ...utils import textline2color
+from ....utils import textline2color
 
 
 class uiCmap(object):

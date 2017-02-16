@@ -6,7 +6,7 @@ really convenient for generating a large number of pictures by looping over a
 vbrain instance.
 """
 
-from .utils import color2vb
+from ..utils import color2vb
 import os.path
 
 __all__ = ['userfcn']

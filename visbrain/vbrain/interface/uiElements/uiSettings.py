@@ -11,7 +11,7 @@ from PyQt4 import QtCore
 from vispy import io
 import vispy.scene.cameras as viscam
 
-from ...utils import uiSpinValue
+from ....utils import uiSpinValue
 
 __all__ = ['uiSettings']
 

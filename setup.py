@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name='visbrain',
-    version='0.0.3',
+    version='0.0.4',
     packages=find_packages(),
     description='Hardware-accelerated data visualization for neuroscientific data in Python',
     long_description=read('README'),

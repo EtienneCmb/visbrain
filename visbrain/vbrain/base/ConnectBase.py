@@ -7,7 +7,7 @@
 import vispy.scene.visuals as visu
 
 from .visuals import ConnectMesh
-from ..utils import _colormap
+from ...utils import _colormap
 
 
 __all__ = ['ConnectBase']
