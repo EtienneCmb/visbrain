@@ -1,7 +1,7 @@
 """Docstring."""
 
 import numpy as np
-import pandas as pd
+# import pandas as pd
 
 from scipy.misc import imread, imsave, imshow
 import matplotlib.pyplot as plt
