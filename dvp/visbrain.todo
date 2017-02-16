@@ -1,5 +1,8 @@
 Big problem
 	-5 Projection corticale peut être passée en numpy : https://www.youtube.com/watch?v=EEUXKG97YRw
+	-5 Améliorer la gestion de la mémoire + traquer les duplication de données.
+	-5 Prendre la classe colorbar de ndviz et adapter avec. Ce sera nettement plus claire.
+	-5 Nouvelle fonction mpl_cmaps() donc changer là où l'on charge les cmaps.
 	-5 AreaBase contient des propriétés qui load systématiquement le chargement des matrices. Donc ça ralentit considérablement le lancement de l'interface. Soit on ne charge les labels que si le panel est enable, soit je sépare les labels dans une matrices et je ne charge que les labels.
 	-5 Vérifier partout où il y a des properties
 
@@ -13,6 +16,7 @@ Fichiers restants
 
 doc
 	-5 Documenter chaque fonction
+	-5 Tableau des raccourcis clavier + doc
 	-5 Améliorer setup.py (version vispy / python)
 	-4 Cleaner le self pour ne faire apparaître que ce qui est utile (arriver à virer les éléments pyqt...)
 	-2 Dans la doc, faire un exemple de script bash pour montrer que l'on peut looper
