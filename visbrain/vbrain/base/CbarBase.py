@@ -5,10 +5,11 @@
 """
 
 import numpy as np
+
 from vispy.scene.visuals import ColorBar, Text
 from vispy.color import Colormap
 
-from ..utils import array2colormap, _colormap, color2vb
+from ...utils import array2colormap, _colormap, color2vb
 
 
 class CbarBase(_colormap):

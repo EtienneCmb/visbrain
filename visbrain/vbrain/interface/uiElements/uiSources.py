@@ -8,7 +8,7 @@ the bridge between the user and the GUI.
 
 import vispy.visuals.transforms as vist
 
-from ...utils import textline2color
+from ....utils import textline2color
 
 
 class uiSources(object):

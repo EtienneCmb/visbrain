@@ -1,4 +1,7 @@
-__version__ = "0.0.3"
+"""
+"""
 
 from .vbrain.vbrain import vbrain
-# from .vbtimeseries.vbtimeseries import vbtimeseries
+from .ndviz.ndviz import Ndviz
+
+__version__ = "0.0.4"

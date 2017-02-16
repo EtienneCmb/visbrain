@@ -5,7 +5,7 @@ areas, gyrus...). This script translate graphical buttons into functions. The
 structure panel in the GUI is present in the MNI -> Structures tab.
 """
 
-from ...utils import textline2color
+from ....utils import textline2color
 
 
 __all__ = ['uiArea']

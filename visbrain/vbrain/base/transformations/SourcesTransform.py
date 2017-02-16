@@ -4,7 +4,7 @@
 from warnings import warn
 import numpy as np
 
-from ...utils import slider2opacity, array2colormap, normalize
+from ....utils import slider2opacity, array2colormap, normalize
 
 
 class SourcesTransform(object):
