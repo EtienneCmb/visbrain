@@ -30,7 +30,7 @@ nd_axis = [2, 1, 3].
 """
 # ===================================================================
 # Display the Nd-plot panel and display the grid :
-kw['nd_visible'] = False
+kw['nd_visible'] = True
 kw['nd_grid'] = False
 kw['nd_axis'] = [2, 1, 3]
 kw['nd_scale'] = (0.9, 1.)

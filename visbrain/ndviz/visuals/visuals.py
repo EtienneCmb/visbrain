@@ -40,7 +40,7 @@ class NdpltBase(object):
     """
 
     def __getitem__(self, name):
-        """Get a variable"""
+        """Get a variable."""
         pass
 
     def __init__(self, data, sf, **kwargs):
@@ -61,8 +61,11 @@ class OdpltBase(object):
 
     def __init__(self, data, sf, **kwargs):
         """Init."""
-        # Get arguments starting with 'od_' :
-        ignore = ['od_grid']
-        args, _ = vis_args(kwargs, 'od_', ignore)
+        # line arguments :
+        self._liargs, _ = vis_args(kwargs, 'li_')
+        # self._hiargs, _ = vis_args(kwargs, 'hi_')
+        # self._imargs, _ = vis_args(kwargs, 'im_')
+        # self._maargs, _ = vis_args(kwargs, 'ma_')
+        # self._spargs, _ = vis_args(kwargs, 'sp_')
         self.mesh = OdpltMesh(data, sf)
-        self.mesh.set_data(data, sf, **args)
+        self.mesh.set_data(data, sf, **self._liargs)

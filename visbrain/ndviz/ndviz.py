@@ -1,11 +1,4 @@
-"""Top level vbrain class.
-
-uiInit: initialize the graphical interface
-uiElements: interactions between graphical elements and deep functions
-base: initialize all vbrain objects (MNI, sources, connectivity...)
-and associated transformations
-userfcn: initialize functions for user interaction.
-"""
+"""Top level Ndviz class."""
 import numpy as np
 
 from PyQt4 import QtGui
@@ -16,8 +9,8 @@ import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
 from .visuals import visuals
-from ..utils import id
 from warnings import warn
+# from ..utils import id
 # from .user import userfcn
 
 
@@ -60,6 +53,12 @@ class Ndviz(uiInit, visuals, uiElements):
 
         ui_bgcolor: string/tuple, optional, (def: (.09, .09, .09))
             Background color of the main canvas.
+
+    Example:
+        >>> import numpy as np
+        >>> from visbrain import Ndviz
+        >>> y = np.random.rand(1000, 10, 20)
+        >>> Ndviz(y).show()
     """
 
     def __init__(self, data, sf=1, **kwargs):
@@ -71,7 +70,7 @@ class Ndviz(uiInit, visuals, uiElements):
                  "data.astype(np.float32) before opening the interface.")
         # ====================== ui Arguments ======================
         # Background color (for all of the canvas) :
-        bgcolor = kwargs.get('ui_bgcolor', (0.09, 0.09, 0.09))
+        bgcolor = kwargs.get('ui_bgcolor', (.09, .09, .09))
         nd_title = kwargs.get('nd_title', 'Nd-plot')
         nd_xlabel = kwargs.get('nd_xlabel', 'X axis')
         nd_ylabel = kwargs.get('nd_ylabel', 'Y axis')

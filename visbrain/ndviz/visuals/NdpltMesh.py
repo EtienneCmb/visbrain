@@ -69,6 +69,14 @@ class NdpltVisual(visuals.Visual):
         """Return the number of time points."""
         return self.n
 
+    def __getitem__(self, name):
+        """Get an input item."""
+        return self._kwargs[name]
+
+    def __setitem__(self, name, value):
+        """Set a input item."""
+        self._kwargs[name] = value
+
     def __init__(self, *args, **kwargs):
         """Init."""
         # Define attributes :
@@ -77,6 +85,7 @@ class NdpltVisual(visuals.Visual):
         self.ncols = 0
         self._minmax = (0., 1.)
         self.camera = []
+        self._kwargs = {}
 
         # --------------------------------------------------------------------
         # Initialize the vispy.Visual class with the vertex / fragment buffer :
@@ -94,7 +103,8 @@ class NdpltVisual(visuals.Visual):
 
         # --------------------------------------------------------------------
         # Link the time the the on_time function :
-        self._timer = app.Timer(1/self._sf, connect=self.on_timer, start=False)
+        self._timer = app.Timer(1/self._sf, connect=self.on_timer,
+                                start=False)
 
         self.freeze()
 
@@ -103,10 +113,11 @@ class NdpltVisual(visuals.Visual):
     # SET DATA
     # ========================================================================
     # ========================================================================
-    def set_data(self, data, sf, axis=None, color='random', space=2, play=False,
-                 force_col=None, rnd_dyn=(.3, .9), demean=True, cmap='viridis',
-                 clim=None, vmin=None, under='gray', vmax=None, over='red',
-                 laps=1, scale=(1., 1.), unicolor='gray', norm=True, **kwargs):
+    def set_data(self, data, sf, axis=None, color='random', space=2,
+                 play=False, force_col=None, rnd_dyn=(.3, .9), demean=True,
+                 cmap='viridis', clim=None, vmin=None, under='gray', vmax=None,
+                 over='red', laps=1, scale=(1., 1.), unicolor='gray',
+                 norm=True, **kwargs):
         """Set some new data to the already existing plot.
 
         Args:
