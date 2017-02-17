@@ -70,3 +70,24 @@ The user functions correspond to a bundle of functions that the user can use to 
    :maxdepth: 4
    
    vbfunctions
+
+Shortcuts
+---------
+
+==============          ==================================================================================
+Keys                    Description
+==============          ==================================================================================
+CTRL+d                  Display quick settings panem
+CTRL+n                  Screenshot window
+0                       Toggle axial view
+1                       Toggle coronal view
+2                       Toggle sagittal view
+3                       Toggle light reflection on the brain
+4                       Display / hide the brain
+5                       Display / hide the sources (if defined)
+6                       Display / hide the connectivity lines (if defined)
+"+"                     Increase brain opacity
+"-"                     Decrease brain opacity
+CTRL+p                  Run the cortical projection
+CTRL+r                  Run the cortical repartition
+==============          ==================================================================================

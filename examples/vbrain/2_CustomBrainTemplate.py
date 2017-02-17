@@ -7,11 +7,11 @@ import numpy as np
 import vispy.visuals.transforms as vist
 
 # Define path and filename of the template :
-path = os.path.dirname(visbrain.__file__)+'/examples/'
+# path = os.path.dirname(visbrain.__file__)+'/examples/vbrain/'
 file = 'custom_template.npz'
 
 # Get faces/vertices :
-mat = np.load(path+file)
+mat = np.load(file)
 vert, faces = mat['coord'], mat['tri']
 
 # By default, this template is rotated (compared to default templates in visbrain)
