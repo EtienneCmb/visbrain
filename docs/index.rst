@@ -24,6 +24,10 @@ Finally, install visbrain :
 
 What's new?
 ***********
+New in version v0.0.4:
+
+* New module :ref:`Ndviz`
+
 New in version v0.0.3:
 
 * New documentation

@@ -12,7 +12,7 @@ setup(
     version='0.0.4',
     packages=find_packages(),
     description='Hardware-accelerated data visualization for neuroscientific data in Python',
-    long_description=read('README'),
+    long_description=read('README.md'),
     install_requires=[
         'numpy',
         'scipy',

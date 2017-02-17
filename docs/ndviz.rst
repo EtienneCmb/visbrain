@@ -18,6 +18,8 @@ Use the following command to import Ndviz :
 
     from visbrain import Ndviz
 
+Visit this page for a set of `examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/ndviz>`_.
+
 Inputs
 ------
 
