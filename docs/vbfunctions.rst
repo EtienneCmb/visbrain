@@ -13,23 +13,23 @@ Set of functions for an iteractive control of the graphical user interface eleme
 
 Show graphical interface
 ~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.vbrain.vbrain.show
+.. automethod:: visbrain.vbrain.vbrain.vbrain.show
 
 Quit graphical interface
 ~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.user.userfcn.quit
+.. automethod:: visbrain.vbrain.user.userfcn.quit
 
 Rotation
 ~~~~~~~~
-.. automethod:: vbrain.user.userfcn.rotate
+.. automethod:: visbrain.vbrain.user.userfcn.rotate
 
 Background color
 ~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.user.userfcn.background_color
+.. automethod:: visbrain.vbrain.user.userfcn.background_color
 
 Screenshot
 ~~~~~~~~~~
-.. automethod:: vbrain.user.userfcn.screenshot
+.. automethod:: visbrain.vbrain.user.userfcn.screenshot
 
 Brain functions
 ^^^^^^^^^^^^^^^
@@ -43,16 +43,16 @@ Set of functions for an iteractive control of the main brain object. Use the met
 
 Control
 ~~~~~~~
-.. automethod:: vbrain.user.userfcn.brain_control
+.. automethod:: visbrain.vbrain.user.userfcn.brain_control
 
 Opacity
 ~~~~~~~
-.. automethod:: vbrain.user.userfcn.brain_opacity
+.. automethod:: visbrain.vbrain.user.userfcn.brain_opacity
 
 
 Light reflection
 ~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.user.userfcn.light_reflection
+.. automethod:: visbrain.vbrain.user.userfcn.light_reflection
 
 
 Sources functions
@@ -66,11 +66,11 @@ Set of functions for an iteractive control of sources object. Use the methods be
 Set data
 ~~~~~~~~
 
-.. automethod:: vbrain.user.userfcn.sources_data
+.. automethod:: visbrain.vbrain.user.userfcn.sources_data
 
 Opacity
 ~~~~~~~
-.. automethod:: vbrain.user.userfcn.sources_opacity
+.. automethod:: visbrain.vbrain.user.userfcn.sources_opacity
 
 .. figure::  picture/ProjObj.png
    :align:   center
@@ -79,15 +79,15 @@ Opacity
 
 Cortical projection
 ~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.user.userfcn.cortical_projection
+.. automethod:: visbrain.vbrain.user.userfcn.cortical_projection
 
 Cortical repartition
 ~~~~~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.user.userfcn.cortical_repartition
+.. automethod:: visbrain.vbrain.user.userfcn.cortical_repartition
 
 Colormap
 ~~~~~~~~
-.. automethod:: vbrain.user.userfcn.sources_colormap
+.. automethod:: visbrain.vbrain.user.userfcn.sources_colormap
 
 Connectivity functions
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -111,12 +111,12 @@ Set of functions for an iteractive control of areas object. Use the methods belo
 
 Plot selection
 ~~~~~~~~~~~~~~
-.. automethod:: vbrain.user.userfcn.area_plot
+.. automethod:: visbrain.vbrain.user.userfcn.area_plot
 
 Opacity
 ~~~~~~~
-.. automethod:: vbrain.user.userfcn.area_opacity
+.. automethod:: visbrain.vbrain.user.userfcn.area_opacity
 
 Light reflection
 ~~~~~~~~~~~~~~~~
-.. automethod:: vbrain.user.userfcn.area_light_reflection
+.. automethod:: visbrain.vbrain.user.userfcn.area_light_reflection

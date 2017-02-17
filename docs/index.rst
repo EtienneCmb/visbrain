@@ -5,7 +5,7 @@ Visbrain is a python package in development and it's dedicated to neuroscience v
 
 * :ref:`vbrain` : plot your data onto a 3D MNI brain control it via the graphical interface
 * :ref:`Ndviz` : inspect data your n-dimentional data.
-* :ref:`vbmakefig` : concatenate several pictures
+* :ref:`makefig` : concatenate several pictures
 
 Installation:
 *************
@@ -41,6 +41,7 @@ Contents:
    
    vbrain
    ndviz
+   makefig
 
 
 Indices and tables

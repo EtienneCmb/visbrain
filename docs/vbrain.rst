@@ -45,7 +45,7 @@ Each one of the above objects can be controled using input parameters for the vb
 
 Here's the list of all possible inputs :
 
-.. autoclass:: vbrain.vbrain.vbrain
+.. autoclass:: visbrain.vbrain.vbrain.vbrain
 
 Color
 -----
