@@ -218,9 +218,10 @@ class vbrain(uiInit, uiElements, base, userfcn):
         uiInit.__init__(self, bgcolor)
 
         # Set icon :
-        iconpath = os.path.join(sys.modules[__name__].__file__,
-                                'vbrain/interface/gui/vbicon.png')
-        self.setWindowIcon(QtGui.QIcon(iconpath))
+        pathfile = sys.modules[__name__].__file__
+        path = os.path.join(*['vbrain', 'interface', 'gui', 'vbicon.png'])
+        self.setWindowIcon(QtGui.QIcon(os.path.join(pathfile.split(
+                                                        '/vbrain')[0], path)))
 
         # ====================== Objects creation ======================
         camera = viscam.TurntableCamera(azimuth=0, distance=1000)

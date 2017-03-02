@@ -29,7 +29,7 @@ class AreaBase(object):
                  scale_factor=1, name='', transform=None):
         """Init."""
         self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
-            'Area')[0], 'templates/')
+            'Area')[0], 'templates')
         self.file = 'AAL_label.npz'
         self._structure = structure
         self._select = select
@@ -55,7 +55,7 @@ class AreaBase(object):
         """
         print('AREA LOADING <--------- FIX IT')
         # Load the atlas :
-        atlas = np.load(self.atlaspath + self.file)
+        atlas = np.load(os.path.join(self.atlaspath, self.file))
 
         # Manage atlas :
         if self._structure not in ['aal', 'brod']:
