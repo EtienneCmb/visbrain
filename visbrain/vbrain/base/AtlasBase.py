@@ -41,7 +41,7 @@ class AtlasBase(object):
 
         # Needed variables :
         self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
-                                                    'Atlas')[0], 'templates/')
+                                                    'Atlas')[0], 'templates')
         self._defcolor = (1., 1., 1.)
         self._scaleMax = 100
 
@@ -94,11 +94,12 @@ class AtlasBase(object):
             color: ndarray
                 Brain color per faces of shape (M, 3, 4) for RGBA color
         """
+        print('-> IM IN LOADING TWO TIMES')
         # Load a default template :
         if (vertices is None) and (faces is None):
             if (template in ['B1', 'B2', 'B3']):
-                atlas = np.load(self.atlaspath + '{template}.npz'.format(
-                                                            template=template))
+                path = os.path.join(self.atlaspath, template + '.npz')
+                atlas = np.load(path)
                 faces, normals = atlas['faces'], atlas['a_normal']
                 vertices, color = atlas['a_position'], atlas['a_color']
             else:
