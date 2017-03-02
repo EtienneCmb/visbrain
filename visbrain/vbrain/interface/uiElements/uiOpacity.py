@@ -136,19 +136,14 @@ class uiOpacity(object):
         The slices can be used to isolate some part of an object. Slices are
         effective on the brain / sources / connectivity / areas.
         """
-        # Get invert checkbox position :
-        xsym = '<' if self.xInvert.isChecked() else '>'
-        ysym = '<' if self.yInvert.isChecked() else '>'
-        zsym = '<' if self.zInvert.isChecked() else '>'
-
         # Get slide positions :
-        xsl1, xsl2 = self.xSlices.value(), - self.xSlices_2.value()
+        xsl1, xsl2 = - self.xSlices.value(), self.xSlices_2.value()
         ysl1, ysl2 = - self.ySlices.value(), self.ySlices_2.value()
         zsl1, zsl2 = - self.zSlices.value(), self.zSlices_2.value()
 
         # Define a default string for all objects :
         formatstr = "np.array(" + \
-            "({obj}[..., 0] < xsl1) | ({obj}[..., 0] > xsl2) | " + \
+            "({obj}[..., 0] > xsl1) | ({obj}[..., 0] < xsl2) | " + \
             "({obj}[..., 1] > ysl1) | ({obj}[..., 1] < ysl2) | " + \
             "({obj}[..., 2] > zsl1) | ({obj}[..., 2] < zsl2))"
 
@@ -187,8 +182,7 @@ class uiOpacity(object):
             # Reset mask :
             self.connect.connect.mask = self.connect._maskbck
             # Find sources to remove :
-            tohide = eval(formatstr.format(obj='self.sources.xyz',
-                                           xsym=xsym, ysym=ysym, zsym=zsym))
+            tohide = eval(formatstr.format(obj='self.sources.xyz'))
             # Update mask :
             self.connect.connect.mask[tohide, :] = True
             self.connect.connect.mask[:, tohide] = True

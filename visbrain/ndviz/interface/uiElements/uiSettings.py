@@ -66,6 +66,7 @@ class uiSettings(object):
         # =====================================================================
         # Quick settings panel :
         self.actionQuick_settings.triggered.connect(self._toggle_settings)
+        self.q_widget.setVisible(True)
 
         # Background color :
         self._uiBgdRed.valueChanged.connect(self._fcn_bgd_color)
