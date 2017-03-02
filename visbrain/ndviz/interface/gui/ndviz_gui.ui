@@ -13,70 +13,6 @@
     <height>919</height>
    </rect>
   </property>
-  <property name="palette">
-   <palette>
-    <active>
-     <colorrole role="Base">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>249</red>
-        <green>249</green>
-        <blue>249</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Window">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>25</red>
-        <green>25</green>
-        <blue>25</blue>
-       </color>
-      </brush>
-     </colorrole>
-    </active>
-    <inactive>
-     <colorrole role="Base">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>249</red>
-        <green>249</green>
-        <blue>249</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Window">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>25</red>
-        <green>25</green>
-        <blue>25</blue>
-       </color>
-      </brush>
-     </colorrole>
-    </inactive>
-    <disabled>
-     <colorrole role="Base">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>25</red>
-        <green>25</green>
-        <blue>25</blue>
-       </color>
-      </brush>
-     </colorrole>
-     <colorrole role="Window">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>25</red>
-        <green>25</green>
-        <blue>25</blue>
-       </color>
-      </brush>
-     </colorrole>
-    </disabled>
-   </palette>
-  </property>
   <property name="windowTitle">
    <string>ndviz</string>
   </property>
@@ -150,8 +86,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>358</width>
-                <height>801</height>
+                <width>328</width>
+                <height>147</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_27">
@@ -954,9 +890,6 @@
                    </layout>
                   </item>
                  </layout>
-                 <zorder>groupBox_2</zorder>
-                 <zorder>horizontalLayoutWidget_6</zorder>
-                 <zorder>horizontalLayoutWidget_7</zorder>
                 </widget>
                </item>
                <item>
@@ -2338,8 +2271,8 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>336</width>
-                    <height>750</height>
+                    <width>304</width>
+                    <height>255</height>
                    </rect>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -2530,7 +2463,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>376</width>
-                <height>763</height>
+                <height>251</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_28">
