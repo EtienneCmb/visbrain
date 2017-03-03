@@ -10,85 +10,21 @@ from PyQt4 import QtGui
 from vispy import app, scene
 
 from .gui import Ui_MainWindow
-from .cbar import Cbar
-from ...utils import color2vb
 
 __all__ = ['uiInit']
 
 
 class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
-    """Group and initialize the graphical elements and interactions.
+    """Group and initialize the graphical elements and interactions."""
 
-    Kargs:
-        bgcolor: tuple, optional, (def: (0.1, 0.1, 0.1))
-            Background color of the main window. The same background
-            will be used for the colorbar panel so that future figures
-            can be uniform.
-    """
-
-    def __init__(self, bgcolor=(.09, .09, .09), nd_title='Nd-plot',
-                 nd_xlabel='X axis', nd_ylabel='Y axis', od_title='1d-plot',
-                 od_xlabel='X axis', od_ylabel='Y axis'):
+    def __init__(self):
         """Init."""
         # Create the main window :
         super(uiInit, self).__init__(None)
         self.setupUi(self)
-        if self._savename is not None:
-            self.setWindowTitle('ndviz - '+self._savename)
-
-        # Initlialize all canvas :
-        self._ndCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=nd_title,
-                                    x_label=nd_xlabel, y_label=nd_ylabel,
-                                    name='ndCanvas')
-        self._1dCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=od_title,
-                                    x_label=od_xlabel, y_label=od_ylabel,
-                                    name='1dCanvas')
-        self._cbCanvas = AxisCanvas(axis=False, bgcolor=bgcolor,
-                                    name='cbCanvas')
-
-        # Add the canvas to the UI (_ndVizLayout layout) and colorbar:
-        self._NdVizLayout.addWidget(self._ndCanvas.canvas.native)
-        self._NdVizPanel.setVisible(True)
-        self._1dVizLayout.addWidget(self._1dCanvas.canvas.native)
-        self._1dVizPanel.setVisible(False)
-        self.cbpanel.addWidget(self._cbCanvas.canvas.native)
-
-        # Create the colorbar with the different objects :
-        self._cb = Cbar(self._cbCanvas.wc.scene)
-        self._cb.add_object('ndplt', label='Nd-plot',  fcn=self._fcn_ndUpdate,
-                            fcn_minmax=self._fcn_get_NdMinmax)
-        self._cb.add_object('line', label='Line', fcn=self._fcn_1dUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-        self._cb.add_object('spectrogram', label='Spectrogram',
-                            fcn=self._fcn_1dUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-        self._cb.add_object('histogram', label='None', fcn=self._fcn_1dUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-        self._cb.add_object('marker', label='Marker', fcn=self._fcn_1dUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-        self._cb.add_object('image', label='Image', fcn=self._fcn_imUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-
-        # Set background color and hide quick settings panel :
-        self.bgcolor = tuple(color2vb(color=bgcolor, length=1)[0, 0:3])
-        self.q_widget.hide()
-
-        # Set background elements :
-        self._uiBgdRed.setValue(self.bgcolor[0])
-        self._uiBgdGreen.setValue(self.bgcolor[1])
-        self._uiBgdBlue.setValue(self.bgcolor[2])
-
-        # Set title / label :
-        self._ndTitleEdit.setText(nd_title)
-        self._ndXlabEdit.setText(nd_xlabel)
-        self._ndYlabEdit.setText(nd_ylabel)
-        self._1dTitleEdit.setText(od_title)
-        self._1dXlabEdit.setText(od_xlabel)
-        self._1dYlabEdit.setText(od_ylabel)
 
         # Initialize shortcuts :
-        vbShortcuts.__init__(self, self._ndCanvas.canvas)
-        vbShortcuts.__init__(self, self._1dCanvas.canvas)
+        # vbShortcuts.__init__(self, self._ndCanvas.canvas)
 
 
 class AxisCanvas(object):
@@ -208,65 +144,11 @@ class vbShortcuts(object):
             :event: the trigger event
             """
             if event.text == ' ':
-                # Play stop :
-                self._fcn_TogglePlay()
-            if event.text == 'r':
-                # Play stop :
-                self._fcn_rtreset()
-            if event.text == '0':
-                # Reset the camera :
-                if canvas.title == 'ndCanvas':
-                    self._ndplt.mesh.camera.rect = (-1, -1, 2, 2)
-                elif canvas.title == '1dCanvas':
-                    self._1dCanvas.wc.camera.rect = self._1dplt.mesh.rect
-                    self._1dCanvas.wc.camera.update()
-            elif event.text == '1':
-                # Toggle display nd panel :
-                self._ndToggleViz()
-            elif event.text == '2':
-                # Toggle display 1d panel :
-                self._1dToggleViz()
-            elif event.text == '3':
                 pass
-            elif event.text == 'g':
-                # Toggle display the grid :
-                if canvas.title == 'ndCanvas':
-                    self._fcn_ndGridToggle()
-                elif canvas.title == '1dCanvas':
-                    self._fcn_1dGridToggle()
-
-            elif event.text == 'l':
-                # Set 1d plot as line :
-                self._cbObjects.setCurrentIndex(1)
-                self._fcn_cbautoscale()
-            elif event.text == 'm':
-                # Set 1d plot as marker :
-                self._cbObjects.setCurrentIndex(2)
-                self._fcn_cbautoscale()
-            elif event.text == 's':
-                # Set 1d plot as spectrogram :
-                self._cbObjects.setCurrentIndex(3)
-                self._fcn_cbautoscale()
-            elif event.text == 'h':
-                # Set 1d plot as histogram :
-                self._1dPltPick.setCurrentIndex(1)
-            elif event.text == 'i':
-                # Set 1d plot as line :
-                self._cbObjects.setCurrentIndex(4)
-                self._fcn_cbautoscale()
-            elif event.text == 'a':
-                # Auto-scale colorbar :
-                self._fcn_cbautoscale()
-            elif event.text == 'n':
-                # Next 1d signal :
-                self._1dAxInd.setValue(self._1dAxInd.value()+1)
-            elif event.text == 'p':
-                # Previous 1d signal :
-                self._1dAxInd.setValue(self._1dAxInd.value()-1)
-            elif event.text == 'N':
-                self._imAxInd.setValue(self._imAxInd.value()+1)
-            elif event.text == 'P':
-                self._imAxInd.setValue(self._imAxInd.value()-1)
+            if event.text == 'r':
+                pass
+            if event.text == '0':
+                pass
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
