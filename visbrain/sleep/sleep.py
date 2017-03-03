@@ -6,11 +6,11 @@ import sys
 from warnings import warn
 
 import vispy.app as visapp
-# import vispy.scene.cameras as viscam
+import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
 from .visuals import visuals
-# from ..utils import id
+from ..utils import FixedCam
 # from .user import userfcn
 
 
@@ -31,18 +31,35 @@ class Sleep(uiInit, visuals, uiElements):
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = list(channels)
+        self._lw = 2
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
         self._app = QtGui.QApplication(sys.argv)
         uiInit.__init__(self)
 
-        # ====================== Objects creation ======================
-        visuals.__init__(self)
-
         # ====================== user & GUI interaction  ======================
         # User <-> GUI :
         uiElements.__init__(self)
+
+        # ====================== Objects creation ======================
+        visuals.__init__(self, self._sf, self._data, self._channels,
+                         self._hypno)
+
+        # ====================== CAMERAS ======================
+        self._chanCam = viscam.PanZoomCamera()
+        # self._chanCam = FixedCam(rect=self._chan.rect)
+        # ------------------- Spectrogram -------------------
+        speccam = FixedCam(rect=self._spec.rect)
+        self._specCanvas.set_camera(speccam)
+        # ------------------- Hypnogram -------------------
+        hypcam = FixedCam(rect=self._hyp.rect)
+        self._hypCanvas.set_camera(hypcam)
+
+        # Finally set data :
+        self._fcn_sliderMove()
+        self._chanCanvas[0].set_camera(self._chanCam)
+        self._chanCam.rect = self._chan.rect
 
     def _check_data(self, sf, data, channels, hypno=None, downsample=None):
         """Check data, hypnogram, channels and sample frequency after loading.

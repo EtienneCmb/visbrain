@@ -25,4 +25,3 @@ class uiSignal(object):
         """Toggle visibility of the filtering panel."""
         viz = self._SigFilt.isChecked()
         self._SigFiltW.setEnabled(viz)
-

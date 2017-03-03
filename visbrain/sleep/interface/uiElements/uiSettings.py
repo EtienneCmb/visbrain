@@ -50,6 +50,16 @@ class uiSettings(object):
         self.actionQuick_settings.triggered.connect(self._toggle_settings)
         self.q_widget.setVisible(True)
 
+        # =====================================================================
+        # SLIDER
+        # =====================================================================
+        # Function applied when the slider move :
+        self._SlVal.valueChanged.connect(self._fcn_sliderMove)
+        # Function applied when slider's settings changed :
+        self._SigWin.valueChanged.connect(self._fcn_sliderSettings)
+        self._SigSlStep.valueChanged.connect(self._fcn_sliderSettings)
+        self._fcn_sliderSettings()
+
     # =====================================================================
     # MENU & FILE MANAGMENT
     # =====================================================================
@@ -152,3 +162,38 @@ class uiSettings(object):
     def _toggle_settings(self):
         """Toggle method for display / hide the settings panel."""
         self.q_widget.setVisible(not self.q_widget.isVisible())
+
+    # =====================================================================
+    # SLIDER
+    # =====================================================================
+    def _fcn_sliderMove(self):
+        """Function applied when the slider move."""
+        # ---------------------------------------
+        val = self._SlVal.value()
+        step = self._SigSlStep.value()
+        win = self._SigWin.value()
+        xlim = (val*step, val*step+win)
+        # ---------------------------------------
+        # Update display signal :
+        sl = slice(int(xlim[0]), int(xlim[1]))
+        self._chan.set_data(self._sf, self._data, sl=sl)
+        # ---------------------------------------
+        # Update spectrogram indicator :
+        ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
+        self._specInd.set_data(xlim=xlim, ylim=ylim)
+        self._chanCam.rect = self._chan.rect
+
+        # ---------------------------------------
+        # Update spectrogram indicator :
+        ylim = (0, 5)
+        self._hypInd.set_data(xlim=xlim, ylim=ylim)
+
+    def _fcn_sliderSettings(self):
+        """Function applied to change slider settings."""
+        # Set minimum :
+        self._SlVal.setMinimum(self._time.min())
+        # Set maximum :
+        step = self._SigSlStep.value()
+        self._SlVal.setMaximum((self._time.max()-self._SigWin.value())/step)
+        self._SlVal.setTickInterval(step)
+        self._SlVal.setSingleStep(step)

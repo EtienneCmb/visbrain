@@ -30,7 +30,7 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
 class AxisCanvas(object):
     """Create a canvas with an embeded axis."""
 
-    def __init__(self, axis=True, x_label='', x_heightMax=80, y_label='',
+    def __init__(self, axis=True, x_label='', x_heightMax=40, y_label='',
                  y_widthMax=80, font_size=12, color='white', title='',
                  axis_label_margin=50, tick_label_margin=5, name='',
                  bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}):
@@ -42,19 +42,14 @@ class AxisCanvas(object):
         self._ylabel = y_label
 
         # Create the main canvas :
-        self.canvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
-                                        show=True, title=name, **cargs)
+        self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
+                                        show=False, title=name, **cargs)
 
         # Add axis :
         if axis:
             # Create a grid :
-            grid = self.canvas.central_widget.add_grid(margin=10)
+            grid = self.canvas.central_widget.add_grid(margin=0)
             grid.spacing = 0
-
-            # Add a title :
-            self._titleObj = scene.Label(title, color=color)
-            self._titleObj.height_max = 40
-            grid.add_widget(self._titleObj, row=0, col=0, col_span=2)
 
             # Add y-axis :
             self.yaxis = scene.AxisWidget(orientation='left', domain=(0, 129),
@@ -64,7 +59,7 @@ class AxisCanvas(object):
                                           tick_label_margin=tick_label_margin,
                                           **yargs)
             self.yaxis.width_max = y_widthMax
-            grid.add_widget(self.yaxis, row=1, col=0)
+            grid.add_widget(self.yaxis, row=0, col=0)
 
             # Add x-axis :
             self.xaxis = scene.AxisWidget(orientation='bottom',
@@ -74,14 +69,14 @@ class AxisCanvas(object):
                                           tick_label_margin=tick_label_margin,
                                           **xargs)
             self.xaxis.height_max = x_heightMax
-            grid.add_widget(self.xaxis, row=2, col=1)
+            grid.add_widget(self.xaxis, row=1, col=1)
 
             # Add right padding :
-            self._rpad = grid.add_widget(row=1, col=2, row_span=1)
+            self._rpad = grid.add_widget(row=0, col=2, row_span=1)
             self._rpad.width_max = 50
 
             # Main plot :
-            self.wc = grid.add_view(row=1, col=1, border_color=color)
+            self.wc = grid.add_view(row=0, col=1, border_color=color)
 
         # Ignore axis :
         else:

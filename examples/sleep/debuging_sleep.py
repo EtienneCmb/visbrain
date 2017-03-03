@@ -7,8 +7,8 @@ from scipy.io import loadmat
 # mat = loadmat('sub-02_mat.mat')
 # print(mat.keys())
 
-nelec = 60
-npts = 10000
+nelec = 10
+npts = 1000000
 
 data = np.random.rand(nelec, npts)
 sf = 1024.
