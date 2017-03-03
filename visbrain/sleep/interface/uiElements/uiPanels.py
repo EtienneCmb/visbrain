@@ -60,6 +60,7 @@ class uiPanels(object):
             self._chanWidget[i] = QtGui.QWidget(self._chanScrollArea)
             self._chanWidget[i].setMinimumSize(QtCore.QSize(0, 0))
             self._chanWidget[i].setObjectName(_fromUtf8("_widgetChan"+k))
+            self._chanWidget[i].setVisible(False)
             vlay = QtGui.QVBoxLayout(self._chanWidget[i])
             vlay.setContentsMargins(9, 0, 9, 0)
             vlay.setSpacing(0)
@@ -77,6 +78,7 @@ class uiPanels(object):
 
         # Set first element checked and first panel visible :
         self._chanChecks[0].setChecked(True)
+        self._chanWidget[0].setVisible(True)
         # Add vertical spacer :
         spacer = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Expanding,
                                    QtGui.QSizePolicy.Minimum)
