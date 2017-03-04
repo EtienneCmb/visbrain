@@ -111,7 +111,7 @@ class Spectrogram(object):
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram')
 
     def set_data(self, sf, data, time, cmap='viridis', nfft=30., overlap=0.,
-                 fstart=0.5, fend=25.):
+                 fstart=0.5, fend=25., contraste=.7):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
@@ -142,6 +142,9 @@ class Spectrogram(object):
 
             fend: float, optional, (def: None)
                 Frequency from which the spectrogram have to finish.
+
+            contraste: float, optional, (def: .7)
+                Contraste of the colormap.
         """
         # =================== CONVERSION ===================
         nperseg = int(round(nfft * sf))
@@ -164,8 +167,11 @@ class Spectrogram(object):
         self._fstart, self._fend = freq[0], freq[-1]
 
         # =================== COLOR ===================
+        # Get clim :
+        clim = (contraste * mesh.min(), contraste * mesh.max())
         # Turn mesh into color array for selected frequencies:
-        self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap))
+        self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap,
+                                          clim=clim))
 
         # =================== TRANSFORM ===================
         # Re-scale the mesh for fitting in time / frequency :

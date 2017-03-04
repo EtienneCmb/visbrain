@@ -55,6 +55,7 @@ class uiPanels(object):
         self._PanSpecNfft.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecStep.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecFstart.valueChanged.connect(self._fcn_specCompat)
+        self._PanSpecCon.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecFend.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecCmap.currentIndexChanged.connect(self._fcn_specSetData)
         self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
@@ -195,6 +196,8 @@ class uiPanels(object):
         nfft, over = self._PanSpecNfft.value(), self._PanSpecStep.value()
         # Get starting / ending frequency :
         fstart, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()
+        # Get contraste :
+        contraste = self._PanSpecCon.value()
         # Get colormap :
         cmap = self._PanSpecCmap.currentText()
         # Get channel to get spectrogram :
@@ -203,7 +206,7 @@ class uiPanels(object):
         # Set data :
         self._spec.set_data(self._sf, self._data[chan, ...], self._time,
                             nfft=nfft, overlap=over, fstart=fstart, fend=fend,
-                            cmap=cmap)
+                            cmap=cmap, contraste=contraste)
         # Set apply button disable :
         self._PanSpecApply.setEnabled(False)
 

@@ -66,7 +66,7 @@ class Sleep(uiInit, visuals, uiElements):
         uiElements.__init__(self)
 
         # Disbale hypno label if needed :
-        self._hypLabel.setVisible(self._HypW.isVisible())
+        # self._hypLabel.setVisible(self._HypW.isVisible())
 
         # ====================== CAMERAS ======================
         # ------------------- Channels -------------------
