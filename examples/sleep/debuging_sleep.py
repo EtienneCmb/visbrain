@@ -4,6 +4,8 @@ import numpy as np
 from visbrain import Sleep
 from scipy.io import loadmat
 
+#############################################################################
+# REAL DATA EXAMPLE :
 mat = loadmat('testing_database.mat')
 
 data = mat['x']
@@ -15,13 +17,14 @@ hypno = []
 for k in hypnot:
 	hypno += [k] * 100
 hypno = np.array(hypno)
-
+#############################################################################
+# DEBUGGING EXAMPLE :
 # nelec = 20
 # npts = 1000000
 
 # data = np.random.rand(nelec, npts)
-sf = 1024.
 # channels = ['channel_'+str(k) for k in range(nelec)]
 # hypno = np.random.rand(npts)
+sf = 512.
 
 Sleep(data=data, channels=channels, sf=sf, hypno=hypno, downsample=100.).show()

@@ -53,6 +53,7 @@ class uiSettings(object):
         # SLIDER
         # =====================================================================
         # Function applied when the slider move :
+        self._slOnStart = False
         self._SlVal.valueChanged.connect(self._fcn_sliderMove)
         # Function applied when slider's settings changed :
         self._SigWin.valueChanged.connect(self._fcn_sliderSettings)
@@ -144,6 +145,7 @@ class uiSettings(object):
     def _fcn_sliderMove(self):
         """Function applied when the slider move."""
         # ---------------------------------------
+        # Get slider variables :
         val = self._SlVal.value()
         step = self._SigSlStep.value()
         win = self._SigWin.value()
@@ -161,7 +163,6 @@ class uiSettings(object):
         # Update spectrogram indicator :
         ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
         self._specInd.set_data(xlim=xlim, ylim=ylim)
-        # self._chanCam.rect = self._chan.rect
 
         # ---------------------------------------
         # Update hypnogram indicator :
@@ -179,3 +180,8 @@ class uiSettings(object):
         self._SlVal.setMaximum((self._time.max()-self._SigWin.value())/step)
         self._SlVal.setTickInterval(step)
         self._SlVal.setSingleStep(step)
+
+        if self._slOnStart:
+            self._fcn_sliderMove()
+        else:
+            self._slOnStart = True

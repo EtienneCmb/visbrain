@@ -31,8 +31,8 @@ class uiPanels(object):
         # SPECTROGRAM
         # =====================================================================
         # Main canvas for the spectrogram :
-        self._specCanvas = AxisCanvas(axis=False, bgcolor=(1., 1., 1.),
-                                      y_label='Spectrogram', x_label=None,
+        self._specCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
+                                      y_label=None, x_label=None,
                                       name='Spectrogram', color='black',
                                       yargs={'text_color': 'black'},
                                       xargs={'text_color': 'black'})
@@ -61,8 +61,8 @@ class uiPanels(object):
         # HYPNOGRAM
         # =====================================================================
         self._PanHypViz.clicked.connect(self._fcn_hypViz)
-        self._hypCanvas = AxisCanvas(axis=False, bgcolor=(1., 1., 1.),
-                                     y_label='Hypnogram', x_label=None,
+        self._hypCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
+                                     y_label=None, x_label=None,
                                      name='Spectrogram', color='black',
                                      yargs={'text_color': 'black'},
                                      xargs={'text_color': 'black'})
@@ -136,18 +136,15 @@ class uiPanels(object):
 
             # ============ CANVAS ============
             # Create canvas :
-            self._chanCanvas[i] = AxisCanvas(axis=False, bgcolor=(1., 1., 1.),
-                                             y_label=k, x_label=None,
+            self._chanCanvas[i] = AxisCanvas(axis=self._ax,
+                                             bgcolor=(1., 1., 1.),
+                                             y_label=None, x_label=None,
                                              name='Canvas_'+k, color='black',
                                              yargs={'text_color': 'black'},
                                              xargs={'text_color': 'black'},)
             # Add the canvas to the layout :
             self._chanLayout[i].addWidget(self._chanCanvas[i].canvas.native)
 
-        # Set first element checked and first panel visible :
-        self._chanChecks[0].setChecked(True)
-        # self._chanWidget[0].setVisible(True)
-        # Add vertical spacer :
         # Define a vertical and horizontal spacers :
         vspacer = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Expanding,
                                     QtGui.QSizePolicy.Minimum)
@@ -202,8 +199,6 @@ class uiPanels(object):
         # Set data :
         self._spec.set_data(self._sf, self._data[chan, ...], nfft=nfft,
                             step=step, fstart=fstart, fend=fend, cmap=cmap)
-        # Update camera :
-        self._specCam.rect = self._spec.rect
 
     # =====================================================================
     # HYPNOGRAM

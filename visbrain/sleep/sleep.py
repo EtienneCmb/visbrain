@@ -21,46 +21,53 @@ class Sleep(uiInit, visuals, uiElements):
     """
 
     def __init__(self, file=None, data=None, channels=None, sf=None,
-                 hypno=None, downsample=None):
+                 hypno=None, downsample=None, axis=False, line='agg'):
         """Init."""
-        # ====================== Load ======================
+        # ====================== LOAD FILE ======================
         # Load file and convert if needed :
         pass
 
-        # ====================== Variables ======================
+        # ====================== VARIABLES ======================
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = list(channels)
         self._lw = 2
+        self._ax = axis
+        self._linemeth = line
+        print(self._time)
+        0/0
 
-        # ====================== App creation ======================
+        # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
         self._app = QtGui.QApplication(sys.argv)
         uiInit.__init__(self)
 
-        # ====================== user & GUI interaction  ======================
+        # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
         uiElements.__init__(self)
 
-        # ====================== Objects creation ======================
-        visuals.__init__(self, self._sf, self._data, self._channels,
-                         self._hypno)
-
         # ====================== CAMERAS ======================
+        # ------------------- Channels -------------------
         self._chanCam = []
         for k in range(len(self)):
             self._chanCam.append(viscam.PanZoomCamera())
-        # self._chanCam = FixedCam(rect=self._chan.rect)
-        self._chan._camera = self._chanCam
         # ------------------- Spectrogram -------------------
-        self._specCam = FixedCam(rect=self._spec.rect)
+        self._specCam = FixedCam()
         self._specCanvas.set_camera(self._specCam)
         # ------------------- Hypnogram -------------------
-        hypcam = FixedCam(rect=self._hyp.rect)
-        self._hypCanvas.set_camera(hypcam)
+        self._hypcam = FixedCam()
+        self._hypCanvas.set_camera(self._hypcam)
         # ------------------- Time axis -------------------
-        timecam = FixedCam(rect=self._hyp.rect)
-        self._TimeAxis.set_camera(timecam)
+        self._timecam = FixedCam()
+        self._TimeAxis.set_camera(self._timecam)
+
+        # Keep all cams :
+        cams = (self._chanCam, self._specCam, self._hypcam, self._timecam)
+
+        # ====================== OBJECTS CREATION ======================
+        visuals.__init__(self, self._sf, self._data, self._channels,
+                         self._hypno, cameras=cams)
+        self._timecam.rect = self._hypcam.rect
 
         # Finally set data and first channel only visible:
         self._fcn_sliderMove()

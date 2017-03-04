@@ -78,7 +78,7 @@ class AxisCanvas(object):
 
     def __init__(self, axis=True, x_label='', x_heightMax=40, y_label='',
                  y_widthMax=80, font_size=7, color='white', title='',
-                 axis_label_margin=50, tick_label_margin=5, name='',
+                 axis_label_margin=0, tick_label_margin=5, name='',
                  bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}):
         """Init."""
         # Save variables :
@@ -111,16 +111,6 @@ class AxisCanvas(object):
             self.yaxis.width_max = y_widthMax
             grid.add_widget(self.yaxis, row=1, col=0)
 
-            # # Add x-axis :
-            # self.xaxis = scene.AxisWidget(orientation='bottom',
-            #                               axis_label=x_label,
-            #                               axis_font_size=font_size,
-            #                               axis_label_margin=axis_label_margin,
-            #                               tick_label_margin=tick_label_margin,
-            #                               **xargs)
-            # self.xaxis.height_max = x_heightMax
-            # grid.add_widget(self.xaxis, row=1, col=1)
-
             # Add right padding :
             self._rpad = grid.add_widget(row=0, col=2, row_span=1)
             self._rpad.width_max = 10
@@ -130,7 +120,7 @@ class AxisCanvas(object):
             self._rpad.height_max = 10
 
             # Main plot :
-            self.wc = grid.add_view(row=1, col=1, border_color='white')
+            self.wc = grid.add_view(row=1, col=1, border_color=color)
         # Ignore axis :
         else:
             self.wc = self.canvas.central_widget.add_view()

@@ -17,16 +17,17 @@ class visuals(object):
     parents on their own canvas.
     """
 
-    def __init__(self, sf, data, channels, hypno, **kwargs):
+    def __init__(self, sf, data, channels, hypno, cameras=None, method='agg',
+                 **kwargs):
         """Init."""
         # =================== CHANNELS ===================
-        self._chan = ChannelPlot(channels)
+        self._chan = ChannelPlot(channels, camera=cameras[0])
         # self._chan.set_data(sf, data)
         self._chan.parent = self._chanCanvas
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
-        self._spec = Spectrogram()
+        self._spec = Spectrogram(camera=cameras[1])
         self._spec.set_data(sf, data[0, ...])
         self._spec.mesh.parent = self._specCanvas.wc.scene
         # Create a visual indicator for spectrogram :
@@ -36,7 +37,7 @@ class visuals(object):
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
-        self._hyp = Hypnogram()
+        self._hyp = Hypnogram(camera=cameras[2])
         self._hyp.set_data(sf, hypno)
         self._hyp.mesh.parent = self._hypCanvas.wc.scene
         # Create a visual indicator for hypnogram :
@@ -48,7 +49,8 @@ class visuals(object):
 class ChannelPlot(object):
     """Plot each channel."""
 
-    def __init__(self, channels, color=(.1, .1, .1), width=4, camera=None):
+    def __init__(self, channels, color=(.1, .1, .1), width=1.5, method='agg',
+                 camera=None):
         self._camera = camera
         self.rect = []
         # Get color :
@@ -58,7 +60,7 @@ class ChannelPlot(object):
         self.mesh = []
         for i, k in enumerate(channels):
             mesh = scene.visuals.Line(pos, name=k+'plot', color=col,
-                                      method='agg')
+                                      method=method, width=width)
             self.mesh.append(mesh)
 
     def set_data(self, sf, data, sl=None):
@@ -100,7 +102,10 @@ class Spectrogram(object):
     color, new frequency / time range, new settings...
     """
 
-    def __init__(self):
+    def __init__(self, camera):
+        # Keep camera :
+        self._camera = camera
+        self._rect = (0., 0., 0., 0.)
         # Create a vispy image object :
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram')
 
@@ -168,11 +173,26 @@ class Spectrogram(object):
         self.rect = (xvec.min(), freq.min(), xvec.max()-xvec.min(),
                      freq.max()-freq.min())
 
+    # ----------- RECT -----------
+    @property
+    def rect(self):
+        """Get the rect value."""
+        return self._rect
+
+    @rect.setter
+    def rect(self, value):
+        """Set rect value."""
+        self._rect = value
+        self._camera.rect = value
+
 
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, color='slateblue'):
+    def __init__(self, camera, color='slateblue'):
+        # Keep camera :
+        self._camera = camera
+        self._rect = (0., 0., 0., 0.)
         # Get color :
         col = color2vb(color=color)
         # Create a default line :
@@ -195,6 +215,18 @@ class Hypnogram(object):
         # Get camera rectangle :
         self.rect = (time.min(), data.min(), time.max()-time.min(),
                      data.max()-data.min())
+
+    # ----------- RECT -----------
+    @property
+    def rect(self):
+        """Get the rect value."""
+        return self._rect
+
+    @rect.setter
+    def rect(self, value):
+        """Set rect value."""
+        self._rect = value
+        self._camera.rect = value
 
 
 class Indicator(object):
