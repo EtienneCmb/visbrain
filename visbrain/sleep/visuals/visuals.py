@@ -221,13 +221,12 @@ class Hypnogram(object):
         # Set data to the mesh :
         self.mesh.set_data(np.vstack((time, data)).T)
         # Re-scale hypnogram :
-        sc = ((time.max() - time.min()) / len(time), 1, 1)
+        # sc = ((time.max() - time.min()) / len(time), 1, 1)
         # self.mesh.transform = vist.STTransform(scale=sc)
         # Get camera rectangle :
         self.rect = (time.min(), data.min(), time.max()-time.min(),
                      data.max()-data.min())
         self.mesh.update()
-        print('HYPNO RECT : ', self.rect)
 
     # ----------- RECT -----------
     @property

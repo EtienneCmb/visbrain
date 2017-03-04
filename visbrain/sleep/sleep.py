@@ -34,7 +34,6 @@ class Sleep(uiInit, visuals, uiElements):
         self._lw = 2
         self._ax = axis
         self._defwin = 30.
-        print('TIME: ', self._time, 'MIN: ', self._time.min(), 'MAX: ', self._time.max())
 
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
