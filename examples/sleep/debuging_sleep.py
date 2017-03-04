@@ -4,15 +4,24 @@ import numpy as np
 from visbrain import Sleep
 from scipy.io import loadmat
 
-# mat = loadmat('sub-02_mat.mat')
-# print(mat.keys())
+mat = loadmat('testing_database.mat')
 
-nelec = 10
-npts = 1000000
+data = mat['x']
+hypnot = mat['hypno'].ravel()
+channels = [str(k[0]) for k in mat['labels'][0][0:-2]]
+print(data.shape, len(channels))
 
-data = np.random.rand(nelec, npts)
+hypno = []
+for k in hypnot:
+	hypno += [k] * 100
+hypno = np.array(hypno)
+
+# nelec = 20
+# npts = 1000000
+
+# data = np.random.rand(nelec, npts)
 sf = 1024.
-channel = ['channel_'+str(k) for k in range(nelec)]
-hypno = np.random.rand(npts)
+# channels = ['channel_'+str(k) for k in range(nelec)]
+# hypno = np.random.rand(npts)
 
-Sleep(data=data, channels=channel, sf=sf, hypno=hypno, downsample=100.).show()
+Sleep(data=data, channels=channels, sf=sf, hypno=hypno, downsample=100.).show()
