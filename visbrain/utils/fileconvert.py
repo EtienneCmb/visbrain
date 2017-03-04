@@ -7,14 +7,13 @@ specific files including *.eeg, *.edf...
 import numpy as np
 import os
 
-__all__ = ['elan2array']
+__all__ = ['elan2array', 'edf2array', 'brainvision2array']
 
 
 def elan2array(path, ds_freq=100):
-    """Read Elan .eeg file into NumpPy
+    """Read Elan eeg file into NumPy.
 
     Elan format specs: http://elan.lyon.inserm.fr/
-
     An Elan dataset is separated into 3 files :
     - .eeg          raw data file
     - .eeg.ent      hearder file
@@ -24,7 +23,7 @@ def elan2array(path, ds_freq=100):
             Filename (with full path) to Elan .eeg file
 
     Kargs:
-        ds_freq: int (def 100)
+        ds_freq: int, optional, (def 100)
             Downsampling frequency
 
     Return:
@@ -37,7 +36,6 @@ def elan2array(path, ds_freq=100):
         chan: list
             The list of channel's names.
 
-
     Example:
         >>> import os
         >>> # Define path where the file is located
@@ -45,7 +43,6 @@ def elan2array(path, ds_freq=100):
         >>> path = os.path.join(pathfile, 'myfile.eeg')
         >>> sf, data, chan, = elan2array(path)
     """
-
     header = path + '.ent'
 
     assert os.path.isfile(path)
@@ -113,7 +110,7 @@ def elan2array(path, ds_freq=100):
 
 
 def edf2array(path):
-    """Read European Data Format (EDF) file into NumPy
+    """Read European Data Format (EDF) file into NumPy.
 
     Use phypno class for reading EDF files:
         http://phypno.readthedocs.io/api/phypno.ioeeg.edf.html
@@ -132,7 +129,6 @@ def edf2array(path):
         chan: list
             The list of channel's names.
 
-
     Example:
         >>> import os
         >>> # Define path where the file is located
@@ -140,10 +136,9 @@ def edf2array(path):
         >>> path = os.path.join(pathfile, 'myfile.edf')
         >>> sf, data, chan, = edf2array(path)
     """
-
     assert os.path.isfile(path)
 
-    from edf import Edf
+    from .edf import Edf
 
     edf = Edf(path)
 
@@ -166,7 +161,7 @@ def edf2array(path):
 
 
 def brainvision2array(path):
-    """Read BrainVision file
+    """Read BrainVision file.
 
     Poor man's version of https://gist.github.com/breuderink/6266871
 
@@ -174,7 +169,6 @@ def brainvision2array(path):
         - Data format: Binary
         - Orientation: Multiplexed
         - Format: int16
-
 
     Args:
         path: str
@@ -190,7 +184,6 @@ def brainvision2array(path):
         chan: list
             The list of channel's names.
 
-
     Example:
         >>> import os
         >>> # Define path where the file is located
@@ -198,7 +191,6 @@ def brainvision2array(path):
         >>> path = os.path.join(pathfile, 'myfile.eeg')
         >>> sf, data, chan, = brainvision2array(path)
     """
-
     import re
 
     assert os.path.splitext(path)[1] == '.eeg'
@@ -216,7 +208,7 @@ def brainvision2array(path):
 
     # Channels info
     n_chan = int(re.findall('\d+', ent[10])[0])
-    n_samples = int(re.findall('\d+', ent[11])[0])
+    # n_samples = int(re.findall('\d+', ent[11])[0])
     sf = int(re.findall('\d+', ent[14])[0])
 
     # Extract channel labels and resolution
