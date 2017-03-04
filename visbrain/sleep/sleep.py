@@ -33,9 +33,8 @@ class Sleep(uiInit, visuals, uiElements):
         self._channels = list(channels)
         self._lw = 2
         self._ax = axis
-        self._linemeth = line
-        print(self._time)
-        0/0
+        self._defwin = 30.
+        print('TIME: ', self._time, 'MIN: ', self._time.min(), 'MAX: ', self._time.max())
 
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
@@ -52,10 +51,10 @@ class Sleep(uiInit, visuals, uiElements):
         for k in range(len(self)):
             self._chanCam.append(viscam.PanZoomCamera())
         # ------------------- Spectrogram -------------------
-        self._specCam = FixedCam()
+        self._specCam = FixedCam()#viscam.PanZoomCamera()
         self._specCanvas.set_camera(self._specCam)
         # ------------------- Hypnogram -------------------
-        self._hypcam = FixedCam()
+        self._hypcam = viscam.PanZoomCamera()#FixedCam()
         self._hypCanvas.set_camera(self._hypcam)
         # ------------------- Time axis -------------------
         self._timecam = FixedCam()
@@ -65,9 +64,10 @@ class Sleep(uiInit, visuals, uiElements):
         cams = (self._chanCam, self._specCam, self._hypcam, self._timecam)
 
         # ====================== OBJECTS CREATION ======================
-        visuals.__init__(self, self._sf, self._data, self._channels,
-                         self._hypno, cameras=cams)
-        self._timecam.rect = self._hypcam.rect
+        visuals.__init__(self, self._sf, self._data, self._time,
+                         self._channels, self._hypno, cameras=cams,
+                         method=line)
+        self._timecam.rect = (0, 0, list(self._hyp.rect)[2], 1)
 
         # Finally set data and first channel only visible:
         self._fcn_sliderMove()

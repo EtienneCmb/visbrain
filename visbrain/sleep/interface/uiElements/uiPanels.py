@@ -49,11 +49,13 @@ class uiPanels(object):
         # Add list of channels :
         self._PanSpecChan.addItems(self._channels)
         # Connect spectrogam properties :
+        self._PanSpecApply.setEnabled(False)
         self._PanSpecViz.clicked.connect(self._fcn_specViz)
-        self._PanSpecNfft.valueChanged.connect(self._fcn_specSetData)
-        self._PanSpecStep.valueChanged.connect(self._fcn_specSetData)
-        self._PanSpecFstart.valueChanged.connect(self._fcn_specSetData)
-        self._PanSpecFend.valueChanged.connect(self._fcn_specSetData)
+        self._PanSpecApply.clicked.connect(self._fcn_specSetData)
+        self._PanSpecNfft.valueChanged.connect(self._fcn_specCompat)
+        self._PanSpecStep.valueChanged.connect(self._fcn_specCompat)
+        self._PanSpecFstart.valueChanged.connect(self._fcn_specCompat)
+        self._PanSpecFend.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecCmap.currentIndexChanged.connect(self._fcn_specSetData)
         self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
 
@@ -83,6 +85,7 @@ class uiPanels(object):
                                   x_label='Time (seconds)',
                                   bgcolor=(1., 1., 1.), color='black',)
         self._TimeLayout.addWidget(self._TimeAxis.canvas.native)
+        self._TimeAxisW.setMaximumHeight(400)
         self._chanGrid.addWidget(self._TimeAxisW, len(self) + 3, 1,
                                  1, 1)
 
@@ -187,8 +190,8 @@ class uiPanels(object):
 
     def _fcn_specSetData(self):
         """Set data to the spectrogram."""
-        # Get nfft and step :
-        nfft, step = self._PanSpecNfft.value(), self._PanSpecStep.value()
+        # Get nfft and overlap :
+        nfft, over = self._PanSpecNfft.value(), self._PanSpecStep.value()
         # Get starting / ending frequency :
         fstart, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()
         # Get colormap :
@@ -197,8 +200,24 @@ class uiPanels(object):
         chan = self._PanSpecChan.currentIndex()
         self._specLabel.setText(self._channels[chan])
         # Set data :
-        self._spec.set_data(self._sf, self._data[chan, ...], nfft=nfft,
-                            step=step, fstart=fstart, fend=fend, cmap=cmap)
+        self._spec.set_data(self._sf, self._data[chan, ...], self._time,
+                            nfft=nfft, overlap=over, fstart=fstart, fend=fend,
+                            cmap=cmap)
+        # Set apply button disable :
+        self._PanSpecApply.setEnabled(False)
+
+    def _fcn_specCompat(self):
+        """Check compatibility between spectro parameters."""
+        # Get nfft and overlap :
+        nfft, over = self._PanSpecNfft.value(), self._PanSpecStep.value()
+        # Get starting / ending frequency :
+        fstart, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()
+
+        self._PanSpecStep.setMaximum(nfft * .99)
+        self._PanSpecFend.setMaximum(self._sf / 2)
+        self._PanSpecFstart.setMaximum(fend - 0.99)
+        # Set apply button enable :
+        self._PanSpecApply.setEnabled(True)
 
     # =====================================================================
     # HYPNOGRAM

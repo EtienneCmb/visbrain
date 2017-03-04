@@ -52,13 +52,14 @@ class uiSettings(object):
         # =====================================================================
         # SLIDER
         # =====================================================================
+        self._slFrame.setMaximumHeight(100)
         # Function applied when the slider move :
         self._slOnStart = False
+        self._fcn_sliderSettings()
         self._SlVal.valueChanged.connect(self._fcn_sliderMove)
         # Function applied when slider's settings changed :
         self._SigWin.valueChanged.connect(self._fcn_sliderSettings)
         self._SigSlStep.valueChanged.connect(self._fcn_sliderSettings)
-        self._fcn_sliderSettings()
 
     # =====================================================================
     # MENU & FILE MANAGMENT

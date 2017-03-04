@@ -111,7 +111,7 @@
                        <x>0</x>
                        <y>0</y>
                        <width>312</width>
-                       <height>106</height>
+                       <height>73</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -268,23 +268,23 @@
                        <property name="spacing">
                         <number>9</number>
                        </property>
-                       <item row="2" column="1">
+                       <item row="2" column="0">
+                        <widget class="QLabel" name="label_15">
+                         <property name="text">
+                          <string>Overlap</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="2">
                         <widget class="QDoubleSpinBox" name="_PanSpecFstart">
                          <property name="decimals">
                           <number>1</number>
                          </property>
                          <property name="minimum">
-                          <double>0.100000000000000</double>
+                          <double>0.500000000000000</double>
                          </property>
                          <property name="maximum">
                           <double>190.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="3">
-                        <widget class="QLabel" name="label_17">
-                         <property name="text">
-                          <string>f end</string>
                          </property>
                         </widget>
                        </item>
@@ -295,44 +295,17 @@
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="5">
-                        <spacer name="horizontalSpacer_20">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="0" column="1">
+                       <item row="0" column="2">
                         <widget class="QComboBox" name="_PanSpecChan"/>
                        </item>
-                       <item row="2" column="0">
+                       <item row="3" column="0">
                         <widget class="QLabel" name="label_16">
                          <property name="text">
                           <string>f start</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="4">
-                        <widget class="QSpinBox" name="_PanSpecStep">
-                         <property name="value">
-                          <number>99</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="3">
-                        <widget class="QLabel" name="label_15">
-                         <property name="text">
-                          <string>Step</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="4">
+                       <item row="3" column="6">
                         <widget class="QDoubleSpinBox" name="_PanSpecFend">
                          <property name="decimals">
                           <number>1</number>
@@ -344,29 +317,36 @@
                           <double>200.000000000000000</double>
                          </property>
                          <property name="value">
-                          <double>20.000000000000000</double>
+                          <double>25.000000000000000</double>
                          </property>
                         </widget>
                        </item>
                        <item row="1" column="0">
                         <widget class="QLabel" name="label_14">
                          <property name="text">
-                          <string>N fft</string>
+                          <string>Length</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="1">
-                        <widget class="QSpinBox" name="_PanSpecNfft">
-                         <property name="maximum">
-                          <number>10000</number>
-                         </property>
-                         <property name="value">
-                          <number>256</number>
+                       <item row="4" column="0">
+                        <widget class="QLabel" name="label_29">
+                         <property name="text">
+                          <string>Colormap</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="2">
-                        <spacer name="horizontalSpacer_21">
+                       <item row="4" column="2">
+                        <widget class="QComboBox" name="_PanSpecCmap"/>
+                       </item>
+                       <item row="2" column="3">
+                        <widget class="QLabel" name="label_23">
+                         <property name="text">
+                          <string>seconds</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="3">
+                        <spacer name="horizontalSpacer_3">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
                          </property>
@@ -378,15 +358,45 @@
                          </property>
                         </spacer>
                        </item>
-                       <item row="3" column="0">
-                        <widget class="QLabel" name="label_29">
+                       <item row="5" column="2" colspan="3">
+                        <widget class="QPushButton" name="_PanSpecApply">
                          <property name="text">
-                          <string>Colormap</string>
+                          <string>Apply</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="3" column="1">
-                        <widget class="QComboBox" name="_PanSpecCmap"/>
+                       <item row="1" column="3">
+                        <widget class="QLabel" name="label_2">
+                         <property name="text">
+                          <string>seconds</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="4">
+                        <widget class="QLabel" name="label_17">
+                         <property name="text">
+                          <string>f end</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="2">
+                        <widget class="QDoubleSpinBox" name="_PanSpecNfft">
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
+                         <property name="minimum">
+                          <double>0.100000000000000</double>
+                         </property>
+                         <property name="maximum">
+                          <double>1000.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>30.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="2">
+                        <widget class="QDoubleSpinBox" name="_PanSpecStep"/>
                        </item>
                       </layout>
                      </item>
@@ -867,19 +877,6 @@
        </layout>
       </item>
       <item>
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
        <widget class="QWidget" name="_TimeAxisW" native="true">
         <property name="minimumSize">
          <size>
@@ -905,6 +902,9 @@
            <property name="spacing">
             <number>0</number>
            </property>
+           <property name="sizeConstraint">
+            <enum>QLayout::SetFixedSize</enum>
+           </property>
            <property name="leftMargin">
             <number>9</number>
            </property>
@@ -915,19 +915,6 @@
          </item>
         </layout>
        </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>0</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item>
        <widget class="QWidget" name="_SpecW" native="true">
@@ -1022,7 +1009,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QFrame" name="frame">
+         <widget class="QFrame" name="_slFrame">
           <property name="minimumSize">
            <size>
             <width>0</width>

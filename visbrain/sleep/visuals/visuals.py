@@ -1,6 +1,7 @@
 """Convert user inputs and create Nd, 1d and Image objects.
 """
 import numpy as np
+from scipy.signal import spectrogram
 
 from vispy import scene
 import vispy.visuals.transforms as vist
@@ -17,18 +18,18 @@ class visuals(object):
     parents on their own canvas.
     """
 
-    def __init__(self, sf, data, channels, hypno, cameras=None, method='agg',
-                 **kwargs):
+    def __init__(self, sf, data, time, channels, hypno, cameras=None,
+                 method='agg', **kwargs):
         """Init."""
         # =================== CHANNELS ===================
-        self._chan = ChannelPlot(channels, camera=cameras[0])
+        self._chan = ChannelPlot(channels, camera=cameras[0], method=method)
         # self._chan.set_data(sf, data)
         self._chan.parent = self._chanCanvas
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
         self._spec = Spectrogram(camera=cameras[1])
-        self._spec.set_data(sf, data[0, ...])
+        self._spec.set_data(sf, data[0, ...], time)
         self._spec.mesh.parent = self._specCanvas.wc.scene
         # Create a visual indicator for spectrogram :
         self._specInd = Indicator(name='spectro_indic', width=self._lw)
@@ -38,11 +39,11 @@ class visuals(object):
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
         self._hyp = Hypnogram(camera=cameras[2])
-        self._hyp.set_data(sf, hypno)
+        self._hyp.set_data(sf, hypno, time)
         self._hyp.mesh.parent = self._hypCanvas.wc.scene
         # Create a visual indicator for hypnogram :
         self._hypInd = Indicator(name='hypno_indic', width=self._lw)
-        self._hypInd.set_data(xlim=(0, 30), ylim=(0, 5))
+        self._hypInd.set_data(xlim=(0, 30), ylim=(-1, 6))
         self._hypInd.parent = self._hypCanvas.wc.scene
 
 
@@ -76,8 +77,8 @@ class ChannelPlot(object):
             dat = np.ascontiguousarray(dat)
             k.set_data(dat)
             # Get camera rectangle and set it:
-            rect = (time.min(), dat.min(), time.max()-time.min(),
-                    dat.max()-dat.min())
+            rect = (time.min(), data[i, :].min(), time.max()-time.min(),
+                    data[i, :].max()-data[i, :].min())
             self._camera[i].rect = rect
             k.update()
             self.rect.append(rect)
@@ -109,8 +110,8 @@ class Spectrogram(object):
         # Create a vispy image object :
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram')
 
-    def set_data(self, sf, data, cmap='viridis', nfft=256, step=128,
-                 fstart=0., fend=20.):
+    def set_data(self, sf, data, time, cmap='viridis', nfft=30., overlap=0.,
+                 fstart=0.5, fend=25.):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
@@ -123,15 +124,18 @@ class Spectrogram(object):
             data: np.ndarray
                 The data to use for the spectrogram. Must be a row vector.
 
+            time: np.ndarray
+                The time vector.
+
         Kargs:
             cmap: string, optional, (def: 'viridis')
                 The matplotlib colormap to use.
 
-            nfft: int, optional, (def: 256)
-                Number of fft points for the spectrogram.
+            nfft: float, optional, (def: 256)
+                Number of fft points for the spectrogram (in seconds).
 
-            step: int, optional, (def: 128)
-                Time step for the spectrogram.
+            overlap: float, optional, (def: 0)
+                Time overlap for the spectrogram (in seconds).
 
             fstart: float, optional, (def: None)
                 Frequency from which the spectrogram have to start.
@@ -139,16 +143,18 @@ class Spectrogram(object):
             fend: float, optional, (def: None)
                 Frequency from which the spectrogram have to finish.
         """
+        # =================== CONVERSION ===================
+        nperseg = int(round(nfft * sf))
+        overlap = int(round(overlap * sf))
+
         # =================== COMPUTE ===================
         # Compute the spectrogram :
-        mesh = scene.visuals.Spectrogram(data, fs=sf, n_fft=nfft, step=step)
-        # Get time vector :
-        xvec = np.arange(len(data)) / sf
+        freq, t, mesh = spectrogram(data, fs=sf, nperseg=nperseg,
+                                    noverlap=overlap)
+        mesh = 20 * np.log10(mesh)
 
         # =================== FREQUENCY SELCTION ===================
-        # Get frequency vector :
-        freq = mesh.freqs
-        # find where freq is [fstart, fend] :
+        # Find where freq is [fstart, fend] :
         f = [0., 0.]
         f[0] = np.abs(freq - fstart).argmin() if fstart else 0
         f[1] = np.abs(freq - fend).argmin() if fend else len(freq)
@@ -159,18 +165,18 @@ class Spectrogram(object):
 
         # =================== COLOR ===================
         # Turn mesh into color array for selected frequencies:
-        self.mesh.set_data(array2colormap(mesh._data[sls, :], cmap=cmap))
+        self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap))
 
         # =================== TRANSFORM ===================
-        # Re-scale the mesh for fitting in xvec / frequency :
+        # Re-scale the mesh for fitting in time / frequency :
         fact = (freq.max()-freq.min())/len(freq)
-        sc = (xvec.max()/mesh.size[0], fact, 1)
+        sc = (time.max()/mesh.shape[1], fact, 1)
         tr = [0, freq.min(), 0]
         self.mesh.transform = vist.STTransform(scale=sc, translate=tr)
         # Update object :
         self.mesh.update()
         # Get camera rectangle :
-        self.rect = (xvec.min(), freq.min(), xvec.max()-xvec.min(),
+        self.rect = (time.min(), freq.min(), time.max()-time.min(),
                      freq.max()-freq.min())
 
     # ----------- RECT -----------
@@ -199,7 +205,7 @@ class Hypnogram(object):
         pos = np.array([[0, 0], [0, 100]])
         self.mesh = scene.visuals.Line(pos, name='hypnogram', color=col)
 
-    def set_data(self, sf, data):
+    def set_data(self, sf, data, time):
         """Set data to the hypnogram.
 
         Args:
@@ -208,13 +214,20 @@ class Hypnogram(object):
 
             data: np.ndarray
                 The data to send. Must be a row vector.
+
+            time: np.ndarray
+                The time vector
         """
-        # Time vector :
-        time = np.arange(len(data)) / sf
+        # Set data to the mesh :
         self.mesh.set_data(np.vstack((time, data)).T)
+        # Re-scale hypnogram :
+        sc = ((time.max() - time.min()) / len(time), 1, 1)
+        # self.mesh.transform = vist.STTransform(scale=sc)
         # Get camera rectangle :
         self.rect = (time.min(), data.min(), time.max()-time.min(),
                      data.max()-data.min())
+        self.mesh.update()
+        print('HYPNO RECT : ', self.rect)
 
     # ----------- RECT -----------
     @property
