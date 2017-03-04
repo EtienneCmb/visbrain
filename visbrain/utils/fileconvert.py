@@ -5,87 +5,243 @@ specific files including *.eeg, *.edf...
 """
 
 import numpy as np
+import os
 
-"""
-##############################################################################
-A LIRE (et à supprimer ensuite !)
-
-Dans visbrain, j'ai adopté une nomenclature assez précise pour la
-documentation et le formatage du code. Tu connais certainement, mais au cas où:
-- Chaque ligne ne dépasse pas 79 caractères pour des questions de lisibilité.
-Pour m'aider, dans sublimetext j'ai mis une ligne verticale.
-- Le code suit la nomenclature pep8 (pareil, dans sublime j'ai un paquet pour
-gérer ça).
-- Dans la mesure du possible, j'essaye d'avoir une consistence dans ma doc
-(une première ligne descriptive, suivi d'un paragraphe plus détaillé. Ensuite
-viennent les arguments obligatoires (Args), puis les optionels (Kargs), puis
-ce que la fonction retourne (ici c'est important de donner les tailles de
-matrices). Enfin, parfois je met un exemple d'utilisation. Pas obligatoire.)
-
-Je sais, c'est un peu tyranique, mais j'ai longuement regardé les packages les
-plus développés et c'est un format standard (utilisé par numpy et scikit par
-exemple).
-Je t'ai pré-formatté la fonction eeg2array pour t'aider un peu. Si tu n'as pas
-le temps de faire le formatage, pas de soucis, je remettrai en forme. C'est
-quasiment automatique avec sublime.
-
-PS: tu crois qu'on a vraiment besoin de retourner le nombre de channel et de
-sample? Parce que ça se récupère bien ensuite si je comprends bien?
-##############################################################################
-"""
-
-__all__ = ['eeg2array']
+__all__ = ['elan2array']
 
 
-def eeg2array(arg1, arg2, karg1=0., karg2='ok', karg3=None):
-    """One line description of what the function do.
+def elan2array(path, ds_freq=100):
+    """Read Elan .eeg file into NumpPy
 
-    More explanations if needed. My function do this, do this, do this, do this
-    do this, do this, do this, do this, do this, do this, do this.
+    Elan format specs: http://elan.lyon.inserm.fr/
+
+    An Elan dataset is separated into 3 files :
+    - .eeg          raw data file
+    - .eeg.ent      hearder file
 
     Args:
-        arg1: float
-            First arg description.
-
-        arg2: string
-            Second arg description.
+        path: str
+            Filename (with full path) to Elan .eeg file
 
     Kargs:
-        karg1: float, optional, (def: 0.)
-            Optional argument 1 description.
-
-        karg2: string, optional, (def: 'ok')
-            Optional argument 2 description.
-
-        karg3: np.ndarray, optional, (def: None)
-            Optional argument 3 description.
+        ds_freq: int (def 100)
+            Downsampling frequency
 
     Return:
-        sf: float
+        sf: int
             The sampling frequency.
 
         data: np.ndarray
             The data organised as well (n_channels, n_points)
 
-        n_points: int
-            The number of time points.
-
         chan: list
             The list of channel's names.
 
-        n_channels: int
-            The number of channels.
 
     Example:
         >>> import os
         >>> # Define path where the file is located
         >>> pathfile = 'mypath/'
         >>> path = os.path.join(pathfile, 'myfile.eeg')
-        >>> sf, data, npts, chan, nchan = eeg2array(path)
+        >>> sf, data, chan, = elan2array(path)
     """
-    # Comment :
-    x = np.array([0, 1, 2, 3])
-    # Comment :
-    x *= 10
 
-    return x
+    header = path + '.ent'
+
+    assert os.path.isfile(path)
+    assert os.path.isfile(header)
+
+    # Read .ent file
+    ent = np.genfromtxt(header, delimiter='\n', usecols=[0],
+                        dtype=None, skip_header=0)
+
+    ent = np.char.decode(ent)
+
+    # eeg file version
+    eeg_version = ent[0]
+
+    if eeg_version == 'V2':
+        nb_oct = 2
+        formread = '>i2'
+    elif eeg_version == 'V3':
+        nb_oct = 4
+        formread = '>i4'
+
+    # Sampling rate
+    sf = np.int(1 / float(ent[8]))
+
+    # Channels
+    nb_chan = np.int(ent[9])
+    nb_chan = nb_chan
+
+    # Last 2 channels do not contain data
+    nb_chan_data = nb_chan - 2
+    chan_list = np.arange(0, nb_chan_data)
+    chan = ent[10:10 + nb_chan_data]
+
+    # Gain
+    Gain = np.zeros(nb_chan)
+    offset1 = 9 + 3 * nb_chan
+    offset2 = 9 + 4 * nb_chan
+    offset3 = 9 + 5 * nb_chan
+    offset4 = 9 + 6 * nb_chan
+
+    for i in np.arange(1, nb_chan + 1):
+
+        MinAn = float(ent[offset1 + i])
+        MaxAn = float(ent[offset2 + i])
+        MinNum = float(ent[offset3 + i])
+        MaxNum = float(ent[offset4 + i])
+
+        Gain[i - 1] = (MaxAn - MinAn) / (MaxNum - MinNum)
+
+    # Load memmap
+    nb_bytes = os.path.getsize(path)
+    nb_samples = int(nb_bytes / (nb_oct * nb_chan))
+
+    m_raw = np.memmap(path, dtype=formread, mode='r',
+                      shape=(nb_chan, nb_samples), order={'F'})
+
+    # Downsample to 100 Hz
+    ds_factor = np.int(sf / ds_freq)
+    m_ds = m_raw[:, ::ds_factor]
+
+    # Multiply by gain
+    data = np.diag(Gain[chan_list]).dot(m_ds[chan_list, ])
+
+    return float(sf), data.astype(np.float32), list(chan)
+
+
+def edf2array(path):
+    """Read European Data Format (EDF) file into NumPy
+
+    Use phypno class for reading EDF files:
+        http://phypno.readthedocs.io/api/phypno.ioeeg.edf.html
+
+    Args:
+        path: str
+            Filename (with full path) to EDF file
+
+    Return:
+        sf: int
+            The sampling frequency.
+
+        data: np.ndarray
+            The data organised as well (n_channels, n_points)
+
+        chan: list
+            The list of channel's names.
+
+
+    Example:
+        >>> import os
+        >>> # Define path where the file is located
+        >>> pathfile = 'mypath/'
+        >>> path = os.path.join(pathfile, 'myfile.edf')
+        >>> sf, data, chan, = edf2array(path)
+    """
+
+    assert os.path.isfile(path)
+
+    from edf import Edf
+
+    edf = Edf(path)
+
+    # Return header informations
+    _, _, sf, chan, n_samples, _ = edf.return_hdr()
+
+    # Keep only data channels (e.g excludes marker chan)
+    freqs = np.unique(edf.hdr['n_samples_per_record'])
+    sf = freqs.max()
+
+    if len(freqs) != 1:
+        bad_chans = np.where(edf.hdr['n_samples_per_record'] < sf)
+        chan = np.delete(chan, bad_chans)
+
+    # Load all samples of selected channels
+    np.seterr(divide='ignore', invalid='ignore')
+    data = edf.return_dat(chan, 0, n_samples)
+
+    return float(sf), data.astype(np.float32), list(chan)
+
+
+def brainvision2array(path):
+    """Read BrainVision file
+
+    Poor man's version of https://gist.github.com/breuderink/6266871
+
+    Assumes that data are saved with the following parameters:
+        - Data format: Binary
+        - Orientation: Multiplexed
+        - Format: int16
+
+
+    Args:
+        path: str
+            Filename (with full path) to .eeg file
+
+    Return:
+        sf: int
+            The sampling frequency.
+
+        data: np.ndarray
+            The data organised as well (n_channels, n_points)
+
+        chan: list
+            The list of channel's names.
+
+
+    Example:
+        >>> import os
+        >>> # Define path where the file is located
+        >>> pathfile = 'mypath/'
+        >>> path = os.path.join(pathfile, 'myfile.eeg')
+        >>> sf, data, chan, = brainvision2array(path)
+    """
+
+    import re
+
+    assert os.path.splitext(path)[1] == '.eeg'
+
+    header = os.path.splitext(path)[0] + '.vhdr'
+
+    assert os.path.isfile(path)
+    assert os.path.isfile(header)
+
+    # Read header
+    ent = np.genfromtxt(header, delimiter='\n', usecols=[0],
+                        dtype=None, skip_header=0)
+
+    ent = np.char.decode(ent)
+
+    # Channels info
+    n_chan = int(re.findall('\d+', ent[10])[0])
+    n_samples = int(re.findall('\d+', ent[11])[0])
+    sf = int(re.findall('\d+', ent[14])[0])
+
+    # Extract channel labels and resolution
+    start_label = np.array(np.where(np.char.find(ent, 'Ch1=') == 0)).min()
+
+    chan = {}
+    resolution = np.empty(shape=n_chan)
+
+    for i, j in enumerate(range(start_label, start_label + n_chan)):
+        chan[i] = re.split('\W+', ent[j])[1]
+        resolution[i] = float(ent[j].split(",")[2])
+
+    chan = np.array(list(chan.values())).flatten()
+
+    # Check binary format
+    assert "MULTIPLEXED" in ent[8]
+    assert "BINARY" in ent[6]
+    assert "INT_16" in ent[22]
+
+    with open(path, 'rb') as f:
+        raw = f.read()
+        size = int(len(raw) / 2)
+        ints = np.ndarray((n_chan, int(size / n_chan)),
+                          dtype='<i2', order='F', buffer=raw)
+
+        data = np.diag(resolution).dot(ints)
+
+    return float(sf), data.astype(np.float32), list(chan)
