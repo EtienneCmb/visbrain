@@ -47,19 +47,29 @@ class Sleep(uiInit, visuals, uiElements):
                          self._hypno)
 
         # ====================== CAMERAS ======================
-        self._chanCam = viscam.PanZoomCamera()
+        self._chanCam = []
+        for k in range(len(self)):
+            self._chanCam.append(viscam.PanZoomCamera())
         # self._chanCam = FixedCam(rect=self._chan.rect)
+        self._chan._camera = self._chanCam
         # ------------------- Spectrogram -------------------
-        speccam = FixedCam(rect=self._spec.rect)
-        self._specCanvas.set_camera(speccam)
+        self._specCam = FixedCam(rect=self._spec.rect)
+        self._specCanvas.set_camera(self._specCam)
         # ------------------- Hypnogram -------------------
         hypcam = FixedCam(rect=self._hyp.rect)
         self._hypCanvas.set_camera(hypcam)
+        # ------------------- Time axis -------------------
+        timecam = FixedCam(rect=self._hyp.rect)
+        self._TimeAxis.set_camera(timecam)
 
-        # Finally set data :
+        # Finally set data and first channel only visible:
         self._fcn_sliderMove()
-        self._chanCanvas[0].set_camera(self._chanCam)
-        self._chanCam.rect = self._chan.rect
+        self._chanChecks[0].setChecked(True)
+        self._fcn_chanViz()
+
+    def __len__(self):
+        """Return the number of channels."""
+        return len(self._channels)
 
     def _check_data(self, sf, data, channels, hypno=None, downsample=None):
         """Check data, hypnogram, channels and sample frequency after loading.

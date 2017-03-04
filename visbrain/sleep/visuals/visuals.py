@@ -48,7 +48,9 @@ class visuals(object):
 class ChannelPlot(object):
     """Plot each channel."""
 
-    def __init__(self, channels, color='black', width=4):
+    def __init__(self, channels, color=(.1, .1, .1), width=4, camera=None):
+        self._camera = camera
+        self.rect = []
         # Get color :
         col = color2vb(color)
         # Create one line pear channel :
@@ -56,7 +58,7 @@ class ChannelPlot(object):
         self.mesh = []
         for i, k in enumerate(channels):
             mesh = scene.visuals.Line(pos, name=k+'plot', color=col,
-                                      method='gl')
+                                      method='agg')
             self.mesh.append(mesh)
 
     def set_data(self, sf, data, sl=None):
@@ -71,9 +73,12 @@ class ChannelPlot(object):
             dat = np.vstack((time, data[i, :])).T
             dat = np.ascontiguousarray(dat)
             k.set_data(dat)
-        # Get camera rectangle :
-        self.rect = (time.min(), data.min(), time.max()-time.min(),
-                     data.max()-data.min())
+            # Get camera rectangle and set it:
+            rect = (time.min(), dat.min(), time.max()-time.min(),
+                    dat.max()-dat.min())
+            self._camera[i].rect = rect
+            k.update()
+            self.rect.append(rect)
 
     # ----------- PARENT -----------
     @property

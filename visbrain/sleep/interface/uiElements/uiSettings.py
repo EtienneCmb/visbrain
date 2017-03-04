@@ -1,8 +1,7 @@
 """Main class for settings managment."""
+import numpy as np
 
-import os
 from PyQt4.QtGui import *
-from vispy import io
 
 
 __all__ = ['uiSettings']
@@ -88,31 +87,7 @@ class uiSettings(object):
     def _fcn_panSettingsViz(self):
         """
         """
-        # Ui settings panel :
-        if self.actionUi_settings.isChecked():
-            self.QuickSettings.setCurrentIndex(0)
-            self.q_widget.setVisible(True)
-            self.actionUi_settings.setChecked(False)
-        # Nd-Plot panel :
-        elif self.actionNdPlt.isChecked():
-            self.QuickSettings.setCurrentIndex(1)
-            self.q_widget.setVisible(True)
-            self.actionNdPlt.setChecked(False)
-        # 1d-plot panel :
-        elif self.actionOnedPlt.isChecked():
-            self.QuickSettings.setCurrentIndex(2)
-            self.q_widget.setVisible(True)
-            self.actionOnedPlt.setChecked(False)
-        # Image panel :
-        elif self.actionImage.isChecked():
-            self.QuickSettings.setCurrentIndex(3)
-            self.q_widget.setVisible(True)
-            self.actionImage.setChecked(False)
-        # Colormap panel :
-        elif self.actionColormap.isChecked():
-            self.QuickSettings.setCurrentIndex(4)
-            self.q_widget.setVisible(True)
-            self.actionColormap.setChecked(False)
+        pass
 
     def _fcn_CanVisToggle(self):
         """Toggle the different panel."""
@@ -174,19 +149,26 @@ class uiSettings(object):
         win = self._SigWin.value()
         xlim = (val*step, val*step+win)
         # ---------------------------------------
+        # Find closest time index :
+        t = [0, 0]
+        t[0] = round(np.abs(self._time - xlim[0]).argmin())
+        t[1] = round(np.abs(self._time - xlim[1]).argmin())
+        # ---------------------------------------
         # Update display signal :
-        sl = slice(int(xlim[0]), int(xlim[1]))
+        sl = slice(t[0], t[1])
         self._chan.set_data(self._sf, self._data, sl=sl)
         # ---------------------------------------
         # Update spectrogram indicator :
         ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
         self._specInd.set_data(xlim=xlim, ylim=ylim)
-        self._chanCam.rect = self._chan.rect
+        # self._chanCam.rect = self._chan.rect
 
         # ---------------------------------------
-        # Update spectrogram indicator :
-        ylim = (0, 5)
+        # Update hypnogram indicator :
+        ylim = (-1, 6)
         self._hypInd.set_data(xlim=xlim, ylim=ylim)
+
+        self._TimeAxis.set_data(xlim[0], win)
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
