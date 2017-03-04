@@ -7,7 +7,93 @@ specific files including *.eeg, *.edf...
 import numpy as np
 import os
 
-__all__ = ['elan2array', 'edf2array', 'brainvision2array']
+__all__ = ['load_sleepdataset', 'load_hypno']
+
+
+def load_sleepdataset(path, ds_freq=100):
+    """Load a sleep dataset (elan, edf, brainvision).
+
+    Args:
+        path: string
+            Filename (with full path) to sleep dataset.
+
+    Kargs:
+        ds_freq: int, optional, (def 100)
+            Down-sampling frequency
+
+    Return:
+        sf: int
+            The sampling frequency.
+
+        data: np.ndarray
+            The data organised as well (n_channels, n_points)
+
+        chan: list
+            The list of channel's names.
+
+        resampling: bool
+            A boolean value if data need a resampling after loading.
+    """
+    # Test if file exist :
+    assert os.path.isfile(path)
+
+    # Extract file extension :
+    file, ext = os.path.splitext(path)
+
+    # Switch between diffrents types :
+    if ext == '.eeg':
+        # ELAN :
+        if os.path.isfile(path + '.ent'):
+            return elan2array(path, ds_freq), None
+
+        # BRAINVISION :
+        elif os.path.isfile(file + '.vhdr'):
+            return brainvision2array(path), ds_freq
+
+        # None :
+        else:
+            raise ValueError("No header file found in this directory. You "
+                             "should have a *.ent (ELAN) or *.vhdr "
+                             "(BRAINVISION)")
+
+    # EDF :
+    elif ext == '.edf':
+        return edf2array(path), ds_freq
+
+    # None :
+    else:
+        raise ValueError("*" + ext + " files are currently not supported.")
+
+
+def load_hypno(path, ds_freq=None):
+    """Load hypnogram file.
+
+    Args:
+        path: string
+            Filename (with full path) to hypnogram file
+
+    Kargs:
+        ds_freq: int, optional, (def 100)
+            Down-sampling frequency
+
+    Return:
+        hypno: np.ndarray
+            The hypnogram vector with same length as data.
+    """
+    # Test if file exist :
+    assert os.path.isfile(path)
+
+    # Try loading file :
+    try:
+        # Load hypno file :
+        # hypno = ...
+        # Down-sample if needed :
+        # hypno = hypno[::ds_freq] if ds_freq else hypno
+
+        # return hypno
+        pass
+    except:
+        return None
 
 
 def elan2array(path, ds_freq=100):
@@ -24,7 +110,7 @@ def elan2array(path, ds_freq=100):
 
     Kargs:
         ds_freq: int, optional, (def 100)
-            Downsampling frequency
+            Down-sampling frequency
 
     Return:
         sf: int

@@ -57,7 +57,8 @@ class TimeAxis(object):
         self.wc = grid.add_view(row=0, col=0, border_color=color)
 
         # Add a square indicator :
-        image = np.full((1, 1, 3), 0.1)
+        image = np.zeros((1, 1, 3), dtype=np.float32)
+        image[:, :, 0] = 1.
         self.mesh = scene.visuals.Image(image, name='indicator')
         self.mesh.parent = self.wc.scene
 

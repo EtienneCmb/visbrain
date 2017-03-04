@@ -10,7 +10,7 @@ import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
 from .visuals import visuals
-from ..utils import FixedCam
+from ..utils import FixedCam, load_sleepdataset, load_hypno
 # from .user import userfcn
 
 
@@ -20,14 +20,40 @@ class Sleep(uiInit, visuals, uiElements):
     Multiple lines description...
     """
 
-    def __init__(self, file=None, data=None, channels=None, sf=None,
-                 hypno=None, downsample=None, axis=False, line='agg'):
+    def __init__(self, file=None, hypno_file=None, data=None, channels=None,
+                 sf=None, hypno=None, downsample=None, axis=False, line='agg'):
         """Init."""
+        # ====================== APP CREATION ======================
+        # Create the app and initialize all graphical elements :
+        self._app = QtGui.QApplication(sys.argv)
+        uiInit.__init__(self)
+
         # ====================== LOAD FILE ======================
         # Load file and convert if needed :
-        pass
+        if not all([k is not None for k in [data, channels, sf]]):
+            # --------------- Qt Dialog ---------------
+            if (file is None) or not isinstance(file, str):
+                # Dialog window for the main dataset :
+                file = QtGui.QFileDialog.getOpenFileName(
+                        self, "Open dataset", "", "Elan (*.eeg *.ent);;"
+                        "Brainvision (*.eeg *.vhdr);;Edf (*.edf)")
+                # Load hypnogram :
+                hypno_file = QtGui.QFileDialog.getOpenFileName(
+                        self, "Open hypnogram", "", "Text file (*.txt)")
+            # Load dataset :
+            sf, data, channels, downsample = load_sleepdataset(file,
+                                                               downsample)
+            # Load hypnogram :
+            hypno = load_hypno(hypno_file, downsample)
+
+        # Empty hypnogram :
+        if hypno is None:
+            hypno = np.zeros((np.max(data.shape),), dtype=np.float32)
+            self._PanHypGrp.setEnabled(False)
+            self._HypW.setVisible(False)
 
         # ====================== VARIABLES ======================
+        # Check all data :
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = list(channels)
@@ -35,14 +61,12 @@ class Sleep(uiInit, visuals, uiElements):
         self._ax = axis
         self._defwin = 30.
 
-        # ====================== APP CREATION ======================
-        # Create the app and initialize all graphical elements :
-        self._app = QtGui.QApplication(sys.argv)
-        uiInit.__init__(self)
-
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
         uiElements.__init__(self)
+
+        # Disbale hypno label if needed :
+        self._hypLabel.setVisible(self._HypW.isVisible())
 
         # ====================== CAMERAS ======================
         # ------------------- Channels -------------------
@@ -50,10 +74,10 @@ class Sleep(uiInit, visuals, uiElements):
         for k in range(len(self)):
             self._chanCam.append(viscam.PanZoomCamera())
         # ------------------- Spectrogram -------------------
-        self._specCam = FixedCam()#viscam.PanZoomCamera()
+        self._specCam = FixedCam()  # viscam.PanZoomCamera()
         self._specCanvas.set_camera(self._specCam)
         # ------------------- Hypnogram -------------------
-        self._hypcam = viscam.PanZoomCamera()#FixedCam()
+        self._hypcam = viscam.PanZoomCamera()  # FixedCam()
         self._hypCanvas.set_camera(self._hypcam)
         # ------------------- Time axis -------------------
         self._timecam = FixedCam()

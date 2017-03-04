@@ -50,7 +50,7 @@ class visuals(object):
 class ChannelPlot(object):
     """Plot each channel."""
 
-    def __init__(self, channels, color=(.1, .1, .1), width=1.5, method='agg',
+    def __init__(self, channels, color=(.1, .1, .1), width=1., method='agg',
                  camera=None):
         self._camera = camera
         self.rect = []

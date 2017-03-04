@@ -82,10 +82,11 @@ class uiPanels(object):
         self._PanTimeViz.clicked.connect(self._fcn_timeViz)
         # Create a unique time axis :
         self._TimeAxis = TimeAxis(xargs={'text_color': 'black'},
-                                  x_label='Time (seconds)',
+                                  x_label=None,
                                   bgcolor=(1., 1., 1.), color='black',)
         self._TimeLayout.addWidget(self._TimeAxis.canvas.native)
         self._TimeAxisW.setMaximumHeight(400)
+        self._TimeAxisW.setMinimumHeight(50)
         self._chanGrid.addWidget(self._TimeAxisW, len(self) + 3, 1,
                                  1, 1)
 
