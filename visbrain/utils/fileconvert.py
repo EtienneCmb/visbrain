@@ -113,15 +113,8 @@ def load_hypno(path, ds_freq):
         return None
 
 
-<< << << < HEAD
-
-
 def elan_hyp(path, ds_freq):
     """Read Elan hypnogram (.hyp)
-=======
-def elan_hyp(path):
-    """Read Elan hypnogram (.hyp).
->>>>>> > origin / feature / start_sleep
 
     Args:
         path: str
@@ -158,7 +151,7 @@ def elan_hyp(path):
 
 
 def txt_hyp(path, ds_freq):
-    """Read text files (.txt / .csv) hypnogram
+    """Read text files (.txt / .csv) hypnogram.
 
     Args:
         path: str
@@ -202,18 +195,18 @@ def txt_hyp(path, ds_freq):
 
 
 def swap_hyp_values(hypno, desc):
-    """Swap values in hypnogram vector
+    """Swap values in hypnogram vector.
 
     Sleep stages in the hypnogram should be scored as follow
     see Iber et al. 2007
 
     Args:
-    hypno: np.ndarray
-        The hypnogram vector
+        hypno: np.ndarray
+            The hypnogram vector
 
-    description: str
-        Path to a .txt file containing labels and values of each sleep
-        stage separated by a space
+        description: str
+            Path to a .txt file containing labels and values of each sleep
+            stage separated by a space
 
     Return:
     hypno_s: np.ndarray
@@ -227,14 +220,11 @@ def swap_hyp_values(hypno, desc):
         N3      1           3
         REM     0           4
     """
-<<<<<<< HEAD
-=======
-    assert os.path.isfile(description)
+    # assert os.path.isfile(desc)
 
-    labels = np.genfromtxt(description, dtype=str, delimiter=" ", usecols=0)
-    values = np.genfromtxt(description, dtype=int, delimiter=" ", usecols=1)
-    hyp = {label: row for label, row in zip(labels, values)}
->>>>>>> origin/feature/start_sleep
+    # labels = np.genfromtxt(desc, dtype=str, delimiter=" ", usecols=0)
+    # values = np.genfromtxt(desc, dtype=int, delimiter=" ", usecols=1)
+    # hyp = {label: row for label, row in zip(labels, values)}
 
     # Swap values
     hypno_s = -1 * np.ones(shape=(hypno.shape), dtype=int)
