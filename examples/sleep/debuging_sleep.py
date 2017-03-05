@@ -4,7 +4,7 @@ import numpy as np
 from visbrain import Sleep
 from scipy.io import loadmat
 
-sf = 512.
+sf = 100.
 #############################################################################
 # REAL DATA EXAMPLE :
 mat = loadmat('testing_database.mat')
