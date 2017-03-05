@@ -58,8 +58,8 @@ def load_sleepdataset(path):
 
     # EDF :
     elif ext == '.edf':
-         sf, data, chan = edf2array(path)
-         return sf, data, chan
+        sf, data, chan = edf2array(path)
+        return sf, data, chan
 
     # None :
     else:
@@ -100,7 +100,6 @@ def load_hypno(path, ds_freq, time_res=None, description=None):
         hypno: np.ndarray
             The hypnogram vector with same length as downsampled data.
     """
-
     # Test if file exist :
     assert os.path.isfile(path)
 
@@ -122,7 +121,7 @@ def load_hypno(path, ds_freq, time_res=None, description=None):
 
 
 def elan_hyp(path):
-    """Read Elan hypnogram (.hyp)
+    """Read Elan hypnogram (.hyp).
 
     Args:
         path: str
@@ -133,14 +132,13 @@ def elan_hyp(path):
             The hypnogram vector with same length as downsampled data.
 
     """
-
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
                         dtype=None, skip_header=0)
 
     hyp = np.char.decode(hyp)
 
     # Sampling rate of original .eeg file
-    #sf = 1 / float(hyp[1].split()[1])
+    # sf = 1 / float(hyp[1].split()[1])
 
     # All Elan .eeg file are downsampled to 100 Hz by default
     ds_freq = 100
@@ -186,7 +184,6 @@ def txt_hyp(path, ds_freq, time_res, description=None):
             The hypnogram vector with same length as downsampled data.
 
     """
-
     assert os.path.isfile(path)
 
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
@@ -240,7 +237,6 @@ def swap_hyp_values(hypno, description):
         N3      1           3
         REM     0           4
     """
-
     assert os.path.isfile(description)
 
     labels = np.genfromtxt(description, dtype=str, delimiter=" ", usecols=0)
