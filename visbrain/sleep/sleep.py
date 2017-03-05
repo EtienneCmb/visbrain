@@ -40,17 +40,18 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                         "Brainvision (*.eeg);;Edf (*.edf)")
                 # Load hypnogram :
                 hypno_file = QtGui.QFileDialog.getOpenFileName(
-                        self, "Open hypnogram", "", "Text file (*.txt);;"
-                        "Elan (*.hyp)")
+                        self, "Open hypnogram", "", "Elan (*.hyp);;"
+                        "Text file (*.txt);;""CSV file (*.csv)")
             # Load dataset :
-            sf, data, channels, downsample = load_sleepdataset(file,
-                                                               downsample)
-            # Load hypnogram :
-            hypno = load_hypno(hypno_file, downsample)
+            sf, data, channels = load_sleepdataset(file)
+            
+            if hypno_file:
+                # Load hypnogram :
+                hypno = load_hypno(hypno_file, sf)
 
         # Empty hypnogram :
         if hypno is None:
-            hypno = np.zeros((np.max(data.shape),), dtype=np.float32)
+            hypno = np.zeros((data.shape[1],), dtype=np.float32)
             self._PanHypGrp.setEnabled(False)
             self._HypW.setVisible(False)
 
@@ -59,7 +60,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = list(channels)
-        self._lw = 1.3
+        self._lw = 1.
         self._ax = axis
         self._defwin = 30.
         # Color :
@@ -163,7 +164,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                              "(e.g. 1024., 512., etc)")
         sf = float(sf)
         # Check data shape and format to float32 :
-        data = np.atleast_2d(data)
+        #data = np.atleast_2d(data)
         if data.ndim is not 2:
             raise ValueError("The data must be a 2D array")
         if nchan not in data.shape:
@@ -180,7 +181,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         else:
             if len(hypno) != npts:
                 raise ValueError("The length of the hypnogram vector must be"
-                                 " "+str(npts)+".")
+                                 " "+str(npts)+" (Currently : " + 
+                                 str(len(hypno)) + ".")
         # Define time vector :
         time = np.arange(npts, dtype=np.float32) / sf
 

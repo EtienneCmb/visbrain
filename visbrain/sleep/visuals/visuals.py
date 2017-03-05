@@ -242,7 +242,7 @@ class Hypnogram(object):
                                        method='agg', width=width,
                                        parent=parent)
         # Add text :
-        offx, offy = 40., 0.2
+        offx, offy = 20., 0.2
         self.node = scene.visuals.Node(name='hypnotext', parent=parent)
         self.st1 = scene.visuals.Text(text='Art', pos=(offx, 1. + offy),
                                       parent=self.node, font_size=font_size)

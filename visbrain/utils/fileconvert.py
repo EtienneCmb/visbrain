@@ -10,16 +10,12 @@ import os
 __all__ = ['load_sleepdataset', 'load_hypno']
 
 
-def load_sleepdataset(path, ds_freq=100):
+def load_sleepdataset(path):
     """Load a sleep dataset (elan, edf, brainvision).
 
     Args:
         path: string
             Filename (with full path) to sleep dataset.
-
-    Kargs:
-        ds_freq: int, optional, (def 100)
-            Down-sampling frequency
 
     Return:
         sf: int
@@ -44,11 +40,11 @@ def load_sleepdataset(path, ds_freq=100):
     if ext == '.eeg':
         # ELAN :
         if os.path.isfile(path + '.ent'):
-            return elan2array(path, ds_freq), None
+            # Apply an automatic downsampling to 100 Hz
+            ds_freq = 100
 
         # BRAINVISION :
         elif os.path.isfile(file + '.vhdr'):
-            return brainvision2array(path), ds_freq
 
         # None :
         else:
@@ -58,14 +54,13 @@ def load_sleepdataset(path, ds_freq=100):
 
     # EDF :
     elif ext == '.edf':
-        return edf2array(path), ds_freq
 
     # None :
     else:
         raise ValueError("*" + ext + " files are currently not supported.")
 
 
-def load_hypno(path, ds_freq=100, time_res=None, description=None):
+def load_hypno(path, ds_freq, time_res=None, description=None):
     """Load hypnogram file.
 
     Sleep stages in the hypnogram should be scored as follow
@@ -83,7 +78,7 @@ def load_hypno(path, ds_freq=100, time_res=None, description=None):
             Filename (with full path) to hypnogram file
 
     Kargs:
-        ds_freq: int, (def 100)
+        ds_freq: int
             Down-sampling frequency
 
         time_res: float, optional
