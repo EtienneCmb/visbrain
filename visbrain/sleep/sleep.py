@@ -42,7 +42,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 hypno_file = QtGui.QFileDialog.getOpenFileName(
                         self, "Open hypnogram", "", "Elan (*.hyp);;"
                         "Text file (*.txt);;""CSV file (*.csv)")
-            
+
             # Load dataset :
             if downsample:
                 # Apply a specific downsampling (Elan only)
@@ -193,9 +193,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                                       (-1*np.zeros((npts-len(hypno), 1))))
                 else:
                     raise ValueError("The length of the hypnogram \
-                                     vector must be"
-                                     + str(npts) + " (Currently : " +
-                                 str(len(hypno)) + ".")
+                                     vector must be" + str(npts) +
+                                     " (Currently : " + str(len(hypno)) + ".")
         # Define time vector :
         time = np.arange(npts, dtype=np.float32) / sf
 
