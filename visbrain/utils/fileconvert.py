@@ -40,7 +40,7 @@ def load_sleepdataset(path, ds_freq=100):
     # Extract file extension :
     file, ext = os.path.splitext(path)
 
-    # Switch between diffrents types :
+    # Switch between differents types :
     if ext == '.eeg':
         # ELAN :
         if os.path.isfile(path + '.ent'):
@@ -65,35 +65,218 @@ def load_sleepdataset(path, ds_freq=100):
         raise ValueError("*" + ext + " files are currently not supported.")
 
 
-def load_hypno(path, ds_freq=None):
+def load_hypno(path, ds_freq=100, time_res=None, description=None):
     """Load hypnogram file.
+
+    Sleep stages in the hypnogram should be scored as follow
+    see Iber et al. 2007
+
+    Wake:   0
+    N1:     1
+    N2:     2
+    N3:     3
+    REM:    4
+    Art:    -1  (optional)
 
     Args:
         path: string
             Filename (with full path) to hypnogram file
 
     Kargs:
-        ds_freq: int, optional, (def 100)
+        ds_freq: int, (def 100)
             Down-sampling frequency
+
+        time_res: float, optional
+            Number of values per second in the hypnogram
+                e.g.:   1 value per sec, time_res = 1
+                        1 value per 30 sec, time_res = 30
+
+        description: str, optional
+            Path to a .txt file containing labels and values of each sleep
+            stage separated by a space
 
     Return:
         hypno: np.ndarray
-            The hypnogram vector with same length as data.
+            The hypnogram vector with same length as downsampled data.
     """
+
     # Test if file exist :
     assert os.path.isfile(path)
 
+    # Extract file extension :
+    file, ext = os.path.splitext(path)
+
     # Try loading file :
     try:
-        # Load hypno file :
-        # hypno = ...
-        # Down-sample if needed :
-        # hypno = hypno[::ds_freq] if ds_freq else hypno
+        # Switch between differents types :
+        if ext == '.hyp':
+            # ELAN :
+            return elan_hyp(path)
 
-        # return hypno
-        pass
+        elif ext == '.txt' or ext == '.csv':
+            return txt_hyp(path, ds_freq, time_res, description)
+
     except:
         return None
+
+
+def elan_hyp(path):
+    """Read Elan hypnogram (.hyp)
+
+    Args:
+        path: str
+            Filename (with full path) to Elan .hyp file
+
+    Return:
+        hypno: np.ndarray
+            The hypnogram vector with same length as downsampled data.
+
+    """
+
+    hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
+                        dtype=None, skip_header=0)
+
+    hyp = np.char.decode(hyp)
+
+    # Sampling rate of original .eeg file
+    #sf = 1 / float(hyp[1].split()[1])
+
+    # All Elan .eeg file are downsampled to 100 Hz by default
+    ds_freq = 100
+
+    # Extract hypnogram values
+    hypno = np.array(hyp[4:], dtype=np.int)
+
+    # Replace values according to Iber et al 2007
+    hypno[hypno == -2] = -1
+    hypno[hypno == 4] = 3
+    hypno[hypno == 5] = 4
+
+    # Resample to get same number of points as in eeg file
+    hypno = np.repeat(hypno, ds_freq)
+
+    return hypno
+
+
+def txt_hyp(path, ds_freq, time_res, description=None):
+    """Read text files (.txt / .csv) hypnogram
+
+    Args:
+        path: str
+            Filename (with full path) to hypnogram (.txt)
+
+        ds_freq: int
+            Downsampling frequency
+
+        time_res: float
+            Time resolution of hypnogram file
+            e.g:
+                1 value per sec:    1
+                1 value per 5 sec:  5
+                1 value per 30 sec: 30
+
+    Kargs:
+        description: str, optional
+            Path to a .txt file containing labels and values of each sleep
+            stage separated by a space
+
+    Return:
+        hypno: np.ndarray
+            The hypnogram vector with same length as downsampled data.
+
+    """
+
+    assert os.path.isfile(path)
+
+    hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
+                        dtype=None, skip_header=0)
+
+    hyp = np.char.decode(hyp)
+
+    # Extract hypnogram values
+    hypno = np.array([s for s in hyp if s.lstrip('-').isdigit()], dtype=int)
+
+    if description:
+        hypno = swap_hyp_values(hypno, description)
+
+    # Resample to get same number of points as in eeg file
+    hypno = np.repeat(hypno, time_res * ds_freq)
+
+    return hypno
+
+
+def swap_hyp_values(hypno, description):
+    """Swap values in hypnogram vector
+
+    Sleep stages in the hypnogram should be scored as follow
+    see Iber et al. 2007
+
+    Wake:   0
+    N1:     1
+    N2:     2
+    N3:     3
+    REM:    4
+    Art:    -1  (optional)
+
+    Args:
+    hypno: np.ndarray
+        The hypnogram vector
+
+    description: str
+        Path to a .txt file containing labels and values of each sleep
+        stage separated by a space
+
+
+    Return:
+    hypno_s: np.ndarray
+        Hypnogram with swapped values
+
+        e.g from the DREAM bank EDF database
+        Stage   Orig. val    New val
+        W       5           0
+        N1      3           1
+        N2      2           2
+        N3      1           3
+        REM     0           4
+    """
+
+    assert os.path.isfile(description)
+
+    labels = np.genfromtxt(description, dtype=str, delimiter=" ", usecols=0)
+    values = np.genfromtxt(description, dtype=int, delimiter=" ", usecols=1)
+    hyp = {label: row for label, row in zip(labels, values)}
+
+    # Swap values
+    hypno_s = -1 * np.ones(shape=(hypno.shape), dtype=int)
+
+    if 'Art' in hyp:
+        hypno_s[hypno == hyp['Art']] = -1
+
+    if 'Nde' in hyp:
+        hypno_s[hypno == hyp['Nde']] = -1
+
+    if 'Mt' in hyp:
+        hypno_s[hypno == hyp['Mt']] = -1
+
+    if 'W' in hyp:
+        hypno_s[hypno == hyp['W']] = 0
+
+    if 'N1' in hyp:
+        hypno_s[hypno == hyp['N1']] = 1
+
+    if 'N2' in hyp:
+        hypno_s[hypno == hyp['N2']] = 2
+
+    if 'N3' in hyp:
+        hypno_s[hypno == hyp['N3']] = 3
+
+    if 'N4' in hyp:
+        hypno_s[hypno == hyp['N4']] = 3
+
+    if 'REM' in hyp:
+        hypno_s[hypno == hyp['REM']] = 4
+
+    return hypno_s
 
 
 def elan2array(path, ds_freq=100):
@@ -103,6 +286,7 @@ def elan2array(path, ds_freq=100):
     An Elan dataset is separated into 3 files :
     - .eeg          raw data file
     - .eeg.ent      hearder file
+    - .pos          events file
 
     Args:
         path: str
