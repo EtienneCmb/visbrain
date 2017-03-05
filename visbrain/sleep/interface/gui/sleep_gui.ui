@@ -1049,18 +1049,109 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QTableWidget" name="_infoTable">
-             <column>
-              <property name="text">
-               <string>Infos</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Values</string>
-              </property>
-             </column>
-            </widget>
+            <layout class="QGridLayout" name="gridLayout_14">
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="_infoTime">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>100000.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>30.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <spacer name="horizontalSpacer_7">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_32">
+               <property name="text">
+                <string>Time window</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="3">
+              <widget class="QTableWidget" name="_infoTable">
+               <column>
+                <property name="text">
+                 <string>Infos</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Values</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="label_33">
+               <property name="text">
+                <string>seconds</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_34">
+               <property name="text">
+                <string>Export as</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="_infoExportAs">
+               <item>
+                <property name="text">
+                 <string>CSV file (*.csv)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Text file (*.txt)</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QPushButton" name="_infoExport">
+               <property name="text">
+                <string>Export</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>

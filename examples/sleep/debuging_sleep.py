@@ -19,7 +19,7 @@ for k in hypnot:
 hypno = np.array(hypno)
 #############################################################################
 # DEBUGGING EXAMPLE :
-
+# sf = 512.
 # nelec = 20
 # npts = 14745600
 # nelec = 3
