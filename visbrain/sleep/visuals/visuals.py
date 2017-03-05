@@ -22,7 +22,8 @@ class visuals(object):
                  method='agg', **kwargs):
         """Init."""
         # =================== CHANNELS ===================
-        self._chan = ChannelPlot(channels, camera=cameras[0], method=method)
+        self._chan = ChannelPlot(channels, camera=cameras[0], method=method,
+                                 color=self._chancolor)
         # self._chan.set_data(sf, data)
         self._chan.parent = self._chanCanvas
 
@@ -32,25 +33,28 @@ class visuals(object):
         self._spec.set_data(sf, data[0, ...], time)
         self._spec.mesh.parent = self._specCanvas.wc.scene
         # Create a visual indicator for spectrogram :
-        self._specInd = Indicator(name='spectro_indic', width=self._lw)
+        self._specInd = Indicator(name='spectro_indic', width=2,
+                                  color=self._indicol, visible=False)
         self._specInd.set_data(xlim=(0, 30), ylim=(0, 20))
         self._specInd.parent = self._specCanvas.wc.scene
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
-        self._hyp = Hypnogram(camera=cameras[2])
+        self._hyp = Hypnogram(camera=cameras[2], color=self._hypcolor)
         self._hyp.set_data(sf, hypno, time)
         self._hyp.mesh.parent = self._hypCanvas.wc.scene
         # Create a visual indicator for hypnogram :
-        self._hypInd = Indicator(name='hypno_indic', width=self._lw)
+        self._hypInd = Indicator(name='hypno_indic', width=2,
+                                 color=self._indicol, visible=False)
         self._hypInd.set_data(xlim=(0, 30), ylim=(-1, 6))
         self._hypInd.parent = self._hypCanvas.wc.scene
+        self._hyp.grid.parent = self._hypCanvas.wc.scene
 
 
 class ChannelPlot(object):
     """Plot each channel."""
 
-    def __init__(self, channels, color=(.1, .1, .1), width=1., method='agg',
+    def __init__(self, channels, color=(.2, .2, .2), width=1., method='agg',
                  camera=None):
         self._camera = camera
         self.rect = []
@@ -58,18 +62,24 @@ class ChannelPlot(object):
         col = color2vb(color)
         # Create one line pear channel :
         pos = np.array([[0, 0], [0, 100]])
-        self.mesh = []
+        self.mesh, self.grid = [], []
         for i, k in enumerate(channels):
+            # Create line :
             mesh = scene.visuals.Line(pos, name=k+'plot', color=col,
                                       method=method, width=width)
             self.mesh.append(mesh)
+            # Create a grid :
+            # grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
+            #                                scale=(10, .1))
+            # grid.set_gl_state('translucent')
+            # self.grid.append(grid)
 
-    def set_data(self, sf, data, sl=None):
+    def set_data(self, sf, data, time, sl=None):
+        r = 1.1
         # Manage slice :
         sl = slice(0, data.shape[1]) if sl is None else sl
         # Time vector :
-        time = np.arange(data.shape[1]) / sf
-        time = time[sl].astype(np.float32)
+        time = time[sl]
         data = data[:, sl]
         # Set data to each plot :
         for i, k in enumerate(self.mesh):
@@ -77,8 +87,8 @@ class ChannelPlot(object):
             dat = np.ascontiguousarray(dat)
             k.set_data(dat)
             # Get camera rectangle and set it:
-            rect = (time.min(), data[i, :].min(), time.max()-time.min(),
-                    data[i, :].max()-data[i, :].min())
+            rect = (time.min(), r * data[i, :].min(), time.max()-time.min(),
+                    r * (data[i, :].max() - data[i, :].min()))
             self._camera[i].rect = rect
             k.update()
             self.rect.append(rect)
@@ -92,8 +102,9 @@ class ChannelPlot(object):
     @parent.setter
     def parent(self, value):
         """Set parent value."""
-        for i, k in zip(value, self.mesh):
+        for i, k, in zip(value, self.mesh):
             k.parent = i.wc.scene
+            # l.parent = i.wc.scene
 
 
 class Spectrogram(object):
@@ -110,7 +121,7 @@ class Spectrogram(object):
         # Create a vispy image object :
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram')
 
-    def set_data(self, sf, data, time, cmap='viridis', nfft=30., overlap=0.,
+    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.,
                  fstart=0.5, fend=25., contraste=.7):
         """Set data to the spectrogram.
 
@@ -153,7 +164,7 @@ class Spectrogram(object):
         # =================== COMPUTE ===================
         # Compute the spectrogram :
         freq, t, mesh = spectrogram(data, fs=sf, nperseg=nperseg,
-                                    noverlap=overlap)
+                                    noverlap=overlap, window='hamming')
         mesh = 20 * np.log10(mesh)
 
         # =================== FREQUENCY SELCTION ===================
@@ -201,7 +212,7 @@ class Spectrogram(object):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, camera, color='slateblue'):
+    def __init__(self, camera, color='darkblue', width=2):
         # Keep camera :
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
@@ -209,7 +220,12 @@ class Hypnogram(object):
         col = color2vb(color=color)
         # Create a default line :
         pos = np.array([[0, 0], [0, 100]])
-        self.mesh = scene.visuals.Line(pos, name='hypnogram', color=col)
+        self.mesh = scene.visuals.Line(pos, name='hypnogram', color=col,
+                                       method='agg', width=width)
+        # Add grid :
+        self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
+                                            scale=(10, 1))
+        self.grid.set_gl_state('translucent')
 
     def set_data(self, sf, data, time):
         """Set data to the hypnogram.
@@ -230,8 +246,8 @@ class Hypnogram(object):
         # sc = ((time.max() - time.min()) / len(time), 1, 1)
         # self.mesh.transform = vist.STTransform(scale=sc)
         # Get camera rectangle :
-        self.rect = (time.min(), data.min(), time.max()-time.min(),
-                     data.max()-data.min())
+        self.rect = (time.min(), data.min() - 1, time.max() - time.min(),
+                     data.max() - data.min() + 2)
         self.mesh.update()
 
     # ----------- RECT -----------
@@ -250,16 +266,18 @@ class Hypnogram(object):
 class Indicator(object):
     """Create a visual indicator (for spectrogram and hypnogram)."""
 
-    def __init__(self, name='indicator', color='red', width=8):
+    def __init__(self, name='indicator', color='darkgreen', width=8,
+                 visible=True):
         # Create a vispy image object :
         pos1 = np.array([[0, 0], [0, 100]])
         pos2 = np.array([[100, 0], [100, 100]])
         self.v1 = scene.visuals.Line(pos1, width=width, name=name, color=color,
-                                     method='agg')
+                                     method='gl')
         self.v2 = scene.visuals.Line(pos2, width=width, name=name, color=color,
-                                     method='agg')
+                                     method='gl')
         self.v1._width, self.v2._width = width, width
         self.v1.update(), self.v2.update()
+        self.visible = visible
 
     def set_data(self, xlim, ylim, offset=5):
         """Move the visual indicator.
@@ -282,6 +300,10 @@ class Indicator(object):
         self.v1.set_data(pos1)
         self.v2.set_data(pos2)
         # Update :
+        self.update()
+
+    def update(self):
+        """Update both lines."""
         self.v1.update(), self.v2.update()
 
     # ----------- PARENT -----------
@@ -295,3 +317,16 @@ class Indicator(object):
         """Set parent value."""
         self.v1.parent = value
         self.v2.parent = value
+
+    # ----------- VISIBLE -----------
+    @property
+    def visible(self):
+        """Get the visible value."""
+        return self._visible
+
+    @visible.setter
+    def visible(self, value):
+        """Set visible value."""
+        self.v1.visible = value
+        self.v2.visible = value
+        self.update()

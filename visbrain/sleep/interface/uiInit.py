@@ -12,6 +12,7 @@ from vispy import app, scene
 import vispy.visuals.transforms as vist
 
 from .gui import Ui_MainWindow
+from ...utils import color2vb
 
 __all__ = ['uiInit']
 
@@ -35,7 +36,7 @@ class TimeAxis(object):
     def __init__(self, axis=True, x_label='', x_heightMax=40,
                  font_size=12, color='white', title='', axis_label_margin=50,
                  tick_label_margin=5, name='', bgcolor=(.9, .9, .9), cargs={},
-                 xargs={}):
+                 xargs={}, indic_color='darkred'):
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
                                         show=False, title=name, **cargs)
@@ -57,8 +58,9 @@ class TimeAxis(object):
         self.wc = grid.add_view(row=0, col=0, border_color=color)
 
         # Add a square indicator :
-        image = np.zeros((1, 1, 3), dtype=np.float32)
-        image[:, :, 0] = 1.
+        image = color2vb(indic_color)[np.newaxis, ...]
+        # image = np.zeros((1, 1, 3), dtype=np.float32)
+        # image[:, :, 1] = 1.
         self.mesh = scene.visuals.Image(image, name='indicator')
         self.mesh.parent = self.wc.scene
 

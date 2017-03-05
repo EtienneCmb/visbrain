@@ -45,7 +45,7 @@ class uiPanels(object):
         # Add list of colormaps :
         self._cmap_lst = mpl_cmap()
         self._PanSpecCmap.addItems(self._cmap_lst)
-        self._PanSpecCmap.setCurrentIndex(self._cmap_lst.index('viridis'))
+        self._PanSpecCmap.setCurrentIndex(self._cmap_lst.index('rainbow'))
         # Add list of channels :
         self._PanSpecChan.addItems(self._channels)
         # Connect spectrogam properties :
@@ -84,12 +84,20 @@ class uiPanels(object):
         # Create a unique time axis :
         self._TimeAxis = TimeAxis(xargs={'text_color': 'black'},
                                   x_label=None,
-                                  bgcolor=(1., 1., 1.), color='black',)
+                                  bgcolor=(1., 1., 1.), color='black',
+                                  indic_color=self._indicol)
         self._TimeLayout.addWidget(self._TimeAxis.canvas.native)
         self._TimeAxisW.setMaximumHeight(400)
         self._TimeAxisW.setMinimumHeight(50)
         self._chanGrid.addWidget(self._TimeAxisW, len(self) + 3, 1,
                                  1, 1)
+
+        # =====================================================================
+        # INDICATORS
+        # =====================================================================
+        self._PanSpecIndic.clicked.connect(self._fcn_indicviz)
+        self._PanHypIndic.clicked.connect(self._fcn_indicviz)
+        self._PanTimeIndic.clicked.connect(self._fcn_indicviz)
 
     # =====================================================================
     # CHANNELS
@@ -147,6 +155,7 @@ class uiPanels(object):
                                              name='Canvas_'+k, color='black',
                                              yargs={'text_color': 'black'},
                                              xargs={'text_color': 'black'},)
+            self._chanCanvas[i].canvas.context.set_line_width(self._lw)
             # Add the canvas to the layout :
             self._chanLayout[i].addWidget(self._chanCanvas[i].canvas.native)
 
@@ -178,6 +187,34 @@ class uiPanels(object):
         for k in self._chanChecks:
             k.setChecked(False)
         self._fcn_chanViz()
+
+    def canvas_isVisible(self, k):
+        """Find if canvas k is visible.
+
+        Args:
+            k: int
+                Index of the canvas.
+
+        Return:
+            visible: bool
+                A boolean value indicating if the canvas is visible.
+        """
+        return self._chanWidget[k].isVisible()
+
+    def canvas_setVisible(self, k, value):
+        """Set the visibility of the canvas k to value.
+
+        Args:
+            k: int
+                Index of the canvas.
+
+            value: bool
+                Boolean value if the canvas has to be visible.
+        """
+        self._chanChecks[k].setChecked(value)
+        self._chanWidget[k].setVisible(value)
+        self._chanLabels[k].setVisible(value)
+        self._chanCanvas[k].set_camera(self._chanCam[k])
 
     # =====================================================================
     # SPECTROGRAM
@@ -237,3 +274,13 @@ class uiPanels(object):
         """Toggle visibility of the time panel."""
         viz = self._PanTimeViz.isChecked()
         self._TimeAxisW.setVisible(viz)
+
+    # =====================================================================
+    # INDICATORS
+    # =====================================================================
+    def _fcn_indicviz(self):
+        """Toggle indicator visibility."""
+        self._specInd.visible = self._PanSpecIndic.isChecked()
+        self._hypInd.visible = self._PanHypIndic.isChecked()
+        self._TimeAxis.mesh.visible = self._PanTimeIndic.isChecked()
+        self._fcn_sliderMove()

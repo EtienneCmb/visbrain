@@ -4,7 +4,7 @@ import numpy as np
 from visbrain import Sleep
 from scipy.io import loadmat
 
-sf = 512.
+sf = 100.
 #############################################################################
 # REAL DATA EXAMPLE :
 mat = loadmat('testing_database.mat')
@@ -32,6 +32,8 @@ hypno = np.array(hypno)
 
 
 Sleep(data=data, channels=channels, sf=sf, downsample=100., hypno=hypno,
-      line='agg', axis=False).show()
+      line='gl', axis=False).show()
 # s = Sleep()
 # s.show()
+
+

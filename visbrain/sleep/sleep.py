@@ -10,11 +10,12 @@ import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
 from .visuals import visuals
+from .tools import Tools
 from ..utils import FixedCam, load_sleepdataset, load_hypno
 # from .user import userfcn
 
 
-class Sleep(uiInit, visuals, uiElements):
+class Sleep(uiInit, visuals, uiElements, Tools):
     """One line description.
 
     Multiple lines description...
@@ -57,16 +58,20 @@ class Sleep(uiInit, visuals, uiElements):
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = list(channels)
-        self._lw = 2
+        self._lw = 1.
         self._ax = axis
         self._defwin = 30.
+        # Color :
+        self._chancolor = '#34495e'
+        self._hypcolor = '#34495e'
+        self._indicol = '#e74c3c'
 
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
         uiElements.__init__(self)
 
         # Disbale hypno label if needed :
-        # self._hypLabel.setVisible(self._HypW.isVisible())
+        self._hypLabel.setVisible(self._HypW.isVisible())
 
         # ====================== CAMERAS ======================
         # ------------------- Channels -------------------
@@ -77,7 +82,7 @@ class Sleep(uiInit, visuals, uiElements):
         self._specCam = FixedCam()  # viscam.PanZoomCamera()
         self._specCanvas.set_camera(self._specCam)
         # ------------------- Hypnogram -------------------
-        self._hypcam = viscam.PanZoomCamera()  # FixedCam()
+        self._hypcam = FixedCam()  # viscam.PanZoomCamera()
         self._hypCanvas.set_camera(self._hypcam)
         # ------------------- Time axis -------------------
         self._timecam = FixedCam()
@@ -92,10 +97,21 @@ class Sleep(uiInit, visuals, uiElements):
                          method=line)
         self._timecam.rect = (0, 0, list(self._hyp.rect)[2], 1)
 
+        # ====================== TOOLS ======================
+        Tools.__init__(self)
+
         # Finally set data and first channel only visible:
         self._fcn_sliderMove()
         self._chanChecks[0].setChecked(True)
         self._fcn_chanViz()
+
+        ###########################################################
+        # from vispy import scene
+        # pos = 500*np.random.rand(100, 2)
+        # self.mesh = scene.visuals.Markers(pos=pos, size=5., face_color='red')
+        # self.mesh.parent = self._hypCanvas.wc.scene
+        # self._hypCanvas.wc.update()
+        # self._hypcam.update()
 
     def __len__(self):
         """Return the number of channels."""

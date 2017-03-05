@@ -59,7 +59,9 @@ class uiSettings(object):
         self._SlVal.valueChanged.connect(self._fcn_sliderMove)
         # Function applied when slider's settings changed :
         self._SigWin.valueChanged.connect(self._fcn_sliderSettings)
+        self._SigWin.setKeyboardTracking(False)
         self._SigSlStep.valueChanged.connect(self._fcn_sliderSettings)
+        self._SigSlStep.setKeyboardTracking(False)
 
     # =====================================================================
     # MENU & FILE MANAGMENT
@@ -159,18 +161,21 @@ class uiSettings(object):
         # ---------------------------------------
         # Update display signal :
         sl = slice(t[0], t[1])
-        self._chan.set_data(self._sf, self._data, sl=sl)
+        self._chan.set_data(self._sf, self._data, self._time, sl=sl)
         # ---------------------------------------
         # Update spectrogram indicator :
-        ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
-        self._specInd.set_data(xlim=xlim, ylim=ylim)
+        if self._PanSpecIndic.isChecked():
+            ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
+            self._specInd.set_data(xlim=xlim, ylim=ylim)
 
         # ---------------------------------------
         # Update hypnogram indicator :
-        ylim = (-1, 6)
-        self._hypInd.set_data(xlim=xlim, ylim=ylim)
+        if self._PanHypIndic.isChecked():
+            ylim = (-1, 6)
+            self._hypInd.set_data(xlim=xlim, ylim=ylim)
 
-        self._TimeAxis.set_data(xlim[0], win)
+        if self._PanTimeIndic.isChecked():
+            self._TimeAxis.set_data(xlim[0], win)
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
