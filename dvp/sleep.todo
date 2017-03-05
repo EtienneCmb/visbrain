@@ -2,6 +2,7 @@ Etienne
 	-5 Nombre de fenêtre
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
+	-4 Afficher et pouvoir modifier l'amplitude de chaque channel
 	-4 Chargement des fichiers (manque chargement hypno + test sur fichiers réels)
 	-4 Filtrage: la complexité ici c'est que le filtrage doit être appliqué partout sans duplication de données
 	-2 Indicator devrait être un carré transparent ou dont le fond est vide?
@@ -10,3 +11,12 @@ Etienne
 Raph
 	-3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
 	+5 Chargement hypnogram
+	+4 Calcul statistiques de sommeil
+	
+Commun
+	-4 Augmenter la hauteur du panel "Visible channels"
+	-4 Possibilité d'afficher une grid sur les channels pour voir la seconde (important pour distinguer spindles, KCs, etc)
+	-4 Panel info avec des infos sur l'enregistrement EEG et les statistiques de sommeil
+	-3 Modifier les unités de la règle en bas pour que ça affiche en minutes ? ( / 60)
+	-2 Possibilité de scorer un hypnogramme en temps réel
+	
