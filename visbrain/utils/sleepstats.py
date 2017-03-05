@@ -75,11 +75,16 @@ def sleepstats(hypno, sf=100, time_window=30.):
     stats['LatN3_10'] = np.where(hypno == 3)[0].min() if 3 in hypno else tov
     stats['LatREM_11'] = np.where(hypno == 4)[0].min() if 4 in hypno else tov
 
-    hypno_s = hypno[stats['LatN1_8']:stats['TDT_1']]
+    if not np.isnan(stats['LatN1_8']) and not np.isnan(stats['TDT_1']):
+        hypno_s = hypno[stats['LatN1_8']:stats['TDT_1']]
 
-    stats['SPT_12'] = hypno_s.size
-    stats['WASO_13'] = hypno_s[hypno_s == 0].size
-    stats['TST_14'] = stats['SPT_12'] - stats['WASO_13']
+        stats['SPT_12'] = hypno_s.size
+        stats['WASO_13'] = hypno_s[hypno_s == 0].size
+        stats['TST_14'] = stats['SPT_12'] - stats['WASO_13']
+    else:
+        stats['SPT_12'] = np.nan
+        stats['WASO_13'] = np.nan
+        stats['TST_14'] = np.nan
 
     # Convert to minutes
     for key, value in stats.items():
