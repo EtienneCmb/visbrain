@@ -36,11 +36,12 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             if (file is None) or not isinstance(file, str):
                 # Dialog window for the main dataset :
                 file = QtGui.QFileDialog.getOpenFileName(
-                        self, "Open dataset", "", "Elan (*.eeg *.ent);;"
-                        "Brainvision (*.eeg *.vhdr);;Edf (*.edf)")
+                        self, "Open dataset", "", "Elan (*.eeg);;"
+                        "Brainvision (*.eeg);;Edf (*.edf)")
                 # Load hypnogram :
                 hypno_file = QtGui.QFileDialog.getOpenFileName(
-                        self, "Open hypnogram", "", "Text file (*.txt)")
+                        self, "Open hypnogram", "", "Text file (*.txt);;"
+                        "Elan (*.hyp)")
             # Load dataset :
             sf, data, channels, downsample = load_sleepdataset(file,
                                                                downsample)
@@ -58,7 +59,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = list(channels)
-        self._lw = 1.
+        self._lw = 1.3
         self._ax = axis
         self._defwin = 30.
         # Color :

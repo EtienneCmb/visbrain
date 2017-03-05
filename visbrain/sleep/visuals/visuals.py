@@ -127,8 +127,8 @@ class Spectrogram(object):
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram',
                                         parent=parent)
 
-    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.,
-                 fstart=0.5, fend=25., contraste=.7):
+    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.5,
+                 fstart=0.5, fend=20., contraste=.7):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
@@ -173,7 +173,7 @@ class Spectrogram(object):
                                     noverlap=overlap, window='hamming')
         mesh = 20 * np.log10(mesh)
 
-        # =================== FREQUENCY SELCTION ===================
+        # =================== FREQUENCY SELECTION ===================
         # Find where freq is [fstart, fend] :
         f = [0., 0.]
         f[0] = np.abs(freq - fstart).argmin() if fstart else 0
@@ -218,7 +218,7 @@ class Spectrogram(object):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, camera, color='darkblue', width=2, font_size=8,
+    def __init__(self, camera, color='darkblue', width=2, font_size=9,
                  parent=None):
         # Keep camera :
         self._camera = camera
@@ -231,9 +231,9 @@ class Hypnogram(object):
                                        method='agg', width=width,
                                        parent=parent)
         # Add text :
-        offx, offy = 10., 0.2
+        offx, offy = 40., 0.2
         self.node = scene.visuals.Node(name='hypnotext', parent=parent)
-        self.st1 = scene.visuals.Text(text='ART', pos=(offx, 1. + offy),
+        self.st1 = scene.visuals.Text(text='Art', pos=(offx, 1. + offy),
                                       parent=self.node, font_size=font_size)
         self.st2 = scene.visuals.Text(text='Wake', pos=(offx, 0. + offy),
                                       parent=self.node, font_size=font_size)
@@ -373,6 +373,13 @@ class vbShortcuts(object):
             if event.text == 'b':
                 self._SlVal.setValue(
                         self._SlVal.value() - self._SigSlStep.value())
+            if event.text == '0':
+                    self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
+                    self._fcn_specViz()
+            if event.text == '1':
+                    self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
+                    self._fcn_hypViz()
+
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
