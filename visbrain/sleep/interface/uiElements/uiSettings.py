@@ -165,14 +165,13 @@ class uiSettings(object):
         # ---------------------------------------
         # Update spectrogram indicator :
         if self._PanSpecIndic.isChecked():
-            ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
-            self._specInd.set_data(xlim=xlim, ylim=ylim)
+            # ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
+            self._specInd.set_data(xlim=xlim, ylim=(0, 2000))
 
         # ---------------------------------------
         # Update hypnogram indicator :
         if self._PanHypIndic.isChecked():
-            ylim = (-1, 6)
-            self._hypInd.set_data(xlim=xlim, ylim=ylim)
+            self._hypInd.set_data(xlim=xlim, ylim=(-1, 6))
 
         if self._PanTimeIndic.isChecked():
             self._TimeAxis.set_data(xlim[0], win)

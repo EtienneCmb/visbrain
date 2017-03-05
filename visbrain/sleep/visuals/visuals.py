@@ -81,10 +81,11 @@ class ChannelPlot(object):
         # Time vector :
         time = time[sl]
         data = data[:, sl]
+        z = np.full_like(time, 0.5)
         # Set data to each plot :
         for i, k in enumerate(self.mesh):
-            dat = np.vstack((time, data[i, :])).T
-            dat = np.ascontiguousarray(dat)
+            dat = np.vstack((time, data[i, :], z)).T
+            # dat = np.ascontiguousarray(dat)
             k.set_data(dat)
             # Get camera rectangle and set it:
             rect = (time.min(), r * data[i, :].min(), time.max()-time.min(),
@@ -289,11 +290,13 @@ class Indicator(object):
         # Create a vispy image object :
         pos1 = np.array([[0, 0], [0, 100]])
         pos2 = np.array([[100, 0], [100, 100]])
+        # Create a visual node :
+        self.node = scene.visuals.Node(name='indic_node', parent=parent)
         self.v1 = scene.visuals.Line(pos1, width=width, name=name, color=color,
-                                     method='gl', parent=parent)
+                                     method='gl', parent=self.node)
         self.v2 = scene.visuals.Line(pos2, width=width, name=name, color=color,
-                                     method='gl', parent=parent)
-        self.v1._width, self.v2._width = width, width
+                                     method='gl', parent=self.node)
+        # self.v1._width, self.v2._width = width, width
         self.v1.update(), self.v2.update()
         self.visible = visible
 
@@ -312,8 +315,9 @@ class Indicator(object):
                 Offset to apply to the ylim (hide line imperfections).
         """
         # Define new position :
-        pos1 = np.array([[xlim[0], ylim[0]-offset], [xlim[0], ylim[1]+offset]])
-        pos2 = np.array([[xlim[1], ylim[0]-offset], [xlim[1], ylim[1]+offset]])
+        y, z = [ylim[0]-offset, ylim[1]+offset], [-.5, -.5]
+        pos1 = np.vstack(([xlim[0]] * 2, y, z)).T
+        pos2 = np.vstack(([xlim[1]] * 2, y, z)).T
         # Set data :
         self.v1.set_data(pos1)
         self.v2.set_data(pos2)
@@ -323,18 +327,6 @@ class Indicator(object):
     def update(self):
         """Update both lines."""
         self.v1.update(), self.v2.update()
-
-    # ----------- PARENT -----------
-    @property
-    def parent(self):
-        """Get the parent value."""
-        return self.v1.parent
-
-    @parent.setter
-    def parent(self, value):
-        """Set parent value."""
-        self.v1.parent = value
-        self.v2.parent = value
 
     # ----------- VISIBLE -----------
     @property
