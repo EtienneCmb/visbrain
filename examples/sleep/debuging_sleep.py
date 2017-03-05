@@ -12,7 +12,6 @@ mat = loadmat('testing_database.mat')
 data = mat['x']
 hypnot = mat['hypno'].ravel()
 channels = [str(k[0]) for k in mat['labels'][0][0:-2]]
-print(data.shape, len(channels))
 
 hypno = []
 for k in hypnot:

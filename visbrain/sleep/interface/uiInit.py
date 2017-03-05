@@ -61,9 +61,20 @@ class TimeAxis(object):
         self.mesh = scene.visuals.Image(image, name='indicator')
         self.mesh.parent = self.wc.scene
 
-    def set_data(self, tox, width):
+    def set_data(self, tox, width, time, unit='seconds'):
         """Move the main square."""
-        self.mesh.transform = vist.STTransform(translate=tox, scale=width)
+        # Get factor according to unit :
+        if unit == 'seconds':
+            fact = 1.
+        elif unit == 'minutes':
+            fact = 60.
+        elif unit == 'hours':
+            fact = 3660.
+        # Move the square
+        self.mesh.transform = vist.STTransform(translate=tox / fact,
+                                               scale=width / fact)
+        # Update camera :
+        self.wc.camera.rect = (0, 0, (time.max() - time.min()) / fact, 1)
 
     def set_camera(self, camera):
         """Set a camera and link all objects inside."""

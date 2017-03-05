@@ -83,11 +83,11 @@ class ChannelPlot(object):
                                       parent=parent[i].wc.scene)
             self.mesh.append(mesh)
             # Create a grid :
-            # grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
-            #                                scale=(10, .1),
-            #                                parent=parent[i].wc.scene)
-            # grid.set_gl_state('translucent')
-            # self.grid.append(grid)
+            grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
+                                           scale=(10., .1),
+                                           parent=parent[i].wc.scene)
+            grid.set_gl_state('translucent')
+            self.grid.append(grid)
 
     def set_data(self, sf, data, time, sl=None):
         r = 1.1

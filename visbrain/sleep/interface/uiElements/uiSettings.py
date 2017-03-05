@@ -65,6 +65,8 @@ class uiSettings(object):
         # Spin box for window selection :
         self._SlWin.valueChanged.connect(self._fcn_sliderWinSelection)
         self._SlWin.setKeyboardTracking(False)
+        # Unit conversion :
+        self._slRules.currentIndexChanged.connect(self._fcn_sliderMove)
 
     # =====================================================================
     # MENU & FILE MANAGMENT
@@ -176,8 +178,14 @@ class uiSettings(object):
         if self._PanHypIndic.isChecked():
             self._hypInd.set_data(xlim=xlim, ylim=(-1, 6))
 
+        # ---------------------------------------
+        # Update Time indicator :
         if self._PanTimeIndic.isChecked():
-            self._TimeAxis.set_data(xlim[0], win)
+            self._TimeAxis.set_data(xlim[0], win, self._time,
+                                    unit=self._slRules.currentText())
+
+        # ---------------------------------------
+        # Update Go to :
         self._SlWin.setValue(val*step)
 
     def _fcn_sliderSettings(self):

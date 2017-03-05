@@ -89,7 +89,7 @@
                <rect>
                 <x>0</x>
                 <y>-75</y>
-                <width>344</width>
+                <width>321</width>
                 <height>876</height>
                </rect>
               </property>
@@ -116,7 +116,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>298</width>
+                       <width>275</width>
                        <height>298</height>
                       </rect>
                      </property>
@@ -656,7 +656,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>358</width>
+                <width>336</width>
                 <height>801</height>
                </rect>
               </property>
@@ -917,7 +917,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>358</width>
+                <width>300</width>
                 <height>801</height>
                </rect>
               </property>
@@ -1247,6 +1247,13 @@
                </property>
               </spacer>
              </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string> seconds</string>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="9">
               <widget class="QLabel" name="label_5">
                <property name="text">
@@ -1254,7 +1261,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="13">
+             <item row="1" column="16">
               <widget class="QCheckBox" name="checkBox">
                <property name="text">
                 <string>Grid</string>
@@ -1311,6 +1318,25 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="14">
+              <widget class="QComboBox" name="_slRules">
+               <item>
+                <property name="text">
+                 <string>seconds</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>minutes</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>hours</string>
+                </property>
+               </item>
+              </widget>
+             </item>
              <item row="1" column="12">
               <spacer name="horizontalSpacer_6">
                <property name="orientation">
@@ -1334,7 +1360,7 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="0" colspan="14">
+             <item row="0" column="0" colspan="17">
               <widget class="QSlider" name="_SlVal">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -1347,12 +1373,25 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
-              <widget class="QLabel" name="label_12">
+             <item row="1" column="13">
+              <widget class="QLabel" name="label_31">
                <property name="text">
-                <string> seconds</string>
+                <string>Rule</string>
                </property>
               </widget>
+             </item>
+             <item row="1" column="15">
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </item>
