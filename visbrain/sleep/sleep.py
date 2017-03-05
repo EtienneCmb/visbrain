@@ -44,7 +44,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                         "Text file (*.txt);;""CSV file (*.csv)")
             # Load dataset :
             sf, data, channels = load_sleepdataset(file)
-            
+
             if hypno_file:
                 # Load hypnogram :
                 hypno = load_hypno(hypno_file, sf)
@@ -164,7 +164,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                              "(e.g. 1024., 512., etc)")
         sf = float(sf)
         # Check data shape and format to float32 :
-        #data = np.atleast_2d(data)
+        # data = np.atleast_2d(data)
         if data.ndim is not 2:
             raise ValueError("The data must be a 2D array")
         if nchan not in data.shape:
@@ -181,7 +181,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         else:
             if len(hypno) != npts:
                 raise ValueError("The length of the hypnogram vector must be"
-                                 " "+str(npts)+" (Currently : " + 
+                                 " "+str(npts)+" (Currently : " +
                                  str(len(hypno)) + ".")
         # Define time vector :
         time = np.arange(npts, dtype=np.float32) / sf

@@ -1,8 +1,13 @@
+"""Get informations about hypnogram."""
+
 import numpy as np
 
 
-def sleepstats(hypno, sf=100, time_window=30):
-    """Compute sleep stats from an hypnogram vector
+__all__ = ['sleepstats']
+
+
+def sleepstats(hypno, sf=100, time_window=30.):
+    """Compute sleep stats from an hypnogram vector.
 
     Args:
         path: string
@@ -46,56 +51,48 @@ def sleepstats(hypno, sf=100, time_window=30):
     ======================================================================
 
     """
-
-    # Resample to get one value per 30 seconds
-    hypno = hypno[::sf * time_window]
+    # Get a step (integer) and resample to get one value per 30 seconds :
+    step = int(round(sf * time_window))
+    hypno = hypno[::step]
 
     stats = {}
 
-    stats['TIB'] = hypno.size
-    stats['TDT'] = np.array(np.where(hypno != 0)).max()
+    stats['TIB_0'] = hypno.size
+    stats['TDT_1'] = np.array(np.where(hypno != 0)).max()
 
     # Duration of each sleep stages
-    stats['Art'] = hypno[hypno == -1].size
-    stats['W'] = hypno[hypno == 0].size
-    stats['N1'] = hypno[hypno == 1].size
-    stats['N2'] = hypno[hypno == 2].size
-    stats['N3'] = hypno[hypno == 3].size
-    stats['REM'] = hypno[hypno == 4].size
+    stats['Art_2'] = hypno[hypno == -1].size
+    stats['W_3'] = hypno[hypno == 0].size
+    stats['N1_4'] = hypno[hypno == 1].size
+    stats['N2_5'] = hypno[hypno == 2].size
+    stats['N3_6'] = hypno[hypno == 3].size
+    stats['REM_7'] = hypno[hypno == 4].size
 
     # Sleep stage latencies
-    stats['LatN1'] = np.nan
-    stats['LatN2'] = np.nan
-    stats['LatN3'] = np.nan
-    stats['LatREM'] = np.nan
+    tov = np.nan
+    stats['LatN1_8'] = np.where(hypno == 1)[0].min() if 1 in hypno else tov
+    stats['LatN2_9'] = np.where(hypno == 2)[0].min() if 2 in hypno else tov
+    stats['LatN3_10'] = np.where(hypno == 3)[0].min() if 3 in hypno else tov
+    stats['LatREM_11'] = np.where(hypno == 4)[0].min() if 4 in hypno else tov
 
-    if 1 in hypno:
-        stats['LatN1'] = np.array(np.where(hypno == 1)).min()
-    if 2 in hypno:
-        stats['LatN2'] = np.array(np.where(hypno == 2)).min()
-    if 3 in hypno:
-        stats['LatN3'] = np.array(np.where(hypno == 3)).min()
-    if 4 in hypno:
-        stats['LatREM'] = np.array(np.where(hypno == 4)).min()
+    hypno_s = hypno[stats['LatN1_8']:stats['TDT_1']]
 
-    hypno_s = hypno[stats['LatN1']:stats['TDT']]
-
-    stats['SPT'] = hypno_s.size
-    stats['WASO'] = hypno_s[hypno_s == 0].size
-    stats['TST'] = stats['SPT'] - stats['WASO']
+    stats['SPT_12'] = hypno_s.size
+    stats['WASO_13'] = hypno_s[hypno_s == 0].size
+    stats['TST_14'] = stats['SPT_12'] - stats['WASO_13']
 
     # Convert to minutes
     for key, value in stats.items():
-        stats[key] = value / (60 / time_window)
+        stats[key] = value / (60. / time_window)
 
-    stats['SE'] = stats['TST'] / stats['TDT'] * 100
+    stats['SE_15'] = stats['TST_14'] / stats['TDT_1'] * 100.
 
     # Percentages of TDT
-    stats['%Art'] = stats['Art'] / stats['TDT'] * 100
-    stats['%W'] = stats['W'] / stats['TDT'] * 100
-    stats['%N1'] = stats['N1'] / stats['TDT'] * 100
-    stats['%N2'] = stats['N2'] / stats['TDT'] * 100
-    stats['%N3'] = stats['N3'] / stats['TDT'] * 100
-    stats['%REM'] = stats['REM'] / stats['TDT'] * 100
+    stats['%Art_16'] = stats['Art_2'] / stats['TDT_1'] * 100.
+    stats['%W_17'] = stats['W_3'] / stats['TDT_1'] * 100.
+    stats['%N1_18'] = stats['N1_4'] / stats['TDT_1'] * 100.
+    stats['%N2_19'] = stats['N2_5'] / stats['TDT_1'] * 100.
+    stats['%N3_20'] = stats['N3_6'] / stats['TDT_1'] * 100.
+    stats['%REM_21'] = stats['REM_7'] / stats['TDT_1'] * 100.
 
     return stats

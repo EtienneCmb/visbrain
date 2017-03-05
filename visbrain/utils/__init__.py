@@ -6,3 +6,4 @@ from .others import *
 from .fileconvert import *
 from .cameras import *
 from .peakdetection import *
+from .sleepstats import *
