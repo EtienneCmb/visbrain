@@ -53,6 +53,17 @@ class visuals(object):
             vbShortcuts.__init__(self, k.canvas)
 
 
+"""
+###############################################################################
+# OBJECTS
+###############################################################################
+Classes below are used to create visual objects, display on sevral canvas :
+- ChannelPlot : plot data (one signal per channel)
+- Spectrogram : on a specific channel
+- Hypnogram : sleep stages (can be optional)
+"""
+
+
 class ChannelPlot(object):
     """Plot each channel."""
 
@@ -286,6 +297,16 @@ class Hypnogram(object):
         self._camera.rect = value
 
 
+"""
+###############################################################################
+# INDICATORS
+###############################################################################
+Visual indicators can be used to help the user to see in which time window the
+signal is currently plotted. Those indicators are two vertical lines displayed
+on the spectrogram and hypnogram.
+"""
+
+
 class Indicator(object):
     """Create a visual indicator (for spectrogram and hypnogram)."""
 
@@ -346,8 +367,16 @@ class Indicator(object):
         self.update()
 
 
+"""
+###############################################################################
+# SHORTCUTS
+###############################################################################
+Shortcuts applied on each canvas.
+"""
+
+
 class vbShortcuts(object):
-    """This class add some shortcuts to the main canvas of vbrain.
+    """This class add some shortcuts to the main canvas.
 
     It's also use to initialize to panel of shortcuts.
 
@@ -361,16 +390,16 @@ class vbShortcuts(object):
         # Add shortcuts to vbCanvas :
         @canvas.events.key_press.connect
         def on_key_press(event):
-            """Executed function when a key is pressed on a keyboard over vbrain canvas.
+            """Executed function when a key is pressed on a keyboard over canvas.
 
             :event: the trigger event
             """
             if event.text == ' ':
                 pass
-            if event.text == 'n':
+            if event.text == 'n':  # Next (slider)
                 self._SlVal.setValue(
                         self._SlVal.value() + self._SigSlStep.value())
-            if event.text == 'b':
+            if event.text == 'b':  # Before (slider)
                 self._SlVal.setValue(
                         self._SlVal.value() - self._SigSlStep.value())
             if event.text == '0':
@@ -383,7 +412,7 @@ class vbShortcuts(object):
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
-            """Executed function when the mouse is pressed over vbrain canvas.
+            """Executed function when the mouse is pressed over canvas.
 
             :event: the trigger event
             """
@@ -391,7 +420,7 @@ class vbShortcuts(object):
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
-            """Executed function when double click mouse over vbrain canvas.
+            """Executed function when double click mouse over canvas.
 
             :event: the trigger event
             """
@@ -399,7 +428,7 @@ class vbShortcuts(object):
 
         @canvas.events.mouse_move.connect
         def on_mouse_move(event):
-            """Executed function when the mouse move over vbrain canvas.
+            """Executed function when the mouse move over canvas.
 
             :event: the trigger event
             """
@@ -408,7 +437,7 @@ class vbShortcuts(object):
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
-            """Executed function when single click mouse over vbrain canvas.
+            """Executed function when single click mouse over canvas.
 
             :event: the trigger event
             """

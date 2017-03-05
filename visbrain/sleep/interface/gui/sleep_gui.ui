@@ -1218,19 +1218,6 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="10">
-              <widget class="QSpinBox" name="_SigSlStep">
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>10000</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="_SlWin"/>
-             </item>
              <item row="1" column="11">
               <widget class="QLabel" name="label_6">
                <property name="text">
@@ -1288,13 +1275,6 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string> / nb_win</string>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label">
                <property name="text">
@@ -1318,6 +1298,13 @@
                </property>
               </spacer>
              </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="_SlWin">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="12">
               <spacer name="horizontalSpacer_6">
                <property name="orientation">
@@ -1331,6 +1318,16 @@
                </property>
               </spacer>
              </item>
+             <item row="1" column="10">
+              <widget class="QDoubleSpinBox" name="_SigSlStep">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0" colspan="14">
               <widget class="QSlider" name="_SlVal">
                <property name="orientation">
@@ -1341,6 +1338,13 @@
                </property>
                <property name="tickInterval">
                 <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string> seconds</string>
                </property>
               </widget>
              </item>

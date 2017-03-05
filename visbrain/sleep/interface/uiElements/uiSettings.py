@@ -62,6 +62,9 @@ class uiSettings(object):
         self._SigWin.setKeyboardTracking(False)
         self._SigSlStep.valueChanged.connect(self._fcn_sliderSettings)
         self._SigSlStep.setKeyboardTracking(False)
+        # Spin box for window selection :
+        self._SlWin.valueChanged.connect(self._fcn_sliderWinSelection)
+        self._SlWin.setKeyboardTracking(False)
 
     # =====================================================================
     # MENU & FILE MANAGMENT
@@ -165,8 +168,8 @@ class uiSettings(object):
         # ---------------------------------------
         # Update spectrogram indicator :
         if self._PanSpecIndic.isChecked():
-            # ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
-            self._specInd.set_data(xlim=xlim, ylim=(0, 2000))
+            ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
+            self._specInd.set_data(xlim=xlim, ylim=ylim)
 
         # ---------------------------------------
         # Update hypnogram indicator :
@@ -175,6 +178,7 @@ class uiSettings(object):
 
         if self._PanTimeIndic.isChecked():
             self._TimeAxis.set_data(xlim[0], win)
+        self._SlWin.setValue(val*step)
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
@@ -185,8 +189,13 @@ class uiSettings(object):
         self._SlVal.setMaximum((self._time.max()-self._SigWin.value())/step)
         self._SlVal.setTickInterval(step)
         self._SlVal.setSingleStep(step)
+        self._SlWin.setMaximum((self._time.max()-self._SigWin.value()))
 
         if self._slOnStart:
             self._fcn_sliderMove()
         else:
             self._slOnStart = True
+
+    def _fcn_sliderWinSelection(self):
+        """Move slider using window spin."""
+        self._SlVal.setValue(self._SlWin.value() / self._SigSlStep.value())
