@@ -120,8 +120,8 @@ def elan_hyp(path, ds_freq):
         path: str
             Filename(with full path) to Elan .hyp file
 
-        ds_freq: int(def 100)
-            Down - sampling frequency
+        ds_freq: int
+            Downsampling frequency
 
     Return:
         hypno: np.ndarray

@@ -239,7 +239,7 @@ class Hypnogram(object):
         # Create a default line :
         pos = np.array([[0, 0], [0, 100]])
         self.mesh = scene.visuals.Line(pos, name='hypnogram', color=col,
-                                       method='agg', width=width,
+                                       method='gl', width=width,
                                        parent=parent)
         # Add text :
         offx, offy = 20., 0.2

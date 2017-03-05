@@ -22,7 +22,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     """
 
     def __init__(self, file=None, hypno_file=None, data=None, channels=None,
-                 sf=None, hypno=None, downsample=None, axis=False, line='agg'):
+                 sf=None, hypno=None, downsample=200, axis=False, line='gl'):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
@@ -42,8 +42,14 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 hypno_file = QtGui.QFileDialog.getOpenFileName(
                         self, "Open hypnogram", "", "Elan (*.hyp);;"
                         "Text file (*.txt);;""CSV file (*.csv)")
+            
             # Load dataset :
-            sf, data, channels = load_sleepdataset(file)
+            if downsample:
+                # Apply a specific downsampling (Elan only)
+                sf, data, channels = load_sleepdataset(file, downsample)
+            else:
+                # Default: Apply 100 Hz downsampling (Elan only)
+                sf, data, channels = load_sleepdataset(file)
 
             if hypno_file:
                 # Load hypnogram :
@@ -60,7 +66,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = list(channels)
-        self._lw = 1.
+        self._lw = 1.2
         self._ax = axis
         self._defwin = 30.
         # Color :
@@ -180,8 +186,15 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             hypno = np.zeros((npts,), dtype=np.float32)
         else:
             if len(hypno) != npts:
-                raise ValueError("The length of the hypnogram vector must be"
-                                 " "+str(npts)+" (Currently : " +
+                if len(hypno) < npts:
+                    # Classic bug in Elan hypnogram file where EEG data is
+                    # slightly longer than hyp file
+                    hypno = np.append(hypno,
+                                      (-1*np.zeros((npts-len(hypno), 1))))
+                else:
+                    raise ValueError("The length of the hypnogram \
+                                     vector must be"
+                                     + str(npts) + " (Currently : " +
                                  str(len(hypno)) + ".")
         # Define time vector :
         time = np.arange(npts, dtype=np.float32) / sf
