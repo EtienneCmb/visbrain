@@ -397,18 +397,17 @@ class vbShortcuts(object):
             if event.text == ' ':
                 pass
             if event.text == 'n':  # Next (slider)
-                self._SlVal.setValue(
-                        self._SlVal.value() + self._SigSlStep.value())
+                self._SlWin.setValue(
+                                self._SlWin.value() + self._SigSlStep.value())
             if event.text == 'b':  # Before (slider)
-                self._SlVal.setValue(
-                        self._SlVal.value() - self._SigSlStep.value())
-            if event.text == '0':
-                    self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
-                    self._fcn_specViz()
-            if event.text == '1':
-                    self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
-                    self._fcn_hypViz()
-
+                self._SlWin.setValue(
+                                self._SlWin.value() - self._SigSlStep.value())
+            if event.text == '0':  # Toggle visibility on spec
+                self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
+                self._fcn_specViz()
+            if event.text == '1':  # Toggle visibility on hypno
+                self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
+                self._fcn_hypViz()
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
