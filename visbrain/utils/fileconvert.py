@@ -42,9 +42,13 @@ def load_sleepdataset(path):
         if os.path.isfile(path + '.ent'):
             # Apply an automatic downsampling to 100 Hz
             ds_freq = 100
+            sf, data, chan = elan2array(path, 100)
+            return ds_freq, data, chan
 
         # BRAINVISION :
         elif os.path.isfile(file + '.vhdr'):
+            sf, data, chan = brainvision2array(path)
+            return sf, data, chan
 
         # None :
         else:
@@ -54,6 +58,8 @@ def load_sleepdataset(path):
 
     # EDF :
     elif ext == '.edf':
+         sf, data, chan = edf2array(path)
+         return sf, data, chan
 
     # None :
     else:
