@@ -67,6 +67,8 @@ class uiSettings(object):
         self._SlWin.setKeyboardTracking(False)
         # Unit conversion :
         self._slRules.currentIndexChanged.connect(self._fcn_sliderMove)
+        # Grid toggle :
+        self._slGrid.clicked.connect(self._fcn_gridToggle)
 
     # =====================================================================
     # MENU & FILE MANAGMENT
@@ -207,3 +209,12 @@ class uiSettings(object):
     def _fcn_sliderWinSelection(self):
         """Move slider using window spin."""
         self._SlVal.setValue(self._SlWin.value() / self._SigSlStep.value())
+
+    def _fcn_gridToggle(self):
+        """Toggle grid visibility."""
+        viz = self._slGrid.isChecked()
+        # Toggle hypno grid :
+        self._hyp.grid.visible = viz
+        # Toggle grid for each channel :
+        for k in self._chan.grid:
+            k.visible = viz

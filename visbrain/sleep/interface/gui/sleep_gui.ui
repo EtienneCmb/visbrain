@@ -1299,9 +1299,12 @@
               </widget>
              </item>
              <item row="1" column="16">
-              <widget class="QCheckBox" name="checkBox">
+              <widget class="QCheckBox" name="_slGrid">
                <property name="text">
                 <string>Grid</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
