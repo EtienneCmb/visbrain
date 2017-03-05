@@ -1086,7 +1086,7 @@
          <number>6</number>
         </property>
         <property name="spacing">
-         <number>6</number>
+         <number>3</number>
         </property>
        </layout>
       </item>

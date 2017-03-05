@@ -39,7 +39,8 @@ class visuals(object):
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
-        self._hyp = Hypnogram(camera=cameras[2], color=self._hypcolor,
+        self._hyp = Hypnogram(time[-1], camera=cameras[2],
+                              color=self._hypcolor,
                               parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
         # Create a visual indicator for hypnogram :
@@ -229,7 +230,7 @@ class Spectrogram(object):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, camera, color='darkblue', width=2, font_size=9,
+    def __init__(self, n, camera, color='darkblue', width=2, font_size=9,
                  parent=None):
         # Keep camera :
         self._camera = camera
@@ -242,23 +243,29 @@ class Hypnogram(object):
                                        method='gl', width=width,
                                        parent=parent)
         # Add text :
-        offx, offy = 20., 0.2
+        offx, offy = .001 * n, 0.2
         self.node = scene.visuals.Node(name='hypnotext', parent=parent)
         self.st1 = scene.visuals.Text(text='Art', pos=(offx, 1. + offy),
-                                      parent=self.node, font_size=font_size)
+                                      parent=self.node, font_size=font_size,
+                                      anchor_x='left')
         self.st2 = scene.visuals.Text(text='Wake', pos=(offx, 0. + offy),
-                                      parent=self.node, font_size=font_size)
+                                      parent=self.node, font_size=font_size,
+                                      anchor_x='left')
         self.st3 = scene.visuals.Text(text='N1', pos=(offx, -1. + offy),
-                                      parent=self.node, font_size=font_size)
+                                      parent=self.node, font_size=font_size,
+                                      anchor_x='left')
         self.st4 = scene.visuals.Text(text='N2', pos=(offx, -2. + offy),
-                                      parent=self.node, font_size=font_size)
+                                      parent=self.node, font_size=font_size,
+                                      anchor_x='left')
         self.st5 = scene.visuals.Text(text='N3', pos=(offx, -3. + offy),
-                                      parent=self.node, font_size=font_size)
+                                      parent=self.node, font_size=font_size,
+                                      anchor_x='left')
         self.st6 = scene.visuals.Text(text='REM', pos=(offx, -4. + offy),
-                                      parent=self.node, font_size=font_size)
+                                      parent=self.node, font_size=font_size,
+                                      anchor_x='left')
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
-                                            scale=(10, 1), parent=parent)
+                                            scale=(10., 1.), parent=parent)
         self.grid.set_gl_state('translucent')
 
     def set_data(self, sf, data, time):

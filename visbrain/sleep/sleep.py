@@ -67,6 +67,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             sf, data, channels, hypno, downsample)
         self._channels = list(channels)
         self._lw = 1.2
+        self._lwhyp = 2
         self._ax = axis
         self._defwin = 30.
         # Color :

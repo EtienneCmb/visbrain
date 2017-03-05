@@ -466,7 +466,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_18.setObjectName(_fromUtf8("verticalLayout_18"))
         self._chanGrid = QtGui.QGridLayout()
         self._chanGrid.setContentsMargins(-1, -1, -1, 6)
-        self._chanGrid.setSpacing(6)
+        self._chanGrid.setSpacing(3)
         self._chanGrid.setObjectName(_fromUtf8("_chanGrid"))
         self.verticalLayout_18.addLayout(self._chanGrid)
         self._TimeAxisW = QtGui.QWidget(self.centralwidget)
