@@ -29,6 +29,7 @@ class PeakDetection(object):
         self._size = size
         # Create a set of empty markers :
         self.mesh = scene.visuals.Markers(pos=np.zeros((2, 2)))
+        self.mesh.set_gl_state('translucent')
 
     def set_data(self, data, time, display='max', lookahead=10, parent=None):
         """Find peaks according to data.
@@ -55,6 +56,7 @@ class PeakDetection(object):
         # Remove previous markers and re-create it :
         self.mesh.parent = None
         self.mesh = scene.visuals.Markers(pos=np.zeros((2, 2)))
+        self.mesh.set_gl_state('translucent')
         # Find peaks (Max, Min) :
         M, m = peakdetect(data, time, int(lookahead))
         # Extract (x, y) coordinates for (Max, Min) peaks :

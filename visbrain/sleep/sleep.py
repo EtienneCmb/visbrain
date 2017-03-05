@@ -82,7 +82,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._specCam = FixedCam()  # viscam.PanZoomCamera()
         self._specCanvas.set_camera(self._specCam)
         # ------------------- Hypnogram -------------------
-        self._hypcam = FixedCam()  # viscam.PanZoomCamera()
+        self._hypcam = viscam.PanZoomCamera()  # FixedCam()
         self._hypCanvas.set_camera(self._hypcam)
         # ------------------- Time axis -------------------
         self._timecam = FixedCam()

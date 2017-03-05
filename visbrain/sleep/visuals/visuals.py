@@ -23,39 +23,37 @@ class visuals(object):
         """Init."""
         # =================== CHANNELS ===================
         self._chan = ChannelPlot(channels, camera=cameras[0], method=method,
-                                 color=self._chancolor)
-        # self._chan.set_data(sf, data)
-        self._chan.parent = self._chanCanvas
+                                 color=self._chancolor,
+                                 parent=self._chanCanvas)
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
-        self._spec = Spectrogram(camera=cameras[1])
+        self._spec = Spectrogram(camera=cameras[1],
+                                 parent=self._specCanvas.wc.scene)
         self._spec.set_data(sf, data[0, ...], time)
-        self._spec.mesh.parent = self._specCanvas.wc.scene
         # Create a visual indicator for spectrogram :
         self._specInd = Indicator(name='spectro_indic', width=2,
-                                  color=self._indicol, visible=False)
+                                  color=self._indicol, visible=False,
+                                  parent=self._specCanvas.wc.scene)
         self._specInd.set_data(xlim=(0, 30), ylim=(0, 20))
-        self._specInd.parent = self._specCanvas.wc.scene
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
-        self._hyp = Hypnogram(camera=cameras[2], color=self._hypcolor)
+        self._hyp = Hypnogram(camera=cameras[2], color=self._hypcolor,
+                              parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
-        self._hyp.mesh.parent = self._hypCanvas.wc.scene
         # Create a visual indicator for hypnogram :
         self._hypInd = Indicator(name='hypno_indic', width=2,
-                                 color=self._indicol, visible=False)
+                                 color=self._indicol, visible=False,
+                                 parent=self._hypCanvas.wc.scene)
         self._hypInd.set_data(xlim=(0, 30), ylim=(-1, 6))
-        self._hypInd.parent = self._hypCanvas.wc.scene
-        self._hyp.grid.parent = self._hypCanvas.wc.scene
 
 
 class ChannelPlot(object):
     """Plot each channel."""
 
     def __init__(self, channels, color=(.2, .2, .2), width=1., method='agg',
-                 camera=None):
+                 camera=None, parent=None):
         self._camera = camera
         self.rect = []
         # Get color :
@@ -66,11 +64,13 @@ class ChannelPlot(object):
         for i, k in enumerate(channels):
             # Create line :
             mesh = scene.visuals.Line(pos, name=k+'plot', color=col,
-                                      method=method, width=width)
+                                      method=method, width=width,
+                                      parent=parent[i].wc.scene)
             self.mesh.append(mesh)
             # Create a grid :
             # grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
-            #                                scale=(10, .1))
+            #                                scale=(10, .1),
+            #                                parent=parent[i].wc.scene)
             # grid.set_gl_state('translucent')
             # self.grid.append(grid)
 
@@ -114,12 +114,13 @@ class Spectrogram(object):
     color, new frequency / time range, new settings...
     """
 
-    def __init__(self, camera):
+    def __init__(self, camera, parent=None):
         # Keep camera :
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
         # Create a vispy image object :
-        self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram')
+        self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram',
+                                        parent=parent)
 
     def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.,
                  fstart=0.5, fend=25., contraste=.7):
@@ -212,7 +213,8 @@ class Spectrogram(object):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, camera, color='darkblue', width=2):
+    def __init__(self, camera, color='darkblue', width=2, font_size=8,
+                 parent=None):
         # Keep camera :
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
@@ -221,10 +223,26 @@ class Hypnogram(object):
         # Create a default line :
         pos = np.array([[0, 0], [0, 100]])
         self.mesh = scene.visuals.Line(pos, name='hypnogram', color=col,
-                                       method='agg', width=width)
+                                       method='agg', width=width,
+                                       parent=parent)
+        # Add text :
+        offx, offy = 10., 0.2
+        self.node = scene.visuals.Node(name='hypnotext', parent=parent)
+        self.st1 = scene.visuals.Text(text='ART', pos=(offx, 1. + offy),
+                                      parent=self.node, font_size=font_size)
+        self.st2 = scene.visuals.Text(text='Wake', pos=(offx, 0. + offy),
+                                      parent=self.node, font_size=font_size)
+        self.st3 = scene.visuals.Text(text='N1', pos=(offx, -1. + offy),
+                                      parent=self.node, font_size=font_size)
+        self.st4 = scene.visuals.Text(text='N2', pos=(offx, -2. + offy),
+                                      parent=self.node, font_size=font_size)
+        self.st5 = scene.visuals.Text(text='N3', pos=(offx, -3. + offy),
+                                      parent=self.node, font_size=font_size)
+        self.st6 = scene.visuals.Text(text='REM', pos=(offx, -4. + offy),
+                                      parent=self.node, font_size=font_size)
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
-                                            scale=(10, 1))
+                                            scale=(10, 1), parent=parent)
         self.grid.set_gl_state('translucent')
 
     def set_data(self, sf, data, time):
@@ -241,13 +259,13 @@ class Hypnogram(object):
                 The time vector
         """
         # Set data to the mesh :
-        self.mesh.set_data(np.vstack((time, data)).T)
+        self.mesh.set_data(np.vstack((time, -data)).T)
         # Re-scale hypnogram :
         # sc = ((time.max() - time.min()) / len(time), 1, 1)
         # self.mesh.transform = vist.STTransform(scale=sc)
         # Get camera rectangle :
-        self.rect = (time.min(), data.min() - 1, time.max() - time.min(),
-                     data.max() - data.min() + 2)
+        self.rect = (time.min(), data.min() - 5, time.max() - time.min(),
+                     data.max() - data.min() + 4)
         self.mesh.update()
 
     # ----------- RECT -----------
@@ -267,14 +285,14 @@ class Indicator(object):
     """Create a visual indicator (for spectrogram and hypnogram)."""
 
     def __init__(self, name='indicator', color='darkgreen', width=8,
-                 visible=True):
+                 visible=True, parent=None):
         # Create a vispy image object :
         pos1 = np.array([[0, 0], [0, 100]])
         pos2 = np.array([[100, 0], [100, 100]])
         self.v1 = scene.visuals.Line(pos1, width=width, name=name, color=color,
-                                     method='gl')
+                                     method='gl', parent=parent)
         self.v2 = scene.visuals.Line(pos2, width=width, name=name, color=color,
-                                     method='gl')
+                                     method='gl', parent=parent)
         self.v1._width, self.v2._width = width, width
         self.v1.update(), self.v2.update()
         self.visible = visible
