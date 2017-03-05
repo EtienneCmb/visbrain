@@ -89,8 +89,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>358</width>
-                <height>801</height>
+                <width>344</width>
+                <height>882</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -102,6 +102,12 @@
                  <layout class="QVBoxLayout" name="verticalLayout_13">
                   <item>
                    <widget class="QScrollArea" name="_PanScrollChan">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>300</height>
+                     </size>
+                    </property>
                     <property name="widgetResizable">
                      <bool>true</bool>
                     </property>
@@ -110,8 +116,8 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>312</width>
-                       <height>72</height>
+                       <width>298</width>
+                       <height>298</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">

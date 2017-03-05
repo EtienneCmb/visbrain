@@ -14,9 +14,9 @@ Raph
 	+4 Calcul statistiques de sommeil
 	
 Commun
-	-4 Augmenter la hauteur du panel "Visible channels"
 	-4 Possibilité d'afficher une grid sur les channels pour voir la seconde (important pour distinguer spindles, KCs, etc)
 	-4 Panel info avec des infos sur l'enregistrement EEG et les statistiques de sommeil
 	-3 Modifier les unités de la règle en bas pour que ça affiche en minutes ? ( / 60)
 	-2 Possibilité de scorer un hypnogramme en temps réel
+	+4 Augmenter la hauteur du panel "Visible channels"
 	
