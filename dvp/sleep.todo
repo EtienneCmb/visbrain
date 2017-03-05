@@ -1,11 +1,12 @@
 Etienne
-	-5 Ajouter texte à hypnogram
 	-5 Nombre de fenêtre
+	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
 	-4 Chargement des fichiers (manque chargement hypno + test sur fichiers réels)
 	-4 Filtrage: la complexité ici c'est que le filtrage doit être appliqué partout sans duplication de données
 	-2 Indicator devrait être un carré transparent ou dont le fond est vide?
+	+5 Ajouter texte à hypnogram
 
 Raph
-	-5 Chargement hypnogram
 	-3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
+	+5 Chargement hypnogram

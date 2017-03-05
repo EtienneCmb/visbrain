@@ -26,9 +26,6 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
         super(uiInit, self).__init__(None)
         self.setupUi(self)
 
-        # Initialize shortcuts :
-        # vbShortcuts.__init__(self, self._ndCanvas.canvas)
-
 
 class TimeAxis(object):
     """Create a unique time axis."""
@@ -256,64 +253,3 @@ class AxisCanvas(object):
         self.xaxis.visible = visible
         self.yaxis.visible = visible
         self._rpad.visible = visible
-
-
-class vbShortcuts(object):
-    """This class add some shortcuts to the main canvas of vbrain.
-
-    It's also use to initialize to panel of shortcuts.
-
-    Args:
-        canvas: vispy canvas
-            Vispy canvas to add the shortcuts.
-    """
-
-    def __init__(self, canvas):
-        """Init."""
-        # Add shortcuts to vbCanvas :
-        @canvas.events.key_press.connect
-        def on_key_press(event):
-            """Executed function when a key is pressed on a keyboard over vbrain canvas.
-
-            :event: the trigger event
-            """
-            if event.text == ' ':
-                pass
-            if event.text == 'r':
-                pass
-            if event.text == '0':
-                pass
-
-        @canvas.events.mouse_release.connect
-        def on_mouse_release(event):
-            """Executed function when the mouse is pressed over vbrain canvas.
-
-            :event: the trigger event
-            """
-            pass
-
-        @canvas.events.mouse_double_click.connect
-        def on_mouse_double_click(event):
-            """Executed function when double click mouse over vbrain canvas.
-
-            :event: the trigger event
-            """
-            pass
-
-        @canvas.events.mouse_move.connect
-        def on_mouse_move(event):
-            """Executed function when the mouse move over vbrain canvas.
-
-            :event: the trigger event
-            """
-            # Display the rotation panel and set informations :
-            pass
-
-        @canvas.events.mouse_press.connect
-        def on_mouse_press(event):
-            """Executed function when single click mouse over vbrain canvas.
-
-            :event: the trigger event
-            """
-            # Display the rotation panel :
-            pass

@@ -48,6 +48,10 @@ class visuals(object):
                                  parent=self._hypCanvas.wc.scene)
         self._hypInd.set_data(xlim=(0, 30), ylim=(-1, 6))
 
+        vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
+        for k in vbcanvas:
+            vbShortcuts.__init__(self, k.canvas)
+
 
 class ChannelPlot(object):
     """Plot each channel."""
@@ -340,3 +344,66 @@ class Indicator(object):
         self.v1.visible = value
         self.v2.visible = value
         self.update()
+
+
+class vbShortcuts(object):
+    """This class add some shortcuts to the main canvas of vbrain.
+
+    It's also use to initialize to panel of shortcuts.
+
+    Args:
+        canvas: vispy canvas
+            Vispy canvas to add the shortcuts.
+    """
+
+    def __init__(self, canvas):
+        """Init."""
+        # Add shortcuts to vbCanvas :
+        @canvas.events.key_press.connect
+        def on_key_press(event):
+            """Executed function when a key is pressed on a keyboard over vbrain canvas.
+
+            :event: the trigger event
+            """
+            if event.text == ' ':
+                pass
+            if event.text == 'n':
+                self._SlVal.setValue(
+                        self._SlVal.value() + self._SigSlStep.value())
+            if event.text == 'b':
+                self._SlVal.setValue(
+                        self._SlVal.value() - self._SigSlStep.value())
+
+        @canvas.events.mouse_release.connect
+        def on_mouse_release(event):
+            """Executed function when the mouse is pressed over vbrain canvas.
+
+            :event: the trigger event
+            """
+            pass
+
+        @canvas.events.mouse_double_click.connect
+        def on_mouse_double_click(event):
+            """Executed function when double click mouse over vbrain canvas.
+
+            :event: the trigger event
+            """
+            pass
+
+        @canvas.events.mouse_move.connect
+        def on_mouse_move(event):
+            """Executed function when the mouse move over vbrain canvas.
+
+            :event: the trigger event
+            """
+            # Display the rotation panel and set informations :
+            pass
+
+        @canvas.events.mouse_press.connect
+        def on_mouse_press(event):
+            """Executed function when single click mouse over vbrain canvas.
+
+            :event: the trigger event
+            """
+            # Display the rotation panel :
+            pass
