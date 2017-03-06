@@ -78,9 +78,6 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # User <-> GUI :
         uiElements.__init__(self)
 
-        # Disbale hypno label if needed :
-        self._hypLabel.setVisible(self._HypW.isVisible())
-
         # ====================== CAMERAS ======================
         # ------------------- Channels -------------------
         self._chanCam = []
@@ -111,6 +108,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Finally set data and first channel only visible:
         self._fcn_sliderMove()
         self._chanChecks[0].setChecked(True)
+        self._hypLabel.setVisible(self._PanHypViz.isChecked())
         self._fcn_chanViz()
         self._fcn_infoUpdate()
 
