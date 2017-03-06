@@ -21,7 +21,7 @@ class Tools(object):
         yaxis = (self._hypcam.rect.bottom, self._hypcam.rect.top)
         self._hypedit = HypnoEdition(self._sf, self._hyp, -self._hypno,
                                      self._hypCanvas.canvas, self._time, yaxis,
-                                     enable=True)
+                                     enable=True, fcn=self._fcn_infoUpdate)
 
 
 class PeakDetection(object):
@@ -128,11 +128,16 @@ class HypnoEdition(object):
 
         size: float, optional, (def: 9.)
             Marker size.
+
+        fcn: function, optional, (def: None)
+            Executed function on mouse released. This is usefull to update
+            stats info.
     """
 
     def __init__(self, sf, hypno_obj, data, canvas, time, yaxis, enable=False,
                  parent=None, color_cursor='red', color_static='blue',
-                 color_active='green', color_dragge='purple', size=9.):
+                 color_active='green', color_dragge='purple', size=9.,
+                 fcn=None):
         """Init."""
         # ============ MARKERS POSITION ============
         self.transient(data, time)
@@ -144,6 +149,11 @@ class HypnoEdition(object):
         self.color_dragge = color2vb(color_dragge)
         self.color = color2vb(color_static, length=self.pos.shape[0])
 
+        # ============ VARIABLES ============
+        if fcn is None:
+            def fcn():
+                """Empty function."""
+                pass
         self.keep = False
         self.keep_idx = -1
         tM = time.max()
@@ -158,6 +168,7 @@ class HypnoEdition(object):
             """
             # Stop dragging point :
             self.keep = False
+            fcn()
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):

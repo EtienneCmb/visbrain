@@ -19,11 +19,11 @@ class uiInfo(object):
         self._infoTime.setKeyboardTracking(False)
         # Export file :
         self._infoExport.clicked.connect(self._fcn_exportFile)
-        # Export info :
-        self._fcn_infoUpdate()
 
     def _fcn_infoUpdate(self):
         """Complete the table sleep info."""
+        # Be sure to have the latest update of info :
+        self._hypno = -self._hyp.mesh.pos[:, 1]
         # Get sleep info :
         win = self._infoTime.value()
         stats = sleepstats(self._hypno, self._sf, win)
