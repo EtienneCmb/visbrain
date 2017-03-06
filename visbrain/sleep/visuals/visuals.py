@@ -435,7 +435,6 @@ class vbShortcuts(object):
 
             :event: the trigger event
             """
-            # Display the rotation panel and set informations :
             pass
 
         @canvas.events.mouse_press.connect

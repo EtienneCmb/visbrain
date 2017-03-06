@@ -36,6 +36,7 @@ class uiPanels(object):
                                       name='Spectrogram', color='black',
                                       yargs={'text_color': 'black'},
                                       xargs={'text_color': 'black'})
+        self._specCanvas.canvas.context.set_line_width(self._lwhyp)
         self._SpecLayout.addWidget(self._specCanvas.canvas.native)
         self._chanGrid.addWidget(self._SpecW, len(self) + 1, 1, 1, 1)
         # Add label :

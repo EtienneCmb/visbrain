@@ -114,14 +114,6 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._chanChecks[0].setChecked(True)
         self._fcn_chanViz()
 
-        ###########################################################
-        # from vispy import scene
-        # pos = 500*np.random.rand(100, 2)
-        # self.mesh = scene.visuals.Markers(pos=pos, size=5., face_color='red')
-        # self.mesh.parent = self._hypCanvas.wc.scene
-        # self._hypCanvas.wc.update()
-        # self._hypcam.update()
-
     def __len__(self):
         """Return the number of channels."""
         return len(self._channels)
@@ -191,7 +183,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                     # Classic bug in Elan hypnogram file where EEG data is
                     # slightly longer than hyp file
                     hypno = np.append(hypno,
-                                      (-1*np.zeros((npts-len(hypno), 1))))
+                                      (-1 * np.zeros((npts-len(hypno), 1))))
                 else:
                     raise ValueError("The length of the hypnogram \
                                      vector must be" + str(npts) +

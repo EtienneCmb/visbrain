@@ -17,6 +17,12 @@ class Tools(object):
         # =========== PEAK DETECTION ===========
         self._peak = PeakDetection(color=self._indicol)
 
+        # =========== HYPNOGRAM EDITION ===========
+        # self._hypedit = HypnoEdition(self._hypCanvas.canvas, -self._hypno,
+        #                              self._time, enable=True,
+        #                              color=self._indicol,
+        #                              parent=self._hypCanvas.wc.scene)
+
 
 class PeakDetection(object):
     """docstring for Tools."""
@@ -75,3 +81,62 @@ class PeakDetection(object):
                            scaling=False)
         self.mesh.parent = parent
         self.mesh.update()
+
+
+class HypnoEdition(object):
+    """Hypnogram edition."""
+
+    def __init__(self, canvas, hypno, time, enable=False, parent=None,
+                 color='red'):
+        """Init."""
+        # Create a marker :
+        self.color = color2vb(color)
+        marker = scene.visuals.Markers(parent=parent)
+        self.pos = np.array([])
+        tM = time.max()
+
+        @canvas.events.mouse_release.connect
+        def on_mouse_release(event):
+            """Executed function when the mouse is pressed over canvas.
+
+            :event: the trigger event
+            """
+            pass
+
+        @canvas.events.mouse_double_click.connect
+        def on_mouse_double_click(event):
+            """Executed function when double click mouse over canvas.
+
+            :event: the trigger event
+            """
+            self.pos = _get_cursor(event.pos)
+            self.color = np.vstack((color2vb('green'), self.color))
+
+        @canvas.events.mouse_move.connect
+        def on_mouse_move(event):
+            """Executed function when the mouse move over canvas.
+
+            :event: the trigger event
+            """
+            marker.set_data(pos=_get_cursor(event.pos), face_color=self.color)
+
+        @canvas.events.mouse_press.connect
+        def on_mouse_press(event):
+            """Executed function when single click mouse over canvas.
+
+            :event: the trigger event
+            """
+            # Find the closest marker (if possible) :
+            cursor = _get_cursor(event.pos)
+            dist = np.mean(self.pos - cursor[-1, :].T, axis=0)
+            temp = self.pos - cursor[-1, :]
+            print(dist, temp.shape)
+
+        def _get_cursor(pos):
+            # Get cursor position :
+            cursor = tM * pos[0] / canvas.size[0]
+            # Find hypnogram value for this position :
+            idx = np.abs(time - cursor).argmin()
+            # Set to marker position :
+            pos = np.array([cursor, hypno[idx], -1.])[np.newaxis, ...]
+            return np.vstack((self.pos, pos)) if self.pos.size else pos

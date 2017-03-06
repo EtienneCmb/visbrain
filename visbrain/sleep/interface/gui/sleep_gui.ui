@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -88,7 +88,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-75</y>
+                <y>0</y>
                 <width>321</width>
                 <height>876</height>
                </rect>
