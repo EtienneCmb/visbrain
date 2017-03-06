@@ -100,9 +100,6 @@ class HypnoEdition(object):
         self.color_close = color2vb('green')
         self.color = color2vb('blue', length=self.pos.shape[0])
 
-        # ============ MARKER OBJECT============
-        # Create a marker :
-        marker = scene.visuals.Markers(parent=parent)
         self.keep = False
         self.keep_idx = -1
         tM = time.max()
@@ -164,15 +161,16 @@ class HypnoEdition(object):
                     # hypno_obj.mesh.update()
                     hypno_obj.set_data(100., -hypno, time)
                     # Send data marker :
-                    marker.set_data(pos=self.pos, face_color=self.color,
-                                    edge_width=0., size=10.)
+                    hypno_obj.edit.set_data(pos=self.pos,
+                                            face_color=self.color,
+                                            edge_width=0., size=10.)
             else:
                 # Stack all pos and color :
                 pos = np.vstack((self.pos, cpos)) if self.pos.size else cpos
                 color = np.vstack((color, self.color_cursor))
                 # Set new data to marker :
-                marker.set_data(pos=pos, face_color=color, edge_width=0.,
-                                size=10.)
+                hypno_obj.edit.set_data(pos=pos, face_color=color,
+                                        edge_width=0., size=10.)
                 # Save current position :
                 self._cpos = cpos
 

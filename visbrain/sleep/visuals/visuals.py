@@ -242,6 +242,8 @@ class Hypnogram(object):
         self.mesh = scene.visuals.Line(pos, name='hypnogram', color=col,
                                        method='gl', width=width,
                                        parent=parent)
+        # Create a default marker (for edition):
+        self.edit = scene.visuals.Markers(parent=parent)
         # Add text :
         offx, offy = .001 * n, 0.2
         self.node = scene.visuals.Node(name='hypnotext', parent=parent)
