@@ -225,9 +225,9 @@ class uiPanels(object):
         """Toggle visibility of the spectrogram panel."""
         viz = self._PanSpecViz.isChecked()
         self._PanSpecW.setEnabled(viz)
-        self._PanSpecZoom.setEnabled(viz)
         self._SpecW.setVisible(viz)
         self._specLabel.setVisible(viz)
+        self._PanSpecIndic.setEnabled(viz)
 
     def _fcn_specSetData(self):
         """Set data to the spectrogram."""
@@ -268,14 +268,18 @@ class uiPanels(object):
     def _fcn_hypViz(self):
         """Toggle visibility of the spectrogram panel."""
         viz = self._PanHypViz.isChecked()
-        self._PanHypZoom.setEnabled(viz)
         self._HypW.setVisible(viz)
         self._hypLabel.setVisible(viz)
+        self._PanHypIndic.setEnabled(viz)
 
+    # =====================================================================
+    # TIME AXIS
+    # =====================================================================
     def _fcn_timeViz(self):
         """Toggle visibility of the time panel."""
         viz = self._PanTimeViz.isChecked()
         self._TimeAxisW.setVisible(viz)
+        self._PanTimeIndic.setEnabled(viz)
 
     # =====================================================================
     # INDICATORS
