@@ -57,9 +57,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         # Empty hypnogram :
         if hypno is None:
-            hypno = np.zeros((data.shape[1],), dtype=np.float32)
-            self._PanHypGrp.setEnabled(False)
             self._HypW.setVisible(False)
+            self._PanHypViz.setChecked(False)
 
         # ====================== VARIABLES ======================
         # Check all data :
@@ -113,6 +112,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._fcn_sliderMove()
         self._chanChecks[0].setChecked(True)
         self._fcn_chanViz()
+        self._fcn_infoUpdate()
 
     def __len__(self):
         """Return the number of channels."""
