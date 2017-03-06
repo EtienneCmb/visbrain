@@ -56,9 +56,11 @@ def sleepstats(hypno, sf=100, time_window=30.):
     hypno = hypno[::step]
 
     stats = {}
+    tov = np.nan
 
     stats['TIB_0'] = hypno.size
-    stats['TDT_1'] = np.array(np.where(hypno != 0)).max()
+    stats['TDT_1'] = np.where(hypno != 0)[0].max() if np.nonzero(
+                                                        hypno)[0].size else tov
 
     # Duration of each sleep stages
     stats['Art_2'] = hypno[hypno == -1].size
@@ -69,7 +71,6 @@ def sleepstats(hypno, sf=100, time_window=30.):
     stats['REM_7'] = hypno[hypno == 4].size
 
     # Sleep stage latencies
-    tov = np.nan
     stats['LatN1_8'] = np.where(hypno == 1)[0].min() if 1 in hypno else tov
     stats['LatN2_9'] = np.where(hypno == 2)[0].min() if 2 in hypno else tov
     stats['LatN3_10'] = np.where(hypno == 3)[0].min() if 3 in hypno else tov
