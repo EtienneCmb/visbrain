@@ -18,9 +18,11 @@ class Tools(object):
         self._peak = PeakDetection(color=self._indicol)
 
         # =========== HYPNOGRAM EDITION ===========
-        self._hypedit = HypnoEdition(self._hypCanvas.canvas, -self._hypno,
-                                     self._time, enable=True,
-                                     color=self._indicol,
+        yaxis = (self._hypcam.rect.bottom, self._hypcam.rect.top)
+        self._hypedit = HypnoEdition(self._sf, self._hyp,
+                                     self._hypCanvas.canvas, -self._hypno,
+                                     self._time, yaxis,
+                                     enable=True, color=self._indicol,
                                      parent=self._hypCanvas.wc.scene)
 
 
@@ -86,20 +88,23 @@ class PeakDetection(object):
 class HypnoEdition(object):
     """Hypnogram edition."""
 
-    def __init__(self, canvas, hypno, time, enable=False, parent=None,
-                 color='red'):
+    def __init__(self, sf, hypno_obj, canvas, hypno, time, yaxis, enable=False,
+                 parent=None, color='red'):
         """Init."""
-        # Transient detection :
-        tr = np.nonzero(np.abs(hypno[:-1] - hypno[1:]))[0] + 1
-        # Predefined positions :
-        self.pos = np.array([time[tr], hypno[tr], np.full_like(tr, -1.)]).T
+        # ============ MARKERS POSITION ============
+        self.transient(hypno, time)
+
+        # ============ COLOR ============
         self.color_cursor = color2vb('red')
         self.color_static = color2vb('blue')
         self.color_close = color2vb('green')
         self.color = color2vb('blue', length=self.pos.shape[0])
+
+        # ============ MARKER OBJECT============
         # Create a marker :
         marker = scene.visuals.Markers(parent=parent)
         self.keep = False
+        self.keep_idx = -1
         tM = time.max()
 
         @canvas.events.mouse_release.connect
@@ -108,6 +113,10 @@ class HypnoEdition(object):
 
             :event: the trigger event
             """
+            if self.keep:
+                self.transient(hypno, time)
+                self.color = color2vb('blue', length=self.pos.shape[0])
+            # Stop keeping point :
             self.keep = False
 
         @canvas.events.mouse_double_click.connect
@@ -126,18 +135,46 @@ class HypnoEdition(object):
             :event: the trigger event
             """
             # Get cursor position :
-            cpos = _get_cursor(event.pos)
+            cpos = _get_cursor(event.pos, not self.keep)
             # Get closest marker :
-            color, _ = _get_close_marker(cpos)
+            color, _ = _get_close_marker(event)
+            # On marker moving :
             if self.keep:
-                self.pos[self.keep_idx, :] = cpos
-            # Stack all pos and color :
-            pos = np.vstack((self.pos, cpos)) if self.pos.size else cpos
-            color = np.vstack((color, self.color_cursor))
-            # Set new data to marker :
-            marker.set_data(pos=pos, face_color=color)
-            # Save current position :
-            self._cpos = cpos
+                # Get distance between cursor and markers :
+                xpos = self.pos[:, 0] - cpos[0, 0]
+                xpos_sorted = np.sort(xpos)
+                # Find current position :
+                xpos_z = np.where(xpos_sorted == xpos[self.keep_idx])[0]
+                # Find previous / next marker position :
+                xprev = self.pos[xpos == xpos_sorted[xpos_z-1], 0]
+                xnext = self.pos[xpos == xpos_sorted[xpos_z+1], 0]
+                # Find their position in the time vector :
+                # xtprev = np.abs(time - xprev).argmin()
+                xtnext = np.abs(time - xnext).argmin()
+                # Move cursor only if xprev <= x < xnext :
+                if (cpos[0, 0] >= xprev) and (cpos[0, 0] <= xnext):
+                    # Force to be on the grid :
+                    cpos[0, 1] = float(round(cpos[0, 1]))
+                    # Update position :
+                    self.pos[self.keep_idx, 1] = cpos[0, 1]
+                    self.pos[xpos == xpos_sorted[xpos_z+1], 1] = cpos[0, 1]
+                    # Stream hypno data :
+                    xtpos = np.abs(time-self.pos[self.keep_idx, 0]).argmin()
+                    hypno[xtpos:xtnext+1] = cpos[0, 1]
+                    # hypno_obj.mesh.update()
+                    hypno_obj.set_data(100., -hypno, time)
+                    # Send data marker :
+                    marker.set_data(pos=self.pos, face_color=self.color,
+                                    edge_width=0., size=10.)
+            else:
+                # Stack all pos and color :
+                pos = np.vstack((self.pos, cpos)) if self.pos.size else cpos
+                color = np.vstack((color, self.color_cursor))
+                # Set new data to marker :
+                marker.set_data(pos=pos, face_color=color, edge_width=0.,
+                                size=10.)
+                # Save current position :
+                self._cpos = cpos
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
@@ -145,30 +182,48 @@ class HypnoEdition(object):
 
             :event: the trigger event
             """
-            # Get cursor position :
-            cpos = _get_cursor(event.pos)
             # Get closest marker :
-            _, idx = _get_close_marker(cpos)
+            _, idx = _get_close_marker(event)
             self.keep = idx is not None
             self.keep_idx = idx
 
-        def _get_cursor(pos):
+        def _get_cursor(pos, force=True):
             # Get cursor position :
             cursor = tM * pos[0] / canvas.size[0]
-            # Find hypnogram value for this position :
-            idx = np.abs(time - cursor).argmin()
+            # Get y position :
+            if force:
+                # Force cursor to be on the hypnogram :
+                val = hypno[np.abs(time - cursor).argmin()]
+            else:
+                # Return converted y axis :
+                val = (yaxis[0]-yaxis[1]) * pos[1] / canvas.size[1] + yaxis[1]
             # Set to marker position :
-            pos = np.array([cursor, hypno[idx], -1.])[np.newaxis, ...]
+            pos = np.array([cursor, val, -1.])[np.newaxis, ...]
             return pos
 
-        def _get_close_marker(cursor, dist=10.):
-            """Get close marker from the cursor."""
+        def _get_close_marker(event, dist=10.):
+            """Get closest marker from the cursor."""
+            # Get cursor (x, y) converted :
+            cursor = _get_cursor(event.pos, force=False)
             color = self.color.copy()
-            l = np.abs(self.pos[:, 0] - cursor[:, 0])
+            # Get distance between all markers and cursor :
+            l = np.abs(np.square(self.pos - cursor).mean(1))
+            # Color points under dist :
             under = l <= dist
             if any(under):
                 idx = l.argmin()
-                color[l.argmin(), :] = self.color_close
-                return color, idx
+                if idx not in (0, 1):
+                    color[idx, :] = self.color_close
+                    return color, idx
+                else:
+                    return self.color, None
             else:
                 return self.color, None
+
+    def transient(self, hypno, time):
+        # Transient detection :
+        tr = np.nonzero(np.abs(hypno[:-1] - hypno[1:]))[0] +1
+        # tr = np.append(tr, tr + 1)
+        tr = np.array([0, len(hypno)-1] + list(tr))
+        # Predefined positions :
+        self.pos = np.array([time[tr], hypno[tr], np.full_like(tr, -1.)]).T
