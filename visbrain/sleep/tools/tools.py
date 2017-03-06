@@ -18,10 +18,10 @@ class Tools(object):
         self._peak = PeakDetection(color=self._indicol)
 
         # =========== HYPNOGRAM EDITION ===========
-        # self._hypedit = HypnoEdition(self._hypCanvas.canvas, -self._hypno,
-        #                              self._time, enable=True,
-        #                              color=self._indicol,
-        #                              parent=self._hypCanvas.wc.scene)
+        self._hypedit = HypnoEdition(self._hypCanvas.canvas, -self._hypno,
+                                     self._time, enable=True,
+                                     color=self._indicol,
+                                     parent=self._hypCanvas.wc.scene)
 
 
 class PeakDetection(object):
@@ -89,10 +89,16 @@ class HypnoEdition(object):
     def __init__(self, canvas, hypno, time, enable=False, parent=None,
                  color='red'):
         """Init."""
+        # Transient detection :
+        tr = np.nonzero(np.abs(hypno[:-1] - hypno[1:]))[0] + 1
+        # Predefined positions :
+        self.pos = np.array([time[tr], hypno[tr], np.full_like(tr, -1.)]).T
+        self.color_cursor = color2vb('red')
+        self.color_static = color2vb('blue')
+        self.color_close = color2vb('green')
+        self.color = color2vb('blue', length=self.pos.shape[0])
         # Create a marker :
-        self.color = color2vb(color)
         marker = scene.visuals.Markers(parent=parent)
-        self.pos = np.array([])
         tM = time.max()
 
         @canvas.events.mouse_release.connect
@@ -109,8 +115,8 @@ class HypnoEdition(object):
 
             :event: the trigger event
             """
-            self.pos = _get_cursor(event.pos)
-            self.color = np.vstack((color2vb('green'), self.color))
+            self.pos = np.vstack((self.pos, self._cpos))
+            self.color = np.vstack((self.color, self.color_static))
 
         @canvas.events.mouse_move.connect
         def on_mouse_move(event):
@@ -118,7 +124,16 @@ class HypnoEdition(object):
 
             :event: the trigger event
             """
-            marker.set_data(pos=_get_cursor(event.pos), face_color=self.color)
+            # Get cursor position :
+            cpos = _get_cursor(event.pos)
+            color, _ = _get_close_marker(cpos)
+            # Stack all pos and color :
+            pos = np.vstack((self.pos, cpos)) if self.pos.size else cpos
+            color = np.vstack((color, self.color_cursor))
+            # Set new data to marker :
+            marker.set_data(pos=pos, face_color=color)
+            # Save current position :
+            self._cpos = cpos
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
@@ -126,11 +141,12 @@ class HypnoEdition(object):
 
             :event: the trigger event
             """
-            # Find the closest marker (if possible) :
-            cursor = _get_cursor(event.pos)
-            dist = np.mean(self.pos - cursor[-1, :].T, axis=0)
-            temp = self.pos - cursor[-1, :]
-            print(dist, temp.shape)
+            pass
+            # # Find the closest marker (if possible) :
+            # cpos = _get_cursor(event.pos)
+            # dist = self.pos[:, 0] - cpos[:, 0]
+            # temp = self.pos - cpos
+            # print(dist, temp.shape)
 
         def _get_cursor(pos):
             # Get cursor position :
@@ -139,4 +155,16 @@ class HypnoEdition(object):
             idx = np.abs(time - cursor).argmin()
             # Set to marker position :
             pos = np.array([cursor, hypno[idx], -1.])[np.newaxis, ...]
-            return np.vstack((self.pos, pos)) if self.pos.size else pos
+            return pos
+
+        def _get_close_marker(cursor, dist=10.):
+            """Get close marker from the cursor."""
+            color = self.color.copy()
+            l = np.abs(self.pos[:, 0] - cursor[:, 0])
+            under = l <= dist
+            if any(under):
+                idx = l.argmin()
+                color[l.argmin(), :] = self.color_close
+                return color, idx
+            else:
+                return self.color, None
