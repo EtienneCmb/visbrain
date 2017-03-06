@@ -264,13 +264,6 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="2">
-                     <widget class="QCheckBox" name="_PanSpecZoom">
-                      <property name="text">
-                       <string>Zooming</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="0" column="1">
                      <widget class="QCheckBox" name="_PanSpecIndic">
                       <property name="text">
@@ -525,13 +518,6 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="2">
-                     <widget class="QCheckBox" name="_PanHypZoom">
-                      <property name="text">
-                       <string>Zooming</string>
-                      </property>
-                     </widget>
-                    </item>
                    </layout>
                   </item>
                  </layout>
@@ -620,13 +606,6 @@
                       </property>
                       <property name="checked">
                        <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="2">
-                     <widget class="QCheckBox" name="_PanHypZoom_3">
-                      <property name="text">
-                       <string>Zooming</string>
                       </property>
                      </widget>
                     </item>
