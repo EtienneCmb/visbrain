@@ -76,8 +76,7 @@ class uiPanels(object):
         # Add label :
         self._hypLabel = QtGui.QLabel(self.centralwidget)
         self._hypLabel.setText('Hypno')
-        self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0,
-                                 1, 1)
+        self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0, 1, 1)
 
         # =====================================================================
         # TIME AXIS
@@ -91,8 +90,11 @@ class uiPanels(object):
         self._TimeLayout.addWidget(self._TimeAxis.canvas.native)
         self._TimeAxisW.setMaximumHeight(400)
         self._TimeAxisW.setMinimumHeight(50)
-        self._chanGrid.addWidget(self._TimeAxisW, len(self) + 3, 1,
-                                 1, 1)
+        self._chanGrid.addWidget(self._TimeAxisW, len(self) + 3, 1, 1, 1)
+        # Add label :
+        self._timeLabel = QtGui.QLabel(self.centralwidget)
+        self._timeLabel.setText('Time')
+        self._chanGrid.addWidget(self._timeLabel, len(self) + 3, 0, 1, 1)
 
         # =====================================================================
         # INDICATORS
@@ -280,6 +282,7 @@ class uiPanels(object):
         viz = self._PanTimeViz.isChecked()
         self._TimeAxisW.setVisible(viz)
         self._PanTimeIndic.setEnabled(viz)
+        self._timeLabel.setVisible(viz)
 
     # =====================================================================
     # INDICATORS
