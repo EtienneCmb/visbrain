@@ -39,7 +39,7 @@ class uiTools(object):
         disp = self._ToolPeakMinMax.currentIndex()
         disp_types = ['max', 'min', 'minmax']
         # Set data :
-        self._peak.set_data(self._data[idx], self._time, disp_types[disp],
-                            look, self._chanCanvas[idx].wc.scene)
+        self._peak.set_data(self._data[idx], self._time, self._chan.peak[idx],
+                            disp_types[disp], look)
         if not self.canvas_isVisible(idx):
             self.canvas_setVisible(idx, True)

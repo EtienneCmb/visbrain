@@ -76,13 +76,16 @@ class ChannelPlot(object):
         col = color2vb(color)
         # Create one line pear channel :
         pos = np.array([[0, 0], [0, 100]])
-        self.mesh, self.grid = [], []
+        self.mesh, self.grid, self.peak = [], [], []
         for i, k in enumerate(channels):
             # Create line :
             mesh = scene.visuals.Line(pos, name=k+'plot', color=col,
                                       method=method, width=width,
                                       parent=parent[i].wc.scene)
             self.mesh.append(mesh)
+            # Create marker peaks :
+            mesh = scene.visuals.Markers(pos=np.zeros((1, 3)), parent=parent[i].wc.scene)
+            self.peak.append(mesh)
             # Create a grid :
             grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
                                            scale=(10., .1),

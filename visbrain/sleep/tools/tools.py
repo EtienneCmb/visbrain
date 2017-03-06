@@ -38,7 +38,7 @@ class PeakDetection(object):
         # Create a set of empty markers :
         self.mesh = scene.visuals.Markers(pos=np.zeros((2, 2)))
 
-    def set_data(self, data, time, display='max', lookahead=10, parent=None):
+    def set_data(self, data, time, marker, display='max', lookahead=10):
         """Find peaks according to data.
 
         Args:
@@ -48,6 +48,9 @@ class PeakDetection(object):
             time: np.ndarray
                 The time vector.
 
+            marker: vispy.scene.visuals.Markers
+                The marker object to set data.
+
         Kargs:
             display: string, optional, (def: 'max')
                 Display either max peaks ('max'), min peaks ('min') or min and
@@ -56,13 +59,7 @@ class PeakDetection(object):
             lookahead: float, optional, (def: 10.)
                 Distance to look ahead from a peak candidate to determine if
                 it is the actual peaks
-
-            parent: vispy, optional, (def: None)
-                The vispy scene for markers.
         """
-        # Remove previous markers and re-create it :
-        self.mesh.parent = None
-        self.mesh = scene.visuals.Markers(pos=np.zeros((2, 2)))
         # Find peaks (Max, Min) :
         M, m = peakdetect(data, time, int(lookahead))
         # Extract (x, y) coordinates for (Max, Min) peaks :
@@ -78,11 +75,10 @@ class PeakDetection(object):
             pos = np.vstack((tm, ym)).T
         elif display == 'minmax':
             pos = np.vstack((np.hstack((tm, tM)), np.hstack((ym, yM)))).T
-        self.mesh.set_data(pos, size=self._size, edge_color=self._edgecol,
-                           face_color=self._color, edge_width=self._edgewidth,
-                           scaling=False)
-        self.mesh.parent = parent
-        self.mesh.update()
+        marker.set_data(pos, size=self._size, edge_color=self._edgecol,
+                        face_color=self._color, edge_width=self._edgewidth,
+                        scaling=False)
+        marker.update()
 
 
 class HypnoEdition(object):
