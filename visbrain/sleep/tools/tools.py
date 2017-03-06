@@ -99,6 +99,7 @@ class HypnoEdition(object):
         self.color = color2vb('blue', length=self.pos.shape[0])
         # Create a marker :
         marker = scene.visuals.Markers(parent=parent)
+        self.keep = False
         tM = time.max()
 
         @canvas.events.mouse_release.connect
@@ -107,7 +108,7 @@ class HypnoEdition(object):
 
             :event: the trigger event
             """
-            pass
+            self.keep = False
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
@@ -126,7 +127,10 @@ class HypnoEdition(object):
             """
             # Get cursor position :
             cpos = _get_cursor(event.pos)
+            # Get closest marker :
             color, _ = _get_close_marker(cpos)
+            if self.keep:
+                self.pos[self.keep_idx, :] = cpos
             # Stack all pos and color :
             pos = np.vstack((self.pos, cpos)) if self.pos.size else cpos
             color = np.vstack((color, self.color_cursor))
@@ -141,12 +145,12 @@ class HypnoEdition(object):
 
             :event: the trigger event
             """
-            pass
-            # # Find the closest marker (if possible) :
-            # cpos = _get_cursor(event.pos)
-            # dist = self.pos[:, 0] - cpos[:, 0]
-            # temp = self.pos - cpos
-            # print(dist, temp.shape)
+            # Get cursor position :
+            cpos = _get_cursor(event.pos)
+            # Get closest marker :
+            _, idx = _get_close_marker(cpos)
+            self.keep = idx is not None
+            self.keep_idx = idx
 
         def _get_cursor(pos):
             # Get cursor position :
