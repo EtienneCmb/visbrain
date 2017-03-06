@@ -251,24 +251,25 @@ class Hypnogram(object):
         # Add text :
         offx, offy = .001 * n, 0.2
         self.node = scene.visuals.Node(name='hypnotext', parent=parent)
-        self.st1 = scene.visuals.Text(text='Art', pos=(offx, 1. + offy),
-                                      parent=self.node, font_size=font_size,
-                                      anchor_x='left')
-        self.st2 = scene.visuals.Text(text='Wake', pos=(offx, 0. + offy),
-                                      parent=self.node, font_size=font_size,
-                                      anchor_x='left')
-        self.st3 = scene.visuals.Text(text='N1', pos=(offx, -1. + offy),
-                                      parent=self.node, font_size=font_size,
-                                      anchor_x='left')
-        self.st4 = scene.visuals.Text(text='N2', pos=(offx, -2. + offy),
-                                      parent=self.node, font_size=font_size,
-                                      anchor_x='left')
-        self.st5 = scene.visuals.Text(text='N3', pos=(offx, -3. + offy),
-                                      parent=self.node, font_size=font_size,
-                                      anchor_x='left')
-        self.st6 = scene.visuals.Text(text='REM', pos=(offx, -4. + offy),
-                                      parent=self.node, font_size=font_size,
-                                      anchor_x='left')
+        st1 = scene.visuals.Text(text='Art', pos=(offx, 1. + offy),
+                                 parent=self.node, font_size=font_size,
+                                 anchor_x='left', bold=True)
+        st2 = scene.visuals.Text(text='Wake', pos=(offx, 0. + offy),
+                                 parent=self.node, font_size=font_size,
+                                 anchor_x='left', bold=True)
+        st3 = scene.visuals.Text(text='N1', pos=(offx, -1. + offy),
+                                 parent=self.node, font_size=font_size,
+                                 anchor_x='left', bold=True)
+        st4 = scene.visuals.Text(text='N2', pos=(offx, -2. + offy),
+                                 parent=self.node, font_size=font_size,
+                                 anchor_x='left', bold=True)
+        st5 = scene.visuals.Text(text='N3', pos=(offx, -3. + offy),
+                                 parent=self.node, font_size=font_size,
+                                 anchor_x='left', bold=True)
+        st6 = scene.visuals.Text(text='REM', pos=(offx, -4. + offy),
+                                 parent=self.node, font_size=font_size,
+                                 anchor_x='left', bold=True)
+        self.st = [st1, st2, st3, st4, st5, st6]
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
                                             scale=(10., 1.), parent=parent)

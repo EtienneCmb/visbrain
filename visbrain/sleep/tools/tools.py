@@ -156,6 +156,7 @@ class HypnoEdition(object):
                 pass
         self.keep = False
         self.keep_idx = -1
+        self.stidx = 0
         tM = time.max()
 
         # =================== MOUSE FUNCTIONS ===================
@@ -168,6 +169,7 @@ class HypnoEdition(object):
             """
             # Stop dragging point :
             self.keep = False
+            hypno_obj.st[self.stidx].color = 'black'
             fcn()
 
         @canvas.events.mouse_double_click.connect
@@ -214,6 +216,11 @@ class HypnoEdition(object):
                        cpos[0, 1] <= 1, cpos[0, 1] >= -4]):
                     # Force to be on the grid :
                     cpos[0, 1] = float(round(cpos[0, 1]))
+                    # Set text color :
+                    for k in hypno_obj.st:
+                        k.color = 'black'
+                    self.stidx = abs(int(cpos[0, 1]) - 1)
+                    hypno_obj.st[self.stidx].color = self.color_dragge
                     # Update position :
                     self.pos[self.keep_idx, 1] = cpos[0, 1]
                     # Stream hypno data :
