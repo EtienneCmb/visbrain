@@ -87,10 +87,10 @@
              <widget class="QWidget" name="scrollAreaWidgetContents">
               <property name="geometry">
                <rect>
-                <x>0</x>
+                <x>-35</x>
                 <y>0</y>
                 <width>321</width>
-                <height>876</height>
+                <height>914</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -213,6 +213,39 @@
                        </size>
                       </property>
                      </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_7">
+                    <property name="topMargin">
+                     <number>10</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="label_35">
+                      <property name="text">
+                       <string>Set all amplitudes to: </string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_12">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QDoubleSpinBox" name="_PanAllAmpMin"/>
+                    </item>
+                    <item>
+                     <widget class="QDoubleSpinBox" name="_PanAllAmpMax"/>
                     </item>
                    </layout>
                   </item>

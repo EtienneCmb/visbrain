@@ -28,8 +28,18 @@ class uiPanels(object):
         self._fcn_chanCheckAndWCreate()
         self._PanChanSelectAll.clicked.connect(self._fcn_SelectAllchan)
         self._PanChanDeselectAll.clicked.connect(self._fcn_DeselectAllchan)
+
+        # =====================================================================
+        # AMPLITUDES
+        # =====================================================================
         # Save all current amplitudes :
         self._ylims = np.zeros((len(self), 2), dtype=np.float32)
+        self._PanAllAmpMin.valueChanged.connect(self._fcn_allAmp)
+        self._PanAllAmpMax.valueChanged.connect(self._fcn_allAmp)
+        self._PanAllAmpMin.setMinimum(self['min'].min())
+        self._PanAllAmpMin.setMaximum(self['max'].max())
+        self._PanAllAmpMax.setMinimum(self['min'].min())
+        self._PanAllAmpMax.setMaximum(self['max'].max())
 
         # =====================================================================
         # SPECTROGRAM
@@ -223,6 +233,13 @@ class uiPanels(object):
                     self._chan.x[1] - self._chan.x[0],
                     self._ylims[k, 1] - self._ylims[k, 0])
             self._chanCam[k].rect = rect
+
+    def _fcn_allAmp(self):
+        """Set all channel amplitudes."""
+        for k, (m, M) in enumerate(zip(self._yminSpin, self._ymaxSpin)):
+            m.setValue(self._PanAllAmpMin.value())
+            M.setValue(self._PanAllAmpMax.value())
+        self._fcn_chanAmplitude()
 
     def _fcn_SelectAllchan(self):
         """Select all channels."""
