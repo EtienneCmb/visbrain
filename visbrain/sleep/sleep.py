@@ -73,6 +73,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._chancolor = '#34495e'
         self._hypcolor = '#34495e'
         self._indicol = '#e74c3c'
+        # Get some data info (min / max / std / mean)
+        self._datainfo = {'min': self._data.min(1), 'max': self._data.max(1),
+                          'std': self._data.std(1), 'mean': self._data.mean(1)}
+        self._defstd = 5.
 
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
@@ -115,6 +119,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     def __len__(self):
         """Return the number of channels."""
         return len(self._channels)
+
+    def __getitem__(self, key):
+        """Return corresponding data info."""
+        return self._datainfo[key]
 
     def _check_data(self, sf, data, channels, hypno=None, downsample=None):
         """Check data, hypnogram, channels and sample frequency after loading.

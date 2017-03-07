@@ -110,6 +110,7 @@ class uiPanels(object):
         """Create one checkbox and one widget/layout per channel."""
         # Empty list of checkbox and widgets/layouts :
         self._chanChecks = [0] * len(self)
+        self._yminSpin, self._ymaxSpin = [0] * len(self), [0] * len(self)
         self._chanWidget = self._chanChecks.copy()
         self._chanLayout = self._chanChecks.copy()
         self._chanCanvas = self._chanChecks.copy()
@@ -118,6 +119,7 @@ class uiPanels(object):
         # Loop over channels :
         for i, k in enumerate(self._channels):
             # ============ CHECKBOX ============
+            # ----- MAIN CHECKBOX -----
             # Add a checkbox to the scrolling panel :
             self._chanChecks[i] = QtGui.QCheckBox(self._PanScrollChan)
             # Name checkbox with channel name :
@@ -125,8 +127,38 @@ class uiPanels(object):
             self._chanChecks[i].setText(k)
             # Add checkbox to the grid :
             self._PanChanLay.addWidget(self._chanChecks[i], i, 0, 1, 1)
+            hspacer = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding,
+                                        QtGui.QSizePolicy.Minimum)
+            self._PanChanLay.addItem(hspacer, i, 1, 1, 1)
             # Connect with the function :
             self._chanChecks[i].clicked.connect(self._fcn_chanViz)
+
+            # ----- Y-MIN / Y-MAX -----
+            # Add ymin / ymax label :
+            yminLabel = QtGui.QLabel(self._PanScrollChan)
+            yminLabel.setText('min               / max')
+            self._PanChanLay.addWidget(yminLabel, i, 2, 1, 1)
+            # ymaxLabel = QtGui.QLabel(self._PanScrollChan)
+            # ymaxLabel.setText('ymax: ')
+            # self._PanChanLay.addWidget(ymaxLabel, i, 4, 1, 1)
+            # Add ymin spinbox :
+            self._yminSpin[i] = QtGui.QDoubleSpinBox(self._PanScrollChan)
+            self._yminSpin[i].setDecimals(1)
+            # self._yminSpin[i].setMinimum(self['min'][i])
+            # self._yminSpin[i].setMaximum(self['max'][i])
+            # self._yminSpin[i].setSingleStep(self['std'][i] / 10.)
+            # print(round(10 * (self['min'][i] + self['std'][i])) / 10, self['min'][i])
+            # self._yminSpin[i].setProperty("value", round(10 * (self['min'][i] + self['std'][i])) / 10)
+            self._PanChanLay.addWidget(self._yminSpin[i], i, 3, 1, 1)
+            # Add ymax spinbox :
+            self._ymaxSpin[i] = QtGui.QDoubleSpinBox(self._PanScrollChan)
+            self._ymaxSpin[i].setDecimals(1)
+            # self._ymaxSpin[i].setMinimum(self['min'][i])
+            # self._ymaxSpin[i].setMaximum(self['max'][i])
+            # self._ymaxSpin[i].setSingleStep(self['std'][i] / 10.)
+            # print(round(10 * (self['min'][i] + self['std'][i])) / 10, self['min'][i])
+            # self._ymaxSpin[i].setProperty("value", round(10 * (self['min'][i] + self['std'][i])) / 10)
+            self._PanChanLay.addWidget(self._ymaxSpin[i], i, 4, 1, 1)
 
             # ============ WIDGETS / LAYOUTS ============
             # Create a widget :

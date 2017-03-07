@@ -87,8 +87,8 @@
              <widget class="QWidget" name="scrollAreaWidgetContents">
               <property name="geometry">
                <rect>
-                <x>0</x>
-                <y>-89</y>
+                <x>-35</x>
+                <y>0</y>
                 <width>321</width>
                 <height>876</height>
                </rect>
@@ -108,8 +108,17 @@
                       <height>300</height>
                      </size>
                     </property>
+                    <property name="frameShape">
+                     <enum>QFrame::Box</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Sunken</enum>
+                    </property>
                     <property name="widgetResizable">
                      <bool>true</bool>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                     </property>
                     <widget class="QWidget" name="scrollAreaWidgetContents_3">
                      <property name="geometry">
@@ -122,7 +131,14 @@
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
                       <item>
-                       <layout class="QGridLayout" name="_PanChanLay"/>
+                       <layout class="QGridLayout" name="_PanChanLay">
+                        <property name="sizeConstraint">
+                         <enum>QLayout::SetMaximumSize</enum>
+                        </property>
+                        <property name="spacing">
+                         <number>3</number>
+                        </property>
+                       </layout>
                       </item>
                       <item>
                        <spacer name="verticalSpacer_5">
@@ -133,6 +149,19 @@
                          <size>
                           <width>20</width>
                           <height>40</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                      <item>
+                       <spacer name="horizontalSpacer_12">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>40</width>
+                          <height>20</height>
                          </size>
                         </property>
                        </spacer>
