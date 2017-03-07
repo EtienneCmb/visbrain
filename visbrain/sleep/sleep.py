@@ -62,6 +62,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         # ====================== VARIABLES ======================
         # Check all data :
+        self._file = file
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = [k.split('.')[0] for k in channels]
