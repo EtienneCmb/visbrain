@@ -93,7 +93,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._specCam = FixedCam()  # viscam.PanZoomCamera()
         self._specCanvas.set_camera(self._specCam)
         # ------------------- Hypnogram -------------------
-        self._hypcam = viscam.PanZoomCamera()  # FixedCam()
+        self._hypcam = FixedCam()  # viscam.PanZoomCamera()
         self._hypCanvas.set_camera(self._hypcam)
         # ------------------- Time axis -------------------
         self._timecam = FixedCam()
@@ -118,20 +118,6 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._fcn_chanViz()
         self._fcn_chanAmplitude()
         self._fcn_infoUpdate()
-
-        ########################################
-        from .visuals import Markers
-        import vispy
-
-        pos = np.random.rand(100, 2)
-        pos[:, 0] *= 1000
-        m2 = vispy.scene.visuals.Markers(parent=self._hypCanvas.wc.scene)
-        m2.set_data(pos=pos, face_color='green')
-        m = Markers(parent=self._hypCanvas.wc.scene)
-        pos[:, 0] += 500.
-        m.set_data(pos=pos, face_color='red')
-
-
 
     def __len__(self):
         """Return the number of channels."""

@@ -6,6 +6,7 @@ from scipy.signal import spectrogram
 from vispy import scene
 import vispy.visuals.transforms as vist
 
+from .marker import Markers
 from ...utils import array2colormap, color2vb
 
 __all__ = ["visuals"]
@@ -84,8 +85,7 @@ class ChannelPlot(object):
                                       parent=parent[i].wc.scene)
             self.mesh.append(mesh)
             # Create marker peaks :
-            mesh = scene.visuals.Markers(pos=np.zeros((1, 3)),
-                                         parent=parent[i].wc.scene)
+            mesh = Markers(pos=np.zeros((1, 3)), parent=parent[i].wc.scene)
             self.peak.append(mesh)
             # Create a grid :
             grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
@@ -252,7 +252,7 @@ class Hypnogram(object):
                                        parent=parent)
         self.mesh.set_gl_state('translucent', depth_test=True)
         # Create a default marker (for edition):
-        self.edit = scene.visuals.Markers(parent=parent)
+        self.edit = Markers(parent=parent)
         # Add text :
         offx, offy = .001 * n, 0.2
         self.node = scene.visuals.Node(name='hypnotext', parent=parent)
@@ -278,6 +278,7 @@ class Hypnogram(object):
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
                                             scale=(10., 1.), parent=parent)
+        self.grid.set_gl_state('translucent')
 
     def set_data(self, sf, data, time):
         """Set data to the hypnogram.
