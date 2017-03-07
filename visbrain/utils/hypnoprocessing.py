@@ -36,14 +36,14 @@ def transient(data, xvec=None):
     # Get stages :
     stages = data[idx[:, 0]]
     # Convert (if needed) :
-    if (xvec is not None) and (len(xvec) is len(data)):
+    if (xvec is not None) and (len(xvec) == len(data)):
         st = idx.copy().astype(float)
         st[:, 0] = xvec[idx[:, 0]]
         st[:, 1] = xvec[idx[:, 1]]
     else:
         st = idx
 
-    return np.array(t), st, stages
+    return np.array(t), st, stages.astype(int)
 
 
 def sleepstats(file, hypno, sf=100, time_window=30.):
