@@ -64,7 +64,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Check all data :
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
-        self._channels = list(channels)
+        self._channels = [k.split('.')[0] for k in channels]
         self._lw = 1.2
         self._lwhyp = 2.
         self._ax = axis
@@ -164,14 +164,15 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # data = np.atleast_2d(data)
         if data.ndim is not 2:
             raise ValueError("The data must be a 2D array")
-        if nchan not in data.shape:
-            raise ValueError("Incorrect data shape. The number of channels "
-                             "("+str(nchan)+') can not be found.')
         if data.shape[0] is not nchan:
             warn("Organize data array as (n_channels, n_time_points) is more "
                  "memory efficient")
             data = data.T
         npts = data.shape[1]
+        # Channels checking :
+        if nchan not in data.shape:
+            raise ValueError("Incorrect data shape. The number of channels "
+                             "("+str(nchan)+') can not be found.')
         # Check hypnogram and format to float32 :
         if hypno is None:
             hypno = np.zeros((npts,), dtype=np.float32)
