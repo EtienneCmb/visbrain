@@ -1,15 +1,15 @@
 Bug
-	-5 Peak detection ne s'affiche pas sur windows. Ca doit venir du set_gl_state, où de la superposition de données. Ce qui est byzarre c'est que ça marche sur l'hypnograme. Solution non esthétique : sur chaque panel, rajouter un objet de type marker contenant les pics du signal.
-	-5 Autre idée pour la peak detection: si ça trouve, windows ne gère pas bien le RGBA avec vispy. Virer l'alpha partout où il y a les color2vb
 	-5 Peut-être il faut vider la mémoire après downsampling.
+	+5 Peak detection ne s'affiche pas sur windows. Ca doit venir du set_gl_state, où de la superposition de données. Ce qui est byzarre c'est que ça marche sur l'hypnograme. Solution non esthétique : sur chaque panel, rajouter un objet de type marker contenant les pics du signal.
+	+5 Autre idée pour la peak detection: si ça trouve, windows ne gère pas bien le RGBA avec vispy. Virer l'alpha partout où il y a les color2vb
 	+5 Axis y hypnograme chez raphael semble merder. Byzarre?
 	+4 Si l'hypnograme est vide, il faut le cacher + cacher onglet info
 
 Etienne
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
-	-4 Chargement des fichiers (manque chargement hypno + test sur fichiers réels)
 	-4 Filtrage: la complexité ici c'est que le filtrage doit être appliqué partout sans duplication de données
+	+4 Chargement des fichiers (manque chargement hypno + test sur fichiers réels)
 	+4 Afficher et pouvoir modifier l'amplitude de chaque channel
 	+2 Indicator devrait être un carré transparent ou dont le fond est vide? Non !
 	+5 Nombre de fenêtre
