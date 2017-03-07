@@ -250,7 +250,7 @@ class Hypnogram(object):
         self.mesh = scene.visuals.Line(pos, name='hypnogram', color=col,
                                        method='gl', width=width,
                                        parent=parent)
-        self.mesh.set_gl_state('translucent', depth_test=False)
+        self.mesh.set_gl_state('translucent', depth_test=True)
         # Create a default marker (for edition):
         self.edit = scene.visuals.Markers(parent=parent)
         # Add text :
@@ -278,11 +278,6 @@ class Hypnogram(object):
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
                                             scale=(10., 1.), parent=parent)
-        self.grid.set_gl_state('translucent', depth_test=False)
-        # self.grid.set_gl_state('translucent')
-        # from vispy import gloo
-        # self.set_gl_state('translucent', depth_test=False, cull_face=False)
-        # gloo.set_state('translucent', depth_test=False, cull_face=False)
 
     def set_data(self, sf, data, time):
         """Set data to the hypnogram.
@@ -300,6 +295,8 @@ class Hypnogram(object):
         # Set data to the mesh :
         self.mesh.set_data(np.vstack((time, -data)).T)
         # Get camera rectangle :
+        # self.rect = (time.min(), data.min() - 5, time.max() - time.min(),
+        #              data.max() - data.min() + 4)
         self.rect = (time.min(), -5., time.max() - time.min(), 7.)
         self.mesh.update()
 
