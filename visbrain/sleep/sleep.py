@@ -21,7 +21,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     Multiple lines description...
     """
 
-    def __init__(self, file=None, hypno_file=None, data=None, channels=None,
+    def __init__(self, file='', hypno_file=None, data=None, channels=None,
                  sf=None, hypno=None, downsample=200, axis=False, line='gl'):
         """Init."""
         # ====================== APP CREATION ======================
