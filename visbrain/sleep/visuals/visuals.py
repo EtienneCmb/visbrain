@@ -309,7 +309,7 @@ class Hypnogram(object):
                 The time vector
         """
         # Set data to the mesh :
-        self.mesh.set_data(np.vstack((time, -data)).T)
+        self.mesh.set_data(pos=np.vstack((time, -data)).T)
         # Get camera rectangle :
         # self.rect = (time.min(), data.min() - 5, time.max() - time.min(),
         #              data.max() - data.min() + 4)

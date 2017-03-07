@@ -19,9 +19,10 @@ class Tools(object):
 
         # =========== HYPNOGRAM EDITION ===========
         yaxis = (self._hypcam.rect.bottom, self._hypcam.rect.top)
-        self._hypedit = HypnoEdition(self._sf, self._hyp, -self._hypno,
+        self._hypedit = HypnoEdition(self._sf, self._hyp,
                                      self._hypCanvas.canvas, self._time, yaxis,
-                                     enable=True, fcn=self._fcn_infoUpdate)
+                                     enable=True, fcn=[self._fcn_infoUpdate,
+                                                       self._fcn_Hypno2Score])
 
 
 class PeakDetection(object):
@@ -88,6 +89,13 @@ class PeakDetection(object):
         marker.update()
 
 
+class MouseEmulation(object):
+
+    def __init__(self):
+        """Init."""
+        self.pos = (0, 0)
+
+
 class HypnoEdition(object):
     """Hypnogram edition.
 
@@ -129,17 +137,20 @@ class HypnoEdition(object):
         size: float, optional, (def: 9.)
             Marker size.
 
-        fcn: function, optional, (def: None)
-            Executed function on mouse released. This is usefull to update
-            stats info.
+        fcn: list, optional, (def: None)
+            List of executed function on mouse released. This is usefull to
+            update stats info or editing table.
     """
 
-    def __init__(self, sf, hypno_obj, data, canvas, time, yaxis, enable=False,
+    def __init__(self, sf, hypno_obj, canvas, time, yaxis, enable=False,
                  parent=None, color_cursor='red', color_static='blue',
                  color_active='green', color_dragge='purple', size=9.,
                  fcn=None):
         """Init."""
+        self.event = MouseEmulation()
+
         # ============ MARKERS POSITION ============
+        data = hypno_obj.mesh.pos[:, 1]
         self._transient(data, time)
 
         # ============ COLOR ============
@@ -151,12 +162,12 @@ class HypnoEdition(object):
 
         # ============ VARIABLES ============
         if fcn is None:
-            def fcn():
-                """Empty function."""
-                pass
+            def fcnt(): pass
+            fcn = [fcnt]
         self.keep = False
         self.keep_idx = -1
         self.stidx = 0
+        self.size = size
         tM = time.max()
 
         # =================== MOUSE FUNCTIONS ===================
@@ -170,7 +181,7 @@ class HypnoEdition(object):
             # Stop dragging point :
             self.keep = False
             hypno_obj.st[self.stidx].color = 'black'
-            fcn()
+            _ = [k() for k in fcn]
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
@@ -192,6 +203,8 @@ class HypnoEdition(object):
                 point (only along y-axis). Then, drag point point and hypno too
                 - Set data to marker object.
             """
+            # Get latest data version :
+            data = hypno_obj.mesh.pos[:, 1]
             # Get cursor position :
             cpos = _get_cursor(event.pos, not self.keep)
             # Get closest marker :
@@ -226,7 +239,7 @@ class HypnoEdition(object):
                     # Stream hypno data :
                     xtpos = np.abs(time-self.pos[self.keep_idx, 0]).argmin()
                     data[xtpos:xtnext+1] = cpos[0, 1]
-                    hypno_obj.set_data(100., -data, time)
+                    hypno_obj.set_data(sf, -data, time)
                     # Temporaly turn dragged point to color_dragge :
                     cbackup[self.keep_idx, :] = self.color_dragge
                     # Send data marker :
@@ -276,6 +289,8 @@ class HypnoEdition(object):
                     The mouse position converted in canvas unit
                     (i.e. time, hypno -1.).
             """
+            # Get latest data version :
+            data = hypno_obj.mesh.pos[:, 1]
             # Get cursor position :
             cursor = tM * pos[0] / canvas.size[0]
             # Get y position :
@@ -328,6 +343,11 @@ class HypnoEdition(object):
             else:
                 return self.color, None
 
+        self._call = on_mouse_move
+
+        # Update :
+        self.update()
+
     # =================== TRANSIENT DETECTION ===================
     def _transient(self, data, time):
         """Perform a transient detection on hypnogram.
@@ -348,3 +368,8 @@ class HypnoEdition(object):
         tr = np.array([0, len(data)-1] + list(tr))
         # Predefined positions :
         self.pos = np.array([time[tr], data[tr], np.full_like(tr, -1.)]).T
+
+    def update(self):
+        """Update markers."""
+        # Simulate a mouse movement :
+        self._call(self.event)

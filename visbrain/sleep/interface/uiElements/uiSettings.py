@@ -165,6 +165,7 @@ class uiSettings(object):
         t = [0, 0]
         t[0] = round(np.abs(self._time - xlim[0]).argmin())
         t[1] = round(np.abs(self._time - xlim[1]).argmin())
+
         # ---------------------------------------
         # Update display signal :
         sl = slice(t[0], t[1])
@@ -219,3 +220,14 @@ class uiSettings(object):
         # Toggle grid for each channel :
         for k in self._chan.grid:
             k.visible = viz
+
+    def _get_factFromUnit(self):
+        """Get factor conversion from current selected unit."""
+        unit = self._slRules.currentText()
+        if unit == 'seconds':
+            fact = 1.
+        elif unit == 'minutes':
+            fact = 60.
+        elif unit == 'hours':
+            fact = 3600.
+        return fact

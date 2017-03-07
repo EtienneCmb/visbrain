@@ -546,7 +546,7 @@ class Ui_MainWindow(object):
         self._scoreAdd = QtGui.QPushButton(self.scrollAreaWidgetContents_2)
         self._scoreAdd.setObjectName(_fromUtf8("_scoreAdd"))
         self.horizontalLayout_13.addWidget(self._scoreAdd)
-        spacerItem20 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem20 = QtGui.QSpacerItem(10, 20, QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_13.addItem(spacerItem20)
         self._scoreRm = QtGui.QPushButton(self.scrollAreaWidgetContents_2)
         self._scoreRm.setObjectName(_fromUtf8("_scoreRm"))
@@ -788,6 +788,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.QuickSettings.setCurrentIndex(3)
+        self._slRules.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -849,9 +850,9 @@ class Ui_MainWindow(object):
         self._infoExport.setText(_translate("MainWindow", "Export", None))
         self.QuickSettings.setTabText(self.QuickSettings.indexOf(self.q_Info), _translate("MainWindow", "Infos", None))
         item = self._scoreTable.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "From (seconds)", None))
+        item.setText(_translate("MainWindow", "From (minutes)", None))
         item = self._scoreTable.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "To (seconds)", None))
+        item.setText(_translate("MainWindow", "To (minutes)", None))
         item = self._scoreTable.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Stage", None))
         self._scoreAdd.setText(_translate("MainWindow", "Add line", None))

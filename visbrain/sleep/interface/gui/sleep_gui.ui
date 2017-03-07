@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -88,7 +88,7 @@
               <property name="geometry">
                <rect>
                 <x>-35</x>
-                <y>0</y>
+                <y>-127</y>
                 <width>321</width>
                 <height>914</height>
                </rect>
@@ -562,7 +562,7 @@
                  <layout class="QVBoxLayout" name="verticalLayout_11">
                   <item>
                    <layout class="QGridLayout" name="gridLayout_4">
-                    <item row="0" column="0">
+                    <item row="1" column="0">
                      <widget class="QCheckBox" name="_PanHypViz">
                       <property name="text">
                        <string>Visible</string>
@@ -572,10 +572,17 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="1">
+                    <item row="1" column="1">
                      <widget class="QCheckBox" name="_PanHypIndic">
                       <property name="text">
                        <string>Indicator</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QCheckBox" name="_PanHyZoom">
+                      <property name="text">
+                       <string>Zooming</string>
                       </property>
                      </widget>
                     </item>
@@ -1234,12 +1241,12 @@
                    <widget class="QTableWidget" name="_scoreTable">
                     <column>
                      <property name="text">
-                      <string>From (seconds)</string>
+                      <string>From (minutes)</string>
                      </property>
                     </column>
                     <column>
                      <property name="text">
-                      <string>To (seconds)</string>
+                      <string>To (minutes)</string>
                      </property>
                     </column>
                     <column>
@@ -1282,9 +1289,12 @@
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Fixed</enum>
+                   </property>
                    <property name="sizeHint" stdset="0">
                     <size>
-                     <width>40</width>
+                     <width>10</width>
                      <height>20</height>
                     </size>
                    </property>
@@ -1668,6 +1678,9 @@
              </item>
              <item row="1" column="14">
               <widget class="QComboBox" name="_slRules">
+               <property name="currentIndex">
+                <number>1</number>
+               </property>
                <item>
                 <property name="text">
                  <string>seconds</string>
