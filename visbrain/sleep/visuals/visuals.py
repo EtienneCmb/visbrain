@@ -95,7 +95,22 @@ class ChannelPlot(object):
             self.grid.append(grid)
 
     def set_data(self, sf, data, time, sl=None, ylim=None):
-        """"""
+        """Set data to channels.
+
+        Args:
+            data: np.ndarray
+                Array of data of shape (n_channels, n_points)
+
+            time: np.ndarray
+                The time vector.
+
+        Kargs:
+            sl: slice, optional, (def: None)
+                A slice object for the time selection of data.
+
+            ylim: np.ndarray, optional, (def: None)
+                Y-limits of each channel. Must be a (n_channels, 2) array.
+        """
         if ylim is None:
             ylim = np.array([data.min(1), data.max(1)]).T
 
