@@ -278,6 +278,9 @@ class Hypnogram(object):
         self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
                                             scale=(10., 1.), parent=parent)
         self.grid.set_gl_state('translucent')
+        from vispy import gloo
+        # self.set_gl_state('translucent', depth_test=False, cull_face=False)
+        gloo.set_state('translucent', depth_test=False, cull_face=False)
 
     def set_data(self, sf, data, time):
         """Set data to the hypnogram.
