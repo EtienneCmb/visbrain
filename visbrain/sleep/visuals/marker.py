@@ -23,7 +23,7 @@ void main (void) {
     v_antialias = 1.0;
     v_fg_color  = vec4(0.0,0.0,0.0,0.5);
     v_bg_color  = $a_color;
-    gl_Position = vec4($a_position, 0.0, 1.0);
+    gl_Position = vec4($a_position, 1.0);
     gl_PointSize = 2.0*(v_radius + v_linewidth + 1.5*v_antialias);
 }
 """
@@ -66,8 +66,8 @@ class MarkerVisual(Visual):
         Visual.__init__(self, VERT_SHADER, FRAG_SHADER)
 
         # Check position :
-        if (pos.ndim is not 2) or (pos.shape[1] is not 2):
-            raise ValueError("po must be a (n, 2) array")
+        # if (pos.ndim is not 2) or (pos.shape[1] is not 2):
+        #     raise ValueError("po must be a (n, 2) array")
         # Check color :
         if not isinstance(color, np.ndarray):
             v_color = color2vb(color, length=pos.shape[0], alpha=0.5)
@@ -86,7 +86,7 @@ class MarkerVisual(Visual):
         self._colBuffer = gloo.VertexBuffer(v_color)
         self._posBuffer = gloo.VertexBuffer(v_position)
         self._sizeBuffer = gloo.VertexBuffer(v_size)
-        self.set_gl_state('translucent', depth_test=False, cull_face=False)
+        self.set_gl_state('opaque', depth_test=False, cull_face=False)
 
         self.shared_program.vert['a_position'] = self._posBuffer
         self.shared_program.vert['a_color'] = self._colBuffer

@@ -120,8 +120,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         #####################################
         from .visuals import Markers
-        pos = np.random.rand(100, 2)
-        m = Markers(pos, parent=self._hypCanvas.wc.scene)
+        from vispy.scene.visuals import Image
+        pos = 0.5*np.random.rand(100, 3)
+        m = Markers(pos, parent=self._hypCanvas.wc.scene, color='olive')
+        im = Image(np.random.rand(10, 1000, 3), parent=self._hypCanvas.wc.scene)
 
 
     def __len__(self):
