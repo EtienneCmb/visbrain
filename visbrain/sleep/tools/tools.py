@@ -4,7 +4,7 @@ import numpy as np
 
 from vispy import scene
 
-from ...utils import peakdetect, color2vb
+from ...utils import peakdetect, color2vb, transient
 
 __all__ = ["Tools"]
 
@@ -140,7 +140,7 @@ class HypnoEdition(object):
                  fcn=None):
         """Init."""
         # ============ MARKERS POSITION ============
-        self.transient(data, time)
+        self._transient(data, time)
 
         # ============ COLOR ============
         self.color_cursor = color2vb(color_cursor)
@@ -329,7 +329,7 @@ class HypnoEdition(object):
                 return self.color, None
 
     # =================== TRANSIENT DETECTION ===================
-    def transient(self, data, time):
+    def _transient(self, data, time):
         """Perform a transient detection on hypnogram.
 
         This function is runned only on start to find if there's already
@@ -343,7 +343,7 @@ class HypnoEdition(object):
                 The time vector.
         """
         # Transient detection :
-        tr = np.nonzero(np.abs(data[:-1] - data[1:]))[0] + 1
+        tr = transient(data, time)[0] + 1
         # tr = np.append(tr, tr + 1)
         tr = np.array([0, len(data)-1] + list(tr))
         # Predefined positions :

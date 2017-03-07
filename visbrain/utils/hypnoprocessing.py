@@ -1,9 +1,49 @@
-"""Get informations about hypnogram."""
+"""Hypnogram related functions."""
 
 import numpy as np
 from os import path
 
-__all__ = ['sleepstats']
+__all__ = ['sleepstats', 'transient']
+
+
+def transient(data, xvec=None):
+    """Perform a transient detection on hypnogram.
+
+    Args:
+        data: np.ndarray
+            The hypnogram data.
+
+    Kargs:
+        xvec: np.ndarray, optional, (def: None)
+            The time vector to use. If None, np.arange(len(data)) will be used
+            instead.
+
+    Returns:
+        t: np.ndarray
+            Hypnogram's transients.
+
+        idx: np.ndarray
+            Either the transient index (as type int) if xvec is None, or the
+            converted version if xvec is not None.
+
+        stages: np.ndarray
+            The stages for each segment.
+    """
+    # Transient detection :
+    t = list(np.nonzero(np.abs(data[:-1] - data[1:]))[0])
+    # Add first and last points :
+    idx = np.vstack((np.array([-1] + t) + 1, np.array(t + [len(data) - 1]))).T
+    # Get stages :
+    stages = data[idx[:, 0]]
+    # Convert (if needed) :
+    if (xvec is not None) and (len(xvec) is len(data)):
+        st = idx.copy().astype(float)
+        st[:, 0] = xvec[idx[:, 0]]
+        st[:, 1] = xvec[idx[:, 1]]
+    else:
+        st = idx
+
+    return np.array(t), st, stages
 
 
 def sleepstats(file, hypno, sf=100, time_window=30.):
