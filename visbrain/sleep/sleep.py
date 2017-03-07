@@ -75,7 +75,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._indicol = '#e74c3c'
         # Get some data info (min / max / std / mean)
         self._datainfo = {'min': self._data.min(1), 'max': self._data.max(1),
-                          'std': self._data.std(1), 'mean': self._data.mean(1)}
+                          'std': self._data.std(1), 'mean': self._data.mean(1),
+                          'dist': self._data.max(1) - self._data.min(1)}
         self._defstd = 5.
 
         # ====================== USER & GUI INTERACTION  ======================
@@ -86,7 +87,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ------------------- Channels -------------------
         self._chanCam = []
         for k in range(len(self)):
-            self._chanCam.append(viscam.PanZoomCamera())
+            self._chanCam.append(FixedCam())  # viscam.PanZoomCamera()
         # ------------------- Spectrogram -------------------
         self._specCam = FixedCam()  # viscam.PanZoomCamera()
         self._specCanvas.set_camera(self._specCam)
@@ -114,6 +115,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._chanChecks[0].setChecked(True)
         self._hypLabel.setVisible(self._PanHypViz.isChecked())
         self._fcn_chanViz()
+        self._fcn_chanAmplitude()
         self._fcn_infoUpdate()
 
     def __len__(self):

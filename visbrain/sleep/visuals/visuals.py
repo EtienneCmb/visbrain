@@ -94,12 +94,16 @@ class ChannelPlot(object):
             grid.set_gl_state('translucent')
             self.grid.append(grid)
 
-    def set_data(self, sf, data, time, sl=None):
-        r = 1.1
+    def set_data(self, sf, data, time, sl=None, ylim=None):
+        """"""
+        if ylim is None:
+            ylim = np.array([data.min(1), data.max(1)]).T
+
         # Manage slice :
         sl = slice(0, data.shape[1]) if sl is None else sl
         # Time vector :
         time = time[sl]
+        self.x = (time.min(), time.max())
         data = data[:, sl]
         z = np.full_like(time, 0.5)
         # Set data to each plot :
@@ -108,8 +112,8 @@ class ChannelPlot(object):
             # dat = np.ascontiguousarray(dat)
             k.set_data(dat)
             # Get camera rectangle and set it:
-            rect = (time.min(), r * data[i, :].min(), time.max()-time.min(),
-                    r * (data[i, :].max() - data[i, :].min()))
+            rect = (self.x[0], ylim[i][0], self.x[1]-self.x[0],
+                    ylim[i][1] - ylim[i][0])
             self._camera[i].rect = rect
             k.update()
             self.rect.append(rect)

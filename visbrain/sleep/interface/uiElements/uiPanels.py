@@ -1,6 +1,8 @@
 """Main class for settings managment."""
 from PyQt4 import QtCore, QtGui
 
+import numpy as np
+
 from ..uiInit import AxisCanvas, TimeAxis
 from ....utils import mpl_cmap
 
@@ -26,6 +28,8 @@ class uiPanels(object):
         self._fcn_chanCheckAndWCreate()
         self._PanChanSelectAll.clicked.connect(self._fcn_SelectAllchan)
         self._PanChanDeselectAll.clicked.connect(self._fcn_DeselectAllchan)
+        # Save all current amplitudes :
+        self._ylims = np.zeros((len(self), 2), dtype=np.float32)
 
         # =====================================================================
         # SPECTROGRAM
@@ -115,6 +119,11 @@ class uiPanels(object):
         self._chanLayout = self._chanChecks.copy()
         self._chanCanvas = self._chanChecks.copy()
         self._chanLabels = []
+        # Define a vertical and horizontal spacers :
+        vspacer = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Expanding,
+                                    QtGui.QSizePolicy.Minimum)
+        hspacer = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding,
+                                    QtGui.QSizePolicy.Minimum)
         # self._chanGrid.setSpacing(0)
         # Loop over channels :
         for i, k in enumerate(self._channels):
@@ -127,38 +136,36 @@ class uiPanels(object):
             self._chanChecks[i].setText(k)
             # Add checkbox to the grid :
             self._PanChanLay.addWidget(self._chanChecks[i], i, 0, 1, 1)
-            hspacer = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding,
-                                        QtGui.QSizePolicy.Minimum)
+            # Add horizontal spacer :
             self._PanChanLay.addItem(hspacer, i, 1, 1, 1)
             # Connect with the function :
             self._chanChecks[i].clicked.connect(self._fcn_chanViz)
 
             # ----- Y-MIN / Y-MAX -----
-            # Add ymin / ymax label :
-            yminLabel = QtGui.QLabel(self._PanScrollChan)
-            yminLabel.setText('min               / max')
-            self._PanChanLay.addWidget(yminLabel, i, 2, 1, 1)
-            # ymaxLabel = QtGui.QLabel(self._PanScrollChan)
-            # ymaxLabel.setText('ymax: ')
-            # self._PanChanLay.addWidget(ymaxLabel, i, 4, 1, 1)
+            fact = 5.
+            # Add amplitude label :
+            amplitude = QtGui.QLabel(self._PanScrollChan)
+            amplitude.setText('Amp')
+            self._PanChanLay.addWidget(amplitude, i, 2, 1, 1)
             # Add ymin spinbox :
             self._yminSpin[i] = QtGui.QDoubleSpinBox(self._PanScrollChan)
             self._yminSpin[i].setDecimals(1)
-            # self._yminSpin[i].setMinimum(self['min'][i])
-            # self._yminSpin[i].setMaximum(self['max'][i])
-            # self._yminSpin[i].setSingleStep(self['std'][i] / 10.)
-            # print(round(10 * (self['min'][i] + self['std'][i])) / 10, self['min'][i])
-            # self._yminSpin[i].setProperty("value", round(10 * (self['min'][i] + self['std'][i])) / 10)
+            self._yminSpin[i].setMinimum(self['min'][i])
+            self._yminSpin[i].setMaximum(self['max'][i])
+            self._yminSpin[i].setProperty("value", -int(fact * self['std'][i]))
+            self._yminSpin[i].setSingleStep(self['dist'][i] / 10.)
             self._PanChanLay.addWidget(self._yminSpin[i], i, 3, 1, 1)
             # Add ymax spinbox :
             self._ymaxSpin[i] = QtGui.QDoubleSpinBox(self._PanScrollChan)
             self._ymaxSpin[i].setDecimals(1)
-            # self._ymaxSpin[i].setMinimum(self['min'][i])
-            # self._ymaxSpin[i].setMaximum(self['max'][i])
-            # self._ymaxSpin[i].setSingleStep(self['std'][i] / 10.)
-            # print(round(10 * (self['min'][i] + self['std'][i])) / 10, self['min'][i])
-            # self._ymaxSpin[i].setProperty("value", round(10 * (self['min'][i] + self['std'][i])) / 10)
+            self._ymaxSpin[i].setMinimum(self['min'][i])
+            self._ymaxSpin[i].setMaximum(self['max'][i])
+            self._ymaxSpin[i].setSingleStep(self['dist'][i] / 10.)
+            self._ymaxSpin[i].setProperty("value", int(fact * self['std'][i]))
             self._PanChanLay.addWidget(self._ymaxSpin[i], i, 4, 1, 1)
+            # Connect buttons :
+            self._yminSpin[i].valueChanged.connect(self._fcn_chanAmplitude)
+            self._ymaxSpin[i].valueChanged.connect(self._fcn_chanAmplitude)
 
             # ============ WIDGETS / LAYOUTS ============
             # Create a widget :
@@ -195,11 +202,6 @@ class uiPanels(object):
             # Add the canvas to the layout :
             self._chanLayout[i].addWidget(self._chanCanvas[i].canvas.native)
 
-        # Define a vertical and horizontal spacers :
-        vspacer = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Expanding,
-                                    QtGui.QSizePolicy.Minimum)
-        hspacer = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding,
-                                    QtGui.QSizePolicy.Minimum)
         self._PanChanLay.addItem(vspacer, i+1, 0, 1, 1)
         self._chanGrid.addItem(hspacer, i+4, 1, 1, 1)
 
@@ -211,6 +213,16 @@ class uiPanels(object):
             self._chanLabels[i].setVisible(viz)
             if viz:
                 self._chanCanvas[i].set_camera(self._chanCam[i])
+
+    def _fcn_chanAmplitude(self):
+        """Change amplitude of each channel."""
+        # Loop over spinbox and update amera rect :
+        for k, (m, M) in enumerate(zip(self._yminSpin, self._ymaxSpin)):
+            self._ylims[k, :] = np.array([m.value(), M.value()])
+            rect = (self._chan.x[0], self._ylims[k, 0],
+                    self._chan.x[1] - self._chan.x[0],
+                    self._ylims[k, 1] - self._ylims[k, 0])
+            self._chanCam[k].rect = rect
 
     def _fcn_SelectAllchan(self):
         """Select all channels."""

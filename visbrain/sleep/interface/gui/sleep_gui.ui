@@ -87,7 +87,7 @@
              <widget class="QWidget" name="scrollAreaWidgetContents">
               <property name="geometry">
                <rect>
-                <x>-35</x>
+                <x>0</x>
                 <y>0</y>
                 <width>321</width>
                 <height>876</height>
@@ -131,14 +131,26 @@
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
                       <item>
-                       <layout class="QGridLayout" name="_PanChanLay">
-                        <property name="sizeConstraint">
-                         <enum>QLayout::SetMaximumSize</enum>
-                        </property>
-                        <property name="spacing">
-                         <number>3</number>
-                        </property>
-                       </layout>
+                       <widget class="QWidget" name="widget" native="true">
+                        <layout class="QVBoxLayout" name="verticalLayout_5">
+                         <property name="margin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <layout class="QGridLayout" name="_PanChanLay">
+                           <property name="sizeConstraint">
+                            <enum>QLayout::SetMaximumSize</enum>
+                           </property>
+                           <property name="horizontalSpacing">
+                            <number>6</number>
+                           </property>
+                           <property name="verticalSpacing">
+                            <number>9</number>
+                           </property>
+                          </layout>
+                         </item>
+                        </layout>
+                       </widget>
                       </item>
                       <item>
                        <spacer name="verticalSpacer_5">
@@ -149,19 +161,6 @@
                          <size>
                           <width>20</width>
                           <height>40</height>
-                         </size>
-                        </property>
-                       </spacer>
-                      </item>
-                      <item>
-                       <spacer name="horizontalSpacer_12">
-                        <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>40</width>
-                          <height>20</height>
                          </size>
                         </property>
                        </spacer>
@@ -1179,6 +1178,19 @@
       <property name="rightMargin">
        <number>0</number>
       </property>
+      <item>
+       <spacer name="horizontalSpacer_13">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item>
        <layout class="QGridLayout" name="_chanGrid">
         <property name="bottomMargin">
