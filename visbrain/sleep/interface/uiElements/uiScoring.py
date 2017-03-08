@@ -3,7 +3,7 @@ import numpy as np
 
 from PyQt4 import QtGui
 
-from ....utils import transient, color2vb
+from ....utils import transient
 
 __all__ = ['uiScoring']
 
@@ -14,7 +14,7 @@ class uiScoring(object):
     def __init__(self):
         """Init."""
         # Fill table on start :
-        self._fcn_Hypno2Score()
+        # self._fcn_Hypno2Score()
         # Add / remove line :
         self._scoreAdd.clicked.connect(self._fcn_addScoreRow)
         self._scoreRm.clicked.connect(self._fcn_rmScoreRow)
@@ -27,6 +27,7 @@ class uiScoring(object):
     ##########################################################################
     def _fcn_Hypno2Score(self):
         """Update hypno table from hypno data."""
+        self._hypno = -self._hyp.mesh.pos[:, 1]
         # Avoid updating data while setting cell :
         self._scoreSet = False
         items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
@@ -36,8 +37,7 @@ class uiScoring(object):
         fact = self._get_factFromUnit()
         # Find transients :
         _, idx, stages = transient(self._hypno, self._time / fact)
-        np.round(10. * idx, out=idx)
-        idx /= 10.
+        idx = np.round(10. * idx) / 10.
         # Set length of the table :
         self._scoreTable.setRowCount(len(stages))
         # Fill the table :
