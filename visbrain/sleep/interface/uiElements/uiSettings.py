@@ -167,6 +167,9 @@ class uiSettings(object):
         step = self._SigSlStep.value()
         win = self._SigWin.value()
         xlim = (val*step, val*step+win)
+        specZoom = self._PanSpecZoom.isChecked()
+        hypZoom = self._PanHypZoom.isChecked()
+        timeZoom = self._PanTimeZoom.isChecked()
 
         # Find closest time index :
         t = [0, 0]
@@ -182,18 +185,18 @@ class uiSettings(object):
 
         # ---------------------------------------
         # Update spectrogram indicator :
-        if self._PanSpecIndic.isChecked():
+        if self._PanSpecIndic.isEnabled() and not specZoom:
             ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
             self._specInd.set_data(xlim=xlim, ylim=ylim)
 
         # ---------------------------------------
         # Update hypnogram indicator :
-        if self._PanHypIndic.isChecked():
-            self._hypInd.set_data(xlim=xlim, ylim=(-1, 6))
+        if self._PanHypIndic.isEnabled() and not hypZoom:
+            self._hypInd.set_data(xlim=xlim, ylim=(-6., 2.))
 
         # ---------------------------------------
         # Update Time indicator :
-        if self._PanTimeIndic.isChecked():
+        if self._PanTimeIndic.isEnabled():
             self._TimeAxis.set_data(xlim[0], win, self._time,
                                     unit=self._slRules.currentText())
 
@@ -203,16 +206,16 @@ class uiSettings(object):
 
         # ================= ZOOMING =================
         # Histogram :
-        if self._PanHypZoom.isChecked():
+        if hypZoom:
             self._hypcam.rect = (xlim[0], -5, xlim[1]-xlim[0], 7.)
 
         # Spectrogram :
-        if self._PanSpecZoom.isChecked():
+        if specZoom:
             self._speccam.rect = (xlim[0], self._spec.freq[0], xlim[1]-xlim[0],
                                   self._spec.freq[-1] - self._spec.freq[0])
 
         # Time axis :
-        if self._PanTimeZoom.isChecked():
+        if timeZoom:
             self._TimeAxis.set_data(xlim[0], win, np.array([xlim[0], xlim[1]]),
                                     unit='seconds')
             self._timecam.rect = (xlim[0], 0., win, 1.)
@@ -260,13 +263,34 @@ class uiSettings(object):
     def _fcn_Zooming(self):
         """Apply dynamic zoom on hypnogram."""
         # Hypnogram :
-        if not self._PanHypZoom.isChecked():
+        if self._PanHypZoom.isChecked():
+            self._PanHypIndic.setEnabled(False)
+            self._hypInd.mesh.visible = False
+        else:
+            self._PanHypIndic.setEnabled(True)
             self._hypcam.rect = (self._time.min(), -5.,
                                  self._time.max() - self._time.min(), 7.)
+            self._hypInd.mesh.visible = self._PanHypIndic.isChecked()
 
         # Spectrogram :
-        if not self._PanSpecZoom.isChecked():
+        if self._PanSpecZoom.isChecked():
+            self._PanSpecIndic.setEnabled(False)
+            self._specInd.mesh.visible = False
+        else:
+            self._PanSpecIndic.setEnabled(True)
             self._speccam.rect = (self._time.min(), self._spec.freq[0],
                                   self._time.max() - self._time.min(),
                                   self._spec.freq[-1] - self._spec.freq[0])
+            self._specInd.mesh.visible = self._PanSpecIndic.isChecked()
+        # Time axis :
+        if self._PanTimeZoom.isChecked():
+            # self._PanTimeIndic.setChecked(False)
+            self._PanTimeIndic.setEnabled(False)
+            self._TimeAxis.mesh.visible = False
+        else:
+            self._PanTimeIndic.setEnabled(True)
+            self._timecam.rect = (self._time.min(), 0.,
+                                  self._time.max() - self._time.min(), 1.)
+            self._TimeAxis.mesh.visible = self._PanTimeIndic.isChecked()
+
         self._fcn_sliderMove()

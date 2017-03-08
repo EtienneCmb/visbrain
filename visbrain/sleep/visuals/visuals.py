@@ -48,7 +48,7 @@ class visuals(object):
         self._hypInd = Indicator(name='hypno_indic', width=2,
                                  color=self._indicol, visible=False,
                                  parent=self._hypCanvas.wc.scene)
-        self._hypInd.set_data(xlim=(0, 30), ylim=(-1, 6))
+        self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
 
         vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
@@ -271,24 +271,24 @@ class Hypnogram(object):
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
         # Add text :
-        offx, offy = .001 * time[-1], 0.2
+        offx, offy, offz = .001 * time[-1], 0.2, -2.
         self.node = scene.visuals.Node(name='hypnotext', parent=parent)
-        st1 = scene.visuals.Text(text='Art', pos=(offx, 1. + offy),
+        st1 = scene.visuals.Text(text='Art', pos=(offx, 1. + offy, offz),
                                  parent=self.node, font_size=font_size,
                                  anchor_x='left', bold=True)
-        st2 = scene.visuals.Text(text='Wake', pos=(offx, 0. + offy),
+        st2 = scene.visuals.Text(text='Wake', pos=(offx, 0. + offy, offz),
                                  parent=self.node, font_size=font_size,
                                  anchor_x='left', bold=True)
-        st3 = scene.visuals.Text(text='N1', pos=(offx, -1. + offy),
+        st3 = scene.visuals.Text(text='N1', pos=(offx, -1. + offy, offz),
                                  parent=self.node, font_size=font_size,
                                  anchor_x='left', bold=True)
-        st4 = scene.visuals.Text(text='N2', pos=(offx, -2. + offy),
+        st4 = scene.visuals.Text(text='N2', pos=(offx, -2. + offy, offz),
                                  parent=self.node, font_size=font_size,
                                  anchor_x='left', bold=True)
-        st5 = scene.visuals.Text(text='N3', pos=(offx, -3. + offy),
+        st5 = scene.visuals.Text(text='N3', pos=(offx, -3. + offy, offz),
                                  parent=self.node, font_size=font_size,
                                  anchor_x='left', bold=True)
-        st6 = scene.visuals.Text(text='REM', pos=(offx, -4. + offy),
+        st6 = scene.visuals.Text(text='REM', pos=(offx, -4. + offy, offz),
                                  parent=self.node, font_size=font_size,
                                  anchor_x='left', bold=True)
         self.st = [st1, st2, st3, st4, st5, st6]
@@ -340,22 +340,15 @@ on the spectrogram and hypnogram.
 class Indicator(object):
     """Create a visual indicator (for spectrogram and hypnogram)."""
 
-    def __init__(self, name='indicator', color='darkgreen', width=8,
+    def __init__(self, name='indicator', color='gray', width=8,
                  visible=True, parent=None):
         # Create a vispy image object :
-        pos1 = np.array([[0, 0], [0, 100]])
-        pos2 = np.array([[100, 0], [100, 100]])
-        # Create a visual node :
-        self.node = scene.visuals.Node(name='indic_node', parent=parent)
-        self.v1 = scene.visuals.Line(pos1, width=width, name=name, color=color,
-                                     method='gl', parent=self.node)
-        self.v2 = scene.visuals.Line(pos2, width=width, name=name, color=color,
-                                     method='gl', parent=self.node)
-        # self.v1._width, self.v2._width = width, width
-        self.v1.update(), self.v2.update()
-        self.visible = visible
+        image = color2vb('gray', alpha=0.3)[np.newaxis, ...]
+        self.mesh = scene.visuals.Image(data=image, name=name,
+                                        parent=parent)
+        self.mesh.visible = visible
 
-    def set_data(self, xlim, ylim, offset=5):
+    def set_data(self, xlim, ylim):
         """Move the visual indicator.
 
         Args:
@@ -364,37 +357,11 @@ class Indicator(object):
 
             ylim: tuple
                 A tuple of two floats indicating where ylim start and ylim end.
-
-        Kargs:
-            offset: float, optional, (def: 5.)
-                Offset to apply to the ylim (hide line imperfections).
         """
-        # Define new position :
-        y, z = [ylim[0]-offset, ylim[1]+offset], [-.5, -.5]
-        pos1 = np.vstack(([xlim[0]] * 2, y, z)).T
-        pos2 = np.vstack(([xlim[1]] * 2, y, z)).T
-        # Set data :
-        self.v1.set_data(pos1)
-        self.v2.set_data(pos2)
-        # Update :
-        self.update()
-
-    def update(self):
-        """Update both lines."""
-        self.v1.update(), self.v2.update()
-
-    # ----------- VISIBLE -----------
-    @property
-    def visible(self):
-        """Get the visible value."""
-        return self._visible
-
-    @visible.setter
-    def visible(self, value):
-        """Set visible value."""
-        self.v1.visible = value
-        self.v2.visible = value
-        self.update()
+        tox = (xlim[0], ylim[0], -1.)
+        sc = (xlim[1]-xlim[0], ylim[1]-ylim[0], 1.)
+        # Move the square
+        self.mesh.transform = vist.STTransform(translate=tox, scale=sc)
 
 
 """

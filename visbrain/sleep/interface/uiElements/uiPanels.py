@@ -350,7 +350,7 @@ class uiPanels(object):
     # =====================================================================
     def _fcn_indicviz(self):
         """Toggle indicator visibility."""
-        self._specInd.visible = self._PanSpecIndic.isChecked()
-        self._hypInd.visible = self._PanHypIndic.isChecked()
+        self._specInd.mesh.visible = self._PanSpecIndic.isChecked()
+        self._hypInd.mesh.visible = self._PanHypIndic.isChecked()
         self._TimeAxis.mesh.visible = self._PanTimeIndic.isChecked()
         self._fcn_sliderMove()

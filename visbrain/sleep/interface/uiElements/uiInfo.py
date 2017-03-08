@@ -24,7 +24,8 @@ class uiInfo(object):
         """Complete the table sleep info."""
         # Get sleep info :
         win = self._infoTime.value()
-        stats = sleepstats(self._file, -self._hyp.mesh.pos[:, 1], self._sf, win)
+        stats = sleepstats(self._file, -self._hyp.mesh.pos[:, 1], self._sf,
+                           win)
         self._keysInfo = ['Window'] + [''] * len(stats)
         self._valInfo = [str(win)] + [''] * len(stats)
         # Check line number:

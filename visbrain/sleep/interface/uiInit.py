@@ -56,8 +56,6 @@ class TimeAxis(object):
 
         # Add a square indicator :
         image = color2vb(indic_color)[np.newaxis, ...]
-        # image = np.zeros((1, 1, 3), dtype=np.float32)
-        # image[:, :, 1] = 1.
         self.mesh = scene.visuals.Image(image, name='indicator')
         self.mesh.parent = self.wc.scene
 
