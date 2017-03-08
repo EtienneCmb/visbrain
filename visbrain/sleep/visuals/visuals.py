@@ -143,7 +143,6 @@ class ChannelPlot(object):
         """Set parent value."""
         for i, k, in zip(value, self.mesh):
             k.parent = i.wc.scene
-            # l.parent = i.wc.scene
 
 
 class Spectrogram(object):

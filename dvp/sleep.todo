@@ -14,6 +14,7 @@ Etienne
 	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
 	-4 Lookahead ça m'étonnerai que ce soit des secondes.
 	-4 Filtrage: la complexité ici c'est que le filtrage doit être appliqué partout sans duplication de données
+	-4 Label bold
 	+4 Indicator devrait être un carré transparent ou dont le fond est vide
 	+4 Chargement des fichiers (manque chargement hypno + test sur fichiers réels)
 	+4 Afficher et pouvoir modifier l'amplitude de chaque channel

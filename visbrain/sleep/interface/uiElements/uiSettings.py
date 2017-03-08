@@ -240,6 +240,9 @@ class uiSettings(object):
         """Move slider using window spin."""
         self._SlVal.setValue(self._SlWin.value() / self._SigSlStep.value())
 
+    # =====================================================================
+    # GRID
+    # =====================================================================
     def _fcn_gridToggle(self):
         """Toggle grid visibility."""
         viz = self._slGrid.isChecked()
@@ -249,6 +252,9 @@ class uiSettings(object):
         for k in self._chan.grid:
             k.visible = viz
 
+    # =====================================================================
+    # RULER
+    # =====================================================================
     def _get_factFromUnit(self):
         """Get factor conversion from current selected unit."""
         unit = self._slRules.currentText()
@@ -260,6 +266,9 @@ class uiSettings(object):
             fact = 3600.
         return fact
 
+    # =====================================================================
+    # ZOOMING
+    # =====================================================================
     def _fcn_Zooming(self):
         """Apply dynamic zoom on hypnogram."""
         # Hypnogram :
