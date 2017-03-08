@@ -234,7 +234,7 @@ class Spectrogram(object):
         # Update object :
         self.mesh.update()
         # Get camera rectangle :
-        self.rect = (t.min(), freq.min(), t.max()-t.min(),
+        self.rect = (time.min(), freq.min(), time.max()-time.min(),
                      freq.max()-freq.min())
         self.freq = freq
 
