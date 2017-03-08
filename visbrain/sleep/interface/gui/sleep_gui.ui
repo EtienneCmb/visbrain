@@ -721,7 +721,7 @@
              <widget class="QWidget" name="scrollAreaWidgetContents_6">
               <property name="geometry">
                <rect>
-                <x>-39</x>
+                <x>-28</x>
                 <y>0</y>
                 <width>336</width>
                 <height>787</height>
@@ -1101,7 +1101,7 @@
                           <number>1</number>
                          </property>
                          <property name="value">
-                          <double>10.000000000000000</double>
+                          <double>0.500000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -1226,7 +1226,7 @@
                     <property name="topMargin">
                      <number>6</number>
                     </property>
-                    <item row="0" column="3">
+                    <item row="0" column="4">
                      <spacer name="horizontalSpacer_34">
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
@@ -1259,20 +1259,40 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="2">
+                    <item row="0" column="3">
                      <widget class="QPushButton" name="_ToolDetectApplyAll">
                       <property name="text">
                        <string>Apply to all channels</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="0" colspan="4">
+                    <item row="3" column="0" colspan="5">
                      <widget class="QProgressBar" name="_ToolDetectProgress">
                       <property name="value">
                        <number>24</number>
                       </property>
                       <property name="invertedAppearance">
                        <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <spacer name="horizontalSpacer_22">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="1" column="1" colspan="3">
+                     <widget class="QPushButton" name="_ToolDetectReport">
+                      <property name="text">
+                       <string>Report to hypno</string>
                       </property>
                      </widget>
                     </item>

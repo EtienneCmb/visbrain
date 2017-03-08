@@ -84,7 +84,7 @@ class uiTools(object):
         # ------------------- PEAKS -------------------
         elif method == 'Peaks':
             # Get variables :
-            look = self._ToolPeakLook.value()
+            look = self._ToolPeakLook.value() * self._sf
             disp = self._ToolPeakMinMax.currentIndex()
             disp_types = ['max', 'min', 'minmax']
             # Set data :
