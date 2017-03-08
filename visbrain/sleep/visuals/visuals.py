@@ -33,8 +33,7 @@ class visuals(object):
                                  parent=self._specCanvas.wc.scene)
         self._spec.set_data(sf, data[0, ...], time)
         # Create a visual indicator for spectrogram :
-        self._specInd = Indicator(name='spectro_indic', width=2,
-                                  color=self._indicol, visible=False,
+        self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
                                   parent=self._specCanvas.wc.scene)
         self._specInd.set_data(xlim=(0, 30), ylim=(0, 20))
 
@@ -45,8 +44,7 @@ class visuals(object):
                               parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
         # Create a visual indicator for hypnogram :
-        self._hypInd = Indicator(name='hypno_indic', width=2,
-                                 color=self._indicol, visible=False,
+        self._hypInd = Indicator(name='hypno_indic', visible=True, alpha=.3,
                                  parent=self._hypCanvas.wc.scene)
         self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
 
@@ -340,10 +338,9 @@ on the spectrogram and hypnogram.
 class Indicator(object):
     """Create a visual indicator (for spectrogram and hypnogram)."""
 
-    def __init__(self, name='indicator', color='gray', width=8,
-                 visible=True, parent=None):
+    def __init__(self, name='indicator', alpha=.3, visible=True, parent=None):
         # Create a vispy image object :
-        image = color2vb('gray', alpha=0.3)[np.newaxis, ...]
+        image = color2vb('gray', alpha=alpha)[np.newaxis, ...]
         self.mesh = scene.visuals.Image(data=image, name=name,
                                         parent=parent)
         self.mesh.visible = visible
