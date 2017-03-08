@@ -49,7 +49,8 @@ class uiPanels(object):
                                       y_label=None, x_label=None,
                                       name='Spectrogram', color='black',
                                       yargs={'text_color': 'black'},
-                                      xargs={'text_color': 'black'})
+                                      xargs={'text_color': 'black'},
+                                      fcn=[self.on_mouse_wheel])
         self._specCanvas.canvas.context.set_line_width(self._lwhyp)
         self._SpecLayout.addWidget(self._specCanvas.canvas.native)
         self._chanGrid.addWidget(self._SpecW, len(self) + 1, 1, 1, 1)
@@ -83,7 +84,8 @@ class uiPanels(object):
                                      y_label=None, x_label=None,
                                      name='Spectrogram', color='black',
                                      yargs={'text_color': 'black'},
-                                     xargs={'text_color': 'black'})
+                                     xargs={'text_color': 'black'},
+                                     fcn=[self.on_mouse_wheel])
         self._hypCanvas.canvas.context.set_line_width(self._lwhyp)
         self._HypLayout.addWidget(self._hypCanvas.canvas.native)
         self._chanGrid.addWidget(self._HypW, len(self) + 2, 1, 1, 1)
@@ -100,7 +102,8 @@ class uiPanels(object):
         self._TimeAxis = TimeAxis(xargs={'text_color': 'black'},
                                   x_label=None,
                                   bgcolor=(1., 1., 1.), color='black',
-                                  indic_color=self._indicol)
+                                  indic_color=self._indicol,
+                                  fcn=[self.on_mouse_wheel])
         self._TimeLayout.addWidget(self._TimeAxis.canvas.native)
         self._TimeAxisW.setMaximumHeight(400)
         self._TimeAxisW.setMinimumHeight(50)
@@ -207,7 +210,8 @@ class uiPanels(object):
                                              y_label=None, x_label=None,
                                              name='Canvas_'+k, color='black',
                                              yargs={'text_color': 'black'},
-                                             xargs={'text_color': 'black'},)
+                                             xargs={'text_color': 'black'},
+                                             fcn=[self.on_mouse_wheel])
             self._chanCanvas[i].canvas.context.set_line_width(self._lw)
             # Add the canvas to the layout :
             self._chanLayout[i].addWidget(self._chanCanvas[i].canvas.native)

@@ -105,8 +105,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ====================== OBJECTS CREATION ======================
         visuals.__init__(self, self._sf, self._data, self._time,
                          self._channels, self._hypno, cameras=cams,
-                         method=line)
-        # self._timecam.rect = (0, 0, list(self._hyp.rect)[2], 1)
+                         method=line,)
 
         # ====================== TOOLS ======================
         Tools.__init__(self)

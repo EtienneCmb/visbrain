@@ -33,10 +33,11 @@ class TimeAxis(object):
     def __init__(self, axis=True, x_label='', x_heightMax=40,
                  font_size=12, color='white', title='', axis_label_margin=50,
                  tick_label_margin=5, name='', bgcolor=(.9, .9, .9), cargs={},
-                 xargs={}, indic_color='darkred'):
+                 xargs={}, indic_color='darkred', fcn=[]):
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
                                         show=False, title=name, **cargs)
+        _ = [self.canvas.connect(k) for k in fcn]
 
         # Create a grid :
         grid = self.canvas.central_widget.add_grid(margin=0)
@@ -183,7 +184,7 @@ class AxisCanvas(object):
     def __init__(self, axis=True, x_label='', x_heightMax=40, y_label='',
                  y_widthMax=80, font_size=14, color='white', title='',
                  axis_label_margin=50, tick_label_margin=5, name='',
-                 bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}):
+                 bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}, fcn=[]):
         """Init."""
         # Save variables :
         self._axis = axis
@@ -194,6 +195,7 @@ class AxisCanvas(object):
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
                                         show=True, title=name, **cargs)
+        _ = [self.canvas.connect(k) for k in fcn]
 
         # Add axis :
         if axis:

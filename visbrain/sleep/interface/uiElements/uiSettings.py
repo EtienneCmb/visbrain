@@ -294,3 +294,8 @@ class uiSettings(object):
             self._TimeAxis.mesh.visible = self._PanTimeIndic.isChecked()
 
         self._fcn_sliderMove()
+
+    def on_mouse_wheel(self, event):
+        """Executed function on mouse wheel."""
+        print(event.delta[1])
+        self._SlVal.setValue(self._SlVal.value() + event.delta[1])
