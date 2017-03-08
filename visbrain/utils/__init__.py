@@ -7,3 +7,4 @@ from .fileconvert import *
 from .cameras import *
 from .peakdetection import *
 from .hypnoprocessing import *
+from .remdetection import *

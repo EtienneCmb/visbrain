@@ -1,11 +1,12 @@
-"""Main class for settings managment."""
+"""Main class for sleep tools managment."""
 
+from ....utils import remdetect
 
 __all__ = ['uiTools']
 
 
 class uiTools(object):
-    """Main class for settings managment."""
+    """Main class for sleep tools managment."""
 
     def __init__(self):
         """Init."""
@@ -28,6 +29,12 @@ class uiTools(object):
         self._ToolPeakLook.setKeyboardTracking(False)
         self._ToolPeakMinMax.currentIndexChanged.connect(self._fcn_peakdetect)
 
+        # =====================================================================
+        # REM DETECTION
+        # =====================================================================
+        # _ToolRemChan -> Channel list
+        # _ToolRemTh -> Threshold
+
     # =====================================================================
     # PEAK DETECTION
     # =====================================================================
@@ -43,3 +50,7 @@ class uiTools(object):
                             disp_types[disp], look)
         if not self.canvas_isVisible(idx):
             self.canvas_setVisible(idx, True)
+
+    # =====================================================================
+    # REM DETECTION
+    # =====================================================================
