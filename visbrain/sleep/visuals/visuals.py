@@ -130,7 +130,7 @@ class ChannelPlot(object):
 
         # Build color segment and boolean index vector:
         colseg = np.tile(self.color, (len(timeSl), 1))
-        # idx = np.zeros((len(timeSl,)), dtype=bool)
+        colsegBck = colseg.copy()
         idx = np.arange(sl.start, sl.stop)
 
         # Set data to each plot :
@@ -143,6 +143,8 @@ class ChannelPlot(object):
                 inter = np.intersect1d(idx, self.colidx[i])-sl.start
                 # Colorize only intersection :
                 colseg[inter] = self.color_detection
+            else:
+                colseg = colsegBck
             # dat = np.ascontiguousarray(dat)
             k.set_data(dat, color=colseg)
             # Get camera rectangle and set it:
