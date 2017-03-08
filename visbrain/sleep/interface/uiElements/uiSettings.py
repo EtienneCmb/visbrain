@@ -70,6 +70,13 @@ class uiSettings(object):
         # Grid toggle :
         self._slGrid.clicked.connect(self._fcn_gridToggle)
 
+        # =====================================================================
+        # ZOOMING
+        # =====================================================================
+        self._PanHypZoom.clicked.connect(self._fcn_Zooming)
+        self._PanSpecZoom.clicked.connect(self._fcn_Zooming)
+        self._PanTimeZoom.clicked.connect(self._fcn_Zooming)
+
     # =====================================================================
     # MENU & FILE MANAGMENT
     # =====================================================================
@@ -154,23 +161,25 @@ class uiSettings(object):
     # =====================================================================
     def _fcn_sliderMove(self):
         """Function applied when the slider move."""
-        # ---------------------------------------
+        # ================= INDEX =================
         # Get slider variables :
         val = self._SlVal.value()
         step = self._SigSlStep.value()
         win = self._SigWin.value()
         xlim = (val*step, val*step+win)
-        # ---------------------------------------
+
         # Find closest time index :
         t = [0, 0]
         t[0] = round(np.abs(self._time - xlim[0]).argmin())
         t[1] = round(np.abs(self._time - xlim[1]).argmin())
 
+        # ================= MESH UPDATES =================
         # ---------------------------------------
         # Update display signal :
         sl = slice(t[0], t[1])
         self._chan.set_data(self._sf, self._data, self._time, sl=sl,
                             ylim=self._ylims)
+
         # ---------------------------------------
         # Update spectrogram indicator :
         if self._PanSpecIndic.isChecked():
@@ -188,9 +197,25 @@ class uiSettings(object):
             self._TimeAxis.set_data(xlim[0], win, self._time,
                                     unit=self._slRules.currentText())
 
-        # ---------------------------------------
+        # ================= GUI =================
         # Update Go to :
         self._SlWin.setValue(val*step)
+
+        # ================= ZOOMING =================
+        # Histogram :
+        if self._PanHypZoom.isChecked():
+            self._hypcam.rect = (xlim[0], -5, xlim[1]-xlim[0], 7.)
+
+        # Spectrogram :
+        if self._PanSpecZoom.isChecked():
+            self._speccam.rect = (xlim[0], self._spec.freq[0], xlim[1]-xlim[0],
+                                  self._spec.freq[-1] - self._spec.freq[0])
+
+        # Time axis :
+        if self._PanTimeZoom.isChecked():
+            self._TimeAxis.set_data(xlim[0], win, np.array([xlim[0], xlim[1]]),
+                                    unit='seconds')
+            self._timecam.rect = (xlim[0], 0., win, 1.)
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
@@ -231,3 +256,17 @@ class uiSettings(object):
         elif unit == 'hours':
             fact = 3600.
         return fact
+
+    def _fcn_Zooming(self):
+        """Apply dynamic zoom on hypnogram."""
+        # Hypnogram :
+        if not self._PanHypZoom.isChecked():
+            self._hypcam.rect = (self._time.min(), -5.,
+                                 self._time.max() - self._time.min(), 7.)
+
+        # Spectrogram :
+        if not self._PanSpecZoom.isChecked():
+            self._speccam.rect = (self._time.min(), self._spec.freq[0],
+                                  self._time.max() - self._time.min(),
+                                  self._spec.freq[-1] - self._spec.freq[0])
+        self._fcn_sliderMove()
