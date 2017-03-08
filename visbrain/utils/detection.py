@@ -50,13 +50,29 @@ def spindlesdetect(data, sf, threshold):
     # Define threshold
     thresh = np.mean(hilbert_env) + threshold * np.std(hilbert_env)
     # Detect spindles
+    # Amplitude criteria
     idx_sup_thr = np.array(np.where(hilbert_env > thresh)).flatten()
+    # Frequency criteria
     idx_insta_freq = np.array(
         np.where(
             (inst_freq[idx_sup_thr] > 11) & (
                 inst_freq[idx_sup_thr] < 16))).flatten()
-
     idx_sup_thr = idx_sup_thr[idx_insta_freq]
+    # Duration criteria
+    bool_break = (idx_sup_thr[1:]-idx_sup_thr[:-1])==1
+    idx_start = np.array(np.where(bool_break==False)).flatten()
+    idx_stop= np.hstack((idx_start[1::], len(bool_break)))
+    duration_ms = np.hstack((idx_start[0], np.diff(idx_start))) / (1 / sf)
+    good_dur = np.array(np.where((duration_ms > 500) &
+                                (duration_ms < 2000))).flatten()
+    idx_dur = np.sort(np.hstack((idx_start[good_dur], idx_stop[good_dur])))
+    good_idx = np.zeros(0)
+    for i, j in enumerate(idx_dur[:-1]):
+        tmp = np.arange(j, idx_dur[i+1], 1)
+        good_idx = np.append(good_idx, tmp)
+
+    good_idx = good_idx.astype(int)
+    idx_sup_thr = idx_sup_thr[good_idx]
     # Remove first value which is almost always a false positive
     idx_sup_thr = np.delete(idx_sup_thr, 0)
     # Compute number / density
