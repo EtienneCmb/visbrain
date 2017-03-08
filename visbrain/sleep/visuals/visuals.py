@@ -288,28 +288,6 @@ class Hypnogram(object):
         self.mesh.set_gl_state('translucent', depth_test=True)
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
-        # Add text :
-        offx, offy, offz = .001 * time[-1], 0.2, -2.
-        self.node = scene.visuals.Node(name='hypnotext', parent=parent)
-        st1 = scene.visuals.Text(text='Art', pos=(offx, 1. + offy, offz),
-                                 parent=self.node, font_size=font_size,
-                                 anchor_x='left', bold=True)
-        st2 = scene.visuals.Text(text='Wake', pos=(offx, 0. + offy, offz),
-                                 parent=self.node, font_size=font_size,
-                                 anchor_x='left', bold=True)
-        st3 = scene.visuals.Text(text='N1', pos=(offx, -1. + offy, offz),
-                                 parent=self.node, font_size=font_size,
-                                 anchor_x='left', bold=True)
-        st4 = scene.visuals.Text(text='N2', pos=(offx, -2. + offy, offz),
-                                 parent=self.node, font_size=font_size,
-                                 anchor_x='left', bold=True)
-        st5 = scene.visuals.Text(text='N3', pos=(offx, -3. + offy, offz),
-                                 parent=self.node, font_size=font_size,
-                                 anchor_x='left', bold=True)
-        st6 = scene.visuals.Text(text='REM', pos=(offx, -4. + offy, offz),
-                                 parent=self.node, font_size=font_size,
-                                 anchor_x='left', bold=True)
-        self.st = [st1, st2, st3, st4, st5, st6]
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
                                             scale=(10., 1.), parent=parent)

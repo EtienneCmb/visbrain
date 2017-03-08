@@ -2,7 +2,7 @@ Bug
 	-5 Peut-être il faut vider la mémoire après downsampling.
 	-5 SEGMENTATION ERROR: à l fermeture, l'interface bug (fait bugger ipython). Continuous array? Voir modifs pyqt5, dernière ligne
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
-	-5 Affichage lent au démarrage provient des labels ajouter au canvas directement. Les mettre en dehors permettrait de résoudre aussi par la même occasion la perte de l'affichage en zooming. Par contre, en drag la gestion des couleurs plus dure...
+	+5 Affichage lent au démarrage provient des labels ajouter au canvas directement. Les mettre en dehors permettrait de résoudre aussi par la même occasion la perte de l'affichage en zooming. Par contre, en drag la gestion des couleurs plus dure...
 	+5 Spectrograme décalé
 	+5 Peak detection ne s'affiche pas sur windows. Ca doit venir du set_gl_state, où de la superposition de données. Ce qui est byzarre c'est que ça marche sur l'hypnograme. Solution non esthétique : sur chaque panel, rajouter un objet de type marker contenant les pics du signal.
 	+5 Autre idée pour la peak detection: si ça trouve, windows ne gère pas bien le RGBA avec vispy. Virer l'alpha partout où il y a les color2vb
@@ -14,7 +14,7 @@ Etienne
 	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
 	-4 Lookahead ça m'étonnerai que ce soit des secondes.
 	-4 Filtrage: la complexité ici c'est que le filtrage doit être appliqué partout sans duplication de données
-	-4 Label bold
+	+4 Label bold
 	+4 Indicator devrait être un carré transparent ou dont le fond est vide
 	+4 Chargement des fichiers (manque chargement hypno + test sur fichiers réels)
 	+4 Afficher et pouvoir modifier l'amplitude de chaque channel
