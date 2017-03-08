@@ -22,11 +22,9 @@ class uiInfo(object):
 
     def _fcn_infoUpdate(self):
         """Complete the table sleep info."""
-        # Be sure to have the latest update of info :
-        self._hypno = -self._hyp.mesh.pos[:, 1]
         # Get sleep info :
         win = self._infoTime.value()
-        stats = sleepstats(self._file, self._hypno, self._sf, win)
+        stats = sleepstats(self._file, self._hyp.mesh.pos[:, 1], self._sf, win)
         self._keysInfo = ['Window'] + [''] * len(stats)
         self._valInfo = [str(win)] + [''] * len(stats)
         # Check line number:
