@@ -87,10 +87,10 @@
              <widget class="QWidget" name="scrollAreaWidgetContents">
               <property name="geometry">
                <rect>
-                <x>-35</x>
-                <y>-127</y>
+                <x>0</x>
+                <y>-118</y>
                 <width>321</width>
-                <height>914</height>
+                <height>905</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -219,7 +219,7 @@
                   <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_7">
                     <property name="topMargin">
-                     <number>10</number>
+                     <number>0</number>
                     </property>
                     <item>
                      <widget class="QLabel" name="label_35">
@@ -329,6 +329,13 @@
                      <widget class="QCheckBox" name="_PanSpecIndic">
                       <property name="text">
                        <string>Indicator</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QCheckBox" name="_PanSpecZoom">
+                      <property name="text">
+                       <string>Zooming</string>
                       </property>
                      </widget>
                     </item>
@@ -580,7 +587,7 @@
                      </widget>
                     </item>
                     <item row="1" column="2">
-                     <widget class="QCheckBox" name="_PanHyZoom">
+                     <widget class="QCheckBox" name="_PanHypZoom">
                       <property name="text">
                        <string>Zooming</string>
                       </property>
@@ -674,6 +681,13 @@
                       </property>
                       <property name="checked">
                        <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QCheckBox" name="_PanTimeZoom">
+                      <property name="text">
+                       <string>Zooming</string>
                       </property>
                      </widget>
                     </item>
