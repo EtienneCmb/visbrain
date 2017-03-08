@@ -62,7 +62,7 @@ class uiTools(object):
             # Get variables :
             thr = self._ToolRemTh.value()
             # Get REM indices :
-            index, number, density = remdetect(self._data[idx,:], self._sf, thr)
+            index, _, _ = remdetect(self._data[idx, :], self._sf, thr)
             # Set them to ChannelPlot object :
             self._chan.colidx[idx] = index
             # Update plot :
@@ -73,7 +73,7 @@ class uiTools(object):
             # Get variables :
             thr = self._ToolSpinTh.value()
             # Get Spindles indices :
-            index, number, density = spindlesdetect(self._data[idx,:], self._sf, thr)
+            index, _, _ = spindlesdetect(self._data[idx, :], self._sf, thr)
             # Set them to ChannelPlot object :
             self._chan.colidx[idx] = index
             # Update plot :
