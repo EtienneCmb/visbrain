@@ -9,6 +9,7 @@ import vispy.visuals.transforms as vist
 from .marker import Markers
 from ...utils import array2colormap, color2vb
 
+
 __all__ = ["visuals"]
 
 
@@ -25,6 +26,7 @@ class visuals(object):
         # =================== CHANNELS ===================
         self._chan = ChannelPlot(channels, camera=cameras[0], method=method,
                                  color=self._chancolor,
+                                 color_detection=self._indicol,
                                  parent=self._chanCanvas)
 
         # =================== SPECTROGRAM ===================
@@ -67,23 +69,27 @@ Classes below are used to create visual objects, display on sevral canvas :
 class ChannelPlot(object):
     """Plot each channel."""
 
-    def __init__(self, channels, color=(.2, .2, .2), width=1., method='agg',
-                 camera=None, parent=None):
+    def __init__(self, channels, color=(.2, .2, .2), color_detection='red',
+                 width=1., method='agg', camera=None, parent=None):
+        # Variables :
         self._camera = camera
         self.rect = []
+        self.colidx = [np.array([])] * len(channels)
         # Get color :
-        col = color2vb(color)
+        self.color = color2vb(color)
+        self.color_detection = color2vb(color_detection)
         # Create one line pear channel :
-        pos = np.array([[0, 0], [0, 100]])
+        pos = np.zeros((2, 2), dtype=np.float32)
         self.mesh, self.grid, self.peak = [], [], []
         for i, k in enumerate(channels):
             # Create line :
-            mesh = scene.visuals.Line(pos, name=k+'plot', color=col,
+            mesh = scene.visuals.Line(pos, name=k+'plot', color=self.color,
                                       method=method, width=width,
                                       parent=parent[i].wc.scene)
             self.mesh.append(mesh)
             # Create marker peaks :
-            mesh = Markers(pos=np.zeros((1, 3)), parent=parent[i].wc.scene)
+            mesh = Markers(pos=np.zeros((1, 3), dtype=np.float32),
+                           parent=parent[i].wc.scene)
             mesh.visible = False
             self.peak.append(mesh)
             # Create a grid :
@@ -115,16 +121,30 @@ class ChannelPlot(object):
 
         # Manage slice :
         sl = slice(0, data.shape[1]) if sl is None else sl
-        # Time vector :
-        time = time[sl]
-        self.x = (time.min(), time.max())
-        data = data[:, sl]
-        z = np.full_like(time, 0.5)
+
+        # Slice selection (of time and data) :
+        timeSl = time[sl]
+        self.x = (timeSl.min(), timeSl.max())
+        dataSl = data[:, sl]
+        z = np.full_like(timeSl, .5, dtype=np.float32)
+
+        # Build color segment and boolean index vector:
+        colseg = np.tile(self.color, (len(timeSl), 1))
+        # idx = np.zeros((len(timeSl,)), dtype=bool)
+        idx = np.arange(sl.start, sl.stop)
+
         # Set data to each plot :
         for i, k in enumerate(self.mesh):
-            dat = np.vstack((time, data[i, :], z)).T
+            # Concatenate time / data / z axis :
+            dat = np.vstack((timeSl, dataSl[i, :], z)).T
+            # Check color :
+            if self.colidx[i].size:
+                # Find intersection :
+                inter = np.intersect1d(idx, self.colidx[i])-sl.start
+                # Colorize only intersection :
+                colseg[inter] = self.color_detection
             # dat = np.ascontiguousarray(dat)
-            k.set_data(dat)
+            k.set_data(dat, color=colseg)
             # Get camera rectangle and set it:
             rect = (self.x[0], ylim[i][0], self.x[1]-self.x[0],
                     ylim[i][1] - ylim[i][0])
