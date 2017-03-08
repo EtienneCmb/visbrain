@@ -40,7 +40,7 @@ class visuals(object):
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
-        self._hyp = Hypnogram(time[-1], camera=cameras[2],
+        self._hyp = Hypnogram(time, camera=cameras[2],
                               color=self._hypcolor,
                               parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
@@ -228,14 +228,15 @@ class Spectrogram(object):
         # =================== TRANSFORM ===================
         # Re-scale the mesh for fitting in time / frequency :
         fact = (freq.max()-freq.min())/len(freq)
-        sc = (time.max()/mesh.shape[1], fact, 1)
-        tr = [0, freq.min(), 0]
+        sc = (t.max()/mesh.shape[1], fact, 1)
+        tr = [t[0], freq.min(), 0]
         self.mesh.transform = vist.STTransform(scale=sc, translate=tr)
         # Update object :
         self.mesh.update()
         # Get camera rectangle :
-        self.rect = (time.min(), freq.min(), time.max()-time.min(),
+        self.rect = (t.min(), freq.min(), t.max()-t.min(),
                      freq.max()-freq.min())
+        self.freq = freq
 
     # ----------- RECT -----------
     @property
@@ -253,11 +254,12 @@ class Spectrogram(object):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, n, camera, color='darkblue', width=2, font_size=9,
+    def __init__(self, time, camera, color='darkblue', width=2, font_size=9,
                  parent=None):
         # Keep camera :
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
+        self.rect = (time.min(), -5., time.max() - time.min(), 7.)
         # Get color :
         col = color2vb(color=color)
         # Create a default line :
@@ -269,7 +271,7 @@ class Hypnogram(object):
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
         # Add text :
-        offx, offy = .001 * n, 0.2
+        offx, offy = .001 * time[-1], 0.2
         self.node = scene.visuals.Node(name='hypnotext', parent=parent)
         st1 = scene.visuals.Text(text='Art', pos=(offx, 1. + offy),
                                  parent=self.node, font_size=font_size,
@@ -310,10 +312,6 @@ class Hypnogram(object):
         """
         # Set data to the mesh :
         self.mesh.set_data(pos=np.vstack((time, -data)).T)
-        # Get camera rectangle :
-        # self.rect = (time.min(), data.min() - 5, time.max() - time.min(),
-        #              data.max() - data.min() + 4)
-        self.rect = (time.min(), -5., time.max() - time.min(), 7.)
         self.mesh.update()
 
     # ----------- RECT -----------
