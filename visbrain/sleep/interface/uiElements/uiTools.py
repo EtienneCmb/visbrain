@@ -34,6 +34,14 @@ class uiTools(object):
         # =====================================================================
         # _ToolRemChan -> Channel list
         # _ToolRemTh -> Threshold
+        
+        # Add list of channels :
+        self._ToolRemChan.addItems(self._channels)
+        self._ToolRemTh.setValue(3.)
+        # Connect functions
+        self._ToolRemChan.currentIndexChanged.connect(self._fcn_remdetect)
+        self._ToolRemTh.valueChanged.connect(self._fcn_remdetect)
+        self._ToolRemTh.setKeyboardTracking(False)
 
     # =====================================================================
     # PEAK DETECTION
@@ -54,3 +62,12 @@ class uiTools(object):
     # =====================================================================
     # REM DETECTION
     # =====================================================================
+    def _fcn_remdetect(self):
+        """Perform and display a rem detection on the specified channel."""
+        # Get variables :
+        idx = self._ToolRemChan.currentIndex()
+        thr = self._ToolRemTh.value()
+        # Set data
+        if not self.canvas_isVisible(idx):
+            self.canvas_setVisible(idx, True)
+                
