@@ -90,8 +90,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         for k in range(len(self)):
             self._chanCam.append(FixedCam())  # viscam.PanZoomCamera()
         # ------------------- Spectrogram -------------------
-        self._specCam = FixedCam()  # viscam.PanZoomCamera()
-        self._specCanvas.set_camera(self._specCam)
+        self._speccam = FixedCam()  # viscam.PanZoomCamera()
+        self._specCanvas.set_camera(self._speccam)
         # ------------------- Hypnogram -------------------
         self._hypcam = FixedCam()  # viscam.PanZoomCamera()
         self._hypCanvas.set_camera(self._hypcam)
@@ -100,13 +100,13 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._TimeAxis.set_camera(self._timecam)
 
         # Keep all cams :
-        cams = (self._chanCam, self._specCam, self._hypcam, self._timecam)
+        cams = (self._chanCam, self._speccam, self._hypcam, self._timecam)
 
         # ====================== OBJECTS CREATION ======================
         visuals.__init__(self, self._sf, self._data, self._time,
                          self._channels, self._hypno, cameras=cams,
                          method=line)
-        self._timecam.rect = (0, 0, list(self._hyp.rect)[2], 1)
+        # self._timecam.rect = (0, 0, list(self._hyp.rect)[2], 1)
 
         # ====================== TOOLS ======================
         Tools.__init__(self)
@@ -118,6 +118,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._fcn_chanViz()
         self._fcn_chanAmplitude()
         self._fcn_infoUpdate()
+        self._fcn_Hypno2Score()
 
     def __len__(self):
         """Return the number of channels."""
