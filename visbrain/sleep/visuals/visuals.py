@@ -139,7 +139,6 @@ class ChannelPlot(object):
             dat = np.vstack((timeSl, dataSl[i, :], z)).T
             # Check color :
             if self.colidx[i].size:
-                print('COLIDX: ', i)
                 colseg = colsegBck.copy()
                 # Find intersection :
                 inter = np.intersect1d(idx, self.colidx[i])-sl.start
