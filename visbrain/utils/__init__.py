@@ -5,6 +5,5 @@ from .memory import *
 from .others import *
 from .fileconvert import *
 from .cameras import *
-from .peakdetection import *
 from .hypnoprocessing import *
-from .remdetection import *
+from .detection import *
