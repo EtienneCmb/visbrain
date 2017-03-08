@@ -37,11 +37,11 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 # Dialog window for the main dataset :
                 file = QtGui.QFileDialog.getOpenFileName(
                         self, "Open dataset", "", "Elan (*.eeg);;"
-                        "Brainvision (*.eeg);;Edf (*.edf)")
+                        "Brainvision (*.eeg);;Edf (*.edf);;All files (*.*)")
                 # Load hypnogram :
                 hypno_file = QtGui.QFileDialog.getOpenFileName(
                         self, "Open hypnogram", "", "Elan (*.hyp);;"
-                        "Text file (*.txt);;""CSV file (*.csv)")
+                        "Text file (*.txt);;""CSV file (*.csv);;All files (*.*)")
 
             # Load dataset :
             if downsample:

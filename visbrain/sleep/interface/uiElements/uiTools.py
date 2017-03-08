@@ -26,6 +26,8 @@ class uiTools(object):
         self._ToolDetectType.currentIndexChanged.connect(
                                                      self._fcn_switchDetection)
         self._ToolDetectApply.clicked.connect(self._fcn_applyDetection)
+        self._ToolDetectApplyAll.clicked.connect(self._fcn_applyDetectionAll)
+        self._ToolDetectProgress.hide()
         self._fcn_switchDetection()
 
         # -------------------------------------------------
@@ -92,3 +94,17 @@ class uiTools(object):
         # Be sure panel is displayed :
         if not self.canvas_isVisible(idx):
             self.canvas_setVisible(idx, True)
+
+    def _fcn_applyDetectionAll(self):
+        """Apply detection to all channels."""
+        for k in range(len(self)):
+            # Display progress bar :
+            self._ToolDetectProgress.show()
+            # Set current channel index :
+            self._ToolDetectChan.setCurrentIndex(k)
+            # Run detection :
+            self._fcn_applyDetection()
+            # Update progress bar :
+            self._ToolDetectProgress.setValue(100. * k / len(self))
+        # Finally, hide progress bar :
+        self._ToolDetectProgress.hide()
