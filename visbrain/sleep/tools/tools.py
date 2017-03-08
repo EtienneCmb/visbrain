@@ -41,11 +41,9 @@ class PeakDetection(object):
 
     def __init__(self, color='red', size=7., edge_width=0.):
         """Init."""
-        self._color = color2vb(color)
+        self._color = color2vb(color, alpha=.8)
         self._edgewidth = edge_width
         self._size = size
-        # Create a set of empty markers :
-        self.mesh = scene.visuals.Markers(pos=np.zeros((2, 2)))
 
     def set_data(self, data, time, marker, display='max', lookahead=10):
         """Find peaks according to data.
@@ -86,6 +84,7 @@ class PeakDetection(object):
             pos = np.vstack((np.hstack((tm, tM)), np.hstack((ym, yM)))).T
         marker.set_data(pos, size=self._size, face_color=self._color,
                         edge_width=self._edgewidth, scaling=False)
+        marker.visible = True
         marker.update()
 
 

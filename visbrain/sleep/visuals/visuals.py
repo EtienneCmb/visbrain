@@ -84,6 +84,7 @@ class ChannelPlot(object):
             self.mesh.append(mesh)
             # Create marker peaks :
             mesh = Markers(pos=np.zeros((1, 3)), parent=parent[i].wc.scene)
+            mesh.visible = False
             self.peak.append(mesh)
             # Create a grid :
             grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
