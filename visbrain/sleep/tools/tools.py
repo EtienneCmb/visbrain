@@ -19,8 +19,8 @@ class Tools(object):
 
         # =========== HYPNOGRAM EDITION ===========
         yaxis = (self._hypcam.rect.bottom, self._hypcam.rect.top)
-        self._hypedit = HypnoEdition(self._sf, self._hyp,
-                                     self._hypCanvas.canvas, self._time, yaxis,
+        self._hypedit = HypnoEdition(self._sf, self._hyp, -self._hypno,
+                                     self._time, self._hypCanvas.canvas, yaxis,
                                      enable=True, fcn=[self._fcn_infoUpdate,
                                                        self._fcn_Hypno2Score])
 
@@ -112,9 +112,6 @@ class HypnoEdition(object):
         canvas: AxisCanvas.canvas
             The canvas on which mouse will be active.
 
-        time: np.ndarray
-            The time vector
-
         yaxis: tuple
             Tuple describing where y-axis of the hypnogram start and finish.
 
@@ -142,34 +139,11 @@ class HypnoEdition(object):
             update stats info or editing table.
     """
 
-    def __init__(self, sf, hypno_obj, canvas, time, yaxis, enable=False,
+    def __init__(self, sf, hypno_obj, data, time, canvas, yaxis, enable=False,
                  parent=None, color_cursor='red', color_static='blue',
                  color_active='green', color_dragge='purple', size=9.,
                  fcn=None):
         """Init."""
-        self.event = MouseEmulation()
-
-        # ============ MARKERS POSITION ============
-        data = hypno_obj.mesh.pos[:, 1]
-        self._transient(data, time)
-
-        # ============ COLOR ============
-        self.color_cursor = color2vb(color_cursor)
-        self.color_static = color2vb(color_static)
-        self.color_active = color2vb(color_active)
-        self.color_dragge = color2vb(color_dragge)
-        self.color = color2vb(color_static, length=self.pos.shape[0])
-
-        # ============ VARIABLES ============
-        if fcn is None:
-            def fcnt(): pass
-            fcn = [fcnt]
-        self.keep = False
-        self.keep_idx = -1
-        self.stidx = 0
-        self.size = size
-        tM = time.max()
-
         # =================== MOUSE FUNCTIONS ===================
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
@@ -203,8 +177,6 @@ class HypnoEdition(object):
                 point (only along y-axis). Then, drag point point and hypno too
                 - Set data to marker object.
             """
-            # Get latest data version :
-            data = hypno_obj.mesh.pos[:, 1]
             # Get cursor position :
             cpos = _get_cursor(event.pos, not self.keep)
             # Get closest marker :
@@ -289,10 +261,10 @@ class HypnoEdition(object):
                     The mouse position converted in canvas unit
                     (i.e. time, hypno -1.).
             """
-            # Get latest data version :
-            data = hypno_obj.mesh.pos[:, 1]
+            # Get latest time :
+            tm, tM = time_update()
             # Get cursor position :
-            cursor = tM * pos[0] / canvas.size[0]
+            cursor = tm + ((tM - tm) * pos[0] / canvas.size[0])
             # Get y position :
             if force:
                 # Force cursor to be on the hypnogram :
@@ -305,7 +277,7 @@ class HypnoEdition(object):
 
             return pos
 
-        def _get_close_marker(event, dist=10.):
+        def _get_close_marker(event, perc=.1):
             """Get closest marker from the cursor.
 
             Arg:
@@ -313,8 +285,9 @@ class HypnoEdition(object):
                     Mouse event.
 
             Kargs:
-                dist: float, optional, (def: 10.)
-                    The distance under which the point is selected.
+                perc: float, optional, (def: .1)
+                    The distance under which the point is selected (in time
+                    length percentage).
 
             Returns:
                 color: np.ndarray
@@ -322,9 +295,12 @@ class HypnoEdition(object):
                     selected point).
 
                 idx: int/None
-                    The index of the closest marker (or None if nor marker
+                    The index of the closest marker (or None if no marker
                     position is under dist).
             """
+            # Get latest time :
+            tm, tM = time_update()
+            dist = perc * (tM - tm) / 100
             # Get cursor (x, y) converted :
             cursor = _get_cursor(event.pos, force=False)
             color = self.color.copy()
@@ -344,6 +320,43 @@ class HypnoEdition(object):
                 return self.color, None
 
         self._call = on_mouse_move
+
+        # =================== UTILS FUNCTIONS ===================
+        # def data_update(hypno_obj):
+        #     """Get latest data version."""
+        #     data = hypno_obj.mesh.pos[hypno_obj.sl, 1]
+        #     time = hypno_obj.mesh.pos[hypno_obj.sl, 0]
+        #     return data, time
+
+        def time_update():
+            """Get time extreme."""
+            tm = hypno_obj._camera.rect.left
+            tM = hypno_obj._camera.rect.right
+            return tm, tM
+
+        # =================== VARIABLES ===================
+        self.event = MouseEmulation()
+
+        # ============ MARKERS POSITION ============
+        # data = hypno_obj.mesh.pos[:, 1]
+        # time = hypno_obj.mesh.pos[:, 0]
+        self._transient(data, time)
+
+        # ============ COLOR ============
+        self.color_cursor = color2vb(color_cursor)
+        self.color_static = color2vb(color_static)
+        self.color_active = color2vb(color_active)
+        self.color_dragge = color2vb(color_dragge)
+        self.color = color2vb(color_static, length=self.pos.shape[0])
+
+        # ============ VARIABLES ============
+        if fcn is None:
+            def fcnt(): pass
+            fcn = [fcnt]
+        self.keep = False
+        self.keep_idx = -1
+        self.stidx = 0
+        self.size = size
 
         # Update :
         self.update()
