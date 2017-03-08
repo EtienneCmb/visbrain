@@ -105,6 +105,6 @@ class uiTools(object):
             # Run detection :
             self._fcn_applyDetection()
             # Update progress bar :
-            self._ToolDetectProgress.setValue(100. * k / len(self))
+            self._ToolDetectProgress.setValue(100. * (k + 1) / len(self))
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
