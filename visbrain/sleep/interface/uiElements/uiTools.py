@@ -74,6 +74,7 @@ class uiTools(object):
             thr = self._ToolSpinTh.value()
             # Get Spindles indices :
             index, _, _ = spindlesdetect(self._data[idx, :], self._sf, thr)
+            print(index.shape)
             # Set them to ChannelPlot object :
             self._chan.colidx[idx] = index
             # Update plot :

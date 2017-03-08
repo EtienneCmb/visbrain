@@ -139,14 +139,17 @@ class ChannelPlot(object):
             dat = np.vstack((timeSl, dataSl[i, :], z)).T
             # Check color :
             if self.colidx[i].size:
+                print('COLIDX: ', i)
+                colseg = colsegBck.copy()
                 # Find intersection :
                 inter = np.intersect1d(idx, self.colidx[i])-sl.start
                 # Colorize only intersection :
                 colseg[inter] = self.color_detection
             else:
-                colseg = colsegBck
+                colseg = colsegBck.copy()
             # dat = np.ascontiguousarray(dat)
             k.set_data(dat, color=colseg)
+            del colseg
             # Get camera rectangle and set it:
             rect = (self.x[0], ylim[i][0], self.x[1]-self.x[0],
                     ylim[i][1] - ylim[i][0])
