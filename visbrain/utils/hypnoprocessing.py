@@ -135,7 +135,10 @@ def sleepstats(file, hypno, sf=100, time_window=30.):
         stats[key] = value / (60. / time_window)
 
     # Add global informations
-    stats['Filename_0'] = path.basename(file)
+    if file == None:
+        stats['Filename_0'] = ''
+    else:
+        stats['Filename_0'] = path.basename(file)
     stats['Downsampling_1'] = str(int(sf)) + " Hz"
     stats['Units_2'] = 'minutes'
 
