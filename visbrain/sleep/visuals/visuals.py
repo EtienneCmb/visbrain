@@ -89,6 +89,10 @@ class PrepareData(object):
         self.forder, self.filt_type = forder, filt_type
         self.filt_meth, self.filt_band = filt_meth, filt_band
 
+    def __bool__(self):
+        """Return if data have to be prepared."""
+        return any([self.demean, self.detrend, self.filt])
+
     def _prepare_data(self, sf, data, time):
         """Prepare data before plotting."""
         # ============= DEMEAN =============
@@ -207,8 +211,9 @@ class ChannelPlot(PrepareData):
         dataSl = data[self.visible, sl]
         z = np.full_like(timeSl, .5, dtype=np.float32)
 
-        # Prepare the data :
-        dataSl = self._prepare_data(sf, dataSl.copy(), timeSl)
+        # Prepare the data (only if needed) :
+        if self:
+            dataSl = self._prepare_data(sf, dataSl.copy(), timeSl)
 
         # Build a index vector:
         idx = np.arange(sl.start, sl.stop)
@@ -322,7 +327,9 @@ class Spectrogram(PrepareData):
         overlap = int(round(overlap * sf))
 
         # =================== PREPARE DATA ===================
-        data = self._prepare_data(sf, data.copy(), time)
+        # Prepare data (only if needed)
+        if self:
+            data = self._prepare_data(sf, data.copy(), time)
 
         # =================== COMPUTE ===================
         # Compute the spectrogram :
