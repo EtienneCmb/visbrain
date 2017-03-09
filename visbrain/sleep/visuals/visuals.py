@@ -114,6 +114,7 @@ class ChannelPlot(PrepareData):
         self.width = width
         self.colidx = [np.array([])] * len(channels)
         self._fcn = fcn
+        self.visible = np.array([True] + [False] * len(channels))
 
         # Get color :
         self.color = color2vb(color)
@@ -177,7 +178,7 @@ class ChannelPlot(PrepareData):
         # Slice selection (of time and data) :
         timeSl = time[sl]
         self.x = (timeSl.min(), timeSl.max())
-        dataSl = data[:, sl]
+        dataSl = data[self.visible, sl]
         z = np.full_like(timeSl, .5, dtype=np.float32)
 
         # Prepare the data :
@@ -187,7 +188,7 @@ class ChannelPlot(PrepareData):
         idx = np.arange(sl.start, sl.stop)
 
         # Set data to each plot :
-        for i, k in enumerate(self.mesh):
+        for i, k in self:
             # Concatenate time / data / z axis :
             dat = np.vstack((timeSl, dataSl[i, :], z)).T
 
@@ -214,6 +215,12 @@ class ChannelPlot(PrepareData):
             self._camera[i].rect = rect
             k.update()
             self.rect.append(rect)
+
+    def __iter__(self):
+        """Iterate over visible mesh."""
+        for i, k in enumerate(self.mesh):
+            if self.visible[i]:
+                yield i, k
 
     # ----------- PARENT -----------
     @property

@@ -237,8 +237,10 @@ class uiPanels(object):
             viz = k.isChecked()
             self._chanWidget[i].setVisible(viz)
             self._chanLabels[i].setVisible(viz)
+            self._chan.visible[i] = viz
             if viz:
                 self._chanCanvas[i].set_camera(self._chanCam[i])
+        self._chan.update()
 
     def _fcn_chanAmplitude(self):
         """Change amplitude of each channel."""
