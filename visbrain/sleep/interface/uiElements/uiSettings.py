@@ -1,5 +1,6 @@
 """Main class for settings managment."""
 import numpy as np
+import os
 
 from PyQt4.QtGui import *
 
@@ -24,7 +25,7 @@ class uiSettings(object):
         self.menuFiles.addAction(screenshot)
 
         # Save :
-        save = QAction("Save", self)
+        save = QAction("Save hypnogram", self)
         save.setShortcut("Ctrl+S")
         save.triggered.connect(self.saveFile)
         self.menuFiles.addAction(save)
@@ -86,13 +87,80 @@ class uiSettings(object):
     def saveFile(self):
         """
         """
-        raise ValueError("NOT CONFIGURED")
-        # filename = QFileDialog.getSaveFileName(self, 'Save File',
-        #                                        os.getenv('HOME'))
-        # f = open(filename, 'w')
-        # filedata = self.text.toPlainText()
-        # f.write(filedata)
-        # f.close()
+        filename = QFileDialog.getSaveFileName(self, 'Save File',
+                   os.getenv('HOME'), 'Text file (*.txt);;Elan file (*.hyp)')
+
+        if filename:
+            file, ext = os.path.splitext(filename)
+
+            # Switch between differents types :
+            if ext == '.hyp':
+                self._save_hypno_elan(filename, self._hypno, self._sf)
+
+            elif ext == '.txt':
+               self._save_hypno_txt(filename, self._hypno, self._sf, 1)
+
+            else:
+                raise ValueError("Not a valid extension")
+
+    def _save_hypno_elan(self, filename, hypno, sf):
+        """Save hypnogram in Elan file format (*.hyp)
+
+        Args:
+            filename: str
+                Filename (with full path) of the file to save
+
+            hypno: np.ndarray
+                Hypnogram array, same length as data
+
+            sf: int
+                Sampling frequency of the data (after downsampling)
+        """
+        hdr = np.array([['time_base 1.000000'],
+                       ['sampling_period ' + str(round(1/sf, 8))],
+                       ['epoch_nb ' + str(int(hypno.size / sf))],
+                       ['epoch_list']]).flatten()
+
+        # Check data format
+        sf = int(sf)
+        hypno = hypno.astype(int)
+        # Save
+        export = np.append(hdr, hypno[::sf].astype(str))
+        np.savetxt(filename, export, fmt='%s')
+
+    def _save_hypno_txt(self, filename, hypno, sf, window=1):
+        """Save hypnogram in txt file format (*.txt)
+        Header is in file filename_description.txt
+
+        Args:
+            filename: str
+                Filename (with full path) of the file to save
+
+            hypno: np.ndarray
+                Hypnogram array, same length as data
+
+            sf: int
+                Sampling frequency of the data (after downsampling)
+
+            window: int, optional (def 1)
+                Time window (second) of each point in the hypno
+                Default is one value per second
+                (e.g. window = 30 = 1 value per 30 second)
+        """
+
+        base = os.path.basename(filename)
+        dirname = os.path.dirname(filename)
+        descript = os.path.join(dirname,
+                                os.path.splitext(base)[0] + '_description.txt')
+
+        # Save hypno
+        ds_fac = int(sf*window)
+        np.savetxt(filename, hypno[::ds_fac].astype(int), fmt='%s')
+
+        # Save header file
+        hdr = np.array([['time ' + str(window)], ['W 0'], ['N1 1'], ['N2 2'],
+                         ['N3 3'], ['REM 4'], ['Art -1']]).flatten()
+        np.savetxt(descript, hdr, fmt='%s')
 
     def openFile(self):
         """
