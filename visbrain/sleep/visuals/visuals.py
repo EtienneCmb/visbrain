@@ -279,10 +279,13 @@ class Spectrogram(PrepareData):
         nperseg = int(round(nfft * sf))
         overlap = int(round(overlap * sf))
 
+        # =================== PREPARE DATA ===================
+        data = self._prepare_data(sf, data, time)
+
         # =================== COMPUTE ===================
         # Compute the spectrogram :
         freq, t, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
-                                    noverlap=overlap, window='hamming')
+                                           noverlap=overlap, window='hamming')
         mesh = 20 * np.log10(mesh)
 
         # =================== FREQUENCY SELECTION ===================
