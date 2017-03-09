@@ -233,4 +233,6 @@ class uiTools(object):
 
     def _fcn_applyMethod(self):
         """Be sure to apply hypnogram report only on selected channel."""
-        self._ToolDetecReport.setEnabled(self._ToolRdSelected.isChecked())
+        viz = self._ToolRdSelected.isChecked()
+        self._ToolDetecReport.setEnabled(viz)
+        self._ToolDetectChan.setEnabled(viz)
