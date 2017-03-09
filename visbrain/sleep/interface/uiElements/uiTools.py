@@ -27,6 +27,7 @@ class uiTools(object):
         # REM / SPINDLES / DETECTION
         # =====================================================================
         # Commonth elements :
+        self._ToolDetecVisible.clicked.connect(self._fcn_detectViz)
         self._ToolDetectChan.addItems(self._channels)
         self._ToolDetectType.currentIndexChanged.connect(
                                                      self._fcn_switchDetection)
@@ -117,6 +118,19 @@ class uiTools(object):
     # =====================================================================
     # DETECTION
     # =====================================================================
+    def _fcn_detectViz(self):
+        """Toggle vivibility of detections."""
+        # Get button state :
+        viz = self._ToolDetecVisible.isChecked()
+        # Turn all detected lines / markers to viz :
+        for k in range(len(self)):
+            # Toggle lines (for REM and spindles) :
+            self._chan.report[k].visible = viz
+            # Toggle markers (for peaks) :
+            self._chan.peak[k].visible = viz
+        # Hypnogram :
+        self._hyp.report.visible = viz
+
     def _fcn_switchDetection(self):
         """Switch between detection types (show / hide panels)."""
         # Define ref :
