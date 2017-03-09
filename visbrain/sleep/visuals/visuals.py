@@ -88,18 +88,21 @@ class ChannelPlot(object):
             # Create main line (for channel plot) :
             mesh = scene.visuals.Line(pos, name=k+'plot', color=self.color,
                                       method=method, parent=parent[i].wc.scene)
+            mesh.set_gl_state('translucent')
             self.mesh.append(mesh)
             # ----------------------------------------------
             # Create marker peaks :
-            mesh = Markers(pos=np.zeros((1, 3), dtype=np.float32),
+            mark = Markers(pos=np.zeros((1, 3), dtype=np.float32),
                            parent=parent[i].wc.scene)
-            mesh.visible = False
-            self.peak.append(mesh)
+            mark.set_gl_state('translucent')
+            mark.visible = False
+            self.peak.append(mark)
             # ----------------------------------------------
             # Report line :
             rep = scene.visuals.Line(pos, name=k+'report', method=method,
                                      color=self.color_detection,
                                      parent=parent[i].wc.scene)
+            # rep.set_gl_state('translucent')
             self.report.append(rep)
             # ----------------------------------------------
             # Create a grid :
@@ -145,6 +148,11 @@ class ChannelPlot(object):
         for i, k in enumerate(self.mesh):
             # Concatenate time / data / z axis :
             dat = np.vstack((timeSl, dataSl[i, :], z)).T
+
+            # Set main ligne :
+            # dat = np.ascontiguousarray(dat)
+            k.set_data(dat, color=self.color, width=self.width)
+
             # Indicator line :
             if self.colidx[i].size:
                 # Find index that are both in idx and in indicator :
@@ -153,11 +161,11 @@ class ChannelPlot(object):
                 index = np.zeros((len(idx)), dtype=bool)
                 index[inter] = True
                 index[-1] = False
+                dat[:, 2] = -2.
                 # Send data to report :
                 self.report[i].set_data(pos=dat, connect=index, width=4.,
                                         color=self.color_detection)
-            # dat = np.ascontiguousarray(dat)
-            k.set_data(dat, color=self.color, width=self.width)
+
             # Get camera rectangle and set it:
             rect = (self.x[0], ylim[i][0], self.x[1]-self.x[0],
                     ylim[i][1] - ylim[i][0])
