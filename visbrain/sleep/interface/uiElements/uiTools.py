@@ -2,6 +2,8 @@
 
 from ....utils import remdetect, spindlesdetect
 
+from PyQt4 import QtGui
+
 __all__ = ['uiTools']
 
 
@@ -45,7 +47,8 @@ class uiTools(object):
 
         # -------------------------------------------------
         # Spindles detection :
-        self._ToolSpinTh.setValue(3.)
+        self._ToolSpinTh.setValue(2.)
+        self._ToolSpinFmax.setValue(14.)
 
     # =====================================================================
     # DEMEAN / DETREND / FILTERING
@@ -56,7 +59,7 @@ class uiTools(object):
         # Mean and trend :
         demean = self._SigMean.isChecked()
         detrend = self._SigTrend.isChecked()
-        # Filetring :
+        # Filtering :
         filt = self._SigFilt.isChecked()
         fstart = self._SigFiltFrom.value()
         fend = self._SigFiltTo.value()
@@ -175,15 +178,26 @@ class uiTools(object):
             elif method == 'Spindles':
                 # Get variables :
                 thr = self._ToolSpinTh.value()
+                fMin = self._ToolSpinFmin.value()
+                fMax = self._ToolSpinFmax.value()
+                tMin = self._ToolSpinTmin.value()
+                tMax = self._ToolSpinTmax.value()
                 # Get Spindles indices :
-                index, _, _ = spindlesdetect(self._data[k, :], self._sf, thr,
-                                             self._hypno)
+                index, number, density = spindlesdetect(self._data[k, :], 
+                 self._sf, thr, self._hypno, fMin, fMax, tMin, tMax)
                 # Set them to ChannelPlot object :
                 self._chan.colidx[k] = index
                 # Report index on hypnogram :
                 if toReport:
                     self._hyp.set_report(self._time, index, color='olive',
                                          symbol='x', y=-self._hypno[index]+.2)
+                                         
+                # Report results on table
+                self._ToolSpinTable.setRowCount(1)
+                self._ToolSpinTable.setItem(0, 0, QtGui.QTableWidgetItem(
+                                                              str(number)))
+                self._ToolSpinTable.setItem(0, 1, QtGui.QTableWidgetItem(
+                                                    str(round(density, 2))))                                                         
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
