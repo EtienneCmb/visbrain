@@ -75,11 +75,19 @@ class PrepareData(object):
         - Filtering
     """
 
-    def __init__(self, axis=0, demean=False, detrend=False, filt=False):
+    def __init__(self, axis=0, demean=False, detrend=False, filt=False,
+                 fstart=12., fend=16., forder=3, filt_meth='lfilter',
+                 filt_type='butterworth', filt_band='bandpass'):
+        # Axis along which to perform preparation :
         self.axis = axis
+        # Demean and detrend :
         self.demean = demean
         self.detrend = detrend
+        # Filtering :
         self.filt = filt
+        self.fstart, self.fend = fstart, fend
+        self.forder, self.filt_type = forder, filt_type
+        self.filt_meth, self.filt_band = filt_meth, filt_band
 
     def _prepare_data(self, sf, data, time):
         """Prepare data before plotting."""
@@ -91,6 +99,24 @@ class PrepareData(object):
         # ============= DETREND =============
         if self.detrend:
             data = scpsig.detrend(data, axis=self.axis)
+
+        # ============= FILTERING =============
+        if self.filt:
+            # Normalize frequency for bandpass / bandstop / lowpass / highpass:
+            if self.filt_band in ['bandpass', 'bandstop']:
+                fnorm = np.array([self.fstart, self.fend]) / (sf / 2)
+            elif self.filt_band == 'lowpass':
+                fnorm = self.fend / (sf / 2)
+            elif self.filt_band == 'highpass':
+                fnorm = self.fstart / (sf / 2)
+            # Get filter coefficients :
+            if self.filt_type == 'butterworth':
+                b, a = scpsig.butter(self.forder, fnorm, btype=self.filt_band)
+            elif self.filt_type == 'bessel':
+                b, a = scpsig.bessel(self.forder, fnorm, btype=self.filt_band)
+            # Apply filter to data :
+            if self.filt_meth == 'lfilter':
+                data = scpsig.lfilter(b, a, data, axis=self.axis)
 
         return data
 
@@ -114,7 +140,7 @@ class ChannelPlot(PrepareData):
         self.width = width
         self.colidx = [np.array([])] * len(channels)
         self._fcn = fcn
-        self.visible = np.array([True] + [False] * len(channels))
+        self.visible = np.array([True] + [False] * (len(channels) - 1))
 
         # Get color :
         self.color = color2vb(color)
