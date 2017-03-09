@@ -9,14 +9,14 @@ sf = 100.
 # REAL DATA EXAMPLE :
 mat = loadmat('testing_database.mat')
 
-data = mat['x']
+data = np.ascontiguousarray(mat['x'], dtype=np.float32)
 hypnot = mat['hypno'].ravel()
 channels = [str(k[0]) for k in mat['labels'][0][0:-2]]
 
 hypno = []
 for k in hypnot:
     hypno += [k] * 100
-hypno = np.array(hypno)
+hypno = np.ascontiguousarray(hypno, dtype=np.float32)
 #############################################################################
 # DEBUGGING EXAMPLE :
 # sf = 512.

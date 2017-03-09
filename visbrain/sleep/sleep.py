@@ -12,7 +12,7 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
-from ..utils import FixedCam, load_sleepdataset, load_hypno
+from ..utils import FixedCam, load_sleepdataset, load_hypno, id
 # from .user import userfcn
 
 
@@ -63,7 +63,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if hypno is None:
             self._HypW.setVisible(False)
             self._PanHypViz.setChecked(False)
-
+        print('ON load : ', id(data), id(hypno))
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
@@ -225,8 +225,14 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         # ========================== CONVERSION ==========================
         # Convert data and hypno to be contiguous and float 32 (for vispy):
-        data = np.ascontiguousarray(data.astype(np.float32, copy=False))
-        hypno = np.ascontiguousarray(hypno.astype(np.float32, copy=False))
+        if not data.flags['C_CONTIGUOUS']:
+            data = np.ascontiguousarray(data, dtype=np.float32)
+        if data.dtype != np.float32:
+            data = data.astype(np.float32, copy=False)
+        if not hypno.flags['C_CONTIGUOUS']:
+            hypno = np.ascontiguousarray(hypno, dtype=np.float32)
+        if hypno.dtype != np.float32:
+            hypno = hypno.astype(np.float32, copy=False)
 
         return sf, data, hypno, time
 
