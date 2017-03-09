@@ -45,12 +45,15 @@ class PeakDetection(object):
         self._edgewidth = edge_width
         self._size = size
 
-    def set_data(self, data, time, marker, display='max', lookahead=10):
+    def set_data(self, sf, data, time, marker, display='max', lookahead=10.):
         """Find peaks according to data.
 
         Args:
+            sf: float
+                The sampling frequency.
+
             data: np.ndarray
-                The data to find peaks. Must be a row vector
+                The data to find peaks. Must be a row vector.
 
             time: np.ndarray
                 The time vector.
@@ -85,6 +88,7 @@ class PeakDetection(object):
         marker.set_data(pos, size=self._size, face_color=self._color,
                         edge_width=self._edgewidth, scaling=False)
         marker.visible = True
+        self.index = np.round(pos[:, 0] * sf).astype(int)
         marker.update()
 
 
