@@ -7,6 +7,7 @@ Perform:
 """
 import numpy as np
 from scipy.signal import butter, hilbert, filtfilt
+import time
 
 __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 
@@ -145,15 +146,37 @@ def _hilbert_transform(x, sf):
 
 
 def _spindles_duration(index, sf):
-    """Compute spindles duration in ms"""
-    bool_break = (index[1:] - index[:-1]) == 1
-    number = bool_break[bool_break == False].size
+    """Compute spindles duration in ms.
 
-    idx_start = np.where(bool_break == False)[0]
-    idx_start = np.hstack((0, idx_start))
+    Args:
+        index: np.ndarray
+            Index of spindle locations.
+
+        sf: float
+            The sampling frequency.
+
+    Returns:
+        number: int
+            Number of spindles
+
+        duration_ms: np.ndarray
+            Duration of each spindle
+
+        idx_start: np.ndarray
+            Array of integers where each spindle begin.
+
+        idx_end: np.ndarray
+            Array of integers where each spindle finish.
+    """
+    # Find boolean values where each spindle start :
+    bool_break = (index[1:] - index[:-1]) != 1
+    # Get spindles number :
+    number = bool_break.sum()
+    # Build starting / ending spindles index :
+    idx_start = np.hstack([np.array([0]), np.where(bool_break)[0]])
     idx_stop = np.hstack((idx_start[1::], len(bool_break)))
-
-    duration_ms = np.diff(idx_start) * (1000 / sf)
+    # Compute duration :
+    duration_ms = np.diff(idx_start) * (1000. / sf)
 
     return number, duration_ms, idx_start, idx_stop
 
