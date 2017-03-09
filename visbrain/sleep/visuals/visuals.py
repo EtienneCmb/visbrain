@@ -1,4 +1,7 @@
-"""Convert user inputs and create Nd, 1d and Image objects.
+"""Visual objects of sleep module.
+
+This file contains and initialize visual objects (channel plot, spectrogram,
+hypnogram, indicator, shortcuts)
 """
 import numpy as np
 from scipy.signal import spectrogram
@@ -14,11 +17,7 @@ __all__ = ["visuals"]
 
 
 class visuals(object):
-    """Create the visual objects to be added to the scene.
-
-    This class create a Nd-plot, 1d-plot and Image-plot objects and set them
-    parents on their own canvas.
-    """
+    """Create the visual objects to be added to the scene."""
 
     def __init__(self, sf, data, time, channels, hypno, cameras=None,
                  method='agg', **kwargs):
@@ -329,15 +328,35 @@ class Hypnogram(object):
         self.mesh.set_data(pos=np.vstack((time, -data)).T, width=self.width)
         self.mesh.update()
 
-    def set_report(self, time, index, symbol='triangle_down', y=1., size=10.,
+    def set_report(self, time, index, symbol='triangle_down', y=1., size=13.,
                    color='red'):
-        """
+        """Report additional markers to the hypnogram.
+
+        Args:
+            time: np.ndarray
+                The time vector.
+
+            index: np.ndarray
+                Marker index (in sample unit).
+
+            symbol: string
+                The marker symbol to use (see vispy.scene.visuals.Markers.
+                set_data description).
+
+            y: float or np.ndarray
+                The y axis position. If y is a float, all markers will be at
+                the same level. Otherwise, use an array with same size as index
+
+            size: float
+                Marker size.
+
+            color: tuple/string/np.ndarray
+                The color to use.
         """
         # Get reduced version of time :
         timeSl = time[index]
         # Build y-position :
         y = np.full_like(timeSl, y) if isinstance(y, (int, float)) else y
-        y += np.random.rand(len(y)) / 100.
         # Build data array :
         pos = np.vstack((timeSl, y)).T
         # Set data to report :
