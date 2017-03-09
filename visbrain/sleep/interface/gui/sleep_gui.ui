@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -917,6 +917,11 @@
                            <string>butterworth</string>
                           </property>
                          </item>
+                         <item>
+                          <property name="text">
+                           <string>bessel</string>
+                          </property>
+                         </item>
                         </widget>
                        </item>
                        <item row="0" column="4">
@@ -925,6 +930,19 @@
                           <string>hz</string>
                          </property>
                         </widget>
+                       </item>
+                       <item row="3" column="0" colspan="5">
+                        <spacer name="horizontalSpacer_24">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>10</height>
+                          </size>
+                         </property>
+                        </spacer>
                        </item>
                        <item row="0" column="1">
                         <widget class="QDoubleSpinBox" name="_SigFiltFrom">
@@ -949,18 +967,36 @@
                          </property>
                         </widget>
                        </item>
-                       <item row="2" column="0" colspan="5">
-                        <spacer name="horizontalSpacer_24">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
+                       <item row="2" column="0">
+                        <widget class="QLabel" name="label_18">
+                         <property name="text">
+                          <string>Type</string>
                          </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>10</height>
-                          </size>
-                         </property>
-                        </spacer>
+                        </widget>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="QComboBox" name="_SigFiltBand">
+                         <item>
+                          <property name="text">
+                           <string>bandpass</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>bandstop</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>lowpass</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>highpass</string>
+                          </property>
+                         </item>
+                        </widget>
                        </item>
                       </layout>
                      </item>
