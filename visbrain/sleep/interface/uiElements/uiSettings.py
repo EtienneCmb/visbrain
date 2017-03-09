@@ -222,6 +222,9 @@ class uiSettings(object):
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
+        # Get current slider value :
+        sl = self._SlVal.value()
+        slmax = self._SlVal.maximum()
         # Set minimum :
         self._SlVal.setMinimum(self._time.min())
         # Set maximum :
@@ -230,6 +233,8 @@ class uiSettings(object):
         self._SlVal.setTickInterval(step)
         self._SlVal.setSingleStep(step)
         self._SlWin.setMaximum((self._time.max()-self._SigWin.value()))
+        # Re-set slider value :
+        self._SlVal.setValue(sl * self._SlVal.maximum() / slmax)
 
         if self._slOnStart:
             self._fcn_sliderMove()
