@@ -67,7 +67,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = [k.split('.')[0] for k in channels]
-        self._lw = 1.2
+        self._lw = 1.
         self._lwhyp = 2.
         self._ax = axis
         self._defwin = 30.

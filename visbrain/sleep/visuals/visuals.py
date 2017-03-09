@@ -214,9 +214,9 @@ class ChannelPlot(PrepareData):
         idx = np.arange(sl.start, sl.stop)
 
         # Set data to each plot :
-        for i, k in self:
+        for l, (i, k) in enumerate(self):
             # Concatenate time / data / z axis :
-            dat = np.vstack((timeSl, dataSl[i, :], z)).T
+            dat = np.vstack((timeSl, dataSl[l, :], z)).T
 
             # Set main ligne :
             # dat = np.ascontiguousarray(dat)

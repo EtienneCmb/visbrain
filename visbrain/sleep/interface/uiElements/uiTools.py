@@ -156,8 +156,6 @@ class uiTools(object):
                     self._hyp.set_report(self._time, index, color='slateblue',
                                          symbol='triangle_down',
                                          y=-self._hypno[index]+.2)
-                # Update plot :
-                self._fcn_sliderMove()
 
             # ------------------- SPINDLES -------------------
             elif method == 'Spindles':
@@ -172,8 +170,6 @@ class uiTools(object):
                 if toReport:
                     self._hyp.set_report(self._time, index, color='olive',
                                          symbol='x', y=-self._hypno[index]+.2)
-                # Update plot :
-                self._fcn_sliderMove()
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
@@ -193,6 +189,10 @@ class uiTools(object):
             # Be sure panel is displayed :
             if not self.canvas_isVisible(k):
                 self.canvas_setVisible(k, True)
+                self._chan.visible[k] = True
+
+            # Update plot :
+            self._fcn_sliderMove()
 
             # Update progress bar :
             self._ToolDetectProgress.setValue(100. * (i + 1) / len(self))
