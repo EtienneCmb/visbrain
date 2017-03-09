@@ -4,7 +4,7 @@ This file contains and initialize visual objects (channel plot, spectrogram,
 hypnogram, indicator, shortcuts)
 """
 import numpy as np
-from scipy.signal import spectrogram
+import scipy.signal as scpsig
 
 from vispy import scene
 import vispy.visuals.transforms as vist
@@ -20,7 +20,7 @@ class visuals(object):
     """Create the visual objects to be added to the scene."""
 
     def __init__(self, sf, data, time, channels, hypno, cameras=None,
-                 method='agg', **kwargs):
+                 method='gl', **kwargs):
         """Init."""
         # =================== CHANNELS ===================
         self._chan = ChannelPlot(channels, camera=cameras[0], method=method,
@@ -65,11 +65,42 @@ Classes below are used to create visual objects, display on sevral canvas :
 """
 
 
-class ChannelPlot(object):
+class PrepareData(object):
+    """Prepare data before plotting.
+
+    This class group a set of signal processing tools including :
+        - De-meaning
+        - De-trending
+        - Filtering
+    """
+
+    def __init__(self, demean=False, detrend=False, filt=False):
+        self.demean = demean
+        self.detrend = detrend
+        self.filt = filt
+
+    def _prepare_data(self, sf, data, time):
+        """Prepare data before plotting."""
+        # ============= DEMEAN =============
+        if self.demean:
+            mean = np.mean(data, axis=1, keepdims=True)
+            np.subtract(data, mean, out=data)
+
+        # ============= DETREND =============
+        if self.detrend:
+            data = scpsig.detrend(data, axis=1)
+
+        return data
+
+
+class ChannelPlot(PrepareData):
     """Plot each channel."""
 
     def __init__(self, channels, color=(.2, .2, .2), color_detection='red',
                  width=1.5, method='gl', camera=None, parent=None):
+        # Initialize PrepareData :
+        PrepareData.__init__(self)
+
         # Variables :
         self._camera = camera
         self.rect = []
@@ -141,6 +172,9 @@ class ChannelPlot(object):
         dataSl = data[:, sl]
         z = np.full_like(timeSl, .5, dtype=np.float32)
 
+        # Prepare the data :
+        dataSl = self._prepare_data(sf, dataSl, timeSl)
+
         # Build a index vector:
         idx = np.arange(sl.start, sl.stop)
 
@@ -186,7 +220,7 @@ class ChannelPlot(object):
             k.parent = i.wc.scene
 
 
-class Spectrogram(object):
+class Spectrogram(PrepareData):
     """Create and manage a Spectrogram object.
 
     After object creation, use the set_data() method to pass new data, new
@@ -194,9 +228,13 @@ class Spectrogram(object):
     """
 
     def __init__(self, camera, parent=None):
+        # Initialize PrepareData :
+        PrepareData.__init__(self)
+
         # Keep camera :
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
+
         # Create a vispy image object :
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram',
                                         parent=parent)
@@ -243,7 +281,7 @@ class Spectrogram(object):
 
         # =================== COMPUTE ===================
         # Compute the spectrogram :
-        freq, t, mesh = spectrogram(data, fs=sf, nperseg=nperseg,
+        freq, t, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
                                     noverlap=overlap, window='hamming')
         mesh = 20 * np.log10(mesh)
 
