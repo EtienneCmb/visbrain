@@ -26,11 +26,12 @@ class visuals(object):
         self._chan = ChannelPlot(channels, camera=cameras[0], method=method,
                                  color=self._chancolor, width=self._lw,
                                  color_detection=self._indicol,
-                                 parent=self._chanCanvas)
+                                 parent=self._chanCanvas,
+                                 fcn=self._fcn_sliderMove)
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
-        self._spec = Spectrogram(camera=cameras[1],
+        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
                                  parent=self._specCanvas.wc.scene)
         self._spec.set_data(sf, data[0, ...], time)
         # Create a visual indicator for spectrogram :
@@ -133,7 +134,7 @@ class ChannelPlot(PrepareData):
             rep = scene.visuals.Line(pos, name=k+'report', method=method,
                                      color=self.color_detection,
                                      parent=parent[i].wc.scene)
-            #rep.set_gl_state('translucent')
+            rep.set_gl_state('translucent')
             self.report.append(rep)
             # ----------------------------------------------
             # Create a grid :
@@ -227,20 +228,21 @@ class Spectrogram(PrepareData):
     color, new frequency / time range, new settings...
     """
 
-    def __init__(self, camera, parent=None):
+    def __init__(self, camera, parent=None, fcn=None):
         # Initialize PrepareData :
-        PrepareData.__init__(self)
+        PrepareData.__init__(self, axis=0)
 
         # Keep camera :
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
+        self._fcn = fcn
 
         # Create a vispy image object :
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram',
                                         parent=parent)
 
-    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.5,
-                 fstart=0.5, fend=20., contraste=.7):
+    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=.5,
+                 fstart=.5, fend=25., contraste=.7):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
