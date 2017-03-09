@@ -181,10 +181,12 @@ def txt_hyp(path, ds_freq):
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
                         dtype=None, skip_header=0)
 
-    hyp = np.char.decode(hyp)
-
-    # Extract hypnogram values
-    hypno = np.array([s for s in hyp if s.lstrip('-').isdigit()], dtype=int)
+    if np.issubdtype(hyp.dtype, np.integer) == False:
+        hyp = np.char.decode(hyp)
+        hypno = np.array([s for s in hyp if s.lstrip('-').isdigit()],
+                          dtype=int)
+    else:
+        hypno = hyp.astype(int)
 
     hypno = swap_hyp_values(hypno, desc)
 
