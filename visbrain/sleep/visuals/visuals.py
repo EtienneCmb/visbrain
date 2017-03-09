@@ -25,7 +25,7 @@ class visuals(object):
         """Init."""
         # =================== CHANNELS ===================
         self._chan = ChannelPlot(channels, camera=cameras[0], method=method,
-                                 color=self._chancolor,
+                                 color=self._chancolor, width=self._lw,
                                  color_detection=self._indicol,
                                  parent=self._chanCanvas)
 
@@ -41,8 +41,8 @@ class visuals(object):
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
-        self._hyp = Hypnogram(time, camera=cameras[2],
-                              color=self._hypcolor,
+        self._hyp = Hypnogram(time, camera=cameras[2], color=self._hypcolor,
+                              width=self._lwhyp,
                               parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
         # Create a visual indicator for hypnogram :
@@ -70,28 +70,39 @@ class ChannelPlot(object):
     """Plot each channel."""
 
     def __init__(self, channels, color=(.2, .2, .2), color_detection='red',
-                 width=1., method='agg', camera=None, parent=None):
+                 width=1.5, method='gl', camera=None, parent=None):
         # Variables :
         self._camera = camera
         self.rect = []
+        self.width = width
         self.colidx = [np.array([])] * len(channels)
+
         # Get color :
         self.color = color2vb(color)
         self.color_detection = color2vb(color_detection)
+
         # Create one line pear channel :
-        pos = np.zeros((2, 2), dtype=np.float32)
-        self.mesh, self.grid, self.peak = [], [], []
+        pos = np.zeros((1, 3), dtype=np.float32)
+        self.mesh, self.report, self.grid, self.peak = [], [], [], []
         for i, k in enumerate(channels):
-            # Create line :
+            # ----------------------------------------------
+            # Create main line (for channel plot) :
             mesh = scene.visuals.Line(pos, name=k+'plot', color=self.color,
-                                      method=method, width=width,
-                                      parent=parent[i].wc.scene)
+                                      method=method, parent=parent[i].wc.scene)
             self.mesh.append(mesh)
+            # ----------------------------------------------
             # Create marker peaks :
             mesh = Markers(pos=np.zeros((1, 3), dtype=np.float32),
                            parent=parent[i].wc.scene)
             mesh.visible = False
             self.peak.append(mesh)
+            # ----------------------------------------------
+            # Report line :
+            rep = scene.visuals.Line(pos, name=k+'report', method=method,
+                                     color=self.color_detection,
+                                     parent=parent[i].wc.scene)
+            self.report.append(rep)
+            # ----------------------------------------------
             # Create a grid :
             grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
                                            scale=(10., .1),
@@ -128,27 +139,26 @@ class ChannelPlot(object):
         dataSl = data[:, sl]
         z = np.full_like(timeSl, .5, dtype=np.float32)
 
-        # Build color segment and boolean index vector:
-        colseg = np.tile(self.color, (len(timeSl), 1))
-        colsegBck = colseg.copy()
+        # Build a index vector:
         idx = np.arange(sl.start, sl.stop)
 
         # Set data to each plot :
         for i, k in enumerate(self.mesh):
             # Concatenate time / data / z axis :
             dat = np.vstack((timeSl, dataSl[i, :], z)).T
-            # Check color :
+            # Indicator line :
             if self.colidx[i].size:
-                colseg = colsegBck.copy()
-                # Find intersection :
-                inter = np.intersect1d(idx, self.colidx[i])-sl.start
-                # Colorize only intersection :
-                colseg[inter] = self.color_detection
-            else:
-                colseg = colsegBck.copy()
+                # Find index that are both in idx and in indicator :
+                inter = np.intersect1d(idx, self.colidx[i]) - sl.start
+                # Build a array for connecting only consecutive segments :
+                index = np.zeros((len(idx)), dtype=bool)
+                index[inter] = True
+                index[-1] = False
+                # Send data to report :
+                self.report[i].set_data(pos=dat, connect=index, width=4.,
+                                        color=self.color_detection)
             # dat = np.ascontiguousarray(dat)
-            k.set_data(dat, color=colseg)
-            del colseg
+            k.set_data(dat, color=self.color, width=self.width)
             # Get camera rectangle and set it:
             rect = (self.x[0], ylim[i][0], self.x[1]-self.x[0],
                     ylim[i][1] - ylim[i][0])
@@ -276,22 +286,27 @@ class Spectrogram(object):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, time, camera, color='darkblue', width=2, font_size=9,
-                 parent=None):
+    def __init__(self, time, camera, color='darkblue', width=2., parent=None):
         # Keep camera :
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
         self.rect = (time.min(), -5., time.max() - time.min(), 7.)
+        self.width = width
         # Get color :
-        col = color2vb(color=color)
+        self.color = color2vb(color=color)
         # Create a default line :
         pos = np.array([[0, 0], [0, 100]])
-        self.mesh = scene.visuals.Line(pos, name='hypnogram', color=col,
-                                       method='gl', width=width,
-                                       parent=parent)
+        self.mesh = scene.visuals.Line(pos, name='hypnogram', color=self.color,
+                                       method='gl', parent=parent)
         self.mesh.set_gl_state('translucent', depth_test=True)
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
+        # Create a reported marker (for detection):
+        self.report = Markers(parent=parent)
+        # self.mesh.set_gl_state('translucent', depth_test=True)
+        self.mesh.set_gl_state('translucent', depth_test=False,
+                               cull_face=True, blend=True, blend_func=(
+                                          'src_alpha', 'one_minus_src_alpha'))
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
                                             scale=(10., 1.), parent=parent)
@@ -311,8 +326,23 @@ class Hypnogram(object):
                 The time vector
         """
         # Set data to the mesh :
-        self.mesh.set_data(pos=np.vstack((time, -data)).T)
+        self.mesh.set_data(pos=np.vstack((time, -data)).T, width=self.width)
         self.mesh.update()
+
+    def set_report(self, time, index, symbol='triangle_down', y=1., size=10.,
+                   color='red'):
+        """
+        """
+        # Get reduced version of time :
+        timeSl = time[index]
+        # Build y-position :
+        y = np.full_like(timeSl, y) if isinstance(y, (int, float)) else y
+        y += np.random.rand(len(y)) / 100.
+        # Build data array :
+        pos = np.vstack((timeSl, y)).T
+        # Set data to report :
+        self.report.set_data(pos=pos, face_color=color2vb(color, alpha=.9),
+                             size=size, symbol=symbol, edge_width=0.)
 
     # ----------- RECT -----------
     @property

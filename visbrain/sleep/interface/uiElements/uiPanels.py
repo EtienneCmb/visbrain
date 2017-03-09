@@ -54,7 +54,6 @@ class uiPanels(object):
                                       yargs={'text_color': 'black'},
                                       xargs={'text_color': 'black'},
                                       fcn=[self.on_mouse_wheel])
-        self._specCanvas.canvas.context.set_line_width(self._lwhyp)
         self._SpecLayout.addWidget(self._specCanvas.canvas.native)
         self._chanGrid.addWidget(self._SpecW, len(self) + 1, 1, 1, 1)
         # Add label :
@@ -90,7 +89,6 @@ class uiPanels(object):
                                      yargs={'text_color': 'black'},
                                      xargs={'text_color': 'black'},
                                      fcn=[self.on_mouse_wheel])
-        self._hypCanvas.canvas.context.set_line_width(self._lwhyp)
         self._HypLayout.addWidget(self._hypCanvas.canvas.native)
         self._chanGrid.addWidget(self._HypW, len(self) + 2, 1, 1, 1)
         # Add label :
@@ -226,7 +224,6 @@ class uiPanels(object):
                                              yargs={'text_color': 'black'},
                                              xargs={'text_color': 'black'},
                                              fcn=[self.on_mouse_wheel])
-            self._chanCanvas[i].canvas.context.set_line_width(self._lw)
             # Add the canvas to the layout :
             self._chanLayout[i].addWidget(self._chanCanvas[i].canvas.native)
 
