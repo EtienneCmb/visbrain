@@ -6,7 +6,7 @@ Perform:
 - Peak detection
 """
 import numpy as np
-from scipy.signal import butter, lfilter, hilbert
+from scipy.signal import butter, hilbert, filtfilt
 
 __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 
@@ -15,7 +15,7 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 # SPINDLES DETECTION
 ###########################################################################
 
-def spindlesdetect(data, sf, threshold):
+def spindlesdetect(data, sf, threshold, hypno=None, min_freq=12., max_freq=14.):
     """Perform a sleep spindles detection.
 
     Args:
@@ -25,9 +25,19 @@ def spindlesdetect(data, sf, threshold):
         sf: int
             Downsampling frequency
 
-        threshold: float, optional (def 4)
+        threshold: float
             Number of standard deviation to use as threshold
             Threshold is defined as: mean + X * std(derivative)
+
+        hypno: np.ndarray, optional (def None)
+            Hypnogram vector, same length as data
+
+    Kargs:
+        min_freq: float, optional (def 12)
+            Lower bandpass frequency
+
+        max_freq: float, optional (def 14)
+            Higher bandpass frequency
 
     Return:
         idx_spindles: np.ndarray
@@ -42,45 +52,66 @@ def spindlesdetect(data, sf, threshold):
     """
     # Data needs to be a NumPy array
     data = np.array(data)
-    length = max(data.shape)
-    # Bandpass filter 11 - 16 Hz
-    data_filt = _butter_bandpass_filter(data, 11, 16, 100, 3)
+
+    if hypno is not None:
+        data[(np.where(hypno < 1))] = 0
+        length = np.count_nonzero(data)
+        idx_nonzero = np.where(data != 0)
+        idx_zero = np.where(data == 0)
+    else:
+        length = max(data.shape)
+
+    # Bandpass filter
+    data_filt = _butter_bandpass_filter(data, min_freq, max_freq, sf, 4)
+
     # Hilbert transform
     hilbert_env, inst_freq = hilbert_transform(data_filt, sf)
+    if hypno is not None:
+        hilbert_env[idx_zero] = np.nan
+
     # Define threshold
-    thresh = np.mean(hilbert_env) + threshold * np.std(hilbert_env)
-    # Detect spindles
+    thresh = np.nanmean(hilbert_env) + threshold * np.nanstd(hilbert_env)
+
     # Amplitude criteria
     idx_sup_thr = np.array(np.where(hilbert_env > thresh)).flatten()
-    # Frequency criteria
-    idx_insta_freq = np.array(
-        np.where(
-            (inst_freq[idx_sup_thr] > 11) & (
-                inst_freq[idx_sup_thr] < 16))).flatten()
-    idx_sup_thr = idx_sup_thr[idx_insta_freq]
-    # Duration criteria
-    bool_break = (idx_sup_thr[1:]-idx_sup_thr[:-1])==1
-    idx_start = np.array(np.where(bool_break==False)).flatten()
-    idx_stop= np.hstack((idx_start[1::], len(bool_break)))
-    duration_ms = np.hstack((idx_start[0], np.diff(idx_start))) / (1 / sf)
-    good_dur = np.array(np.where((duration_ms > 500) &
-                                (duration_ms < 2000))).flatten()
-    idx_dur = np.sort(np.hstack((idx_start[good_dur], idx_stop[good_dur])))
-    good_idx = np.zeros(0)
-    for i, j in enumerate(idx_dur[:-1]):
-        tmp = np.arange(j, idx_dur[i+1], 1)
-        good_idx = np.append(good_idx, tmp)
 
-    good_idx = good_idx.astype(int)
-    idx_sup_thr = idx_sup_thr[good_idx]
-    # Remove first value which is almost always a false positive
-    idx_sup_thr = np.delete(idx_sup_thr, 0)
-    # Compute number / density
-    spindles = np.diff(idx_sup_thr, n=1)
-    number = np.array(np.where(spindles > 1)).size
-    density = number / (length / sf / 60)
+    if idx_sup_thr.size > 0:
+        # Duration criteria
+#        bool_break = (idx_sup_thr[1:]-idx_sup_thr[:-1])==1
+#        idx_start = np.array(np.where(bool_break==False)).flatten()
+#        idx_stop= np.hstack((idx_start[1::], len(bool_break)))
+#        duration_ms = np.hstack((idx_start[0], np.diff(idx_start))) / (1 / sf)
+#        good_dur = np.array(np.where((duration_ms > min_dur_ms) &
+#                                    (duration_ms < max_dur_ms))).flatten()
+#        idx_dur = np.sort(np.hstack((idx_start[good_dur], idx_stop[good_dur])))
+#        good_idx = np.zeros(0)
+#        for i, j in enumerate(idx_dur[:-1]):
+#            tmp = np.arange(j, idx_dur[i+1], 1)
+#            good_idx = np.append(good_idx, tmp)
+#
+#        good_idx = good_idx.astype(int)
+#        idx_sup_thr = idx_sup_thr[good_idx]
+
+        # Frequency criteria
+        idx_insta_freq = np.array(
+            np.where(
+                (inst_freq[idx_sup_thr] > min_freq) & (
+                    inst_freq[idx_sup_thr] < max_freq))).flatten()
+        idx_sup_thr = idx_sup_thr[idx_insta_freq]
+
+        # Compute number / density
+        spindles = np.diff(idx_sup_thr, n=1)
+        number = np.array(np.where(spindles > 1)).size
+        density = number / (length / sf / 60)
+
+    else:
+        spindles = 0
+        number = 0
+        density = 0.
+
+    print("\nThreshold:\t" + str(threshold) + "\nNumber:\t\t" + str(number) +
+    "\nDensity:\t" + str(round(density, 3)) + "\n-----------------------")
     return idx_sup_thr, number, density
-
 
 def _butter_bandpass(lowcut, highcut, sf, order):
     """Design a butterworth bandpass filter."""
@@ -94,7 +125,7 @@ def _butter_bandpass(lowcut, highcut, sf, order):
 def _butter_bandpass_filter(x, lowcut, highcut, fs, order):
     """"Filter signal using butterworth design."""
     b, a = _butter_bandpass(lowcut, highcut, fs, order=order)
-    y = lfilter(b, a, x)
+    y = filtfilt(b, a, x)
     return y
 
 

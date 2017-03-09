@@ -133,7 +133,7 @@ class ChannelPlot(PrepareData):
             rep = scene.visuals.Line(pos, name=k+'report', method=method,
                                      color=self.color_detection,
                                      parent=parent[i].wc.scene)
-            # rep.set_gl_state('translucent')
+            #rep.set_gl_state('translucent')
             self.report.append(rep)
             # ----------------------------------------------
             # Create a grid :
