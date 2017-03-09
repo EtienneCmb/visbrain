@@ -207,6 +207,8 @@ class Ui_MainWindow(object):
         self._PanSpecNfft.setObjectName(_fromUtf8("_PanSpecNfft"))
         self.gridLayout_5.addWidget(self._PanSpecNfft, 1, 2, 1, 1)
         self._PanSpecStep = QtGui.QDoubleSpinBox(self._PanSpecW)
+        self._PanSpecStep.setDecimals(1)
+        self._PanSpecStep.setProperty("value", 0.5)
         self._PanSpecStep.setObjectName(_fromUtf8("_PanSpecStep"))
         self.gridLayout_5.addWidget(self._PanSpecStep, 2, 2, 1, 1)
         self.label_2 = QtGui.QLabel(self._PanSpecW)
@@ -321,7 +323,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollArea_3.setObjectName(_fromUtf8("scrollArea_3"))
         self.scrollAreaWidgetContents_6 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_6.setGeometry(QtCore.QRect(-39, 0, 336, 787))
+        self.scrollAreaWidgetContents_6.setGeometry(QtCore.QRect(0, 0, 336, 787))
         self.scrollAreaWidgetContents_6.setObjectName(_fromUtf8("scrollAreaWidgetContents_6"))
         self.verticalLayout_28 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents_6)
         self.verticalLayout_28.setObjectName(_fromUtf8("verticalLayout_28"))
@@ -895,7 +897,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.QuickSettings.setCurrentIndex(1)
+        self.QuickSettings.setCurrentIndex(0)
         self._slRules.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

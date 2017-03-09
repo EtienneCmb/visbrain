@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -436,7 +436,14 @@
                         </widget>
                        </item>
                        <item row="2" column="2">
-                        <widget class="QDoubleSpinBox" name="_PanSpecStep"/>
+                        <widget class="QDoubleSpinBox" name="_PanSpecStep">
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
+                         <property name="value">
+                          <double>0.500000000000000</double>
+                         </property>
+                        </widget>
                        </item>
                        <item row="1" column="3">
                         <widget class="QLabel" name="label_2">

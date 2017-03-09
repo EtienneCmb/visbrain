@@ -260,16 +260,16 @@ class Spectrogram(PrepareData):
             cmap: string, optional, (def: 'viridis')
                 The matplotlib colormap to use.
 
-            nfft: float, optional, (def: 256)
+            nfft: float, optional, (def: 30.)
                 Number of fft points for the spectrogram (in seconds).
 
-            overlap: float, optional, (def: 0)
+            overlap: float, optional, (def: .5)
                 Time overlap for the spectrogram (in seconds).
 
-            fstart: float, optional, (def: None)
+            fstart: float, optional, (def: .5)
                 Frequency from which the spectrogram have to start.
 
-            fend: float, optional, (def: None)
+            fend: float, optional, (def: 25.)
                 Frequency from which the spectrogram have to finish.
 
             contraste: float, optional, (def: .7)
