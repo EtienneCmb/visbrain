@@ -39,7 +39,7 @@ class uiTools(object):
 
         # -------------------------------------------------
         # Spindles detection :
-        self._ToolSpinTh.setValue(4.)
+        self._ToolSpinTh.setValue(3.)
 
     # =====================================================================
     # DETECTION
@@ -65,6 +65,10 @@ class uiTools(object):
             # Display progress bar :
             self._ToolDetectProgress.show()
 
+            # Get if report is enable and checked:
+            toReport = self._ToolDetecReport.isEnabled() and \
+                       self._ToolDetecReport.isChecked()
+
             # Switch between detection types :
             # ------------------- REM -------------------
             if method == 'REM':
@@ -75,7 +79,7 @@ class uiTools(object):
                 # Set them to ChannelPlot object :
                 self._chan.colidx[k] = index
                 # Report index on hypnogram :
-                if self._ToolDetecReport.isEnabled():
+                if toReport:
                     self._hyp.set_report(self._time, index, color='slateblue',
                                          symbol='triangle_down',
                                          y=-self._hypno[index]+.2)
@@ -87,11 +91,12 @@ class uiTools(object):
                 # Get variables :
                 thr = self._ToolSpinTh.value()
                 # Get Spindles indices :
-                index, _, _ = spindlesdetect(self._data[k, :], self._sf, thr)
+                index, _, _ = spindlesdetect(self._data[k, :], self._sf, thr,
+                                               self._hypno)
                 # Set them to ChannelPlot object :
                 self._chan.colidx[k] = index
                 # Report index on hypnogram :
-                if self._ToolDetecReport.isEnabled():
+                if toReport:
                     self._hyp.set_report(self._time, index, color='olive',
                                          symbol='x', y=-self._hypno[index]+.2)
                 # Update plot :
@@ -108,7 +113,7 @@ class uiTools(object):
                                     self._chan.peak[k], disp_types[disp],
                                     look)
                 # Report index on hypnogram :
-                if self._ToolDetecReport.isEnabled():
+                if toReport:
                     self._hyp.set_report(self._time, self._peak.index,
                                          color='firebrick', symbol='vbar',
                                          y=-self._hypno[self._peak.index]+.2)
