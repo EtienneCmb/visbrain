@@ -187,13 +187,15 @@ class uiTools(object):
                 nrem_only = self._ToolSpinRemOnly.isChecked()
                 # Get Spindles indices :
                 index, number, density = spindlesdetect(self._data[k, :],
-                                                        self._sf, thr, self._hypno, nrem_only, fMin, fMax, tMin, tMax)
+                                                        self._sf, thr,
+                                                        self._hypno, nrem_only,
+                                                        fMin, fMax, tMin, tMax)
                 # Set them to ChannelPlot object :
                 self._chan.colidx[k] = index
                 # Report index on hypnogram :
                 if toReport:
                     self._hyp.set_report(self._time, index, color='olive',
-                                         symbol='x', y=-self._hypno[index] + .2)
+                                         symbol='x', y=-self._hypno[index]+.2)
 
                 # Report results on table
                 self._ToolSpinTable.setRowCount(1)
