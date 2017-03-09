@@ -39,10 +39,7 @@ class uiPanels(object):
         self._ylims = np.zeros((len(self), 2), dtype=np.float32)
         self._PanAllAmpMin.valueChanged.connect(self._fcn_allAmp)
         self._PanAllAmpMax.valueChanged.connect(self._fcn_allAmp)
-        self._PanAllAmpMin.setMinimum(self['min'].min())
-        self._PanAllAmpMin.setMaximum(self['max'].max())
-        self._PanAllAmpMax.setMinimum(self['min'].min())
-        self._PanAllAmpMax.setMaximum(self['max'].max())
+        self._fcn_updateAmpInfo()
 
         # =====================================================================
         # SPECTROGRAM
@@ -231,20 +228,12 @@ class uiPanels(object):
         self._PanChanLay.addItem(vspacer, i+1, 0, 1, 1)
         self._chanGrid.addItem(hspacer, i+4, 1, 1, 1)
 
-    def _fcn_chanViz(self):
-        """Control visible panels of channels."""
-        for i, k in enumerate(self._chanChecks):
-            viz = k.isChecked()
-            self._chanWidget[i].setVisible(viz)
-            self._chanLabels[i].setVisible(viz)
-            self._chan.visible[i] = viz
-            if viz:
-                self._chanCanvas[i].set_camera(self._chanCam[i])
-        self._chan.update()
-
+    # =====================================================================
+    # AMPLITUDES
+    # =====================================================================
     def _fcn_chanAmplitude(self):
         """Change amplitude of each channel."""
-        # Loop over spinbox and update amera rect :
+        # Loop over spinbox and update camera rect :
         for k, (m, M) in enumerate(zip(self._yminSpin, self._ymaxSpin)):
             self._ylims[k, :] = np.array([m.value(), M.value()])
             rect = (self._chan.x[0], self._ylims[k, 0],

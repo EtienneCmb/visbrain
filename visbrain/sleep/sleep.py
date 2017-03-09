@@ -76,9 +76,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._hypcolor = '#34495e'
         self._indicol = '#e74c3c'
         # Get some data info (min / max / std / mean)
-        self._datainfo = {'min': self._data.min(1), 'max': self._data.max(1),
-                          'std': self._data.std(1), 'mean': self._data.mean(1),
-                          'dist': self._data.max(1) - self._data.min(1)}
+        self._get_dataInfo()
+
         self._defstd = 5.
 
         # ====================== USER & GUI INTERACTION  ======================
@@ -227,6 +226,12 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         hypno = np.ascontiguousarray(hypno.astype(np.float32, copy=False))
 
         return sf, data, hypno, time
+
+    def _get_dataInfo(self):
+        """Get some info about data (min, max, std, mean, dist)."""
+        self._datainfo = {'min': self._data.min(1), 'max': self._data.max(1),
+                          'std': self._data.std(1), 'mean': self._data.mean(1),
+                          'dist': self._data.max(1) - self._data.min(1)}
 
     def show(self):
         """Display the graphical user interface."""
