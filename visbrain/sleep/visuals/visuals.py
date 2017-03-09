@@ -75,7 +75,8 @@ class PrepareData(object):
         - Filtering
     """
 
-    def __init__(self, demean=False, detrend=False, filt=False):
+    def __init__(self, axis=0, demean=False, detrend=False, filt=False):
+        self.axis = axis
         self.demean = demean
         self.detrend = detrend
         self.filt = filt
@@ -84,29 +85,35 @@ class PrepareData(object):
         """Prepare data before plotting."""
         # ============= DEMEAN =============
         if self.demean:
-            mean = np.mean(data, axis=1, keepdims=True)
+            mean = np.mean(data, axis=self.axis, keepdims=True)
             np.subtract(data, mean, out=data)
 
         # ============= DETREND =============
         if self.detrend:
-            data = scpsig.detrend(data, axis=1)
+            data = scpsig.detrend(data, axis=self.axis)
 
         return data
+
+    def update(self):
+        """Update object."""
+        if self._fcn is not None:
+            self._fcn()
 
 
 class ChannelPlot(PrepareData):
     """Plot each channel."""
 
     def __init__(self, channels, color=(.2, .2, .2), color_detection='red',
-                 width=1.5, method='gl', camera=None, parent=None):
+                 width=1.5, method='gl', camera=None, parent=None, fcn=None):
         # Initialize PrepareData :
-        PrepareData.__init__(self)
+        PrepareData.__init__(self, axis=1)
 
         # Variables :
         self._camera = camera
         self.rect = []
         self.width = width
         self.colidx = [np.array([])] * len(channels)
+        self._fcn = fcn
 
         # Get color :
         self.color = color2vb(color)
@@ -174,7 +181,7 @@ class ChannelPlot(PrepareData):
         z = np.full_like(timeSl, .5, dtype=np.float32)
 
         # Prepare the data :
-        dataSl = self._prepare_data(sf, dataSl, timeSl)
+        dataSl = self._prepare_data(sf, dataSl.copy(), timeSl)
 
         # Build a index vector:
         idx = np.arange(sl.start, sl.stop)
@@ -282,7 +289,7 @@ class Spectrogram(PrepareData):
         overlap = int(round(overlap * sf))
 
         # =================== PREPARE DATA ===================
-        data = self._prepare_data(sf, data, time)
+        data = self._prepare_data(sf, data.copy(), time)
 
         # =================== COMPUTE ===================
         # Compute the spectrogram :

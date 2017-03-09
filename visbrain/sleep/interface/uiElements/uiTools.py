@@ -13,6 +13,10 @@ class uiTools(object):
         # =====================================================================
         # MEAN / TREND
         # =====================================================================
+        self._SigMean.clicked.connect(self._fcn_sigProcessing)
+        self._SigTrend.clicked.connect(self._fcn_sigProcessing)
+        self._SigFiltApply.clicked.connect(self._fcn_sigProcessing)
+        self._SigFilt.clicked.connect(self._fcn_filtViz)
 
         # =====================================================================
         # FILTERING
@@ -42,6 +46,41 @@ class uiTools(object):
         self._ToolSpinTh.setValue(3.)
 
     # =====================================================================
+    # DEMEAN / DETREND / FILTERING
+    # =====================================================================
+    def _fcn_sigProcessing(self):
+        """Signal processing function."""
+        # ========== VALUES ==========
+        # Mean and trend :
+        demean = self._SigMean.isChecked()
+        detrend = self._SigTrend.isChecked()
+        # Filetring :
+        filt = self._SigFilt.isChecked()
+        fstart = self._SigFiltFrom.value()
+        fend = self._SigFiltTo.value()
+        filtmeth = self._SigFiltMeth.currentText()
+        filtorder = self._SigFiltOrder.value()
+
+        # ========== CHANNELS ==========
+        self._chan.demean = demean
+        self._chan.detrend = detrend
+        self._chan.filt = filt
+        self._chan.update()
+
+        # ========== SPECTROGRAM ==========
+        self._spec.demean = demean
+        self._spec.detrend = detrend
+        self._spec.filt = filt
+        self._spec.update()
+
+    def _fcn_filtViz(self):
+        """Display / hide filtering panel."""
+        viz = self._SigFilt.isChecked()
+        self._SigFiltW.setEnabled(viz)
+        if not viz:
+            self._fcn_sigProcessing()
+
+    # =====================================================================
     # DETECTION
     # =====================================================================
     def _fcn_switchDetection(self):
@@ -66,8 +105,8 @@ class uiTools(object):
             self._ToolDetectProgress.show()
 
             # Get if report is enable and checked:
-            toReport = self._ToolDetecReport.isEnabled() and \
-                       self._ToolDetecReport.isChecked()
+            toReport = self._ToolDetecReport.isEnabled(
+                                       ) and self._ToolDetecReport.isChecked()
 
             # Switch between detection types :
             # ------------------- REM -------------------
@@ -92,7 +131,7 @@ class uiTools(object):
                 thr = self._ToolSpinTh.value()
                 # Get Spindles indices :
                 index, _, _ = spindlesdetect(self._data[k, :], self._sf, thr,
-                                               self._hypno)
+                                             self._hypno)
                 # Set them to ChannelPlot object :
                 self._chan.colidx[k] = index
                 # Report index on hypnogram :
