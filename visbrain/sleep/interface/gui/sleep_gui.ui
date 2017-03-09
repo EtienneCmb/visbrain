@@ -729,9 +729,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-114</y>
                 <width>334</width>
-                <height>813</height>
+                <height>901</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -1304,8 +1304,17 @@
                   <item>
                    <widget class="QWidget" name="_ToolSpinPanel" native="true">
                     <layout class="QVBoxLayout" name="verticalLayout_36">
-                     <property name="margin">
+                     <property name="leftMargin">
                       <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>10</number>
                      </property>
                      <item>
                       <layout class="QGridLayout" name="gridLayout_18">
@@ -1341,7 +1350,7 @@
                           <double>200.000000000000000</double>
                          </property>
                          <property name="value">
-                          <double>12.000000000000000</double>
+                          <double>14.000000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -1453,6 +1462,26 @@
                         </widget>
                        </item>
                       </layout>
+                     </item>
+                     <item>
+                      <widget class="QTableWidget" name="_ToolSpinTable">
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>100</height>
+                        </size>
+                       </property>
+                       <column>
+                        <property name="text">
+                         <string>Number</string>
+                        </property>
+                       </column>
+                       <column>
+                        <property name="text">
+                         <string>Density ( / min )</string>
+                        </property>
+                       </column>
+                      </widget>
                      </item>
                     </layout>
                    </widget>
