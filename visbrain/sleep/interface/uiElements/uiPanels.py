@@ -259,6 +259,28 @@ class uiPanels(object):
             M.setValue(self._PanAllAmpMax.value())
         self._fcn_chanAmplitude()
 
+    def _fcn_updateAmpInfo(self):
+        """Update informations about amplitudes."""
+        self._get_dataInfo()
+        self._PanAllAmpMin.setMinimum(self['min'].min())
+        self._PanAllAmpMin.setMaximum(self['max'].max())
+        self._PanAllAmpMax.setMinimum(self['min'].min())
+        self._PanAllAmpMax.setMaximum(self['max'].max())
+
+    # =====================================================================
+    # CHANNEL SELECTION
+    # =====================================================================
+    def _fcn_chanViz(self):
+        """Control visible panels of channels."""
+        for i, k in enumerate(self._chanChecks):
+            viz = k.isChecked()
+            self._chanWidget[i].setVisible(viz)
+            self._chanLabels[i].setVisible(viz)
+            self._chan.visible[i] = viz
+            if viz:
+                self._chanCanvas[i].set_camera(self._chanCam[i])
+        self._chan.update()
+
     def _fcn_SelectAllchan(self):
         """Select all channels."""
         for k in self._chanChecks:
