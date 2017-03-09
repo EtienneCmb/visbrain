@@ -3,6 +3,7 @@ import numpy as np
 
 from PyQt4 import QtGui
 import sys
+import os
 from warnings import warn
 
 import vispy.app as visapp
@@ -38,9 +39,11 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 file = QtGui.QFileDialog.getOpenFileName(
                         self, "Open dataset", "", "Elan (*.eeg);;"
                         "Brainvision (*.eeg);;Edf (*.edf);;All files (*.*)")
-                # Load hypnogram :
+                # Get the user path :
+                upath = os.path.split(file)[0]
+                # Dialog window for hypnogram :
                 hypno_file = QtGui.QFileDialog.getOpenFileName(
-                        self, "Open hypnogram", "", "Elan (*.hyp);;"
+                        self, "Open hypnogram", upath, "Elan (*.hyp);;"
                         "Text file (*.txt);;""CSV file (*.csv);;All files "
                         "(*.*)")
 
