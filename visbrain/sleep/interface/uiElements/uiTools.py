@@ -32,7 +32,7 @@ class uiTools(object):
         self._ToolDetecVisible.clicked.connect(self._fcn_detectViz)
         self._ToolDetectChan.addItems(self._channels)
         self._ToolDetectType.currentIndexChanged.connect(
-                                                     self._fcn_switchDetection)
+            self._fcn_switchDetection)
         self._ToolDetectApply.clicked.connect(self._fcn_applyDetection)
         # Apply method (Selected / Visible / All) :
         self._ToolRdSelected.clicked.connect(self._fcn_applyMethod)
@@ -142,8 +142,8 @@ class uiTools(object):
         viz = [self._ToolDetectType.currentText() == k for k in ref]
         # Set widget visibility :
         _ = [k.setVisible(i) for k, i in zip([self._ToolRemPanel,
-                                             self._ToolSpinPanel,
-                                             self._ToolPeakPanel], viz)]
+                                              self._ToolSpinPanel,
+                                              self._ToolPeakPanel], viz)]
 
     def _fcn_applyDetection(self):
         """Apply detection (either REM / Spindles / Peaks."""
@@ -157,22 +157,24 @@ class uiTools(object):
 
             # Get if report is enable and checked:
             toReport = self._ToolDetecReport.isEnabled(
-                                       ) and self._ToolDetecReport.isChecked()
+            ) and self._ToolDetecReport.isChecked()
 
             # Switch between detection types :
             # ------------------- REM -------------------
             if method == 'REM':
                 # Get variables :
                 thr = self._ToolRemTh.value()
+                rem_only = self._ToolRemOnly.isChecked()
                 # Get REM indices :
-                index, _, _ = remdetect(self._data[k, :], self._sf, thr)
+                index, _, _ = remdetect(self._data[k, :], self._sf,
+                                        self._hypno, rem_only, thr)
                 # Set them to ChannelPlot object :
                 self._chan.colidx[k] = index
                 # Report index on hypnogram :
                 if toReport:
                     self._hyp.set_report(self._time, index, color='slateblue',
                                          symbol='triangle_down',
-                                         y=-self._hypno[index]+.2)
+                                         y=-self._hypno[index] + .2)
 
             # ------------------- SPINDLES -------------------
             elif method == 'Spindles':
@@ -182,22 +184,23 @@ class uiTools(object):
                 fMax = self._ToolSpinFmax.value()
                 tMin = self._ToolSpinTmin.value()
                 tMax = self._ToolSpinTmax.value()
+                nrem_only = self._ToolSpinRemOnly.isChecked()
                 # Get Spindles indices :
-                index, number, density = spindlesdetect(self._data[k, :], 
-                 self._sf, thr, self._hypno, fMin, fMax, tMin, tMax)
+                index, number, density = spindlesdetect(self._data[k, :],
+                                                        self._sf, thr, self._hypno, nrem_only, fMin, fMax, tMin, tMax)
                 # Set them to ChannelPlot object :
                 self._chan.colidx[k] = index
                 # Report index on hypnogram :
                 if toReport:
                     self._hyp.set_report(self._time, index, color='olive',
-                                         symbol='x', y=-self._hypno[index]+.2)
-                                         
+                                         symbol='x', y=-self._hypno[index] + .2)
+
                 # Report results on table
                 self._ToolSpinTable.setRowCount(1)
                 self._ToolSpinTable.setItem(0, 0, QtGui.QTableWidgetItem(
-                                                              str(number)))
+                    str(number)))
                 self._ToolSpinTable.setItem(0, 1, QtGui.QTableWidgetItem(
-                                                    str(round(density, 2))))                                                         
+                    str(round(density, 2))))
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
@@ -213,7 +216,7 @@ class uiTools(object):
                 if toReport:
                     self._hyp.set_report(self._time, self._peak.index,
                                          color='firebrick', symbol='vbar',
-                                         y=-self._hypno[self._peak.index]+.2)
+                                         y=-self._hypno[self._peak.index] + .2)
             # Be sure panel is displayed :
             if not self.canvas_isVisible(k):
                 self.canvas_setVisible(k, True)

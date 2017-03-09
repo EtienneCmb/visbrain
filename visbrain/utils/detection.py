@@ -15,8 +15,8 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 # SPINDLES DETECTION
 ###########################################################################
 
-def spindlesdetect(data, sf, threshold, hypno, min_freq=12., max_freq=14.,
-                   min_dur_ms=500, max_dur_ms=1500):
+def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
+                   max_freq=14., min_dur_ms=500, max_dur_ms=1500):
     """Perform a sleep spindles detection.
 
     Args:
@@ -33,6 +33,9 @@ def spindlesdetect(data, sf, threshold, hypno, min_freq=12., max_freq=14.,
         hypno: np.ndarray
             Hypnogram vector, same length as data
             Vector with only 0 if no hypnogram is loaded
+
+        rem_only: boolean
+            Perfom detection only on NREM sleep period
 
     Kargs:
         min_freq: float, optional (def 12)
@@ -55,10 +58,10 @@ def spindlesdetect(data, sf, threshold, hypno, min_freq=12., max_freq=14.,
     # Data needs to be a NumPy array
     data = np.array(data)
 
-    hypLoaded = True if np.unique(hypno).size > 1 else False
+    hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
 
     if hypLoaded:
-        data[(np.where(hypno < 1))] = 0
+        data[(np.where((hypno < 1) | (hypno == 4)))] = 0
         length = np.count_nonzero(data)
         idx_zero = np.where(data == 0)
     else:
@@ -77,7 +80,7 @@ def spindlesdetect(data, sf, threshold, hypno, min_freq=12., max_freq=14.,
 
     # Amplitude criteria
     with np.errstate(divide='ignore', invalid='ignore'):
-        idx_sup_thr = np.array(np.where(hilbert_env > thresh)).flatten()
+        idx_sup_thr = np.where(hilbert_env > thresh)[0]
 
     if idx_sup_thr.size > 0:
 
@@ -85,8 +88,8 @@ def spindlesdetect(data, sf, threshold, hypno, min_freq=12., max_freq=14.,
         _, duration_ms, idx_start, idx_stop = _spindles_duration(idx_sup_thr,
                                                                  sf)
 
-        good_dur = np.array(np.where((duration_ms > min_dur_ms) &
-                                     (duration_ms < max_dur_ms))).flatten()
+        good_dur = np.where((duration_ms > min_dur_ms) &
+                            (duration_ms < max_dur_ms))[0]
 
         good_idx = _spindles_removal(idx_start, idx_stop, good_dur)
 
@@ -106,7 +109,6 @@ def spindlesdetect(data, sf, threshold, hypno, min_freq=12., max_freq=14.,
     else:
         number = 0
         density = 0.
-        mean_dur_ms = 0.
 
     # print("\nSPINDLES DETECTION\n-----------------------\nThreshold:\t"
     # + str(threshold)  + "\nNumber:\t\t" + str(number) + "\nDensity:\t" +
@@ -147,7 +149,7 @@ def _spindles_duration(index, sf):
     bool_break = (index[1:] - index[:-1]) == 1
     number = bool_break[bool_break == False].size
 
-    idx_start = np.array(np.where(bool_break == False)).flatten()
+    idx_start = np.where(bool_break == False)[0]
     idx_start = np.hstack((0, idx_start))
     idx_stop = np.hstack((idx_start[1::], len(bool_break)))
 
@@ -178,7 +180,7 @@ def _spindles_removal(idx_start, idx_stop, good_dur):
 ###########################################################################
 
 
-def remdetect(eog, sf, threshold=3, moving_ms=100, deriv_ms=40):
+def remdetect(eog, sf, hypno, rem_only, threshold, moving_ms=100, deriv_ms=40):
     """Perform a rapid eye movement (REM) detection.
 
     Function to perform a semi-automatic detection of rapid eye movements
@@ -191,9 +193,16 @@ def remdetect(eog, sf, threshold=3, moving_ms=100, deriv_ms=40):
         sf: int
             Downsampling frequency
 
-        threshold: float, optional (def 3)
+        threshold: float
             Number of standard deviation of the derivative signal
             Threshold is defined as: mean + X * std(derivative)
+
+        hypno: np.ndarray
+            Hypnogram vector, same length as data
+            Vector with only 0 if no hypnogram is loaded
+
+        rem_only: boolean
+            Perfom detection only on REM sleep period
 
         moving_ms: int, optional (def 100)
             Time (ms) window of the moving average
@@ -217,23 +226,41 @@ def remdetect(eog, sf, threshold=3, moving_ms=100, deriv_ms=40):
 
     """
     eog = np.array(eog)
-    length = max(eog.shape)
+
+    if rem_only and 4 in hypno:
+        eog[(np.where(hypno < 4))] = 0
+        length = np.count_nonzero(eog)
+        idx_zero = np.where(eog == 0)
+    else:
+        length = max(eog.shape)
+
     # Smooth signal with moving average
     sm_sig = _movingaverage(eog, moving_ms, sf)
+
     # Compute first derivative
     deriv = _derivative(sm_sig, deriv_ms, sf)
+
     # Smooth derivative
     deriv = _movingaverage(deriv, moving_ms, sf)
+
     # Define threshold
-    thresh = np.mean(deriv) + threshold * np.std(deriv)
+    if rem_only and 4 in hypno:
+        deriv[idx_zero] = np.nan
+
+    thresh = np.nanmean(deriv) + threshold * np.nanstd(deriv)
+
     # Find supra-threshold values
-    idx_sup_thr = np.array(np.where(deriv > thresh)).flatten()
+    with np.errstate(divide='ignore', invalid='ignore'):
+        idx_sup_thr = np.where(deriv > thresh)[0]
+
     # Remove first value which is almost always a false positive
     idx_sup_thr = np.delete(idx_sup_thr, 0)
+
     # Number and density of REM
     rem = np.diff(idx_sup_thr, n=1)
     number = np.array(np.where(rem > 1)).size
     density = number / (length / sf / 60)
+
     return idx_sup_thr, number, density
 
 
