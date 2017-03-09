@@ -120,6 +120,7 @@ class uiPanels(object):
         # Add label :
         self._timeLabel = QtGui.QLabel(self.centralwidget)
         self._timeLabel.setText('Time')
+        self._timeLabel.setFont(font)
         self._chanGrid.addWidget(self._timeLabel, len(self) + 3, 0, 1, 1)
 
         # =====================================================================
