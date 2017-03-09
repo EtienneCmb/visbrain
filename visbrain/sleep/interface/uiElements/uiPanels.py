@@ -21,6 +21,9 @@ class uiPanels(object):
 
     def __init__(self):
         """Init."""
+        # Bold font :
+        self._font = QtGui.QFont()
+        self._font.setBold(True)
         # =====================================================================
         # CHANNELS
         # =====================================================================
@@ -28,9 +31,6 @@ class uiPanels(object):
         self._fcn_chanCheckAndWCreate()
         self._PanChanSelectAll.clicked.connect(self._fcn_SelectAllchan)
         self._PanChanDeselectAll.clicked.connect(self._fcn_DeselectAllchan)
-        # Bold font :
-        font = QtGui.QFont()
-        font.setBold(True)
 
         # =====================================================================
         # AMPLITUDES
@@ -56,7 +56,7 @@ class uiPanels(object):
         # Add label :
         self._specLabel = QtGui.QLabel(self.centralwidget)
         self._specLabel.setText(self._channels[0])
-        self._specLabel.setFont(font)
+        self._specLabel.setFont(self._font)
         self._chanGrid.addWidget(self._specLabel, len(self) + 1, 0, 1, 1)
         # Add list of colormaps :
         self._cmap_lst = mpl_cmap()
@@ -96,7 +96,7 @@ class uiPanels(object):
         for k in ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM', '']:
             label = QtGui.QLabel()
             label.setText(k)
-            label.setFont(font)
+            label.setFont(self._font)
             layout.addWidget(label)
         self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0, 1, 1)
 
@@ -117,7 +117,7 @@ class uiPanels(object):
         # Add label :
         self._timeLabel = QtGui.QLabel(self.centralwidget)
         self._timeLabel.setText('Time')
-        self._timeLabel.setFont(font)
+        self._timeLabel.setFont(self._font)
         self._chanGrid.addWidget(self._timeLabel, len(self) + 3, 0, 1, 1)
 
         # =====================================================================
@@ -139,14 +139,13 @@ class uiPanels(object):
         self._chanLayout = self._chanChecks.copy()
         self._chanCanvas = self._chanChecks.copy()
         self._chanLabels = []
+
         # Define a vertical and horizontal spacers :
         vspacer = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Expanding,
                                     QtGui.QSizePolicy.Minimum)
         hspacer = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding,
                                     QtGui.QSizePolicy.Minimum)
-        # Bold text :
-        font = QtGui.QFont()
-        font.setBold(True)
+
         # Loop over channels :
         for i, k in enumerate(self._channels):
             # ============ CHECKBOX ============
@@ -209,7 +208,7 @@ class uiPanels(object):
             # Add channel label :
             self._chanLabels.append(QtGui.QLabel(self.centralwidget))
             self._chanLabels[i].setText(k)
-            self._chanLabels[i].setFont(font)
+            self._chanLabels[i].setFont(self._font)
             self._chanLabels[i].setVisible(False)
             self._chanGrid.addWidget(self._chanLabels[i], i, 0, 1, 1)
 

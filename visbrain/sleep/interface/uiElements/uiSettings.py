@@ -69,6 +69,9 @@ class uiSettings(object):
         self._slRules.currentIndexChanged.connect(self._fcn_sliderMove)
         # Grid toggle :
         self._slGrid.clicked.connect(self._fcn_gridToggle)
+        # Text format :
+        self._slTxtFormat = "Window: [ {start} ; {end} ] {unit} || " + \
+                            "Sleep stage: {conv}"
 
         # =====================================================================
         # ZOOMING
@@ -170,6 +173,7 @@ class uiSettings(object):
         specZoom = self._PanSpecZoom.isChecked()
         hypZoom = self._PanHypZoom.isChecked()
         timeZoom = self._PanTimeZoom.isChecked()
+        unit = self._slRules.currentText()
 
         # Find closest time index :
         t = [0, 0]
@@ -197,8 +201,7 @@ class uiSettings(object):
         # ---------------------------------------
         # Update Time indicator :
         if self._PanTimeIndic.isEnabled():
-            self._TimeAxis.set_data(xlim[0], win, self._time,
-                                    unit=self._slRules.currentText())
+            self._TimeAxis.set_data(xlim[0], win, self._time, unit=unit)
 
         # ================= GUI =================
         # Update Go to :
@@ -219,6 +222,14 @@ class uiSettings(object):
             self._TimeAxis.set_data(xlim[0], win, np.array([xlim[0], xlim[1]]),
                                     unit='seconds')
             self._timecam.rect = (xlim[0], 0., win, 1.)
+
+        # ================= TEXT INFO =================
+        hypref = int(self._hypno[t[0]])
+        items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
+        txt = self._slTxtFormat.format(start=str(xlim[0]), end=str(xlim[1]),
+                                       unit=unit, conv=items[hypref])
+        self._SlText.setText(txt)
+        self._SlText.setFont(self._font)
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
