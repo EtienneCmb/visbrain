@@ -14,7 +14,14 @@ Etienne
 	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
 	-5 Spindles REM peu lisibles car trop de marqueurs (afficher seulement démarrage/fin)
 	-5 Mouvement du curseur hypno quand slider change
-	-5 Améliorer la gestion des amplitudes
+	-5 Améliorer la gestion des amplitudes + bouton auto
+	-5 Couleur spindles / REM devrait fitter avec l'hypno (self._spin, self._rem)
+	-5 Bouger detection dans un autre panel + uiDetection
+	-5 Possibilité de sort sur scoring table (en fonction du time start)
+	-5 Grilles peu lisibles
+	-5 Changement de couleur des Qlabel en fonction position curseur et slider
+	-5 Ajouter des frames descriptifs en haut des tabs
+	+5 A l'exportation, proposer un nom
 	+5 Changer filtrage
 	+4 Lookahead ça m'étonnerai que ce soit des secondes.
 	+4 Filtrage: la complexité ici c'est que le filtrage doit être appliqué partout sans duplication de données
@@ -34,7 +41,10 @@ Raph
 	+4 Calcul statistiques de sommeil
 	
 Commun
-	-5 Indicateur temporel + stage
+	-5 Documentation
+	-5 About
+	-5 Aide directement depuis l'interface?
+	+5 Indicateur temporel + stage
 	+2 Possibilité de scorer un hypnogramme en temps réel
 	+3 Fréquence de down-sampling pour ELAN à modifier quand chargement sera bon (pour le moment, fixe à 100hz)
 	+4 Panel info avec des infos sur l'enregistrement EEG et les statistiques de sommeil

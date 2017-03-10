@@ -276,7 +276,7 @@ class uiSettings(object):
 
         # ================= GUI =================
         # Update Go to :
-        self._SlWin.setValue(val*step)
+        self._SlGoto.setValue(val*step)
 
         # ================= ZOOMING =================
         # Histogram :
@@ -307,25 +307,33 @@ class uiSettings(object):
         # Get current slider value :
         sl = self._SlVal.value()
         slmax = self._SlVal.maximum()
+        win = self._SigWin.value()
         # Set minimum :
         self._SlVal.setMinimum(self._time.min())
         # Set maximum :
         step = self._SigSlStep.value()
-        self._SlVal.setMaximum((self._time.max()-self._SigWin.value())/step)
+        self._SlVal.setMaximum((self._time.max() - win)/step)
         self._SlVal.setTickInterval(step)
         self._SlVal.setSingleStep(step)
-        self._SlWin.setMaximum((self._time.max()-self._SigWin.value()))
+        self._SlGoto.setMaximum((self._time.max() - win))
         # Re-set slider value :
         self._SlVal.setValue(sl * self._SlVal.maximum() / slmax)
 
         if self._slOnStart:
             self._fcn_sliderMove()
+            # Update grid :
+            if self._PanHypZoom.isChecked():
+                self._hyp.set_grid(self._time, step)
+            else:
+                self._hyp.set_grid(self._time, win)
+            self._chan.set_grid(self._time, step)
         else:
             self._slOnStart = True
 
+
     def _fcn_sliderWinSelection(self):
         """Move slider using window spin."""
-        self._SlVal.setValue(self._SlWin.value() / self._SigSlStep.value())
+        self._SlVal.setValue(self._SlGoto.value() / self._SigSlStep.value())
 
     # =====================================================================
     # GRID
@@ -389,7 +397,7 @@ class uiSettings(object):
                                   self._time.max() - self._time.min(), 1.)
             self._TimeAxis.mesh.visible = self._PanTimeIndic.isChecked()
 
-        self._fcn_sliderMove()
+        self._fcn_sliderSettings()
 
     def on_mouse_wheel(self, event):
         """Executed function on mouse wheel."""

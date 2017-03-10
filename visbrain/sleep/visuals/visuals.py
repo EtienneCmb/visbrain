@@ -23,9 +23,9 @@ class visuals(object):
                  method='gl', **kwargs):
         """Init."""
         # =================== CHANNELS ===================
-        self._chan = ChannelPlot(channels, camera=cameras[0], method=method,
-                                 color=self._chancolor, width=self._lw,
-                                 color_detection=self._indicol,
+        self._chan = ChannelPlot(channels, time, camera=cameras[0],
+                                 method=method, color=self._chancolor,
+                                 width=self._lw, color_detection=self._indicol,
                                  parent=self._chanCanvas,
                                  fcn=self._fcn_sliderMove)
 
@@ -121,8 +121,9 @@ class PrepareData(object):
 class ChannelPlot(PrepareData):
     """Plot each channel."""
 
-    def __init__(self, channels, color=(.2, .2, .2), color_detection='red',
-                 width=1.5, method='gl', camera=None, parent=None, fcn=None):
+    def __init__(self, channels, time, color=(.2, .2, .2),
+                 color_detection='red', width=1.5, method='gl', camera=None,
+                 parent=None, fcn=None):
         # Initialize PrepareData :
         PrepareData.__init__(self, axis=1)
 
@@ -165,7 +166,7 @@ class ChannelPlot(PrepareData):
             # ----------------------------------------------
             # Create a grid :
             grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
-                                           scale=(10., .1),
+                                           scale=(30.*time[-1]/len(time), .1),
                                            parent=parent[i].wc.scene)
             grid.set_gl_state('translucent')
             self.grid.append(grid)
@@ -240,6 +241,15 @@ class ChannelPlot(PrepareData):
         for i, k in enumerate(self.mesh):
             if self.visible[i]:
                 yield i, k
+
+    def set_grid(self, time, length=30., y=1.):
+        """Set grid lentgh."""
+        # Get scaling factor :
+        sc = (length * time[-1] / len(time), y)
+        # Set to the grid :
+        for k in self.grid:
+            k._grid_color_fn['scale'].value = sc
+            k.update()
 
     # ----------- PARENT -----------
     @property
@@ -377,6 +387,7 @@ class Hypnogram(object):
         self._rect = (0., 0., 0., 0.)
         self.rect = (time.min(), -5., time.max() - time.min(), 7.)
         self.width = width
+        self.n = len(time)
         # Get color :
         self.color = color2vb(color=color)
         # Create a default line :
@@ -393,9 +404,14 @@ class Hypnogram(object):
                                cull_face=True, blend=True, blend_func=(
                                           'src_alpha', 'one_minus_src_alpha'))
         # Add grid :
-        self.grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
-                                            scale=(10., 1.), parent=parent)
+        self.grid = scene.visuals.GridLines(color=(.1, .1, .1, 1.),
+                                            scale=(30.*time[-1]/len(time), 1.),
+                                            parent=parent)
         self.grid.set_gl_state('translucent')
+
+    def __len__(self):
+        """Return the time length."""
+        return self.n
 
     def set_data(self, sf, data, time):
         """Set data to the hypnogram.
@@ -448,6 +464,14 @@ class Hypnogram(object):
         # Set data to report :
         self.report.set_data(pos=pos, face_color=color2vb(color, alpha=.9),
                              size=size, symbol=symbol, edge_width=0.)
+
+    def set_grid(self, time, length=30., y=1.):
+        """Set grid lentgh."""
+        # Get scaling factor :
+        sc = (length * time[-1] / len(time), y)
+        # Set to the grid :
+        self.grid._grid_color_fn['scale'].value = sc
+        self.grid.update()
 
     # ----------- RECT -----------
     @property
