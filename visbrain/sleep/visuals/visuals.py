@@ -10,7 +10,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .marker import Markers
-from ...utils import array2colormap, color2vb
+from ...utils import array2colormap, color2vb, filt
 
 
 __all__ = ["visuals"]
@@ -76,8 +76,8 @@ class PrepareData(object):
     """
 
     def __init__(self, axis=0, demean=False, detrend=False, filt=False,
-                 fstart=12., fend=16., forder=3, filt_meth='lfilter',
-                 filt_type='butterworth', filt_band='bandpass'):
+                 fstart=12., fend=16., forder=3, way='lfilter',
+                 filt_meth='butterworth', btype='bandpass'):
         # Axis along which to perform preparation :
         self.axis = axis
         # Demean and detrend :
@@ -86,8 +86,8 @@ class PrepareData(object):
         # Filtering :
         self.filt = filt
         self.fstart, self.fend = fstart, fend
-        self.forder, self.filt_type = forder, filt_type
-        self.filt_meth, self.filt_band = filt_meth, filt_band
+        self.forder, self.filt_meth = forder, filt_meth
+        self.way, self.btype = way, btype
 
     def __bool__(self):
         """Return if data have to be prepared."""
@@ -106,21 +106,9 @@ class PrepareData(object):
 
         # ============= FILTERING =============
         if self.filt:
-            # Normalize frequency for bandpass / bandstop / lowpass / highpass:
-            if self.filt_band in ['bandpass', 'bandstop']:
-                fnorm = np.array([self.fstart, self.fend]) / (sf / 2)
-            elif self.filt_band == 'lowpass':
-                fnorm = self.fend / (sf / 2)
-            elif self.filt_band == 'highpass':
-                fnorm = self.fstart / (sf / 2)
-            # Get filter coefficients :
-            if self.filt_type == 'butterworth':
-                b, a = scpsig.butter(self.forder, fnorm, btype=self.filt_band)
-            elif self.filt_type == 'bessel':
-                b, a = scpsig.bessel(self.forder, fnorm, btype=self.filt_band)
-            # Apply filter to data :
-            if self.filt_meth == 'lfilter':
-                data = scpsig.lfilter(b, a, data, axis=self.axis)
+            data = filt(sf, np.array([self.fstart, self.fend]), data,
+                        btype=self.btype, order=self.forder, way=self.way,
+                        method=self.filt_meth, axis=self.axis)
 
         return data
 
