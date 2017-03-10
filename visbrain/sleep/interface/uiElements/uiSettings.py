@@ -59,13 +59,13 @@ class uiSettings(object):
         self._fcn_sliderSettings()
         self._SlVal.valueChanged.connect(self._fcn_sliderMove)
         # Function applied when slider's settings changed :
-        self._SigWin.valueChanged.connect(self._fcn_sliderSettings)
+        self._SigWin.valueChanged.connect(self._fcn_sliderMove)
         self._SigWin.setKeyboardTracking(False)
         self._SigSlStep.valueChanged.connect(self._fcn_sliderSettings)
         self._SigSlStep.setKeyboardTracking(False)
         # Spin box for window selection :
-        self._SlWin.valueChanged.connect(self._fcn_sliderWinSelection)
-        self._SlWin.setKeyboardTracking(False)
+        self._SlGoto.valueChanged.connect(self._fcn_sliderWinSelection)
+        self._SlGoto.setKeyboardTracking(False)
         # Unit conversion :
         self._slRules.currentIndexChanged.connect(self._fcn_sliderMove)
         # Grid toggle :
