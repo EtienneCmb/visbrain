@@ -4,7 +4,7 @@ import numpy as np
 from visbrain import Sleep
 from scipy.io import loadmat
 
-torun = 'big'
+torun = 'small'
 
 ###########################################################################
 # LOAD BY GUI :
@@ -62,7 +62,7 @@ elif torun == 'rnd':
 sp = Sleep(file=file, hypno_file=hypno_file, data=data, channels=channels,
            sf=sf, downsample=100., hypno=hypno, line='gl', axis=False)
 sp._ToolDetectType.setCurrentIndex(1)
-sp._fcn_applyDetection()
+# sp._fcn_applyDetection()
 sp.show()
 # s = Sleep()
 # s.show()

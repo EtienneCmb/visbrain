@@ -12,8 +12,12 @@ Bug
 Etienne
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
-	-4 Lookahead ça m'étonnerai que ce soit des secondes.
-	-4 Filtrage: la complexité ici c'est que le filtrage doit être appliqué partout sans duplication de données
+	-5 Spindles REM peu lisibles car trop de marqueurs (afficher seulement démarrage/fin)
+	-5 Mouvement du curseur hypno quand slider change
+	-5 Améliorer la gestion des amplitudes
+	+5 Changer filtrage
+	+4 Lookahead ça m'étonnerai que ce soit des secondes.
+	+4 Filtrage: la complexité ici c'est que le filtrage doit être appliqué partout sans duplication de données
 	+4 Label bold
 	+4 Indicator devrait être un carré transparent ou dont le fond est vide
 	+4 Chargement des fichiers (manque chargement hypno + test sur fichiers réels)
@@ -22,9 +26,10 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-5 Intégration de la REM détection
-	-5 Intégration de la Spindle détection
+	-5 Spindles
 	-3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
+	+5 Intégration de la REM détection
+	+5 Intégration de la Spindle détection
 	+5 Chargement hypnogram
 	+4 Calcul statistiques de sommeil
 	
