@@ -6,8 +6,8 @@ Perform:
 - Peak detection
 """
 import numpy as np
-from scipy.signal import butter, hilbert, filtfilt
-import time
+from scipy.signal import hilbert
+from .filtering import filt, morlet
 
 __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 
@@ -17,14 +17,15 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 ###########################################################################
 
 def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
-                   max_freq=14., min_dur_ms=500, max_dur_ms=1500):
+                   max_freq=14., min_dur_ms=500, max_dur_ms=1500,
+                   method='hilbert'):
     """Perform a sleep spindles detection.
 
     Args:
         data: np.ndarray
             eeg signal (preferably central electrodes)
 
-        sf: int
+        sf: float
             Downsampling frequency
 
         threshold: float
@@ -45,6 +46,10 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
         max_freq: float, optional (def 14)
             Higher bandpass frequency
 
+        method: string
+            Method to extract complex decomposition. Use either 'hilbert' or
+            'wavelet'.
+
     Return:
         idx_spindles: np.ndarray
             Array of supra-threshold indices
@@ -56,41 +61,54 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
             Number of spindles per minute
 
     """
-    # Data needs to be a NumPy array
-    data = np.array(data)
-
+    # Find if hypnogram is loaded :
     hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
 
     if hypLoaded:
-        data[(np.where((hypno < 1) | (hypno == 4)))] = 0
+        data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0
         length = np.count_nonzero(data)
-        idx_zero = np.where(data == 0)
+        idx_zero = np.where(data == 0)[0]
     else:
         length = max(data.shape)
 
-    # Bandpass filter
-    data_filt = _butter_bandpass_filter(data, min_freq, max_freq, sf, 4)
+    # Get complex decomposition of filtered data :
+    if method == 'hilbert':
+        # Bandpass filter
+        data_filt = filt(sf, [min_freq, max_freq], data, order=4)
+        # Hilbert transform on odd-length signals is twice longer. To avoid
+        # this extra time, simply set to zero padding.
+        # See https://github.com/scipy/scipy/issues/6324
+        if data.size % 2:
+            analytic = hilbert(data_filt)
+        else:
+            analytic = hilbert(data_filt[:-1], len(data_filt))
+    elif method == 'wavelet':
+        analytic = morlet(data, sf, np.mean([min_freq, max_freq]))
 
-    # Hilbert transform
-    hilbert_env, inst_freq = _hilbert_transform(data_filt, sf)
+    # Get amplitude and phase :
+    amplitude = np.abs(analytic)
+    phase = np.unwrap(np.angle(analytic))
+    # Phase derivative (instantaneaous frequencies) :
+    inst_freq = np.diff(phase) / (2.0 * np.pi) * sf
+    inst_freq = np.append(inst_freq, 0.)  # What for?
 
     if hypLoaded:
-        hilbert_env[idx_zero] = np.nan
+        amplitude[idx_zero] = np.nan
 
-    thresh = np.nanmean(hilbert_env) + threshold * np.nanstd(hilbert_env)
+    thresh = np.nanmean(amplitude) + threshold * np.nanstd(amplitude)
 
     # Amplitude criteria
     with np.errstate(divide='ignore', invalid='ignore'):
-        idx_sup_thr = np.where(hilbert_env > thresh)[0]
+        idx_sup_thr = np.where(amplitude > thresh)[0]
 
     if idx_sup_thr.size > 0:
 
-        # Duration criteria
+        # Get where spindles start / end and duration :
         _, duration_ms, idx_start, idx_stop = _spindles_duration(idx_sup_thr,
                                                                  sf)
-
-        good_dur = np.where((duration_ms > min_dur_ms) &
-                            (duration_ms < max_dur_ms))[0]
+        # Get where min_dur < spindles duration < max_dur :
+        good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
+                                           duration_ms < max_dur_ms))[0]
 
         good_idx = _spindles_removal(idx_start, idx_stop, good_dur)
 
@@ -105,44 +123,13 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
         # idx_sup_thr = idx_sup_thr[idx_insta_freq]
 
         number, duration_ms, _, _ = _spindles_duration(idx_sup_thr, sf)
-        density = number / (length / sf / 60)
+        density = number / (length / sf / 60.)
 
     else:
         number = 0
         density = 0.
 
-    # print("\nSPINDLES DETECTION\n-----------------------\nThreshold:\t"
-    # + str(threshold)  + "\nNumber:\t\t" + str(number) + "\nDensity:\t" +
-    # str(round(density, 3)) + " / min\n")
-
     return idx_sup_thr, number, density
-
-
-def _butter_bandpass(lowcut, highcut, sf, order):
-    """Design a butterworth bandpass filter."""
-    nyq = 0.5 * sf
-    low = lowcut / nyq
-    high = highcut / nyq
-    b, a = butter(order, [low, high], btype='band')
-    return b, a
-
-
-def _butter_bandpass_filter(x, lowcut, highcut, fs, order):
-    """"Filter signal using butterworth design."""
-    b, a = _butter_bandpass(lowcut, highcut, fs, order=order)
-    y = filtfilt(b, a, x)
-    return y
-
-
-def _hilbert_transform(x, sf):
-    """Perform a Hilbert transform of the signal."""
-    analytic = hilbert(x)
-    amplitude_envelope = np.abs(analytic)
-    instantaneous_phase = np.unwrap(np.angle(analytic))
-    instantaneous_freq = np.diff(instantaneous_phase) / (2.0 * np.pi) * sf
-    instantaneous_freq = np.append(instantaneous_freq, 0)
-
-    return amplitude_envelope, instantaneous_freq
 
 
 def _spindles_duration(index, sf):
@@ -182,19 +169,31 @@ def _spindles_duration(index, sf):
 
 
 def _spindles_removal(idx_start, idx_stop, good_dur):
-    """Remove events that do not have the good duration"""
+    """Remove events that do not have the good duration.
 
-    idx_good_start = idx_start[good_dur]
-    idx_good_stop = idx_stop[good_dur]
+    Args:
+        idx_start: np.ndarray
+            Starting indices of spindles.
 
-    good_idx = np.zeros(0)
+        idx_stop: np.ndarray
+            Ending indices of spindles.
 
-    for i, j in enumerate(idx_good_start[:]):
-        #print(idx_good_start[i], idx_good_stop[i])
-        tmp = np.arange(idx_good_start[i], idx_good_stop[i])
-        good_idx = np.append(good_idx, tmp)
+        good_dur: np.ndarray
+            Indices of spindles having a proper duration.
 
-    good_idx = good_idx.astype(int)
+    Return:
+        good_idx: np.ndarray
+            Row vector containing the extending version of indices.
+    """
+    # Get where good duration start / end :
+    start = idx_start[good_dur]
+    stop = idx_stop[good_dur]
+
+    # Extend each spindle duration (start -> stop) :
+    extend = np.array([np.arange(i, j) for i, j in zip(start, stop)])
+
+    # Get it as a flatten array :
+    good_idx = np.hstack(extend.flat)
 
     return good_idx
 
