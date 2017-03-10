@@ -16,7 +16,7 @@ class uiSettings(object):
         # =====================================================================
         # MENU & FILES
         # =====================================================================
-
+        # self.TESTLABEL.setText("<font color=#34495e>Some text</font>");
         # ------------------------------- FILE -------------------------------
         # Screenshot :
         screenshot = QAction("Screenshot", self)
