@@ -3,7 +3,5 @@ from .guitools import *
 from .math import *
 from .memory import *
 from .others import *
-from .fileconvert import *
 from .cameras import *
-from .hypnoprocessing import *
-from .detection import *
+from .sleep import *
