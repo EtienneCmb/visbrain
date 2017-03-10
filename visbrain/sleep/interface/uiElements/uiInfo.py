@@ -46,7 +46,7 @@ class uiInfo(object):
         """Export stat info."""
         # Get file name :
         path = QtGui.QFileDialog.getSaveFileName(
-            self, "Save File", "",
+            self, "Save File", "statsinfo.csv",
             filter="CSV Files (*.csv);;Text Files (*.txt)")
         # Find extension :
         selected_ext = self._infoExportAs.currentText()
