@@ -125,13 +125,13 @@ class HypnoEdition(object):
         color_cursor: string/tuple, optional, (def: 'red')
             Color of the traveling cursor.
 
-        color_static: string/tuple, optional, (def: 'blue')
+        color_static: string/tuple, optional, (def: 'gray')
             Color of defined markers.
 
         color_active: string/tuple, optional, (def: 'green')
             Color of active marker.
 
-        color_dragge: string/tuple, optional, (def: 'purple')
+        color_dragge: string/tuple, optional, (def: 'blue')
             Color of dragged marker.
 
         size: float, optional, (def: 9.)
@@ -143,8 +143,8 @@ class HypnoEdition(object):
     """
 
     def __init__(self, sf, hypno_obj, data, time, canvas, yaxis, enable=False,
-                 parent=None, color_cursor='red', color_static='blue',
-                 color_active='green', color_dragge='purple', size=9.,
+                 parent=None, color_cursor='red', color_static='gray',
+                 color_active='green', color_dragge='blue', size=8.,
                  fcn=None):
         """Init."""
         # =================== MOUSE FUNCTIONS ===================
@@ -274,7 +274,7 @@ class HypnoEdition(object):
 
             return pos
 
-        def _get_close_marker(event, perc=.1):
+        def _get_close_marker(event, perc=1.):
             """Get closest marker from the cursor.
 
             Arg:
