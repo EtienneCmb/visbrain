@@ -144,7 +144,7 @@ class HypnoEdition(object):
 
     def __init__(self, sf, hypno_obj, data, time, canvas, yaxis, enable=False,
                  parent=None, color_cursor='red', color_static='gray',
-                 color_active='green', color_dragge='blue', size=8.,
+                 color_active='green', color_dragge='blue', size=7.,
                  fcn=None):
         """Init."""
         # =================== MOUSE FUNCTIONS ===================
@@ -212,8 +212,9 @@ class HypnoEdition(object):
                     # Temporaly turn dragged point to color_dragge :
                     cbackup[self.keep_idx, :] = self.color_dragge
                     # Send data marker :
-                    hypno_obj.edit.set_data(pos=self.pos, edge_width=0.,
-                                            face_color=cbackup, size=size)
+                    hypno_obj.edit.set_data(pos=self.pos, edge_width=1.,
+                                            face_color=cbackup, size=size,
+                                            edge_color='white')
             else:
                 # Display moving point :
                 if idx is None:
@@ -225,7 +226,7 @@ class HypnoEdition(object):
                     pos = self.pos
                 # Set new data to marker :
                 hypno_obj.edit.set_data(pos=pos, face_color=color, size=size,
-                                        edge_width=0.)
+                                        edge_width=1., edge_color='white')
                 # Save current position :
                 self._cpos = cpos
 
