@@ -4,6 +4,8 @@ Bug
 	-5 Bug d'affichage avec l'option REM only: à la ligne data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0
 	-5 Bug quand aucun spindle détecté (à reproduire sur small + th=2. + wavelet)
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
+	-5 Spindles et REM report ne suivent plus les coordonnées (y,) lors de l'édition de l'hypno
+	-4 Screenshot page complète mais par PyQt (pas vispy canvas)
 	+5 Affichage lent au démarrage provient des labels ajouter au canvas directement. Les mettre en dehors permettrait de résoudre aussi par la même occasion la perte de l'affichage en zooming. Par contre, en drag la gestion des couleurs plus dure...
 	+5 Spectrograme décalé
 	+5 Peak detection ne s'affiche pas sur windows. Ca doit venir du set_gl_state, où de la superposition de données. Ce qui est byzarre c'est que ça marche sur l'hypnograme. Solution non esthétique : sur chaque panel, rajouter un objet de type marker contenant les pics du signal.
@@ -12,17 +14,16 @@ Bug
 	+4 Si l'hypnograme est vide, il faut le cacher + cacher onglet info
 
 Etienne
+	-5 Améliorer la gestion des amplitudes + bouton auto
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
-	-5 Spindles REM peu lisibles car trop de marqueurs (afficher seulement démarrage/fin)
-	-5 Mouvement du curseur hypno quand slider change
-	-5 Améliorer la gestion des amplitudes + bouton auto
 	-5 Couleur spindles / REM devrait fitter avec l'hypno (self._spin, self._rem)
 	-5 Bouger detection dans un autre panel + uiDetection
-	-5 Possibilité de sort sur scoring table (en fonction du time start)
-	-5 Grilles peu lisibles
-	-5 Changement de couleur des Qlabel en fonction position curseur et slider
-	-5 Ajouter des frames descriptifs en haut des tabs
+	-4 Possibilité de sort sur scoring table (en fonction du time start)
+	-4 Ajouter des frames descriptifs en haut des tabs
+	-3 Grilles peu lisibles
+	+5 Spindles REM peu lisibles car trop de marqueurs (afficher seulement démarrage/fin)
+	+5 Changement de couleur des Qlabel en fonction position curseur et slider
 	+5 A l'exportation, proposer un nom
 	+5 Changer filtrage
 	+4 Lookahead ça m'étonnerai que ce soit des secondes.
