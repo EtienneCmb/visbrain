@@ -552,11 +552,11 @@ class vbShortcuts(object):
             if event.text == ' ':
                 pass
             if event.text == 'n':  # Next (slider)
-                self._SlWin.setValue(
-                                self._SlWin.value() + self._SigSlStep.value())
+                self._SlGoto.setValue(
+                                self._SlGoto.value() + self._SigSlStep.value())
             if event.text == 'b':  # Before (slider)
-                self._SlWin.setValue(
-                                self._SlWin.value() - self._SigSlStep.value())
+                self._SlGoto.setValue(
+                                self._SlGoto.value() - self._SigSlStep.value())
             if event.text == '0':  # Toggle visibility on spec
                 self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
                 self._fcn_specViz()
