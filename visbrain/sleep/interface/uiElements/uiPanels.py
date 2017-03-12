@@ -61,7 +61,7 @@ class uiPanels(object):
         # Add list of colormaps :
         self._cmap_lst = mpl_cmap()
         self._PanSpecCmap.addItems(self._cmap_lst)
-        self._PanSpecCmap.setCurrentIndex(self._cmap_lst.index('rainbow'))
+        self._PanSpecCmap.setCurrentIndex(self._cmap_lst.index(self._defcmap))
         # Add list of channels :
         self._PanSpecChan.addItems(self._channels)
         # Connect spectrogam properties :
@@ -71,8 +71,8 @@ class uiPanels(object):
         self._PanSpecNfft.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecStep.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecFstart.valueChanged.connect(self._fcn_specCompat)
-        self._PanSpecCon.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecFend.valueChanged.connect(self._fcn_specCompat)
+        self._PanSpecCon.valueChanged.connect(self._fcn_specSetData)
         self._PanSpecCmap.currentIndexChanged.connect(self._fcn_specSetData)
         self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
 

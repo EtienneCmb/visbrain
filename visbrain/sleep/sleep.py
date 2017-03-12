@@ -75,9 +75,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._ax = axis
         self._defwin = 30.
         # Color :
-        self._chancolor = '#34495e'
-        self._hypcolor = '#34495e'
+        self._chancolor = '#2b303b'
+        self._hypcolor = '#2b303b'
         self._indicol = '#e74c3c'
+        self._defcmap = 'viridis'
         # Get some data info (min / max / std / mean)
         self._get_dataInfo()
 

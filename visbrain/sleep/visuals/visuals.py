@@ -33,7 +33,7 @@ class visuals(object):
         # Create a spectrogram object :
         self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
                                  parent=self._specCanvas.wc.scene)
-        self._spec.set_data(sf, data[0, ...], time)
+        self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
         # Create a visual indicator for spectrogram :
         self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
                                   parent=self._specCanvas.wc.scene)
