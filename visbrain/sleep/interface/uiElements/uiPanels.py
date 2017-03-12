@@ -93,11 +93,13 @@ class uiPanels(object):
         layout = QtGui.QVBoxLayout(self._hypLabel)
         layout.setMargin(0)
         layout.setSpacing(0)
+        self._hypYLabels = []
         for k in ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM', '']:
             label = QtGui.QLabel()
             label.setText(k)
             label.setFont(self._font)
             layout.addWidget(label)
+            self._hypYLabels.append(label)
         self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0, 1, 1)
 
         # =====================================================================

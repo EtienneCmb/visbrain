@@ -302,6 +302,13 @@ class uiSettings(object):
         self._SlText.setText(txt)
         self._SlText.setFont(self._font)
 
+        # ================= HYPNO LABELS =================
+        ref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
+        for k, i in zip(self._hypYLabels, ref):
+            k.setStyleSheet("QLabel")
+        self._hypYLabels[hypref + 1].setStyleSheet("QLabel {color: " +
+                                                   self._indicol + ";}")
+
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
         # Get current slider value :
