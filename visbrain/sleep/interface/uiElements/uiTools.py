@@ -1,4 +1,5 @@
 """Main class for sleep tools managment."""
+import numpy as np
 
 from ....utils import remdetect, spindlesdetect
 
@@ -172,9 +173,12 @@ class uiTools(object):
                 self._chan.colidx[k] = index
                 # Report index on hypnogram :
                 if toReport:
-                    self._hyp.set_report(self._time, index, color='slateblue',
+                    # Find only where index start :
+                    ind = index[np.where(index[1:]-index[:-1] != 1)[0]]
+                    # Display on hypnogram :
+                    self._hyp.set_report(self._time, ind, color='slateblue',
                                          symbol='triangle_down',
-                                         y=-self._hypno[index] + .2)
+                                         y=-self._hypno[ind] + .2)
 
             # ------------------- SPINDLES -------------------
             elif method == 'Spindles':
@@ -194,8 +198,11 @@ class uiTools(object):
                 self._chan.colidx[k] = index
                 # Report index on hypnogram :
                 if toReport:
-                    self._hyp.set_report(self._time, index, color='olive',
-                                         symbol='x', y=-self._hypno[index]+.2)
+                    # Find only where index start :
+                    ind = index[np.where(index[1:]-index[:-1] != 1)[0]]
+                    # Display on hypnogram :
+                    self._hyp.set_report(self._time, ind, color='olive',
+                                         symbol='x', y=-self._hypno[ind] + .2)
 
                 # Report results on table
                 self._ToolSpinTable.setRowCount(1)
