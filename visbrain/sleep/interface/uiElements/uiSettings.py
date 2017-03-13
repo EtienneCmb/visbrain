@@ -16,7 +16,6 @@ class uiSettings(object):
         # =====================================================================
         # MENU & FILES
         # =====================================================================
-        # self.TESTLABEL.setText("<font color=#34495e>Some text</font>");
         # ------------------------------- FILE -------------------------------
         # Screenshot :
         screenshot = QAction("Screenshot", self)
@@ -217,14 +216,17 @@ class uiSettings(object):
     # GUI
     # =====================================================================
     def _screenshot(self):
-        """Screenshot using the GUI.
-
-        This function need that a savename is already defined (otherwise, a
-        window appeared so that the user specify the path/name). Then, it needs
-        an extension (png) and a boolean parameter (self.cb['export']) to
-        specify if the colorbar has to be exported.
-        """
-        pass
+        """Screenshot using the GUI."""
+        # Get filename :
+        filename = QFileDialog.getSaveFileName(self, 'Screenshot',
+                                               os.path.join(os.getenv('HOME'),
+                                                            'screenshot.jpg'),
+                                               "Picture (*.jpg);;;;All files"
+                                               " (*.*)")
+        if filename:
+            file, ext = os.path.splitext(filename)
+            p = QPixmap.grabWindow(self.centralwidget.winId())
+            p.save(filename + '.jpg')
 
     def _toggle_settings(self):
         """Toggle method for display / hide the settings panel."""
