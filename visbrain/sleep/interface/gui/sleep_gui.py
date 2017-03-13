@@ -837,6 +837,7 @@ class Ui_MainWindow(object):
         self._ToolRdSelected.setObjectName(_fromUtf8("_ToolRdSelected"))
         self.gridLayout_8.addWidget(self._ToolRdSelected, 1, 0, 1, 1)
         self._ToolDetecReport = QtGui.QCheckBox(self.groupBox_7)
+        self._ToolDetecReport.setChecked(True)
         self._ToolDetecReport.setObjectName(_fromUtf8("_ToolDetecReport"))
         self.gridLayout_8.addWidget(self._ToolDetecReport, 2, 0, 1, 3)
         self._ToolRdAll = QtGui.QRadioButton(self.groupBox_7)
@@ -1116,7 +1117,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.QuickSettings.setCurrentIndex(4)
-        self._DetectionTab.setCurrentIndex(1)
+        self._DetectionTab.setCurrentIndex(0)
         self._slRules.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
