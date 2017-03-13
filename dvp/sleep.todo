@@ -47,6 +47,7 @@ Commun
 	-5 Documentation
 	-5 About
 	-5 Aide directement depuis l'interface?
+	-5 Ajouter collaborateurs
 	+5 Indicateur temporel + stage
 	+2 Possibilité de scorer un hypnogramme en temps réel
 	+3 Fréquence de down-sampling pour ELAN à modifier quand chargement sera bon (pour le moment, fixe à 100hz)
