@@ -65,7 +65,7 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
     hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
 
     if hypLoaded:
-        data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0
+        data.copy()[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
         length = np.count_nonzero(data)
         idx_zero = np.where(data == 0)[0]
     else:
