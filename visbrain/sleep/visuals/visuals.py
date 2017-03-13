@@ -563,6 +563,12 @@ class vbShortcuts(object):
             if event.text == '1':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
+            if event.text == 'z':  # Enable zoom
+                viz = self._PanTimeZoom.isChecked()
+                self._PanTimeZoom.setChecked(not viz)
+                self._PanHypZoom.setChecked(not viz)
+                self._PanSpecZoom.setChecked(not viz)
+                self._fcn_Zooming()
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
