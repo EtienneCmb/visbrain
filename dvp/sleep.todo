@@ -2,7 +2,7 @@ Bug
 	-5 Peut-être il faut vider la mémoire après downsampling.
 	-5 SEGMENTATION ERROR: à l fermeture, l'interface bug (fait bugger ipython). Continuous array? Voir modifs pyqt5, dernière ligne
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
-	-4 Screenshot page complète mais par PyQt (pas vispy canvas)
+	+4 Screenshot page complète mais par PyQt (pas vispy canvas)
 	+5 Bug quand aucun spindle détecté (à reproduire sur small + th=2. + wavelet)
 	+5 Bug d'affichage avec l'option REM only: à la ligne data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0
 	+5 Spindles et REM report ne suivent plus les coordonnées (y,) lors de l'édition de l'hypno
@@ -16,8 +16,8 @@ Bug
 Etienne
 	-5 Améliorer la gestion des amplitudes + bouton auto
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
-	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
 	-3 Grilles peu lisibles
+	+5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
 	+5 Couleur spindles / REM devrait fitter avec l'hypno (self._spin, self._rem)
 	+4 Possibilité de sort sur scoring table (en fonction du time start)
 	+4 Ajouter des frames descriptifs en haut des tabs
