@@ -1,5 +1,6 @@
 """Main class for sleep tools managment."""
 import numpy as np
+from warnings import warn
 
 from ....utils import remdetect, spindlesdetect
 
@@ -40,7 +41,8 @@ class uiDetection(object):
 
         # -------------------------------------------------
         # Location table :
-        self._DetectLocations.itemSelectionChanged.connect(self._fcn_gotoLocation)
+        self._DetectLocations.itemSelectionChanged.connect(
+                                                        self._fcn_gotoLocation)
 
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
@@ -111,6 +113,7 @@ class uiDetection(object):
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = self._ToolDetectType.currentText()
+        ind = np.array([], dtype=int)
 
         for i, k in enumerate(idx):
             # Display progress bar :
@@ -129,17 +132,22 @@ class uiDetection(object):
                 # Get REM indices :
                 index, _, _ = remdetect(self._data[k, :], self._sf,
                                         self._hypno, rem_only, thr)
-                # Set them + color to ChannelPlot object :
-                self._chan.colidx[k]['color'] = self._defrem
-                self._chan.colidx[k]['idx'] = index
-                # Find only where index start / finish :
-                ind = np.where(np.gradient(index) != 1.)[0]
-                ind = index[np.hstack(([0], ind, [len(index) - 1]))]
-                # Report index on hypnogram :
-                if toReport:
-                    # Display on hypnogram :
-                    self._hyp.set_report(self._time, ind, color=self._defrem,
-                                         symbol='triangle_down', y=1.5)
+                if index.size:
+                    # Set them + color to ChannelPlot object :
+                    self._chan.colidx[k]['color'] = self._defrem
+                    self._chan.colidx[k]['idx'] = index
+                    # Find only where index start / finish :
+                    ind = np.where(np.gradient(index) != 1.)[0]
+                    ind = index[np.hstack(([0], ind, [len(index) - 1]))]
+                    # Report index on hypnogram :
+                    if toReport:
+                        # Display on hypnogram :
+                        self._hyp.set_report(self._time, ind, y=1.5,
+                                             symbol='triangle_down',
+                                             color=self._defrem)
+                else:
+                    warn("\nNo REM detected on channel "+self._channels[k]+"."
+                         " Try to decrease the threshold")
 
             # ------------------- SPINDLES -------------------
             elif method == 'Spindles':
@@ -155,24 +163,28 @@ class uiDetection(object):
                                                         self._sf, thr,
                                                         self._hypno, nrem_only,
                                                         fMin, fMax, tMin, tMax)
-                # Set them + color to ChannelPlot object :
-                self._chan.colidx[k]['color'] = self._defspin
-                self._chan.colidx[k]['idx'] = index
-                # Find only where index start / finish :
-                ind = np.where(np.gradient(index) != 1.)[0]
-                ind = index[np.hstack(([0], ind, [len(index) - 1]))]
-                # Report index on hypnogram :
-                if toReport:
-                    # Display on hypnogram :
-                    self._hyp.set_report(self._time, ind, color=self._defspin,
-                                         symbol='x', y=1.5)
+                if index.size:
+                    # Set them + color to ChannelPlot object :
+                    self._chan.colidx[k]['color'] = self._defspin
+                    self._chan.colidx[k]['idx'] = index
+                    # Find only where index start / finish :
+                    ind = np.where(np.gradient(index) != 1.)[0]
+                    ind = index[np.hstack(([0], ind, [len(index) - 1]))]
+                    # Report index on hypnogram :
+                    if toReport:
+                        # Display on hypnogram :
+                        self._hyp.set_report(self._time, ind, symbol='x',
+                                             color=self._defspin, y=1.5)
 
-                # Report results on table
-                self._ToolSpinTable.setRowCount(1)
-                self._ToolSpinTable.setItem(0, 0, QtGui.QTableWidgetItem(
-                    str(number)))
-                self._ToolSpinTable.setItem(0, 1, QtGui.QTableWidgetItem(
-                    str(round(density, 2))))
+                    # Report results on table
+                    self._ToolSpinTable.setRowCount(1)
+                    self._ToolSpinTable.setItem(0, 0, QtGui.QTableWidgetItem(
+                        str(number)))
+                    self._ToolSpinTable.setItem(0, 1, QtGui.QTableWidgetItem(
+                        str(round(density, 2))))
+                else:
+                    warn("\nNo Spindles detected on channel "+self._channels[
+                         k]+". Try to decrease the threshold")
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
@@ -204,13 +216,12 @@ class uiDetection(object):
             self._ToolDetectProgress.setValue(100. * (i + 1) / len(self))
 
         # Fill the location table (only if selected):
-        if self._ToolRdSelected.isChecked():
-            self._fcn_fillLocations(self._channels[idx[0]], method,
+        if self._ToolRdSelected.isChecked() and ind.size:
+            self._fcn_fillLocations(self._channels[k], method,
                                     self._time[ind])
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
-
 
     # =====================================================================
     # FILL LOCATION TABLE

@@ -193,9 +193,10 @@ def _spindles_removal(idx_start, idx_stop, good_dur):
     extend = np.array([np.arange(i, j) for i, j in zip(start, stop)])
 
     # Get it as a flatten array :
-    good_idx = np.hstack(extend.flat)
-
-    return good_idx
+    if extend.size:
+        return np.hstack(extend.flat)
+    else:
+        return np.array([], dtype=int)
 
 ###########################################################################
 # REM DETECTION
@@ -275,16 +276,18 @@ def remdetect(eog, sf, hypno, rem_only, threshold, moving_ms=100, deriv_ms=40):
     with np.errstate(divide='ignore', invalid='ignore'):
         idx_sup_thr = np.where(deriv > thresh)[0]
 
-    # Remove first value which is almost always a false positive
-    idx_sup_thr = np.delete(idx_sup_thr, 0)
+    if idx_sup_thr.size:
+        # Remove first value which is almost always a false positive
+        idx_sup_thr = np.delete(idx_sup_thr, 0)
 
-    # Number and density of REM
-    rem = np.diff(idx_sup_thr, n=1)
-    number = np.array(np.where(rem > 1)).size
-    density = number / (length / sf / 60)
+        # Number and density of REM
+        rem = np.diff(idx_sup_thr, n=1)
+        number = np.array(np.where(rem > 1)).size
+        density = number / (length / sf / 60)
 
-    return idx_sup_thr, number, density
-
+        return idx_sup_thr, number, density
+    else:
+        return np.array([], dtype=int), 0., 0.
 
 def _movingaverage(x, window, sf):
     """Perform a moving average.
