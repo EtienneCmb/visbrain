@@ -79,7 +79,7 @@ Shortcuts
 ==============          ==================================================================================
 Keys                    Description
 ==============          ==================================================================================
-CTRL+d                  Display quick settings panem
+CTRL+d                  Display quick settings panel
 CTRL+n                  Screenshot window
 0                       Toggle axial view
 1                       Toggle coronal view

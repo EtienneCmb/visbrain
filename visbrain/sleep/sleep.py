@@ -18,9 +18,45 @@ from ..utils import FixedCam, load_sleepdataset, load_hypno, color2vb
 
 
 class Sleep(uiInit, visuals, uiElements, Tools):
-    """One line description.
+    """Visualize and edit sleep data.
 
-    Multiple lines description...
+    Use this module to :
+        - Load .eeg (Brainvision and ELAN), .edf or directly raw data.
+        - Visualize data channels, spectrogram and hypnogram
+        - Edit hypnogram from the interface
+        - Perform a spindle / REM / Peak detection
+        - Further signal processing tools (de-mean, de-trend and filtering)
+
+    Kargs:
+        file: string, optional, (def: None)
+            Path to the data file (.eeg or .edf).
+
+        hypno_file: string, optional, (def: None)
+            Path to the hypnogram file (.hyp, .txt or .csv)
+
+        data: np.ndarray, optional, (def: None)
+            Array of data of shape (n_channels, n_pts)
+
+        channels: list, optional, (def: None)
+            List of channel names. The length of this list must be n_channels.
+
+        sf: float, optional, (def: None)
+            The sampling frequency of raw data.
+
+        hypno: np.ndarray, optional, (def: None)
+            Hypnogram data. Should be a raw vector of shape (n_pts,)
+
+        downsample: float, optional, (def: 100.)
+            The downsampling frequency for the data and hypnogram raw data.
+
+        axis: bool, optional, (def: Fals)
+            Specify if each axis have to contains its own axis. Be carefull
+            with this option, the rendering can be much slower.
+
+        line: string, optional, (def: 'gl')
+            Specify the line rendering. Use 'gl' for the default line (fast) or
+            'agg' for smooth lines. This option might not works on some
+            plateforms.
     """
 
     def __init__(self, file=None, hypno_file=None, data=None, channels=None,
