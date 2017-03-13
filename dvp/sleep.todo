@@ -18,10 +18,10 @@ Etienne
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
 	-5 Couleur spindles / REM devrait fitter avec l'hypno (self._spin, self._rem)
-	-5 Bouger detection dans un autre panel + uiDetection
 	-4 Possibilité de sort sur scoring table (en fonction du time start)
-	-4 Ajouter des frames descriptifs en haut des tabs
 	-3 Grilles peu lisibles
+	+4 Ajouter des frames descriptifs en haut des tabs
+	+5 Bouger detection dans un autre panel + uiDetection
 	+5 Spindles REM peu lisibles car trop de marqueurs (afficher seulement démarrage/fin)
 	+5 Changement de couleur des Qlabel en fonction position curseur et slider
 	+5 A l'exportation, proposer un nom
@@ -36,7 +36,7 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-5 Spindles
+	-5 Minimum duration sur REM? Spindles?
 	-3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
 	+5 Intégration de la REM détection
 	+5 Intégration de la Spindle détection
