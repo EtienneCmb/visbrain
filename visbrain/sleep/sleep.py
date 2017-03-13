@@ -7,12 +7,13 @@ import os
 from warnings import warn
 
 import vispy.app as visapp
-import vispy.scene.cameras as viscam
+# import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
-from ..utils import FixedCam, load_sleepdataset, load_hypno, color2vb, id
+from ..utils import FixedCam, load_sleepdataset, load_hypno, color2vb
+# from ...utils import id
 # from .user import userfcn
 
 
@@ -63,7 +64,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if hypno is None:
             self._HypW.setVisible(False)
             self._PanHypViz.setChecked(False)
-        print('ON load : ', id(data), id(hypno))
+        # print('ON load : ', id(data), id(hypno))
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
