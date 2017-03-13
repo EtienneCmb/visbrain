@@ -38,6 +38,10 @@ class uiDetection(object):
         self._ToolSpinTh.setValue(2.)
         self._ToolSpinFmax.setValue(14.)
 
+        # -------------------------------------------------
+        # Location table :
+        self._DetectLocations.itemSelectionChanged.connect(self._fcn_gotoLocation)
+
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
     # =====================================================================
@@ -127,10 +131,11 @@ class uiDetection(object):
                                         self._hypno, rem_only, thr)
                 # Set them to ChannelPlot object :
                 self._chan.colidx[k] = index
+                # Find only where index start / finish :
+                ind = np.where(np.gradient(index) != 1.)[0]
+                ind = index[np.hstack(([0], ind, [len(index) - 1]))]
                 # Report index on hypnogram :
                 if toReport:
-                    # Find only where index start :
-                    ind = index[np.where(index[1:]-index[:-1] != 1)[0]]
                     # Display on hypnogram :
                     self._hyp.set_report(self._time, ind, color='slateblue',
                                          symbol='triangle_down',
@@ -152,10 +157,11 @@ class uiDetection(object):
                                                         fMin, fMax, tMin, tMax)
                 # Set them to ChannelPlot object :
                 self._chan.colidx[k] = index
+                # Find only where index start / finish :
+                ind = np.where(np.gradient(index) != 1.)[0]
+                ind = index[np.hstack(([0], ind, [len(index) - 1]))]
                 # Report index on hypnogram :
                 if toReport:
-                    # Find only where index start :
-                    ind = index[np.where(index[1:]-index[:-1] != 1)[0]]
                     # Display on hypnogram :
                     self._hyp.set_report(self._time, ind, color='olive',
                                          symbol='x', y=-self._hypno[ind] + .2)
@@ -177,11 +183,14 @@ class uiDetection(object):
                 self._peak.set_data(self._sf, self._data[k], self._time,
                                     self._chan.peak[k], disp_types[disp],
                                     look)
+                # Get index :
+                ind = self._peak.index
                 # Report index on hypnogram :
                 if toReport:
                     self._hyp.set_report(self._time, self._peak.index,
                                          color='firebrick', symbol='vbar',
                                          y=-self._hypno[self._peak.index] + .2)
+
             # Be sure panel is displayed :
             if not self.canvas_isVisible(k):
                 self.canvas_setVisible(k, True)
@@ -193,5 +202,57 @@ class uiDetection(object):
             # Update progress bar :
             self._ToolDetectProgress.setValue(100. * (i + 1) / len(self))
 
+        # Fill the location table (only if selected):
+        if self._ToolRdSelected.isChecked():
+            self._fcn_fillLocations(self._channels[idx[0]], method,
+                                    self._time[ind])
+
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
+
+    # =====================================================================
+    # FILL LOCATION TABLE
+    # =====================================================================
+    def _fcn_fillLocations(self, channel, kind, index):
+        """Fill the location table."""
+        # Clean table :
+        self._scoreTable.setRowCount(0)
+        if (kind in ['REM', 'Spindles']) and self._ToolRdSelected.isChecked():
+            # Define the lentgh of the table :
+            self._DetectLocations.setRowCount(int(len(index) / 2))
+            # Get starting and ending index :
+            staInd, endInd = index[0::2], index[1::2]
+            # Fill the table :
+            for num, (k, i) in enumerate(zip(staInd, endInd)):
+                # Starting :
+                self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
+                    str(k)))
+                # Ending :
+                self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
+                    str(i)))
+                # Type :
+                self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
+                    channel + '-' + kind))
+        elif kind == 'Peaks':
+            # Define the lentgh of the table :
+            self._DetectLocations.setRowCount(len(index))
+            # Fill the table :
+            for num, k in enumerate(index):
+                # Starting :
+                self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
+                    str(k)))
+                # Ending :
+                self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
+                    ''))
+                # Type :
+                self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
+                    channel + '-' + kind))
+
+    def _fcn_gotoLocation(self):
+        """Go to the selected row REM / spindles / peak."""
+        # Get selected row :
+        row = self._DetectLocations.currentRow()
+        # Get starting and ending point :
+        st = float(self._DetectLocations.item(row, 0).text())
+        # Go to :
+        self._SlGoto.setValue(st - self._SigWin.value() / 2)

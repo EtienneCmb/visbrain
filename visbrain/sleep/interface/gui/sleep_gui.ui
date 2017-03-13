@@ -1472,6 +1472,9 @@ hypnogram. Those informations change while editing it.</string>
                   </property>
                   <item>
                    <widget class="QTableWidget" name="_scoreTable">
+                    <property name="sortingEnabled">
+                     <bool>true</bool>
+                    </property>
                     <attribute name="horizontalHeaderStretchLastSection">
                      <bool>true</bool>
                     </attribute>
@@ -1641,7 +1644,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -2234,7 +2237,16 @@ selected, visible or all channels.</string>
               </attribute>
               <layout class="QVBoxLayout" name="verticalLayout_39">
                <item>
-                <widget class="QTableWidget" name="tableWidget">
+                <widget class="QTableWidget" name="_DetectLocations">
+                 <property name="editTriggers">
+                  <set>QAbstractItemView::NoEditTriggers</set>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="sortingEnabled">
+                  <bool>true</bool>
+                 </property>
                  <attribute name="horizontalHeaderStretchLastSection">
                   <bool>true</bool>
                  </attribute>
@@ -2607,6 +2619,9 @@ selected, visible or all channels.</string>
               <widget class="QDoubleSpinBox" name="_SigSlStep">
                <property name="decimals">
                 <number>1</number>
+               </property>
+               <property name="minimum">
+                <double>0.100000000000000</double>
                </property>
                <property name="value">
                 <double>30.000000000000000</double>
