@@ -131,7 +131,9 @@ class ChannelPlot(PrepareData):
         self._camera = camera
         self.rect = []
         self.width = width
-        self.colidx = [np.array([])] * len(channels)
+        # Don't use self.colidx = [{...}] * len(channels)
+        self.colidx = [{'color': color_detection, 'idx': np.array([
+                                            ])} for _ in range(len(channels))]
         self._fcn = fcn
         self.visible = np.array([True] + [False] * (len(channels) - 1))
 
@@ -217,9 +219,9 @@ class ChannelPlot(PrepareData):
             k.set_data(dat, color=self.color, width=self.width)
 
             # Indicator line :
-            if self.colidx[i].size:
+            if self.colidx[i]['idx'].size:
                 # Find index that are both in idx and in indicator :
-                inter = np.intersect1d(idx, self.colidx[i]) - sl.start
+                inter = np.intersect1d(idx, self.colidx[i]['idx']) - sl.start
                 # Build a array for connecting only consecutive segments :
                 index = np.zeros((len(idx)), dtype=bool)
                 index[inter] = True
@@ -227,7 +229,7 @@ class ChannelPlot(PrepareData):
                 dat[:, 2] = -2.
                 # Send data to report :
                 self.report[i].set_data(pos=dat, connect=index, width=4.,
-                                        color=self.color_detection)
+                                        color=self.colidx[i]['color'])
 
             # Get camera rectangle and set it:
             rect = (self.x[0], ylim[i][0], self.x[1]-self.x[0],

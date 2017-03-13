@@ -15,7 +15,7 @@ class Tools(object):
     def __init__(self):
         """Init."""
         # =========== PEAK DETECTION ===========
-        self._peak = PeakDetection(color=self._indicol)
+        self._peak = PeakDetection(color=self._defpeaks)
 
         # =========== HYPNOGRAM EDITION ===========
         yaxis = (self._hypcam.rect.bottom, self._hypcam.rect.top)

@@ -12,7 +12,7 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
-from ..utils import FixedCam, load_sleepdataset, load_hypno, id
+from ..utils import FixedCam, load_sleepdataset, load_hypno, color2vb, id
 # from .user import userfcn
 
 
@@ -79,6 +79,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._hypcolor = '#2b303b'
         self._indicol = '#e74c3c'
         self._defcmap = 'viridis'
+        self._defspin = color2vb('#ba6236')
+        self._defrem = color2vb('#5f9182')
+        self._defpeaks = '#9d6c7c'
         # Get some data info (min / max / std / mean)
         self._get_dataInfo()
 

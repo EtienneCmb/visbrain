@@ -129,15 +129,16 @@ class uiDetection(object):
                 # Get REM indices :
                 index, _, _ = remdetect(self._data[k, :], self._sf,
                                         self._hypno, rem_only, thr)
-                # Set them to ChannelPlot object :
-                self._chan.colidx[k] = index
+                # Set them + color to ChannelPlot object :
+                self._chan.colidx[k]['color'] = self._defrem
+                self._chan.colidx[k]['idx'] = index
                 # Find only where index start / finish :
                 ind = np.where(np.gradient(index) != 1.)[0]
                 ind = index[np.hstack(([0], ind, [len(index) - 1]))]
                 # Report index on hypnogram :
                 if toReport:
                     # Display on hypnogram :
-                    self._hyp.set_report(self._time, ind, color='slateblue',
+                    self._hyp.set_report(self._time, ind, color=self._defrem,
                                          symbol='triangle_down',
                                          y=-self._hypno[ind] + .2)
 
@@ -155,15 +156,16 @@ class uiDetection(object):
                                                         self._sf, thr,
                                                         self._hypno, nrem_only,
                                                         fMin, fMax, tMin, tMax)
-                # Set them to ChannelPlot object :
-                self._chan.colidx[k] = index
+                # Set them + color to ChannelPlot object :
+                self._chan.colidx[k]['color'] = self._defspin
+                self._chan.colidx[k]['idx'] = index
                 # Find only where index start / finish :
                 ind = np.where(np.gradient(index) != 1.)[0]
                 ind = index[np.hstack(([0], ind, [len(index) - 1]))]
                 # Report index on hypnogram :
                 if toReport:
                     # Display on hypnogram :
-                    self._hyp.set_report(self._time, ind, color='olive',
+                    self._hyp.set_report(self._time, ind, color=self._defspin,
                                          symbol='x', y=-self._hypno[ind] + .2)
 
                 # Report results on table
@@ -188,7 +190,7 @@ class uiDetection(object):
                 # Report index on hypnogram :
                 if toReport:
                     self._hyp.set_report(self._time, self._peak.index,
-                                         color='firebrick', symbol='vbar',
+                                         color=self._defpeaks, symbol='vbar',
                                          y=-self._hypno[self._peak.index] + .2)
 
             # Be sure panel is displayed :
@@ -209,6 +211,7 @@ class uiDetection(object):
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
+
 
     # =====================================================================
     # FILL LOCATION TABLE
