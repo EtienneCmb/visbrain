@@ -61,7 +61,8 @@ elif torun == 'rnd':
 
 sp = Sleep(file=file, hypno_file=hypno_file, data=data, channels=channels,
            sf=sf, downsample=100., hypno=hypno, line='gl', axis=False)
-sp._ToolDetectType.setCurrentIndex(1)
+# sp._ToolDetectType.setCurrentIndex(1)
+# sp._ToolDetecReport.setChecked(True)
 # sp._fcn_applyDetection()
 sp.show()
 # s = Sleep()
