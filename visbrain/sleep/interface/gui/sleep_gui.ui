@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>4</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -80,7 +80,38 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
+            <widget class="QFrame" name="frame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_10">
+              <item>
+               <widget class="QLabel" name="label_41">
+                <property name="font">
+                 <font>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Manage visible channels, amplitude, 
+spectrogram, hypnogram and the time axis</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QScrollArea" name="scrollArea">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="widgetResizable">
               <bool>true</bool>
              </property>
@@ -88,7 +119,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-177</y>
                 <width>321</width>
                 <height>905</height>
                </rect>
@@ -96,6 +127,9 @@
               <layout class="QVBoxLayout" name="verticalLayout_2">
                <item>
                 <widget class="QGroupBox" name="groupBox">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the channels to be displayed and control the amplitudes of each one of them.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="title">
                   <string>Visible channels</string>
                  </property>
@@ -107,6 +141,9 @@
                       <width>0</width>
                       <height>300</height>
                      </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p/&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="frameShape">
                      <enum>QFrame::Box</enum>
@@ -189,6 +226,9 @@
                     </item>
                     <item>
                      <widget class="QPushButton" name="_PanChanSelectAll">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display all channels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
                        <string>Select all</string>
                       </property>
@@ -196,6 +236,9 @@
                     </item>
                     <item>
                      <widget class="QPushButton" name="_PanChanDeselectAll">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hide all channels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
                        <string>Deselect all</string>
                       </property>
@@ -242,10 +285,18 @@
                      </spacer>
                     </item>
                     <item>
-                     <widget class="QDoubleSpinBox" name="_PanAllAmpMin"/>
+                     <widget class="QDoubleSpinBox" name="_PanAllAmpMin">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change minimum amplitude for all channels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                     </widget>
                     </item>
                     <item>
-                     <widget class="QDoubleSpinBox" name="_PanAllAmpMax"/>
+                     <widget class="QDoubleSpinBox" name="_PanAllAmpMax">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change maximum amplitude for all channels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
@@ -317,6 +368,9 @@
                    <layout class="QGridLayout" name="gridLayout_6">
                     <item row="0" column="0">
                      <widget class="QCheckBox" name="_PanSpecViz">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display / hide the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
                        <string>Visible</string>
                       </property>
@@ -327,6 +381,9 @@
                     </item>
                     <item row="0" column="1">
                      <widget class="QCheckBox" name="_PanSpecIndic">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display / hide the time window indicator&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
                        <string>Indicator</string>
                       </property>
@@ -337,8 +394,11 @@
                     </item>
                     <item row="0" column="2">
                      <widget class="QCheckBox" name="_PanSpecZoom">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zoom over the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
-                       <string>Zooming</string>
+                       <string>Zoom</string>
                       </property>
                      </widget>
                     </item>
@@ -367,6 +427,9 @@
                        </item>
                        <item row="3" column="2">
                         <widget class="QDoubleSpinBox" name="_PanSpecFstart">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting frequency for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="decimals">
                           <number>1</number>
                          </property>
@@ -386,7 +449,11 @@
                         </widget>
                        </item>
                        <item row="0" column="2">
-                        <widget class="QComboBox" name="_PanSpecChan"/>
+                        <widget class="QComboBox" name="_PanSpecChan">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select to channel used for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                        </widget>
                        </item>
                        <item row="3" column="0">
                         <widget class="QLabel" name="label_16">
@@ -410,7 +477,11 @@
                         </widget>
                        </item>
                        <item row="4" column="2">
-                        <widget class="QComboBox" name="_PanSpecCmap"/>
+                        <widget class="QComboBox" name="_PanSpecCmap">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Colormap for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                        </widget>
                        </item>
                        <item row="2" column="3">
                         <widget class="QLabel" name="label_23">
@@ -421,6 +492,9 @@
                        </item>
                        <item row="1" column="2">
                         <widget class="QDoubleSpinBox" name="_PanSpecNfft">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length of each time window for computing the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="decimals">
                           <number>1</number>
                          </property>
@@ -437,6 +511,9 @@
                        </item>
                        <item row="2" column="2">
                         <widget class="QDoubleSpinBox" name="_PanSpecStep">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Overlap between each  consecutive windows.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="decimals">
                           <number>1</number>
                          </property>
@@ -461,6 +538,9 @@
                        </item>
                        <item row="3" column="4">
                         <widget class="QDoubleSpinBox" name="_PanSpecFend">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ending frequency for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="decimals">
                           <number>1</number>
                          </property>
@@ -484,6 +564,9 @@
                        </item>
                        <item row="4" column="4">
                         <widget class="QDoubleSpinBox" name="_PanSpecCon">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change the contrast of the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="decimals">
                           <number>1</number>
                          </property>
@@ -503,6 +586,9 @@
                        </item>
                        <item row="5" column="2" colspan="2">
                         <widget class="QPushButton" name="_PanSpecApply">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Compute the spectrogram on the selected channel and using the time length, overlap, [fstart, fend], colormap and contrast.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>Apply</string>
                          </property>
@@ -581,6 +667,9 @@
                    <layout class="QGridLayout" name="gridLayout_4">
                     <item row="1" column="0">
                      <widget class="QCheckBox" name="_PanHypViz">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display / hide the hypnogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
                        <string>Visible</string>
                       </property>
@@ -591,6 +680,9 @@
                     </item>
                     <item row="1" column="1">
                      <widget class="QCheckBox" name="_PanHypIndic">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display / hide the time window indicator&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
                        <string>Indicator</string>
                       </property>
@@ -601,8 +693,11 @@
                     </item>
                     <item row="1" column="2">
                      <widget class="QCheckBox" name="_PanHypZoom">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zoom over the hypnogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
-                       <string>Zooming</string>
+                       <string>Zoom</string>
                       </property>
                      </widget>
                     </item>
@@ -679,6 +774,9 @@
                     </property>
                     <item row="0" column="1">
                      <widget class="QCheckBox" name="_PanTimeIndic">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display / hide the time window indicator&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
                        <string>Indicator</string>
                       </property>
@@ -689,6 +787,9 @@
                     </item>
                     <item row="0" column="0">
                      <widget class="QCheckBox" name="_PanTimeViz">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display / hide the time axis&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
                        <string>Visible</string>
                       </property>
@@ -699,8 +800,11 @@
                     </item>
                     <item row="0" column="2">
                      <widget class="QCheckBox" name="_PanTimeZoom">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zoom over the time axis&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
                       <property name="text">
-                       <string>Zooming</string>
+                       <string>Zoom</string>
                       </property>
                      </widget>
                     </item>
@@ -721,6 +825,34 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
+            <widget class="QFrame" name="frame_2">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_19">
+              <item>
+               <widget class="QLabel" name="label_42">
+                <property name="font">
+                 <font>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Set of signal processing tools (remove the mean and 
+trend, filtering)</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QScrollArea" name="scrollArea_3">
              <property name="widgetResizable">
               <bool>true</bool>
@@ -729,9 +861,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-114</y>
+                <y>0</y>
                 <width>334</width>
-                <height>957</height>
+                <height>728</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -1098,486 +1230,6 @@
                 </layout>
                </item>
                <item>
-                <widget class="QGroupBox" name="groupBox_3">
-                 <property name="title">
-                  <string>Detection</string>
-                 </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_33">
-                  <item>
-                   <layout class="QGridLayout" name="gridLayout">
-                    <item row="1" column="4">
-                     <widget class="QComboBox" name="_ToolDetectChan">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pick up a channel to run the detection (only avaible with &amp;quot;Selected&amp;quot; option)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="2">
-                     <spacer name="horizontalSpacer_37">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item row="1" column="3">
-                     <widget class="QLabel" name="label_25">
-                      <property name="text">
-                       <string>On channel</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="label_39">
-                      <property name="text">
-                       <string>Type</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="QComboBox" name="_ToolDetectType">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose the detection type&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <item>
-                       <property name="text">
-                        <string>REM</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>Spindles</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>Peaks</string>
-                       </property>
-                      </item>
-                     </widget>
-                    </item>
-                    <item row="0" column="0" colspan="5">
-                     <widget class="QCheckBox" name="_ToolDetecVisible">
-                      <property name="text">
-                       <string>Display detection</string>
-                      </property>
-                      <property name="checked">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <widget class="QWidget" name="_ToolPeakPanel" native="true">
-                    <layout class="QVBoxLayout" name="verticalLayout_34">
-                     <property name="margin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <layout class="QGridLayout" name="gridLayout_11">
-                       <property name="topMargin">
-                        <number>0</number>
-                       </property>
-                       <item row="0" column="3">
-                        <spacer name="horizontalSpacer_38">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="1" column="0">
-                        <widget class="QLabel" name="label_28">
-                         <property name="text">
-                          <string>Display</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="1">
-                        <widget class="QDoubleSpinBox" name="_ToolPeakLook">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum duration between two peaks&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                         <property name="decimals">
-                          <number>1</number>
-                         </property>
-                         <property name="value">
-                          <double>0.500000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0">
-                        <widget class="QLabel" name="label_26">
-                         <property name="text">
-                          <string>Lookahead</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="1">
-                        <widget class="QComboBox" name="_ToolPeakMinMax">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Search either for maximum / minimum / both&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                         <item>
-                          <property name="text">
-                           <string>Max only</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>Min only</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>Min and Max</string>
-                          </property>
-                         </item>
-                        </widget>
-                       </item>
-                       <item row="0" column="2">
-                        <widget class="QLabel" name="label_27">
-                         <property name="text">
-                          <string>seconds</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QWidget" name="_ToolRemPanel" native="true">
-                    <layout class="QVBoxLayout" name="verticalLayout_35">
-                     <property name="margin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <layout class="QGridLayout" name="gridLayout_17">
-                       <property name="topMargin">
-                        <number>0</number>
-                       </property>
-                       <item row="3" column="0">
-                        <widget class="QLabel" name="label_38">
-                         <property name="text">
-                          <string>Threshold</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="3" column="1">
-                        <widget class="QDoubleSpinBox" name="_ToolRemTh">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of standard deviation of the derivative signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="4" column="0" colspan="5">
-                        <widget class="QCheckBox" name="_ToolRemOnly">
-                         <property name="text">
-                          <string>Perform detection only for REM sleep</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="3" column="2">
-                        <spacer name="horizontalSpacer_39">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                      </layout>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QWidget" name="_ToolSpinPanel" native="true">
-                    <layout class="QVBoxLayout" name="verticalLayout_36">
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>10</number>
-                     </property>
-                     <item>
-                      <layout class="QGridLayout" name="gridLayout_18">
-                       <property name="topMargin">
-                        <number>0</number>
-                       </property>
-                       <item row="0" column="1">
-                        <widget class="QDoubleSpinBox" name="_ToolSpinFmin">
-                         <property name="decimals">
-                          <number>1</number>
-                         </property>
-                         <property name="maximum">
-                          <double>200.000000000000000</double>
-                         </property>
-                         <property name="value">
-                          <double>12.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0">
-                        <widget class="QLabel" name="label_19">
-                         <property name="text">
-                          <string>Fmin</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="4">
-                        <widget class="QDoubleSpinBox" name="_ToolSpinFmax">
-                         <property name="decimals">
-                          <number>1</number>
-                         </property>
-                         <property name="maximum">
-                          <double>200.000000000000000</double>
-                         </property>
-                         <property name="value">
-                          <double>14.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="0">
-                        <widget class="QLabel" name="label_40">
-                         <property name="text">
-                          <string>Threshold</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="1">
-                        <widget class="QDoubleSpinBox" name="_ToolSpinTh">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Look for signals having an amplitude 'Threshold' times superior to the deviation of the filtered signal amplitude&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="3">
-                        <spacer name="horizontalSpacer_40">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="1" column="3">
-                        <widget class="QLabel" name="label_30">
-                         <property name="text">
-                          <string>Tmax</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="0">
-                        <widget class="QLabel" name="label_22">
-                         <property name="text">
-                          <string>Tmin</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="5">
-                        <widget class="QLabel" name="label_21">
-                         <property name="text">
-                          <string>Hz</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="4">
-                        <widget class="QDoubleSpinBox" name="_ToolSpinTmax">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Maximum spindle's duration&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                         <property name="decimals">
-                          <number>1</number>
-                         </property>
-                         <property name="maximum">
-                          <double>10000.000000000000000</double>
-                         </property>
-                         <property name="value">
-                          <double>2000.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="2">
-                        <spacer name="horizontalSpacer_25">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="1" column="5">
-                        <widget class="QLabel" name="label_37">
-                         <property name="text">
-                          <string>ms</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="1">
-                        <widget class="QDoubleSpinBox" name="_ToolSpinTmin">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum spindle's duration&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                         <property name="decimals">
-                          <number>1</number>
-                         </property>
-                         <property name="maximum">
-                          <double>10000.000000000000000</double>
-                         </property>
-                         <property name="value">
-                          <double>500.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="3">
-                        <widget class="QLabel" name="label_20">
-                         <property name="text">
-                          <string>Fmax</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="3" column="0" colspan="6">
-                        <widget class="QCheckBox" name="_ToolSpinRemOnly">
-                         <property name="text">
-                          <string>Perform detection only for NREM sleep</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </item>
-                     <item>
-                      <widget class="QTableWidget" name="_ToolSpinTable">
-                       <property name="maximumSize">
-                        <size>
-                         <width>16777215</width>
-                         <height>100</height>
-                        </size>
-                       </property>
-                       <column>
-                        <property name="text">
-                         <string>Number</string>
-                        </property>
-                       </column>
-                       <column>
-                        <property name="text">
-                         <string>Density ( / min )</string>
-                        </property>
-                       </column>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <layout class="QGridLayout" name="gridLayout_8">
-                    <property name="topMargin">
-                     <number>6</number>
-                    </property>
-                    <item row="0" column="1">
-                     <widget class="QRadioButton" name="_ToolRdViz">
-                      <property name="text">
-                       <string>Visible</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <widget class="QPushButton" name="_ToolDetectApply">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apply detection either on :&lt;/p&gt;&lt;p&gt;- Selected channels via the channel selection box above&lt;/p&gt;&lt;p&gt;- Visible channels&lt;/p&gt;&lt;p&gt;- All channels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="text">
-                       <string>Apply</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="6" column="0" colspan="3">
-                     <widget class="QProgressBar" name="_ToolDetectProgress">
-                      <property name="value">
-                       <number>24</number>
-                      </property>
-                      <property name="invertedAppearance">
-                       <bool>false</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="0">
-                     <widget class="QRadioButton" name="_ToolRdSelected">
-                      <property name="text">
-                       <string>Selected</string>
-                      </property>
-                      <property name="checked">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0" colspan="3">
-                     <widget class="QCheckBox" name="_ToolDetecReport">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Report the detection on the hypnogram. Only avaible for selected channel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="text">
-                       <string>Report detection on hypnogram</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="2">
-                     <widget class="QRadioButton" name="_ToolRdAll">
-                      <property name="text">
-                       <string>All</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0" colspan="3">
-                     <spacer name="horizontalSpacer">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>10</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                   </layout>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
                 <spacer name="verticalSpacer_2">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
@@ -1602,11 +1254,39 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
+            <widget class="QFrame" name="frame_4">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_23">
+              <item>
+               <widget class="QLabel" name="label_44">
+                <property name="font">
+                 <font>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Get and export usefull informations about the 
+hypnogram. Those informations change while editing it.</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <layout class="QGridLayout" name="gridLayout_14">
              <property name="topMargin">
               <number>10</number>
              </property>
-             <item row="1" column="1">
+             <item row="1" column="2">
               <widget class="QDoubleSpinBox" name="_infoTime">
                <property name="decimals">
                 <number>1</number>
@@ -1619,7 +1299,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="3">
+             <item row="1" column="4">
               <spacer name="horizontalSpacer_7">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -1632,15 +1312,21 @@
                </property>
               </spacer>
              </item>
-             <item row="1" column="0">
+             <item row="1" column="1">
               <widget class="QLabel" name="label_32">
                <property name="text">
                 <string>Time window</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="0" colspan="3">
+             <item row="0" column="1" colspan="3">
               <widget class="QTableWidget" name="_infoTable">
+               <attribute name="horizontalHeaderStretchLastSection">
+                <bool>true</bool>
+               </attribute>
+               <attribute name="verticalHeaderStretchLastSection">
+                <bool>false</bool>
+               </attribute>
                <column>
                 <property name="text">
                  <string>Infos</string>
@@ -1653,21 +1339,21 @@
                </column>
               </widget>
              </item>
-             <item row="1" column="2">
+             <item row="1" column="3">
               <widget class="QLabel" name="label_33">
                <property name="text">
                 <string>seconds</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
+             <item row="2" column="1">
               <widget class="QLabel" name="label_34">
                <property name="text">
                 <string>Export as</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
+             <item row="2" column="2">
               <widget class="QComboBox" name="_infoExportAs">
                <item>
                 <property name="text">
@@ -1681,12 +1367,25 @@
                </item>
               </widget>
              </item>
-             <item row="2" column="2">
+             <item row="2" column="3">
               <widget class="QPushButton" name="_infoExport">
                <property name="text">
                 <string>Export</string>
                </property>
               </widget>
+             </item>
+             <item row="1" column="0">
+              <spacer name="horizontalSpacer_27">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </item>
@@ -1714,6 +1413,34 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_29">
            <item>
+            <widget class="QFrame" name="frame_3">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_24">
+              <item>
+               <widget class="QLabel" name="label_43">
+                <property name="font">
+                 <font>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Score the hypnogram by manually adding / removing
+ lines. Alternatively, you can directly edit it from the grah.</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QScrollArea" name="scrollArea_2">
              <property name="widgetResizable">
               <bool>true</bool>
@@ -1726,8 +1453,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>297</width>
-                <height>778</height>
+                <width>321</width>
+                <height>742</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_31">
@@ -1745,6 +1472,9 @@
                   </property>
                   <item>
                    <widget class="QTableWidget" name="_scoreTable">
+                    <attribute name="horizontalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
                     <column>
                      <property name="text">
                       <string>From (minutes)</string>
@@ -1868,6 +1598,662 @@
                   </spacer>
                  </item>
                 </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="q_Detection">
+          <attribute name="title">
+           <string>Detection</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_22">
+           <item>
+            <widget class="QFrame" name="frame_5">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_37">
+              <item>
+               <widget class="QLabel" name="label_45">
+                <property name="font">
+                 <font>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Perform a REM, spindles or peak detection either on 
+selected, visible or all channels.</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTabWidget" name="_DetectionTab">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="q_DetectSettings">
+              <attribute name="title">
+               <string>Settings</string>
+              </attribute>
+              <layout class="QVBoxLayout" name="verticalLayout_38">
+               <item>
+                <widget class="QCheckBox" name="_ToolDetecVisible">
+                 <property name="text">
+                  <string>Display detection</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QScrollArea" name="scrollArea_4">
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scrollAreaWidgetContents_4">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>329</width>
+                    <height>669</height>
+                   </rect>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_25">
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_3">
+                     <property name="title">
+                      <string>Detection type</string>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_33">
+                      <item>
+                       <layout class="QGridLayout" name="gridLayout">
+                        <item row="0" column="1">
+                         <widget class="QLabel" name="label_39">
+                          <property name="text">
+                           <string>Type</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="2">
+                         <widget class="QComboBox" name="_ToolDetectType">
+                          <property name="toolTip">
+                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose the detection type&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          </property>
+                          <item>
+                           <property name="text">
+                            <string>REM</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>Spindles</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>Peaks</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                        <item row="0" column="3">
+                         <spacer name="horizontalSpacer_37">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_4">
+                     <property name="title">
+                      <string>Settings</string>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_26">
+                      <item>
+                       <widget class="QWidget" name="_ToolPeakPanel" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_34">
+                         <property name="margin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <layout class="QGridLayout" name="gridLayout_11">
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <item row="0" column="3">
+                            <spacer name="horizontalSpacer_38">
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>40</width>
+                               <height>20</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_28">
+                             <property name="text">
+                              <string>Display</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QDoubleSpinBox" name="_ToolPeakLook">
+                             <property name="toolTip">
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum duration between two peaks&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                             <property name="decimals">
+                              <number>1</number>
+                             </property>
+                             <property name="value">
+                              <double>0.500000000000000</double>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_26">
+                             <property name="text">
+                              <string>Lookahead</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QComboBox" name="_ToolPeakMinMax">
+                             <property name="toolTip">
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Search either for maximum / minimum / both&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                             <item>
+                              <property name="text">
+                               <string>Max only</string>
+                              </property>
+                             </item>
+                             <item>
+                              <property name="text">
+                               <string>Min only</string>
+                              </property>
+                             </item>
+                             <item>
+                              <property name="text">
+                               <string>Min and Max</string>
+                              </property>
+                             </item>
+                            </widget>
+                           </item>
+                           <item row="0" column="2">
+                            <widget class="QLabel" name="label_27">
+                             <property name="text">
+                              <string>seconds</string>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QWidget" name="_ToolRemPanel" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_35">
+                         <property name="margin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <layout class="QGridLayout" name="gridLayout_17">
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <item row="3" column="0">
+                            <widget class="QLabel" name="label_38">
+                             <property name="text">
+                              <string>Threshold</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="1">
+                            <widget class="QDoubleSpinBox" name="_ToolRemTh">
+                             <property name="toolTip">
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of standard deviation of the derivative signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="4" column="0" colspan="5">
+                            <widget class="QCheckBox" name="_ToolRemOnly">
+                             <property name="text">
+                              <string>Perform detection only for REM sleep</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="2">
+                            <spacer name="horizontalSpacer_39">
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>40</width>
+                               <height>20</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QWidget" name="_ToolSpinPanel" native="true">
+                        <layout class="QVBoxLayout" name="verticalLayout_36">
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>10</number>
+                         </property>
+                         <item>
+                          <layout class="QGridLayout" name="gridLayout_18">
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <item row="0" column="1">
+                            <widget class="QDoubleSpinBox" name="_ToolSpinFmin">
+                             <property name="decimals">
+                              <number>1</number>
+                             </property>
+                             <property name="maximum">
+                              <double>200.000000000000000</double>
+                             </property>
+                             <property name="value">
+                              <double>12.000000000000000</double>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_19">
+                             <property name="text">
+                              <string>Fmin</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="4">
+                            <widget class="QDoubleSpinBox" name="_ToolSpinFmax">
+                             <property name="decimals">
+                              <number>1</number>
+                             </property>
+                             <property name="maximum">
+                              <double>200.000000000000000</double>
+                             </property>
+                             <property name="value">
+                              <double>14.000000000000000</double>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="0">
+                            <widget class="QLabel" name="label_40">
+                             <property name="text">
+                              <string>Threshold</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="1">
+                            <widget class="QDoubleSpinBox" name="_ToolSpinTh">
+                             <property name="toolTip">
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Look for signals having an amplitude 'Threshold' times superior to the deviation of the filtered signal amplitude&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="3">
+                            <spacer name="horizontalSpacer_40">
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>40</width>
+                               <height>20</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                           <item row="1" column="3">
+                            <widget class="QLabel" name="label_30">
+                             <property name="text">
+                              <string>Tmax</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_22">
+                             <property name="text">
+                              <string>Tmin</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="5">
+                            <widget class="QLabel" name="label_21">
+                             <property name="text">
+                              <string>Hz</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="4">
+                            <widget class="QDoubleSpinBox" name="_ToolSpinTmax">
+                             <property name="toolTip">
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Maximum spindle's duration&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                             <property name="decimals">
+                              <number>1</number>
+                             </property>
+                             <property name="maximum">
+                              <double>10000.000000000000000</double>
+                             </property>
+                             <property name="value">
+                              <double>2000.000000000000000</double>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="2">
+                            <spacer name="horizontalSpacer_25">
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>40</width>
+                               <height>20</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                           <item row="1" column="5">
+                            <widget class="QLabel" name="label_37">
+                             <property name="text">
+                              <string>ms</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QDoubleSpinBox" name="_ToolSpinTmin">
+                             <property name="toolTip">
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum spindle's duration&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                             <property name="decimals">
+                              <number>1</number>
+                             </property>
+                             <property name="maximum">
+                              <double>10000.000000000000000</double>
+                             </property>
+                             <property name="value">
+                              <double>500.000000000000000</double>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="3">
+                            <widget class="QLabel" name="label_20">
+                             <property name="text">
+                              <string>Fmax</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="0" colspan="6">
+                            <widget class="QCheckBox" name="_ToolSpinRemOnly">
+                             <property name="text">
+                              <string>Perform detection only for NREM sleep</string>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                         <item>
+                          <widget class="QTableWidget" name="_ToolSpinTable">
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>100</height>
+                            </size>
+                           </property>
+                           <attribute name="horizontalHeaderStretchLastSection">
+                            <bool>true</bool>
+                           </attribute>
+                           <column>
+                            <property name="text">
+                             <string>Number</string>
+                            </property>
+                           </column>
+                           <column>
+                            <property name="text">
+                             <string>Density ( / min )</string>
+                            </property>
+                           </column>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_7">
+                     <property name="title">
+                      <string>Apply on</string>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_32">
+                      <item>
+                       <layout class="QGridLayout" name="gridLayout_8">
+                        <property name="topMargin">
+                         <number>6</number>
+                        </property>
+                        <item row="1" column="1">
+                         <widget class="QRadioButton" name="_ToolRdViz">
+                          <property name="text">
+                           <string>Visible</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="0">
+                         <widget class="QRadioButton" name="_ToolRdSelected">
+                          <property name="text">
+                           <string>Selected</string>
+                          </property>
+                          <property name="checked">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="0" colspan="3">
+                         <widget class="QCheckBox" name="_ToolDetecReport">
+                          <property name="toolTip">
+                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Report the detection on the hypnogram. Only avaible for selected channel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          </property>
+                          <property name="text">
+                           <string>Report detection on hypnogram</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="2">
+                         <widget class="QRadioButton" name="_ToolRdAll">
+                          <property name="text">
+                           <string>All</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="3" column="0" colspan="3">
+                         <spacer name="horizontalSpacer">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>10</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_25">
+                          <property name="text">
+                           <string>On channel</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="1">
+                         <widget class="QComboBox" name="_ToolDetectChan">
+                          <property name="toolTip">
+                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pick up a channel to run the detection (only avaible with &amp;quot;Selected&amp;quot; option)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_8">
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <spacer name="horizontalSpacer_26">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>40</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="_ToolDetectApply">
+                       <property name="toolTip">
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apply detection either on :&lt;/p&gt;&lt;p&gt;- Selected channels via the channel selection box above&lt;/p&gt;&lt;p&gt;- Visible channels&lt;/p&gt;&lt;p&gt;- All channels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                       </property>
+                       <property name="text">
+                        <string>Apply</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <spacer name="horizontalSpacer_2">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>40</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <widget class="QProgressBar" name="_ToolDetectProgress">
+                     <property name="value">
+                      <number>24</number>
+                     </property>
+                     <property name="invertedAppearance">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="q_DetectLoc">
+              <attribute name="title">
+               <string>Locations</string>
+              </attribute>
+              <layout class="QVBoxLayout" name="verticalLayout_39">
+               <item>
+                <widget class="QTableWidget" name="tableWidget">
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <column>
+                  <property name="text">
+                   <string>Start (seconds)</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Stop (seconds)</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Type</string>
+                  </property>
+                 </column>
+                </widget>
                </item>
               </layout>
              </widget>
