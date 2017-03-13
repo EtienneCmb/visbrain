@@ -139,8 +139,7 @@ class uiDetection(object):
                 if toReport:
                     # Display on hypnogram :
                     self._hyp.set_report(self._time, ind, color=self._defrem,
-                                         symbol='triangle_down',
-                                         y=-self._hypno[ind] + .2)
+                                         symbol='triangle_down', y=1.5)
 
             # ------------------- SPINDLES -------------------
             elif method == 'Spindles':
@@ -166,7 +165,7 @@ class uiDetection(object):
                 if toReport:
                     # Display on hypnogram :
                     self._hyp.set_report(self._time, ind, color=self._defspin,
-                                         symbol='x', y=-self._hypno[ind] + .2)
+                                         symbol='x', y=1.5)
 
                 # Report results on table
                 self._ToolSpinTable.setRowCount(1)
@@ -191,7 +190,7 @@ class uiDetection(object):
                 if toReport:
                     self._hyp.set_report(self._time, self._peak.index,
                                          color=self._defpeaks, symbol='vbar',
-                                         y=-self._hypno[self._peak.index] + .2)
+                                         y=1.5)
 
             # Be sure panel is displayed :
             if not self.canvas_isVisible(k):
