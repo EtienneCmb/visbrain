@@ -2,8 +2,8 @@ import numpy as np
 
 from visbrain import vbrain
 
-s_xyz = np.loadtxt('thalamus.txt').mean(1)
-s_data = np.load('Px.npy')
+s_xyz = np.loadtxt('thalamus.txt')
+s_data = np.load('Px.npy').mean(1)
 
 vb = vbrain(s_xyz=s_xyz, s_data=s_data, s_radius=16, s_cmap='viridis')
 vb.rotate(fixed='axial')
