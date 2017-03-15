@@ -16,13 +16,13 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 # SPINDLES DETECTION
 ###########################################################################
 
-def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
+def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
                    max_freq=14., min_dur_ms=500, max_dur_ms=1500,
                    method='hilbert'):
     """Perform a sleep spindles detection.
 
     Args:
-        data: np.ndarray
+        elec: np.ndarray
             eeg signal (preferably central electrodes)
 
         sf: float
@@ -33,7 +33,7 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
             Threshold is defined as: mean + X * std(derivative)
 
         hypno: np.ndarray
-            Hypnogram vector, same length as data
+            Hypnogram vector, same length as elec
             Vector with only 0 if no hypnogram is loaded
 
         rem_only: boolean
@@ -65,10 +65,12 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
     hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
 
     if hypLoaded:
-        data.copy()[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
+        data = elec.copy()
+        data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
         length = np.count_nonzero(data)
         idx_zero = np.where(data == 0)[0]
     else:
+        data = elec
         length = max(data.shape)
 
     # Get complex decomposition of filtered data :
