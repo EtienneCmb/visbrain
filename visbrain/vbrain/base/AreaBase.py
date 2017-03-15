@@ -191,16 +191,14 @@ class AreaBase(object):
         # desired areas volume values to 0. Then, using the level parameter,
         # we ensure that ignoring non-selected areas.
         elif not self._selectAll and self._unicolor:
-            # Create a masked array of a copy of the volume :
-            vol = np.ma.masked_array(self._vol.copy(), mask=False)
-            # For every selected area, turn the mask to True so it can be hide:
-            for k in self._select:
-                vol.mask[self._idx == k] = True
-            # Set volume values to 0 for all non selected areas : :
-            self._vol[~vol.mask] = 0
+            # Create an empty volume :
+            vol = np.zeros_like(self._vol)
+            # Build the condition list :
+            cd_lst = ['(self._vol == ' + str(k) + ')' for k in self._select]
+            # Set vol to 1 for selected index :
+            vol[eval(' | '.join(cd_lst))] = 1
             # Extract the vertices / faces of non-zero values :
-            minTh = np.array(self._select).min()
-            self.vert, self.faces = isosurface(self._vol, level=minTh)
+            self.vert, self.faces = isosurface(self._smooth(vol), level=.5)
             # Turn the unique color tuple into a faces compatible ndarray:
             self.vertex_colors = color2faces(self._color[0],
                                              self.faces.shape[0])
