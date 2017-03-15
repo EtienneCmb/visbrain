@@ -5,6 +5,8 @@ using either Automated Anatomical Labeling (AAL) or Brodmann area labeling.
 """
 
 import numpy as np
+from scipy.signal import convolve
+
 import warnings
 import os
 import sys
@@ -177,8 +179,8 @@ class AreaBase(object):
         # In this part, we select all possible areas by setting a selecting
         # level under 1. Then, a unique color is used for all of areas.
         if self._selectAll and self._unicolor:
-            # Select all areas but setting the level under 1 :
-            self.vert, self.faces = isosurface(self._vol, level=0.5)
+            # Select all areas by setting the level under 1 :
+            self.vert, self.faces = isosurface(self._smooth(self._vol), level=0.5)
             # Turn the unique color tuple into a faces compatible ndarray:
             self.vertex_colors = color2faces(self._color[0],
                                              self.faces.shape[0])
@@ -248,6 +250,33 @@ class AreaBase(object):
         self.vert[:, 1] -= ym
         self.vert[:, 2] -= zm
         # self.vert = self._transform.map(self.vert)[:, 0:-1]
+
+    def _smooth(self, data, size=3):
+        """Volume smoothing.
+
+        Args:
+            data: np.ndarray
+                Data volume (M, N, P)
+
+        Kargs:
+            size: int, optional, (def: 3)
+                The smoothing coefficient.
+
+        Return:
+            data_sm: np.ndarray
+                The smoothed data with the same shape as the data (M, N, P)
+        """
+        # Smooth throuh all dimensions :
+        sz = np.full((3,), size, dtype=int)
+        smooth = np.ones((size, size, size)) / np.prod(sz)
+        padSize = (sz - 1) / 2
+        idx = [np.array([])] * 3
+        for i, (k, s) in enumerate(zip(data.shape, padSize)):
+            ones = np.ones((int(s)), dtype=int)
+            idx[i] = np.hstack(([0], np.arange(k, dtype=int), (k-1) * ones))
+        grid = np.ix_(*tuple(idx))
+        data_sm = convolve(data[grid], smooth, mode='valid')
+        return data_sm
 
     def _plot(self):
         """Plot deep ares.
