@@ -18,7 +18,7 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 
 def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
                    max_freq=14., min_dur_ms=500, max_dur_ms=1500,
-                   method='hilbert'):
+                   method='wavelet'):
     """Perform a sleep spindles detection.
 
     Args:
