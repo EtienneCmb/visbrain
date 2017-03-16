@@ -119,7 +119,7 @@ class uiArea(object):
         (Brodmann or AAL). This function update the list of areas depending on
         this choice.
         """
-        # Get avaibme structures. This is automatically updated because of the
+        # Get avaible structures. This is automatically updated because of the
         # use  of @property and setter :
         if self.Sub_brod.isChecked():
             self.area.structure = 'brod'
@@ -150,6 +150,9 @@ class uiArea(object):
 
     def _area_plot(self):
         """Area Sub-plotting function."""
+        # Clean data (if needed) :
+        if self.area.name == 'displayed':
+            self.area.mesh.clean()
         # Get smoothing :
         self.area.smoothsize = self._roiSmooth.value()
         self.area._get_vertices()
