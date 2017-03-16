@@ -12,6 +12,7 @@ import os
 import sys
 
 from vispy.geometry.isosurface import isosurface
+import vispy.visuals.transforms as vist
 
 from .visuals import BrainMesh
 from ...utils import array2colormap, color2vb, color2faces
@@ -32,7 +33,7 @@ class AreaBase(object):
         """Init."""
         self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
             'Area')[0], 'templates')
-        self.file = 'AAL_label.npz'
+        self.file = 'roi.npz'
         self._structure = structure
         self._select = select
         self._selectAll = True
@@ -87,6 +88,7 @@ class AreaBase(object):
                 self._uidx = np.unique(self._vol)[1::]
                 self._label = np.array(["%.2d" % k + ': BA' + str(k) for num, k
                                         in enumerate(self._uidx)])
+            self._hdr = atlas['hdr'][0:-1, -1]
 
     def _preprocess(self):
         """Pre-processing function.
@@ -169,12 +171,6 @@ class AreaBase(object):
         # * Not sure that the self._color_idx is usefull
         # --------------------------------------------------------------------
 
-        # Pre-load atlas vertices to find the mean across xyz axis :
-        vertemp = isosurface(self._vol, level=0.5)[0]
-        xm = vertemp[:, 0].mean()
-        ym = vertemp[:, 1].mean()
-        zm = vertemp[:, 2].mean()
-
         # ============ Select all and unicolor============
         # In this part, we select all possible areas by setting a selecting
         # level under 1. Then, a unique color is used for all of areas.
@@ -219,10 +215,10 @@ class AreaBase(object):
             q = 0
             for num, k in enumerate(self._select):
                 # Remove unecessary index :
-                vol = self._vol.copy()
-                vol[self._idx != k] = 0
+                vol = np.zeros_like(self._vol)
+                vol[self._idx == k] = 1
                 # Get vertices/faces for this structure :
-                vertT, facesT = isosurface(vol, level=k)
+                vertT, facesT = isosurface(self._smooth(vol), level=.5)
                 # Update faces index :
                 facesT += (q+1)
                 # Concatenate vertices/faces :
@@ -245,11 +241,11 @@ class AreaBase(object):
             raise ValueError("Error: cannot match between color and areas to "
                              "select")
 
-        # Finally, apply transformation to vertices :
-        self.vert[:, 0] -= xm
-        self.vert[:, 1] -= ym
-        self.vert[:, 2] -= zm
-        # self.vert = self._transform.map(self.vert)[:, 0:-1]
+        # ============ Transformations ============
+        # Finally, apply transformations to vertices :
+        tr = vist.STTransform(translate=self._hdr)
+        self.vert = tr.map(self.vert)[:, 0:-1]
+        self.vert = self._transform.map(self.vert)[:, 0:-1]
 
     def _smooth(self, data, size=3):
         """Volume smoothing.
@@ -274,12 +270,15 @@ class AreaBase(object):
         for i, (k, s) in enumerate(zip(data.shape, padSize)):
             ones = np.ones((int(s)), dtype=int)
             idx[i] = np.hstack(([0], np.arange(k, dtype=int), (k-1) * ones))
+        # Define a indexing grid :
         grid = np.ix_(*tuple(idx))
+        # Convolve the data with the smoothing array :
         data_sm = convolve(data[grid], smooth, mode='valid')
+
         return data_sm
 
     def _plot(self):
-        """Plot deep ares.
+        """Plot deep areas.
 
         This method use the BrainMesh class, which is the same as the class
         used for plotting the main MNI brain.
