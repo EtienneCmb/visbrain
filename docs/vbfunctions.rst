@@ -4,7 +4,7 @@ The functions below are subdivided into several parts :
 * Brain functions: control the main brain object (color, transparency...)
 * Sources functions: control sources object (color, transparency, data...)
 * Connectivity functions: control connectivity object (color, transparency, data...)
-* Area functions: control area object (selected areas, color, transparency...)
+* ROI functions: control area object (selected areas, color, transparency...)
 
 GUI functions and settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -99,24 +99,28 @@ Set of functions for an iteractive control of connectivity object. Use the metho
 
    Example of connectivity setup.
 
-Area functions
-^^^^^^^^^^^^^^
+ROI functions
+^^^^^^^^^^^^^
 
-Set of functions for an iteractive control of areas object. Use the methods below to select the areas to display, to control the transparency level...
+Set of functions for an iteractive control of ROI (Region of interest) objects. Use methods below to select the ROI to display, to control the transparency level...
 
 .. figure::  picture/AreaObj.png
    :align:   center
 
    Example of deep-structures (AAL / Brodmann area).
 
+List of suported ROI
+~~~~~~~~~~~~~~~~~~~~
+.. automethod:: visbrain.vbrain.user.userfcn.roi_list
+
 Plot selection
 ~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.area_plot
+.. automethod:: visbrain.vbrain.user.userfcn.roi_plot
 
 Opacity
 ~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.area_opacity
+.. automethod:: visbrain.vbrain.user.userfcn.roi_opacity
 
 Light reflection
 ~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.area_light_reflection
+.. automethod:: visbrain.vbrain.user.userfcn.roi_light_reflection

@@ -5,11 +5,14 @@ using either Automated Anatomical Labeling (AAL) or Brodmann area labeling.
 """
 
 import numpy as np
+from scipy.signal import fftconvolve
+
 import warnings
 import os
 import sys
 
 from vispy.geometry.isosurface import isosurface
+import vispy.visuals.transforms as vist
 
 from .visuals import BrainMesh
 from ...utils import array2colormap, color2vb, color2faces
@@ -26,11 +29,12 @@ class AreaBase(object):
     """
 
     def __init__(self, structure='brod', select=None, color='white', cmap=None,
-                 scale_factor=1, name='', transform=None):
+                 scale_factor=1, name='', transform=None, smooth=3):
         """Init."""
         self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
             'Area')[0], 'templates')
-        self.file = 'AAL_label.npz'
+        self.file = 'roi.npz'
+        self._roitype = {}
         self._structure = structure
         self._select = select
         self._selectAll = True
@@ -38,11 +42,18 @@ class AreaBase(object):
         self._color = color
         self.cmap = cmap
         self._scale_factor = scale_factor
-        self._name = name
+        self.name = name
         self.mesh = None
+        self.smoothsize = smooth
+        self.need_update = True
+        self.creation = True
 
         if transform is not None:
             self._transform = transform
+
+    def __str__(self):
+        """Return labels of selected ROI type."""
+        return '\n'.join(self._label)
 
     # ========================================================================
     # PROCESSING FUNCTIONS
@@ -53,19 +64,18 @@ class AreaBase(object):
         This method load the volume, the index of each structure and the
         appropriate name.
         """
-        print('AREA LOADING <--------- FIX IT')
         # Load the atlas :
         atlas = np.load(os.path.join(self.atlaspath, self.file))
+        self._hdr = atlas['hdr'][0:-1, -1]
 
         # Manage atlas :
         if self._structure not in ['aal', 'brod']:
             raise ValueError("structure must be either 'aal' or 'brod'")
         else:
-            # Automated Anatomical Labeling labeling :
+            # ==================== AAL ====================
             if self._structure == 'aal':
                 # Get volume, index and unique index list :
                 self._vol = atlas['vol']
-                self._idx = atlas['vol']
                 self._uidx = np.unique(atlas['aal_idx'])
                 self._nlabel = len(atlas['aal_label'])*2
                 # Get labels for left / right hemispheres :
@@ -77,11 +87,10 @@ class AreaBase(object):
                                            atlas['aal_label'])])
                 # Cat labels in alternance (L, R, L, R...) :
                 self._label = np.column_stack((label_L, label_R)).flatten()
-            # Brodmann labeling :
+            # ==================== BRODMANN ====================
             elif self._structure == 'brod':
                 # Get volume, index and unique index list :
                 self._vol = atlas['brod_idx']
-                self._idx = atlas['brod_idx']
                 self._uidx = np.unique(self._vol)[1::]
                 self._label = np.array(["%.2d" % k + ': BA' + str(k) for num, k
                                         in enumerate(self._uidx)])
@@ -130,7 +139,7 @@ class AreaBase(object):
             self._color = array2colormap(np.arange(len(self._select)),
                                          cmap=self.cmap)
             # Turn it into a list :
-            self._color = np.ndarray.tolist(self._color)
+            self._color = list(self._color)
             # self._color = [tuple(self._color[k, :]) for k in range(
             #                                             self._color.shape[0])]
             self._unicolor = False
@@ -159,52 +168,24 @@ class AreaBase(object):
         # Futhermore, this function use a level parameter in order to get
         # vertices and faces of specific index. Unfortunately, the level can
         # only be >=, it's not possible to only select some specific levels.
-
-        # This code is really not esthetic, and I'm sure can be significantly
-        # improved. <-------------------------------------------------
-        # * Case 1 and 2 can easily be merged.
-        # * Not forced to create a masked array, a boolean one must do the job
-        # * Not sure that the self._color_idx is usefull
         # --------------------------------------------------------------------
-
-        # Pre-load atlas vertices to find the mean across xyz axis :
-        vertemp = isosurface(self._vol, level=0.5)[0]
-        xm = vertemp[:, 0].mean()
-        ym = vertemp[:, 1].mean()
-        zm = vertemp[:, 2].mean()
-
-        # ============ Select all and unicolor============
-        # In this part, we select all possible areas by setting a selecting
-        # level under 1. Then, a unique color is used for all of areas.
-        if self._selectAll and self._unicolor:
-            # Select all areas but setting the level under 1 :
-            self.vert, self.faces = isosurface(self._vol, level=0.5)
-            # Turn the unique color tuple into a faces compatible ndarray:
-            self.vertex_colors = color2faces(self._color[0],
-                                             self.faces.shape[0])
-            # <----------------------------------------------------------------------------------- DEFINITION
-            self._color_idx = np.zeros((self.faces.shape[0],))
-
-        # ============ Don't select all but unicolor ============
-        # In this part, we select only some specific areas but use only one
-        # color for all of them. The selection is achieved by setting non-
-        # desired areas volume values to 0. Then, using the level parameter,
-        # we ensure that ignoring non-selected areas.
-        elif not self._selectAll and self._unicolor:
-            # Create a masked array of a copy of the volume :
-            vol = np.ma.masked_array(self._vol.copy(), mask=False)
-            # For every selected area, turn the mask to True so it can be hide:
-            for k in self._select:
-                vol.mask[self._idx == k] = True
-            # Set volume values to 0 for all non selected areas : :
-            self._vol[~vol.mask] = 0
+        # ============ Unicolor ============
+        if self._unicolor:
+            if not self._selectAll:
+                # Create an empty volume :
+                vol = np.zeros_like(self._vol)
+                # Build the condition list :
+                cd_lst = ['(self._vol==' + str(k) + ')' for k in self._select]
+                # Set vol to 1 for selected index :
+                vol[eval(' | '.join(cd_lst))] = 1
+            else:
+                vol = self._vol
             # Extract the vertices / faces of non-zero values :
-            minTh = np.array(self._select).min()
-            self.vert, self.faces = isosurface(self._vol, level=minTh)
+            self.vert, self.faces = isosurface(self._smooth(vol), level=.5)
             # Turn the unique color tuple into a faces compatible ndarray:
             self.vertex_colors = color2faces(self._color[0],
                                              self.faces.shape[0])
-            # <----------------------------------------------------------------------------------- DEFINITION
+            # Unique color per ROI :
             self._color_idx = np.zeros((self.faces.shape[0],))
 
         # ============ Specific selection + specific colors ============
@@ -214,15 +195,15 @@ class AreaBase(object):
         # non-desired area index to 0, transform into an isosurface and finally
         # concatenate vertices / faces / color. This is is very slow and it's
         # only because of the color.
-        elif not self._selectAll and not self._unicolor:
+        else:
             self.vert, self.faces = np.array([]), np.array([])
             q = 0
             for num, k in enumerate(self._select):
                 # Remove unecessary index :
-                vol = self._vol.copy()
-                vol[self._idx != k] = 0
+                vol = np.zeros_like(self._vol)
+                vol[self._vol == k] = 1
                 # Get vertices/faces for this structure :
-                vertT, facesT = isosurface(vol, level=k)
+                vertT, facesT = isosurface(self._smooth(vol), level=.5)
                 # Update faces index :
                 facesT += (q+1)
                 # Concatenate vertices/faces :
@@ -240,27 +221,48 @@ class AreaBase(object):
                 # Update maximum :
                 q = self.faces.max()
 
-        # ============ Other case ============
-        else:
-            raise ValueError("Error: cannot match between color and areas to "
-                             "select")
+        # ============ Transformations ============
+        # Finally, apply transformations to vertices :
+        tr = vist.STTransform(translate=self._hdr)
+        self.vert = tr.map(self.vert)[:, 0:-1]
+        self.vert = self._transform.map(self.vert)[:, 0:-1]
 
-        # Finally, apply transformation to vertices :
-        self.vert[:, 0] -= xm
-        self.vert[:, 1] -= ym
-        self.vert[:, 2] -= zm
-        # self.vert = self._transform.map(self.vert)[:, 0:-1]
+    def _smooth(self, data):
+        """Volume smoothing.
+
+        Args:
+            data: np.ndarray
+                Data volume (M, N, P)
+
+        Return:
+            data_sm: np.ndarray
+                The smoothed data with the same shape as the data (M, N, P)
+        """
+        if self.smoothsize >= 3:
+            # Define smooth arguments :
+            sz = np.full((3,), self.smoothsize, dtype=int)
+            smooth = np.ones([self.smoothsize] * 3) / np.prod(sz)
+            return fftconvolve(data, smooth, mode='same')
+        else:
+            return data
 
     def _plot(self):
-        """Plot deep ares.
+        """Plot deep areas.
 
         This method use the BrainMesh class, which is the same as the class
         used for plotting the main MNI brain.
         """
-        self.mesh = BrainMesh(vertices=self.vert, faces=self.faces,
-                              vertex_colors=self.vertex_colors,
-                              scale_factor=self._scale_factor, name=self._name,
-                              recenter=False)
+        if self.creation:
+            self.mesh = BrainMesh(vertices=self.vert, faces=self.faces,
+                                  vertex_colors=self.vertex_colors,
+                                  scale_factor=self._scale_factor,
+                                  name=self.name, recenter=False)
+            self.name = 'displayed'
+            self.creation = False
+        else:
+            # Clean the mesh :
+            self.mesh.set_data(vertices=self.vert, faces=self.faces,
+                               vertex_colors=self.vertex_colors)
 
     def _get_idxMask(self, index):
         """Get a boolean array where each structure is located.
@@ -353,6 +355,21 @@ class AreaBase(object):
         """
         self.mesh.set_camera(camera)
 
+    def update(self):
+        """Update ROI."""
+        if self.need_update:
+            self._load()
+            self.need_update = False
+
+    def plot(self):
+        """Plot ROI"""
+        if self.need_update:
+            self._load()
+            self.need_update = False
+        self._preprocess()
+        self._get_vertices()
+        self._plot()
+
     # ========================================================================
     # PROPERTIES
     # ========================================================================
@@ -365,7 +382,7 @@ class AreaBase(object):
     def structure(self, value):
         """Set structure name ('aal' or 'brod)'."""
         self._structure = value
-        self._load()
+        self.need_update = True
 
     @property
     def select(self):
@@ -376,7 +393,7 @@ class AreaBase(object):
     def select(self, value):
         """Set selected structures."""
         self._select = value
-        self._load()
+        self.need_update = True
 
     @property
     def color(self):
@@ -387,4 +404,4 @@ class AreaBase(object):
     def color(self, value):
         """Set structure color."""
         self._color = value
-        self._load()
+        self.need_update = True

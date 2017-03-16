@@ -94,7 +94,6 @@ class AtlasBase(object):
             color: ndarray
                 Brain color per faces of shape (M, 3, 4) for RGBA color
         """
-        print('-> IM IN LOADING TWO TIMES')
         # Load a default template :
         if (vertices is None) and (faces is None):
             if (template in ['B1', 'B2', 'B3']):

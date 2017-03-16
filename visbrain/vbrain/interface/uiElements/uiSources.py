@@ -16,7 +16,8 @@ class uiSources(object):
 
     def __init__(self,):
         """Init."""
-        # Sources :
+        # ====================== SOURCES ======================
+        # ---------- Visibility ----------
         self.show_Sources.clicked.connect(self._toggle_sources_visible)
         self.s_uiAll.clicked.connect(self._fcn_left_right_H)
         self.s_uiNone.clicked.connect(self._fcn_left_right_H)
@@ -24,8 +25,25 @@ class uiSources(object):
         self.s_RightH.clicked.connect(self._fcn_left_right_H)
         self.s_Inside.clicked.connect(self._fcn_inside_outside_H)
         self.s_Outside.clicked.connect(self._fcn_inside_outside_H)
+        # ---------- Change marker look ----------
+        # Symbol :
+        sym = [self.s_Symbol.itemText(i) for i in range(self.s_Symbol.count())]
+        self.s_Symbol.setCurrentIndex(sym.index(self.sources.symbol))
+        self.s_Symbol.currentIndexChanged.connect(self._fcn_MarkerLook)
+        # Edge color / width :
+        self.s_EdgeColor.setText(str(self.sources.edgecolor))
+        self.s_EdgeColor.editingFinished.connect(self._fcn_MarkerLook)
+        self.s_EdgeWidth.setValue(self.sources.edgewidth)
+        self.s_EdgeWidth.valueChanged.connect(self._fcn_MarkerLook)
+        # ---------- Marker's radius ----------
+        self.s_radiusMin.setValue(self.sources.radiusmin)
+        self.s_radiusMin.valueChanged.connect(self._fcn_MarkerRadius)
+        self.s_radiusMax.setValue(self.sources.radiusmax)
+        self.s_radiusMax.valueChanged.connect(self._fcn_MarkerRadius)
+        self.s_Scaling.setChecked(self.sources.scaling)
+        self.s_Scaling.clicked.connect(self._fcn_MarkerRadius)
 
-        # Text elements :
+        # ====================== SOURCE'S TEXT ======================
         if self.sources.stext is None:
             self.q_stextshow.setEnabled(False)
             self.q_stextcolor.setEnabled(False)
@@ -44,6 +62,14 @@ class uiSources(object):
         self.y_text.valueChanged.connect(self._fcn_textupdate)
         self.z_text.valueChanged.connect(self._fcn_textupdate)
 
+        # ====================== PROJECTION ======================
+        self._uitRadius.setValue(self._tradius)
+        self._uitProjectOn.model().item(1).setEnabled(False)
+        self._uitApply.clicked.connect(self._fcn_sourceProjection)
+
+    # =====================================================================
+    # SOURCES
+    # =====================================================================
     def _fcn_left_right_H(self):
         """Display sources either in the Left or Right hemisphere.
 
@@ -68,6 +94,41 @@ class uiSources(object):
         elif self.s_Outside.isChecked():
             self.s_display(select='outside')
 
+    def _fcn_MarkerLook(self):
+        """Change how marker looks."""
+        self.sources.symbol = self.s_Symbol.currentText()
+        self.sources.edgecolor = textline2color(self.s_EdgeColor.text())[1]
+        self.sources.edgewidth = self.s_EdgeWidth.value()
+        self.sources.update()
+
+    def _fcn_MarkerRadius(self):
+        """Marker radius related functions."""
+        self.sources.scaling = self.s_Scaling.isChecked()
+        self.sources.radiusmin = self.s_radiusMin.value()
+        self.sources.radiusmax = self.s_radiusMax.value()
+        self.sources.array2radius()
+        self.sources.update()
+
+    # =====================================================================
+    # PROJECTION
+    # =====================================================================
+    def _fcn_sourceProjection(self):
+        """Apply source projection."""
+        # Get projection radius :
+        self._tradius = self._uitRadius.value()
+        # Get if activity has to be projected on surface / ROI :
+        self._tprojecton = self._uitProjectOn.currentText().lower()
+        # Run either the activity / repartition projection :
+        if self._uitActivity.isChecked():
+            self._cortical_projection()
+        elif self._uitRepartition.isChecked():
+            self._cortical_repartition()
+        # Disable apply button :
+        self._uitApply.setEnabled(False)
+
+    # =====================================================================
+    # TEXT
+    # =====================================================================
     def _fcn_textupdate(self):
         """Update text of each sources.
 

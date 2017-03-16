@@ -42,6 +42,7 @@ class uiArea(object):
         # System :
         self.strcutShow.clicked.connect(self._fcn_visible_area)
         self.struct_apply.clicked.connect(self._fcn_applyStruct)
+        self.structClear.clicked.connect(self._fcn_roiClear)
 
         self._fcn_buildStructLst()
 
@@ -119,20 +120,18 @@ class uiArea(object):
         (Brodmann or AAL). This function update the list of areas depending on
         this choice.
         """
-        # Get avaibme structures. This is automatically updated because of the
+        # Get avaible structures. This is automatically updated because of the
         # use  of @property and setter :
         if self.Sub_brod.isChecked():
             self.area.structure = 'brod'
         elif self.Sub_aal.isChecked():
             self.area.structure = 'aal'
+        self.area.update()
 
         # Update list of structures :
         self.struct2select.clear()
         self.struct2select.addItems(self.area._label)
         self._fcn_rst_struct()
-
-        # Reconstruct structure list :
-        self.area._preprocess()
 
     def _fcn_applyStruct(self):
         """Apply the choice of structures and plot them.
@@ -148,12 +147,23 @@ class uiArea(object):
         self.area.select = struct2add
         self._area_plot()
 
+    def _fcn_roiClear(self):
+        """Clear ROI."""
+        self.area.mesh.clean()
+        self.area.mesh.update()
+
     def _area_plot(self):
         """Area Sub-plotting function."""
-        self.area._get_vertices()
-        self.area._plot()
+        # Get smoothing :
+        self.area.smoothsize = self._roiSmooth.value()
+        self.area.plot()
         self.area.mesh.parent = self._vbNode
         self.area.set_camera(self.view.wc.camera)
+        # Enable projection on ROI and related buttons :
+        self._uitProjectOn.model().item(1).setEnabled(True)
+        self._roiReflect.setEnabled(True)
+        self.strcutShow.setEnabled(True)
+        self.o_Areas.setEnabled(True)
 
     def _area_light_reflection(self, *args):
         """Change how light is refleting onto sub-areas.

@@ -64,12 +64,11 @@ class base(CbarBase, transformations):
 
         # Sources panel:
         if self.sources.mesh.name is 'NoneSources':
-            self.q_SOURCES.setEnabled(False)
+            self.QuickSettings.setTabEnabled(2, False)
+            self.QuickSettings.setTabEnabled(3, False)
+            self.QuickSettings.setTabEnabled(5, False)
             self.menuTransform.setEnabled(False)
-            self.q_TRANS.setEnabled(False)
-            self.q_CONNECT.setEnabled(False)
             self.o_Sources.setEnabled(False)
-            self.o_Text.setEnabled(False)
 
         # Text panel:
         if self.sources.stextmesh.name == 'NoneText':
@@ -79,9 +78,9 @@ class base(CbarBase, transformations):
 
         # Connectivity panel:
         if self.connect.mesh.name == 'NoneConnect':
-            self.q_CONNECT.setEnabled(False)
-            self.o_Connect.setEnabled(False)
+            self.QuickSettings.setTabEnabled(3, False)
             self.cmapConnect.setEnabled(False)
+            self.o_Connect.setEnabled(False)
         self._lw = kwargs.get('c_linewidth', 4.)
 
         # ---------- Put everything in a root node ----------
