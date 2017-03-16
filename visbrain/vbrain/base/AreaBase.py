@@ -41,7 +41,7 @@ class AreaBase(object):
         self._color = color
         self.cmap = cmap
         self._scale_factor = scale_factor
-        self._name = name
+        self.name = name
         self.mesh = None
 
         if transform is not None:
@@ -285,7 +285,7 @@ class AreaBase(object):
         """
         self.mesh = BrainMesh(vertices=self.vert, faces=self.faces,
                               vertex_colors=self.vertex_colors,
-                              scale_factor=self._scale_factor, name=self._name,
+                              scale_factor=self._scale_factor, name=self.name,
                               recenter=False)
 
     def _get_idxMask(self, index):
