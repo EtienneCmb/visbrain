@@ -45,8 +45,8 @@ class SourcesBase(_colormap):
         self.alpha = s_opacity
         self.scaling = s_scaling
         self.transform = s_transform
-        self.radiusmin = s_radiusmin*1.5
-        self.radiusmax = s_radiusmax*1.5
+        self.radiusmin = s_radiusmin
+        self.radiusmax = s_radiusmax
         self.symbol = s_symbol
         self.stext = s_text
         self.stextcolor = color2vb(s_textcolor)
@@ -178,7 +178,7 @@ class SourcesBase(_colormap):
                 raise ValueError("The length of text data must be the same "
                                  "as the number of electrodes")
 
-    def array2radius(self):
+    def array2radius(self, factor=1.5):
         """Transform an array of data to source's radius.
 
         If data across sources is constant, the radiusmin will be used. If not,
@@ -186,10 +186,10 @@ class SourcesBase(_colormap):
         """
         # Find radius either for constant / non-constant data :
         if np.unique(self.data.data).size == 1:  # Constant data
-            self.sData = self.radiusmin*np.ones((len(self.data.data),))
+            self.sData = factor*self.radiusmin*np.ones((len(self.data.data),))
         else:                          # Non-constant values
-            self.sData = normalize(self.data.data, tomin=self.radiusmin,
-                                   tomax=self.radiusmax)
+            self.sData = normalize(self.data.data, tomin=factor*self.radiusmin,
+                                   tomax=factor*self.radiusmax)
 
         # Rescale data :
         if self.scaling:
