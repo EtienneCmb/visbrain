@@ -38,9 +38,9 @@ Sources
 
 Projection
 	-5 Vérifier les dernières modifs liées à la projection corticale / répartition
-	-4 Projection interne à peaufiner
 	-2 Ajouter un paramètre de smoothing exponentiel + filtre gaussien sur le final
 	-1 Projection temporelle, en tenant compte de la fréquence d'échantillonage
+	+4 Projection interne à peaufiner
 
 Opacité
 	-5 Slice sur opacité ou sur les données??????
@@ -56,7 +56,7 @@ Structures internes
 	-4 Ajouter des paramètres d'entrées a_ pour contrôler les strustures
 	-4 Dans la couleur renseignée, posibilité de mettre une cmap (si la couleur rentrée est dans la liste de cmap mpl, set cmap paramètre).
 	-4 Bug dans les structures internes
-	-3 Structures internes HD
+	+3 Structures internes HD
 
 
 Connectivity

@@ -20,9 +20,7 @@ vb = vbrain(s_xyz=s_xyz, s_data=s_data, s_cmap='viridis')
 vb.rotate(fixed='axial')
 # Select the thalamus index (77 for the left and 78 for the right). If you
 # don't know what is the index of your ROI, open the GUI and look at the
-# number in front of the name. The smooth parameter should be used with caution
-# because it can considerably slow down the opening speed of the interface
-# (if you want smoother try 5 or 6...)
+# number in front of the name.
 vb.area_plot(selection=[77, 78], subdivision='aal', smooth=5)
 # Project the source's activity onto ROI directly :
 vb.cortical_projection(project_on='roi')
