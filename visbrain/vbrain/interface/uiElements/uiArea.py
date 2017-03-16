@@ -150,6 +150,8 @@ class uiArea(object):
 
     def _area_plot(self):
         """Area Sub-plotting function."""
+        # Get smoothing :
+        self.area.smoothsize = self._roiSmooth.value()
         self.area._get_vertices()
         self.area._plot()
         self.area.mesh.parent = self._vbNode

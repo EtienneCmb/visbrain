@@ -29,7 +29,7 @@ class AreaBase(object):
     """
 
     def __init__(self, structure='brod', select=None, color='white', cmap=None,
-                 scale_factor=1, name='', transform=None):
+                 scale_factor=1, name='', transform=None, smooth=3):
         """Init."""
         self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
             'Area')[0], 'templates')
@@ -43,6 +43,7 @@ class AreaBase(object):
         self._scale_factor = scale_factor
         self.name = name
         self.mesh = None
+        self.smoothsize = smooth
 
         if transform is not None:
             self._transform = transform
@@ -247,35 +248,35 @@ class AreaBase(object):
         self.vert = tr.map(self.vert)[:, 0:-1]
         self.vert = self._transform.map(self.vert)[:, 0:-1]
 
-    def _smooth(self, data, size=3):
+    def _smooth(self, data):
         """Volume smoothing.
 
         Args:
             data: np.ndarray
                 Data volume (M, N, P)
 
-        Kargs:
-            size: int, optional, (def: 3)
-                The smoothing coefficient.
-
         Return:
             data_sm: np.ndarray
                 The smoothed data with the same shape as the data (M, N, P)
         """
-        # Smooth throuh all dimensions :
-        sz = np.full((3,), size, dtype=int)
-        smooth = np.ones((size, size, size)) / np.prod(sz)
-        padSize = (sz - 1) / 2
-        idx = [np.array([])] * 3
-        for i, (k, s) in enumerate(zip(data.shape, padSize)):
-            ones = np.ones((int(s)), dtype=int)
-            idx[i] = np.hstack(([0], np.arange(k, dtype=int), (k-1) * ones))
-        # Define a indexing grid :
-        grid = np.ix_(*tuple(idx))
-        # Convolve the data with the smoothing array :
-        data_sm = convolve(data[grid], smooth, mode='valid')
+        if self.smoothsize >= 3:
+            # Define smooth arguments :
+            sz = np.full((3,), self.smoothsize, dtype=int)
+            smooth = np.ones([self.smoothsize] * 3) / np.prod(sz)
+            padSize = (sz - 1) / 2
+            # Define new index array before convolution :
+            idx = [np.array([])] * 3
+            for i, (k, s) in enumerate(zip(data.shape, padSize)):
+                ones = (k-1) * np.ones((int(s)), dtype=int)
+                idx[i] = np.hstack(([0], np.arange(k, dtype=int), ones))
+            # Define a indexing grid :
+            grid = np.ix_(*tuple(idx))
+            # Convolve the data with the smoothing array :
+            data_sm = convolve(data[grid], smooth, mode='valid')
 
-        return data_sm
+            return data_sm
+        else:
+            return data
 
     def _plot(self):
         """Plot deep areas.

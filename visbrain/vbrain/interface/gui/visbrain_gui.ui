@@ -3346,7 +3346,7 @@ reflection</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="2">
+                    <item row="3" column="2">
                      <spacer name="horizontalSpacer_29">
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
@@ -3451,6 +3451,41 @@ reflection</string>
                         </widget>
                        </item>
                       </layout>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_2">
+                      <property name="font">
+                       <font>
+                        <italic>true</italic>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Smooth</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="Line" name="line_4">
+                      <property name="minimumSize">
+                       <size>
+                        <width>10</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2">
+                     <widget class="QSpinBox" name="_roiSmooth">
+                      <property name="minimum">
+                       <number>3</number>
+                      </property>
+                      <property name="singleStep">
+                       <number>2</number>
+                      </property>
                      </widget>
                     </item>
                    </layout>
