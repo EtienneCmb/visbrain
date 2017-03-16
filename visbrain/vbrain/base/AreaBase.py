@@ -45,28 +45,25 @@ class AreaBase(object):
         self.name = name
         self.mesh = None
         self.smoothsize = smooth
+        self.need_update = True
+        self.creation = True
 
         if transform is not None:
             self._transform = transform
 
-    def __getitem__(self, key):
-        """Get either the brodmann / AAL object."""
-        pass
+    def __str__(self):
+        """Return labels of selected ROI type."""
+        return '\n'.join(self._label)
 
     # ========================================================================
     # PROCESSING FUNCTIONS
     # ========================================================================
-    def _preload(self):
-        """"""
-        pass
-
     def _load(self):
         """Load the matrice which contains the labeling atlas.
 
         This method load the volume, the index of each structure and the
         appropriate name.
         """
-        print('AREA LOADING <--------- FIX IT')
         # Load the atlas :
         atlas = np.load(os.path.join(self.atlaspath, self.file))
         self._hdr = atlas['hdr'][0:-1, -1]
@@ -188,7 +185,7 @@ class AreaBase(object):
             # Turn the unique color tuple into a faces compatible ndarray:
             self.vertex_colors = color2faces(self._color[0],
                                              self.faces.shape[0])
-            # <----------------------------------------------------------------------------------- DEFINITION
+            # Unique color per ROI :
             self._color_idx = np.zeros((self.faces.shape[0],))
 
         # ============ Specific selection + specific colors ============
@@ -255,10 +252,17 @@ class AreaBase(object):
         This method use the BrainMesh class, which is the same as the class
         used for plotting the main MNI brain.
         """
-        self.mesh = BrainMesh(vertices=self.vert, faces=self.faces,
-                              vertex_colors=self.vertex_colors,
-                              scale_factor=self._scale_factor, name=self.name,
-                              recenter=False)
+        if self.creation:
+            self.mesh = BrainMesh(vertices=self.vert, faces=self.faces,
+                                  vertex_colors=self.vertex_colors,
+                                  scale_factor=self._scale_factor,
+                                  name=self.name, recenter=False)
+            self.name = 'displayed'
+            self.creation = False
+        else:
+            # Clean the mesh :
+            self.mesh.set_data(vertices=self.vert, faces=self.faces,
+                               vertex_colors=self.vertex_colors)
 
     def _get_idxMask(self, index):
         """Get a boolean array where each structure is located.
@@ -351,6 +355,21 @@ class AreaBase(object):
         """
         self.mesh.set_camera(camera)
 
+    def update(self):
+        """Update ROI."""
+        if self.need_update:
+            self._load()
+            self.need_update = False
+
+    def plot(self):
+        """Plot ROI"""
+        if self.need_update:
+            self._load()
+            self.need_update = False
+        self._preprocess()
+        self._get_vertices()
+        self._plot()
+
     # ========================================================================
     # PROPERTIES
     # ========================================================================
@@ -363,7 +382,7 @@ class AreaBase(object):
     def structure(self, value):
         """Set structure name ('aal' or 'brod)'."""
         self._structure = value
-        self._load()
+        self.need_update = True
 
     @property
     def select(self):
@@ -374,7 +393,7 @@ class AreaBase(object):
     def select(self, value):
         """Set selected structures."""
         self._select = value
-        self._load()
+        self.need_update = True
 
     @property
     def color(self):
@@ -385,4 +404,4 @@ class AreaBase(object):
     def color(self, value):
         """Set structure color."""
         self._color = value
-        self._load()
+        self.need_update = True
