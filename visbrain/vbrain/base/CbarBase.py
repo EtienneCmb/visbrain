@@ -22,7 +22,7 @@ class CbarBase(_colormap):
 
     def __init__(self, parent, cmap='viridis', clim=None, vmin=None, vmax=None,
                  under=None, over=None, cb_export=False, cb_fontsize=15,
-                 cb_fontcolor='w', cb_label='', **kwargs):
+                 cb_fontcolor='white', cb_label='', **kwargs):
         """Init."""
         # Initialize colorbar elements :
         _colormap.__init__(self, cmap, clim, vmin, vmax, under, over)
@@ -109,8 +109,8 @@ class CbarBase(_colormap):
         return cmap
 
     def cbupdate(self, data, cmap, clim=None, vmin=None, under=None, vmax=None,
-                 over=None, label='', fontsize=20, fontcolor='w', export=True,
-                 length=10):
+                 over=None, label='', fontsize=20, fontcolor='white',
+                 export=True, length=10):
         """Update the colorbar with data or color properties.
 
         Args:
@@ -148,7 +148,7 @@ class CbarBase(_colormap):
             fontsize: int, optional, (def: 10)
                 Font-size of the colorbar text (min / max / title).
 
-            fontcolor: string, optional, (def: 'w')
+            fontcolor: string, optional, (def: 'white')
                 Font-color of the colorbar text (min / max / title).
 
             length: int, optional, (def: 10)
@@ -172,7 +172,7 @@ class CbarBase(_colormap):
                     fontcolor=fontcolor)
 
     def set_cb(self, cmap=None, clim=None, label='', fontsize=None,
-               fontcolor='w'):
+               fontcolor='white'):
         """Set some colorbar properties.
 
         Kargs:
@@ -188,7 +188,7 @@ class CbarBase(_colormap):
             fontsize: int, optional, (def: 10)
                 Font-size of the colorbar text (min / max / title).
 
-            fontcolor: string, optional, (def: 'w')
+            fontcolor: string, optional, (def: 'white')
                 Font-color of the colorbar text (min / max / title).
         """
         if cmap is not None:
