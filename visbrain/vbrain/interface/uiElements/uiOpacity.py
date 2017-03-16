@@ -127,6 +127,7 @@ class uiOpacity(object):
         # =================== Areas opacity ===================
         if self.o_Areas.isChecked():
             self.area.set_alpha(sl_01)
+            self.area.mesh.visible = visible
 
         self.view.canvas.update()
 
@@ -168,8 +169,7 @@ class uiOpacity(object):
             # Reset mask :
             self.sources.data.mask = np.zeros_like(self.sources.data.mask)
             # Find sources to remove :
-            tohide = eval(formatstr.format(obj='self.sources.xyz', xsym=xsym,
-                                           ysym=ysym, zsym=zsym))
+            tohide = eval(formatstr.format(obj='self.sources.xyz'))
             # Update mask then sources :
             self.sources.data.mask[tohide] = True
             if self.o_Sources.isChecked():
