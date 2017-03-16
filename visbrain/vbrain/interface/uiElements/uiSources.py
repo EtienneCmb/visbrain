@@ -63,16 +63,8 @@ class uiSources(object):
         self.z_text.valueChanged.connect(self._fcn_textupdate)
 
         # ====================== PROJECTION ======================
-        # Radius :
         self._uitRadius.setValue(self._tradius)
-        self._uitRadius.valueChanged.connect(self._fcn_projAllowed)
-        # Activity / Repartition :
-        self._uitActivity.clicked.connect(self._fcn_projAllowed)
-        self._uitRepartition.clicked.connect(self._fcn_projAllowed)
-        # Project on brain / ROI :
         self._uitProjectOn.model().item(1).setEnabled(False)
-        self._uitProjectOn.currentIndexChanged.connect(self._fcn_projAllowed)
-        # Apply :
         self._uitApply.clicked.connect(self._fcn_sourceProjection)
 
     # =====================================================================
@@ -120,10 +112,6 @@ class uiSources(object):
     # =====================================================================
     # PROJECTION
     # =====================================================================
-    def _fcn_projAllowed(self):
-        """Allow the cortical projection / repartition."""
-        self._uitApply.setEnabled(True)
-
     def _fcn_sourceProjection(self):
         """Apply source projection."""
         # Get projection radius :
