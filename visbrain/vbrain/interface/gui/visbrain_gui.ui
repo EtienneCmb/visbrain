@@ -66,7 +66,7 @@
           <bool>true</bool>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <property name="documentMode">
           <bool>true</bool>
@@ -2811,7 +2811,7 @@ type</string>
                     <item>
                      <widget class="QPushButton" name="_uitApply">
                       <property name="enabled">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </property>
                       <property name="toolTip">
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Run the source's projection using above parameters&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -3294,6 +3294,16 @@ width</string>
                     <property name="topMargin">
                      <number>0</number>
                     </property>
+                    <item row="2" column="2">
+                     <widget class="QSpinBox" name="_roiSmooth">
+                      <property name="minimum">
+                       <number>3</number>
+                      </property>
+                      <property name="singleStep">
+                       <number>2</number>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="1" column="0">
                      <widget class="QLabel" name="label_113">
                       <property name="font">
@@ -3343,6 +3353,19 @@ division</string>
                       <property name="text">
                        <string>Light
 reflection</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="Line" name="line_4">
+                      <property name="minimumSize">
+                       <size>
+                        <width>10</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
                       </property>
                      </widget>
                     </item>
@@ -3403,6 +3426,18 @@ reflection</string>
                       </layout>
                      </widget>
                     </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_2">
+                      <property name="font">
+                       <font>
+                        <italic>true</italic>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Smooth</string>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="0" column="2">
                      <widget class="QWidget" name="_roiReflect" native="true">
                       <property name="enabled">
@@ -3451,41 +3486,6 @@ reflection</string>
                         </widget>
                        </item>
                       </layout>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="label_2">
-                      <property name="font">
-                       <font>
-                        <italic>true</italic>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>Smooth</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1">
-                     <widget class="Line" name="line_4">
-                      <property name="minimumSize">
-                       <size>
-                        <width>10</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="orientation">
-                       <enum>Qt::Vertical</enum>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="2">
-                     <widget class="QSpinBox" name="_roiSmooth">
-                      <property name="minimum">
-                       <number>3</number>
-                      </property>
-                      <property name="singleStep">
-                       <number>2</number>
-                      </property>
                      </widget>
                     </item>
                    </layout>

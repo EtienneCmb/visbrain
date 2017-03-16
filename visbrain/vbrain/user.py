@@ -6,8 +6,10 @@ really convenient for generating a large number of pictures by looping over a
 vbrain instance.
 """
 
-from ..utils import color2vb
+import numpy as np
 import os.path
+
+from ..utils import color2vb
 
 __all__ = ['userfcn']
 
@@ -480,14 +482,14 @@ class userfcn(object):
     #                                 ROI
     # =========================================================================
     # =========================================================================
-    def area_plot(self, selection=[], subdivision='brod', smooth=3):
-        """Select some area to plot.
+    def roi_plot(self, selection=[], subdivision='brod', smooth=3):
+        """Select some roi to plot.
 
         Kargs:
             selection: list, optional, (def: [])
-                List of integers where each one refer to a particular area. The
+                List of integers where each one refer to a particular roi. The
                 corresponding list can be found in the graphical interface in
-                the MNI -> Strucures -> Select structures tab.
+                the ROI tab or using the function roi_list.
 
             subdivision: str, optional, (def: 'brod')
                 Select the sub-division method i.e 'brod' (for brodmann areas)
@@ -500,9 +502,12 @@ class userfcn(object):
             >>> # Define a vbrain instance :
             >>> vb = vbrain()
             >>> # Display brodmann area 4 and 6 :
-            >>> vb.area_plot(selection=[4, 6], subdivision='brod', smooth=5)
+            >>> vb.roi_plot(selection=[4, 6], subdivision='brod', smooth=5)
             >>> # Show the GUI :
             >>> vb.show()
+
+        See also:
+            roi_list
         """
         # Inputs checking :
         if not isinstance(selection, list):
@@ -512,20 +517,31 @@ class userfcn(object):
             raise ValueError("The subdivision parameter must either be 'brod' "
                              "or 'aal'")
 
-        # Area selection (only if it's not empty) :
+        # roi selection (only if it's not empty) :
         if selection:
+            # Sort selection :
             selection.sort()
             self.area.select = selection
             self.area.structure = subdivision
             self._roiSmooth.setValue(smooth)
-            # Add areas to the plot :
+            # Plot ROI :
             self._area_plot()
+            # --------------- GUI ---------------
+            # Set check the corresponding subdivision :
+            if subdivision == 'brod':
+                self.Sub_brod.setChecked(True)
+            elif subdivision == 'aal':
+                self.Sub_aal.setChecked(True)
+            # Add selected items to the GUI :
+            self.struct2add.addItems(self.area._label[np.add(selection, -1)])
+            self.struct2select.clear()
+            self.struct2select.addItems(self.area._label)
 
-    def area_light_reflection(self, reflect_on=None):
-        """Change how light is refleting onto sub-areas.
+    def roi_light_reflection(self, reflect_on=None):
+        """Change how light is reflecting onto roi.
 
         This function can be used to see either the surface only (external) or
-        deep voxels inside areas (internal).
+        deep voxels inside roi (internal).
 
         Kargs:
             reflect_on: string, optional, (def: None)
@@ -535,9 +551,9 @@ class userfcn(object):
             >>> # Define a vbrain instance :
             >>> vb = vbrain()
             >>> # Display brodmann area 4 and 6 :
-            >>> vb.area_plot(selection=[4, 6], subdivision='brod')
+            >>> vb.roi_plot(selection=[4, 6], subdivision='brod')
             >>> # Display the external surface :
-            >>> vb._area_light_reflection(reflect_on='internal')
+            >>> vb.roi_light_reflection(reflect_on='internal')
             >>> # Hide the brain :
             >>> vb.brain_opacity(show=False)
             >>> # Show the GUI :
@@ -553,7 +569,7 @@ class userfcn(object):
 
         self._area_light_reflection()
 
-    def area_opacity(self, alpha=0.1, show=True):
+    def roi_opacity(self, alpha=0.1, show=True):
         """Set the level of transparency of the deep structures.
 
         Kargs:
@@ -561,13 +577,13 @@ class userfcn(object):
                 Transparency level (usually between 0 and 1).
 
             show: bool, optional, (def: True)
-                Specify if area(s) has be shown.
+                Specify if roi(s) has be shown.
 
         Example:
             >>> # Define a vbrain instance :
             >>> vb = vbrain()
             >>> # Set transparency :
-            >>> vb.area_opacity(alpha=0.1, show=True)
+            >>> vb.roi_opacity(alpha=0.1, show=True)
             >>> # Show the GUI :
             >>> vb.show()
         """
@@ -576,3 +592,25 @@ class userfcn(object):
         self.area.mesh.visible = show
         self.strcutShow.setChecked(show)
         self.area.mesh.set_alpha(alpha)
+
+    def roi_list(self, subdivision='brod'):
+        """Get the list of supported ROI.
+
+        Kargs:
+            subdivision: str, optional, (def: 'brod')
+                Select the sub-division method i.e 'brod' (for brodmann areas)
+                or 'aal' (Anatomical Automatic Labeling)
+
+        Return:
+            labels: str
+                The currently supported ROI's labels.
+
+        Example:
+            >>> # Define a vbrain instance :
+            >>> vb = vbrain()
+            >>> # Get list of ROI for AAL :
+            >>> lst = vb.roi_list(subdivision='aal')
+            >>> # Print this list :
+            >>> print(lst)
+        """
+        return str(self.area)

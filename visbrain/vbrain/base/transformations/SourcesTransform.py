@@ -19,7 +19,6 @@ class SourcesTransform(object):
         self._tprojecton = t_projecton
         self._tsmooth = t_smooth
         self.current_mask = None
-        print('SMOOTH : ', self._tsmooth)
 
     # ======================================================================
     # DISPLAY
