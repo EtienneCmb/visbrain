@@ -10,7 +10,6 @@ from scipy.signal import fftconvolve
 import warnings
 import os
 import sys
-from time import time
 
 from vispy.geometry.isosurface import isosurface
 import vispy.visuals.transforms as vist
