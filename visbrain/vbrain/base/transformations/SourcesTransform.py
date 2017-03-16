@@ -12,7 +12,7 @@ class SourcesTransform(object):
     """docstring for SourcesTransform.
     """
 
-    def __init__(self, t_radius=10.0, t_projecton='surface', t_smooth=0.,
+    def __init__(self, t_radius=10.0, t_projecton='brain', t_smooth=0.,
                  **kwargs):
         """Init."""
         self._tradius = t_radius
@@ -81,17 +81,17 @@ class SourcesTransform(object):
     # ======================================================================
     # PROJECTIONS
     # ======================================================================
-    def _cortical_projecton(self, projecton='surface'):
+    def _projectOn(self):
         """Get the vertices to project sources activity or repartition."""
         # Check the projecton parameter :
-        if projecton not in ['surface', 'deep']:
-            raise ValueError("The projecton parameter must either be 'surface'"
-                             " or 'deep'.")
+        if self._tprojecton not in ['brain', 'roi']:
+            raise ValueError("The projecton parameter must either be 'brain'"
+                             " or 'roi'.")
         # Project on brain surface :
-        if self.sources.projecton == 'surface':
+        if self._tprojecton == 'brain':
             nv, vertices = self.atlas._nv, self.atlas.vert
         # Project on deep areas :
-        elif self.sources.projecton == 'deep':
+        elif self._tprojecton == 'roi':
             vertices = self.area.mesh.get_vertices
             nv = vertices.shape[0]
 
@@ -106,7 +106,7 @@ class SourcesTransform(object):
         if self.sources.xyz is not None:
             self.progressbar.show()
             # Get vertices of surface / deep :
-            vertices, nv = self._cortical_projecton(self.sources.projecton)
+            vertices, nv = self._projectOn()
             # Get data and proportional mask :
             prop, mask, smask = self._get_mask(nv, vertices, self.sources.xyz,
                                                self.sources.data, set_to=1,
@@ -147,7 +147,7 @@ class SourcesTransform(object):
         if self.sources.xyz is not None:
             self.progressbar.show()
             # Get vertices of surface / deep :
-            vertices, nv = self._cortical_projecton(self.sources.projecton)
+            vertices, nv = self._projectOn()
             # Get data and proportional mask :
             prop, _, smask = self._get_mask(nv, vertices, self.sources.xyz,
                                             self.sources.data, set_to=0,
@@ -443,12 +443,12 @@ class SourcesTransform(object):
         else:
             nnz = np.invert(non_zero)
 
-        if self.sources.projecton == 'surface':
+        if self._tprojecton == 'brain':
             # Apply generale color to the brain :
             cortmask[nnz, 0:3] = self.atlas.mesh.get_color[nnz, 0:3]
             # Update mesh with cmap :
             self.atlas.mesh.set_color(data=cortmask)
-        elif self.sources.projecton == 'deep':
+        elif self._tprojecton == 'roi':
             # Apply generale color to the brain :
             cortmask[nnz, 0:3] = self.area.mesh.get_color[nnz, 0:3]
             # Update mesh with cmap :
