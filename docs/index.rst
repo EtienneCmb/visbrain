@@ -27,22 +27,14 @@ Finally, install visbrain :
 
 What's new?
 ***********
-New in version v0.1.0:
 
-* New module :ref:`Sleep`
-
-New in version v0.0.4:
-
-* New module :ref:`Ndviz`
-
-New in version v0.0.3:
-
-* New documentation
-* Code cleaned
-* File and folder structure changed
-* New user functions : control the interface without to opening it
-* Improve colormap / colorbar managment
-* Bug fixed
+* New in version v0.1.0:
+	* vbrain GUI improvements (design, source's panel and ROI)
+	* better control of ROI
+* New in version v0.1.0:
+	* New module :ref:`Sleep`
+* New in version v0.0.4:
+	* New module :ref:`Ndviz`
 
 Contents:
 *********
