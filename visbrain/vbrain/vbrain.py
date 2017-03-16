@@ -167,7 +167,7 @@ class vbrain(uiInit, uiElements, base, userfcn):
         cb_fontsize: int, optional, (def: 15)
             Font-size of colorbar text (min / max / title)
 
-        cb_fontcolor: string, optional, (def: 'w')
+        cb_fontcolor: string, optional, (def: 'white')
             Font-color of colorbar text (min / max / title)
 
         l_position: tuple, optional, (def: (100., 100., 100.))
