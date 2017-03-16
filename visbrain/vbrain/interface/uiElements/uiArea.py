@@ -154,6 +154,12 @@ class uiArea(object):
         self.area._plot()
         self.area.mesh.parent = self._vbNode
         self.area.set_camera(self.view.wc.camera)
+        # Enable projection on ROI and related buttons :
+        self.area.name = 'displayed'
+        self._uitProjectOn.model().item(1).setEnabled(True)
+        self._roiReflect.setEnabled(True)
+        self.strcutShow.setEnabled(True)
+        self.o_Areas.setEnabled(True)
 
     def _area_light_reflection(self, *args):
         """Change how light is refleting onto sub-areas.
