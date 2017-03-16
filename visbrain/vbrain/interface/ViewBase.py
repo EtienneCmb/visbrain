@@ -99,8 +99,9 @@ class vbShortcuts(object):
 
             :event: the trigger event
             """
-            # Display the rotation panel and set informations :
-            self._fcn_userRotation()
+            if self.view.wc.camera.name == 'turntable':
+                # Display the rotation panel and set informations :
+                self._fcn_userRotation()
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
@@ -108,9 +109,10 @@ class vbShortcuts(object):
 
             :event: the trigger event
             """
-            # Display the rotation panel :
-            self._fcn_userRotation()
-            self.userRotationPanel.setVisible(True)
+            if self.view.wc.camera.name == 'turntable':
+                # Display the rotation panel :
+                self._fcn_userRotation()
+                self.userRotationPanel.setVisible(True)
 
     def shortcuts_panel(self):
         """Display or hide the shortcuts panel."""

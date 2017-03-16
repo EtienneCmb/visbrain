@@ -224,7 +224,8 @@ class vbrain(uiInit, uiElements, base, userfcn):
                                                         '/vbrain')[0], path)))
 
         # ====================== Objects creation ======================
-        camera = viscam.TurntableCamera(azimuth=0, distance=1000)
+        camera = viscam.TurntableCamera(azimuth=0, distance=1000,
+                                        name='turntable')
         base.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
         # ====================== UI to visbrain ======================
