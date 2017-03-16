@@ -24,7 +24,19 @@ The [vbrain](http://etiennecmb.github.io/visbrain/vbrain.html#) Display a standa
 - Use either the graphical inteface to interact or use the [user functions](http://etiennecmb.github.io/visbrain/vbrain.html#user-functions) to run every commands without opening the interface. This tricks can be really usefull to produce a large number of figures.
 - Finally, export figures in high-definition.
 
-![vbrain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png "vbrain examples")
+![vbrain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png "vbrain : visualize your data into a transparent MNI brain")
+
+### Sleep
+
+[Sleep](http://etiennecmb.github.io/visbrain/sleep.html) is a sleep data dedicated interface for visualization, processing and edition.
+
+- Load .eeg (Brainvision and ELAN), .edf or directly pass raw data
+- Visualize channels / spectrogram / hypnogram, time window control and fast plot update
+- Hypnogram edition (either by manually adding where stages start / finish or interactively by adding / dragging and moving points) and save the edited hypnogram (.txt, .csv and .hyp)
+- Spindles / REM / Peaks detection and report results on each channel and hypnogram
+- Signal processing tools (filtering...)
+
+![sleep](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_full.png "Sleep : load, visualize and edit sleep data")
 
 ### Ndviz
 
@@ -40,6 +52,32 @@ The [Ndviz](http://etiennecmb.github.io/visbrain/ndviz.html) module help you to 
 
 	Each object inherit from a large number of color control or different settings.
 
-![ndviz](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/ndviz_example.png "ndviz examples")
+![ndviz](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/ndviz_example.png "Ndviz : data mining")
 
+## Installation
 
+To see the installation requirements, check the [documentation](http://etiennecmb.github.io/visbrain/).
+Clone the repository :
+
+```{r, engine='bash', count_lines}
+    git clone https://github.com/EtienneCmb/visbrain.git
+```
+
+Install the pckage :
+
+```{r, engine='bash', count_lines}
+    python setup.py install
+```
+
+## Contributors
+
+### Main contributors
+
+- [Etienne Combrisson](http://etiennecmb.github.io)
+- [Raphael Vallat](https://raphaelvallat.github.io/)
+- [David Meunier](https://github.com/davidmeunier79)
+- [Tarek Lajnef](https://github.com/TarekLaj)
+- [Karim Jerbi](www.karimjerbi.com)
+
+### Thx to...
+*Dmitri Altukchov, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian...*
