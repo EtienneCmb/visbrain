@@ -22,7 +22,8 @@ kwargs['s_data'] = np.round(100*np.random.rand(kwargs['s_xyz'].shape[0])-50)
 kwargs['s_radiusmin'] = 2				# Minimum radius
 kwargs['s_radiusmax'] = 8				# Maximum radius
 kwargs['s_edgecolor'] = (1, 1, 1, 0.5)  # Color of the edges
-kwargs['s_edgewidth'] = 1				# Width of the edges
+kwargs['s_edgewidth'] = .5				# Width of the edges
+kwargs['s_symbol'] = 'square'           # Source's symbol
 
 # Next, we will mask data between [-20, 20]:
 kwargs['s_mask'] = np.logical_and(kwargs['s_data'] >= -20, kwargs['s_data'] <= 20)
