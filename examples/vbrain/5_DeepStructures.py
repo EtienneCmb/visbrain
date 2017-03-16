@@ -23,7 +23,7 @@ vb.rotate(fixed='axial')
 # number in front of the name. The smooth parameter should be used with caution
 # because it can considerably slow down the opening speed of the interface
 # (if you want smoother try 5 or 6...)
-vb.area_plot(selection=[77, 78], subdivision='aal', smooth=3)
+vb.area_plot(selection=[77, 78], subdivision='aal', smooth=5)
 # Project the source's activity onto ROI directly :
 vb.cortical_projection(project_on='roi')
 # Eventualy, take a screenshot :
