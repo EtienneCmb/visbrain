@@ -477,10 +477,10 @@ class userfcn(object):
 
     # =========================================================================
     # =========================================================================
-    #                           SUB-STRUCTURES
+    #                                 ROI
     # =========================================================================
     # =========================================================================
-    def area_plot(self, selection=[], subdivision='brod'):
+    def area_plot(self, selection=[], subdivision='brod', smooth=3):
         """Select some area to plot.
 
         Kargs:
@@ -493,11 +493,14 @@ class userfcn(object):
                 Select the sub-division method i.e 'brod' (for brodmann areas)
                 or 'aal' (Anatomical Automatic Labeling)
 
+            smoth: int, optional, (def: 3)
+                Define smooth proportion.
+
         Example:
             >>> # Define a vbrain instance :
             >>> vb = vbrain()
             >>> # Display brodmann area 4 and 6 :
-            >>> vb.area_plot(selection=[4, 6], subdivision='brod')
+            >>> vb.area_plot(selection=[4, 6], subdivision='brod', smooth=5)
             >>> # Show the GUI :
             >>> vb.show()
         """
@@ -514,6 +517,7 @@ class userfcn(object):
             selection.sort()
             self.area.select = selection
             self.area.structure = subdivision
+            self._roiSmooth.setValue(smooth)
             # Add areas to the plot :
             self._area_plot()
 
