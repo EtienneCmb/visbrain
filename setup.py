@@ -18,6 +18,7 @@ setup(
         'scipy',
         'pillow',
         'matplotlib<=1.5.1',
+        'pyopengl',
     ],
     dependency_links=['https://github.com/vispy/vispy#egg=vispy-dev'],
     author='Etienne Combrisson',

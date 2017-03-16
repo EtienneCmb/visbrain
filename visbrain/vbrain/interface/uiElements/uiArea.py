@@ -119,7 +119,7 @@ class uiArea(object):
         (Brodmann or AAL). This function update the list of areas depending on
         this choice.
         """
-        # Get avaibme structures. This is automatically updated because of the
+        # Get avaible structures. This is automatically updated because of the
         # use  of @property and setter :
         if self.Sub_brod.isChecked():
             self.area.structure = 'brod'
@@ -150,10 +150,21 @@ class uiArea(object):
 
     def _area_plot(self):
         """Area Sub-plotting function."""
+        # Clean data (if needed) :
+        if self.area.name == 'displayed':
+            self.area.mesh.clean()
+        # Get smoothing :
+        self.area.smoothsize = self._roiSmooth.value()
         self.area._get_vertices()
         self.area._plot()
         self.area.mesh.parent = self._vbNode
         self.area.set_camera(self.view.wc.camera)
+        # Enable projection on ROI and related buttons :
+        self.area.name = 'displayed'
+        self._uitProjectOn.model().item(1).setEnabled(True)
+        self._roiReflect.setEnabled(True)
+        self.strcutShow.setEnabled(True)
+        self.o_Areas.setEnabled(True)
 
     def _area_light_reflection(self, *args):
         """Change how light is refleting onto sub-areas.

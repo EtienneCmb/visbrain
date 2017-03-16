@@ -372,14 +372,17 @@ class uiSettings(object):
         """
         # Get radio buttons values :
         if self.c_Turnable.isChecked():
-            camera = viscam.TurntableCamera(distance=10.0, fov=10, azimuth=0)
+            camera = viscam.TurntableCamera(distance=10.0, fov=10, azimuth=0,
+                                            name='turntable')
         if self.c_Fly.isChecked():
             # camera = viscam.PanZoomCamera(aspect=1)
-            camera = viscam.FlyCamera()
+            camera = viscam.FlyCamera(name='fly')
 
         # Add camera to the mesh and to the canvas :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(camera)
+        if self.area.name == 'displayed':
+            self.area.mesh.set_camera(camera)
         self.view.wc.update()
 
     # =============================================================

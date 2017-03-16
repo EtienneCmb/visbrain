@@ -45,8 +45,8 @@ class SourcesBase(_colormap):
         self.alpha = s_opacity
         self.scaling = s_scaling
         self.transform = s_transform
-        self.radiusmin = s_radiusmin*1.5
-        self.radiusmax = s_radiusmax*1.5
+        self.radiusmin = s_radiusmin
+        self.radiusmax = s_radiusmax
         self.symbol = s_symbol
         self.stext = s_text
         self.stextcolor = color2vb(s_textcolor)
@@ -169,9 +169,7 @@ class SourcesBase(_colormap):
             raise ValueError("The length of data must be the same as the "
                              "number of electrodes")
         else:
-            self.sData = self.array2radius(self.data.data, vmin=self.radiusmin,
-                                           vmax=self.radiusmax,
-                                           rescale=self.scaling)
+            self.array2radius()
 
         # --------------------------------------------------------------------
         # Check text :
@@ -180,42 +178,22 @@ class SourcesBase(_colormap):
                 raise ValueError("The length of text data must be the same "
                                  "as the number of electrodes")
 
-    def array2radius(self, data, vmin=0.02, vmax=0.05, rescale=True):
+    def array2radius(self, factor=1.5):
         """Transform an array of data to source's radius.
 
-        Each deep source have a corresponding floating value and the ball
-        radius will be proportional to this value.
-
-        Args:
-            data: array of shape (N,)
-                Array of data to use. The data must be a vector of
-                float number.
-
-        Kargs:
-            vmin: float, optional, (def: 0.02)
-                Minimum radius size to use for the sources.
-
-            vmax: float, optional, (def: 0.05)
-                Maximum radius size to use for the sources.
-
-            rescale: bool, optional, (def: True)
-                Rescale data using the _rescale attribute.
-
-        Return:
-            radius: array of shape (N,)
-                The source's radius, proportional to data.
+        If data across sources is constant, the radiusmin will be used. If not,
+        the source's radius will be modulated by the value of the data.
         """
         # Find radius either for constant / non-constant data :
-        if np.unique(data).size == 1:  # Constant data
-            radius = vmin*np.ones((len(data),))
+        if np.unique(self.data.data).size == 1:  # Constant data
+            self.sData = factor*self.radiusmin*np.ones((len(self.data.data),))
         else:                          # Non-constant values
-            radius = normalize(data, tomin=vmin, tomax=vmax)
+            self.sData = normalize(self.data.data, tomin=factor*self.radiusmin,
+                                   tomax=factor*self.radiusmax)
 
         # Rescale data :
-        if rescale:
-            radius /= self._rescale
-
-        return radius
+        if self.scaling:
+            self.sData /= self._rescale
 
     def plot(self):
         """Plot non-masked sources in the MNI brain.
