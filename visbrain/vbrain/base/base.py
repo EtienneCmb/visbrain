@@ -68,6 +68,7 @@ class base(CbarBase, transformations):
             self.QuickSettings.setTabEnabled(3, False)
             self.QuickSettings.setTabEnabled(5, False)
             self.menuTransform.setEnabled(False)
+            self.o_Sources.setEnabled(False)
 
         # Text panel:
         if self.sources.stextmesh.name == 'NoneText':
@@ -79,6 +80,7 @@ class base(CbarBase, transformations):
         if self.connect.mesh.name == 'NoneConnect':
             self.QuickSettings.setTabEnabled(3, False)
             self.cmapConnect.setEnabled(False)
+            self.o_Connect.setEnabled(False)
         self._lw = kwargs.get('c_linewidth', 4.)
 
         # ---------- Put everything in a root node ----------
