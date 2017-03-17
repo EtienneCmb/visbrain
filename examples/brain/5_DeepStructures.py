@@ -17,7 +17,7 @@ s_data = np.load('Px.npy').mean(1)
 # Define a Brain instance :
 vb = Brain(s_xyz=s_xyz, s_data=s_data, s_cmap='viridis')
 # Rotate the brain in axial view :
-vb.rotate(fixed='axial')
+vb.rotate(fixed='axial_0')
 # Select the thalamus index (77 for the left and 78 for the right). If you
 # don't know what is the index of your ROI, open the GUI and look at the
 # number in front of the name. Otherwise, use print(vb.get_ROI_list()) to print
