@@ -73,6 +73,17 @@ The user functions correspond to a bundle of functions that the user can use to 
    
    vbfunctions
 
+
+Screenshot tutorial
+-------------------
+
+See this tutorial to export your figures in a proper way in order to use them in your research / paper...
+
+.. toctree::
+   :maxdepth: 4
+   
+   vbexport
+
 Shortcuts
 ---------
 

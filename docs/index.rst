@@ -21,7 +21,7 @@ Clone visbrain repository :
 
 Finally, install visbrain :
 
-.. code-block:: python
+.. code-block:: bash
 
     python setup.py install
 
