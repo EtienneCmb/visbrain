@@ -22,7 +22,7 @@ class CbarBase(_colormap):
 
     def __init__(self, parent, cmap='viridis', clim=None, vmin=None, vmax=None,
                  under=None, over=None, cb_export=False, cb_fontsize=15,
-                 cb_fontcolor='white', cb_label='', **kwargs):
+                 cb_fontcolor='white', cb_label=''):
         """Init."""
         # Initialize colorbar elements :
         _colormap.__init__(self, cmap, clim, vmin, vmax, under, over)

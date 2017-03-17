@@ -129,10 +129,10 @@ class SourcesTransform(object):
                              smaskcolor=self.sources.smaskcolor)
             # Update colorbar :
             if len(cort_mask[non_zero]):
-                self.cb.cbupdate(cort_mask[non_zero], **self.sources._cb,
-                                 label=self.cb['label'],
+                self.cb.cbupdate(cort_mask[non_zero], label=self.cb['label'],
                                  fontsize=self.cb['fontsize'],
-                                 fontcolor=self.cb['fontcolor'])
+                                 fontcolor=self.cb['fontcolor'],
+                                 **self.sources._cb)
         else:
             warn("No sources detected. Use s_xyz input parameter to define "
                  "source's coordinates")
@@ -160,10 +160,10 @@ class SourcesTransform(object):
             self.current_mask = prop
             self.current_non_zero = non_zero
             # Update colorbar :
-            self.cb.cbupdate(prop[non_zero], **self.sources._cb,
-                             label=self.cb['label'],
+            self.cb.cbupdate(prop[non_zero], label=self.cb['label'],
                              fontsize=self.cb['fontsize'],
-                             fontcolor=self.cb['fontcolor'])
+                             fontcolor=self.cb['fontcolor'],
+                             **self.sources._cb)
         else:
             warn("No sources detected. Use s_xyz input parameter to define "
                  "source's coordinates")

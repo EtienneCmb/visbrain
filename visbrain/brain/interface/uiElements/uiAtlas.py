@@ -31,10 +31,9 @@ class uiAtlas(object):
         self.q_internal.clicked.connect(self._light_reflection)
         self.q_external.clicked.connect(self._light_reflection)
 
-        self.struct_color_edit.setPlaceholderText(
-            "Ex: 'red', #ab4642, (1,0,0)...)")
+        self.struct_color_edit.setPlaceholderText("'red', #ab4642, (1,0,0)...")
 
-    def _brain_control(self, *args, template=None, show=True, hemisphere=None):
+    def _brain_control(self, _, template=None, show=True, hemisphere=None):
         """Control the type of brain to use.
 
         Kargs:
