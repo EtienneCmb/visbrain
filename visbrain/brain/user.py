@@ -3,7 +3,7 @@
 Those functions are a the top level of a visbrain instance and are defined in
 order to run commands without the necessity of opening the interface. This is
 really convenient for generating a large number of pictures by looping over a
-vbrain instance.
+Brain instance.
 """
 
 import numpy as np
@@ -51,8 +51,8 @@ class userfcn(object):
                 elevation.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Predefined rotation :
             >>> vb.rotate(fixed='sagittal_1')
             >>> # Custom rotation :
@@ -76,8 +76,8 @@ class userfcn(object):
                 a matplotlib color (string) or a hexadecimal color (string).
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Set the background color (using a RGB tuple) :
             >>> vb.background_color(color=(1., 1., 1.))
             >>> # Set the background color (using matplotlib format) :
@@ -91,7 +91,9 @@ class userfcn(object):
         self.view.canvas.bgcolor = bckcolor
         self.view.cbcanvas.bgcolor = bckcolor
 
-    def screenshot(self, name, region=None, colorbar=False):
+    def screenshot(self, name, region=None, zoom=None, colorbar=False,
+                   cbregion=None, cbzoom=None, transparent=False,
+                   resolution=3000.):
         """Take a screenshot of the current scene and save it as a picture.
 
         This method try to make a high-fidelity screenshot of your scene. There
@@ -106,8 +108,8 @@ class userfcn(object):
 
         Args:
             name: str
-                The name of the file to be saved. This file must contains one
-                of the following extension: .png, .tiff
+                The name of the file to be saved. This file must contains a
+                extension like .png, .tiff, .jpg...
 
         Kargs:
             region: tuple, optional, (def: None)
@@ -118,12 +120,29 @@ class userfcn(object):
                 along the vertical axis. By default, the entire canvas is
                 rendered.
 
+            zoom: float, optional, (def: None)
+                Define the zoom level over the main canvas.
+
             colorbar: bool, optional, (def: False)
                 Specify if the colorbar has to be exported too.
 
+            cbregion: tuple, optional, (def: None)
+                Same parameter as the region but applied on the colorbar canvas
+
+            cbzoom: float, optional, (def: None)
+                Define the zoom level over the colorbar canvas.
+
+            transparent: bool, optional, (def: False)
+                Specify if the exported figure have to contains a transparent
+                background.
+
+            resolution: float, optional, (def: 3000)
+                Define the screenshot resolution by indicating the number of
+                times the definition of your screen must be multiplied.
+
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Define the filename and the cropped region :
             >>> filename, crop = 'myfile.png', (1000, 300, 570, 550)
             >>> # Rotate the brain :
@@ -140,12 +159,13 @@ class userfcn(object):
                 patient, it's possible. Don't forget that .png files contains
                 transparency. For an optimal screenshot, I recommand doing a
                 rotation before the screenshot, so that the canvas can be
-                initialized.
+                initialized. See the
+                `tutorial <https://etiennecmb.github.io/visbrain/vbexport.html>`_
+                for futher explanations.
         """
         # Define the filename :
         if isinstance(name, str):
-            self._savename, self._extension = os.path.splitext(name)
-            self._extension = self._extension.replace('.', '')
+            self._savename = name
         else:
             raise ValueError("The name must be a string and must contains the"
                              " extension (ex: name='myfile.png')")
@@ -158,6 +178,17 @@ class userfcn(object):
                 raise ValueError("The region parameter must be a tuple of four"
                                  " integers describing (x_start, y_start, "
                                  "width, height)")
+        if cbregion is not None:
+            if isinstance(region, (tuple, list)) and (len(region) == 4):
+                self._cbcrop = cbregion
+            else:
+                raise ValueError("The cbregion parameter must be a tuple of"
+                                 "four integers describing (x_start, y_start, "
+                                 "width, height)")
+
+        # Define screenshot resolution :
+        if isinstance(resolution, (int, float)):
+            self._uirez = float(resolution)
 
         # Define if the colorbar has to be exported :
         if isinstance(colorbar, bool):
@@ -165,6 +196,17 @@ class userfcn(object):
         else:
             raise ValueError("The colorbar parameter must be a bool describing"
                              " if the colorbar have to exported too.")
+
+        # Force transparent background :
+        if transparent:
+            self.view.canvas.bgcolor = [0.] * 4
+            self.view.cbcanvas.bgcolor = [0.] * 4
+
+        # Zoom :
+        if (zoom is not None) and isinstance(zoom, (float, int)):
+            self.view.wc.camera.scale_factor = zoom
+        if (cbzoom is not None) and isinstance(cbzoom, (float, int)):
+            self.view.cbwc.camera.scale_factor = cbzoom
 
         self._screenshot()
 
@@ -196,8 +238,8 @@ class userfcn(object):
                 Otherwise use 'both'.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Display the right hemisphere of 'B3' template :
             >>> vb.brain_control(template='B3', hemisphere='right')
             >>> # Show the GUI :
@@ -217,8 +259,8 @@ class userfcn(object):
                 Specify if the brain has be shown.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Set transparency :
             >>> vb.brain_opacity(alpha=0.1, show=True)
             >>> # Show the GUI :
@@ -245,8 +287,8 @@ class userfcn(object):
                 graphical interface, this can be done using the shortcut 3.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Display the external surface :
             >>> vb.light_reflection(reflect_on='external')
             >>> # Show the GUI :
@@ -316,8 +358,8 @@ class userfcn(object):
                 Color of masked sources when projected on surface.
 
         Example:
-            >>> # Define a vbrain instance with 10 random sources:
-            >>> vb = vbrain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
             >>> # Define some random data :
             >>> data = 100 * np.random.rand(10)
             >>> # Define some color :
@@ -362,8 +404,8 @@ class userfcn(object):
                 Specify if sources has be shown.
 
         Example:
-            >>> # Define a vbrain instance with 10 random sources:
-            >>> vb = vbrain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
             >>> # Set transparency :
             >>> vb.sources_opacity(alpha=0.1, show=True)
             >>> # Show the GUI :
@@ -378,24 +420,42 @@ class userfcn(object):
         self.sources.update()
         self.sources.mesh.visible = show
 
-    def cortical_projection(self, project_on='brain', mask=None):
+    def cortical_projection(self, radius=10., project_on='brain', mask=None):
         """Project sources activity.
 
         This method can be used to project the sources activity either onto the
         brain or on deep areas (like gyrus or brodmann areas).
 
         Kargs:
+            radius: float, optional, (def: 10.)
+                Projection radius.
+
             project_on: string, optional, (def: 'brain')
                 Define on which object to project the sources activity. Chose
                 either 'brain' for projecting the sources activity onto the
                 brain or 'roi' to project on region of interest (if defined).
 
         Example:
-            >>> ...
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Set transparency :
+            >>> vb.sources_opacity(alpha=0.1, show=True)
+            >>> # Run the cortical projection :
+            >>> vb.cortical_projection()
+            >>> # Show the GUI :
+            >>> vb.show()
 
         See also:
             area_plot, sources_colormap
         """
+        # Check projection radius :
+        if isinstance(radius, (int, float)):
+            self._tradius = float(radius)
+        else:
+            raise ValueError("The radius parameter must be a integer or a "
+                             "float number.")
+
+        # Check project_on parameter :
         if project_on in ['brain', 'roi']:
             self._tprojecton = project_on
         else:
@@ -405,14 +465,43 @@ class userfcn(object):
         # Run the corticale projection :
         self._cortical_projection()
 
-    def cortical_repartition(self):
+    def cortical_repartition(self, radius=10., project_on='brain'):
         """Get the number of contributing sources per vertex.
 
         Kargs:
+            radius: float, optional, (def: 10.)
+                Projection radius.
+
+            project_on: string, optional, (def: 'brain')
+                Define on which object to project the sources repartition.
+                Chose either 'brain' for projecting onto the brain or 'roi'
+                to project on region of interest (if defined).
 
         Example:
-            >>>
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Set transparency :
+            >>> vb.sources_opacity(alpha=0.1, show=True)
+            >>> # Run the cortical projection :
+            >>> vb.cortical_repartition()
+            >>> # Show the GUI :
+            >>> vb.show()
         """
+        # Check projection radius :
+        if isinstance(radius, (int, float)):
+            self._tradius = float(radius)
+        else:
+            raise ValueError("The radius parameter must be a integer or a "
+                             "float number.")
+
+        # Check project_on parameter :
+        if project_on in ['brain', 'roi']:
+            self._tprojecton = project_on
+        else:
+            raise ValueError("The project_on parameter must be either "
+                             "'brain' or 'roi'")
+
+        # Run the cortical repartition :
         self._cortical_repartition()
 
     def sources_colormap(self, cmap=None, clim=None, vmin=None,
@@ -452,8 +541,8 @@ class userfcn(object):
                 Matplotlib color for values over vmax.
 
         Example:
-            >>> # Define a vbrain instance with 10 random sources:
-            >>> vb = vbrain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
             >>> # Define some random data :
             >>> data = 100 * np.random.rand(10)
             >>> # Set data and properties :
@@ -469,7 +558,10 @@ class userfcn(object):
         See also:
             cortical_projection, cortical_repartition
         """
-        pass
+        for i, k in zip(['cmap', 'clim', 'vmin', 'vmax', 'under', 'over'],
+                        [cmap, clim, vmin, vmax, under, over]):
+            if k is not None:
+                self.sources._cb[i] = k
 
     # =========================================================================
     # =========================================================================
@@ -499,8 +591,8 @@ class userfcn(object):
                 Define smooth proportion.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Display brodmann area 4 and 6 :
             >>> vb.roi_plot(selection=[4, 6], subdivision='brod', smooth=5)
             >>> # Show the GUI :
@@ -530,10 +622,13 @@ class userfcn(object):
             # Set check the corresponding subdivision :
             if subdivision == 'brod':
                 self.Sub_brod.setChecked(True)
+                idx = [list(self.area._uidx).index(k) for k in selection]
             elif subdivision == 'aal':
                 self.Sub_aal.setChecked(True)
+                idx = np.add(selection, -1)
             # Add selected items to the GUI :
-            self.struct2add.addItems(self.area._label[np.add(selection, -1)])
+
+            self.struct2add.addItems(self.area._label[idx])
             self.struct2select.clear()
             self.struct2select.addItems(self.area._label)
 
@@ -548,8 +643,8 @@ class userfcn(object):
                 Choose either to reflect on 'internal' or 'external'.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Display brodmann area 4 and 6 :
             >>> vb.roi_plot(selection=[4, 6], subdivision='brod')
             >>> # Display the external surface :
@@ -580,8 +675,8 @@ class userfcn(object):
                 Specify if roi(s) has be shown.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Set transparency :
             >>> vb.roi_opacity(alpha=0.1, show=True)
             >>> # Show the GUI :
@@ -606,8 +701,8 @@ class userfcn(object):
                 The currently supported ROI's labels.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Get list of ROI for AAL :
             >>> lst = vb.roi_list(subdivision='aal')
             >>> # Print this list :

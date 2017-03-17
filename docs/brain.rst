@@ -1,6 +1,6 @@
-.. _vbrain:
+.. _Brain:
 
-vbrain
+Brain
 ======
 
 Description
@@ -9,18 +9,18 @@ Description
 .. figure::  picture/example.png
    :align:   center
 
-Vbrain is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, brodmann areas, materialize connectivity... This module use `vispy <http://vispy.org/>`_ and can be imported as follow :
+Brain is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, brodmann areas, materialize connectivity... This module use `vispy <http://vispy.org/>`_ and can be imported as follow :
 
 .. code-block:: python
 
-    from visbrain import vbrain
+    from visbrain import Brain
 
 Visit this page for a set of `examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/vbrain>`_.
 
 Objects
 -------
 
-There's four fundamental objects in vbrain :
+There's four fundamental objects in Brain :
 
 * The main brain, which can be generated using one of the three possible template or simply pass vertices / faces of your own template.
 * Sources, which can represent deep electrodes, EEG / MEG captors or source localization...
@@ -34,7 +34,7 @@ There's four fundamental objects in vbrain :
 Inputs
 ------
 
-Each one of the above objects can be controled using input parameters for the vbrain class. All possible inputs use a prefixe, refering to the object itself :
+Each one of the above objects can be controled using input parameters for the Brain class. All possible inputs use a prefixe, refering to the object itself :
 
 	* 'a(_)': atlas properties
 	* 's(_)': sources properties
@@ -47,12 +47,12 @@ Each one of the above objects can be controled using input parameters for the vb
 
 Here's the list of all possible inputs :
 
-.. autoclass:: visbrain.vbrain.vbrain.vbrain
+.. autoclass:: visbrain.brain.brain.Brain
 
 Color
 -----
 
-Vbrain can manage several types of color inputs. All possible colors can be a matplotlib color name ('olive', 'slateblue'...), an hexadecimal type ('#9b59b6', '#3498db', '#95a5a6'...*) or an array of RGB or RGBA colors ((1., 0., 0.), (.1, .1, .1)...).
+Brain can manage several types of color inputs. All possible colors can be a matplotlib color name ('olive', 'slateblue'...), an hexadecimal type ('#9b59b6', '#3498db', '#95a5a6'...*) or an array of RGB or RGBA colors ((1., 0., 0.), (.1, .1, .1)...).
 
 The colormap can be personalized using five variables :
 
@@ -66,12 +66,23 @@ The colormap can be personalized using five variables :
 User functions
 --------------
 
-The user functions correspond to a bundle of functions that the user can use to control vbrain operations without opening the graphical interface. This can be convenient to generate a large amount of pictures. 
+The user functions correspond to a bundle of functions that the user can use to control Brain operations without opening the graphical interface. This can be convenient to generate a large amount of pictures. 
 
 .. toctree::
    :maxdepth: 4
    
    vbfunctions
+
+
+Screenshot tutorial
+-------------------
+
+See this tutorial to export your figures in a proper way in order to use them in your research / paper...
+
+.. toctree::
+   :maxdepth: 4
+   
+   vbexport
 
 Shortcuts
 ---------

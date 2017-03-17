@@ -123,8 +123,6 @@ class uiSources(object):
             self._cortical_projection()
         elif self._uitRepartition.isChecked():
             self._cortical_repartition()
-        # Disable apply button :
-        self._uitApply.setEnabled(False)
 
     # =====================================================================
     # TEXT

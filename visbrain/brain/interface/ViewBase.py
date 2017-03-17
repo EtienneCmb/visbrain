@@ -2,7 +2,7 @@
 
 This file contain:
     * vbShortcuts : main class for shortcuts managment
-    * vbCanvas : create vbrain main canvas and the canvas
+    * vbCanvas : create Brain main canvas and the canvas
     for the colorbar
 """
 
@@ -12,7 +12,7 @@ __all__ = ['vbCanvas', 'vbShortcuts']
 
 
 class vbShortcuts(object):
-    """This class add some shortcuts to the main canvas of vbrain.
+    """This class add some shortcuts to the main canvas of Brain.
 
     It's also use to initialize to panel of shortcuts.
 
@@ -34,7 +34,7 @@ class vbShortcuts(object):
         # Add shortcuts to vbCanvas :
         @canvas.events.key_press.connect
         def on_key_press(event):
-            """Executed function when a key is pressed on a keyboard over vbrain canvas.
+            """Executed function when a key is pressed on a keyboard over Brain canvas.
 
             :event: the trigger event
             """
@@ -78,7 +78,7 @@ class vbShortcuts(object):
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
-            """Executed function when the mouse is pressed over vbrain canvas.
+            """Executed function when the mouse is pressed over Brain canvas.
 
             :event: the trigger event
             """
@@ -87,7 +87,7 @@ class vbShortcuts(object):
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
-            """Executed function when double click mouse over vbrain canvas.
+            """Executed function when double click mouse over Brain canvas.
 
             :event: the trigger event
             """
@@ -95,7 +95,7 @@ class vbShortcuts(object):
 
         @canvas.events.mouse_move.connect
         def on_mouse_move(event):
-            """Executed function when the mouse move over vbrain canvas.
+            """Executed function when the mouse move over Brain canvas.
 
             :event: the trigger event
             """
@@ -105,7 +105,7 @@ class vbShortcuts(object):
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
-            """Executed function when single click mouse over vbrain canvas.
+            """Executed function when single click mouse over Brain canvas.
 
             :event: the trigger event
             """

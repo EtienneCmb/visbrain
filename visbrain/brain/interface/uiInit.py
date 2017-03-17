@@ -32,7 +32,7 @@ class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
         super(uiInit, self).__init__(None)
         self.setupUi(self)
         if self._savename is not None:
-            self.setWindowTitle('vbrain - '+self._savename)
+            self.setWindowTitle('Brain - '+self._savename)
 
         # Initlialize view :
         self.view = vbCanvas(bgcolor)

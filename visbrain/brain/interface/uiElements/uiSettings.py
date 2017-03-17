@@ -183,12 +183,15 @@ class uiSettings(object):
         """
         # Manage filename :
         if self._savename is None:
-            self._savename = QFileDialog.getSaveFileName(
-                self, 'Save screenshot', os.getenv('HOME'))
-        if self._savename.find('.' + self._extension) == -1:
-            self._savename += '.' + self._extension
+            saveas = QFileDialog.getSaveFileName(self, 'Save screenshot',
+                                                 os.getenv('HOME'))
         else:
-            raise ValueError("No extension detected.")
+            saveas = self._savename
+
+        # Get filename and extension :
+        file, ext = os.path.splitext(saveas)
+        if not ext:
+            raise ValueError("No extension detected in "+saveas)
 
         # Manage size exportation. The dpi option present when creating a
         # vispy canvas doesn't seems to work. The trick bellow increase the
@@ -196,27 +199,33 @@ class uiSettings(object):
         # high-definition :
         # Get a copy of the actual canvas physical size :
         backp_size = self.view.canvas.physical_size
+
         # Increase the physical size :
-        ratio = max(6000/backp_size[0], 3000/backp_size[1])
+        ratio = max((2*self._uirez)/backp_size[0], self._uirez/backp_size[1])
         new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
         self.view.canvas._backend._physical_size = new_size
 
         # Render and save :
         img = self.view.canvas.render(region=self._crop)
-        io.imsave(self._savename, img, format=self._extension)
+        io.imsave(self._savename, img)
+
+        # Set to the canvas it's previous size :
+        self.view.canvas._backend._physical_size = backp_size
 
         # Export the colorbar :
         if self.cb['export']:
+            # Get a copy of the actual canvas physical size :
+            backp_size = self.view.canvas.physical_size
+            new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
+            self.view.cbcanvas._backend._physical_size = new_size
             # Render colorbar panel :
-            cbimg = self.view.cbcanvas.render()
+            cbimg = self.view.cbcanvas.render(region=self._cbcrop)
             # Colorbar file name : filename_colorbar.extension
-            if self._savename.find('.') + 1:
-                filename = self._savename.replace('.', '_colorbar.')
-            else:
-                filename += '_colorbar'
-            io.imsave(filename, cbimg, format=self._extension)
-        # Set to the canvas it's previous size :
-        self.view.canvas._backend._physical_size = backp_size
+            filename = self._savename.replace('.', '_colorbar.')
+            io.imsave(filename, cbimg)
+            # Set to the canvas it's previous size :
+            self.view.cbcanvas._backend._physical_size = backp_size
+
         # Update the canvas :
         self.view.canvas.update()
         self.atlas.mesh.update()
