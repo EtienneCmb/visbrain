@@ -245,7 +245,7 @@ class userfcn(object):
             >>> # Show the GUI :
             >>> vb.show()
         """
-        self._brain_control(template=template, show=show,
+        self._brain_control('', template=template, show=show,
                             hemisphere=hemisphere)
 
     def brain_opacity(self, alpha=0.1, show=True):

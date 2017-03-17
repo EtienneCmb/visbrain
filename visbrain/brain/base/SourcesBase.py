@@ -29,12 +29,11 @@ class SourcesBase(_colormap):
     def __init__(self, s_xyz=None, s_data=None, s_color='#ab4652',
                  s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0,
                  s_edgecolor=None, s_edgewidth=0.6, s_scaling=False,
-                 s_transform=[], s_text=None, s_symbol='disc',
-                 s_textcolor='black', s_textsize=3, s_textshift=(0, 2, 0),
-                 s_mask=None, s_maskcolor='gray', s_cmap='inferno',
-                 s_cmap_clim=None, s_cmap_vmin=None, s_cmap_vmax=None,
-                 s_cmap_under=None, s_cmap_over=None, s_projecton='surface',
-                 **kwargs):
+                 s_text=None, s_symbol='disc', s_textcolor='black',
+                 s_textsize=3, s_textshift=(0, 2, 0), s_mask=None,
+                 s_maskcolor='gray', s_cmap='inferno', s_cmap_clim=None,
+                 s_cmap_vmin=None, s_cmap_vmax=None, s_cmap_under=None,
+                 s_cmap_over=None, s_projecton='surface', **kwargs):
         """Init."""
         # Initialize elements :
         self.xyz = s_xyz
@@ -44,7 +43,6 @@ class SourcesBase(_colormap):
         self.edgewidth = s_edgewidth
         self.alpha = s_opacity
         self.scaling = s_scaling
-        self.transform = s_transform
         self.radiusmin = s_radiusmin
         self.radiusmax = s_radiusmax
         self.symbol = s_symbol
@@ -55,7 +53,6 @@ class SourcesBase(_colormap):
         self.smask = s_mask
         self.smaskcolor = color2vb(s_maskcolor)
         self.projecton = s_projecton
-        self._xyz_transformed = False
         self._defcolor = 'slateblue'
         self._rescale = 3.0
 
@@ -102,11 +99,6 @@ class SourcesBase(_colormap):
             self.xyz = self.xyz.T
         self.xyz = self.xyz
         self.nSources = self.xyz.shape[0]
-
-        # Apply transformation to coordinates (if not already transformed):
-        if not self._xyz_transformed:
-            self.xyz = self.transform.map(self.xyz)[:, 0:-1]
-            self._xyz_transformed = True
 
         # ======================== Check color ========================
         # Simple string :

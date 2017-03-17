@@ -21,17 +21,15 @@ class ConnectBase(_colormap):
     """
 
     def __init__(self, c_xyz=[], c_connect=None, c_select=None,
-                 c_colorby='count', c_transform=[], c_dynamic=None,
-                 c_cmap='viridis', c_cmap_vmin=None, c_cmap_vmax=None,
-                 c_cmap_under=None, c_cmap_over=None, c_cmap_clim=None,
-                 **kwargs):
+                 c_colorby='count', c_dynamic=None, c_cmap='viridis',
+                 c_cmap_vmin=None, c_cmap_vmax=None, c_cmap_under=None,
+                 c_cmap_over=None, c_cmap_clim=None, **kwargs):
         """Init."""
         # Initialize elements :
         self.xyz = c_xyz
         self.connect = c_connect
         self.select = c_select
         self.colorby = c_colorby
-        self.transform = c_transform
         self.dynamic = c_dynamic
 
         # Initialize colormap :
