@@ -456,7 +456,7 @@ class SourcesTransform(object):
             self.atlas.mesh.set_color(data=cortmask)
         elif self._tprojecton == 'roi':
             # Apply general color to the brain :
-            cortmask[nnz, 0:3] = self.area.color
+            cortmask[nnz, 0:3] = self.atlas.color
             # cortmask[nnz, 0:3] = self.area.mesh.get_color[nnz, 0:3]
             # Update mesh with cmap :
             self.area.mesh.set_color(data=cortmask)
