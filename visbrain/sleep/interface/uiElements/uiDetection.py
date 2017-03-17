@@ -80,7 +80,7 @@ class uiDetection(object):
         # Define ref :
         ref = ['REM', 'Spindles', 'Peaks']
         # Get current selected text :
-        viz = [self._ToolDetectType.currentText() == k for k in ref]
+        viz = [str(self._ToolDetectType.currentText()) == k for k in ref]
         # Set widget visibility :
         _ = [k.setVisible(i) for k, i in zip([self._ToolRemPanel,
                                               self._ToolSpinPanel,
@@ -112,7 +112,7 @@ class uiDetection(object):
         """Apply detection (either REM / Spindles / Peaks."""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
-        method = self._ToolDetectType.currentText()
+        method = str(self._ToolDetectType.currentText())
         ind = np.array([], dtype=int)
 
         for i, k in enumerate(idx):

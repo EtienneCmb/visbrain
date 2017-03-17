@@ -96,7 +96,7 @@ class uiSources(object):
 
     def _fcn_MarkerLook(self):
         """Change how marker looks."""
-        self.sources.symbol = self.s_Symbol.currentText()
+        self.sources.symbol = str(self.s_Symbol.currentText())
         self.sources.edgecolor = textline2color(self.s_EdgeColor.text())[1]
         self.sources.edgewidth = self.s_EdgeWidth.value()
         self.sources.update()
@@ -117,7 +117,7 @@ class uiSources(object):
         # Get projection radius :
         self._tradius = self._uitRadius.value()
         # Get if activity has to be projected on surface / ROI :
-        self._tprojecton = self._uitProjectOn.currentText().lower()
+        self._tprojecton = str(self._uitProjectOn.currentText()).lower()
         # Run either the activity / repartition projection :
         if self._uitActivity.isChecked():
             self._cortical_projection()

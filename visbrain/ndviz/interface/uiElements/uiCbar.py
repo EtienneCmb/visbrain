@@ -64,7 +64,7 @@ class uiCbar(object):
         """Load an object and set it args to the colorbar."""
         self._cbForceUpdate = False
         # Get current object and update:
-        self._cb.set_default(self._cbObjects.currentText(), update=False)
+        self._cb.set_default(str(self._cbObjects.currentText()), update=False)
         # Clim :
         self.uiclim = self._cb['clim']
         # Vmin / under :
@@ -87,7 +87,7 @@ class uiCbar(object):
 
     def _fcn_PanelObjects(self):
         """Automatically display corresponding panel while interactions."""
-        cobj = self._cbObjects.currentText()
+        cobj = str(self._cbObjects.currentText())
         # Nd-plt :
         if cobj == 'ndplt':
             self._CanVisNd.setChecked(True)
@@ -205,7 +205,7 @@ class uiCbar(object):
     @property
     def uicmap(self):
         """Get the uicmap value."""
-        return self._cbCmap.currentText()
+        return str(self._cbCmap.currentText())
 
     @uicmap.setter
     def uicmap(self, value):

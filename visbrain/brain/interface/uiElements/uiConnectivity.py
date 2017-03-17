@@ -65,7 +65,7 @@ class uiConnectivity(object):
                                                                             ))
 
         # Get colorby (strength / count):
-        colorby = self.uiConnect_colorby.currentText()
+        colorby = str(self.uiConnect_colorby.currentText())
         self.connect.colorby = colorby
 
         # Get Min / Max (static or dynamic) :

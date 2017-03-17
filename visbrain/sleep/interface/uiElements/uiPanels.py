@@ -331,7 +331,7 @@ class uiPanels(object):
         # Get contraste :
         contraste = self._PanSpecCon.value()
         # Get colormap :
-        cmap = self._PanSpecCmap.currentText()
+        cmap = str(self._PanSpecCmap.currentText())
         # Get channel to get spectrogram :
         chan = self._PanSpecChan.currentIndex()
         self._specLabel.setText(self._channels[chan])

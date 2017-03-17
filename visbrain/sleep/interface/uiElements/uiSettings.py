@@ -246,7 +246,7 @@ class uiSettings(object):
         specZoom = self._PanSpecZoom.isChecked()
         hypZoom = self._PanHypZoom.isChecked()
         timeZoom = self._PanTimeZoom.isChecked()
-        unit = self._slRules.currentText()
+        unit = str(self._slRules.currentText())
 
         # Find closest time index :
         t = [0, 0]
@@ -361,7 +361,7 @@ class uiSettings(object):
     # =====================================================================
     def _get_factFromUnit(self):
         """Get factor conversion from current selected unit."""
-        unit = self._slRules.currentText()
+        unit = str(self._slRules.currentText())
         if unit == 'seconds':
             fact = 1.
         elif unit == 'minutes':
