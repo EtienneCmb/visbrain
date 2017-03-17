@@ -1883,7 +1883,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.QuickSettings.setCurrentIndex(2)
+        self.QuickSettings.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.bgd_green, self.bgd_blue)
         MainWindow.setTabOrder(self.bgd_blue, self.o_Brain)
