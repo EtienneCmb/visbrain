@@ -181,8 +181,8 @@ class uiSettings(object):
         """
         # Manage filename :
         if self._savename is None:
-            saveas = QFileDialog.getSaveFileName(self, 'Save screenshot',
-                                                 os.getenv('HOME'))
+            saveas = str(QFileDialog.getSaveFileName(self, 'Save screenshot',
+                                                     os.getenv('HOME')))
         else:
             saveas = self._savename
 
@@ -205,7 +205,7 @@ class uiSettings(object):
 
         # Render and save :
         img = self.view.canvas.render(region=self._crop)
-        io.imsave(self._savename, img)
+        io.imsave(saveas, img)
 
         # Set to the canvas it's previous size :
         self.view.canvas._backend._physical_size = backp_size
@@ -219,7 +219,7 @@ class uiSettings(object):
             # Render colorbar panel :
             cbimg = self.view.cbcanvas.render(region=self._cbcrop)
             # Colorbar file name : filename_colorbar.extension
-            filename = self._savename.replace('.', '_colorbar.')
+            filename = saveas.replace('.', '_colorbar.')
             io.imsave(filename, cbimg)
             # Set to the canvas it's previous size :
             self.view.cbcanvas._backend._physical_size = backp_size
