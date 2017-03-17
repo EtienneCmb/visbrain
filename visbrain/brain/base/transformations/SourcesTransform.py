@@ -133,6 +133,8 @@ class SourcesTransform(object):
                                  fontsize=self.cb['fontsize'],
                                  fontcolor=self.cb['fontcolor'],
                                  **self.sources._cb)
+            # Update opacity :
+            self._fcn_opacity()
         else:
             warn("No sources detected. Use s_xyz input parameter to define "
                  "source's coordinates")
@@ -164,6 +166,8 @@ class SourcesTransform(object):
                              fontsize=self.cb['fontsize'],
                              fontcolor=self.cb['fontcolor'],
                              **self.sources._cb)
+            # Update opacity :
+            self._fcn_opacity()
         else:
             warn("No sources detected. Use s_xyz input parameter to define "
                  "source's coordinates")
@@ -415,7 +419,7 @@ class SourcesTransform(object):
                 The color to use for masked sources.
         """
         # Get alpha :
-        alpha = slider2opacity(self.OpacitySlider.value(), thmin=0.0,
+        alpha = slider2opacity(float(self.OpacitySlider.value()), thmin=0.0,
                                thmax=100.0, vmin=self._slmin, vmax=self._slmax,
                                tomin=self.view.minOpacity,
                                tomax=self.view.maxOpacity)
