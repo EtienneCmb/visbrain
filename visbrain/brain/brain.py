@@ -154,10 +154,6 @@ class Brain(uiInit, uiElements, base, userfcn):
         ui_savename: string, optional, (def: None)
             The save name when exporting
 
-        ui_extension: string, optional, (def: '.png')
-            The picture extension when exporting. Choose between 'png'
-            and 'tiff'
-
         ui_region: tuple, optional, (def: None)
             Crop the exportation to the region define by (x, y, width, height)
 
@@ -207,10 +203,8 @@ class Brain(uiInit, uiElements, base, userfcn):
         bgcolor = kwargs.get('ui_bgcolor', (0.098, 0.098, 0.098))
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
-        self._extension = kwargs.get('ui_extension', '.png')
         self._crop = kwargs.get('ui_region', None)
-        if self._extension not in ['png', 'tiff']:
-            self._extension = 'png'
+        self._cbcrop = kwargs.get('ui_cbregion', None)
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
@@ -243,6 +237,7 @@ class Brain(uiInit, uiElements, base, userfcn):
                                                        azimuth=0, elevation=90)
         self.view.cbwc.camera.set_range(x=(-24, 24), y=(-0.5, 0.5), margin=0)
         self.view.wc.scene.children[0].parent = None
+        self._rotate(fixed='axial')
 
         # print(self.view.wc.scene.describe_tree(with_transform=True))
 
@@ -250,5 +245,4 @@ class Brain(uiInit, uiElements, base, userfcn):
         """Display the graphical user interface."""
         # This function has to be placed here (and not in the user.py script)
         self.showMaximized()
-        self._rotate()
         visapp.run()
