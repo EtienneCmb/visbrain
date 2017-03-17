@@ -1,8 +1,8 @@
-"""Top level vbrain class.
+"""Top level Brain class.
 
 uiInit: initialize the graphical interface
 uiElements: interactions between graphical elements and deep functions
-base: initialize all vbrain objects (MNI, sources, connectivity...)
+base: initialize all Brain objects (MNI, sources, connectivity...)
 and associated transformations
 userfcn: initialize functions for user interaction.
 """
@@ -19,7 +19,7 @@ from .base import base
 from .user import userfcn
 
 
-class vbrain(uiInit, uiElements, base, userfcn):
+class Brain(uiInit, uiElements, base, userfcn):
     """Visualization of neuroscientic data on a standard MNI brain.
 
     Kargs:
@@ -188,14 +188,14 @@ class vbrain(uiInit, uiElements, base, userfcn):
     Example:
         >>> # Load librairies :
         >>> import numpy as np
-        >>> from visbrain import vbrain
+        >>> from visbrain import Brain
         >>> # Define some coordinates and colors for three deep sources :
         >>> s_xyz = np.array([[-12, -13, 58], [40, 7, 57], [10, 5, 36]])
         >>> s_color = ["#3498db", "#e74c3c", "#2ecc71"]
         >>> # Add data to sources :
         >>> s_data = [100, 0.2, 27]
         >>> # Define a visbrain instance with previous parameters :
-        >>> vb = vbrain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)
+        >>> vb = Brain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)
         >>> # Finally, display the interface :
         >>> vb.show()
     """
@@ -219,7 +219,7 @@ class vbrain(uiInit, uiElements, base, userfcn):
 
         # Set icon :
         pathfile = sys.modules[__name__].__file__
-        path = os.path.join(*['vbrain', 'interface', 'gui', 'vbicon.png'])
+        path = os.path.join(*['brain', 'interface', 'gui', 'vbicon.png'])
         self.setWindowIcon(QtGui.QIcon(os.path.join(pathfile.split(
                                                         '/vbrain')[0], path)))
 

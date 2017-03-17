@@ -1,7 +1,7 @@
 """
 """
 
-from .vbrain.vbrain import vbrain
+from .brain.brain import Brain
 from .ndviz.ndviz import Ndviz
 from .sleep.sleep import Sleep
 

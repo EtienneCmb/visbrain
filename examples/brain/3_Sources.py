@@ -1,5 +1,5 @@
 """This example demonstrate how to display deep sources using MNI coordinates."""
-from visbrain import vbrain
+from visbrain import Brain
 import numpy as np
 
 # Define a empty dictionnary :
@@ -51,5 +51,5 @@ kwargs['s_textsize'] = 1.5			    # Size of the text
 kwargs['s_textshift'] = (1.5, 1.5, 0)   # To avoid a superposition between the text and sources sphere, we move the text of (x, y, z) points
 
 # Pass all arguments in the dictionnary :
-vb = vbrain(**kwargs)
+vb = Brain(**kwargs)
 vb.show()

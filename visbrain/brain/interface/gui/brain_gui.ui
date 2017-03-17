@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>visbrain</string>
+   <string>Brain</string>
   </property>
   <property name="tabShape">
    <enum>QTabWidget::Rounded</enum>
@@ -1597,7 +1597,6 @@ color</string>
                 </spacer>
                </item>
               </layout>
-              <zorder>toolBox_4</zorder>
               <zorder>groupBox_3</zorder>
               <zorder>groupBox_5</zorder>
               <zorder>verticalSpacer_3</zorder>
@@ -1678,8 +1677,8 @@ color</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>674</height>
+                <width>307</width>
+                <height>177</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_48">
@@ -2019,8 +2018,8 @@ refllection</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>674</height>
+                <width>335</width>
+                <height>656</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -2922,8 +2921,8 @@ type</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>674</height>
+                <width>264</width>
+                <height>216</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_63">
@@ -3262,8 +3261,8 @@ width</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>674</height>
+                <width>303</width>
+                <height>666</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_32">

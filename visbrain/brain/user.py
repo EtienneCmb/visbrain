@@ -3,7 +3,7 @@
 Those functions are a the top level of a visbrain instance and are defined in
 order to run commands without the necessity of opening the interface. This is
 really convenient for generating a large number of pictures by looping over a
-vbrain instance.
+Brain instance.
 """
 
 import numpy as np
@@ -51,8 +51,8 @@ class userfcn(object):
                 elevation.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Predefined rotation :
             >>> vb.rotate(fixed='sagittal_1')
             >>> # Custom rotation :
@@ -76,8 +76,8 @@ class userfcn(object):
                 a matplotlib color (string) or a hexadecimal color (string).
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Set the background color (using a RGB tuple) :
             >>> vb.background_color(color=(1., 1., 1.))
             >>> # Set the background color (using matplotlib format) :
@@ -122,8 +122,8 @@ class userfcn(object):
                 Specify if the colorbar has to be exported too.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Define the filename and the cropped region :
             >>> filename, crop = 'myfile.png', (1000, 300, 570, 550)
             >>> # Rotate the brain :
@@ -196,8 +196,8 @@ class userfcn(object):
                 Otherwise use 'both'.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Display the right hemisphere of 'B3' template :
             >>> vb.brain_control(template='B3', hemisphere='right')
             >>> # Show the GUI :
@@ -217,8 +217,8 @@ class userfcn(object):
                 Specify if the brain has be shown.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Set transparency :
             >>> vb.brain_opacity(alpha=0.1, show=True)
             >>> # Show the GUI :
@@ -245,8 +245,8 @@ class userfcn(object):
                 graphical interface, this can be done using the shortcut 3.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Display the external surface :
             >>> vb.light_reflection(reflect_on='external')
             >>> # Show the GUI :
@@ -316,8 +316,8 @@ class userfcn(object):
                 Color of masked sources when projected on surface.
 
         Example:
-            >>> # Define a vbrain instance with 10 random sources:
-            >>> vb = vbrain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
             >>> # Define some random data :
             >>> data = 100 * np.random.rand(10)
             >>> # Define some color :
@@ -362,8 +362,8 @@ class userfcn(object):
                 Specify if sources has be shown.
 
         Example:
-            >>> # Define a vbrain instance with 10 random sources:
-            >>> vb = vbrain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
             >>> # Set transparency :
             >>> vb.sources_opacity(alpha=0.1, show=True)
             >>> # Show the GUI :
@@ -452,8 +452,8 @@ class userfcn(object):
                 Matplotlib color for values over vmax.
 
         Example:
-            >>> # Define a vbrain instance with 10 random sources:
-            >>> vb = vbrain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
             >>> # Define some random data :
             >>> data = 100 * np.random.rand(10)
             >>> # Set data and properties :
@@ -499,8 +499,8 @@ class userfcn(object):
                 Define smooth proportion.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Display brodmann area 4 and 6 :
             >>> vb.roi_plot(selection=[4, 6], subdivision='brod', smooth=5)
             >>> # Show the GUI :
@@ -548,8 +548,8 @@ class userfcn(object):
                 Choose either to reflect on 'internal' or 'external'.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Display brodmann area 4 and 6 :
             >>> vb.roi_plot(selection=[4, 6], subdivision='brod')
             >>> # Display the external surface :
@@ -580,8 +580,8 @@ class userfcn(object):
                 Specify if roi(s) has be shown.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Set transparency :
             >>> vb.roi_opacity(alpha=0.1, show=True)
             >>> # Show the GUI :
@@ -606,8 +606,8 @@ class userfcn(object):
                 The currently supported ROI's labels.
 
         Example:
-            >>> # Define a vbrain instance :
-            >>> vb = vbrain()
+            >>> # Define a Brain instance :
+            >>> vb = Brain()
             >>> # Get list of ROI for AAL :
             >>> lst = vb.roi_list(subdivision='aal')
             >>> # Print this list :

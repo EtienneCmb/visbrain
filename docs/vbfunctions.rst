@@ -13,23 +13,23 @@ Set of functions for an iteractive control of the graphical user interface eleme
 
 Show graphical interface
 ~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.vbrain.vbrain.show
+.. automethod:: visbrain.brain.brain.Brain.show
 
 Quit graphical interface
 ~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.quit
+.. automethod:: visbrain.brain.user.userfcn.quit
 
 Rotation
 ~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.rotate
+.. automethod:: visbrain.brain.user.userfcn.rotate
 
 Background color
 ~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.background_color
+.. automethod:: visbrain.brain.user.userfcn.background_color
 
 Screenshot
 ~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.screenshot
+.. automethod:: visbrain.brain.user.userfcn.screenshot
 
 Brain functions
 ^^^^^^^^^^^^^^^
@@ -43,16 +43,16 @@ Set of functions for an iteractive control of the main brain object. Use the met
 
 Control
 ~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.brain_control
+.. automethod:: visbrain.brain.user.userfcn.brain_control
 
 Opacity
 ~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.brain_opacity
+.. automethod:: visbrain.brain.user.userfcn.brain_opacity
 
 
 Light reflection
 ~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.light_reflection
+.. automethod:: visbrain.brain.user.userfcn.light_reflection
 
 
 Sources functions
@@ -66,11 +66,11 @@ Set of functions for an iteractive control of sources object. Use the methods be
 Set data
 ~~~~~~~~
 
-.. automethod:: visbrain.vbrain.user.userfcn.sources_data
+.. automethod:: visbrain.brain.user.userfcn.sources_data
 
 Opacity
 ~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.sources_opacity
+.. automethod:: visbrain.brain.user.userfcn.sources_opacity
 
 .. figure::  picture/ProjObj.png
    :align:   center
@@ -79,15 +79,15 @@ Opacity
 
 Cortical projection
 ~~~~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.cortical_projection
+.. automethod:: visbrain.brain.user.userfcn.cortical_projection
 
 Cortical repartition
 ~~~~~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.cortical_repartition
+.. automethod:: visbrain.brain.user.userfcn.cortical_repartition
 
 Colormap
 ~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.sources_colormap
+.. automethod:: visbrain.brain.user.userfcn.sources_colormap
 
 Connectivity functions
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -111,16 +111,16 @@ Set of functions for an iteractive control of ROI (Region of interest) objects. 
 
 List of suported ROI
 ~~~~~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.roi_list
+.. automethod:: visbrain.brain.user.userfcn.roi_list
 
 Plot selection
 ~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.roi_plot
+.. automethod:: visbrain.brain.user.userfcn.roi_plot
 
 Opacity
 ~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.roi_opacity
+.. automethod:: visbrain.brain.user.userfcn.roi_opacity
 
 Light reflection
 ~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.vbrain.user.userfcn.roi_light_reflection
+.. automethod:: visbrain.brain.user.userfcn.roi_light_reflection
