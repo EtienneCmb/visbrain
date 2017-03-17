@@ -1,8 +1,6 @@
-"""Main class for settings managment (save / load / light / cameras...).
+# -*- coding: utf-8 -*-
 
-
-"""
-
+"""Main class for settings managment (save / load / light / cameras...)."""
 import os
 from PyQt4.QtGui import *
 from PyQt4 import QtCore

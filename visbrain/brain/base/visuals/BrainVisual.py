@@ -609,8 +609,8 @@ class BrainVisual(Visual):
     @property
     def get_light(self):
         """List of all light properties."""
-        return [*self.get_l_position] + [*self.get_l_intensity] + [
-            *self.get_l_color] + [*self.get_l_coef]
+        return list(self.get_l_position) + list(self.get_l_intensity) + list(
+                    self.get_l_color) + list(self.get_l_coef)
 
     # =======================================================================
     # =======================================================================

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Group functions for automatic detection of sleep parameters.
 
 Perform:
