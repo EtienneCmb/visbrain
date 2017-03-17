@@ -114,13 +114,14 @@ class uiScoring(object):
         stageItem = self._scoreTable.item(idx, 2)
         if tstartItem and tendItem and stageItem:
             # ============= PROPER FORMAT =============
-            if all([bool(tstartItem.text()), bool(tendItem.text()),
-                   stageItem.text().lower() in it.keys()]):
+            if all([bool(str(tstartItem.text())), bool(str(tendItem.text())),
+                   str(stageItem.text()).lower() in it.keys()]):
                 try:
                     # Get start / end / stage :
-                    tstart = int(float(tstartItem.text()) * fact * self._sf)
-                    tend = int(float(tendItem.text()) * fact * self._sf)
-                    stage = it[stageItem.text().lower()]
+                    tstart = int(float(str(tstartItem.text(
+                                                       ))) * fact * self._sf)
+                    tend = int(float(str(tendItem.text())) * fact * self._sf)
+                    stage = it[str(stageItem.text()).lower()]
 
                     return tstart, tend, stage
                 except:

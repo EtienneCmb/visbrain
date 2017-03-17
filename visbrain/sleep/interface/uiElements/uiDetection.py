@@ -266,6 +266,6 @@ class uiDetection(object):
         # Get selected row :
         row = self._DetectLocations.currentRow()
         # Get starting and ending point :
-        st = float(self._DetectLocations.item(row, 0).text())
+        st = float(str(self._DetectLocations.item(row, 0).text()))
         # Go to :
         self._SlGoto.setValue(st - self._SigWin.value() / 2)
