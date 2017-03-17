@@ -50,7 +50,9 @@ class base(CbarBase, transformations):
                              name='NoneArea', select=[4, 6], color='#ab4642')
 
         # Initialize colorbar base  (by default, with sources base):
-        self.cb = CbarBase(self.view.cbwc, **self.sources._cb)
+        self.cb = CbarBase(self.view.cbwc, cb_fontcolor=self._cbfontcolor,
+                           cb_fontsize=self._cbfontsize,
+                           cb_label=self._cblabel, **self.sources._cb)
 
         # Add transformations :
         transformations.__init__(self, **kwargs)

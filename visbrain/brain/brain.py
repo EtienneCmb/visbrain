@@ -166,6 +166,9 @@ class Brain(uiInit, uiElements, base, userfcn):
             Define the screenshot resolution by indicating the number of times
             the definition of your screen must be multiplied.
 
+        cb_label: string, optional, (def: '')
+            Colorbar label.
+
         cb_export: bool, optional, (def: True)
             Control if the colorbor must be exported when doing a screenshot
 
@@ -221,6 +224,9 @@ class Brain(uiInit, uiElements, base, userfcn):
                                   'z': (-90, 90)},
                           }
         self._xRange = (-70, 70)
+        self._cbfontsize = kwargs.get('cb_fontsize', 15)
+        self._cbfontcolor = kwargs.get('cb_fontcolor', 'white')
+        self._cblabel = kwargs.get('cb_label', '')
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
