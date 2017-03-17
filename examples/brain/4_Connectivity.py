@@ -2,7 +2,8 @@
 we will define some deep sources and connect them. See 2_Sources.py
 to defined sources
 """
-from visbrain import vbrain
+from __future__ import print_function
+from visbrain import Brain
 import numpy as np
 
 # Create an empty kwargs dictionnary :
@@ -52,7 +53,7 @@ kwargs['c_connect'] = c_connect
 
 # Control the dynamic range of sources radius and the edge color :
 kwargs['s_radiusmin'], kwargs['s_radiusmax'] = 2, 10
-kwargs['s_edgecolor'] = None#'white'
+kwargs['s_edgecolor'] = None  # 'white'
 kwargs['s_edgewidth'] = 0
 
 # Colormap properties (for sources) :
@@ -83,5 +84,5 @@ kwargs['cb_fontsize'] = 15
 kwargs['cb_fontcolor'] = 'white'
 kwargs['cb_label'] = 'My colorbar label'
 
-vb = vbrain(**kwargs)
+vb = Brain(**kwargs)
 vb.show()

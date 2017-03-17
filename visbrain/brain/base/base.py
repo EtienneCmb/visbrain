@@ -1,4 +1,4 @@
-"""This script initialize vbrain objects and manage if they are empty.
+"""This script initialize Brain objects and manage if they are empty.
 
 The following elements are initialized :
     * Atlas : create the main standard MNI brain.
@@ -10,7 +10,7 @@ The following elements are initialized :
     educational or simply for visualiation purpose.
     * Colorbar : initialize the colorbar elements.
     * Transformations : set of transformations that can be applied on several
-    vbrain objects (like cortical_projection(), cortical_repartition(...))
+    Brain objects (like cortical_projection(), cortical_repartition(...))
     Those transformations are added here, at the top level, so that they
     can have access to the previously defined elements.
 """
@@ -27,7 +27,7 @@ from .transformations import transformations
 
 
 class base(CbarBase, transformations):
-    """Initialize vbrain objects.
+    """Initialize Brain objects.
 
     Initialize sources / connectivity / areas / colorbar / transformations.
     Organize them at diffrent levels and make the link with the graphical
@@ -90,7 +90,7 @@ class base(CbarBase, transformations):
         # Create a root node :
         self._vbNode = Node(name='visbrain')
 
-        # Make this root node the parent of others vbrain objects :
+        # Make this root node the parent of others Brain objects :
         self.atlas.mesh.parent = self._vbNode
         self.sources.mesh.parent = self._vbNode
         self.connect.mesh.parent = self._vbNode

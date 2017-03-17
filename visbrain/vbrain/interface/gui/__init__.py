@@ -1,1 +1,0 @@
-from .visbrain_gui import Ui_MainWindow

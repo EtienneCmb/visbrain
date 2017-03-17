@@ -1,8 +1,8 @@
-"""Top level vbrain class.
+"""Top level Brain class.
 
 uiInit: initialize the graphical interface
 uiElements: interactions between graphical elements and deep functions
-base: initialize all vbrain objects (MNI, sources, connectivity...)
+base: initialize all Brain objects (MNI, sources, connectivity...)
 and associated transformations
 userfcn: initialize functions for user interaction.
 """
@@ -19,7 +19,7 @@ from .base import base
 from .user import userfcn
 
 
-class vbrain(uiInit, uiElements, base, userfcn):
+class Brain(uiInit, uiElements, base, userfcn):
     """Visualization of neuroscientic data on a standard MNI brain.
 
     Kargs:
@@ -154,12 +154,17 @@ class vbrain(uiInit, uiElements, base, userfcn):
         ui_savename: string, optional, (def: None)
             The save name when exporting
 
-        ui_extension: string, optional, (def: '.png')
-            The picture extension when exporting. Choose between 'png'
-            and 'tiff'
-
         ui_region: tuple, optional, (def: None)
-            Crop the exportation to the region define by (x, y, width, height)
+            Crop the exportation of the main canvas to the region define by
+            (x, y, width, height).
+
+        ui_cbregion: tuple, optional, (def: None)
+            Crop the exportation of the colorbar canvas to the region define by
+            (x, y, width, height).
+
+        ui_resolution: float, optional, (def: 3000)
+            Define the screenshot resolution by indicating the number of times
+            the definition of your screen must be multiplied.
 
         cb_export: bool, optional, (def: True)
             Control if the colorbor must be exported when doing a screenshot
@@ -188,14 +193,14 @@ class vbrain(uiInit, uiElements, base, userfcn):
     Example:
         >>> # Load librairies :
         >>> import numpy as np
-        >>> from visbrain import vbrain
+        >>> from visbrain import Brain
         >>> # Define some coordinates and colors for three deep sources :
         >>> s_xyz = np.array([[-12, -13, 58], [40, 7, 57], [10, 5, 36]])
         >>> s_color = ["#3498db", "#e74c3c", "#2ecc71"]
         >>> # Add data to sources :
         >>> s_data = [100, 0.2, 27]
         >>> # Define a visbrain instance with previous parameters :
-        >>> vb = vbrain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)
+        >>> vb = Brain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)
         >>> # Finally, display the interface :
         >>> vb.show()
     """
@@ -207,10 +212,9 @@ class vbrain(uiInit, uiElements, base, userfcn):
         bgcolor = kwargs.get('ui_bgcolor', (0.098, 0.098, 0.098))
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
-        self._extension = kwargs.get('ui_extension', '.png')
         self._crop = kwargs.get('ui_region', None)
-        if self._extension not in ['png', 'tiff']:
-            self._extension = 'png'
+        self._cbcrop = kwargs.get('ui_cbregion', None)
+        self._uirez = kwargs.get('ui_resolution', 3000.)
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
@@ -219,7 +223,7 @@ class vbrain(uiInit, uiElements, base, userfcn):
 
         # Set icon :
         pathfile = sys.modules[__name__].__file__
-        path = os.path.join(*['vbrain', 'interface', 'gui', 'vbicon.png'])
+        path = os.path.join(*['brain', 'interface', 'gui', 'vbicon.png'])
         self.setWindowIcon(QtGui.QIcon(os.path.join(pathfile.split(
                                                         '/vbrain')[0], path)))
 
@@ -243,6 +247,7 @@ class vbrain(uiInit, uiElements, base, userfcn):
                                                        azimuth=0, elevation=90)
         self.view.cbwc.camera.set_range(x=(-24, 24), y=(-0.5, 0.5), margin=0)
         self.view.wc.scene.children[0].parent = None
+        self._rotate(fixed='axial')
 
         # print(self.view.wc.scene.describe_tree(with_transform=True))
 
@@ -250,5 +255,4 @@ class vbrain(uiInit, uiElements, base, userfcn):
         """Display the graphical user interface."""
         # This function has to be placed here (and not in the user.py script)
         self.showMaximized()
-        self._rotate()
         visapp.run()

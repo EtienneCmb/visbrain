@@ -4,9 +4,9 @@ Visbrain is a python package dedicated (mainly) to the visualization of neurosci
 
 ## Modules
 
-### vbrain
+### Brain
 
-The [vbrain](http://etiennecmb.github.io/visbrain/vbrain.html#) Display a standard MNI brain inside a graphical user interface (using PyQt4 for instance). This module can be used for:
+The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard MNI brain inside a graphical user interface (using PyQt4 for instance). This module can be used for:
 
 - Display one of the 3 included standard MNI brain or your own template (using vertices and faces)
 - Interactions (rotation / translation / transformations / slices)
@@ -21,10 +21,10 @@ The [vbrain](http://etiennecmb.github.io/visbrain/vbrain.html#) Display a standa
 	- Use a dynamic control of transparency to make stronger connexions more visible
 	- A lot of other color controls (colormap / limits / threshold...) 
 - Deep structures (like brodmann areas, AAL...). Source's activity can be projected on deep sources.
-- Use either the graphical inteface to interact or use the [user functions](http://etiennecmb.github.io/visbrain/vbrain.html#user-functions) to run every commands without opening the interface. This tricks can be really usefull to produce a large number of figures.
+- Use either the graphical inteface to interact or use the [user functions](http://etiennecmb.github.io/visbrain/brain.html#user-functions) to run every commands without opening the interface. This tricks can be really usefull to produce a large number of figures.
 - Finally, export figures in high-definition.
 
-![vbrain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png "vbrain : visualize your data into a transparent MNI brain")
+![Brain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png "Brain : visualize your data into a transparent MNI brain")
 
 ### Sleep
 

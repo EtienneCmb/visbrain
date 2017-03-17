@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/vbrain/interface/gui/visbrain_gui.ui'
+# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/brain/interface/gui/brain_gui.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -665,7 +665,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 364, 674))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 307, 177))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_48 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_48.setObjectName(_fromUtf8("verticalLayout_48"))
@@ -795,7 +795,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName(_fromUtf8("scrollArea_2"))
         self.scrollAreaWidgetContents_2 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 364, 674))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 335, 656))
         self.scrollAreaWidgetContents_2.setObjectName(_fromUtf8("scrollAreaWidgetContents_2"))
         self.verticalLayout_12 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout_12.setObjectName(_fromUtf8("verticalLayout_12"))
@@ -1135,7 +1135,7 @@ class Ui_MainWindow(object):
         self.scrollArea_7.setWidgetResizable(True)
         self.scrollArea_7.setObjectName(_fromUtf8("scrollArea_7"))
         self.scrollAreaWidgetContents_8 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_8.setGeometry(QtCore.QRect(0, 0, 364, 674))
+        self.scrollAreaWidgetContents_8.setGeometry(QtCore.QRect(0, 0, 264, 216))
         self.scrollAreaWidgetContents_8.setObjectName(_fromUtf8("scrollAreaWidgetContents_8"))
         self.verticalLayout_63 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents_8)
         self.verticalLayout_63.setObjectName(_fromUtf8("verticalLayout_63"))
@@ -1272,7 +1272,7 @@ class Ui_MainWindow(object):
         self.scrollArea_8.setWidgetResizable(True)
         self.scrollArea_8.setObjectName(_fromUtf8("scrollArea_8"))
         self.scrollAreaWidgetContents_10 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_10.setGeometry(QtCore.QRect(0, 0, 364, 674))
+        self.scrollAreaWidgetContents_10.setGeometry(QtCore.QRect(0, 0, 303, 666))
         self.scrollAreaWidgetContents_10.setObjectName(_fromUtf8("scrollAreaWidgetContents_10"))
         self.verticalLayout_32 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents_10)
         self.verticalLayout_32.setObjectName(_fromUtf8("verticalLayout_32"))
@@ -1906,7 +1906,7 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.sh_table, self.QuickSettings)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "visbrain", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Brain", None))
         self.QuickSettings.setToolTip(_translate("MainWindow", "<html><head/><body><p><br/></p></body></html>", None))
         self.groupBox_8.setTitle(_translate("MainWindow", "Rotation / Camera", None))
         self.q_axial.setToolTip(_translate("MainWindow", "<html><head/><body><p>Click twice to see top / bottom</p></body></html>", None))

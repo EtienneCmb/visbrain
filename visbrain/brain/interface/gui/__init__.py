@@ -1,0 +1,1 @@
+from .brain_gui import Ui_MainWindow
