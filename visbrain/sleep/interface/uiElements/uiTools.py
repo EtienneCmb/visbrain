@@ -35,9 +35,9 @@ class uiTools(object):
         filt = self._SigFilt.isChecked()
         fstart = self._SigFiltFrom.value()
         fend = self._SigFiltTo.value()
-        filttype = self._SigFiltMeth.currentText()
+        filttype = str(self._SigFiltMeth.currentText())
         filtorder = self._SigFiltOrder.value()
-        filtband = self._SigFiltBand.currentText()
+        filtband = str(self._SigFiltBand.currentText())
 
         # ========== CHANNELS ==========
         # ---- Demean / detrend ----
@@ -78,7 +78,7 @@ class uiTools(object):
     def _fcn_filtBand(self):
         """Configure visible [fstart, fend] for the band possibilities."""
         # Get selected band :
-        filtband = self._SigFiltBand.currentText()
+        filtband = str(self._SigFiltBand.currentText())
         # Enable / disable [fstart, fend] :
         if filtband in ['bandpass', 'bandstop']:
             fstart, fend = True, True
