@@ -45,7 +45,7 @@ vb.cortical_projection()          # Run the cortical projection
 vb.sources_opacity(show=False)    # Hide sources
 vb.rotate(custom=(-160., 10.))    # Rotate the brain
 vb.light_reflection('external')   # Make the brain opaque
-vb.screenshot('screenshot2.jpg', region=region)
+vb.screenshot('screenshot2.tiff', region=region)
 
 # Make a screenshot of ROI :
 vb.roi_plot(selection=[4, 6, 40],       # Display Brodmann area 4 and 6 :
