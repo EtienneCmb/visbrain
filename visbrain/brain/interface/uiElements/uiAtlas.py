@@ -56,7 +56,7 @@ class uiAtlas(object):
             else:
                 self.uiSwitchTemplate.setCurrentIndex(int(template[-1]) - 1)
         else:
-            self.atlas.template = self.uiSwitchTemplate.currentText()
+            self.atlas.template = str(self.uiSwitchTemplate.currentText())
 
         # Show / hide MNI :
         self.show_MNI.setChecked(show)

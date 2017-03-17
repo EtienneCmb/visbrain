@@ -130,9 +130,9 @@ class uiCmap(object):
             # try:
             # Get colormap name and set to cb object :
             if self.q_cmap_invert.isChecked():
-                self.cb['cmap'] = self.q_cmap_list.currentText() + '_r'
+                self.cb['cmap'] = str(self.q_cmap_list.currentText()) + '_r'
             else:
-                self.cb['cmap'] = self.q_cmap_list.currentText()
+                self.cb['cmap'] = str(self.q_cmap_list.currentText())
 
             # Get clim and set to cb object :
             self.cb['clim'] = (self.q_cmin.value(), self.q_cmax.value())

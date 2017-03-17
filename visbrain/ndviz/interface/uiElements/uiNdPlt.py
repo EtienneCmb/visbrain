@@ -240,7 +240,7 @@ class uiNdPlt(object):
     def _fcn_ndcolor(self):
         """Manage color of nd-signals."""
         # Get color type :
-        col = self._ndColType.currentText()
+        col = str(self._ndColType.currentText())
         uni = 'white'
 
         # Manage panel to display :

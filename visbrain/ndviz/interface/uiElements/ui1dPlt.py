@@ -163,7 +163,7 @@ class ui1dPlt(object):
     def _fcn_1dPlt(self):
         """Manage plot type inputs."""
         # Get plot type :
-        plt = self._1dPltPick.currentText()
+        plt = str(self._1dPltPick.currentText())
         self._1dargs['plot'] = plt
         objlst = [self._1dPltLine, self._1dPltHist, self._1dPltSpec,
                   self._1dPltMark]
@@ -174,7 +174,7 @@ class ui1dPlt(object):
         # LINE :
         if plt == 'line':
             # Get line method :
-            self._1dargs['method'] = self._1dLineMeth.currentText()
+            self._1dargs['method'] = str(self._1dLineMeth.currentText())
             # Set only line control visible :
             viz = [True, False, False, False]
             enabviz = [True, True, True, True]
@@ -216,7 +216,7 @@ class ui1dPlt(object):
         # ----------------------------------------------------
 
         # Get interpolation type and step :
-        self._1dargs['itp_type'] = self._1dInterType.currentText()
+        self._1dargs['itp_type'] = str(self._1dInterType.currentText())
         self._1dargs['itp_step'] = self._1dInterStep.value()
 
         # Set visible panels :
@@ -232,7 +232,7 @@ class ui1dPlt(object):
     def _fcn_1dcolor(self):
         """Manage color of nd-signals."""
         # Get color type :
-        col = self._1dColType.currentText()
+        col = str(self._1dColType.currentText())
         self._1dargs['color'] = col
 
         # Manage panel to display :
@@ -284,7 +284,7 @@ class ui1dPlt(object):
         # Get line width (LW) from the button :
         self._1dlw = self._1dLineWidth.value()
         # The method to control linewidth depend of the line method :
-        if self._1dLineMeth.currentText() == 'gl':
+        if str(self._1dLineMeth.currentText()) == 'gl':
             # Set the LW to the canvas :
             self._1dCanvas.canvas.context.set_line_width(self._1dlw)
         else:
