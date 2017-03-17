@@ -53,7 +53,7 @@ class base(CbarBase, transformations):
                              transform=self.atlas.transform)
 
         # Initialize colorbar base  (by default, with sources base):
-        self.cb = CbarBase(self.view.cbwc, **self.sources._cb, **kwargs)
+        self.cb = CbarBase(self.view.cbwc, **self.sources._cb)
 
         # Add transformations :
         transformations.__init__(self, **kwargs)
