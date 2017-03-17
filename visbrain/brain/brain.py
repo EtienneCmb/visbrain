@@ -215,9 +215,12 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._crop = kwargs.get('ui_region', None)
         self._cbcrop = kwargs.get('ui_cbregion', None)
         self._uirez = kwargs.get('ui_resolution', 3000.)
+        self._xyzRange = {'turntable': {'x': (-70, 70), 'y': (-70, 70),
+                                        'z': (-90, 90)},
+                          'fly': {'x': (-120, 120), 'y': (-100, 200),
+                                  'z': (-90, 90)},
+                          }
         self._xRange = (-70, 70)
-        self._yRange = (-70, 70)
-        self._zRange = (-90, 90)
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :

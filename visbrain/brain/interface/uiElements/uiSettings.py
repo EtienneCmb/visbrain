@@ -317,10 +317,10 @@ class uiSettings(object):
         self.view.wc.camera.elevation = elevation
         self._set_cam_range()
 
-    def _set_cam_range(self):
+    def _set_cam_range(self, name='turntable'):
         """Set the camera range."""
-        self.view.wc.camera.set_range(x=self._xRange, y=self._yRange,
-                                      z=self._zRange)
+        dic = self._xyzRange[name]
+        self.view.wc.camera.set_range(x=dic['x'], y=dic['x'], z=dic['z'])
 
     def _fcn_coronal(self):
         """GUI to deep function for a fixed coronal view."""
@@ -384,7 +384,7 @@ class uiSettings(object):
         """
         # Get radio buttons values :
         if self.c_Turnable.isChecked():
-            camera = viscam.TurntableCamera(distance=10.0, fov=10, azimuth=0,
+            camera = viscam.TurntableCamera(azimuth=0, distance=1000,
                                             name='turntable')
         if self.c_Fly.isChecked():
             # camera = viscam.PanZoomCamera(aspect=1)
@@ -396,6 +396,7 @@ class uiSettings(object):
         if self.area.name == 'displayed':
             self.area.mesh.set_camera(camera)
         self.view.wc.update()
+        self._set_cam_range(name=camera.name)
 
     # =============================================================
     # ERROR // WARNING MESSAGES
