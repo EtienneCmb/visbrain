@@ -155,7 +155,16 @@ class Brain(uiInit, uiElements, base, userfcn):
             The save name when exporting
 
         ui_region: tuple, optional, (def: None)
-            Crop the exportation to the region define by (x, y, width, height)
+            Crop the exportation of the main canvas to the region define by
+            (x, y, width, height).
+
+        ui_cbregion: tuple, optional, (def: None)
+            Crop the exportation of the colorbar canvas to the region define by
+            (x, y, width, height).
+
+        ui_resolution: float, optional, (def: 3000)
+            Define the screenshot resolution by indicating the number of times
+            the definition of your screen must be multiplied.
 
         cb_export: bool, optional, (def: True)
             Control if the colorbor must be exported when doing a screenshot
@@ -205,6 +214,7 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._savename = kwargs.get('ui_savename', None)
         self._crop = kwargs.get('ui_region', None)
         self._cbcrop = kwargs.get('ui_cbregion', None)
+        self._uirez = kwargs.get('ui_resolution', 3000.)
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
