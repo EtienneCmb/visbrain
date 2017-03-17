@@ -234,7 +234,7 @@ class uiCbar(object):
     @property
     def uiunder(self):
         """Get the uiunder value."""
-        return self._cbUnder.text()
+        return str(self._cbUnder.text())
 
     @uiunder.setter
     def uiunder(self, value):
@@ -263,7 +263,7 @@ class uiCbar(object):
     @property
     def uiover(self):
         """Get the uiover value."""
-        return self._cbOver.text()
+        return str(self._cbOver.text())
 
     @uiover.setter
     def uiover(self, value):
@@ -287,7 +287,7 @@ class uiCbar(object):
     @property
     def uilabel(self):
         """Get the uilabel value."""
-        return self._cbLabel.text()
+        return str(self._cbLabel.text())
 
     @uilabel.setter
     def uilabel(self, value):

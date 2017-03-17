@@ -75,7 +75,8 @@ class uiArea(object):
         This function will add the selected structre but only if it's not
         already present in the list.
         """
-        currentItem = [k.text() for k in self.struct2select.selectedItems()]
+        currentItem = [str(k.text())
+                       for k in self.struct2select.selectedItems()]
         for k in currentItem:
             if k not in self._struct2add:
                 self._struct2add.append(k)
@@ -87,7 +88,7 @@ class uiArea(object):
         This function doesn't need any conditional testing because the 'remove'
         button is only showed when a structure is displayed.
         """
-        currentItem = self.struct2add.currentItem().text()
+        currentItem = str(self.struct2add.currentItem().text())
         self._struct2add.pop(self._struct2add.index(currentItem))
         self._fcn_update_list()
 

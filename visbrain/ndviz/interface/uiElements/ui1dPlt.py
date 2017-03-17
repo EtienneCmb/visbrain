@@ -249,7 +249,7 @@ class ui1dPlt(object):
         elif col == 'uniform':
             self._1dRndPan.setVisible(False)
             self._1dUniPan.setVisible(True)
-            uni = textline2color(self._1dUniColor.text())[0]
+            uni = textline2color(str(self._1dUniColor.text()))[0]
             self._1dDynText.setVisible(False)
             self._1dargs['unicolor'] = uni
             [self._cbObjects.model().item(k).setEnabled(False) for k in [1, 2]]
@@ -294,9 +294,9 @@ class ui1dPlt(object):
 
     def _fcn_1dEdit(self):
         """Update title / labels of the Nd-plot."""
-        self._1dCanvas.set_info(title=self._1dTitleEdit.text(),
-                                xlabel=self._1dXlabEdit.text(),
-                                ylabel=self._1dYlabEdit.text())
+        self._1dCanvas.set_info(title=str(self._1dTitleEdit.text()),
+                                xlabel=str(self._1dXlabEdit.text()),
+                                ylabel=str(self._1dYlabEdit.text()))
 
     def _fcn_1dGridToggle(self):
         """Display or hide axis."""

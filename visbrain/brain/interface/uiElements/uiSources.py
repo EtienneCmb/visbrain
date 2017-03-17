@@ -97,7 +97,8 @@ class uiSources(object):
     def _fcn_MarkerLook(self):
         """Change how marker looks."""
         self.sources.symbol = str(self.s_Symbol.currentText())
-        self.sources.edgecolor = textline2color(self.s_EdgeColor.text())[1]
+        self.sources.edgecolor = textline2color(
+                                            str(self.s_EdgeColor.text()))[1]
         self.sources.edgewidth = self.s_EdgeWidth.value()
         self.sources.update()
 
@@ -143,7 +144,8 @@ class uiSources(object):
                                             self.z_text.value()]))
         self.sources.stextmesh.transform = t
         # Color and fontsize :
-        _, self.sources.stextcolor = textline2color(self.q_stextcolor.text())
+        _, self.sources.stextcolor = textline2color(
+                                                str(self.q_stextcolor.text()))
         self.sources.stextsize = self.q_stextsize.value()
         # Update text :
         self.sources.text_update()
