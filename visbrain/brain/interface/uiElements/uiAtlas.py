@@ -83,8 +83,6 @@ class uiAtlas(object):
 
         # Update transformation :
         self._vbNode.transform = self.atlas.transform
-        self.view.wc.camera.set_range(x=self._xRange, y=self._yRange,
-                                      z=self._zRange)
 
     def _light_reflection(self):
         """Change how light is reflected onto the brain.

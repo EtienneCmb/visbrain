@@ -315,7 +315,12 @@ class uiSettings(object):
         # Set camera and range :
         self.view.wc.camera.azimuth = azimuth
         self.view.wc.camera.elevation = elevation
-        self.view.wc.camera.set_range(x=(-50, 50), y=(-50, 50), z=(-85, 85))
+        self._set_cam_range()
+
+    def _set_cam_range(self):
+        """Set the camera range."""
+        self.view.wc.camera.set_range(x=self._xRange, y=self._yRange,
+                                      z=self._zRange)
 
     def _fcn_coronal(self):
         """GUI to deep function for a fixed coronal view."""
