@@ -77,7 +77,6 @@ kwargs['c_dynamic'] = (0.1, 1)
 
 # Atlas template and opacity :
 kwargs['a_template'] = 'B2'
-kwargs['a_opacity'] = 0.05
 
 # Set font size, color and label for the colorbar :
 kwargs['cb_fontsize'] = 15

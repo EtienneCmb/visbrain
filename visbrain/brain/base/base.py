@@ -38,22 +38,21 @@ class base(CbarBase, transformations):
     def __init__(self, canvas, progressbar, **kwargs):
         """Init."""
         # ---------- Initialize base ----------
-        # Initialize transformation with Null:
-        self.transform = vist.ChainTransform([vist.NullTransform()])
+        # Get progress bar :
         self.progressbar = progressbar
 
         # Initialize brain, sources and connectivity objects and put them in
         # the relevant attribute :
-        self.atlas = AtlasBase(a_transform=self.transform, **kwargs)
-        self.sources = SourcesBase(s_transform=self.atlas.transform, **kwargs)
-        self.connect = ConnectBase(c_transform=self.atlas.transform,
-                                   c_xyz=self.sources.xyz, **kwargs)
+        self.atlas = AtlasBase(**kwargs)
+        self.sources = SourcesBase(**kwargs)
+        self.connect = ConnectBase(c_xyz=self.sources.xyz, **kwargs)
         self.area = AreaBase(scale_factor=self.atlas._scaleMax,
-                             name='NoneArea', select=[4, 6], color='#ab4642',
-                             transform=self.atlas.transform)
+                             name='NoneArea', select=[4, 6], color='#ab4642')
 
         # Initialize colorbar base  (by default, with sources base):
-        self.cb = CbarBase(self.view.cbwc, **self.sources._cb)
+        self.cb = CbarBase(self.view.cbwc, cb_fontcolor=self._cbfontcolor,
+                           cb_fontsize=self._cbfontsize,
+                           cb_label=self._cblabel, **self.sources._cb)
 
         # Add transformations :
         transformations.__init__(self, **kwargs)
@@ -94,3 +93,6 @@ class base(CbarBase, transformations):
         self.sources.mesh.parent = self._vbNode
         self.connect.mesh.parent = self._vbNode
         self.sources.stextmesh.parent = self._vbNode
+
+        # Add a rescale / translate transformation to the Node :
+        self._vbNode.transform = self.atlas.transform

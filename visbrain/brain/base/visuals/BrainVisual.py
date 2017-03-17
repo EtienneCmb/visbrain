@@ -327,38 +327,17 @@ class BrainVisual(Visual):
         # -------------- Transformations --------------
         if self._recenter:
             # Inspect minimum and maximum :
-            vm, vM = vertices.min(), vertices.max()
-
-            # Rescale the brain between (-scaleFactor, scaleFactor) :
-            vertices = normalize(vertices, tomin=-self._scaleFactor,
-                                 tomax=self._scaleFactor)
+            vM = vertices.max()
 
             # Get the mean across (x, y, z) axis :
             xScale = vertices[:, :, 0].mean()
             yScale = vertices[:, :, 1].mean()
             zScale = vertices[:, :, 2].mean()
 
-            # Recenter the brain around (0, 0, 0) :
-            np.subtract(vertices[:, :, 0], xScale, out=vertices[:, :, 0])
-            np.subtract(vertices[:, :, 1], yScale, out=vertices[:, :, 1])
-            np.subtract(vertices[:, :, 2], zScale, out=vertices[:, :, 2])
-
-            # The brain need to be recenter arround 0 then rescaled. But each
-            # object in the scene must inherit from the same transformation so
-            # that we conserve proportions / alignment. To do this, the
-            # recenter -> rescale operations are saved in a vispy
-            # transformation so that it can be then applied to each object of
-            # the scene.
-            #  Remove minimum across 3 dimensions :
-            self._btransform.prepend(vist.STTransform(translate=[-vM] * 3))
-            # Normalize between (-scaleFactor, scaleFactor) :
-            self._btransform.prepend(
-                vist.STTransform(scale=[2 * self._scaleFactor / (vM-vm)] * 3))
-            self._btransform.prepend(
-                vist.STTransform(translate=[self._scaleFactor]*3))
-            # Finally, recenter arround (0, 0, 0) :
-            self._btransform.prepend(
-                vist.STTransform(translate=[-xScale, -yScale, -zScale]))
+            # Recenter the brain around (0, 0, 0) and rescale it:
+            sc = [self._scaleFactor / vM] * 3
+            tr = (-xScale, -yScale, -zScale)
+            self._btransform = vist.STTransform(scale=sc, translate=tr)
 
             # Keep maximum/minimum pear coordinates :
             self._vertsize = [(vertices[:, 0, 0].min(),

@@ -29,7 +29,7 @@ class AreaBase(object):
     """
 
     def __init__(self, structure='brod', select=None, color='white', cmap=None,
-                 scale_factor=1, name='', transform=None, smooth=3):
+                 scale_factor=1, name='', smooth=3):
         """Init."""
         self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
             'Area')[0], 'templates')
@@ -47,9 +47,6 @@ class AreaBase(object):
         self.smoothsize = smooth
         self.need_update = True
         self.creation = True
-
-        if transform is not None:
-            self._transform = transform
 
     def __str__(self):
         """Return labels of selected ROI type."""
@@ -225,7 +222,6 @@ class AreaBase(object):
         # Finally, apply transformations to vertices :
         tr = vist.STTransform(translate=self._hdr)
         self.vert = tr.map(self.vert)[:, 0:-1]
-        self.vert = self._transform.map(self.vert)[:, 0:-1]
 
     def _smooth(self, data):
         """Volume smoothing.
@@ -255,7 +251,7 @@ class AreaBase(object):
         if self.creation:
             self.mesh = BrainMesh(vertices=self.vert, faces=self.faces,
                                   vertex_colors=self.vertex_colors,
-                                  scale_factor=self._scale_factor,
+                                  scale_factor=1,
                                   name=self.name, recenter=False)
             self.name = 'displayed'
             self.creation = False

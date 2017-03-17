@@ -166,6 +166,9 @@ class Brain(uiInit, uiElements, base, userfcn):
             Define the screenshot resolution by indicating the number of times
             the definition of your screen must be multiplied.
 
+        cb_label: string, optional, (def: '')
+            Colorbar label.
+
         cb_export: bool, optional, (def: True)
             Control if the colorbor must be exported when doing a screenshot
 
@@ -215,6 +218,15 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._crop = kwargs.get('ui_region', None)
         self._cbcrop = kwargs.get('ui_cbregion', None)
         self._uirez = kwargs.get('ui_resolution', 3000.)
+        self._xyzRange = {'turntable': {'x': (-70, 70), 'y': (-70, 70),
+                                        'z': (-90, 90)},
+                          'fly': {'x': (-120, 120), 'y': (-100, 200),
+                                  'z': (-90, 90)},
+                          }
+        self._xRange = (-70, 70)
+        self._cbfontsize = kwargs.get('cb_fontsize', 15)
+        self._cbfontcolor = kwargs.get('cb_fontcolor', 'white')
+        self._cblabel = kwargs.get('cb_label', '')
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
@@ -255,4 +267,6 @@ class Brain(uiInit, uiElements, base, userfcn):
         """Display the graphical user interface."""
         # This function has to be placed here (and not in the user.py script)
         self.showMaximized()
+        # Fix brain range :
+        self._set_cam_range()
         visapp.run()
