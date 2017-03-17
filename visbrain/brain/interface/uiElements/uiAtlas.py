@@ -23,8 +23,8 @@ class uiAtlas(object):
         self.Rhemi_only.clicked.connect(self._brain_control)
 
         # Brain template to use :
-        self.uiSwitchTemplate.currentIndexChanged.connect(self._brain_control)
         self.uiSwitchTemplate.setCurrentIndex(int(self.atlas.template[-1]) - 1)
+        self.uiSwitchTemplate.currentIndexChanged.connect(self._brain_control)
 
         # Structure :
         eval('self.q_' + self.atlas.projection + '.setChecked(True)')
@@ -80,6 +80,11 @@ class uiAtlas(object):
                 self.atlas.reload(hemisphere='left')
             elif self.Rhemi_only.isChecked():
                 self.atlas.reload(hemisphere='right')
+
+        # Update transformation :
+        self._vbNode.transform = self.atlas.transform
+        self.view.wc.camera.set_range(x=self._xRange, y=self._yRange,
+                                      z=self._zRange)
 
     def _light_reflection(self):
         """Change how light is reflected onto the brain.

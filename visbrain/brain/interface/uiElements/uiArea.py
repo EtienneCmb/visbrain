@@ -157,6 +157,7 @@ class uiArea(object):
         """Area Sub-plotting function."""
         # Get smoothing :
         self.area.smoothsize = self._roiSmooth.value()
+        # Plot areas and set parent :
         self.area.plot()
         self.area.mesh.parent = self._vbNode
         self.area.set_camera(self.view.wc.camera)
