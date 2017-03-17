@@ -72,7 +72,7 @@ class uiOpacity(object):
                 The unprocessed slider value.
         """
         # Get opacity from the slider :
-        sl = self.OpacitySlider.value()
+        sl = float(self.OpacitySlider.value())
         # Normalize this value :
         slval = slider2opacity(sl, thmin=0.0, thmax=100.0, vmin=self._slmin,
                                vmax=self._slmax, tomin=tomin, tomax=tomax)
@@ -86,7 +86,7 @@ class uiOpacity(object):
         every value under 0.05 or over 0.95 will respectively peak to 0 / 1.
         """
         # Get slider value :
-        sl = self.OpacitySlider.value()
+        sl = float(self.OpacitySlider.value())
         sl_01 = (sl-self._slmin)/(self._slmax-self._slmin)
         if sl_01 < 0.05:
             sl_01, visible, deep_test = 0., False, False

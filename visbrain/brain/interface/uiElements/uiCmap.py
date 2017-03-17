@@ -144,7 +144,7 @@ class uiCmap(object):
                 self.qUnder_txt.setEnabled(True)
                 self.q_under.setEnabled(True)
                 self.cb['vmin'] = self.q_vmin.value()
-                self.cb['under'], _ = textline2color(self.q_under.text())
+                self.cb['under'], _ = textline2color(str(self.q_under.text()))
             else:
                 self.q_vmin.setEnabled(False)
                 self.qUnder_txt.setEnabled(False)
@@ -157,7 +157,7 @@ class uiCmap(object):
                 self.qOver_txt.setEnabled(True)
                 self.q_over.setEnabled(True)
                 self.cb['vmax'] = self.q_vmax.value()
-                self.cb['over'], _ = textline2color(self.q_over.text())
+                self.cb['over'], _ = textline2color(str(self.q_over.text()))
             else:
                 self.q_vmax.setEnabled(False)
                 self.q_vmax.setEnabled(False)
@@ -167,7 +167,7 @@ class uiCmap(object):
                 self.cb['over'] = None
 
             # Update colorbar label :
-            self.cb['label'] = self.q_cblabel.text()
+            self.cb['label'] = str(self.q_cblabel.text())
 
             # Direct interaction : if this button is checked, the user can see
             # the colormap changements inline :

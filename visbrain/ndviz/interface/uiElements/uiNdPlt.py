@@ -255,7 +255,7 @@ class uiNdPlt(object):
         elif col == 'uniform':
             self._ndRndPan.setVisible(False)
             self._ndUniPan.setVisible(True)
-            uni = textline2color(self._ndUniColor.text())[0]
+            uni = textline2color(str(self._ndUniColor.text()))[0]
             self._ndDynText.setVisible(False)
 
         # Get variables :
@@ -326,9 +326,9 @@ class uiNdPlt(object):
 
     def _fcn_ndEdit(self):
         """Update title / labels of the Nd-plot."""
-        self._ndCanvas.set_info(title=self._ndTitleEdit.text(),
-                                xlabel=self._ndXlabEdit.text(),
-                                ylabel=self._ndYlabEdit.text())
+        self._ndCanvas.set_info(title=str(self._ndTitleEdit.text()),
+                                xlabel=str(self._ndXlabEdit.text()),
+                                ylabel=str(self._ndYlabEdit.text()))
 
     def _fcn_ndGridToggle(self):
         """Display or hide axis."""

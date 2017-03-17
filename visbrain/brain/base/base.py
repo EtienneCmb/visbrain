@@ -74,7 +74,6 @@ class base(CbarBase, transformations):
         if self.sources.stextmesh.name == 'NoneText':
             self.o_Text.setEnabled(False)
             self.grpText.setEnabled(False)
-            self.cmapSources.setEnabled(False)
 
         # Connectivity panel:
         if self.connect.mesh.name == 'NoneConnect':
