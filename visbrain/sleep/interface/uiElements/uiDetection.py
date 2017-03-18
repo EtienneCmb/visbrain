@@ -130,8 +130,9 @@ class uiDetection(object):
                 thr = self._ToolRemTh.value()
                 rem_only = self._ToolRemOnly.isChecked()
                 # Get REM indices :
-                index, _, _ = remdetect(self._data[k, :], self._sf,
-                                        self._hypno, rem_only, thr)
+                index, number, density, duration = remdetect(
+                                        self._data[k, :],
+                                        self._sf, self._hypno, rem_only, thr)
                 if index.size:
                     # Set them + color to ChannelPlot object :
                     self._chan.colidx[k]['color'] = self._defrem
@@ -159,7 +160,8 @@ class uiDetection(object):
                 tMax = self._ToolSpinTmax.value()
                 nrem_only = self._ToolSpinRemOnly.isChecked()
                 # Get Spindles indices :
-                index, number, density = spindlesdetect(self._data[k, :],
+                index, number, density, duration = spindlesdetect(
+                                                        self._data[k, :],
                                                         self._sf, thr,
                                                         self._hypno, nrem_only,
                                                         fMin, fMax, tMin, tMax)
@@ -218,7 +220,7 @@ class uiDetection(object):
         # Fill the location table (only if selected):
         if self._ToolRdSelected.isChecked() and ind.size:
             self._fcn_fillLocations(self._channels[k], method,
-                                    self._time[ind])
+                                    self._time[ind], duration)
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
@@ -226,35 +228,35 @@ class uiDetection(object):
     # =====================================================================
     # FILL LOCATION TABLE
     # =====================================================================
-    def _fcn_fillLocations(self, channel, kind, index):
+    def _fcn_fillLocations(self, channel, kind, index, duration):
         """Fill the location table."""
         # Clean table :
         self._scoreTable.setRowCount(0)
         if (kind in ['REM', 'Spindles']) and self._ToolRdSelected.isChecked():
-            # Define the lentgh of the table :
+            # Define the length of the table:
             self._DetectLocations.setRowCount(int(len(index) / 2))
-            # Get starting and ending index :
-            staInd, endInd = index[0::2], index[1::2]
+            # Get starting index:
+            staInd = index[0::2]
             # Fill the table :
-            for num, (k, i) in enumerate(zip(staInd, endInd)):
+            for num, (k, i) in enumerate(zip(staInd, duration)):
                 # Starting :
                 self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
                     str(k)))
-                # Ending :
+               # Duration :
                 self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
                     str(i)))
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     channel + '-' + kind))
         elif kind == 'Peaks':
-            # Define the lentgh of the table :
+            # Define the length of the table :
             self._DetectLocations.setRowCount(len(index))
             # Fill the table :
             for num, k in enumerate(index):
                 # Starting :
                 self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
                     str(k)))
-                # Ending :
+                # Duration :
                 self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
                     ''))
                 # Type :
@@ -268,4 +270,4 @@ class uiDetection(object):
         # Get starting and ending point :
         st = float(self._DetectLocations.item(row, 0).text())
         # Go to :
-        self._SlGoto.setValue(st - self._SigWin.value() / 2)
+        self._SlGoto.setValue(st - self._SigWin.value() / self._SigSlStep.value())
