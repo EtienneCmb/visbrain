@@ -15,6 +15,9 @@ Bug
 	+4 Si l'hypnograme est vide, il faut le cacher + cacher onglet info
 
 Etienne
+	-5 Scoring avancer fenêtre par fenêtre + (a / w / 1 / 2 / 3 / r) et ajout de points 
+	-5 Améliorer le départ d'un hypno vide
+	-5 Ajouter un bouton (radio) link qui link min/max anplitude
 	-5 Améliorer la gestion des amplitudes + bouton auto
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-4 Tableau Locations start / duration / stage + header electrode et type
