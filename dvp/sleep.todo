@@ -2,6 +2,7 @@ Bug
 	-5 Peut-être il faut vider la mémoire après downsampling.
 	-5 SEGMENTATION ERROR: à l fermeture, l'interface bug (fait bugger ipython). Continuous array? Voir modifs pyqt5, dernière ligne
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
+	-5 Convertir window
 	+4 Screenshot page complète mais par PyQt (pas vispy canvas)
 	+5 Bug quand aucun spindle détecté (à reproduire sur small + th=2. + wavelet)
 	+5 Bug d'affichage avec l'option REM only: à la ligne data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0
@@ -36,7 +37,7 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-5 Minimum duration sur REM? Spindles?
+	-5 Minimum duration sur REM?
 	-3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
 	+5 Intégration de la REM détection
 	+5 Intégration de la Spindle détection
