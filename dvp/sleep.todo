@@ -17,6 +17,7 @@ Bug
 Etienne
 	-5 Améliorer la gestion des amplitudes + bouton auto
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
+	-4 Tableau Locations start / duration / stage + header electrode et type
 	-3 Grilles peu lisibles
 	+5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
 	+5 Couleur spindles / REM devrait fitter avec l'hypno (self._spin, self._rem)
