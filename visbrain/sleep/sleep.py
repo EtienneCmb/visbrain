@@ -111,8 +111,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._chancolor = '#292824'
         # self._hypcolor = '#292824'
         # Hypnogram color :
-        self._hypcolor = {-1: '#8bbf56', 0: '#56bf8b', 1: '#568bbf',
-                          2: '#8b56bf', 3: '#bf568b', 4: '#bf5656'}
+        self._hypcolor = {-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
+                          2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}
         self._indicol = '#e74c3c'
         # Default spectrogram colormap :
         self._defcmap = 'viridis'
