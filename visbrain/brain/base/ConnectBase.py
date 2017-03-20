@@ -97,8 +97,7 @@ class ConnectBase(_colormap):
         self.a_position[self._Nindices, :] = self.xyz[self._indices, :]
 
     def _check_color(self):
-        """
-        """
+        """Check color variables."""
         # Colorby strength of connection :
         if self.colorby == 'strength':
             # Get non-zeros-values :
@@ -153,7 +152,6 @@ class ConnectBase(_colormap):
         """Update."""
         self._check_data()
         self._check_color()
-
 
     # ----------- LW -----------
     @property
