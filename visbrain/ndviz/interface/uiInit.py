@@ -16,81 +16,6 @@ from ...utils import color2vb
 __all__ = ['uiInit']
 
 
-class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
-    """Group and initialize the graphical elements and interactions.
-
-    Kargs:
-        bgcolor: tuple, optional, (def: (0.1, 0.1, 0.1))
-            Background color of the main window. The same background
-            will be used for the colorbar panel so that future figures
-            can be uniform.
-    """
-
-    def __init__(self, bgcolor=(.09, .09, .09), nd_title='Nd-plot',
-                 nd_xlabel='X axis', nd_ylabel='Y axis', od_title='1d-plot',
-                 od_xlabel='X axis', od_ylabel='Y axis'):
-        """Init."""
-        # Create the main window :
-        super(uiInit, self).__init__(None)
-        self.setupUi(self)
-        if self._savename is not None:
-            self.setWindowTitle('ndviz - '+self._savename)
-
-        # Initlialize all canvas :
-        self._ndCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=nd_title,
-                                    x_label=nd_xlabel, y_label=nd_ylabel,
-                                    name='ndCanvas')
-        self._1dCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=od_title,
-                                    x_label=od_xlabel, y_label=od_ylabel,
-                                    name='1dCanvas')
-        self._cbCanvas = AxisCanvas(axis=False, bgcolor=bgcolor,
-                                    name='cbCanvas')
-
-        # Add the canvas to the UI (_ndVizLayout layout) and colorbar:
-        self._NdVizLayout.addWidget(self._ndCanvas.canvas.native)
-        self._NdVizPanel.setVisible(True)
-        self._1dVizLayout.addWidget(self._1dCanvas.canvas.native)
-        self._1dVizPanel.setVisible(False)
-        self.cbpanel.addWidget(self._cbCanvas.canvas.native)
-
-        # Create the colorbar with the different objects :
-        self._cb = Cbar(self._cbCanvas.wc.scene)
-        self._cb.add_object('ndplt', label='Nd-plot',  fcn=self._fcn_ndUpdate,
-                            fcn_minmax=self._fcn_get_NdMinmax)
-        self._cb.add_object('line', label='Line', fcn=self._fcn_1dUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-        self._cb.add_object('spectrogram', label='Spectrogram',
-                            fcn=self._fcn_1dUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-        self._cb.add_object('histogram', label='None', fcn=self._fcn_1dUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-        self._cb.add_object('marker', label='Marker', fcn=self._fcn_1dUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-        self._cb.add_object('image', label='Image', fcn=self._fcn_imUpdate,
-                            fcn_minmax=self._fcn_get_1dMinmax)
-
-        # Set background color and hide quick settings panel :
-        self.bgcolor = tuple(color2vb(color=bgcolor, length=1)[0, 0:3])
-        self.q_widget.hide()
-
-        # Set background elements :
-        self._uiBgdRed.setValue(self.bgcolor[0])
-        self._uiBgdGreen.setValue(self.bgcolor[1])
-        self._uiBgdBlue.setValue(self.bgcolor[2])
-
-        # Set title / label :
-        self._ndTitleEdit.setText(nd_title)
-        self._ndXlabEdit.setText(nd_xlabel)
-        self._ndYlabEdit.setText(nd_ylabel)
-        self._1dTitleEdit.setText(od_title)
-        self._1dXlabEdit.setText(od_xlabel)
-        self._1dYlabEdit.setText(od_ylabel)
-
-        # Initialize shortcuts :
-        vbShortcuts.__init__(self, self._ndCanvas.canvas)
-        vbShortcuts.__init__(self, self._1dCanvas.canvas)
-
-
 class AxisCanvas(object):
     """Create a canvas with an embeded axis."""
 
@@ -301,3 +226,78 @@ class vbShortcuts(object):
             """
             # Display the rotation panel :
             pass
+
+
+class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
+    """Group and initialize the graphical elements and interactions.
+
+    Kargs:
+        bgcolor: tuple, optional, (def: (0.1, 0.1, 0.1))
+            Background color of the main window. The same background
+            will be used for the colorbar panel so that future figures
+            can be uniform.
+    """
+
+    def __init__(self, bgcolor=(.09, .09, .09), nd_title='Nd-plot',
+                 nd_xlabel='X axis', nd_ylabel='Y axis', od_title='1d-plot',
+                 od_xlabel='X axis', od_ylabel='Y axis'):
+        """Init."""
+        # Create the main window :
+        super(uiInit, self).__init__(None)
+        self.setupUi(self)
+        if self._savename is not None:
+            self.setWindowTitle('ndviz - '+self._savename)
+
+        # Initlialize all canvas :
+        self._ndCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=nd_title,
+                                    x_label=nd_xlabel, y_label=nd_ylabel,
+                                    name='ndCanvas')
+        self._1dCanvas = AxisCanvas(axis=True, bgcolor=bgcolor, title=od_title,
+                                    x_label=od_xlabel, y_label=od_ylabel,
+                                    name='1dCanvas')
+        self._cbCanvas = AxisCanvas(axis=False, bgcolor=bgcolor,
+                                    name='cbCanvas')
+
+        # Add the canvas to the UI (_ndVizLayout layout) and colorbar:
+        self._NdVizLayout.addWidget(self._ndCanvas.canvas.native)
+        self._NdVizPanel.setVisible(True)
+        self._1dVizLayout.addWidget(self._1dCanvas.canvas.native)
+        self._1dVizPanel.setVisible(False)
+        self.cbpanel.addWidget(self._cbCanvas.canvas.native)
+
+        # Create the colorbar with the different objects :
+        self._cb = Cbar(self._cbCanvas.wc.scene)
+        self._cb.add_object('ndplt', label='Nd-plot',  fcn=self._fcn_ndUpdate,
+                            fcn_minmax=self._fcn_get_NdMinmax)
+        self._cb.add_object('line', label='Line', fcn=self._fcn_1dUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
+        self._cb.add_object('spectrogram', label='Spectrogram',
+                            fcn=self._fcn_1dUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
+        self._cb.add_object('histogram', label='None', fcn=self._fcn_1dUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
+        self._cb.add_object('marker', label='Marker', fcn=self._fcn_1dUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
+        self._cb.add_object('image', label='Image', fcn=self._fcn_imUpdate,
+                            fcn_minmax=self._fcn_get_1dMinmax)
+
+        # Set background color and hide quick settings panel :
+        self.bgcolor = tuple(color2vb(color=bgcolor, length=1)[0, 0:3])
+        self.q_widget.hide()
+
+        # Set background elements :
+        self._uiBgdRed.setValue(self.bgcolor[0])
+        self._uiBgdGreen.setValue(self.bgcolor[1])
+        self._uiBgdBlue.setValue(self.bgcolor[2])
+
+        # Set title / label :
+        self._ndTitleEdit.setText(nd_title)
+        self._ndXlabEdit.setText(nd_xlabel)
+        self._ndYlabEdit.setText(nd_ylabel)
+        self._1dTitleEdit.setText(od_title)
+        self._1dXlabEdit.setText(od_xlabel)
+        self._1dYlabEdit.setText(od_ylabel)
+
+        # Initialize shortcuts :
+        vbShortcuts.__init__(self, self._ndCanvas.canvas)
+        vbShortcuts.__init__(self, self._1dCanvas.canvas)
