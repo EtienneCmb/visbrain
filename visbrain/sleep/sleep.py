@@ -96,11 +96,6 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 # Load hypnogram :
                 hypno = load_hypno(hypno_file, sf)
 
-        # Empty hypnogram :
-        if hypno is None:
-            self._HypW.setVisible(False)
-            self._PanHypViz.setChecked(False)
-        # print('ON load : ', id(data), id(hypno))
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
