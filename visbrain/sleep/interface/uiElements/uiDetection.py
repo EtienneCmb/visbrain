@@ -200,6 +200,7 @@ class uiDetection(object):
                                     look)
                 # Get index :
                 ind = self._peak.index
+                duration = 0
                 # Report index on hypnogram :
                 if toReport:
                     self._hyp.set_report(self._time, self._peak.index,
@@ -220,7 +221,7 @@ class uiDetection(object):
         # Fill the location table (only if selected):
         if self._ToolRdSelected.isChecked() and ind.size:
             self._fcn_fillLocations(self._channels[k], method,
-                                    self._time[ind], duration)
+                                    ind, duration)
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
@@ -230,6 +231,9 @@ class uiDetection(object):
     # =====================================================================
     def _fcn_fillLocations(self, channel, kind, index, duration):
         """Fill the location table."""
+        ref = ['Wake', 'N1', 'N2', 'N3', 'REM', 'ART']
+        # Set header label :
+        self._DetectLocHead.setText(kind + ' detection on channel ' + channel)
         # Clean table :
         self._scoreTable.setRowCount(0)
         if (kind in ['REM', 'Spindles']) and self._ToolRdSelected.isChecked():
@@ -241,13 +245,13 @@ class uiDetection(object):
             for num, (k, i) in enumerate(zip(staInd, duration)):
                 # Starting :
                 self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
-                    str(k)))
-               # Duration :
+                    str(self._time[k])))
+                # Duration :
                 self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
                     str(i)))
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
-                    channel + '-' + kind))
+                    ref[int(self._hypno[k])]))
         elif kind == 'Peaks':
             # Define the length of the table :
             self._DetectLocations.setRowCount(len(index))
@@ -255,13 +259,13 @@ class uiDetection(object):
             for num, k in enumerate(index):
                 # Starting :
                 self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
-                    str(k)))
+                    str(self._time[k])))
                 # Duration :
                 self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
                     ''))
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
-                    channel + '-' + kind))
+                    ref[int(self._hypno[k])]))
 
     def _fcn_gotoLocation(self):
         """Go to the selected row REM / spindles / peak."""
