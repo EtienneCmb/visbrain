@@ -15,7 +15,7 @@ Brain is a flexible graphical user interface for 3D visualizations on an MNI bra
 
     from visbrain import Brain
 
-Visit this page for a set of `examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/vbrain>`_.
+Visit this page for a set of `examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/brain>`_.
 
 Objects
 -------
