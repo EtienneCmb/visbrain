@@ -320,7 +320,7 @@ class uiSettings(object):
         for k, i in zip(self._hypYLabels, ref):
             k.setStyleSheet("QLabel")
         self._hypYLabels[hypref + 1].setStyleSheet("QLabel {color: " +
-                                                   self._indicol + ";}")
+                                                   self._hypcolor[hypref]+";}")
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""

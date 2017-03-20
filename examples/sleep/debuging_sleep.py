@@ -4,7 +4,7 @@ import numpy as np
 from visbrain import Sleep
 from scipy.io import loadmat
 
-torun = 'small'
+torun = 'big'
 
 ###########################################################################
 # LOAD BY GUI :

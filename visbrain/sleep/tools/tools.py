@@ -142,7 +142,7 @@ class HypnoEdition(object):
 
     def __init__(self, sf, hypno_obj, data, time, canvas, yaxis, enable=False,
                  parent=None, color_cursor='red', color_static='gray',
-                 color_active='green', color_dragge='blue', size=7.,
+                 color_active='green', color_dragge='blue', size=6.,
                  fcn=None):
         """Init."""
         # =================== MOUSE FUNCTIONS ===================
