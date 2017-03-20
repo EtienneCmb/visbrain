@@ -339,7 +339,6 @@ class uiSettings(object):
         else:
             self._slOnStart = True
 
-
     def _fcn_sliderWinSelection(self):
         """Move slider using window spin."""
         self._SlVal.setValue(self._SlGoto.value() / self._SigSlStep.value())
@@ -411,3 +410,24 @@ class uiSettings(object):
     def on_mouse_wheel(self, event):
         """Executed function on mouse wheel."""
         self._SlVal.setValue(self._SlVal.value() + event.delta[1])
+
+    # =====================================================================
+    # HYPNO
+    # =====================================================================
+    def _add_stage_on_win(self, stage):
+        """Change the stage on the current window."""
+        # Get the window :
+        win = self._SigWin.value()
+        val = self._SlVal.value()
+        step = self._SigSlStep.value()
+        xlim = (val*step, val*step+win)
+        # Find closest time index :
+        t = [0, 0]
+        t[0] = round(np.abs(self._time - xlim[0]).argmin())
+        t[1] = round(np.abs(self._time - xlim[1]).argmin())
+        # Set the stage :
+        self._hypno[t[0]:t[1]] = stage
+        self._hyp.set_data(self._sf, self._hypno, self._time)
+        # Update scoring table :
+        self._fcn_Hypno2Score()
+        self._fcn_Score2Hypno()

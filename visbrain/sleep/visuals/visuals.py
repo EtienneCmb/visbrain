@@ -553,12 +553,14 @@ class vbShortcuts(object):
             """
             if event.text == ' ':
                 pass
+            # ------------ SLIDER ------------ 
             if event.text == 'n':  # Next (slider)
                 self._SlGoto.setValue(
                                 self._SlGoto.value() + self._SigSlStep.value())
             if event.text == 'b':  # Before (slider)
                 self._SlGoto.setValue(
                                 self._SlGoto.value() - self._SigSlStep.value())
+            # ------------  VISIBILITY ------------ 
             if event.text == 's':  # Toggle visibility on spec
                 self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
                 self._fcn_specViz()
@@ -571,6 +573,19 @@ class vbShortcuts(object):
                 self._PanHypZoom.setChecked(not viz)
                 self._PanSpecZoom.setChecked(not viz)
                 self._fcn_Zooming()
+            # ------------ SCORING ------------ 
+            if event.text == 'a':
+                self._add_stage_on_win(-1)
+            if event.text == 'w':
+                self._add_stage_on_win(0)
+            if event.text == '1':
+                self._add_stage_on_win(1)
+            if event.text == '2':
+                self._add_stage_on_win(2)
+            if event.text == '3':
+                self._add_stage_on_win(3)
+            if event.text == 'r':
+                self._add_stage_on_win(4)
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
