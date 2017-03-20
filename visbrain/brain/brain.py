@@ -124,6 +124,18 @@ class Brain(uiInit, uiElements, base, userfcn):
             Control the dynamic opacity. For example, if c_dynamic=(0, 1),
             strong connections will be more opaque than weak connections.
 
+        c_colorby: string, optional, (def: 'strength')
+            Define how to color connexions. Use 'strength' if the color has to
+            be modulate by the connectivity strength or use 'count' if the
+            color depends on the number of connexions per node.
+
+        c_colval: dict, optional, (def: None)
+            Define colors for a specifics values. For example, c_colval=
+            {1.5: 'red', 2.1: 'blue'} every connexions equal to 1.5 are going
+            to be red and blue for 2.1. Use np.nan: 'gray' in order to define
+            the color of all connexions that are not in the dictionary
+            otherwise they are going to be ignored.
+
         c_linewidth: float, optional, (def: 4.0)
             Linewidth of connectivity lines.
 

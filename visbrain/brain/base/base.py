@@ -47,7 +47,7 @@ class base(CbarBase, transformations):
         self.sources = SourcesBase(**kwargs)
         self.connect = ConnectBase(c_xyz=self.sources.xyz, **kwargs)
         self.area = AreaBase(scale_factor=self.atlas._scaleMax,
-                             name='NoneArea', select=[4, 6], color='#ab4642')
+                             name='NoneArea', select=None, color='#ab4642')
 
         # Initialize colorbar base  (by default, with sources base):
         self.cb = CbarBase(self.view.cbwc, cb_fontcolor=self._cbfontcolor,
@@ -77,6 +77,9 @@ class base(CbarBase, transformations):
         # Connectivity panel:
         if self.connect.mesh.name == 'NoneConnect':
             self.QuickSettings.setTabEnabled(3, False)
+            self.cmapConnect.setEnabled(False)
+            self.o_Connect.setEnabled(False)
+        elif self.connect.colval is not None:
             self.cmapConnect.setEnabled(False)
             self.o_Connect.setEnabled(False)
         self._lw = kwargs.get('c_linewidth', 4.)

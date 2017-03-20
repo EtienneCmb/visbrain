@@ -12,7 +12,7 @@ import numpy as np
 from collections import Counter
 
 from vispy import gloo, visuals
-from ....utils import array2colormap, normalize
+from ....utils import array2colormap, normalize, color2vb
 
 
 __all__ = ['ConnectVisual']
@@ -67,6 +67,13 @@ class ConnectVisual(visuals.Visual):
             'count' so that the color materialize the number of connections per
             node.
 
+        colval: dict, optional, (def: None)
+            Define colors for a specifics values. For example, c_colval=
+            {1.5: 'red', 2.1: 'blue'} every connexions equal to 1.5 are going
+            to be red and blue for 2.1. Use np.nan: 'gray' in order to define
+            the color of all connexions that are not in the dictionary
+            otherwise they are going to be ignored.
+
         dynamic: tuple, optional, (def: None)
             Dynamic transparency. The dynamic parameter must be a tuple of two
             floats, each one between 0 (include) and 1 (include) and
@@ -101,8 +108,8 @@ class ConnectVisual(visuals.Visual):
     """
 
     def __init__(self, pos, connect, select=None, colorby='strength',
-                 dynamic=None, cmap='viridis', clim=None, vmin=None,
-                 under=None, vmax=None, over=None):
+                 dynamic=None, colval=None, cmap='viridis', clim=None,
+                 vmin=None, under=None, vmax=None, over=None):
         """Init."""
         # Initialize the vispy.Visual class with the vertex / fragment buffer :
         visuals.Visual.__init__(self, vertex_shader, fragment_shader)
@@ -113,6 +120,7 @@ class ConnectVisual(visuals.Visual):
         self.select = select
         self.colorby = colorby
         self.dynamic = dynamic
+        self.colval = colval
         self._cmap = cmap
         self._vmin, self._vmax = vmin, vmax
         self._under, self._over = under, over
@@ -180,6 +188,13 @@ class ConnectVisual(visuals.Visual):
         except:
             connect = np.ma.masked_array(connect, mask=True)
         connect.mask[select.nonzero()] = False
+        # Use specific color values :
+        if (self.colval is not None) and isinstance(self.colval, dict):
+            mask = np.ones_like(connect.mask)
+            for k, v in zip(self.colval.keys(), self.colval.values()):
+                mask[connect.data == k] = False
+                self.colval[k] = color2vb(v)
+            connect.mask = mask
         self.connect = connect
 
     def _check_color(self, colorby, cmap, dynamic):
@@ -339,17 +354,24 @@ class ConnectVisual(visuals.Visual):
         self._MinMax = (self._all_nnz.min(), self._all_nnz.max())
 
         # Get associated colormap :
-        colormap = array2colormap(self._all_nnz, cmap=cmap, vmin=vmin,
-                                  vmax=vmax, under=under, over=over, clim=clim)
+        if (self.colval is not None) and isinstance(self.colval, dict):
+            # Build a_color and send to buffer :
+            self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)
+            for k, v in zip(self.colval.keys(), self.colval.values()):
+                self.a_color[self._all_nnz == k, :] = v
+        else:
+            colormap = array2colormap(self._all_nnz, cmap=cmap, vmin=vmin,
+                                      vmax=vmax, under=under, over=over,
+                                      clim=clim)
 
-        # Dynamic alpha :
-        if (dynamic is not False) and isinstance(dynamic, tuple):
-            colormap[:, 3] = normalize(self._all_nnz, tomin=dynamic[0],
-                                       tomax=dynamic[1])
+            # Dynamic alpha :
+            if (dynamic is not False) and isinstance(dynamic, tuple):
+                colormap[:, 3] = normalize(self._all_nnz, tomin=dynamic[0],
+                                           tomax=dynamic[1])
 
-        # Build a_color and send to buffer :
-        self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)
-        self.a_color[self._Nindices, :] = colormap[self._loopIndex, :]
+            # Build a_color and send to buffer :
+            self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)
+            self.a_color[self._Nindices, :] = colormap[self._loopIndex, :]
         self.update_color()
 
     def set_opacity(self, alpha=1.):
