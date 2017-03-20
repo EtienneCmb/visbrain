@@ -2,8 +2,6 @@
 
 import numpy as np
 
-from vispy import scene
-
 from ...utils import peakdetect, color2vb, transient
 
 __all__ = ["Tools"]

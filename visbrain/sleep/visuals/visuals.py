@@ -559,10 +559,10 @@ class vbShortcuts(object):
             if event.text == 'b':  # Before (slider)
                 self._SlGoto.setValue(
                                 self._SlGoto.value() - self._SigSlStep.value())
-            if event.text == '0':  # Toggle visibility on spec
+            if event.text == 's':  # Toggle visibility on spec
                 self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
                 self._fcn_specViz()
-            if event.text == '1':  # Toggle visibility on hypno
+            if event.text == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
             if event.text == 'z':  # Enable zoom
