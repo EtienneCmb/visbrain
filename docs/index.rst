@@ -28,23 +28,16 @@ Finally, install visbrain :
 What's new?
 ***********
 
-* New in version v0.1.4:
+* New in version v0.1.4
+
   * Python 2 compatibility
   * Sleep module and doc improvements
-* New in version v0.1.2:
+
+* New in version v0.1.2
+
   * vbrain has been renamed to Brain()
   * exportation improvements
   * New screenshot tutorial
-* New in version v0.1.1:
-  * vbrain GUI improvements (design, source's panel and ROI)
-  * better control of ROI
-* New in version v0.1.1:
-	* vbrain GUI improvements (design, source's panel and ROI)
-	* better control of ROI
-* New in version v0.1.0:
-	* New module :ref:`Sleep`
-* New in version v0.0.4:
-	* New module :ref:`Ndviz`
 
 Contents:
 *********

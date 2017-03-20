@@ -16,7 +16,7 @@ Sleep is a graphical user interface dedicated to visualization and scoring of sl
 * Dynamic display of polysomnographic data, spectrogram and hypnogram, with individual real-time adjustment of channel amplitude and visibility. 
 * Spectrogram display with several controllable parameters (e.g. frequency, channel, colormap)
 * Hypnogram editing and saving functions, as well as real-time computation of the main sleep parameters (see Hypnogram section). 
-* Implementation of several semi-automatic detection method such as sleep spindles, rapid eye movements or peak detection. These can be performed either on single or multiple channels and report where each one of them on the hypnogram or inside a table. Each detection comes with several parameters that the user * can adjust to find the optimal detection. 
+* Implementation of several semi-automatic detection method such as sleep spindles, rapid eye movements or peak detection. These can be performed either on single or multiple channels and report where each one of them on the hypnogram or inside a table. Each detection comes with several parameters that the user can adjust to find the optimal detection. 
 * Several others signal processing tools such as de-mean, de-trend and filtering. Those tools are directly applied to each channel and to the spectrogram
 * Nice and intuitive interface to help you scroll and explore your data.
 
@@ -41,7 +41,7 @@ Data files
 Here’s the list of currently supported extensions for data files:
 
 * BrainVision (**.eeg**)
-* ELAN – (lien: http://elan.lyon.inserm.fr) (**.eeg**)
+* `ELAN <http://elan.lyon.inserm.fr>`_ (**.eeg**)
 * European Data Format (**.edf**)
 
 .. note::
@@ -55,7 +55,7 @@ Hypnogram
 
 Here's the list of supported extensions for hypnogram files : 
 
-* **.hyp** (ELAN)
+* **.hyp** (`ELAN <http://elan.lyon.inserm.fr>`_)
 * **.txt**
 * **.csv**
 
@@ -97,9 +97,11 @@ Load your files
 
 There is three way for loading your files :
 
-- **Load from the GUI**:
-- **Load from path**:
-- **Load raw data**:
+* :ref:`loadfromgui`
+* :ref:`loadfrompath`
+* :ref:`loadfromraw`
+
+.. _loadfromgui:
 
 From the GUI
 ~~~~~~~~~~~~
@@ -119,6 +121,8 @@ Don't send anything, just open the interface and you will have a popup window as
 
    Popup window for loading your files.
 
+.. _loadfrompath:
+
 From path
 ~~~~~~~~~
 
@@ -135,6 +139,8 @@ Instead of leaving inputs arguments empty, send the path to the data :
     # You're not forced to give a hypnogram. If you prefer to start from a fresh empty one, use :
     # hfile = None or ignore passing this argument.
     Sleep(file=dfile, hypno_file=hfile).show()
+
+.. _loadfromraw:
 
 Raw data
 ~~~~~~~~
@@ -244,7 +250,7 @@ This is probably the most usefull editing method. While you are navigating acros
 Keys                    Description
 ==============          =================
 a                       Artefact
-0                       Wake stage
+w                       Wake stage
 1                       N1 stage
 2                       N2 stage
 3                       N3 stage
@@ -301,6 +307,7 @@ Detection
 The Detection panel offers several semi-automatic algorithms for the detection of sleep features such as sleep spindles, rapid eyes movements and peaks. All detection types shared the following parameters :
 
 * *Apply on* : choose on which channel to perform the detection
+
   * Selected : apply detection on selected channel
   * Visible : apply detection on all visible channels
   * All : apply detection on all channels (even those that are hidden)
@@ -377,7 +384,7 @@ b                       Previous window
 n                       Next window
 mouse wheel             Move the current window
 a                       Insert Artefact in the hypnogram
-0                       Insert Wake stage in the hypnogram
+w                       Insert Wake stage in the hypnogram
 1                       Insert N1 stage in the hypnogram
 2                       Insert N2 stage in the hypnogram
 3                       Insert N3 stage in the hypnogram
