@@ -297,10 +297,21 @@ class uiSettings(object):
             self._timecam.rect = (xlim[0], 0., win, 1.)
 
         # ================= TEXT INFO =================
+        # Get unit and convert:
+        unit = self._slRules.currentText()
+        if unit == 'seconds':
+            fact = 1.
+        elif unit == 'minutes':
+            fact = 60.
+        elif unit == 'hours':
+            fact = 3600.
+        xconv = np.round((1000*xlim[0]/fact, 1000*xlim[1]/fact))/1000
+        # Format string :
         hypref = int(self._hypno[t[0]])
         items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
-        txt = self._slTxtFormat.format(start=str(xlim[0]), end=str(xlim[1]),
+        txt = self._slTxtFormat.format(start=str(xconv[0]), end=str(xconv[1]),
                                        unit=unit, conv=items[hypref])
+        # Set text :
         self._SlText.setText(txt)
         self._SlText.setFont(self._font)
 
