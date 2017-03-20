@@ -16,45 +16,6 @@ from ...utils import array2colormap, color2vb, filt
 __all__ = ["visuals"]
 
 
-class visuals(object):
-    """Create the visual objects to be added to the scene."""
-
-    def __init__(self, sf, data, time, channels, hypno, cameras=None,
-                 method='gl', **kwargs):
-        """Init."""
-        # =================== CHANNELS ===================
-        self._chan = ChannelPlot(channels, time, camera=cameras[0],
-                                 method=method, color=self._chancolor,
-                                 width=self._lw, color_detection=self._indicol,
-                                 parent=self._chanCanvas,
-                                 fcn=self._fcn_sliderMove)
-
-        # =================== SPECTROGRAM ===================
-        # Create a spectrogram object :
-        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
-                                 parent=self._specCanvas.wc.scene)
-        self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
-        # Create a visual indicator for spectrogram :
-        self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
-                                  parent=self._specCanvas.wc.scene)
-        self._specInd.set_data(xlim=(0, 30), ylim=(0, 20))
-
-        # =================== HYPNOGRAM ===================
-        # Create a hypnogram object :
-        self._hyp = Hypnogram(time, camera=cameras[2], color=self._hypcolor,
-                              width=self._lwhyp,
-                              parent=self._hypCanvas.wc.scene)
-        self._hyp.set_data(sf, hypno, time)
-        # Create a visual indicator for hypnogram :
-        self._hypInd = Indicator(name='hypno_indic', visible=True, alpha=.3,
-                                 parent=self._hypCanvas.wc.scene)
-        self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
-
-        vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
-        for k in vbcanvas:
-            vbShortcuts.__init__(self, k.canvas)
-
-
 """
 ###############################################################################
 # OBJECTS
@@ -625,3 +586,42 @@ class vbShortcuts(object):
             """
             # Display the rotation panel :
             pass
+
+
+class visuals(vbShortcuts):
+    """Create the visual objects to be added to the scene."""
+
+    def __init__(self, sf, data, time, channels, hypno, cameras=None,
+                 method='gl', **kwargs):
+        """Init."""
+        # =================== CHANNELS ===================
+        self._chan = ChannelPlot(channels, time, camera=cameras[0],
+                                 method=method, color=self._chancolor,
+                                 width=self._lw, color_detection=self._indicol,
+                                 parent=self._chanCanvas,
+                                 fcn=self._fcn_sliderMove)
+
+        # =================== SPECTROGRAM ===================
+        # Create a spectrogram object :
+        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
+                                 parent=self._specCanvas.wc.scene)
+        self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
+        # Create a visual indicator for spectrogram :
+        self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
+                                  parent=self._specCanvas.wc.scene)
+        self._specInd.set_data(xlim=(0, 30), ylim=(0, 20))
+
+        # =================== HYPNOGRAM ===================
+        # Create a hypnogram object :
+        self._hyp = Hypnogram(time, camera=cameras[2], color=self._hypcolor,
+                              width=self._lwhyp,
+                              parent=self._hypCanvas.wc.scene)
+        self._hyp.set_data(sf, hypno, time)
+        # Create a visual indicator for hypnogram :
+        self._hypInd = Indicator(name='hypno_indic', visible=True, alpha=.3,
+                                 parent=self._hypCanvas.wc.scene)
+        self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
+
+        vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
+        for k in vbcanvas:
+            vbShortcuts.__init__(self, k.canvas)
