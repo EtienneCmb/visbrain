@@ -543,16 +543,28 @@ class vbShortcuts(object):
             # ------------ SCORING ------------
             if event.text == 'a':
                 self._add_stage_on_win(-1)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
             if event.text == 'w':
                 self._add_stage_on_win(0)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
             if event.text == '1':
                 self._add_stage_on_win(1)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
             if event.text == '2':
                 self._add_stage_on_win(2)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
             if event.text == '3':
                 self._add_stage_on_win(3)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
             if event.text == 'r':
                 self._add_stage_on_win(4)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):

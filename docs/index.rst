@@ -28,6 +28,9 @@ Finally, install visbrain :
 What's new?
 ***********
 
+* New in version v0.1.4:
+  * Python 2 compatibility
+  * Sleep module and doc improvements
 * New in version v0.1.2:
   * vbrain has been renamed to Brain()
   * exportation improvements

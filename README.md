@@ -36,7 +36,7 @@ The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard
 - Spindles / REM / Peaks detection and report results on each channel and hypnogram
 - Signal processing tools (filtering...)
 
-![sleep](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_full.png "Sleep : load, visualize and edit sleep data")
+![sleep](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_main.png "Sleep : load, visualize and edit sleep data")
 
 ### Ndviz
 
