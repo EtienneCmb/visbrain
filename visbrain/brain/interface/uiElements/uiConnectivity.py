@@ -14,8 +14,7 @@ class uiConnectivity(object):
         self.uiConnectShow.clicked.connect(self._toggle_connect_visible)
 
         # Line width :
-        self.view.canvas.context.set_line_width(self._lw)
-        self.uiConnect_lw.setValue(self._lw)
+        self.uiConnect_lw.setValue(self.connect.lw)
         self.uiConnect_lw.valueChanged.connect(self._update_lw)
 
         # Colorby :
@@ -48,9 +47,8 @@ class uiConnectivity(object):
         """
         # Get line width (LW) from the button :
         self._lw = self.uiConnect_lw.value()
-        # Set the LW to the canvas :
-        self.view.canvas.context.set_line_width(self._lw)
-        self.view.canvas.update()
+        # Set the LW :
+        self.connect.lw = self._lw
 
     def _set_color(self):
         """Graphic control of color connectivity settings.
@@ -72,15 +70,7 @@ class uiConnectivity(object):
         self._getMinMax_dyn()
 
         # Update color :
-        self.connect.mesh.set_color(colorby=colorby,
-                                    dynamic=self.connect.dynamic,
-                                    **self.connect._cb)
-
-        # Be sure to have the latest updated (Min, Max) :
-        self.connect._MinMax = self.connect.mesh.get_MinMax
-
-        # Update the mesh :
-        self.connect.mesh.update()
+        self.connect._check_color()
 
     def _getMinMax_dyn(self):
         """Dynamic lines opacity.
@@ -110,8 +100,6 @@ class uiConnectivity(object):
             return 1
         else:
             raise ValueError('c_colorby not in ["strength", "count"]')
-
-        self.connect._MinMax = self.connect.mesh.get_MinMax
 
     def _ShowHide(self):
         """Show or hide connections between nodes."""
