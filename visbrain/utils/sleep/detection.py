@@ -20,7 +20,7 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 
 def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
                    max_freq=14., min_dur_ms=500, max_dur_ms=1500,
-                   method='wavelet'):
+                   method='wavelet', min_distance_ms=1000):
     """Perform a sleep spindles detection.
 
     Args:
@@ -38,7 +38,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
             Hypnogram vector, same length as elec
             Vector with only 0 if no hypnogram is loaded
 
-        rem_only: boolean
+        nrem_only: boolean
             Perfom detection only on NREM sleep period
 
     Kargs:
@@ -51,6 +51,10 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
         method: string
             Method to extract complex decomposition. Use either 'hilbert' or
             'wavelet'.
+
+        min_distance_ms: int, optional (def 1000)
+            Minimum distance (in ms) between two spindles to consider them as
+            two distinct spindles
 
     Return:
         idx_spindles: np.ndarray
@@ -109,7 +113,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 
         # Get where spindles start / end and duration :
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
-                                                                 sf)
+                                                               sf)
         # Get where min_dur < spindles duration < max_dur :
         good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
                                            duration_ms < max_dur_ms))[0]
@@ -117,6 +121,9 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
 
         idx_sup_thr = idx_sup_thr[good_idx]
+
+        # Fill gap between spindles separated by less than min_distance_ms
+        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
 
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
@@ -155,7 +162,7 @@ def _events_duration(index, sf):
     # Get spindles number :
     number = bool_break.sum()
     # Build starting / ending spindles index :
-    idx_start = np.hstack([np.array([0]), np.where(bool_break)[0]+1])
+    idx_start = np.hstack([np.array([0]), np.where(bool_break)[0] + 1])
     idx_stop = np.hstack((idx_start[1::], len(index)))
     # Compute duration :
     duration_ms = np.diff(idx_start) * (1000. / sf)
@@ -193,13 +200,48 @@ def _events_removal(idx_start, idx_stop, good_dur):
     else:
         return np.array([], dtype=int)
 
+def _events_distance_fill(index, min_distance_ms, sf):
+    """Remove events that do not have the good duration.
+
+    Args:
+        index: np.ndarray
+            Indices of supra-threshold events.
+
+        min_distance_ms: int
+            Minimum distance (ms) between two events to consider them as two
+            distinct events
+
+        sf: int
+            Sampling frequency of the data (Hz)
+
+    Return:
+        f_index: np.ndarray
+            Filled (corrected) Indices of supra-threshold events
+    """
+    # Convert min_distance_ms
+    min_distance = min_distance_ms/ 1000. * sf
+    idx_diff = np.diff(index)
+    idx_distance = np.where(idx_diff > 1)[0]
+    distance = idx_diff[idx_diff > 1]
+    bad = idx_distance[np.where(distance < min_distance)[0]]
+    # Fill gap between events separated with less than min_distance_ms
+    if len(bad) > 0:
+
+        fill = np.hstack([np.arange(index[j]+1, index[j+1])
+                            for i, j in enumerate(bad)])
+        f_index = np.sort(np.append(index, fill))
+        return f_index
+    else:
+        return index
+
+
 ###########################################################################
 # REM DETECTION
 ###########################################################################
 
 
-def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=100,
-              min_distance_ms=100, moving_ms=100, deriv_ms=40):
+def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
+              max_dur_ms=500, min_distance_ms=100, moving_ms=100, deriv_ms=40):
     """Perform a rapid eye movement (REM) detection.
 
     Function to perform a semi-automatic detection of rapid eye movements
@@ -226,9 +268,9 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=100,
         min_dur_ms: int, optional (def 30)
             Minimum duration (ms) of rapid eye movement
 
-       min_distance_ms: int, optional (def 100)
-            Minimum distance (ms) between two saccades to consider them as
-            unique events
+        min_distance_ms: int, optional (def 50)
+            Minimum distance (ms) between two saccades to consider them as two
+            distinct events
 
         moving_ms: int, optional (def 100)
             Time (ms) window of the moving average
@@ -282,17 +324,17 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=100,
     if idx_sup_thr.size:
 
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
-                                                                 sf)
+                                                               sf)
 
-        # Get where min_dur < REM duration:
-        good_dur = np.where(duration_ms > min_dur_ms)[0]
+        # Get where min_dur < REM duration
+        good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
+                                           duration_ms < max_dur_ms))[0]
         good_dur = np.append(good_dur, len(good_dur))
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
-
         idx_sup_thr = idx_sup_thr[good_idx]
 
-        # Remove first event
-        idx_sup_thr = np.delete(idx_sup_thr, 0)
+        # Find REMs separated by less than min_distance_ms
+        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
 
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
