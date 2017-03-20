@@ -46,8 +46,14 @@ class ConnectBase(_colormap):
             self.mesh = visu.Line(name='Connectivity', antialias=True)
             self.mesh.set_gl_state('translucent', depth_test=True)
             self.update()
+            self._interp()
+            0/0
         else:
             self.mesh = visu.Line(name='NoneConnect')
+
+    def __len__(self):
+        """Return the number of sources."""
+        return self.xyz.shape[0]
 
     def _check_data(self):
         """Check data and color."""
@@ -104,16 +110,12 @@ class ConnectBase(_colormap):
             nnz_values = self.connect.compressed()
             # Concatenate in alternance all non-zero values :
             self._all_nnz = np.c_[nnz_values, nnz_values].flatten()
-            # Get looping indices :
-            self._loopIndex = self._Nindices
 
         # Colorby count on each node :
         elif self.colorby == 'count':
             # Count the number of occurence for each node :
             node_count = Counter(np.ravel([self._nnz_x, self._nnz_y]))
             self._all_nnz = np.array([node_count[k] for k in self._indices])
-            # Get looping indices :
-            self._loopIndex = self._Nindices
 
         # Get (min / max) :
         self._MinMax = (self._all_nnz.min(), self._all_nnz.max())
@@ -142,11 +144,14 @@ class ConnectBase(_colormap):
 
             # Build a_color and send to buffer :
             self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)
-            self.a_color[self._Nindices, :] = colormap[self._loopIndex, :]
+            self.a_color[self._Nindices, :] = colormap[self._Nindices, :]
 
         # Set to data :
         self.mesh.set_data(pos=self.a_position, color=self.a_color,
                            connect='segments', width=self.lw)
+
+    def _interp(self):
+        cut = np.vsplit(self.a_position, int(self.a_position.shape[0]/2))
 
     def update(self):
         """Update."""
