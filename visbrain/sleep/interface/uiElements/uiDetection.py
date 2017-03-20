@@ -235,7 +235,7 @@ class uiDetection(object):
         # Set header label :
         self._DetectLocHead.setText(kind + ' detection on channel ' + channel)
         # Clean table :
-        self._scoreTable.setRowCount(0)
+        self._DetectLocations.setRowCount(0)
         if (kind in ['REM', 'Spindles']) and self._ToolRdSelected.isChecked():
             # Define the length of the table:
             self._DetectLocations.setRowCount(int(len(index) / 2))
