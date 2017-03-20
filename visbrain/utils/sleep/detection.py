@@ -18,13 +18,13 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
 # SPINDLES DETECTION
 ###########################################################################
 
-def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
+def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
                    max_freq=14., min_dur_ms=500, max_dur_ms=1500,
-                   method='hilbert'):
+                   method='wavelet'):
     """Perform a sleep spindles detection.
 
     Args:
-        data: np.ndarray
+        elec: np.ndarray
             eeg signal (preferably central electrodes)
 
         sf: float
@@ -35,7 +35,7 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
             Threshold is defined as: mean + X * std(derivative)
 
         hypno: np.ndarray
-            Hypnogram vector, same length as data
+            Hypnogram vector, same length as elec
             Vector with only 0 if no hypnogram is loaded
 
         rem_only: boolean
@@ -67,10 +67,12 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
     hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
 
     if hypLoaded:
-        data.copy()[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
+        data = elec.copy()
+        data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
         length = np.count_nonzero(data)
         idx_zero = np.where(data == 0)[0]
     else:
+        data = elec
         length = max(data.shape)
 
     # Get complex decomposition of filtered data :
@@ -106,82 +108,73 @@ def spindlesdetect(data, sf, threshold, hypno, nrem_only, min_freq=12.,
     if idx_sup_thr.size > 0:
 
         # Get where spindles start / end and duration :
-        _, duration_ms, idx_start, idx_stop = _spindles_duration(idx_sup_thr,
+        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
                                                                  sf)
         # Get where min_dur < spindles duration < max_dur :
         good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
                                            duration_ms < max_dur_ms))[0]
 
-        good_idx = _spindles_removal(idx_start, idx_stop, good_dur)
+        good_idx = _events_removal(idx_start, idx_stop, good_dur)
 
         idx_sup_thr = idx_sup_thr[good_idx]
 
-        # Frequency criteria
-        # To Do: Instantaneous frequency on original signal ?
-        # idx_insta_freq = np.array(
-        # np.where(
-        # (inst_freq[idx_sup_thr] > min_freq) & (
-        # inst_freq[idx_sup_thr] < max_freq))).flatten()
-        # idx_sup_thr = idx_sup_thr[idx_insta_freq]
-
-        number, duration_ms, _, _ = _spindles_duration(idx_sup_thr, sf)
+        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
 
+        return idx_sup_thr, number, density, duration_ms
+
     else:
-        number = 0
-        density = 0.
-
-    return idx_sup_thr, number, density
+        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
 
-def _spindles_duration(index, sf):
-    """Compute spindles duration in ms.
+def _events_duration(index, sf):
+    """Compute spindles/REM duration in ms.
 
     Args:
         index: np.ndarray
-            Index of spindle locations.
+            Index of events locations.
 
         sf: float
             The sampling frequency.
 
     Returns:
         number: int
-            Number of spindles
+            Number of events
 
         duration_ms: np.ndarray
-            Duration of each spindle
+            Duration of each event
 
         idx_start: np.ndarray
-            Array of integers where each spindle begin.
+            Array of integers where each event begin.
 
         idx_end: np.ndarray
-            Array of integers where each spindle finish.
+            Array of integers where each event finish.
     """
     # Find boolean values where each spindle start :
     bool_break = (index[1:] - index[:-1]) != 1
     # Get spindles number :
     number = bool_break.sum()
     # Build starting / ending spindles index :
-    idx_start = np.hstack([np.array([0]), np.where(bool_break)[0]])
-    idx_stop = np.hstack((idx_start[1::], len(bool_break)))
+    idx_start = np.hstack([np.array([0]), np.where(bool_break)[0]+1])
+    idx_stop = np.hstack((idx_start[1::], len(index)))
     # Compute duration :
     duration_ms = np.diff(idx_start) * (1000. / sf)
 
     return number, duration_ms, idx_start, idx_stop
 
 
-def _spindles_removal(idx_start, idx_stop, good_dur):
+def _events_removal(idx_start, idx_stop, good_dur):
     """Remove events that do not have the good duration.
 
     Args:
         idx_start: np.ndarray
-            Starting indices of spindles.
+            Starting indices of event.
 
         idx_stop: np.ndarray
-            Ending indices of spindles.
+            Ending indices of event.
 
         good_dur: np.ndarray
-            Indices of spindles having a proper duration.
+            Indices of event having a proper duration.
 
     Return:
         good_idx: np.ndarray
@@ -205,7 +198,8 @@ def _spindles_removal(idx_start, idx_stop, good_dur):
 ###########################################################################
 
 
-def remdetect(eog, sf, hypno, rem_only, threshold, moving_ms=100, deriv_ms=40):
+def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=100,
+              min_distance_ms=100, moving_ms=100, deriv_ms=40):
     """Perform a rapid eye movement (REM) detection.
 
     Function to perform a semi-automatic detection of rapid eye movements
@@ -218,16 +212,23 @@ def remdetect(eog, sf, hypno, rem_only, threshold, moving_ms=100, deriv_ms=40):
         sf: int
             Downsampling frequency
 
-        threshold: float
-            Number of standard deviation of the derivative signal
-            Threshold is defined as: mean + X * std(derivative)
-
-        hypno: np.ndarray
+       hypno: np.ndarray
             Hypnogram vector, same length as data
             Vector with only 0 if no hypnogram is loaded
 
         rem_only: boolean
             Perfom detection only on REM sleep period
+
+        threshold: float
+            Number of standard deviation of the derivative signal
+            Threshold is defined as: mean + X * std(derivative)
+
+        min_dur_ms: int, optional (def 30)
+            Minimum duration (ms) of rapid eye movement
+
+       min_distance_ms: int, optional (def 100)
+            Minimum distance (ms) between two saccades to consider them as
+            unique events
 
         moving_ms: int, optional (def 100)
             Time (ms) window of the moving average
@@ -236,8 +237,8 @@ def remdetect(eog, sf, hypno, rem_only, threshold, moving_ms=100, deriv_ms=40):
             Time (ms) window of derivative computation
             Default is 40 ms step  since most of naturally occurring human
             saccades have magnitudes of 15 degrees or less and last thus
-            no more than 30 – 40 ms (the maximum velocity of a saccade is
-            above 500°/sec, see Bahill et al., 1975)
+            no more than 30 - 40 ms (the maximum velocity of a saccade is
+            above 500 degrees/sec, see Bahill et al., 1975)
 
     Return:
         idx_sup_thr: np.ndarray
@@ -279,17 +280,27 @@ def remdetect(eog, sf, hypno, rem_only, threshold, moving_ms=100, deriv_ms=40):
         idx_sup_thr = np.where(deriv > thresh)[0]
 
     if idx_sup_thr.size:
-        # Remove first value which is almost always a false positive
+
+        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
+                                                                 sf)
+
+        # Get where min_dur < REM duration:
+        good_dur = np.where(duration_ms > min_dur_ms)[0]
+        good_dur = np.append(good_dur, len(good_dur))
+        good_idx = _events_removal(idx_start, idx_stop, good_dur)
+
+        idx_sup_thr = idx_sup_thr[good_idx]
+
+        # Remove first event
         idx_sup_thr = np.delete(idx_sup_thr, 0)
 
-        # Number and density of REM
-        rem = np.diff(idx_sup_thr, n=1)
-        number = np.array(np.where(rem > 1)).size
-        density = number / (length / sf / 60)
+        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+        density = number / (length / sf / 60.)
 
-        return idx_sup_thr, number, density
+        return idx_sup_thr, number, density, duration_ms
+
     else:
-        return np.array([], dtype=int), 0., 0.
+        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
 def _movingaverage(x, window, sf):
     """Perform a moving average.

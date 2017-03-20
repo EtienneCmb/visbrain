@@ -37,8 +37,8 @@ elif torun == 'small':
 ###########################################################################
 # LOAD BY PATH :
 elif torun == 'big':
-    file = '/home/etienne/wetransfer-ff7857/s101_sleep.eeg'
-    hypno_file = '/home/etienne/wetransfer-ff7857/s101_jbe.hyp'
+    file = '/media/etienne/E438C4AE38C480D2/Users/Etienne Combrisson/Documents/wetransfer-ff7857/s101_sleep.eeg'
+    hypno_file = '/media/etienne/E438C4AE38C480D2/Users/Etienne Combrisson/Documents/wetransfer-ff7857/s101_jbe.hyp'
     data = None
     channels = None
     sf = None

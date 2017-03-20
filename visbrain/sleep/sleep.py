@@ -96,26 +96,27 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 # Load hypnogram :
                 hypno = load_hypno(hypno_file, sf)
 
-        # Empty hypnogram :
-        if hypno is None:
-            self._HypW.setVisible(False)
-            self._PanHypViz.setChecked(False)
-        # print('ON load : ', id(data), id(hypno))
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
         self._channels = [k.split('.')[0] for k in channels]
-        self._lw = 1.
-        self._lwhyp = 2.
         self._ax = axis
+        # ---------- Default line width ----------
+        self._lw = 1.
+        self._lwhyp = 2.5
         self._defwin = 30.
-        # Color :
+        # ---------- Default colors ----------
         self._chancolor = '#292824'
-        self._hypcolor = '#292824'
+        # self._hypcolor = '#292824'
+        # Hypnogram color :
+        self._hypcolor = {-1: '#8bbf56', 0: '#56bf8b', 1: '#568bbf',
+                          2: '#8b56bf', 3: '#bf568b', 4: '#bf5656'}
         self._indicol = '#e74c3c'
+        # Default spectrogram colormap :
         self._defcmap = 'viridis'
+        # Spindles / REM / Peaks colors :
         self._defspin = color2vb('#d73737')
         self._defrem = color2vb('#6684e1')
         self._defpeaks = '#b854d4'

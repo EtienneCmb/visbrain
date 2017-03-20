@@ -119,7 +119,7 @@ spectrogram, hypnogram and the time axis</string>
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-177</y>
+                <y>0</y>
                 <width>321</width>
                 <height>905</height>
                </rect>
@@ -162,7 +162,7 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>275</width>
+                       <width>98</width>
                        <height>298</height>
                       </rect>
                      </property>
@@ -863,7 +863,7 @@ trend, filtering)</string>
                 <x>0</x>
                 <y>0</y>
                 <width>334</width>
-                <height>728</height>
+                <height>389</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -1644,7 +1644,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -2240,6 +2240,22 @@ selected, visible or all channels.</string>
               </attribute>
               <layout class="QVBoxLayout" name="verticalLayout_39">
                <item>
+                <widget class="QLabel" name="_DetectLocHead">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>HEADER_chan</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QTableWidget" name="_DetectLocations">
                  <property name="editTriggers">
                   <set>QAbstractItemView::NoEditTriggers</set>
@@ -2260,12 +2276,12 @@ selected, visible or all channels.</string>
                  </column>
                  <column>
                   <property name="text">
-                   <string>Stop (seconds)</string>
+                   <string>Duration (ms)</string>
                   </property>
                  </column>
                  <column>
                   <property name="text">
-                   <string>Type</string>
+                   <string>Stage</string>
                   </property>
                  </column>
                 </widget>
