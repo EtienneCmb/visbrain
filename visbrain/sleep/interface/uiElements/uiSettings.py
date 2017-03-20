@@ -90,7 +90,7 @@ class uiSettings(object):
                                                             'hypno.txt'),
                                                "Text file (*.txt);;Elan file "
                                                "(*.hyp);;All files (*.*)")
-
+        filename = str(filename)
         if filename:
             file, ext = os.path.splitext(filename)
 
@@ -250,8 +250,8 @@ class uiSettings(object):
 
         # Find closest time index :
         t = [0, 0]
-        t[0] = round(np.abs(self._time - xlim[0]).argmin())
-        t[1] = round(np.abs(self._time - xlim[1]).argmin())
+        t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
+        t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
 
         # ================= MESH UPDATES =================
         # ---------------------------------------
@@ -434,8 +434,8 @@ class uiSettings(object):
         xlim = (val*step, val*step+win)
         # Find closest time index :
         t = [0, 0]
-        t[0] = round(np.abs(self._time - xlim[0]).argmin())
-        t[1] = round(np.abs(self._time - xlim[1]).argmin())
+        t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
+        t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
         # Set the stage :
         self._hypno[t[0]:t[1]] = stage
         self._hyp.set_data(self._sf, self._hypno, self._time)

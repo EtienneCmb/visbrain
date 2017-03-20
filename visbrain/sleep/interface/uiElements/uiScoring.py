@@ -9,7 +9,7 @@ __all__ = ['uiScoring']
 
 
 class uiScoring(object):
-    """"""
+    """Enable scoring using the table."""
 
     def __init__(self):
         """Init."""
