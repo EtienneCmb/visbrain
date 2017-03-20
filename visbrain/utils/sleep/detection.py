@@ -235,8 +235,8 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=100,
             Time (ms) window of derivative computation
             Default is 40 ms step  since most of naturally occurring human
             saccades have magnitudes of 15 degrees or less and last thus
-            no more than 30 – 40 ms (the maximum velocity of a saccade is
-            above 500°/sec, see Bahill et al., 1975)
+            no more than 30 - 40 ms (the maximum velocity of a saccade is
+            above 500 degrees/sec, see Bahill et al., 1975)
 
     Return:
         idx_sup_thr: np.ndarray
