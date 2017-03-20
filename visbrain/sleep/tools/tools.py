@@ -264,7 +264,7 @@ class HypnoEdition(object):
             # Get y position :
             if force:
                 # Force cursor to be on the hypnogram :
-                val = data[np.abs(time - cursor).argmin()]
+                val = hypno_obj.mesh.pos[np.abs(time - cursor).argmin(), 1]
             else:
                 # Return converted y axis :
                 val = (yaxis[0]-yaxis[1]) * pos[1] / canvas.size[1] + yaxis[1]
