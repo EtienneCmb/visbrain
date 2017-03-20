@@ -2,8 +2,6 @@
 
 import numpy as np
 
-from vispy import scene
-
 from ...utils import peakdetect, color2vb, transient
 
 __all__ = ["Tools"]
@@ -144,7 +142,7 @@ class HypnoEdition(object):
 
     def __init__(self, sf, hypno_obj, data, time, canvas, yaxis, enable=False,
                  parent=None, color_cursor='red', color_static='gray',
-                 color_active='green', color_dragge='blue', size=7.,
+                 color_active='green', color_dragge='blue', size=6.,
                  fcn=None):
         """Init."""
         # =================== MOUSE FUNCTIONS ===================
@@ -179,6 +177,8 @@ class HypnoEdition(object):
                 point (only along y-axis). Then, drag point point and hypno too
                 - Set data to marker object.
             """
+            # Get latest data version :
+            data = hypno_obj.mesh.pos[:, 1]
             # Get cursor position :
             cpos = _get_cursor(event.pos, not self.keep)
             # Get closest marker :
@@ -266,7 +266,7 @@ class HypnoEdition(object):
             # Get y position :
             if force:
                 # Force cursor to be on the hypnogram :
-                val = data[np.abs(time - cursor).argmin()]
+                val = hypno_obj.mesh.pos[np.abs(time - cursor).argmin(), 1]
             else:
                 # Return converted y axis :
                 val = (yaxis[0]-yaxis[1]) * pos[1] / canvas.size[1] + yaxis[1]
@@ -320,11 +320,11 @@ class HypnoEdition(object):
         self._call = on_mouse_move
 
         # =================== UTILS FUNCTIONS ===================
-        # def data_update(hypno_obj):
-        #     """Get latest data version."""
-        #     data = hypno_obj.mesh.pos[hypno_obj.sl, 1]
-        #     time = hypno_obj.mesh.pos[hypno_obj.sl, 0]
-        #     return data, time
+        def data_update(hypno_obj):
+            """Get latest data version."""
+            data = hypno_obj.mesh.pos[hypno_obj.sl, 1]
+            time = hypno_obj.mesh.pos[hypno_obj.sl, 0]
+            return data, time
 
         def time_update():
             """Get time extreme."""

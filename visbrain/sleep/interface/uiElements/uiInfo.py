@@ -50,7 +50,7 @@ class uiInfo(object):
             filter="CSV Files (*.csv);;Text Files (*.txt)")
         # Find extension :
         selected_ext = str(self._infoExportAs.currentText())
-        file = os.path.splitext(path)[0]
+        file = os.path.splitext(str(path))[0]
         if selected_ext.find('csv') + 1:
             self.listToCsv(file + '.csv', zip(self._keysInfo, self._valInfo))
         elif selected_ext.find('txt') + 1:

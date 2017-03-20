@@ -16,45 +16,6 @@ from ...utils import array2colormap, color2vb, filt
 __all__ = ["visuals"]
 
 
-class visuals(object):
-    """Create the visual objects to be added to the scene."""
-
-    def __init__(self, sf, data, time, channels, hypno, cameras=None,
-                 method='gl', **kwargs):
-        """Init."""
-        # =================== CHANNELS ===================
-        self._chan = ChannelPlot(channels, time, camera=cameras[0],
-                                 method=method, color=self._chancolor,
-                                 width=self._lw, color_detection=self._indicol,
-                                 parent=self._chanCanvas,
-                                 fcn=self._fcn_sliderMove)
-
-        # =================== SPECTROGRAM ===================
-        # Create a spectrogram object :
-        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
-                                 parent=self._specCanvas.wc.scene)
-        self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
-        # Create a visual indicator for spectrogram :
-        self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
-                                  parent=self._specCanvas.wc.scene)
-        self._specInd.set_data(xlim=(0, 30), ylim=(0, 20))
-
-        # =================== HYPNOGRAM ===================
-        # Create a hypnogram object :
-        self._hyp = Hypnogram(time, camera=cameras[2], color=self._hypcolor,
-                              width=self._lwhyp,
-                              parent=self._hypCanvas.wc.scene)
-        self._hyp.set_data(sf, hypno, time)
-        # Create a visual indicator for hypnogram :
-        self._hypInd = Indicator(name='hypno_indic', visible=True, alpha=.3,
-                                 parent=self._hypCanvas.wc.scene)
-        self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
-
-        vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
-        for k in vbcanvas:
-            vbShortcuts.__init__(self, k.canvas)
-
-
 """
 ###############################################################################
 # OBJECTS
@@ -391,11 +352,12 @@ class Hypnogram(object):
         self.width = width
         self.n = len(time)
         # Get color :
-        self.color = color2vb(color=color)
+        self.color = {k: color2vb(color=i) for k, i in zip(color.keys(),
+                                                           color.values())}
         # Create a default line :
         pos = np.array([[0, 0], [0, 100]])
-        self.mesh = scene.visuals.Line(pos, name='hypnogram', color=self.color,
-                                       method='gl', parent=parent)
+        self.mesh = scene.visuals.Line(pos, name='hypnogram', method='gl',
+                                       parent=parent)
         self.mesh.set_gl_state('translucent', depth_test=True)
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
@@ -428,8 +390,13 @@ class Hypnogram(object):
             time: np.ndarray
                 The time vector
         """
+        # Build color array :
+        color = np.zeros((len(data), 4), dtype=np.float32)
+        for k, v in zip(self.color.keys(), self.color.values()):
+            color[data == k, :] = v
         # Set data to the mesh :
-        self.mesh.set_data(pos=np.vstack((time, -data)).T, width=self.width)
+        self.mesh.set_data(pos=np.vstack((time, -data)).T, width=self.width,
+                           color=color)
         self.mesh.update()
 
     def set_report(self, time, index, symbol='triangle_down', y=1., size=13.,
@@ -553,16 +520,18 @@ class vbShortcuts(object):
             """
             if event.text == ' ':
                 pass
+            # ------------ SLIDER ------------
             if event.text == 'n':  # Next (slider)
                 self._SlGoto.setValue(
                                 self._SlGoto.value() + self._SigSlStep.value())
             if event.text == 'b':  # Before (slider)
                 self._SlGoto.setValue(
                                 self._SlGoto.value() - self._SigSlStep.value())
-            if event.text == '0':  # Toggle visibility on spec
+            # ------------  VISIBILITY ------------
+            if event.text == 's':  # Toggle visibility on spec
                 self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
                 self._fcn_specViz()
-            if event.text == '1':  # Toggle visibility on hypno
+            if event.text == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
             if event.text == 'z':  # Enable zoom
@@ -571,6 +540,31 @@ class vbShortcuts(object):
                 self._PanHypZoom.setChecked(not viz)
                 self._PanSpecZoom.setChecked(not viz)
                 self._fcn_Zooming()
+            # ------------ SCORING ------------
+            if event.text == 'a':
+                self._add_stage_on_win(-1)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
+            if event.text == 'w':
+                self._add_stage_on_win(0)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
+            if event.text == '1':
+                self._add_stage_on_win(1)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
+            if event.text == '2':
+                self._add_stage_on_win(2)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
+            if event.text == '3':
+                self._add_stage_on_win(3)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
+            if event.text == 'r':
+                self._add_stage_on_win(4)
+                self._SlGoto.setValue(self._SlGoto.value(
+                                                 ) + self._SigSlStep.value())
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
@@ -604,3 +598,42 @@ class vbShortcuts(object):
             """
             # Display the rotation panel :
             pass
+
+
+class visuals(vbShortcuts):
+    """Create the visual objects to be added to the scene."""
+
+    def __init__(self, sf, data, time, channels, hypno, cameras=None,
+                 method='gl', **kwargs):
+        """Init."""
+        # =================== CHANNELS ===================
+        self._chan = ChannelPlot(channels, time, camera=cameras[0],
+                                 method=method, color=self._chancolor,
+                                 width=self._lw, color_detection=self._indicol,
+                                 parent=self._chanCanvas,
+                                 fcn=self._fcn_sliderMove)
+
+        # =================== SPECTROGRAM ===================
+        # Create a spectrogram object :
+        self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
+                                 parent=self._specCanvas.wc.scene)
+        self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
+        # Create a visual indicator for spectrogram :
+        self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
+                                  parent=self._specCanvas.wc.scene)
+        self._specInd.set_data(xlim=(0, 30), ylim=(0, 20))
+
+        # =================== HYPNOGRAM ===================
+        # Create a hypnogram object :
+        self._hyp = Hypnogram(time, camera=cameras[2], color=self._hypcolor,
+                              width=self._lwhyp,
+                              parent=self._hypCanvas.wc.scene)
+        self._hyp.set_data(sf, hypno, time)
+        # Create a visual indicator for hypnogram :
+        self._hypInd = Indicator(name='hypno_indic', visible=True, alpha=.3,
+                                 parent=self._hypCanvas.wc.scene)
+        self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
+
+        vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
+        for k in vbcanvas:
+            vbShortcuts.__init__(self, k.canvas)

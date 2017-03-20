@@ -30,7 +30,8 @@ Specify the region of your screen to capture. This is usefull to have a fitted f
 
 .. figure::  picture/brain_region.png
    :align:   center
-   :alt: Figure 1 : Explanation of the region argument.
+   
+   Figure 1 : Explanation of the region argument.
 
 Zoom
 ++++
@@ -39,7 +40,8 @@ Specify the zoom level over the canvas.
 
 .. figure::  picture/brain_zoom.png
    :align:   center
-   :alt: Figure 2 : Explanation of the zoom argument.
+   
+   Figure 2 : Explanation of the zoom argument.
 
 If you don't want to ajust manually the zoom, you can `rotate <https://etiennecmb.github.io/visbrain/vbfunctions.html#rotation>`_ the brain before, this will force the zoom level to be perfectly ajusted. For example, if you want to take an axial view of the brain, run before the screenshot :
 
@@ -64,7 +66,8 @@ If you export your figures as a *png* file, and if the brain is transparent, don
 
 .. figure::  picture/brain_png.png
    :align:   center
-   :alt: Figure 3 : transparent brain and *png* files.
+   
+   Figure 3 : transparent brain and *png* files.
 
 Combine transparent figures
 +++++++++++++++++++++++++++
@@ -73,4 +76,5 @@ The `Screenshot <https://etiennecmb.github.io/visbrain/vbfunctions.html#screensh
 
 .. figure::  picture/brain_complex.png
    :align:   center
-   :alt: Figure 4 : combine png files to create complex scene.
+   
+   Figure 4 : combine png files to create complex scene.

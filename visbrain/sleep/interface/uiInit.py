@@ -194,7 +194,7 @@ class AxisCanvas(object):
 
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=True, title=name, **cargs)
+                                        show=False, title=name, **cargs)
         _ = [self.canvas.connect(k) for k in fcn]
 
         # Add axis :

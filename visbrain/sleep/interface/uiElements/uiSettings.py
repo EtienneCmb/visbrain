@@ -90,7 +90,7 @@ class uiSettings(object):
                                                             'hypno.txt'),
                                                "Text file (*.txt);;Elan file "
                                                "(*.hyp);;All files (*.*)")
-
+        filename = str(filename)
         if filename:
             file, ext = os.path.splitext(filename)
 
@@ -250,8 +250,8 @@ class uiSettings(object):
 
         # Find closest time index :
         t = [0, 0]
-        t[0] = round(np.abs(self._time - xlim[0]).argmin())
-        t[1] = round(np.abs(self._time - xlim[1]).argmin())
+        t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
+        t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
 
         # ================= MESH UPDATES =================
         # ---------------------------------------
@@ -297,10 +297,21 @@ class uiSettings(object):
             self._timecam.rect = (xlim[0], 0., win, 1.)
 
         # ================= TEXT INFO =================
+        # Get unit and convert:
+        unit = self._slRules.currentText()
+        if unit == 'seconds':
+            fact = 1.
+        elif unit == 'minutes':
+            fact = 60.
+        elif unit == 'hours':
+            fact = 3600.
+        xconv = np.round((1000*xlim[0]/fact, 1000*xlim[1]/fact))/1000
+        # Format string :
         hypref = int(self._hypno[t[0]])
         items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
-        txt = self._slTxtFormat.format(start=str(xlim[0]), end=str(xlim[1]),
+        txt = self._slTxtFormat.format(start=str(xconv[0]), end=str(xconv[1]),
                                        unit=unit, conv=items[hypref])
+        # Set text :
         self._SlText.setText(txt)
         self._SlText.setFont(self._font)
 
@@ -309,7 +320,7 @@ class uiSettings(object):
         for k, i in zip(self._hypYLabels, ref):
             k.setStyleSheet("QLabel")
         self._hypYLabels[hypref + 1].setStyleSheet("QLabel {color: " +
-                                                   self._indicol + ";}")
+                                                   self._hypcolor[hypref]+";}")
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
@@ -338,7 +349,6 @@ class uiSettings(object):
             self._chan.set_grid(self._time, step)
         else:
             self._slOnStart = True
-
 
     def _fcn_sliderWinSelection(self):
         """Move slider using window spin."""
@@ -411,3 +421,24 @@ class uiSettings(object):
     def on_mouse_wheel(self, event):
         """Executed function on mouse wheel."""
         self._SlVal.setValue(self._SlVal.value() + event.delta[1])
+
+    # =====================================================================
+    # HYPNO
+    # =====================================================================
+    def _add_stage_on_win(self, stage):
+        """Change the stage on the current window."""
+        # Get the window :
+        win = self._SigWin.value()
+        val = self._SlVal.value()
+        step = self._SigSlStep.value()
+        xlim = (val*step, val*step+win)
+        # Find closest time index :
+        t = [0, 0]
+        t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
+        t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
+        # Set the stage :
+        self._hypno[t[0]:t[1]] = stage
+        self._hyp.set_data(self._sf, self._hypno, self._time)
+        # Update scoring table :
+        self._fcn_Hypno2Score()
+        self._fcn_Score2Hypno()
