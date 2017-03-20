@@ -137,9 +137,9 @@ class uiPanels(object):
         # Empty list of checkbox and widgets/layouts :
         self._chanChecks = [0] * len(self)
         self._yminSpin, self._ymaxSpin = [0] * len(self), [0] * len(self)
-        self._chanWidget = self._chanChecks.copy()
-        self._chanLayout = self._chanChecks.copy()
-        self._chanCanvas = self._chanChecks.copy()
+        self._chanWidget = [0] * len(self)
+        self._chanLayout = [0] * len(self)
+        self._chanCanvas = [0] * len(self)
         self._chanLabels = []
 
         # Define a vertical and horizontal spacers :
