@@ -1280,7 +1280,7 @@ class Ui_MainWindow(object):
         item = self._DetectLocations.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Start (seconds)", None))
         item = self._DetectLocations.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Stop (seconds)", None))
+        item.setText(_translate("MainWindow", "Duration (ms)", None))
         item = self._DetectLocations.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Type", None))
         self._DetectionTab.setTabText(self._DetectionTab.indexOf(self.q_DetectLoc), _translate("MainWindow", "Locations", None))

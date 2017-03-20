@@ -355,6 +355,7 @@ def elan2array(path, ds_freq):
     m_ds = m_raw[:, ::ds_factor]
 
     # Multiply by gain :
+    #data = np.diag(Gain[chan_list]).dot(m_ds[chan_list, ])
     data = m_ds[chan_list, ] * Gain[chan_list][..., np.newaxis]
 
     return float(sf), data.astype(np.float32), list(chan)
