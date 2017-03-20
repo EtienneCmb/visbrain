@@ -177,6 +177,8 @@ class HypnoEdition(object):
                 point (only along y-axis). Then, drag point point and hypno too
                 - Set data to marker object.
             """
+            # Get latest data version :
+            data = hypno_obj.mesh.pos[:, 1]
             # Get cursor position :
             cpos = _get_cursor(event.pos, not self.keep)
             # Get closest marker :
@@ -318,11 +320,11 @@ class HypnoEdition(object):
         self._call = on_mouse_move
 
         # =================== UTILS FUNCTIONS ===================
-        # def data_update(hypno_obj):
-        #     """Get latest data version."""
-        #     data = hypno_obj.mesh.pos[hypno_obj.sl, 1]
-        #     time = hypno_obj.mesh.pos[hypno_obj.sl, 0]
-        #     return data, time
+        def data_update(hypno_obj):
+            """Get latest data version."""
+            data = hypno_obj.mesh.pos[hypno_obj.sl, 1]
+            time = hypno_obj.mesh.pos[hypno_obj.sl, 0]
+            return data, time
 
         def time_update():
             """Get time extreme."""
