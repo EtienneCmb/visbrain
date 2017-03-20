@@ -21,9 +21,10 @@ class ConnectBase(_colormap):
     """
 
     def __init__(self, c_xyz=[], c_connect=None, c_select=None,
-                 c_colorby='count', c_dynamic=None, c_cmap='viridis',
-                 c_cmap_vmin=None, c_cmap_vmax=None, c_cmap_under=None,
-                 c_cmap_over=None, c_cmap_clim=None, **kwargs):
+                 c_colorby='strength', c_dynamic=None, c_cmap='viridis',
+                 c_cmap_vmin=None, c_cmap_vmax=None, c_colval=None,
+                 c_cmap_under=None, c_cmap_over=None, c_cmap_clim=None,
+                 **kwargs):
         """Init."""
         # Initialize elements :
         self.xyz = c_xyz
@@ -31,6 +32,7 @@ class ConnectBase(_colormap):
         self.select = c_select
         self.colorby = c_colorby
         self.dynamic = c_dynamic
+        self.colval = c_colval
 
         # Initialize colormap :
         _colormap.__init__(self, c_cmap, c_cmap_clim, c_cmap_vmin, c_cmap_vmax,
@@ -40,7 +42,8 @@ class ConnectBase(_colormap):
         if (self.xyz is not None) and (self.connect is not None):
             self.mesh = ConnectMesh(self.xyz, self.connect, select=self.select,
                                     colorby=self.colorby, dynamic=self.dynamic,
-                                    name='Connectivity', **self._cb)
+                                    colval=self.colval, name='Connectivity',
+                                    **self._cb)
             self._maskbck = self.mesh.connect.mask.copy()
         else:
             self.mesh = visu.Line(name='NoneConnect')
