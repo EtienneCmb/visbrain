@@ -257,7 +257,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ========================== DOWN-SAMPLING ==========================
         if isinstance(downsample, (int, float)):
             # Find frequency ratio :
-            fratio = round(sf / downsample)
+            fratio = int(round(sf / downsample))
             # Select time, data and hypno points :
             data = data[:, ::fratio]
             time = time[::fratio]
