@@ -46,7 +46,7 @@ class ConnectBase(_colormap):
             self.mesh = visu.Line(name='Connectivity', antialias=True)
             self.mesh.set_gl_state('translucent', depth_test=True)
             self.update()
-            self._interp()
+            # self._interp()
         else:
             self.mesh = visu.Line(name='NoneConnect')
 
