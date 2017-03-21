@@ -115,7 +115,7 @@ class uiDetection(object):
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_applyDetection(self):
-        """Apply detection (either REM / Spindles / Peaks / Slow Wave"""
+        """Apply detection (either REM / Spindles / Peaks / Slow Wave."""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
@@ -268,7 +268,9 @@ class uiDetection(object):
         self._DetectLocHead.setText(kind + ' detection on channel ' + channel)
         # Clean table :
         self._DetectLocations.setRowCount(0)
-        if (kind in ['REM', 'Spindles', 'Slow waves']) and self._ToolRdSelected.isChecked():
+        # Get kind :
+        kindIn = kind in ['REM', 'Spindles', 'Slow waves']
+        if kindIn and self._ToolRdSelected.isChecked():
             # Define the length of the table:
             self._DetectLocations.setRowCount(int(len(index) / 2))
             # Get starting index:
