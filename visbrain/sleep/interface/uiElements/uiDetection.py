@@ -10,6 +10,7 @@ __all__ = ['uiDetection']
 
 
 class uiDetection(object):
+
     """Main class for sleep tools managment."""
 
     def __init__(self):
@@ -46,7 +47,7 @@ class uiDetection(object):
         # -------------------------------------------------
         # Location table :
         self._DetectLocations.itemSelectionChanged.connect(
-                                                        self._fcn_gotoLocation)
+            self._fcn_gotoLocation)
 
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
@@ -136,8 +137,8 @@ class uiDetection(object):
                 rem_only = self._ToolRemOnly.isChecked()
                 # Get REM indices :
                 index, number, density, duration = remdetect(
-                                        self._data[k, :],
-                                        self._sf, self._hypno, rem_only, thr)
+                    self._data[k, :],
+                    self._sf, self._hypno, rem_only, thr)
                 if index.size:
                     # Set them + color to ChannelPlot object :
                     self._chan.colidx[k]['color'] = self._defrem
@@ -166,10 +167,10 @@ class uiDetection(object):
                 nrem_only = self._ToolSpinRemOnly.isChecked()
                 # Get Spindles indices :
                 index, number, density, duration = spindlesdetect(
-                                                        self._data[k, :],
-                                                        self._sf, thr,
-                                                        self._hypno, nrem_only,
-                                                        fMin, fMax, tMin, tMax)
+                    self._data[k, :],
+                    self._sf, thr,
+                    self._hypno, nrem_only,
+                    fMin, fMax, tMin, tMax)
                 if index.size:
                     # Set them + color to ChannelPlot object :
                     self._chan.colidx[k]['color'] = self._defspin
@@ -201,11 +202,11 @@ class uiDetection(object):
 
                 # Get Slow Waves indices :
                 index, number, duration = slowwavedetect(self._data[k, :],
-                                                        self._sf, thr, meth)
+                                                         self._sf, thr, meth)
 
                 if index.size:
                     # Set them + color to ChannelPlot object :
-                    self._chan.colidx[k]['color'] = self._defspin
+                    self._chan.colidx[k]['color'] = self._defslowwave
                     self._chan.colidx[k]['idx'] = index
                     # Find only where index start / finish :
                     ind = np.where(np.gradient(index) != 1.)[0]
@@ -219,7 +220,6 @@ class uiDetection(object):
                 else:
                     warn("\nNo Slow Wave detected on channel "+self._channels[
                          k]+". Try to decrease the threshold")
-
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
@@ -253,8 +253,7 @@ class uiDetection(object):
 
         # Fill the location table (only if selected):
         if self._ToolRdSelected.isChecked() and ind.size:
-            self._fcn_fillLocations(self._channels[k], method,
-                                    ind, duration)
+            self._fcn_fillLocations(self._channels[k], method, ind, duration)
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
@@ -269,7 +268,7 @@ class uiDetection(object):
         self._DetectLocHead.setText(kind + ' detection on channel ' + channel)
         # Clean table :
         self._DetectLocations.setRowCount(0)
-        if (kind in ['REM', 'Spindles']) and self._ToolRdSelected.isChecked():
+        if (kind in ['REM', 'Spindles', 'Slow waves']) and self._ToolRdSelected.isChecked():
             # Define the length of the table:
             self._DetectLocations.setRowCount(int(len(index) / 2))
             # Get starting index:
@@ -307,4 +306,5 @@ class uiDetection(object):
         # Get starting and ending point :
         st = float(str(self._DetectLocations.item(row, 0).text()))
         # Go to :
-        self._SlGoto.setValue(st - self._SigWin.value() / self._SigSlStep.value())
+        self._SlGoto.setValue(
+            st - self._SigWin.value() / self._SigSlStep.value())
