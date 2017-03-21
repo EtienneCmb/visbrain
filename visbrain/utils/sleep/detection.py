@@ -64,7 +64,10 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
             Number of detected spindles
 
         density: float
-            Number of spindles per minute
+            Number of spindles per minutes of data
+
+        duration_ms: float
+            Duration (ms) of each spindles detected
 
     """
     # Find if hypnogram is loaded :
@@ -134,107 +137,6 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
 
-def _events_duration(index, sf):
-    """Compute spindles/REM duration in ms.
-
-    Args:
-        index: np.ndarray
-            Index of events locations.
-
-        sf: float
-            The sampling frequency.
-
-    Returns:
-        number: int
-            Number of events
-
-        duration_ms: np.ndarray
-            Duration of each event
-
-        idx_start: np.ndarray
-            Array of integers where each event begin.
-
-        idx_end: np.ndarray
-            Array of integers where each event finish.
-    """
-    # Find boolean values where each spindle start :
-    bool_break = (index[1:] - index[:-1]) != 1
-    # Get spindles number :
-    number = bool_break.sum()
-    # Build starting / ending spindles index :
-    idx_start = np.hstack([np.array([0]), np.where(bool_break)[0] + 1])
-    idx_stop = np.hstack((idx_start[1::], len(index)))
-    # Compute duration :
-    duration_ms = np.diff(idx_start) * (1000. / sf)
-
-    return number, duration_ms, idx_start, idx_stop
-
-
-def _events_removal(idx_start, idx_stop, good_dur):
-    """Remove events that do not have the good duration.
-
-    Args:
-        idx_start: np.ndarray
-            Starting indices of event.
-
-        idx_stop: np.ndarray
-            Ending indices of event.
-
-        good_dur: np.ndarray
-            Indices of event having a proper duration.
-
-    Return:
-        good_idx: np.ndarray
-            Row vector containing the extending version of indices.
-    """
-    # Get where good duration start / end :
-    start = idx_start[good_dur]
-    stop = idx_stop[good_dur]
-
-    # Extend each spindle duration (start -> stop) :
-    extend = np.array([np.arange(i, j) for i, j in zip(start, stop)])
-
-    # Get it as a flatten array :
-    if extend.size:
-        return np.hstack(extend.flat)
-    else:
-        return np.array([], dtype=int)
-
-def _events_distance_fill(index, min_distance_ms, sf):
-    """Remove events that do not have the good duration.
-
-    Args:
-        index: np.ndarray
-            Indices of supra-threshold events.
-
-        min_distance_ms: int
-            Minimum distance (ms) between two events to consider them as two
-            distinct events
-
-        sf: int
-            Sampling frequency of the data (Hz)
-
-    Return:
-        f_index: np.ndarray
-            Filled (corrected) Indices of supra-threshold events
-    """
-    # Convert min_distance_ms
-    min_distance = min_distance_ms/ 1000. * sf
-    idx_diff = np.diff(index)
-    idx_distance = np.where(idx_diff > 1)[0]
-    distance = idx_diff[idx_diff > 1]
-    bad = idx_distance[np.where(distance < min_distance)[0]]
-    # Fill gap between events separated with less than min_distance_ms
-    if len(bad) > 0:
-
-        fill = np.hstack([np.arange(index[j]+1, index[j+1])
-                            for i, j in enumerate(bad)])
-        f_index = np.sort(np.append(index, fill))
-        return f_index
-    else:
-        return index
-
-
 ###########################################################################
 # REM DETECTION
 ###########################################################################
@@ -292,6 +194,9 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
         density: float
             Number of REMs per minute
 
+        duration_ms: float
+            Duration (ms) of each REM detected
+
     """
     eog = np.array(eog)
 
@@ -344,56 +249,87 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
-def _movingaverage(x, window, sf):
-    """Perform a moving average.
+###########################################################################
+# SLOW WAVE DETECTION
+###########################################################################
+
+def slowwavedetect(elec, sf, threshold, fMin=0.5, fMax=4,
+                   method='wavelet_power', moving_s=30):
+    """Perform a Slow Wave detection
 
     Args:
-        x: np.ndarray
-            Signal
+        elec: np.ndarray
+            eeg signal (preferably frontal electrodes)
 
-        window: int
-            Time (ms) window to compute moving average
-
-        sf: int
+        sf: float
             Downsampling frequency
 
+        threshold: float
+            Number of standard deviation to use as threshold
+            Threshold is defined as: mean + X * std(derivative)
+
+    Kargs:
+        fMin: float, optional (def 0.5)
+            High-pass frequency
+
+        fMax: float, optional (def 4)
+            Lowpass frequency
+
+        method: string, optional (default wavelet_power)
+            Method to extract delta power. Use either 'welch',
+            'wavelet_power' or 'wavelet_amp'.
+
+        moving_s: int, optional (def 60)
+            Time (sec) window of the moving average
+
+    Return:
+        idx_sup_thr: np.ndarray
+            Array of supra-threshold indices
+
+        number: int
+            Number of detected slow-wave
+
+        duration_ms: float
+            Duration (ms) of each slow wave period detected
+
     """
-    window = int(window / (1000 / sf))
-    weights = np.repeat(1.0, window) / window
-    sma = np.convolve(x, weights, 'same')
-    return sma
 
+    if method == 'wavelet_power':
+        # Get complex decomposition of filtered data in the main EEG freq band:
+        freqs = np.array([fMin, fMax, 8, 12, 16])
+        delta_npow, _, _, _ = _wavelet_bpower(elec, freqs, sf, norm=True)
 
-def _derivative(x, window, sf):
-    """Compute first derivative of signal.
+        # Smooth
+        delta_nfpow= _movingaverage(delta_npow, moving_s * 1000, sf)
 
-       Equivalent to np.gradient function
+        # Normalized power criteria
+        thresh = np.mean(delta_nfpow) + threshold * np.std(delta_nfpow)
+        idx_sup_thr = np.where(delta_nfpow > thresh)[0]
 
-    Args:
-        x: np.ndarray
-            Signal
+        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
 
-        window: int
-            Time (ms) window to compute first derivative
+        return idx_sup_thr, number, duration_ms
 
-        sf: int
-            Downsampling frequency
+    elif method == 'welch':
+        # WARNING: only return one value per epoch (and not per ms)
+        delta_spec_norm = _welch_bpower(elec, fMin, fMax, sf,
+                                        window_s=30, norm=True)
 
-    """
-    length = x.size
-    step = int(window / (1000 / sf))
-    tail = np.zeros(shape=(int(step / 2),))
+    elif method == 'wavelet_amp':
+        analytic = morlet(elec, sf, np.mean([fMin, fMax]))
+        amplitude = np.abs(analytic)
+        # Clip extreme values
+        amplitude = np.clip(amplitude, 0, 10*np.std(amplitude))
+        # Find supra-threshold values
+        thresh = np.mean(amplitude) + threshold * np.std(amplitude)
+        idx_sup_thr = np.where(amplitude > thresh)[0]
+        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
 
-    deriv = np.hstack((tail, x[step:length] - x[0:length - step], tail))
-
-    deriv = np.abs(deriv)
-
-    return deriv
+        return idx_sup_thr, number, duration_ms
 
 ###########################################################################
 # PEAKS DETECTION
 ###########################################################################
-
 
 def peakdetect(y_axis, x_axis=None, lookahead=200, delta=0):
     """Perform a peak detection.
@@ -525,3 +461,238 @@ def _datacheck(x_axis, y_axis):
     y_axis = np.array(y_axis)
     x_axis = np.array(x_axis)
     return x_axis, y_axis
+
+###########################################################################
+# SIGNAL PROCESSING FUNCTIONS
+###########################################################################
+
+def _movingaverage(x, window, sf):
+    """Perform a moving average.
+
+    Args:
+        x: np.ndarray
+            Signal
+
+        window: int
+            Time (ms) window to compute moving average
+
+        sf: int
+            Downsampling frequency
+
+    """
+    window = int(window / (1000 / sf))
+    weights = np.repeat(1.0, window) / window
+    sma = np.convolve(x, weights, 'same')
+    return sma
+
+
+def _derivative(x, window, sf):
+    """Compute first derivative of signal.
+
+       Equivalent to np.gradient function
+
+    Args:
+        x: np.ndarray
+            Signal
+
+        window: int
+            Time (ms) window to compute first derivative
+
+        sf: int
+            Downsampling frequency
+
+    """
+    length = x.size
+    step = int(window / (1000 / sf))
+    tail = np.zeros(shape=(int(step / 2),))
+
+    deriv = np.hstack((tail, x[step:length] - x[0:length - step], tail))
+
+    deriv = np.abs(deriv)
+
+    return deriv
+
+def _wavelet_bpower(x, freqs, sf, norm=True):
+    """Compute bandwise-normalized power of data using morlet wavelet
+
+    Args:
+        x: np.ndarray
+            Signal
+
+        freqs: np.array
+            Frequency band low and hi cutoff frequencies (must be odd length)
+
+        sf: int
+            Downsampling frequency
+
+    Kargs:
+        norm: boolean, optional (def True)
+            If True, return bandwise normalized band power
+            (For each time point, the sum of power in the 4 band equals 1)
+
+    """
+    # Analytic
+    delta = morlet(x, sf, np.mean([freqs[0], freqs[1]]))
+    theta = morlet(x, sf, np.mean([freqs[1], freqs[2]]))
+    alpha = morlet(x, sf, np.mean([freqs[2], freqs[3]]))
+    beta = morlet(x, sf, np.mean([freqs[3], freqs[4]]))
+    # Power
+    delta_pow = np.abs(np.power(delta, 2))
+    theta_pow = np.abs(np.power(theta, 2))
+    alpha_pow = np.abs(np.power(alpha, 2))
+    beta_pow = np.abs(np.power(beta, 2))
+
+    if norm:
+        # Bandwise normalize power
+        sum_pow = delta_pow + theta_pow + alpha_pow + beta_pow
+        delta_npow = np.divide(delta_pow, sum_pow)
+        theta_npow = np.divide(theta_pow, sum_pow)
+        alpha_npow = np.divide(alpha_pow, sum_pow)
+        beta_npow = np.divide(beta_pow, sum_pow)
+        return delta_npow, theta_npow, alpha_npow, beta_npow
+
+    else:
+        return delta_pow, theta_pow, alpha_pow, beta_pow
+
+def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
+    """Compute bandwise-normalized power of data using morlet wavelet
+
+    Args:
+        x: np.ndarray
+            Signal
+
+        sf: int
+            Downsampling frequency
+
+    Kargs:
+        window_s: int, optional (def 30)
+            Time resolution (sec) of Welch's periodogram
+            Must be > 10 seconds
+
+        norm: boolean, optional (def True)
+            If True, return normalized band power
+
+    """
+    from scipy.signal import welch
+    freq_spacing = 0.1
+    f_vector = np.arange(0, sf/2 + freq_spacing, freq_spacing)
+    idx_fMin = np.where(f_vector == fMin)[0][0]
+    idx_fMax = np.where(f_vector == fMax)[0][0] + 1
+
+    delta_spec = np.array([], dtype=float)
+    delta_spec_norm = np.array([], dtype=float)
+
+    for i in np.arange(0, len(x), window_s*sf):
+        f, Pxx_spec = welch(x[i:i+window_s*sf], sf, 'flattop',
+                            nperseg=sf*(1/freq_spacing), scaling='spectrum')
+        mean_delta = np.mean(Pxx_spec[idx_fMin:idx_fMax,])
+        norm_delta = np.sum(Pxx_spec[idx_fMin:idx_fMax,]) / np.sum(Pxx_spec)
+        delta_spec = np.append(delta_spec, mean_delta)
+        delta_spec_norm = np.append(delta_spec_norm, norm_delta)
+
+    return delta_spec_norm if norm else delta_spec
+
+###########################################################################
+# INDEX MANIPULATION FUNCTIONS
+###########################################################################
+
+def _events_duration(index, sf):
+    """Compute spindles/REM duration in ms.
+
+    Args:
+        index: np.ndarray
+            Index of events locations.
+
+        sf: float
+            The sampling frequency.
+
+    Returns:
+        number: int
+            Number of events
+
+        duration_ms: np.ndarray
+            Duration of each event
+
+        idx_start: np.ndarray
+            Array of integers where each event begin.
+
+        idx_end: np.ndarray
+            Array of integers where each event finish.
+    """
+    # Find boolean values where each spindle start :
+    bool_break = (index[1:] - index[:-1]) != 1
+    # Get spindles number :
+    number = bool_break.sum()
+    # Build starting / ending spindles index :
+    idx_start = np.hstack([np.array([0]), np.where(bool_break)[0] + 1])
+    idx_stop = np.hstack((idx_start[1::], len(index)))
+    # Compute duration :
+    duration_ms = np.diff(idx_start) * (1000. / sf)
+
+    return number, duration_ms, idx_start, idx_stop
+
+
+def _events_removal(idx_start, idx_stop, good_dur):
+    """Remove events that do not have the good duration.
+
+    Args:
+        idx_start: np.ndarray
+            Starting indices of event.
+
+        idx_stop: np.ndarray
+            Ending indices of event.
+
+        good_dur: np.ndarray
+            Indices of event having a proper duration.
+
+    Return:
+        good_idx: np.ndarray
+            Row vector containing the extending version of indices.
+    """
+    # Get where good duration start / end :
+    start = idx_start[good_dur]
+    stop = idx_stop[good_dur]
+
+    # Extend each spindle duration (start -> stop) :
+    extend = np.array([np.arange(i, j) for i, j in zip(start, stop)])
+
+    # Get it as a flatten array :
+    if extend.size:
+        return np.hstack(extend.flat)
+    else:
+        return np.array([], dtype=int)
+
+def _events_distance_fill(index, min_distance_ms, sf):
+    """Remove events that do not have the good duration.
+
+    Args:
+        index: np.ndarray
+            Indices of supra-threshold events.
+
+        min_distance_ms: int
+            Minimum distance (ms) between two events to consider them as two
+            distinct events
+
+        sf: int
+            Sampling frequency of the data (Hz)
+
+    Return:
+        f_index: np.ndarray
+            Filled (corrected) Indices of supra-threshold events
+    """
+    # Convert min_distance_ms
+    min_distance = min_distance_ms/ 1000. * sf
+    idx_diff = np.diff(index)
+    idx_distance = np.where(idx_diff > 1)[0]
+    distance = idx_diff[idx_diff > 1]
+    bad = idx_distance[np.where(distance < min_distance)[0]]
+    # Fill gap between events separated with less than min_distance_ms
+    if len(bad) > 0:
+
+        fill = np.hstack([np.arange(index[j]+1, index[j+1])
+                            for i, j in enumerate(bad)])
+        f_index = np.sort(np.append(index, fill))
+        return f_index
+    else:
+        return index
+
