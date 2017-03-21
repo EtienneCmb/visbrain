@@ -46,7 +46,7 @@ class ConnectBase(_colormap):
             self.mesh = visu.Line(name='Connectivity', antialias=True)
             self.mesh.set_gl_state('translucent', depth_test=True)
             self.update()
-            self._interp()
+            # self._interp()
         else:
             self.mesh = visu.Line(name='NoneConnect')
 
@@ -154,13 +154,13 @@ class ConnectBase(_colormap):
         from scipy.interpolate import splprep, splev
         n = 10
         radius = 13
-        dxyz = .5
+        dxyz = 0.7
         # --------------------------------------------------------
         sh = self.a_position.shape
         pos = self.a_position
         # Split positions in segments of two points :
         cut = np.vsplit(pos, int(sh[0]/2))
-        # Get center position :
+        # Get center position and starting line position :
         center = np.mean(cut, axis=1)
 
         # ============ EUCLIDIAN DISTANCE ============
@@ -170,13 +170,11 @@ class ConnectBase(_colormap):
         # ============ PROXIMAL LINES ============
         dx, dy = np.where(diff <= radius)
         r = np.arange(len(center))
-        print('dx : ', dx, '\ndy : ', dy)
-        print(center.shape)
         for k in np.unique(dx):
             dk = dx == k
             c = center[[k] + list(r[dy[dk]]), :].mean(0)
-            center[k, :] = c
-            center[dy[dk], :] = c
+            center[k, :] += (c - center[k, :]) * dxyz
+            center[dy[dk], :] += (c - center[dy[dk], :]) * dxyz
 
         # ============ 3rd POINT IN THE MIDDLE ============
         col = self.a_color[0::2, :]
@@ -188,7 +186,6 @@ class ConnectBase(_colormap):
         color = np.array([])
         index = np.arange(n)
         idx = np.c_[index[:-1], index[1:]].flatten()
-        # 0/0
         for num, k in enumerate(cut[1:]):
             tckp, u = splprep(np.ndarray.tolist(k.T), k=2, s=0.)
             y2 = np.array(splev(np.linspace(0, 1, n), tckp)).T[idx]
@@ -196,7 +193,6 @@ class ConnectBase(_colormap):
             colrep = np.tile(col[[num], ...], (len(y2), 1))
             color = np.vstack((color, colrep)) if color.size else colrep
 
-        print('POS2 : ', pos.shape, color.shape)
         self.mesh.set_data(pos=pos, color=color)
 
     def update(self):
