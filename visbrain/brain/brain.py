@@ -239,6 +239,7 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._cbfontsize = kwargs.get('cb_fontsize', 15)
         self._cbfontcolor = kwargs.get('cb_fontcolor', 'white')
         self._cblabel = kwargs.get('cb_label', '')
+        self._userobj = {}
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
