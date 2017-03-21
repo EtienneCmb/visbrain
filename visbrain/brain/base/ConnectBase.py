@@ -4,6 +4,7 @@
 - colormap managment for connectivity
 """
 import numpy as np
+from scipy.interpolate import splprep, splev
 from collections import Counter
 from warnings import warn
 
@@ -26,7 +27,8 @@ class ConnectBase(_colormap):
                  c_colorby='strength', c_dynamic=None, c_cmap='viridis',
                  c_cmap_vmin=None, c_cmap_vmax=None, c_colval=None,
                  c_cmap_under=None, c_cmap_over=None, c_cmap_clim=None,
-                 c_linewidth=3., **kwargs):
+                 c_linewidth=3., c_dradius=30., c_blxyz=.1, c_blradius=13.,
+                 **kwargs):
         """Init."""
         # Initialize elements :
         if (_xyz is not None) and(c_xyz is None):
@@ -43,8 +45,12 @@ class ConnectBase(_colormap):
         self.colorby = c_colorby
         self.dynamic = c_dynamic
         self.colval = c_colval
-        # Bundle :
-        self.blradius = 13.
+        # Density :
+        self.dradius = c_dradius
+        # Bundling :
+        self.blradius = c_blradius
+        self.blxyz = c_blxyz
+        self.blinterp = 10
 
         # Initialize colormap :
         _colormap.__init__(self, c_cmap, c_cmap_clim, c_cmap_vmin, c_cmap_vmax,
@@ -55,7 +61,6 @@ class ConnectBase(_colormap):
             self.mesh = visu.Line(name='Connectivity', antialias=True)
             self.mesh.set_gl_state('translucent', depth_test=True)
             self.update()
-            self._interp()
         else:
             self.mesh = visu.Line(name='NoneConnect')
 
@@ -94,9 +99,9 @@ class ConnectBase(_colormap):
 
         # ================ CHECK COLOR ================
         # Check colorby :
-        if self.colorby not in ['count', 'strength', 'bundle']:
+        if self.colorby not in ['count', 'strength', 'density']:
             raise ValueError("The c_colorby parameter must be 'count', "
-                             "'strength' or 'bundle'")
+                             "'strength' or 'density'")
         # Test dynamic :
         if (self.dynamic is not None) and not isinstance(self.dynamic, tuple):
             raise ValueError("c_dynamic bust be a tuple")
@@ -126,19 +131,19 @@ class ConnectBase(_colormap):
             node_count = Counter(np.ravel([self._nnz_x, self._nnz_y]))
             self._all_nnz = np.array([node_count[k] for k in self._indices])
 
-        # ----------- Bundle -----------
-        elif self.colorby == 'bundle':
+        # ----------- density -----------
+        elif self.colorby == 'density':
             # Get center to center distance :
             center, diff = self._center_distance()
-            # Wind where distances are under bundle radius :
-            d = np.ravel(np.where(diff <= self.blradius))
+            # Wind where distances are under density radius :
+            d = np.ravel(np.where(diff <= self.dradius))
             # Start coloring :
             self._all_nnz = np.zeros((self.a_position.shape[0],),
                                      dtype=np.float32)
             for num, k in enumerate(np.unique(d)):
                 dxk = np.array(np.where(d == k)[0])
-                self._all_nnz[2 * d[dxk]] = num
-                self._all_nnz[2 * d[dxk] + 1] = num
+                self._all_nnz[2 * d[dxk]] = len(dxk)
+                self._all_nnz[2 * d[dxk] + 1] = len(dxk)
 
         # ================== MinMax ==================
         # Get (min / max) :
@@ -189,12 +194,7 @@ class ConnectBase(_colormap):
 
         return center, diff
 
-    def _interp(self):
-        # --------------------------------------------------------
-        from scipy.interpolate import splprep, splev
-        n = 10
-        dxyz = 0.5
-        # --------------------------------------------------------
+    def bundling(self):
         sh = self.a_position.shape
         pos = self.a_position
         # Split positions in segments of two points :
@@ -212,8 +212,8 @@ class ConnectBase(_colormap):
         for k in np.unique(dx):
             dk = dx == k
             c = center[[k] + list(r[dy[dk]]), :].mean(0)
-            center[k, :] += (c - center[k, :]) * dxyz
-            center[dy[dk], :] += (c - center[dy[dk], :]) * dxyz
+            center[k, :] += (c - center[k, :]) * self.blxyz
+            center[dy[dk], :] += (c - center[dy[dk], :]) * self.blxyz
 
         # ============ 3rd POINT IN THE MIDDLE ============
         col = self.a_color[0::2, :]
@@ -223,11 +223,11 @@ class ConnectBase(_colormap):
 
         pos = np.array([])
         color = np.array([])
-        index = np.arange(n)
+        index = np.arange(self.blinterp)
         idx = np.c_[index[:-1], index[1:]].flatten()
         for num, k in enumerate(cut[1:]):
             tckp, u = splprep(np.ndarray.tolist(k.T), k=2, s=0.)
-            y2 = np.array(splev(np.linspace(0, 1, n), tckp)).T[idx]
+            y2 = np.array(splev(np.linspace(0, 1, self.blinterp), tckp)).T[idx]
             pos = np.vstack((pos, y2)) if pos.size else y2
             colrep = np.tile(col[[num], ...], (len(y2), 1))
             color = np.vstack((color, colrep)) if color.size else colrep

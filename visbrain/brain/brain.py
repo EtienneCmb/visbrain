@@ -126,8 +126,13 @@ class Brain(uiInit, uiElements, base, userfcn):
 
         c_colorby: string, optional, (def: 'strength')
             Define how to color connexions. Use 'strength' if the color has to
-            be modulate by the connectivity strength or use 'count' if the
-            color depends on the number of connexions per node.
+            be modulate by the connectivity strength. Use 'count' if the
+            color depends on the number of connexions per node. Use 'density'
+            to define colors according to the number of line in a sphere of
+            radius c_dradius.
+
+        c_dradius: float, optional, (def: 30.)
+            Radius for the density color line method.
 
         c_colval: dict, optional, (def: None)
             Define colors for a specifics values. For example, c_colval=
