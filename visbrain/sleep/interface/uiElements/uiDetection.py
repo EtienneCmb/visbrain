@@ -2,7 +2,7 @@
 import numpy as np
 from warnings import warn
 
-from ....utils import remdetect, spindlesdetect
+from ....utils import remdetect, spindlesdetect, slowwavedetect
 
 from PyQt4 import QtGui
 
@@ -78,13 +78,14 @@ class uiDetection(object):
     def _fcn_switchDetection(self):
         """Switch between detection types (show / hide panels)."""
         # Define ref :
-        ref = ['REM', 'Spindles', 'Peaks']
+        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves']
         # Get current selected text :
         viz = [str(self._ToolDetectType.currentText()) == k for k in ref]
         # Set widget visibility :
         _ = [k.setVisible(i) for k, i in zip([self._ToolRemPanel,
                                               self._ToolSpinPanel,
-                                              self._ToolPeakPanel], viz)]
+                                              self._ToolPeakPanel,
+                                              self._ToolWavePanel], viz)]
 
     # =====================================================================
     # RUN DETECTION
