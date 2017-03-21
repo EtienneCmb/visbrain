@@ -98,6 +98,8 @@ class uiConnectivity(object):
             return 0
         elif colorby == 'count':
             return 1
+        elif colorby == 'bundle':
+            return 2
         else:
             raise ValueError('c_colorby not in ["strength", "count"]')
 

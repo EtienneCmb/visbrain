@@ -32,15 +32,19 @@ class ConnectBase(_colormap):
         if (_xyz is not None) and(c_xyz is None):
             warn("No node's coordinates found for connectivity (c_xyz). "
                  "Source's location will be used instead")
+        # Connectivity properties :
             self.xyz = _xyz
         else:
             self.xyz = c_xyz
         self.connect = c_connect
         self.select = c_select
+        self._lw = c_linewidth
+        # Color :
         self.colorby = c_colorby
         self.dynamic = c_dynamic
         self.colval = c_colval
-        self._lw = c_linewidth
+        # Bundle :
+        self.blradius = 13.
 
         # Initialize colormap :
         _colormap.__init__(self, c_cmap, c_cmap_clim, c_cmap_vmin, c_cmap_vmax,
@@ -51,7 +55,7 @@ class ConnectBase(_colormap):
             self.mesh = visu.Line(name='Connectivity', antialias=True)
             self.mesh.set_gl_state('translucent', depth_test=True)
             self.update()
-            # self._interp()
+            self._interp()
         else:
             self.mesh = visu.Line(name='NoneConnect')
 
@@ -90,9 +94,9 @@ class ConnectBase(_colormap):
 
         # ================ CHECK COLOR ================
         # Check colorby :
-        if self.colorby not in ['count', 'strength']:
-            raise ValueError("The c_colorby parameter must be 'count' or "
-                             "'strength'")
+        if self.colorby not in ['count', 'strength', 'bundle']:
+            raise ValueError("The c_colorby parameter must be 'count', "
+                             "'strength' or 'bundle'")
         # Test dynamic :
         if (self.dynamic is not None) and not isinstance(self.dynamic, tuple):
             raise ValueError("c_dynamic bust be a tuple")
@@ -108,29 +112,48 @@ class ConnectBase(_colormap):
 
     def _check_color(self):
         """Check color variables."""
-        # Colorby strength of connection :
+        # ================== COLOR TYPE ==================
+        # ----------- Strength -----------
         if self.colorby == 'strength':
             # Get non-zeros-values :
             nnz_values = self.connect.compressed()
             # Concatenate in alternance all non-zero values :
             self._all_nnz = np.c_[nnz_values, nnz_values].flatten()
 
-        # Colorby count on each node :
+        # ----------- Count -----------
         elif self.colorby == 'count':
             # Count the number of occurence for each node :
             node_count = Counter(np.ravel([self._nnz_x, self._nnz_y]))
             self._all_nnz = np.array([node_count[k] for k in self._indices])
 
+        # ----------- Bundle -----------
+        elif self.colorby == 'bundle':
+            # Get center to center distance :
+            center, diff = self._center_distance()
+            # Wind where distances are under bundle radius :
+            d = np.ravel(np.where(diff <= self.blradius))
+            # Start coloring :
+            self._all_nnz = np.zeros((self.a_position.shape[0],),
+                                     dtype=np.float32)
+            for num, k in enumerate(np.unique(d)):
+                dxk = np.array(np.where(d == k)[0])
+                self._all_nnz[2 * d[dxk]] = num
+                self._all_nnz[2 * d[dxk] + 1] = num
+
+        # ================== MinMax ==================
         # Get (min / max) :
         self._MinMax = (self._all_nnz.min(), self._all_nnz.max())
         self._cb['clim'] = self._MinMax
 
-        # Get associated colormap :
+        # ================== GET COLOR ==================
+        # ----------- User specific color -----------
         if (self.colval is not None) and isinstance(self.colval, dict):
             # Build a_color and send to buffer :
             self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)
             for k, v in zip(self.colval.keys(), self.colval.values()):
                 self.a_color[self._all_nnz == k, :] = v
+
+        # ----------- Colormap -----------
         else:
             colormap = array2colormap(self._all_nnz, cmap=self._cb['cmap'],
                                       vmin=self._cb['vmin'],
@@ -153,12 +176,24 @@ class ConnectBase(_colormap):
         self.mesh.set_data(pos=self.a_position, color=self.a_color,
                            connect='segments', width=self.lw)
 
+    def _center_distance(self):
+        """Get the euclidian distance between centers."""
+        # Split positions in segments of two points :
+        cut = np.vsplit(self.a_position, int(self.a_position.shape[0]/2))
+        # Get center position and starting line position :
+        center = np.mean(cut, axis=1)
+
+        # ============ EUCLIDIAN DISTANCE ============
+        diff = np.sqrt(np.square(center[:, np.newaxis, :] - center).sum(2))
+        diff[np.tril_indices_from(diff)] = np.inf
+
+        return center, diff
+
     def _interp(self):
         # --------------------------------------------------------
         from scipy.interpolate import splprep, splev
         n = 10
-        radius = 13
-        dxyz = 0.3
+        dxyz = 0.5
         # --------------------------------------------------------
         sh = self.a_position.shape
         pos = self.a_position
@@ -172,7 +207,7 @@ class ConnectBase(_colormap):
         diff[np.tril_indices_from(diff)] = np.inf
 
         # ============ PROXIMAL LINES ============
-        dx, dy = np.where(diff <= radius)
+        dx, dy = np.where(diff <= self.blradius)
         r = np.arange(len(center))
         for k in np.unique(dx):
             dk = dx == k
