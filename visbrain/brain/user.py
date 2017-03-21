@@ -577,7 +577,7 @@ class userfcn(object):
 
         Kargs:
             kwargs: dict
-                Pass every further arguments starting with s_ (like s_xyz,
+                Pass every further arguments starting with "s" (like s_xyz,
                 s_data, s_cmap, s_symbol...)
         """
         self._userobj[name] = SourcesBase(**kwargs)
@@ -600,7 +600,7 @@ class userfcn(object):
 
         Kargs:
             kwargs: dict
-                Pass every further arguments starting with c_ (like c_xyz,
+                Pass every further arguments starting with "c" (like c_xyz,
                 c_connect, c_select, c_colorby...)
         """
         self._userobj[name] = ConnectBase(**kwargs)
