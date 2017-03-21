@@ -192,11 +192,8 @@ class uiCmap(object):
                 # Update connectivity :
                 elif self.cmapConnect.isChecked():
                     self.connect.cbUpdateFrom(self.cb)
-                    self.connect.mesh.set_color(colorby=self.connect.colorby,
-                                                dynamic=self.connect.dynamic,
-                                                **self.connect._cb)
-                    self.connect.mesh.update()
-                    self.cb.cbupdate(self.connect.mesh._all_nnz, **self.cb._cb)
+                    self.connect._check_color()
+                    self.cb.cbupdate(self.connect._all_nnz, **self.cb._cb)
 
             # except:
             #     pass
@@ -235,7 +232,6 @@ class uiCmap(object):
             self.cb.cbUpdateFrom(self.sources)
         # Connectivity object :
         elif self.cmapConnect.isChecked():
-            self.connect._MinMax = self.connect.mesh.get_MinMax
             self.cb.cbUpdateFrom(self.connect)
 
     def _auto_scale(self):

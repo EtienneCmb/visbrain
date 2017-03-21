@@ -136,7 +136,7 @@ class Brain(uiInit, uiElements, base, userfcn):
             the color of all connexions that are not in the dictionary
             otherwise they are going to be ignored.
 
-        c_linewidth: float, optional, (def: 4.0)
+        c_linewidth: float, optional, (def: 3.0)
             Linewidth of connectivity lines.
 
         cmap: string, (def: 'inferno')
@@ -239,6 +239,7 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._cbfontsize = kwargs.get('cb_fontsize', 15)
         self._cbfontcolor = kwargs.get('cb_fontcolor', 'white')
         self._cblabel = kwargs.get('cb_label', '')
+        self._userobj = {}
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
