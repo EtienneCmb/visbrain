@@ -9,6 +9,7 @@ Brain instance.
 import numpy as np
 import os.path
 
+from .base.SourcesBase import SourcesBase
 from ..utils import color2vb
 
 __all__ = ['userfcn']
@@ -562,6 +563,15 @@ class userfcn(object):
                         [cmap, clim, vmin, vmax, under, over]):
             if k is not None:
                 self.sources._cb[i] = k
+
+    def add_sources(self, name, **kwargs):
+        """Add source's object.
+
+        Warning : sources that are adding usnig this methos cannot be controled
+        using the GUI.
+        """
+        self._userobj[name] = SourcesBase(**kwargs)
+        self._userobj[name].mesh.parent = self._vbNode
 
     # =========================================================================
     # =========================================================================

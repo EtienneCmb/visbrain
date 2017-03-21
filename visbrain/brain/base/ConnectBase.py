@@ -46,8 +46,13 @@ class ConnectBase(_colormap):
             self.mesh = visu.Line(name='Connectivity', antialias=True)
             self.mesh.set_gl_state('translucent', depth_test=True)
             self.update()
+            # self._interp()
         else:
             self.mesh = visu.Line(name='NoneConnect')
+
+    def __len__(self):
+        """Return the number of sources."""
+        return self.xyz.shape[0]
 
     def _check_data(self):
         """Check data and color."""
@@ -104,21 +109,16 @@ class ConnectBase(_colormap):
             nnz_values = self.connect.compressed()
             # Concatenate in alternance all non-zero values :
             self._all_nnz = np.c_[nnz_values, nnz_values].flatten()
-            # Get looping indices :
-            self._loopIndex = self._Nindices
 
         # Colorby count on each node :
         elif self.colorby == 'count':
             # Count the number of occurence for each node :
             node_count = Counter(np.ravel([self._nnz_x, self._nnz_y]))
             self._all_nnz = np.array([node_count[k] for k in self._indices])
-            # Get looping indices :
-            self._loopIndex = self._Nindices
 
         # Get (min / max) :
         self._MinMax = (self._all_nnz.min(), self._all_nnz.max())
-        if self._cb['clim'] is None:
-            self._cb['clim'] = self._MinMax
+        self._cb['clim'] = self._MinMax
 
         # Get associated colormap :
         if (self.colval is not None) and isinstance(self.colval, dict):
@@ -142,11 +142,57 @@ class ConnectBase(_colormap):
 
             # Build a_color and send to buffer :
             self.a_color = np.zeros((2*len(self._nnz_x), 4), dtype=np.float32)
-            self.a_color[self._Nindices, :] = colormap[self._loopIndex, :]
+            self.a_color[self._Nindices, :] = colormap[self._Nindices, :]
 
         # Set to data :
         self.mesh.set_data(pos=self.a_position, color=self.a_color,
                            connect='segments', width=self.lw)
+
+    def _interp(self):
+        # --------------------------------------------------------
+        from scipy.interpolate import splprep, splev
+        n = 10
+        radius = 13
+        dxyz = 0.3
+        # --------------------------------------------------------
+        sh = self.a_position.shape
+        pos = self.a_position
+        # Split positions in segments of two points :
+        cut = np.vsplit(pos, int(sh[0]/2))
+        # Get center position and starting line position :
+        center = np.mean(cut, axis=1)
+
+        # ============ EUCLIDIAN DISTANCE ============
+        diff = np.sqrt(np.square(center[:, np.newaxis, :] - center).sum(2))
+        diff[np.tril_indices_from(diff)] = np.inf
+
+        # ============ PROXIMAL LINES ============
+        dx, dy = np.where(diff <= radius)
+        r = np.arange(len(center))
+        for k in np.unique(dx):
+            dk = dx == k
+            c = center[[k] + list(r[dy[dk]]), :].mean(0)
+            center[k, :] += (c - center[k, :]) * dxyz
+            center[dy[dk], :] += (c - center[dy[dk], :]) * dxyz
+
+        # ============ 3rd POINT IN THE MIDDLE ============
+        col = self.a_color[0::2, :]
+        pos = np.c_[pos[0::2], center, pos[1::2]].reshape(len(center)*3, 3)
+
+        cut = np.vsplit(pos, int(pos.shape[0]/3))
+
+        pos = np.array([])
+        color = np.array([])
+        index = np.arange(n)
+        idx = np.c_[index[:-1], index[1:]].flatten()
+        for num, k in enumerate(cut[1:]):
+            tckp, u = splprep(np.ndarray.tolist(k.T), k=2, s=0.)
+            y2 = np.array(splev(np.linspace(0, 1, n), tckp)).T[idx]
+            pos = np.vstack((pos, y2)) if pos.size else y2
+            colrep = np.tile(col[[num], ...], (len(y2), 1))
+            color = np.vstack((color, colrep)) if color.size else colrep
+
+        self.mesh.set_data(pos=pos, color=color)
 
     def update(self):
         """Update."""
