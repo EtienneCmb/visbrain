@@ -10,6 +10,7 @@ import numpy as np
 import os.path
 
 from .base.SourcesBase import SourcesBase
+from .base.ConnectBase import ConnectBase
 from ..utils import color2vb
 
 __all__ = ['userfcn']
@@ -565,10 +566,19 @@ class userfcn(object):
                 self.sources._cb[i] = k
 
     def add_sources(self, name, **kwargs):
-        """Add source's object.
+        """Add a supplementar source's object.
 
         Warning : sources that are adding usnig this methos cannot be controled
         using the GUI.
+
+        Args:
+            name: string
+                Your source's object name.
+
+        Kargs:
+            kwargs: dict
+                Pass every further arguments starting with s_ (like s_xyz,
+                s_data, s_cmap, s_symbol...)
         """
         self._userobj[name] = SourcesBase(**kwargs)
         self._userobj[name].mesh.parent = self._vbNode
@@ -578,6 +588,23 @@ class userfcn(object):
     #                            CONNECTIVITY
     # =========================================================================
     # =========================================================================
+    def add_connect(self, name, **kwargs):
+        """Add a supplementar connectivity object.
+
+        Warning : connectivity lines that are adding usnig this methos cannot
+        be controled using the GUI.
+
+        Args:
+            name: string
+                Your connectivity lines object name.
+
+        Kargs:
+            kwargs: dict
+                Pass every further arguments starting with c_ (like c_xyz,
+                c_connect, c_select, c_colorby...)
+        """
+        self._userobj[name] = ConnectBase(**kwargs)
+        self._userobj[name].mesh.parent = self._vbNode
 
     # =========================================================================
     # =========================================================================

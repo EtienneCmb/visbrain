@@ -45,7 +45,8 @@ class base(CbarBase, transformations):
         # the relevant attribute :
         self.atlas = AtlasBase(**kwargs)
         self.sources = SourcesBase(**kwargs)
-        self.connect = ConnectBase(c_xyz=self.sources.xyz, **kwargs)
+        self.connect = ConnectBase(_xyz=self.sources.xyz,
+                                   c_xyz=self.sources.xyz, **kwargs)
         self.area = AreaBase(scale_factor=self.atlas._scaleMax,
                              name='NoneArea', select=None, color='#ab4642')
 

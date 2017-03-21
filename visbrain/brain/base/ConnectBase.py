@@ -5,10 +5,10 @@
 """
 import numpy as np
 from collections import Counter
+from warnings import warn
 
 import vispy.scene.visuals as visu
 
-# from .visuals import ConnectMesh
 from ...utils import _colormap, color2vb, array2colormap, normalize
 
 
@@ -22,14 +22,19 @@ class ConnectBase(_colormap):
     (connectivity).
     """
 
-    def __init__(self, c_xyz=[], c_connect=None, c_select=None,
+    def __init__(self, _xyz=[], c_xyz=None, c_connect=None, c_select=None,
                  c_colorby='strength', c_dynamic=None, c_cmap='viridis',
                  c_cmap_vmin=None, c_cmap_vmax=None, c_colval=None,
                  c_cmap_under=None, c_cmap_over=None, c_cmap_clim=None,
                  c_linewidth=3., **kwargs):
         """Init."""
         # Initialize elements :
-        self.xyz = c_xyz
+        if (_xyz is not None) and(c_xyz is None):
+            warn("No node's coordinates found for connectivity (c_xyz). "
+                 "Source's location will be used instead")
+            self.xyz = _xyz
+        else:
+            self.xyz = c_xyz
         self.connect = c_connect
         self.select = c_select
         self.colorby = c_colorby
