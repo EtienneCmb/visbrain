@@ -77,6 +77,10 @@ Opacity
 
    Example of cortical projection.
 
+Add source object
+~~~~~~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.add_sources
+
 Cortical projection
 ~~~~~~~~~~~~~~~~~~~
 .. automethod:: visbrain.brain.user.userfcn.cortical_projection
@@ -98,6 +102,10 @@ Set of functions for an iteractive control of connectivity object. Use the metho
    :align:   center
 
    Example of connectivity setup.
+
+Add connectivity object
+~~~~~~~~~~~~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.add_connect
 
 ROI functions
 ^^^^^^^^^^^^^
