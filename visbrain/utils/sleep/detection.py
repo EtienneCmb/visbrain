@@ -11,7 +11,7 @@ import numpy as np
 from scipy.signal import hilbert
 from ..filtering import filt, morlet
 
-__all__ = ['peakdetect', 'remdetect', 'spindlesdetect']
+__all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect']
 
 
 ###########################################################################
