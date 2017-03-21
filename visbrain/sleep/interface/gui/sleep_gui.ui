@@ -162,7 +162,7 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>98</width>
+                       <width>275</width>
                        <height>298</height>
                       </rect>
                      </property>
@@ -863,7 +863,7 @@ trend, filtering)</string>
                 <x>0</x>
                 <y>0</y>
                 <width>334</width>
-                <height>389</height>
+                <height>728</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -1644,7 +1644,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -1672,7 +1672,7 @@ selected, visible or all channels.</string>
                     <x>0</x>
                     <y>0</y>
                     <width>329</width>
-                    <height>669</height>
+                    <height>735</height>
                    </rect>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_25">
@@ -1709,6 +1709,11 @@ selected, visible or all channels.</string>
                           <item>
                            <property name="text">
                             <string>Peaks</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>Slow waves</string>
                            </property>
                           </item>
                          </widget>
@@ -2079,6 +2084,59 @@ selected, visible or all channels.</string>
                         </layout>
                        </widget>
                       </item>
+                      <item>
+                       <widget class="QWidget" name="_ToolWavePanel" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_40">
+                         <property name="spacing">
+                          <number>0</number>
+                         </property>
+                         <property name="margin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <layout class="QGridLayout" name="gridLayout_9">
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_46">
+                             <property name="text">
+                              <string>Method</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QComboBox" name="_ToolWaveMeth">
+                             <item>
+                              <property name="text">
+                               <string>wavelet_power</string>
+                              </property>
+                             </item>
+                             <item>
+                              <property name="text">
+                               <string>wavelet_amplitude</string>
+                              </property>
+                             </item>
+                            </widget>
+                           </item>
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_47">
+                             <property name="text">
+                              <string>Threshold</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QDoubleSpinBox" name="_ToolWaveTh"/>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
                      </layout>
                     </widget>
                    </item>
@@ -2093,13 +2151,6 @@ selected, visible or all channels.</string>
                         <property name="topMargin">
                          <number>6</number>
                         </property>
-                        <item row="1" column="1">
-                         <widget class="QRadioButton" name="_ToolRdViz">
-                          <property name="text">
-                           <string>Visible</string>
-                          </property>
-                         </widget>
-                        </item>
                         <item row="1" column="0">
                          <widget class="QRadioButton" name="_ToolRdSelected">
                           <property name="text">
@@ -2107,6 +2158,13 @@ selected, visible or all channels.</string>
                           </property>
                           <property name="checked">
                            <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1">
+                         <widget class="QRadioButton" name="_ToolRdViz">
+                          <property name="text">
+                           <string>Visible</string>
                           </property>
                          </widget>
                         </item>
