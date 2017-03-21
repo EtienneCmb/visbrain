@@ -46,7 +46,7 @@ class ConnectBase(_colormap):
             self.mesh = visu.Line(name='Connectivity', antialias=True)
             self.mesh.set_gl_state('translucent', depth_test=True)
             self.update()
-            # self._interp()
+            self._interp()
         else:
             self.mesh = visu.Line(name='NoneConnect')
 
@@ -118,8 +118,7 @@ class ConnectBase(_colormap):
 
         # Get (min / max) :
         self._MinMax = (self._all_nnz.min(), self._all_nnz.max())
-        if self._cb['clim'] is None:
-            self._cb['clim'] = self._MinMax
+        self._cb['clim'] = self._MinMax
 
         # Get associated colormap :
         if (self.colval is not None) and isinstance(self.colval, dict):
@@ -154,7 +153,7 @@ class ConnectBase(_colormap):
         from scipy.interpolate import splprep, splev
         n = 10
         radius = 13
-        dxyz = 0.7
+        dxyz = 0.3
         # --------------------------------------------------------
         sh = self.a_position.shape
         pos = self.a_position
