@@ -35,6 +35,10 @@ class uiDetection(object):
         self._ToolRemTh.setValue(3.)
 
         # -------------------------------------------------
+        # Slow Wave detection :
+        self._ToolWaveTh.setValue(1.)
+
+        # -------------------------------------------------
         # Spindles detection :
         self._ToolSpinTh.setValue(2.)
         self._ToolSpinFmax.setValue(14.)
@@ -110,7 +114,7 @@ class uiDetection(object):
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_applyDetection(self):
-        """Apply detection (either REM / Spindles / Peaks."""
+        """Apply detection (either REM / Spindles / Peaks / Slow Wave"""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
@@ -188,6 +192,34 @@ class uiDetection(object):
                 else:
                     warn("\nNo Spindles detected on channel "+self._channels[
                          k]+". Try to decrease the threshold")
+
+            # ------------------- SLOW WAVES -------------------
+            elif method == 'Slow waves':
+                # Get variables :
+                thr = self._ToolWaveTh.value()
+                meth = str(self._ToolWaveMeth.currentText())
+
+                # Get Slow Waves indices :
+                index, number, duration = slowwavedetect(self._data[k, :],
+                                                        self._sf, thr, meth)
+
+                if index.size:
+                    # Set them + color to ChannelPlot object :
+                    self._chan.colidx[k]['color'] = self._defspin
+                    self._chan.colidx[k]['idx'] = index
+                    # Find only where index start / finish :
+                    ind = np.where(np.gradient(index) != 1.)[0]
+                    ind = index[np.hstack(([0], ind, [len(index) - 1]))]
+                    # Report index on hypnogram :
+                    if toReport:
+                        # Display on hypnogram :
+                        self._hyp.set_report(self._time, ind, symbol='o',
+                                             color=self._defslowwave, y=1.5)
+
+                else:
+                    warn("\nNo Slow Wave detected on channel "+self._channels[
+                         k]+". Try to decrease the threshold")
+
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':

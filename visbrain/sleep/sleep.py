@@ -118,6 +118,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._defcmap = 'viridis'
         # Spindles / REM / Peaks colors :
         self._defspin = color2vb('#d73737')
+        self._defslowwave = color2vb('#ff796c')
         self._defrem = color2vb('#6684e1')
         self._defpeaks = '#b854d4'
         # Get some data info (min / max / std / mean)

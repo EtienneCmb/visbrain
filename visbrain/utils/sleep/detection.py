@@ -253,8 +253,8 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
 # SLOW WAVE DETECTION
 ###########################################################################
 
-def slowwavedetect(elec, sf, threshold, fMin=0.5, fMax=4,
-                   method='wavelet_power', moving_s=30):
+
+def slowwavedetect(elec, sf, threshold, method, fMin=0.5, fMax=4, moving_s=30):
     """Perform a Slow Wave detection
 
     Args:
@@ -279,7 +279,7 @@ def slowwavedetect(elec, sf, threshold, fMin=0.5, fMax=4,
             Method to extract delta power. Use either 'welch',
             'wavelet_power' or 'wavelet_amp'.
 
-        moving_s: int, optional (def 60)
+        moving_s: int, optional (def 30)
             Time (sec) window of the moving average
 
     Return:
@@ -300,11 +300,16 @@ def slowwavedetect(elec, sf, threshold, fMin=0.5, fMax=4,
         delta_npow, _, _, _ = _wavelet_bpower(elec, freqs, sf, norm=True)
 
         # Smooth
-        delta_nfpow= _movingaverage(delta_npow, moving_s * 1000, sf)
+        delta_nfpow = _movingaverage(delta_npow, moving_s * 1000, sf)
 
         # Normalized power criteria
-        thresh = np.mean(delta_nfpow) + threshold * np.std(delta_nfpow)
+        thresh = np.nanmean(delta_nfpow) + threshold * np.nanstd(delta_nfpow)
         idx_sup_thr = np.where(delta_nfpow > thresh)[0]
+
+        # Raw signal amplitude criteria
+        raw_thresh = 70 / 2  # raw amplitude in mV (Iber et al 2007)
+        idx_sup_raw = np.where(abs(elec) > raw_thresh)[0]
+        idx_sup_thr = np.intersect1d(idx_sup_thr, idx_sup_raw)
 
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
 
@@ -315,14 +320,16 @@ def slowwavedetect(elec, sf, threshold, fMin=0.5, fMax=4,
         delta_spec_norm = _welch_bpower(elec, fMin, fMax, sf,
                                         window_s=30, norm=True)
 
-    elif method == 'wavelet_amp':
+    elif method == 'wavelet_amplitude':
         analytic = morlet(elec, sf, np.mean([fMin, fMax]))
         amplitude = np.abs(analytic)
         # Clip extreme values
-        amplitude = np.clip(amplitude, 0, 10*np.std(amplitude))
-        # Find supra-threshold values
+        amplitude = np.clip(amplitude, 0, 10 * np.std(amplitude))
+
         thresh = np.mean(amplitude) + threshold * np.std(amplitude)
+
         idx_sup_thr = np.where(amplitude > thresh)[0]
+
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
 
         return idx_sup_thr, number, duration_ms
@@ -330,6 +337,7 @@ def slowwavedetect(elec, sf, threshold, fMin=0.5, fMax=4,
 ###########################################################################
 # PEAKS DETECTION
 ###########################################################################
+
 
 def peakdetect(y_axis, x_axis=None, lookahead=200, delta=0):
     """Perform a peak detection.
@@ -466,6 +474,7 @@ def _datacheck(x_axis, y_axis):
 # SIGNAL PROCESSING FUNCTIONS
 ###########################################################################
 
+
 def _movingaverage(x, window, sf):
     """Perform a moving average.
 
@@ -512,6 +521,7 @@ def _derivative(x, window, sf):
 
     return deriv
 
+
 def _wavelet_bpower(x, freqs, sf, norm=True):
     """Compute bandwise-normalized power of data using morlet wavelet
 
@@ -554,6 +564,7 @@ def _wavelet_bpower(x, freqs, sf, norm=True):
     else:
         return delta_pow, theta_pow, alpha_pow, beta_pow
 
+
 def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
     """Compute bandwise-normalized power of data using morlet wavelet
 
@@ -575,18 +586,18 @@ def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
     """
     from scipy.signal import welch
     freq_spacing = 0.1
-    f_vector = np.arange(0, sf/2 + freq_spacing, freq_spacing)
+    f_vector = np.arange(0, sf / 2 + freq_spacing, freq_spacing)
     idx_fMin = np.where(f_vector == fMin)[0][0]
     idx_fMax = np.where(f_vector == fMax)[0][0] + 1
 
     delta_spec = np.array([], dtype=float)
     delta_spec_norm = np.array([], dtype=float)
 
-    for i in np.arange(0, len(x), window_s*sf):
-        f, Pxx_spec = welch(x[i:i+window_s*sf], sf, 'flattop',
-                            nperseg=sf*(1/freq_spacing), scaling='spectrum')
-        mean_delta = np.mean(Pxx_spec[idx_fMin:idx_fMax,])
-        norm_delta = np.sum(Pxx_spec[idx_fMin:idx_fMax,]) / np.sum(Pxx_spec)
+    for i in np.arange(0, len(x), window_s * sf):
+        f, Pxx_spec = welch(x[i:i + window_s * sf], sf, 'flattop',
+                            nperseg=sf * (1 / freq_spacing), scaling='spectrum')
+        mean_delta = np.mean(Pxx_spec[idx_fMin:idx_fMax, ])
+        norm_delta = np.sum(Pxx_spec[idx_fMin:idx_fMax, ]) / np.sum(Pxx_spec)
         delta_spec = np.append(delta_spec, mean_delta)
         delta_spec_norm = np.append(delta_spec_norm, norm_delta)
 
@@ -595,6 +606,7 @@ def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
 ###########################################################################
 # INDEX MANIPULATION FUNCTIONS
 ###########################################################################
+
 
 def _events_duration(index, sf):
     """Compute spindles/REM duration in ms.
@@ -662,6 +674,7 @@ def _events_removal(idx_start, idx_stop, good_dur):
     else:
         return np.array([], dtype=int)
 
+
 def _events_distance_fill(index, min_distance_ms, sf):
     """Remove events that do not have the good duration.
 
@@ -681,7 +694,7 @@ def _events_distance_fill(index, min_distance_ms, sf):
             Filled (corrected) Indices of supra-threshold events
     """
     # Convert min_distance_ms
-    min_distance = min_distance_ms/ 1000. * sf
+    min_distance = min_distance_ms / 1000. * sf
     idx_diff = np.diff(index)
     idx_distance = np.where(idx_diff > 1)[0]
     distance = idx_diff[idx_diff > 1]
@@ -689,10 +702,9 @@ def _events_distance_fill(index, min_distance_ms, sf):
     # Fill gap between events separated with less than min_distance_ms
     if len(bad) > 0:
 
-        fill = np.hstack([np.arange(index[j]+1, index[j+1])
-                            for i, j in enumerate(bad)])
+        fill = np.hstack([np.arange(index[j] + 1, index[j + 1])
+                          for i, j in enumerate(bad)])
         f_index = np.sort(np.append(index, fill))
         return f_index
     else:
         return index
-
