@@ -47,7 +47,6 @@ class ConnectBase(_colormap):
             self.mesh.set_gl_state('translucent', depth_test=True)
             self.update()
             self._interp()
-            0/0
         else:
             self.mesh = visu.Line(name='NoneConnect')
 
@@ -151,7 +150,54 @@ class ConnectBase(_colormap):
                            connect='segments', width=self.lw)
 
     def _interp(self):
-        cut = np.vsplit(self.a_position, int(self.a_position.shape[0]/2))
+        # --------------------------------------------------------
+        from scipy.interpolate import splprep, splev
+        n = 10
+        radius = 13
+        dxyz = .5
+        # --------------------------------------------------------
+        sh = self.a_position.shape
+        pos = self.a_position
+        # Split positions in segments of two points :
+        cut = np.vsplit(pos, int(sh[0]/2))
+        # Get center position :
+        center = np.mean(cut, axis=1)
+
+        # ============ EUCLIDIAN DISTANCE ============
+        diff = np.sqrt(np.square(center[:, np.newaxis, :] - center).sum(2))
+        diff[np.tril_indices_from(diff)] = np.inf
+
+        # ============ PROXIMAL LINES ============
+        dx, dy = np.where(diff <= radius)
+        r = np.arange(len(center))
+        print('dx : ', dx, '\ndy : ', dy)
+        print(center.shape)
+        for k in np.unique(dx):
+            dk = dx == k
+            c = center[[k] + list(r[dy[dk]]), :].mean(0)
+            center[k, :] = c
+            center[dy[dk], :] = c
+
+        # ============ 3rd POINT IN THE MIDDLE ============
+        col = self.a_color[0::2, :]
+        pos = np.c_[pos[0::2], center, pos[1::2]].reshape(len(center)*3, 3)
+
+        cut = np.vsplit(pos, int(pos.shape[0]/3))
+
+        pos = np.array([])
+        color = np.array([])
+        index = np.arange(n)
+        idx = np.c_[index[:-1], index[1:]].flatten()
+        # 0/0
+        for num, k in enumerate(cut[1:]):
+            tckp, u = splprep(np.ndarray.tolist(k.T), k=2, s=0.)
+            y2 = np.array(splev(np.linspace(0, 1, n), tckp)).T[idx]
+            pos = np.vstack((pos, y2)) if pos.size else y2
+            colrep = np.tile(col[[num], ...], (len(y2), 1))
+            color = np.vstack((color, colrep)) if color.size else colrep
+
+        print('POS2 : ', pos.shape, color.shape)
+        self.mesh.set_data(pos=pos, color=color)
 
     def update(self):
         """Update."""
