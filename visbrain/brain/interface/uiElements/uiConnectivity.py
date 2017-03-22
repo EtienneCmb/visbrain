@@ -125,6 +125,9 @@ class uiConnectivity(object):
         self.connect.mesh.visible = viz
         self.uiConnectShow.setChecked(viz)
         self.toolBox_5.setEnabled(viz)
+        self.toolBox_6.setEnabled(viz)
+        self.o_Connect.setEnabled(viz)
+        self.o_Connect.setChecked(viz)
 
     def _fcn_applyBundle(self):
         """Apply line bundling."""

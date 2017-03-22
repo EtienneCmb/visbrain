@@ -202,8 +202,7 @@ class SourcesBase(_colormap):
         self.mesh.set_data(xyz, edge_color=self.edgecolor, face_color=sColor,
                            size=sData, scaling=self.scaling,
                            edge_width=self.edgewidth, symbol=self.symbol)
-        # self.mesh.set_gl_state('translucent', depth_test=False,
-        #                        cull_face=True)
+        self.mesh.set_gl_state('translucent')
 
     def update(self):
         """Update sources without rendering.

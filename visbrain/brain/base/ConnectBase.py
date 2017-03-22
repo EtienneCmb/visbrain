@@ -60,8 +60,9 @@ class ConnectBase(_colormap):
         # Object creation :
         if (self.xyz is not None) and (self.connect is not None):
             self.mesh = visu.Line(name='Connectivity', antialias=True)
-            self.mesh.set_gl_state('translucent', depth_test=True)
+            self.mesh.set_gl_state('translucent')
             self.update()
+            self._maskbck = self.connect.mask.copy() 
         else:
             self.mesh = visu.Line(name='NoneConnect')
 

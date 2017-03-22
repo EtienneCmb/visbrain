@@ -237,6 +237,7 @@ class uiSettings(object):
         bgd = (self.bgd_red.value(), self.bgd_green.value(),
                self.bgd_blue.value())
         self.view.canvas.bgcolor = bgd
+        self.view.cbcanvas.bgcolor = bgd
 
     # =============================================================
     # ROTATION

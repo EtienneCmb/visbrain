@@ -66,7 +66,7 @@
           <bool>true</bool>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>0</number>
          </property>
          <property name="documentMode">
           <bool>true</bool>
@@ -379,6 +379,9 @@
                       <property name="text">
                        <string>Sources</string>
                       </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
                      </widget>
                     </item>
                     <item row="1" column="0">
@@ -402,6 +405,9 @@
                       <property name="text">
                        <string>Connectivity</string>
                       </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
                      </widget>
                     </item>
                     <item row="1" column="2">
@@ -411,6 +417,9 @@
                       </property>
                       <property name="text">
                        <string>Text</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
                       </property>
                      </widget>
                     </item>
@@ -4014,12 +4023,12 @@ reflection</string>
               </spacer>
              </item>
              <item>
-              <widget class="QCheckBox" name="q_cmap_interact">
+              <widget class="QCheckBox" name="_qcmapVisible">
                <property name="toolTip">
                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use this parameter to see colormap changes in live&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="text">
-                <string>Process in live</string>
+                <string>Display</string>
                </property>
                <property name="checked">
                 <bool>false</bool>
@@ -4506,7 +4515,7 @@ reflection</string>
        <number>0</number>
       </property>
       <item>
-       <widget class="QWidget" name="widget_4" native="true">
+       <widget class="QWidget" name="cbpanelW" native="true">
         <property name="maximumSize">
          <size>
           <width>300</width>
