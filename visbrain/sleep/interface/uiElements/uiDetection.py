@@ -11,7 +11,6 @@ __all__ = ['uiDetection']
 
 
 class uiDetection(object):
-
     """Main class for sleep tools managment."""
 
     def __init__(self):
@@ -49,7 +48,7 @@ class uiDetection(object):
         # Location table :
         self._DetectLocations.itemSelectionChanged.connect(
             self._fcn_gotoLocation)
-            
+
         # Export file :
         self._DetectLocExport.clicked.connect(self._fcn_exportLocation)
 
@@ -289,7 +288,7 @@ class uiDetection(object):
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     ref[int(self._hypno[k])]))
-                   
+
         elif kind == 'Peaks':
             # Define the length of the table :
             self._DetectLocations.setRowCount(len(index))
@@ -304,7 +303,7 @@ class uiDetection(object):
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     ref[int(self._hypno[k])]))
-                    
+
     def _fcn_gotoLocation(self):
         """Go to the selected row REM / spindles / peak."""
         # Get selected row :
