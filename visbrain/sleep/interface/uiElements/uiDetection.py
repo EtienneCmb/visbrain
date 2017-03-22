@@ -1,5 +1,6 @@
 """Main class for sleep tools managment."""
 import numpy as np
+import os
 from warnings import warn
 
 from ....utils import remdetect, spindlesdetect, slowwavedetect
@@ -48,6 +49,9 @@ class uiDetection(object):
         # Location table :
         self._DetectLocations.itemSelectionChanged.connect(
             self._fcn_gotoLocation)
+            
+        # Export file :
+        self._DetectLocExport.clicked.connect(self._fcn_exportLocation)
 
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
@@ -198,11 +202,10 @@ class uiDetection(object):
             elif method == 'Slow waves':
                 # Get variables :
                 thr = self._ToolWaveTh.value()
-                meth = str(self._ToolWaveMeth.currentText())
-
+                amp = self._ToolWaveAmp.value()
                 # Get Slow Waves indices :
                 index, number, duration = slowwavedetect(self._data[k, :],
-                                                         self._sf, thr, meth)
+                                                         self._sf, thr, amp)
 
                 if index.size:
                     # Set them + color to ChannelPlot object :
@@ -286,6 +289,7 @@ class uiDetection(object):
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     ref[int(self._hypno[k])]))
+                   
         elif kind == 'Peaks':
             # Define the length of the table :
             self._DetectLocations.setRowCount(len(index))
@@ -300,7 +304,7 @@ class uiDetection(object):
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     ref[int(self._hypno[k])]))
-
+                    
     def _fcn_gotoLocation(self):
         """Go to the selected row REM / spindles / peak."""
         # Get selected row :
@@ -310,3 +314,60 @@ class uiDetection(object):
         # Go to :
         self._SlGoto.setValue(
             st - self._SigWin.value() / self._SigSlStep.value())
+            
+    def _fcn_exportLocation(self):
+        """Export locations info."""
+        method = str(self._ToolDetectType.currentText())   
+        # Read Table
+        rowCount = self._DetectLocations.rowCount()
+        staInd = np.zeros(shape=(rowCount,))
+        duration = np.zeros(shape=(rowCount,))
+        stage = np.zeros(shape=(rowCount,), dtype=str)
+        for row in np.arange(0, rowCount):
+            staInd[row] = str(self._DetectLocations.item(row, 0).text())
+            duration[row] = str(self._DetectLocations.item(row, 1).text())
+            stage[row] = str(self._DetectLocations.item(row, 2).text())
+        # Find extension :
+        selected_ext = str(self._DetectLocExportAs.currentText())
+        # Get file name :
+        path = QtGui.QFileDialog.getSaveFileName(
+            self, "Save File", method + "_locinfo",
+            filter=selected_ext)
+        file = os.path.splitext(str(path))[0]
+        if selected_ext.find('csv') + 1:
+            self.listToCsv(file + '.csv', zip(staInd, duration, stage))
+        elif selected_ext.find('txt') + 1:
+            self.listToTxt(file + '.txt', zip(staInd.astype(str), duration.astype(str), stage))
+
+    def listToCsv(self, file, data):
+        """Write a csv file.
+
+        Args:
+            file: string
+                File name for saving file.
+
+            data: list
+                List of data to save to the csv file.
+        """
+        with open(file, 'w') as csvfile:
+            writer = csv.writer(csvfile, dialect='excel',
+                                quoting=csv.QUOTE_NONNUMERIC)
+            for k in data:
+                writer.writerow(k)
+        return
+
+    def listToTxt(self, file, data):
+        """Write a txt file.
+
+        Args:
+            file: string
+                File name for saving file.
+
+            data: list
+                List of data to save to the txt file.
+        """
+        # Open file :
+        ofile = open(file, 'w')
+        for k in data:
+            ofile.write("%s\n" % ', '.join(k))
+        return

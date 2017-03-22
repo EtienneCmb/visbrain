@@ -254,7 +254,8 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
 ###########################################################################
 
 
-def slowwavedetect(elec, sf, threshold, method, fMin=0.5, fMax=4, moving_s=30):
+def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4, 
+                                                                moving_s=30):
     """Perform a Slow Wave detection
 
     Args:
@@ -265,8 +266,12 @@ def slowwavedetect(elec, sf, threshold, method, fMin=0.5, fMax=4, moving_s=30):
             Downsampling frequency
 
         threshold: float
-            Number of standard deviation to use as threshold
-            Threshold is defined as: mean + X * std(derivative)
+            First threshold: number of standard deviation of delta power
+            Formula: mean + X * std(derivative)
+            
+        amplitude: float
+            Secondary threshold: minimum amplitude (mV) of the raw signal.
+            Slow waves are generally defined by amplitude > 75 mV.
 
     Kargs:
         fMin: float, optional (def 0.5)
@@ -274,10 +279,6 @@ def slowwavedetect(elec, sf, threshold, method, fMin=0.5, fMax=4, moving_s=30):
 
         fMax: float, optional (def 4)
             Lowpass frequency
-
-        method: string, optional (default wavelet_power)
-            Method to extract delta power. Use either 'welch',
-            'wavelet_power' or 'wavelet_amp'.
 
         moving_s: int, optional (def 30)
             Time (sec) window of the moving average
@@ -293,46 +294,40 @@ def slowwavedetect(elec, sf, threshold, method, fMin=0.5, fMax=4, moving_s=30):
             Duration (ms) of each slow wave period detected
 
     """
+    # Get complex decomposition of filtered data in the main EEG freq band:
+    freqs = np.array([fMin, fMax, 8, 12, 16])
+    delta_npow, _, _, _ = _wavelet_bpower(elec, freqs, sf, norm=True)
 
-    if method == 'wavelet_power':
-        # Get complex decomposition of filtered data in the main EEG freq band:
-        freqs = np.array([fMin, fMax, 8, 12, 16])
-        delta_npow, _, _, _ = _wavelet_bpower(elec, freqs, sf, norm=True)
+    # Smooth
+    delta_nfpow = _movingaverage(delta_npow, moving_s * 1000, sf)
 
-        # Smooth
-        delta_nfpow = _movingaverage(delta_npow, moving_s * 1000, sf)
+    # Normalized power criteria
+    thresh = np.nanmean(delta_nfpow) + threshold * np.nanstd(delta_nfpow)
+    idx_sup_thr = np.where(delta_nfpow > thresh)[0]
 
-        # Normalized power criteria
-        thresh = np.nanmean(delta_nfpow) + threshold * np.nanstd(delta_nfpow)
-        idx_sup_thr = np.where(delta_nfpow > thresh)[0]
+    # Raw signal amplitude criteria
+    raw_thresh = amplitude / 2 
+    idx_sup_raw = np.where(abs(elec) > raw_thresh)[0]
+    idx_sup_thr = np.intersect1d(idx_sup_thr, idx_sup_raw)
 
-        # Raw signal amplitude criteria
-        raw_thresh = 70 / 2  # raw amplitude in mV (Iber et al 2007)
-        idx_sup_raw = np.where(abs(elec) > raw_thresh)[0]
-        idx_sup_thr = np.intersect1d(idx_sup_thr, idx_sup_raw)
+    number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
 
-        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+    return idx_sup_thr, number, duration_ms
 
-        return idx_sup_thr, number, duration_ms
+    # WELCH METHOD
+    # WARNING: only return one value per epoch (and not per ms)
+    #delta_spec_norm = _welch_bpower(elec, fMin, fMax, sf,
+    #                            window_s=30, norm=True)
 
-    elif method == 'welch':
-        # WARNING: only return one value per epoch (and not per ms)
-        delta_spec_norm = _welch_bpower(elec, fMin, fMax, sf,
-                                        window_s=30, norm=True)
-
-    elif method == 'wavelet_amplitude':
-        analytic = morlet(elec, sf, np.mean([fMin, fMax]))
-        amplitude = np.abs(analytic)
-        # Clip extreme values
-        amplitude = np.clip(amplitude, 0, 10 * np.std(amplitude))
-
-        thresh = np.mean(amplitude) + threshold * np.std(amplitude)
-
-        idx_sup_thr = np.where(amplitude > thresh)[0]
-
-        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
-
-        return idx_sup_thr, number, duration_ms
+    # WAVELET AMPLITUDE
+    # analytic = morlet(elec, sf, np.mean([fMin, fMax]))
+    # amplitude = np.abs(analytic)
+    # # Clip extreme values
+    # amplitude = np.clip(amplitude, 0, 10 * np.std(amplitude))
+    # thresh = np.mean(amplitude) + threshold * np.std(amplitude)
+    # idx_sup_thr = np.where(amplitude > thresh)[0]
+    # number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+    # return idx_sup_thr, number, duration_ms
 
 ###########################################################################
 # PEAKS DETECTION

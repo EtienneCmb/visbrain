@@ -44,12 +44,12 @@ class uiInfo(object):
 
     def _fcn_exportFile(self):
         """Export stat info."""
-        # Get file name :
-        path = QtGui.QFileDialog.getSaveFileName(
-            self, "Save File", "statsinfo.csv",
-            filter="CSV Files (*.csv);;Text Files (*.txt)")
         # Find extension :
         selected_ext = str(self._infoExportAs.currentText())
+        # Get file name :
+        path = QtGui.QFileDialog.getSaveFileName(
+            self, "Save File", "statsinfo",
+            filter=selected_ext)        
         file = os.path.splitext(str(path))[0]
         if selected_ext.find('csv') + 1:
             self.listToCsv(file + '.csv', zip(self._keysInfo, self._valInfo))

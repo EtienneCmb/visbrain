@@ -248,7 +248,7 @@ class Spectrogram(PrepareData):
                                         parent=parent)
 
     def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=.5,
-                 fstart=.5, fend=25., contraste=.7):
+                 fstart=.5, fend=20., contraste=.5):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
@@ -277,10 +277,10 @@ class Spectrogram(PrepareData):
             fstart: float, optional, (def: .5)
                 Frequency from which the spectrogram have to start.
 
-            fend: float, optional, (def: 25.)
+            fend: float, optional, (def: 20.)
                 Frequency from which the spectrogram have to finish.
 
-            contraste: float, optional, (def: .7)
+            contraste: float, optional, (def: .5)
                 Contraste of the colormap.
         """
         # =================== CONVERSION ===================

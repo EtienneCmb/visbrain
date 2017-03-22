@@ -120,8 +120,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>321</width>
-                <height>905</height>
+                <width>337</width>
+                <height>844</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -162,7 +162,7 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>275</width>
+                       <width>297</width>
                        <height>298</height>
                       </rect>
                      </property>
@@ -551,7 +551,7 @@ spectrogram, hypnogram and the time axis</string>
                           <double>200.000000000000000</double>
                          </property>
                          <property name="value">
-                          <double>25.000000000000000</double>
+                          <double>20.000000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -580,7 +580,7 @@ spectrogram, hypnogram and the time axis</string>
                           <double>0.100000000000000</double>
                          </property>
                          <property name="value">
-                          <double>0.700000000000000</double>
+                          <double>0.500000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -862,8 +862,8 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>334</width>
-                <height>728</height>
+                <width>354</width>
+                <height>762</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -1453,8 +1453,8 @@ hypnogram. Those informations change while editing it.</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>321</width>
-                <height>742</height>
+                <width>354</width>
+                <height>762</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_31">
@@ -1644,7 +1644,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -1671,8 +1671,8 @@ selected, visible or all channels.</string>
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>329</width>
-                    <height>735</height>
+                    <width>278</width>
+                    <height>647</height>
                    </rect>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_25">
@@ -1782,7 +1782,7 @@ selected, visible or all channels.</string>
                            <item row="0" column="1">
                             <widget class="QDoubleSpinBox" name="_ToolPeakLook">
                              <property name="toolTip">
-                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum duration between two peaks&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum distance between two peaks&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                              </property>
                              <property name="decimals">
                               <number>1</number>
@@ -1862,6 +1862,9 @@ selected, visible or all channels.</string>
                              <property name="toolTip">
                               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of standard deviation of the derivative signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                              </property>
+                             <property name="value">
+                              <double>2.000000000000000</double>
+                             </property>
                             </widget>
                            </item>
                            <item row="4" column="0" colspan="5">
@@ -1911,6 +1914,9 @@ selected, visible or all channels.</string>
                            </property>
                            <item row="0" column="1">
                             <widget class="QDoubleSpinBox" name="_ToolSpinFmin">
+                             <property name="toolTip">
+                              <string>High-pass cutoff frequency</string>
+                             </property>
                              <property name="decimals">
                               <number>1</number>
                              </property>
@@ -1931,6 +1937,9 @@ selected, visible or all channels.</string>
                            </item>
                            <item row="0" column="4">
                             <widget class="QDoubleSpinBox" name="_ToolSpinFmax">
+                             <property name="toolTip">
+                              <string>Low-pass cutoff frequency</string>
+                             </property>
                              <property name="decimals">
                               <number>1</number>
                              </property>
@@ -1953,6 +1962,9 @@ selected, visible or all channels.</string>
                             <widget class="QDoubleSpinBox" name="_ToolSpinTh">
                              <property name="toolTip">
                               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Look for signals having an amplitude 'Threshold' times superior to the deviation of the filtered signal amplitude&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                             <property name="value">
+                              <double>2.000000000000000</double>
                              </property>
                             </widget>
                            </item>
@@ -2104,33 +2116,48 @@ selected, visible or all channels.</string>
                            <item row="0" column="0">
                             <widget class="QLabel" name="label_46">
                              <property name="text">
-                              <string>Method</string>
+                              <string>Power (std)</string>
                              </property>
-                            </widget>
-                           </item>
-                           <item row="0" column="1">
-                            <widget class="QComboBox" name="_ToolWaveMeth">
-                             <item>
-                              <property name="text">
-                               <string>wavelet_power</string>
-                              </property>
-                             </item>
-                             <item>
-                              <property name="text">
-                               <string>wavelet_amplitude</string>
-                              </property>
-                             </item>
                             </widget>
                            </item>
                            <item row="1" column="0">
                             <widget class="QLabel" name="label_47">
                              <property name="text">
-                              <string>Threshold</string>
+                              <string>Amplitude (mV)</string>
                              </property>
                             </widget>
                            </item>
                            <item row="1" column="1">
-                            <widget class="QDoubleSpinBox" name="_ToolWaveTh"/>
+                            <widget class="QDoubleSpinBox" name="_ToolWaveAmp">
+                             <property name="toolTip">
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum amplitude (mV) of Slow Wave (0 for no amplitude criteria)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                             <property name="minimum">
+                              <double>0.000000000000000</double>
+                             </property>
+                             <property name="maximum">
+                              <double>200.000000000000000</double>
+                             </property>
+                             <property name="value">
+                              <double>70.000000000000000</double>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QDoubleSpinBox" name="_ToolWaveTh">
+                             <property name="toolTip">
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of standard deviations of delta power&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                             <property name="maximum">
+                              <double>10.000000000000000</double>
+                             </property>
+                             <property name="singleStep">
+                              <double>0.500000000000000</double>
+                             </property>
+                             <property name="value">
+                              <double>1.000000000000000</double>
+                             </property>
+                            </widget>
                            </item>
                           </layout>
                          </item>
@@ -2343,6 +2370,53 @@ selected, visible or all channels.</string>
                   </property>
                  </column>
                 </widget>
+               </item>
+               <item>
+                <layout class="QGridLayout" name="gridLayout_10">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="2">
+                  <widget class="QPushButton" name="_DetectLocExport">
+                   <property name="text">
+                    <string>Export</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_48">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Export as</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="_DetectLocExportAs">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>CSV file (*.csv)</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>TXT file (*.txt)</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </widget>
@@ -2781,7 +2855,7 @@ selected, visible or all channels.</string>
      <x>0</x>
      <y>0</y>
      <width>1328</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">
