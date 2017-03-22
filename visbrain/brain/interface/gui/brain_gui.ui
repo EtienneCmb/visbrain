@@ -66,7 +66,7 @@
           <bool>true</bool>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>5</number>
          </property>
          <property name="documentMode">
           <bool>true</bool>
@@ -4375,32 +4375,6 @@ reflection</string>
                      </item>
                     </layout>
                    </item>
-                   <item>
-                    <layout class="QVBoxLayout" name="cbpanel">
-                     <property name="spacing">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <spacer name="verticalSpacer_7">
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>100</width>
-                         <height>200</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </item>
                   </layout>
                  </item>
                 </layout>
@@ -4408,6 +4382,19 @@ reflection</string>
               </item>
              </layout>
             </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -4514,25 +4501,45 @@ reflection</string>
      </widget>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="vBrain">
+     <layout class="QHBoxLayout" name="horizontalLayout_11">
       <property name="spacing">
        <number>0</number>
       </property>
       <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Preferred</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
+       <widget class="QWidget" name="widget_4" native="true">
+        <property name="maximumSize">
          <size>
-          <width>800</width>
-          <height>20</height>
+          <width>300</width>
+          <height>16777215</height>
          </size>
         </property>
-       </spacer>
+        <layout class="QVBoxLayout" name="verticalLayout_10">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="cbpanel">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+          </layout>
+         </item>
+        </layout>
+        <zorder>verticalSpacer_7</zorder>
+        <zorder></zorder>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="vBrain"/>
       </item>
      </layout>
     </item>

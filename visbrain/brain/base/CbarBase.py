@@ -7,6 +7,8 @@
 import numpy as np
 
 from vispy.scene.visuals import ColorBar, Text
+from vispy.scene import Node
+import vispy.visuals.transforms as vist
 from vispy.color import Colormap
 
 from ...utils import array2colormap, _colormap, color2vb
@@ -34,6 +36,10 @@ class CbarBase(_colormap):
         self._cb['fontsize'] = cb_fontsize
         self._cb['fontcolor'] = tuple(color2vb(cb_fontcolor).ravel()[0:-1])
         self._cb['length'] = 10
+        # Create a colorbar node :
+        self._cbNode = Node(name='cbNode')
+        self._cbNode.parent = parent
+        self._cbNode.transform = vist.STTransform(translate=(50, 500), scale=(10, -10))
 
         # Create the colorbar :
         self.cbcreate()
@@ -48,8 +54,10 @@ class CbarBase(_colormap):
         # ==================================================================
         self.colorbarW = ColorBar(cmap=cmap, orientation='right', size=(40, 5),
                                   label='', clim=('', ''), border_color="w",
-                                  padding=-10, margin=-10, border_width=1)
-        self.cbwc.add(self.colorbarW)
+                                  padding=-10, margin=-10, border_width=1,
+                                  parent=self._cbNode)
+        # 
+        # self.cbwc.add(self.colorbarW)
 
         # ==================================================================
         # COLORBAR TEXT
@@ -57,19 +65,21 @@ class CbarBase(_colormap):
         # Colorbar maximum :
         self.cbmaxW = Text(text='', color=self._cb['fontcolor'],
                            font_size=self['fontsize']-2, pos=(4.5, 20),
-                           anchor_x='left', anchor_y='center')
-        self.cbwc.add(self.cbmaxW)
+                           anchor_x='left', anchor_y='center',
+                           parent=self._cbNode)
+        # self.cbwc.add(self.cbmaxW)
         # Colorbar minimum :
         self.cbminW = Text(text='', color=self._cb['fontcolor'],
                            font_size=self['fontsize']-2, pos=(4.5, -20-0.5),
-                           anchor_x='left', anchor_y='center')
-        self.cbwc.add(self.cbminW)
+                           anchor_x='left', anchor_y='center',
+                           parent=self._cbNode)
+        # self.cbwc.add(self.cbminW)
         # Colorbar label :
         self.cblabelW = Text(text='', color=self._cb['fontcolor'],
                              font_size=self['fontsize'], pos=(6, 0),
                              rotation=-90, anchor_y='center',
-                             anchor_x='center')
-        self.cbwc.add(self.cblabelW)
+                             anchor_x='center', parent=self._cbNode)
+        # self.cbwc.add(self.cblabelW)
 
         # ==================================================================
         # COLORBAR PROPERTIES
