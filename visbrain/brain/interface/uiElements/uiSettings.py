@@ -175,14 +175,14 @@ class uiSettings(object):
                 self._ssCropXe.value(), self._ssCropYe.value())
         viz = self._ssCropEnable.isChecked()
         self._ssCropW.setEnabled(viz)
-        self.guide.mesh.visible = self._ssGuide.isChecked()
-        if self._ssGuide.isChecked() and self._ssCropW.isEnabled():
-            self.guide.size = np.subtract(self.view.canvas.size, self.view.canvas.position)
-            print(self.view.canvas.size, self.view.wc.size, self.view.wc.camera._xlim, self.view.wc.camera._ylim)
-            self.guide.range['x'] = self.view.wc.camera._xlim
-            self.guide.range['y'] = self.view.wc.camera._ylim
-            print(self.guide.range)
-            self.guide.set_data(crop=crop)
+        # self.guide.mesh.visible = self._ssGuide.isChecked()
+        # if self._ssGuide.isChecked() and self._ssCropW.isEnabled():
+        #     print(self.view.wc.camera.center)
+        #     self.guide.size = self.view.canvas.size
+        #     self.guide.range['x'] = self.view.wc.camera._xlim
+        #     self.guide.range['y'] = self.view.wc.camera._ylim
+        #     print(self.guide.range)
+        #     self.guide.set_data(crop=crop)
         self.crop = crop if self._ssCropW.isEnabled() else None
         # Resolution :
         self._uirez = float(self._ssResolution.value())

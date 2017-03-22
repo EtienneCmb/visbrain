@@ -246,23 +246,27 @@ class GuideLines(object):
         # Convert each value :
         cropXY = self._convert(crop[0], crop[1])
         cropHW = self._convert(crop[0] + crop[2], crop[1] + crop[3])
-        print('CROPXY : ', cropXY, 'CROPHW : ', cropHW)
-        # Build segment :
-        segment = np.zeros((8, 3), dtype=np.float32)
-        segment[0, :] = (cropXY[0], cropXY[1], 0.)
-        segment[1, :] = (cropXY[0], cropHW[1], 0.)
-        segment[2, :] = (cropXY[0], cropHW[1], 0.)
-        segment[3, :] = (cropHW[0], cropHW[1], 0.)
-        segment[4, :] = (cropHW[0], cropHW[1], 0.)
-        segment[5, :] = (cropHW[0], cropXY[1], 0.)
-        segment[6, :] = (cropHW[0], cropXY[1], 0.)
-        segment[7, :] = (cropXY[0], cropXY[1], 0.)
-        print(segment)
+        # print('CROPXY : ', cropXY, 'CROPHW : ', cropHW)
+        # # Build segment :
+        # segment = np.zeros((8, 3), dtype=np.float32)
+        # segment[0, :] = (cropXY[0], cropXY[1], 0.)
+        # segment[1, :] = (cropXY[0], cropHW[1], 0.)
+        # segment[2, :] = (cropXY[0], cropHW[1], 0.)
+        # segment[3, :] = (cropHW[0], cropHW[1], 0.)
+        # segment[4, :] = (cropHW[0], cropHW[1], 0.)
+        # segment[5, :] = (cropHW[0], cropXY[1], 0.)
+        # segment[6, :] = (cropHW[0], cropXY[1], 0.)
+        # segment[7, :] = (cropXY[0], cropXY[1], 0.)
+        # print(segment)
+        segment = np.array([
+                           [-154., -100., 0.], 
+                           [154., 100., 0.]
+                           ])
         self.mesh.set_data(pos=segment)
 
     def _convert(self, x, y):
-        xc = self.xm + ((self.xM - self.xm) * x / self.size[1])
-        yc = self.ym + ((self.yM - self.ym) * y / self.size[0])
+        xc = self.xm + ((self.xM - self.xm) * x / self.size[0])
+        yc = self.ym + ((self.yM - self.ym) * y / self.size[1])
         return xc, yc
 
     # ----------- RANGE -----------

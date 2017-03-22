@@ -155,8 +155,8 @@ class vbCanvas(object):
         self.cbwc = self.cbcanvas.central_widget.add_view()
 
         # Add axis (debugging):
-        # ax = scene.visuals.XYZAxis()
-        # self.wc.add(ax)
+        # self._axis = scene.visuals.XYZAxis()
+        # self.wc.add(self._axis)
 
         # Visualization settings. The min/maxOpacity attributes are defined
         # because it seems that OpenGL have trouble with small opacity (usually
