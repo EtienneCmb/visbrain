@@ -3,7 +3,8 @@ import numpy as np
 import os
 from warnings import warn
 
-from ....utils import remdetect, spindlesdetect, slowwavedetect
+from ....utils import (remdetect, spindlesdetect, slowwavedetect,
+                       listToCsv, listToTxt)
 
 from PyQt4 import QtGui
 
@@ -334,39 +335,6 @@ class uiDetection(object):
             filter=selected_ext)
         file = os.path.splitext(str(path))[0]
         if selected_ext.find('csv') + 1:
-            self.listToCsv(file + '.csv', zip(staInd, duration, stage))
+            listToCsv(file + '.csv', zip(staInd, duration, stage))
         elif selected_ext.find('txt') + 1:
-            self.listToTxt(file + '.txt', zip(staInd.astype(str), duration.astype(str), stage))
-
-    def listToCsv(self, file, data):
-        """Write a csv file.
-
-        Args:
-            file: string
-                File name for saving file.
-
-            data: list
-                List of data to save to the csv file.
-        """
-        with open(file, 'w') as csvfile:
-            writer = csv.writer(csvfile, dialect='excel',
-                                quoting=csv.QUOTE_NONNUMERIC)
-            for k in data:
-                writer.writerow(k)
-        return
-
-    def listToTxt(self, file, data):
-        """Write a txt file.
-
-        Args:
-            file: string
-                File name for saving file.
-
-            data: list
-                List of data to save to the txt file.
-        """
-        # Open file :
-        ofile = open(file, 'w')
-        for k in data:
-            ofile.write("%s\n" % ', '.join(k))
-        return
+            listToTxt(file + '.txt', zip(staInd, duration, stage))

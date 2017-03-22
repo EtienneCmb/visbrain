@@ -1,10 +1,9 @@
 """Main class for info managment."""
 
 from PyQt4 import QtGui
-import csv
 import os
 
-from ....utils import sleepstats
+from ....utils import sleepstats, listToCsv, listToTxt
 
 __all__ = ['uiInfo']
 
@@ -49,42 +48,9 @@ class uiInfo(object):
         # Get file name :
         path = QtGui.QFileDialog.getSaveFileName(
             self, "Save File", "statsinfo",
-            filter=selected_ext)        
+            filter=selected_ext)
         file = os.path.splitext(str(path))[0]
         if selected_ext.find('csv') + 1:
-            self.listToCsv(file + '.csv', zip(self._keysInfo, self._valInfo))
+            listToCsv(file + '.csv', zip(self._keysInfo, self._valInfo))
         elif selected_ext.find('txt') + 1:
-            self.listToTxt(file + '.txt', zip(self._keysInfo, self._valInfo))
-
-    def listToCsv(self, file, data):
-        """Write a csv file.
-
-        Args:
-            file: string
-                File name for saving file.
-
-            data: list
-                List of data to save to the csv file.
-        """
-        with open(file, 'w') as csvfile:
-            writer = csv.writer(csvfile, dialect='excel',
-                                quoting=csv.QUOTE_NONNUMERIC)
-            for k in data:
-                writer.writerow(k)
-        return
-
-    def listToTxt(self, file, data):
-        """Write a txt file.
-
-        Args:
-            file: string
-                File name for saving file.
-
-            data: list
-                List of data to save to the txt file.
-        """
-        # Open file :
-        ofile = open(file, 'w')
-        for k in data:
-            ofile.write("%s\n" % ', '.join(k))
-        return
+            listToTxt(file + '.txt', zip(self._keysInfo, self._valInfo))
