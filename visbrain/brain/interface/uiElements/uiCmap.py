@@ -203,9 +203,6 @@ class uiCmap(object):
                 self.connect._check_color()
                 self.cb.cbupdate(self.connect._all_nnz, **self.cb._cb)
 
-            # except:
-            #     pass
-
     def _select_object_cmap(self):
         """Specify the object for which colormap properties need to be applied.
 
