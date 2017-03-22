@@ -66,6 +66,7 @@ class uiSettings(object):
         # =============================================================
         # Quick settings panel :
         self.actionQuick_settings.triggered.connect(self._toggle_settings)
+        self.QuickSettings.currentChanged.connect(self._fcn_onTabChange)
         self.q_widget.setVisible(True)
 
         # Background color :
@@ -212,6 +213,7 @@ class uiSettings(object):
 
         # Export the colorbar :
         if self.cb['export']:
+            # self.cbpanelW.setVisible(True)
             # Get a copy of the actual canvas physical size :
             backp_size = self.view.canvas.physical_size
             new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
@@ -238,6 +240,16 @@ class uiSettings(object):
                self.bgd_blue.value())
         self.view.canvas.bgcolor = bgd
         self.view.cbcanvas.bgcolor = bgd
+
+    def _fcn_onTabChange(self):
+        """Triggered method when tab changed."""
+        # Get current tab :
+        currentIndex = self.QuickSettings.currentIndex()
+        if currentIndex == 2:
+            self.cmapSources.setChecked(True)
+        if currentIndex == 3:
+            self.cmapConnect.setChecked(True)
+        self._select_object_cmap()
 
     # =============================================================
     # ROTATION

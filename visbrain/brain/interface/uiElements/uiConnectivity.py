@@ -74,9 +74,9 @@ class uiConnectivity(object):
         # Get density radius :
         self.connect.dradius = self._densityRadius.value()
         # Update color :
-        self._set_color()
+        self._set_color('', update=True)
 
-    def _set_color(self):
+    def _set_color(self, _, update=False):
         """Graphic control of color connectivity settings.
 
         This method is used to control the color code of connectivity (either
@@ -98,8 +98,8 @@ class uiConnectivity(object):
         # Update color :
         self.connect._check_color()
 
-        # Bundling if necessary :
-        # self._fcn_applyBundle()
+        if update:
+            self._auto_scale()
 
     def _getMinMax_dyn(self):
         """Dynamic lines opacity.

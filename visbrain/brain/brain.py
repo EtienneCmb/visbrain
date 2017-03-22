@@ -273,11 +273,11 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._vbNode.parent = self.view.wc.scene
 
         # Fixed colorbar camera :
-        # self.view.cbwc.camera = viscam.TurntableCamera(interactive=True,
-        #                                                azimuth=0, elevation=90)
-        # self.view.cbwc.camera.set_range(x=(-24, 24), y=(-0.5, 0.5), margin=0)
-        # self.view.cbwc.camera.set_range(x=(-.5, .5), y=(-0.5, 0.5), margin=0)
-        self.view.wc.scene.children[0].parent = None
+        self.view.cbwc.camera = viscam.TurntableCamera(interactive=True,
+                                                       azimuth=0, elevation=90)
+        self.view.cbwc.camera.set_range(x=(-.5, .5), y=(-20, 20), margin=0)
+        # self.view.wc.scene.children[0].parent = None
+        self.cb._cbNode.parent = self.view.cbwc.scene
         self._rotate(fixed='axial')
 
         # print(self.view.wc.scene.describe_tree(with_transform=True))

@@ -76,6 +76,12 @@ class vbShortcuts(object):
             elif event.text == '6':
                 self._toggle_connect_visible()
 
+            # Colorbar visibility :
+            elif event.text == 'c':
+                viz = not self._qcmapVisible.isChecked()
+                self._qcmapVisible.setChecked(viz)
+                self._toggle_cmap()
+
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
             """Executed function when the mouse is pressed over Brain canvas.
@@ -144,7 +150,8 @@ class vbCanvas(object):
         self.wc = self.canvas.central_widget.add_view()
 
         # Initialize colorbar canvas :
-        self.cbcanvas = scene.SceneCanvas(bgcolor=bgcolor)
+        self.cbcanvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
+                                          resizable=True, )
         self.cbwc = self.cbcanvas.central_widget.add_view()
 
         # Add axis (debugging):

@@ -142,7 +142,10 @@ class uiCmap(object):
                 self.q_vmin.setEnabled(True)
                 self.qUnder_txt.setEnabled(True)
                 self.q_under.setEnabled(True)
-                self.cb['vmin'] = self.q_vmin.value()
+                if self.q_vmin.value() > self.cb['clim'][0]:
+                    self.cb['vmin'] = self.q_vmin.value()
+                else:
+                    self.cb['vmin'] = None
                 self.cb['under'], _ = textline2color(str(self.q_under.text()))
             else:
                 self.q_vmin.setEnabled(False)
@@ -155,7 +158,10 @@ class uiCmap(object):
                 self.q_vmax.setEnabled(True)
                 self.qOver_txt.setEnabled(True)
                 self.q_over.setEnabled(True)
-                self.cb['vmax'] = self.q_vmax.value()
+                if self.q_vmax.value() < self.cb['clim'][1]:
+                    self.cb['vmax'] = self.q_vmax.value()
+                else:
+                    self.cb['vmax'] = None
                 self.cb['over'], _ = textline2color(str(self.q_over.text()))
             else:
                 self.q_vmax.setEnabled(False)
@@ -164,6 +170,11 @@ class uiCmap(object):
                 self.q_over.setEnabled(False)
                 self.cb['vmax'] = None
                 self.cb['over'] = None
+            # Vmin / vmax :
+            if (self.cb['vmin'] is not None) and (self.cb['vmax'] is not None):
+                if self.cb['vmin'] >= self.cb['vmax']:
+                    self.cb['vmin'] = None
+                    self.cb['vmax'] = None
 
             # Update colorbar label :
             self.cb['label'] = str(self.q_cblabel.text())
