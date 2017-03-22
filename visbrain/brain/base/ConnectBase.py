@@ -225,7 +225,7 @@ class ConnectBase(_colormap):
         color = np.array([])
         index = np.arange(self.blinterp)
         idx = np.c_[index[:-1], index[1:]].flatten()
-        for num, k in enumerate(cut[1:]):
+        for num, k in enumerate(cut):
             tckp, u = splprep(np.ndarray.tolist(k.T), k=2, s=0.)
             y2 = np.array(splev(np.linspace(0, 1, self.blinterp), tckp)).T[idx]
             pos = np.vstack((pos, y2)) if pos.size else y2
