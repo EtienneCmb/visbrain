@@ -69,6 +69,8 @@ class uiConnectivity(object):
         else:
             self._densityPanel.setVisible(False)
         self.connect.needupdate = True
+        self.connect._cb['vmin'] = None
+        self.connect._cb['vmax'] = None
         # Get density radius :
         self.connect.dradius = self._densityRadius.value()
         # Update color :
