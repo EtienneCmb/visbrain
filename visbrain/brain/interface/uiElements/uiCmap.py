@@ -29,7 +29,7 @@ class uiCmap(object):
         self._cmap2GUI()
 
         # Interactive :
-        self.q_cmap_interact.clicked.connect(self._toggle_cmap)
+        self._qcmapVisible.clicked.connect(self._toggle_cmap)
         self._toggle_cmap()
 
         # Colorbar label :
@@ -43,7 +43,6 @@ class uiCmap(object):
         self.q_vmax_chk.clicked.connect(self._GUI2cmap)
         self.q_under.editingFinished.connect(self._GUI2cmap)
         self.q_over.editingFinished.connect(self._GUI2cmap)
-        self.q_cmap_interact.clicked.connect(self._GUI2cmap)
         self.q_cblabel.editingFinished.connect(self._GUI2cmap)
         self.q_auto_scale.clicked.connect(self._auto_scale)
         self.cmapSources.clicked.connect(self._select_object_cmap)
@@ -171,29 +170,27 @@ class uiCmap(object):
 
             # Direct interaction : if this button is checked, the user can see
             # the colormap changements inline :
-            if self.q_cmap_interact.isChecked():
+            # Update sources :
+            if self.cmapSources.isChecked():
+                # If cortical projection never run :
+                if self.current_mask is None:
+                    self._userMsg("To control the colormap of sources, "
+                                  "run either the cortical\nprojection / "
+                                  "repartition first.", 'warn', 10, 9)
+                    # self._cortical_projection()
+                # Otherwise update colormap :
+                else:
+                    self.sources.cbUpdateFrom(self.cb)
+                    self._array2cmap(self.current_mask,
+                                     non_zero=self.current_non_zero)
+                # Update colorbar :
+                self.cb.cbupdate(self.current_mask, **self.cb._cb)
 
-                # Update sources :
-                if self.cmapSources.isChecked():
-                    # If cortical projection never run :
-                    if self.current_mask is None:
-                        self._userMsg("To control the colormap of sources, "
-                                      "run either the cortical\nprojection / "
-                                      "repartition first.", 'warn', 10, 9)
-                        # self._cortical_projection()
-                    # Otherwise update colormap :
-                    else:
-                        self.sources.cbUpdateFrom(self.cb)
-                        self._array2cmap(self.current_mask,
-                                         non_zero=self.current_non_zero)
-                    # Update colorbar :
-                    self.cb.cbupdate(self.current_mask, **self.cb._cb)
-
-                # Update connectivity :
-                elif self.cmapConnect.isChecked():
-                    self.connect.cbUpdateFrom(self.cb)
-                    self.connect._check_color()
-                    self.cb.cbupdate(self.connect._all_nnz, **self.cb._cb)
+            # Update connectivity :
+            elif self.cmapConnect.isChecked():
+                self.connect.cbUpdateFrom(self.cb)
+                self.connect._check_color()
+                self.cb.cbupdate(self.connect._all_nnz, **self.cb._cb)
 
             # except:
             #     pass
@@ -255,4 +252,6 @@ class uiCmap(object):
 
     def _toggle_cmap(self):
         """Toggle colorbar panel."""
-        self.colorbar_pan.setEnabled(self.q_cmap_interact.isChecked())
+        viz = self._qcmapVisible.isChecked()
+        self.colorbar_pan.setEnabled(viz)
+        self.cbpanelW.setVisible(viz)

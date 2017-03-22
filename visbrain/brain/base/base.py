@@ -69,10 +69,12 @@ class base(CbarBase, transformations):
             self.QuickSettings.setTabEnabled(5, False)
             self.menuTransform.setEnabled(False)
             self.o_Sources.setEnabled(False)
+            self.o_Sources.setChecked(False)
 
         # Text panel:
         if self.sources.stextmesh.name == 'NoneText':
             self.o_Text.setEnabled(False)
+            self.o_Text.setChecked(False)
             self.grpText.setEnabled(False)
 
         # Connectivity panel:
@@ -80,6 +82,7 @@ class base(CbarBase, transformations):
             self.QuickSettings.setTabEnabled(3, False)
             self.cmapConnect.setEnabled(False)
             self.o_Connect.setEnabled(False)
+            self.o_Connect.setChecked(False)
         elif self.connect.colval is not None:
             self.cmapConnect.setEnabled(False)
             self.o_Connect.setEnabled(False)
