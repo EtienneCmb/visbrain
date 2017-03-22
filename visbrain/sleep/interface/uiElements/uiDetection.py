@@ -314,19 +314,17 @@ class uiDetection(object):
         # Go to :
         self._SlGoto.setValue(
             st - self._SigWin.value() / self._SigSlStep.value())
-            
+
     def _fcn_exportLocation(self):
         """Export locations info."""
-        method = str(self._ToolDetectType.currentText())   
+        method = str(self._ToolDetectType.currentText())
         # Read Table
         rowCount = self._DetectLocations.rowCount()
-        staInd = np.zeros(shape=(rowCount,))
-        duration = np.zeros(shape=(rowCount,))
-        stage = np.zeros(shape=(rowCount,), dtype=str)
-        for row in np.arange(0, rowCount):
-            staInd[row] = str(self._DetectLocations.item(row, 0).text())
-            duration[row] = str(self._DetectLocations.item(row, 1).text())
-            stage[row] = str(self._DetectLocations.item(row, 2).text())
+        staInd, duration, stage = [], [], []
+        for row in np.arange(rowCount):
+            staInd.append(str(self._DetectLocations.item(row, 0).text()))
+            duration.append(str(self._DetectLocations.item(row, 1).text()))
+            stage.append(str(self._DetectLocations.item(row, 2).text()))
         # Find extension :
         selected_ext = str(self._DetectLocExportAs.currentText())
         # Get file name :
