@@ -17,6 +17,7 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .base import base
 from .user import userfcn
+from ..utils import GuideLines
 
 
 class Brain(uiInit, uiElements, base, userfcn):
@@ -266,7 +267,7 @@ class Brain(uiInit, uiElements, base, userfcn):
         # Link UI and visbrain function :
         uiElements.__init__(self)
 
-        # # ====================== Cameras ======================
+        # ====================== Cameras ======================
         # # Main camera :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(self.view.wc.camera)
@@ -280,12 +281,22 @@ class Brain(uiInit, uiElements, base, userfcn):
         self.cb._cbNode.parent = self.view.cbwc.scene
         self._rotate(fixed='axial')
 
+        # ====================== Guidelines ======================
+        # Create guide lines for exportation :
+        self.guide = GuideLines(self.view.canvas.size, parent=self._vbNode,
+                                camrange=self._xyzRange['turntable'])
         # print(self.view.wc.scene.describe_tree(with_transform=True))
 
     def show(self):
         """Display the graphical user interface."""
         # This function has to be placed here (and not in the user.py script)
         self.showMaximized()
+        pos = self.view.canvas.size
+        if self._crop is None:
+            self._ssCropXs.setValue(0)
+            self._ssCropYs.setValue(0)
+            self._ssCropXe.setValue(pos[0])
+            self._ssCropYe.setValue(pos[1])
         # Fix brain range :
         self._set_cam_range()
         visapp.run()
