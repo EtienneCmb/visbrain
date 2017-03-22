@@ -3285,14 +3285,10 @@ width</string>
                        <property name="topMargin">
                         <number>0</number>
                        </property>
-                       <item row="1" column="2">
-                        <widget class="QLabel" name="label_38">
-                         <property name="text">
-                          <string>dxyz</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="1" rowspan="2">
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item row="0" column="1">
                         <widget class="Line" name="line_58">
                          <property name="minimumSize">
                           <size>
@@ -3312,7 +3308,14 @@ width</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="4">
+                       <item row="0" column="5">
+                        <widget class="QLabel" name="label_38">
+                         <property name="text">
+                          <string>dxyz</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="6">
                         <widget class="QDoubleSpinBox" name="_conBlDxyz">
                          <property name="decimals">
                           <number>1</number>
@@ -3325,7 +3328,26 @@ width</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="5">
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_117">
+                         <property name="font">
+                          <font>
+                           <italic>true</italic>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Settings</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="3">
+                        <widget class="QDoubleSpinBox" name="_conBlRadius">
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="4">
                         <spacer name="horizontalSpacer_35">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
@@ -3338,36 +3360,14 @@ width</string>
                          </property>
                         </spacer>
                        </item>
-                       <item row="0" column="0" rowspan="2">
-                        <widget class="QLabel" name="label_117">
-                         <property name="font">
-                          <font>
-                           <italic>true</italic>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Settings</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="4">
-                        <widget class="QDoubleSpinBox" name="_conBlRadius">
-                         <property name="decimals">
-                          <number>1</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="3">
+                       <item row="0" column="7">
                         <spacer name="horizontalSpacer_38">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
                          </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Minimum</enum>
-                         </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>10</width>
+                           <width>40</width>
                            <height>20</height>
                           </size>
                          </property>

@@ -41,6 +41,7 @@ class ConnectBase(_colormap):
         self.connect = c_connect
         self.select = c_select
         self._lw = c_linewidth
+        self.needupdate = True
         # Color :
         self.colorby = c_colorby
         self.dynamic = c_dynamic
@@ -148,7 +149,8 @@ class ConnectBase(_colormap):
         # ================== MinMax ==================
         # Get (min / max) :
         self._MinMax = (self._all_nnz.min(), self._all_nnz.max())
-        self._cb['clim'] = self._MinMax
+        if self.needupdate:
+            self._cb['clim'] = self._MinMax
 
         # ================== GET COLOR ==================
         # ----------- User specific color -----------
@@ -180,6 +182,7 @@ class ConnectBase(_colormap):
         # Set to data :
         self.mesh.set_data(pos=self.a_position, color=self.a_color,
                            connect='segments', width=self.lw)
+        self.needupdate = False
 
     def _center_distance(self):
         """Get the euclidian distance between centers."""

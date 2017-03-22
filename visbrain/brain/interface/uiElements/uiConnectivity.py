@@ -68,6 +68,7 @@ class uiConnectivity(object):
             self._densityPanel.setVisible(True)
         else:
             self._densityPanel.setVisible(False)
+        self.connect.needupdate = True
         # Get density radius :
         self.connect.dradius = self._densityRadius.value()
         # Update color :
@@ -94,6 +95,9 @@ class uiConnectivity(object):
 
         # Update color :
         self.connect._check_color()
+
+        # Bundling if necessary :
+        # self._fcn_applyBundle()
 
     def _getMinMax_dyn(self):
         """Dynamic lines opacity.
