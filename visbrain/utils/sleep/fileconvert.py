@@ -184,7 +184,7 @@ def txt_hyp(path, ds_freq):
     if np.issubdtype(hyp.dtype, np.integer) == False:
         hyp = np.char.decode(hyp)
         hypno = np.array([s for s in hyp if s.lstrip('-').isdigit()],
-                          dtype=int)
+                         dtype=int)
     else:
         hypno = hyp.astype(int)
 
@@ -355,10 +355,10 @@ def elan2array(path, ds_freq):
     m_ds = m_raw[:, ::ds_factor]
 
     # Multiply by gain :
-    #data = np.diag(Gain[chan_list]).dot(m_ds[chan_list, ])
-    data = m_ds[chan_list, ] * Gain[chan_list][..., np.newaxis]
+    data = m_ds[chan_list, ] * \
+        Gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return float(sf), data.astype(np.float32), list(chan)
+    return float(sf), data, list(chan)
 
 
 def edf2array(path):
@@ -486,6 +486,6 @@ def brainvision2array(path):
         ints = np.ndarray((n_chan, int(size / n_chan)),
                           dtype='<i2', order='F', buffer=raw)
 
-        data = np.diag(resolution).dot(ints)
+        data = np.float32(np.diag(resolution)).dot(ints)
 
-    return float(sf), data.astype(np.float32), list(chan)
+    return float(sf), data, list(chan)
