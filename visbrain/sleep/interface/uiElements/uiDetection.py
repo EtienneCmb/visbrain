@@ -274,10 +274,10 @@ class uiDetection(object):
         # Get kind :
         kindIn = kind in ['REM', 'Spindles', 'Slow waves']
         if kindIn and self._ToolRdSelected.isChecked():
-            # Define the length of the table:
-            self._DetectLocations.setRowCount(int(len(index) / 2))
             # Get starting index:
             staInd = index[0::2]
+            # Define the length of the table:
+            self._DetectLocations.setRowCount(min(len(staInd), len(duration)))
             # Fill the table :
             for num, (k, i) in enumerate(zip(staInd, duration)):
                 # Starting :
