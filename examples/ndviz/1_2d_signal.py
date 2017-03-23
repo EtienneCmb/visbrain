@@ -30,7 +30,7 @@ You can switch axis directly from the interface or using the nd_axis.
 # ===================================================================
 # Display the Nd-plot panel and display the grid :
 kw['nd_visible'] = True
-kw['nd_grid'] = False
+kw['nd_grid'] = True
 # Use a random color for each signal :
 kw['nd_color'] = 'random'
 # Set the linewidth :
