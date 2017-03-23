@@ -8,6 +8,7 @@ from ....utils import listToCsv, listToTxt
 
 __all__ = ['uiScoring']
 
+
 class uiScoring(object):
     """Enable scoring using the table."""
 
@@ -21,7 +22,7 @@ class uiScoring(object):
 
         # Table edited :
         self._scoreTable.cellChanged.connect(self._fcn_Score2Hypno)
-        
+
         # Export file :
         self._scoreExport.clicked.connect(self._fcn_exportScore)
 
@@ -141,14 +142,14 @@ class uiScoring(object):
         """Add a row to the table."""
         # Increase length :
         self._scoreTable.setRowCount(self._scoreTable.rowCount() + 1)
-    
+
     def _fcn_rmScoreRow(self):
         """Remove selected row."""
         # Remove row :
         self._scoreTable.removeRow(self._scoreTable.currentRow())
         # Update hypnogram from table :
         self._fcn_Score2Hypno()
-        
+
     ##########################################################################
     # EXPORT TABLE
     ##########################################################################

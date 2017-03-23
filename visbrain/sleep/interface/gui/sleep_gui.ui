@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>3</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -1424,7 +1424,7 @@ hypnogram. Those informations change while editing it.</string>
               <number>0</number>
              </property>
              <item row="0" column="1">
-              <widget class="QComboBox" name="_scoreExport">
+              <widget class="QComboBox" name="_scoreExportAs">
                <item>
                 <property name="text">
                  <string>CSV file (*.csv)</string>
@@ -1444,7 +1444,7 @@ hypnogram. Those informations change while editing it.</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
+             <item row="0" column="3">
               <spacer name="horizontalSpacer_33">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -1456,6 +1456,13 @@ hypnogram. Those informations change while editing it.</string>
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="0" column="2">
+              <widget class="QPushButton" name="_scoreExport">
+               <property name="text">
+                <string>Export</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -1512,7 +1519,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
