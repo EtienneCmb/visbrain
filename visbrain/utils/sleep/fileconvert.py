@@ -7,7 +7,8 @@ specific files including *.eeg, *.edf...
 import numpy as np
 import os
 
-__all__ = ['load_sleepdataset', 'load_hypno']
+__all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
+           'save_hypnoTotxt']
 
 
 def load_sleepdataset(path, downsample=100):
@@ -489,3 +490,65 @@ def brainvision2array(path):
         data = np.float32(np.diag(resolution)).dot(ints)
 
     return float(sf), data, list(chan)
+
+
+def save_hypnoToElan(filename, hypno, sf):
+        """Save hypnogram in Elan file format (*.hyp).
+
+        Args:
+            filename: str
+                Filename (with full path) of the file to save
+
+            hypno: np.ndarray
+                Hypnogram array, same length as data
+
+            sf: int
+                Sampling frequency of the data (after downsampling)
+        """
+        hdr = np.array([['time_base 1.000000'],
+                        ['sampling_period ' + str(round(1/sf, 8))],
+                        ['epoch_nb ' + str(int(hypno.size / sf))],
+                        ['epoch_list']]).flatten()
+
+        # Check data format
+        sf = int(sf)
+        hypno = hypno.astype(int)
+        # Save
+        export = np.append(hdr, hypno[::sf].astype(str))
+        np.savetxt(filename, export, fmt='%s')
+
+
+def save_hypnoTotxt(filename, hypno, sf, window=1.):
+        """Save hypnogram in txt file format (*.txt).
+
+        Header is in file filename_description.txt
+
+        Args:
+            filename: str
+                Filename (with full path) of the file to save
+
+            hypno: np.ndarray
+                Hypnogram array, same length as data
+
+            sf: float
+                Sampling frequency of the data (after downsampling)
+
+        Kargs:
+            window: float, optional, (def 1)
+                Time window (second) of each point in the hypno
+                Default is one value per second
+                (e.g. window = 30 = 1 value per 30 second)
+        """
+        base = os.path.basename(filename)
+        dirname = os.path.dirname(filename)
+        descript = os.path.join(dirname,
+                                os.path.splitext(base)[0] + '_description.txt')
+
+        # Save hypno
+        ds_fac = int(sf * window)
+        np.savetxt(filename, hypno[::ds_fac].astype(int), fmt='%s')
+
+        # Save header file
+        hdr = np.array([['time ' + str(window)], ['W 0'], ['N1 1'], ['N2 2'],
+                        ['N3 3'], ['REM 4'], ['Art -1']]).flatten()
+        np.savetxt(descript, hdr, fmt='%s')

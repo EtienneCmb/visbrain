@@ -544,6 +544,7 @@ class vbShortcuts(object):
                    ('2', 'Scoring: set current window to N2 (2)'),
                    ('3', 'Scoring: set current window to N3 (3)'),
                    ('r', 'Scoring: set current window to REM (4)'),
+                   ('CTRL+s', 'Save hypnogram'),
                    ('CTRL+d', 'Display / hide setting panel'),
                    ('CTRL+n', 'Take a screenshot'),
                    ('CTRL+q', 'Close Sleep graphical interface'),

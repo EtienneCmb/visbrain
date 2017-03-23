@@ -4,6 +4,8 @@ import os
 
 from PyQt4.QtGui import *
 
+from ....utils import save_hypnoTotxt, save_hypnoToElan
+
 
 __all__ = ['uiSettings']
 
@@ -16,35 +18,17 @@ class uiSettings(object):
         # =====================================================================
         # MENU & FILES
         # =====================================================================
-        # ------------------------------- FILE -------------------------------
-        # Screenshot :
-        screenshot = QAction("Screenshot", self)
-        screenshot.setShortcut("Ctrl+N")
-        screenshot.triggered.connect(self._screenshot)
-        self.menuFiles.addAction(screenshot)
+        # ---------------------- Screenshot ----------------------
+        self.actionScreenshot.triggered.connect(self._screenshot)
 
-        # Save :
-        save = QAction("Save hypnogram", self)
-        save.setShortcut("Ctrl+S")
-        save.triggered.connect(self.saveFile)
-        self.menuFiles.addAction(save)
+        # ---------------------- Save ----------------------
+        self.actionHypnogram_data.triggered.connect(self.saveFile)
+        self.actionInfo_table.triggered.connect(self._fcn_exportInfos)
+        self.actionScoring_table.triggered.connect(self._fcn_exportScore)
+        self.actionDetection_table.triggered.connect(self._fcn_exportLocation)
 
-        # Load :
-        openm = QAction("Load", self)
-        openm.setShortcut("Ctrl+O")
-        openm.triggered.connect(self.openFile)
-        self.menuFiles.addAction(openm)
-
-        # Quit :
-        exitAction = QAction(QIcon('exit.png'), '&Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(qApp.quit)
-        self.menuFiles.addAction(exitAction)
-
-        # Shortcut :
+        # ---------------------- Shortcut & Doc ----------------------
         self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
-
         self.actionDocumentation.triggered.connect(self._fcn_openDoc)
 
         # =====================================================================
@@ -85,7 +69,11 @@ class uiSettings(object):
         self._PanSpecZoom.clicked.connect(self._fcn_Zooming)
         self._PanTimeZoom.clicked.connect(self._fcn_Zooming)
 
+    # =====================================================================
+    # MENU & FILE MANAGMENT
+    # =====================================================================
     def _fcn_showShortPopup(self):
+        """Open shortcut window."""
         self._shpopup.show()
 
     def _fcn_openDoc(self):
@@ -93,141 +81,6 @@ class uiSettings(object):
         import webbrowser
         webbrowser.open('http://etiennecmb.github.io/visbrain/sleep.html')
 
-    # =====================================================================
-    # MENU & FILE MANAGMENT
-    # =====================================================================
-    def saveFile(self):
-        """Save the hypnogram."""
-        filename = QFileDialog.getSaveFileName(self, 'Save File',
-                                               os.path.join(os.getenv('HOME'),
-                                                            'hypno.txt'),
-                                               "Text file (*.txt);;Elan file "
-                                               "(*.hyp);;All files (*.*)")
-        filename = str(filename)
-        if filename:
-            file, ext = os.path.splitext(filename)
-
-            # Switch between differents types :
-            if ext == '.hyp':
-                self._save_hypno_elan(filename, self._hypno, self._sf)
-
-            elif ext == '.txt':
-                self._save_hypno_txt(filename, self._hypno, self._sf, 1)
-
-            else:
-                raise ValueError("Not a valid extension")
-
-    def _save_hypno_elan(self, filename, hypno, sf):
-        """Save hypnogram in Elan file format (*.hyp).
-
-        Args:
-            filename: str
-                Filename (with full path) of the file to save
-
-            hypno: np.ndarray
-                Hypnogram array, same length as data
-
-            sf: int
-                Sampling frequency of the data (after downsampling)
-        """
-        hdr = np.array([['time_base 1.000000'],
-                        ['sampling_period ' + str(round(1/sf, 8))],
-                        ['epoch_nb ' + str(int(hypno.size / sf))],
-                        ['epoch_list']]).flatten()
-
-        # Check data format
-        sf = int(sf)
-        hypno = hypno.astype(int)
-        # Save
-        export = np.append(hdr, hypno[::sf].astype(str))
-        np.savetxt(filename, export, fmt='%s')
-
-    def _save_hypno_txt(self, filename, hypno, sf, window=1.):
-        """Save hypnogram in txt file format (*.txt).
-
-        Header is in file filename_description.txt
-
-        Args:
-            filename: str
-                Filename (with full path) of the file to save
-
-            hypno: np.ndarray
-                Hypnogram array, same length as data
-
-            sf: float
-                Sampling frequency of the data (after downsampling)
-
-        Kargs:
-            window: float, optional, (def 1)
-                Time window (second) of each point in the hypno
-                Default is one value per second
-                (e.g. window = 30 = 1 value per 30 second)
-        """
-        base = os.path.basename(filename)
-        dirname = os.path.dirname(filename)
-        descript = os.path.join(dirname,
-                                os.path.splitext(base)[0] + '_description.txt')
-
-        # Save hypno
-        ds_fac = int(sf * window)
-        np.savetxt(filename, hypno[::ds_fac].astype(int), fmt='%s')
-
-        # Save header file
-        hdr = np.array([['time ' + str(window)], ['W 0'], ['N1 1'], ['N2 2'],
-                        ['N3 3'], ['REM 4'], ['Art -1']]).flatten()
-        np.savetxt(descript, hdr, fmt='%s')
-
-    def openFile(self):
-        """
-        """
-        raise ValueError("NOT CONFIGURED")
-        # filename = QFileDialog.getSaveFileName(self, 'Open File',
-        #                                        os.getenv('HOME'))
-        # f = open(filename, 'w')
-        # filedata = self.text.toPlainText()
-        # f.write(filedata)
-        # f.close()
-
-    def _fcn_panSettingsViz(self):
-        """
-        """
-        pass
-
-    def _fcn_CanVisToggle(self):
-        """Toggle the different panel."""
-        self._NdVizPanel.setVisible(self._CanVisNd.isChecked())
-        self._1dVizPanel.setVisible(self._CanVis1d.isChecked())
-        # self._ImVizPanel.setVisible(self._CanVis1d.isChecked())
-
-    def _fcn_QuickTabSelec(self):
-        """On Quick settings tab selection.
-
-        Triggered function when the user select a tab from the QuickSettings
-        Tab widget.
-        """
-        pass
-        # if self.QuickSettings.currentIndex() == 1:
-        #     self._fcn_ndAxis_update()
-        # if self.QuickSettings.currentIndex() == 2:
-        #     self._fcn_1dAxis_update()
-        # elif self.QuickSettings.currentIndex() == 3:
-        #     self._fcn_imAxis_update()
-        # pass
-
-    def _fcn_1dPltTabSelect(self):
-        """On Inspect tab selection.
-
-        Triggered function when the user select a tab from the Inspect
-        Tab widget.
-        """
-        if self._1dPltTab.currentIndex() == 0:
-            self._fcn_1dAxis_update()
-        elif self._1dPltTab.currentIndex() == 1:
-            self._fcn_imAxis_update()
-
-    # =====================================================================
-    # GUI
-    # =====================================================================
     def _screenshot(self):
         """Screenshot using the GUI."""
         # Get filename :
@@ -244,6 +97,25 @@ class uiSettings(object):
     def _toggle_settings(self):
         """Toggle method for display / hide the settings panel."""
         self.q_widget.setVisible(not self.q_widget.isVisible())
+
+    def saveFile(self):
+        """Save the hypnogram."""
+        filename = QFileDialog.getSaveFileName(self, 'Save File',
+                                               os.path.join(os.getenv('HOME'),
+                                                            'hypno.txt'),
+                                               "Text file (*.txt);;Elan file "
+                                               "(*.hyp);;All files (*.*)")
+        filename = str(filename)
+        if filename:
+            file, ext = os.path.splitext(filename)
+
+            # Switch between differents types :
+            if ext == '.hyp':
+                save_hypnoToElan(filename, self._hypno, self._sf)
+            elif ext == '.txt':
+                save_hypnoTotxt(filename, self._hypno, self._sf, 1)
+            else:
+                raise ValueError("Not a valid extension")
 
     # =====================================================================
     # SLIDER

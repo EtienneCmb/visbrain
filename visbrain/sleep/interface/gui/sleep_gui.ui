@@ -2921,18 +2921,34 @@ waves</string>
     <property name="title">
      <string>Files</string>
     </property>
+    <widget class="QMenu" name="menuSave">
+     <property name="title">
+      <string>Save</string>
+     </property>
+     <addaction name="actionHypnogram_data"/>
+     <addaction name="actionInfo_table"/>
+     <addaction name="actionScoring_table"/>
+     <addaction name="actionDetection_table"/>
+    </widget>
+    <widget class="QMenu" name="menuLoad">
+     <property name="title">
+      <string>Load</string>
+     </property>
+     <addaction name="actionData"/>
+     <addaction name="actionHypnogram"/>
+    </widget>
+    <addaction name="actionScreenshot"/>
+    <addaction name="separator"/>
+    <addaction name="menuSave"/>
+    <addaction name="menuLoad"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuDisplay">
     <property name="title">
      <string>Display</string>
     </property>
-    <widget class="QMenu" name="menuPanel">
-     <property name="title">
-      <string>Panel</string>
-     </property>
-    </widget>
     <addaction name="actionQuick_settings"/>
-    <addaction name="menuPanel"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -3094,6 +3110,93 @@ waves</string>
   <action name="actionDocumentation">
    <property name="text">
     <string>Documentation</string>
+   </property>
+  </action>
+  <action name="actionScreenshot">
+   <property name="text">
+    <string>Screenshot</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionSave_hypnogram">
+   <property name="text">
+    <string>Save hypnogram data</string>
+   </property>
+  </action>
+  <action name="actionSave_infos">
+   <property name="text">
+    <string>Save infos table</string>
+   </property>
+  </action>
+  <action name="actionSave_scoring">
+   <property name="text">
+    <string>Save scoring table</string>
+   </property>
+  </action>
+  <action name="actionSave_detection">
+   <property name="text">
+    <string>Save detection table</string>
+   </property>
+  </action>
+  <action name="actionSave_all">
+   <property name="text">
+    <string>Save all</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionLoad_hypnogram">
+   <property name="text">
+    <string>Load hypnogram</string>
+   </property>
+  </action>
+  <action name="actionHypnogram_data">
+   <property name="text">
+    <string>Hypnogram data</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionInfo_table">
+   <property name="text">
+    <string>Info table</string>
+   </property>
+  </action>
+  <action name="actionScoring_table">
+   <property name="text">
+    <string>Scoring table</string>
+   </property>
+  </action>
+  <action name="actionDetection_table">
+   <property name="text">
+    <string>Detection table</string>
+   </property>
+  </action>
+  <action name="actionAll">
+   <property name="text">
+    <string>All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionHypnogram">
+   <property name="text">
+    <string>Hypnogram</string>
+   </property>
+  </action>
+  <action name="actionData">
+   <property name="text">
+    <string>Data</string>
    </property>
   </action>
  </widget>

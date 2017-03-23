@@ -17,7 +17,7 @@ class uiInfo(object):
         self._infoTime.valueChanged.connect(self._fcn_infoUpdate)
         self._infoTime.setKeyboardTracking(False)
         # Export file :
-        self._infoExport.clicked.connect(self._fcn_exportFile)
+        self._infoExport.clicked.connect(self._fcn_exportInfos)
 
     def _fcn_infoUpdate(self):
         """Complete the table sleep info."""
@@ -41,7 +41,7 @@ class uiInfo(object):
             self._keysInfo[int(r) + 1] = key
             self._valInfo[int(r) + 1] = str(v)
 
-    def _fcn_exportFile(self):
+    def _fcn_exportInfos(self):
         """Export stat info."""
         # Find extension :
         selected_ext = str(self._infoExportAs.currentText())
