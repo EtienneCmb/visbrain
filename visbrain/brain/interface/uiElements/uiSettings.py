@@ -171,9 +171,10 @@ class uiSettings(object):
         ext = str(self._ssSaveAsExt.currentText())
         self._savename = file + ext
         # Cropping :
+        viz = self._ssCropEnable.isChecked()
         crop = (self._ssCropXs.value(), self._ssCropYs.value(),
                 self._ssCropXe.value(), self._ssCropYe.value())
-        viz = self._ssCropEnable.isChecked()
+        self._crop = crop if viz else None
         self._ssCropW.setEnabled(viz)
         # self.guide.mesh.visible = self._ssGuide.isChecked()
         # if self._ssGuide.isChecked() and self._ssCropW.isEnabled():
@@ -183,7 +184,6 @@ class uiSettings(object):
         #     self.guide.range['y'] = self.view.wc.camera._ylim
         #     print(self.guide.range)
         #     self.guide.set_data(crop=crop)
-        self.crop = crop if self._ssCropW.isEnabled() else None
         # Resolution :
         self._uirez = float(self._ssResolution.value())
 
@@ -231,7 +231,6 @@ class uiSettings(object):
         self.view.canvas._backend._physical_size = new_size
 
         # Render and save :
-        # self._crop = (0, 0, new_size[0]-1, new_size[1]-1)
         img = self.view.canvas.render(region=self._crop, size=new_size)
         io.imsave(saveas, img)
 

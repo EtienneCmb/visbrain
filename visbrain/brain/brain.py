@@ -290,12 +290,6 @@ class Brain(uiInit, uiElements, base, userfcn):
         """Display the graphical user interface."""
         # This function has to be placed here (and not in the user.py script)
         self.showMaximized()
-        # pos = self.view.canvas.size
-        # if self._crop is None:
-        #     self._ssCropXs.setValue(0)
-        #     self._ssCropYs.setValue(0)
-        #     self._ssCropXe.setValue(pos[0])
-        #     self._ssCropYe.setValue(pos[1])
         # Fix brain range :
         self._set_cam_range()
         visapp.run()
