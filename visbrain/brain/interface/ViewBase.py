@@ -23,13 +23,6 @@ class vbShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
-        # Shortcuts panel :
-        self.table_panel.hide()
-        self.actionShortcuts.triggered.connect(self.shortcuts_panel)
-        # self.sh_table.resizeColumnsToContents()
-        self.sh_table.resizeRowsToContents()
-        self.sh_table.setColumnWidth(self.sh_table.columnCount()-2, 200)
-        self.sh_table.setColumnWidth(self.sh_table.columnCount()-1, 100)
 
         # Add shortcuts to vbCanvas :
         @canvas.events.key_press.connect
@@ -119,14 +112,6 @@ class vbShortcuts(object):
                 # Display the rotation panel :
                 self._fcn_userRotation()
                 self.userRotationPanel.setVisible(True)
-
-    def shortcuts_panel(self):
-        """Display or hide the shortcuts panel."""
-        isVisible = self.table_panel.isVisible()
-        if not isVisible:
-            self.table_panel.show()
-        else:
-            self.table_panel.hide()
 
 
 class vbCanvas(object):
