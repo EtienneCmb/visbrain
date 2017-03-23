@@ -254,9 +254,9 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
 ###########################################################################
 
 
-def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4, 
-                                                                moving_s=30):
-    """Perform a Slow Wave detection
+def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
+                   moving_s=30):
+    """Perform a Slow Wave detection.
 
     Args:
         elec: np.ndarray
@@ -268,7 +268,7 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
         threshold: float
             First threshold: number of standard deviation of delta power
             Formula: mean + X * std(derivative)
-            
+
         amplitude: float
             Secondary threshold: minimum amplitude (mV) of the raw signal.
             Slow waves are generally defined by amplitude > 75 mV.
@@ -306,7 +306,7 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
     idx_sup_thr = np.where(delta_nfpow > thresh)[0]
 
     # Raw signal amplitude criteria
-    raw_thresh = amplitude / 2 
+    raw_thresh = amplitude / 2
     idx_sup_raw = np.where(abs(elec) > raw_thresh)[0]
     idx_sup_thr = np.intersect1d(idx_sup_thr, idx_sup_raw)
 
@@ -316,8 +316,8 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
 
     # WELCH METHOD
     # WARNING: only return one value per epoch (and not per ms)
-    #delta_spec_norm = _welch_bpower(elec, fMin, fMax, sf,
-    #                            window_s=30, norm=True)
+    # delta_spec_norm = _welch_bpower(elec, fMin, fMax, sf,
+    #                             window_s=30, norm=True)
 
     # WAVELET AMPLITUDE
     # analytic = morlet(elec, sf, np.mean([fMin, fMax]))
@@ -518,7 +518,7 @@ def _derivative(x, window, sf):
 
 
 def _wavelet_bpower(x, freqs, sf, norm=True):
-    """Compute bandwise-normalized power of data using morlet wavelet
+    """Compute bandwise-normalized power of data using morlet wavelet.
 
     Args:
         x: np.ndarray
@@ -561,7 +561,7 @@ def _wavelet_bpower(x, freqs, sf, norm=True):
 
 
 def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
-    """Compute bandwise-normalized power of data using morlet wavelet
+    """Compute bandwise-normalized power of data using morlet wavelet.
 
     Args:
         x: np.ndarray
@@ -590,7 +590,8 @@ def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
 
     for i in np.arange(0, len(x), window_s * sf):
         f, Pxx_spec = welch(x[i:i + window_s * sf], sf, 'flattop',
-                            nperseg=sf * (1 / freq_spacing), scaling='spectrum')
+                            nperseg=sf * (1 / freq_spacing),
+                            scaling='spectrum')
         mean_delta = np.mean(Pxx_spec[idx_fMin:idx_fMax, ])
         norm_delta = np.sum(Pxx_spec[idx_fMin:idx_fMax, ]) / np.sum(Pxx_spec)
         delta_spec = np.append(delta_spec, mean_delta)
