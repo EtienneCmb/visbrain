@@ -43,6 +43,7 @@ Etienne
 
 Raph
 	+4 Detection K-complexes
+	+3 Implémentation ICA + rejection
 	+2 Scorage automatique du sommeil
 	+5 Minimum duration sur REM?
 	+3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz

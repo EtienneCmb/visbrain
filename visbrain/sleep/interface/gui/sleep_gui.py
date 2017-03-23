@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/sleep/interface/gui/sleep_gui.ui'
+# Form implementation generated from reading ui file 'sleep_gui.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -89,7 +89,7 @@ class Ui_MainWindow(object):
         self._PanScrollChan.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self._PanScrollChan.setObjectName(_fromUtf8("_PanScrollChan"))
         self.scrollAreaWidgetContents_3 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 350, 299))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 354, 376))
         self.scrollAreaWidgetContents_3.setObjectName(_fromUtf8("scrollAreaWidgetContents_3"))
         self.verticalLayout_14 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents_3)
         self.verticalLayout_14.setObjectName(_fromUtf8("verticalLayout_14"))
@@ -583,16 +583,19 @@ class Ui_MainWindow(object):
         self.gridLayout_15 = QtGui.QGridLayout()
         self.gridLayout_15.setContentsMargins(-1, 0, -1, -1)
         self.gridLayout_15.setObjectName(_fromUtf8("gridLayout_15"))
-        self._scoreExport = QtGui.QComboBox(self.q_Score)
-        self._scoreExport.setObjectName(_fromUtf8("_scoreExport"))
-        self._scoreExport.addItem(_fromUtf8(""))
-        self._scoreExport.addItem(_fromUtf8(""))
-        self.gridLayout_15.addWidget(self._scoreExport, 0, 1, 1, 1)
+        self._scoreExportAs = QtGui.QComboBox(self.q_Score)
+        self._scoreExportAs.setObjectName(_fromUtf8("_scoreExportAs"))
+        self._scoreExportAs.addItem(_fromUtf8(""))
+        self._scoreExportAs.addItem(_fromUtf8(""))
+        self.gridLayout_15.addWidget(self._scoreExportAs, 0, 1, 1, 1)
         self.label_36 = QtGui.QLabel(self.q_Score)
         self.label_36.setObjectName(_fromUtf8("label_36"))
         self.gridLayout_15.addWidget(self.label_36, 0, 0, 1, 1)
         spacerItem16 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.gridLayout_15.addItem(spacerItem16, 0, 2, 1, 1)
+        self.gridLayout_15.addItem(spacerItem16, 0, 3, 1, 1)
+        self._scoreExport = QtGui.QPushButton(self.q_Score)
+        self._scoreExport.setObjectName(_fromUtf8("_scoreExport"))
+        self.gridLayout_15.addWidget(self._scoreExport, 0, 2, 1, 1)
         self.verticalLayout_29.addLayout(self.gridLayout_15)
         self.QuickSettings.addTab(self.q_Score, _fromUtf8(""))
         self.q_Detection = QtGui.QWidget()
@@ -1143,7 +1146,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout_18)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1328, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1328, 21))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFiles = QtGui.QMenu(self.menubar)
         self.menuFiles.setObjectName(_fromUtf8("menuFiles"))
@@ -1217,7 +1220,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.QuickSettings.setCurrentIndex(4)
+        self.QuickSettings.setCurrentIndex(3)
         self._DetectionTab.setCurrentIndex(0)
         self._slRules.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -1328,9 +1331,10 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Stage", None))
         self._scoreAdd.setText(_translate("MainWindow", "Add line", None))
         self._scoreRm.setText(_translate("MainWindow", "Remove line", None))
-        self._scoreExport.setItemText(0, _translate("MainWindow", "CSV file (*.csv)", None))
-        self._scoreExport.setItemText(1, _translate("MainWindow", "Text file (*.txt)", None))
+        self._scoreExportAs.setItemText(0, _translate("MainWindow", "CSV file (*.csv)", None))
+        self._scoreExportAs.setItemText(1, _translate("MainWindow", "Text file (*.txt)", None))
         self.label_36.setText(_translate("MainWindow", "Export as: ", None))
+        self._scoreExport.setText(_translate("MainWindow", "Export", None))
         self.QuickSettings.setTabText(self.QuickSettings.indexOf(self.q_Score), _translate("MainWindow", "Scoring", None))
         self.label_45.setText(_translate("MainWindow", "Perform a REM, spindles or peak detection either on \n"
 "selected, visible or all channels.", None))
