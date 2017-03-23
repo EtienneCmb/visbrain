@@ -143,22 +143,10 @@ class uiDetection(object):
                 index, number, density, duration = remdetect(
                     self._data[k, :],
                     self._sf, self._hypno, rem_only, thr)
-                if index.size:
-                    # Set them + color to ChannelPlot object :
-                    self._chan.colidx[k]['color'] = self._defrem
-                    self._chan.colidx[k]['idx'] = index
-                    # Find only where index start / finish :
-                    ind = np.where(np.gradient(index) != 1.)[0]
-                    ind = index[np.hstack(([0], ind, [len(index) - 1]))]
-                    # Report index on hypnogram :
-                    if toReport:
-                        # Display on hypnogram :
-                        self._hyp.set_report(self._time, ind, y=1.5,
-                                             symbol='triangle_down',
-                                             color=self._defrem)
-                else:
-                    warn("\nNo REM detected on channel "+self._channels[k]+"."
-                         " Try to decrease the threshold")
+                # Get starting index :
+                ind = self._get_startingIndex(method, k, index, self._defrem,
+                                              'triangle_down', toReport,
+                                              number, density)
 
             # ------------------- SPINDLES -------------------
             elif method == 'Spindles':
@@ -171,32 +159,11 @@ class uiDetection(object):
                 nrem_only = self._ToolSpinRemOnly.isChecked()
                 # Get Spindles indices :
                 index, number, density, duration = spindlesdetect(
-                    self._data[k, :],
-                    self._sf, thr,
-                    self._hypno, nrem_only,
+                    self._data[k, :], self._sf, thr, self._hypno, nrem_only,
                     fMin, fMax, tMin, tMax)
-                if index.size:
-                    # Set them + color to ChannelPlot object :
-                    self._chan.colidx[k]['color'] = self._defspin
-                    self._chan.colidx[k]['idx'] = index
-                    # Find only where index start / finish :
-                    ind = np.where(np.gradient(index) != 1.)[0]
-                    ind = index[np.hstack(([0], ind, [len(index) - 1]))]
-                    # Report index on hypnogram :
-                    if toReport:
-                        # Display on hypnogram :
-                        self._hyp.set_report(self._time, ind, symbol='x',
-                                             color=self._defspin, y=1.5)
-
-                    # Report results on table
-                    self._ToolSpinTable.setRowCount(1)
-                    self._ToolSpinTable.setItem(0, 0, QtGui.QTableWidgetItem(
-                        str(number)))
-                    self._ToolSpinTable.setItem(0, 1, QtGui.QTableWidgetItem(
-                        str(round(density, 2))))
-                else:
-                    warn("\nNo Spindles detected on channel "+self._channels[
-                         k]+". Try to decrease the threshold")
+                # Get starting index :
+                ind = self._get_startingIndex(method, k, index, self._defspin,
+                                              'x', toReport, number, density)
 
             # ------------------- SLOW WAVES -------------------
             elif method == 'Slow waves':
@@ -206,23 +173,9 @@ class uiDetection(object):
                 # Get Slow Waves indices :
                 index, number, duration = slowwavedetect(self._data[k, :],
                                                          self._sf, thr, amp)
-
-                if index.size:
-                    # Set them + color to ChannelPlot object :
-                    self._chan.colidx[k]['color'] = self._defslowwave
-                    self._chan.colidx[k]['idx'] = index
-                    # Find only where index start / finish :
-                    ind = np.where(np.gradient(index) != 1.)[0]
-                    ind = index[np.hstack(([0], ind, [len(index) - 1]))]
-                    # Report index on hypnogram :
-                    if toReport:
-                        # Display on hypnogram :
-                        self._hyp.set_report(self._time, ind, symbol='o',
-                                             color=self._defslowwave, y=1.5)
-
-                else:
-                    warn("\nNo Slow Wave detected on channel "+self._channels[
-                         k]+". Try to decrease the threshold")
+                # Get starting index :
+                ind = self._get_startingIndex(method, k, index, self._defsw,
+                                              'o', toReport, number, 0.)
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
@@ -260,6 +213,36 @@ class uiDetection(object):
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
+
+    def _get_startingIndex(self, name, k, index, color, symbol, toReport,
+                           number, density):
+        """"""
+        if index.size:
+            # Set them + color to ChannelPlot object :
+            self._chan.colidx[k]['color'] = color
+            self._chan.colidx[k]['idx'] = index
+
+            # Find only where index start / finish :
+            ind = np.where(np.gradient(index) != 1.)[0]
+            ind = index[np.hstack(([0], ind, [len(index) - 1]))]
+
+            # Report index on hypnogram :
+            if toReport:
+                self._hyp.set_report(self._time, ind, symbol=symbol,
+                                     color=color, y=1.5)
+
+            # Report results on table :
+            self._ToolSpinTable.setRowCount(1)
+            self._ToolSpinTable.setItem(0, 0, QtGui.QTableWidgetItem(
+                str(number)))
+            self._ToolSpinTable.setItem(0, 1, QtGui.QTableWidgetItem(
+                str(round(density, 2))))
+        else:
+            warn("\nNo " + name + " detected on channel "+self._channels[
+                 k]+". Try to decrease the threshold")
+            ind = np.array([])
+
+        return ind
 
     # =====================================================================
     # FILL LOCATION TABLE
