@@ -28,6 +28,15 @@ Finally, install visbrain :
 What's new?
 ***********
 
+* New in version v0.1.7
+
+  * Brain : New density color and start bundling
+  * Brain : possibility to add multiple source / connectivity objects
+  * Brain : screenshot improvements and GUI integration
+  * Sleep : REM / spindles detection improvements and slow waves detection
+  * Sleep : everything can now be exported.
+  * Sleep : GUI re-organization and improvements
+
 * New in version v0.1.4
 
   * Python 2 compatibility
