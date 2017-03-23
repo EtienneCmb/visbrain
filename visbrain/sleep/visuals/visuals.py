@@ -533,6 +533,22 @@ class vbShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
+        self.sh = [('n', 'Go to the next window'),
+                   ('b', 'Go to the previous window'),
+                   ('s', 'Display / hide spectrogram'),
+                   ('h', 'Display / hide hypnogram'),
+                   ('z', 'Enable / disable zooming'),
+                   ('a', 'Scoring: set current window to Art (-1)'),
+                   ('w', 'Scoring: set current window to Wake (0)'),
+                   ('1', 'Scoring: set current window to N1 (1)'),
+                   ('2', 'Scoring: set current window to N2 (2)'),
+                   ('3', 'Scoring: set current window to N3 (3)'),
+                   ('r', 'Scoring: set current window to REM (4)'),
+                   ('CTRL+d', 'Display / hide setting panel'),
+                   ('CTRL+n', 'Take a screenshot'),
+                   ('CTRL+q', 'Close Sleep graphical interface'),
+                   ]
+
         # Add shortcuts to vbCanvas :
         @canvas.events.key_press.connect
         def on_key_press(event):
@@ -659,3 +675,6 @@ class visuals(vbShortcuts):
         vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
             vbShortcuts.__init__(self, k.canvas)
+
+        # Initialize popup window with shotcuts :
+        self._shpopup.set_shortcuts(self.sh)

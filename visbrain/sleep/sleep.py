@@ -12,7 +12,8 @@ import vispy.app as visapp
 from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
-from ..utils import FixedCam, load_sleepdataset, load_hypno, color2vb
+from ..utils import (FixedCam, load_sleepdataset, load_hypno, color2vb,
+                     ShortcutPopup)
 # from ...utils import id
 # from .user import userfcn
 
@@ -129,6 +130,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
         uiElements.__init__(self)
+
+        # Shortcuts popup window :
+        self._shpopup = ShortcutPopup()
 
         # ====================== CAMERAS ======================
         # ------------------- Channels -------------------

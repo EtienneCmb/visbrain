@@ -42,6 +42,9 @@ class uiSettings(object):
         exitAction.triggered.connect(qApp.quit)
         self.menuFiles.addAction(exitAction)
 
+        # Shortcut :
+        self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
+
         # =====================================================================
         # SETTINGS PANEL
         # =====================================================================
@@ -79,6 +82,9 @@ class uiSettings(object):
         self._PanHypZoom.clicked.connect(self._fcn_Zooming)
         self._PanSpecZoom.clicked.connect(self._fcn_Zooming)
         self._PanTimeZoom.clicked.connect(self._fcn_Zooming)
+
+    def _fcn_showShortPopup(self):
+        self._shpopup.show()
 
     # =====================================================================
     # MENU & FILE MANAGMENT

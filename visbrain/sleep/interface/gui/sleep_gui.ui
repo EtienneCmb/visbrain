@@ -2932,7 +2932,7 @@ waves</string>
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionAbout"/>
+    <addaction name="actionShortcut"/>
     <addaction name="actionDocumentation"/>
    </widget>
    <addaction name="menuFiles"/>
@@ -3080,9 +3080,9 @@ waves</string>
     <string>Colormap</string>
    </property>
   </action>
-  <action name="actionAbout">
+  <action name="actionShortcut">
    <property name="text">
-    <string>About</string>
+    <string>Shortcuts</string>
    </property>
   </action>
   <action name="actionDocumentation">
