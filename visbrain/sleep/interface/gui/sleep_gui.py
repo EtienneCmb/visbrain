@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/sleep/interface/gui/sleep_gui.ui'
+# Form implementation generated from reading ui file 'sleep_gui.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -89,7 +89,7 @@ class Ui_MainWindow(object):
         self._PanScrollChan.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self._PanScrollChan.setObjectName(_fromUtf8("_PanScrollChan"))
         self.scrollAreaWidgetContents_3 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 350, 299))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 354, 376))
         self.scrollAreaWidgetContents_3.setObjectName(_fromUtf8("scrollAreaWidgetContents_3"))
         self.verticalLayout_14 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents_3)
         self.verticalLayout_14.setObjectName(_fromUtf8("verticalLayout_14"))
@@ -673,6 +673,7 @@ class Ui_MainWindow(object):
         self._ToolDetectType.addItem(_fromUtf8(""))
         self._ToolDetectType.addItem(_fromUtf8(""))
         self._ToolDetectType.addItem(_fromUtf8(""))
+        self._ToolDetectType.addItem(_fromUtf8(""))
         self.gridLayout.addWidget(self._ToolDetectType, 0, 3, 1, 3)
         self.line_9 = QtGui.QFrame(self.groupBox_3)
         self.line_9.setMinimumSize(QtCore.QSize(10, 0))
@@ -930,6 +931,27 @@ class Ui_MainWindow(object):
         self.gridLayout_9.addItem(spacerItem23, 0, 3, 1, 1)
         self.verticalLayout_40.addLayout(self.gridLayout_9)
         self.verticalLayout_26.addWidget(self._ToolWavePanel)
+        self._ToolKCPanel = QtGui.QWidget(self.groupBox_4)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self._ToolKCPanel.sizePolicy().hasHeightForWidth())
+        self._ToolKCPanel.setSizePolicy(sizePolicy)
+        self._ToolKCPanel.setMinimumSize(QtCore.QSize(0, 30))
+        self._ToolKCPanel.setObjectName(_fromUtf8("_ToolKCPanel"))
+        self.horizontalLayout_6 = QtGui.QHBoxLayout(self._ToolKCPanel)
+        self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
+        self.gridLayout_8 = QtGui.QGridLayout()
+        self.gridLayout_8.setContentsMargins(-1, 0, -1, -1)
+        self.gridLayout_8.setObjectName(_fromUtf8("gridLayout_8"))
+        self._ToolKCNremOnly = QtGui.QCheckBox(self._ToolKCPanel)
+        self._ToolKCNremOnly.setObjectName(_fromUtf8("_ToolKCNremOnly"))
+        self.gridLayout_8.addWidget(self._ToolKCNremOnly, 0, 1, 1, 1)
+        self.kc_label = QtGui.QLabel(self._ToolKCPanel)
+        self.kc_label.setObjectName(_fromUtf8("kc_label"))
+        self.gridLayout_8.addWidget(self.kc_label, 0, 0, 1, 1)
+        self.horizontalLayout_6.addLayout(self.gridLayout_8)
+        self.verticalLayout_26.addWidget(self._ToolKCPanel)
         self.verticalLayout_38.addWidget(self.groupBox_4)
         spacerItem24 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout_38.addItem(spacerItem24)
@@ -1153,7 +1175,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout_18)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1328, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1328, 21))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFiles = QtGui.QMenu(self.menubar)
         self.menuFiles.setObjectName(_fromUtf8("menuFiles"))
@@ -1270,8 +1292,8 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.QuickSettings.setCurrentIndex(0)
-        self._DetectionTab.setCurrentIndex(1)
+        self.QuickSettings.setCurrentIndex(4)
+        self._DetectionTab.setCurrentIndex(0)
         self._slRules.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -1399,6 +1421,7 @@ class Ui_MainWindow(object):
         self._ToolDetectType.setItemText(1, _translate("MainWindow", "Spindles", None))
         self._ToolDetectType.setItemText(2, _translate("MainWindow", "Peaks", None))
         self._ToolDetectType.setItemText(3, _translate("MainWindow", "Slow waves", None))
+        self._ToolDetectType.setItemText(4, _translate("MainWindow", "K-complexes", None))
         self._ToolRdViz.setText(_translate("MainWindow", "Visible", None))
         self.label_49.setText(_translate("MainWindow", "Apply\n"
 "on", None))
@@ -1443,6 +1466,8 @@ class Ui_MainWindow(object):
         self._ToolWaveTh.setToolTip(_translate("MainWindow", "<html><head/><body><p>Number of standard deviations of delta power</p></body></html>", None))
         self.label_46.setText(_translate("MainWindow", "Power (std)", None))
         self.label_47.setText(_translate("MainWindow", "Amplitude (mV)", None))
+        self._ToolKCNremOnly.setText(_translate("MainWindow", "Perform detection only for NREM sleep", None))
+        self.kc_label.setText(_translate("MainWindow", "K-complexes", None))
         self._ToolDetectApply.setToolTip(_translate("MainWindow", "<html><head/><body><p>Apply detection either on :</p><p>- Selected channels via the channel selection box above</p><p>- Visible channels</p><p>- All channels</p></body></html>", None))
         self._ToolDetectApply.setText(_translate("MainWindow", "Apply", None))
         self._DetectionTab.setTabText(self._DetectionTab.indexOf(self.q_DetectSettings), _translate("MainWindow", "Settings", None))

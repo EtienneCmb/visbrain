@@ -11,7 +11,69 @@ import numpy as np
 from scipy.signal import hilbert
 from ..filtering import filt, morlet
 
-__all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect']
+__all__ = ['peakdetect', 'remdetect',
+           'spindlesdetect', 'slowwavedetect', 'kcdetect']
+
+###########################################################################
+# K-COMPLEX DETECTION
+###########################################################################
+
+def kcdetect(elec, sf, hypno, nrem_only):
+    """Perform a K-complex detection
+
+    Args:
+        elec: np.ndarray
+            eeg signal (preferably central electrodes)
+
+        sf: float
+            Downsampling frequency
+
+        hypno: np.ndarray
+            Hypnogram vector, same length as elec
+            Vector with only 0 if no hypnogram is loaded
+
+        nrem_only: boolean
+            Perfom detection only on NREM sleep period
+
+    Return:
+        idx_kc: np.ndarray
+            Array of supra-threshold indices
+
+        number: int
+            Number of detected K-complexes
+
+        density: float
+            Number of K-complexes per minutes of data
+
+        duration_ms: float
+            Duration (ms) of each K-complex detected
+    """
+    # Main parameters (raw values per algorithm construction)
+    delta_window = 20
+    spindles_thresh = 3
+    fMin = 0.5
+    fMax = 2
+    daub_coeff = 6
+    daub_mult = 10
+
+    # PRE DETECTION
+    # Compute delta band power
+    delta_nspec = _welch_bpower(elec, fMin, fMax, sf,
+                                window_s=delta_window, norm=True)
+    # Compute spindles detection
+    spindles, _, _, _ = spindlesdetect(
+        elec, sf, spindles_thresh, hypno, nrem_only=False)
+
+    # MAIN DETECTION
+    from scipy.signal import daub
+    sig_filt = filt(sf, np.array([fMin, fMax]), elec)
+    wavelet = daub(daub_coeff)
+    sig_transformed = np.convolve(sig_filt, wavelet * daub_mult, mode='same')
+
+    # Find suprathreshold
+    thresh = np.mean(sig_transformed) + np.std(sig_transformed)
+
+    # PROBABILITY
 
 
 ###########################################################################
@@ -580,6 +642,7 @@ def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
 
     """
     from scipy.signal import welch
+    sf = int(sf)
     freq_spacing = 0.1
     f_vector = np.arange(0, sf / 2 + freq_spacing, freq_spacing)
     idx_fMin = np.where(f_vector == fMin)[0][0]

@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -163,8 +163,8 @@ spectrogram, hypnogram and the time axis</string>
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>350</width>
-                   <height>299</height>
+                   <width>354</width>
+                   <height>376</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -1525,7 +1525,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -1654,6 +1654,11 @@ selected, visible or all channels.</string>
                       <item>
                        <property name="text">
                         <string>Slow waves</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>K-complexes</string>
                        </property>
                       </item>
                      </widget>
@@ -2294,6 +2299,45 @@ waves</string>
                     </layout>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QWidget" name="_ToolKCPanel" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_6">
+                     <item>
+                      <layout class="QGridLayout" name="gridLayout_8">
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <item row="0" column="1">
+                        <widget class="QCheckBox" name="_ToolKCNremOnly">
+                         <property name="text">
+                          <string>Perform detection only for NREM sleep</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="kc_label">
+                         <property name="text">
+                          <string>K-complexes</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
                  </layout>
                 </widget>
                </item>
@@ -2914,7 +2958,7 @@ waves</string>
      <x>0</x>
      <y>0</y>
      <width>1328</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">
