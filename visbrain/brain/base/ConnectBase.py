@@ -28,7 +28,7 @@ class ConnectBase(_colormap):
                  c_cmap_vmin=None, c_cmap_vmax=None, c_colval=None,
                  c_cmap_under=None, c_cmap_over=None, c_cmap_clim=None,
                  c_linewidth=3., c_dradius=30., c_blxyz=.1, c_blradius=13.,
-                 **kwargs):
+                 c_bundling=False, **kwargs):
         """Init."""
         # Initialize elements :
         if (_xyz is not None) and(c_xyz is None):
@@ -49,6 +49,7 @@ class ConnectBase(_colormap):
         # Density :
         self.dradius = c_dradius
         # Bundling :
+        self.bl = c_bundling
         self.blradius = c_blradius
         self.blxyz = c_blxyz
         self.blinterp = 10
@@ -181,8 +182,11 @@ class ConnectBase(_colormap):
             self.a_color[self._Nindices, :] = colormap[self._Nindices, :]
 
         # Set to data :
-        self.mesh.set_data(pos=self.a_position, color=self.a_color,
-                           connect='segments', width=self.lw)
+        if self.bl:
+            self.bundling()
+        else:
+            self.mesh.set_data(pos=self.a_position, color=self.a_color,
+                               connect='segments', width=self.lw)
         self.needupdate = False
 
     def _center_distance(self):

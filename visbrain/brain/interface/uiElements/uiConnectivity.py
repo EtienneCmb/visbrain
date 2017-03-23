@@ -131,11 +131,13 @@ class uiConnectivity(object):
 
     def _fcn_applyBundle(self):
         """Apply line bundling."""
-        if self._conBlEnable.isChecked():
+        viz = self._conBlEnable.isChecked()
+        self.connect.bl = viz
+        if viz:
             self._conBlPanel.setEnabled(True)
             self.connect.blradius = self._conBlRadius.value()
             self.connect.blxyz = self._conBlDxyz.value()
             self.connect.bundling()
         else:
             self._conBlPanel.setEnabled(False)
-            self._set_color('')
+        self._set_color('')
