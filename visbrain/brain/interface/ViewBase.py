@@ -33,13 +33,13 @@ class vbShortcuts(object):
                    ('c', 'Display / hide colorbar'),
                    ('+', 'Increase brain opacity'),
                    ('-', 'Decrease brain opacity'),
-                   ('CTRL+p', 'Run the cortical projection'),
-                   ('CTRL+r', 'Run the cortical repartition'),
-                   ('CTRL+d', 'Display / hide setting panel'),
-                   ('CTRL+e', 'Show the documentation'),
-                   ('CTRL+t', 'Display shortcuts'),
-                   ('CTRL+n', 'Take a screenshot'),
-                   ('CTRL+q', 'Close Sleep graphical interface'),
+                   ('CTRL + p', 'Run the cortical projection'),
+                   ('CTRL + r', 'Run the cortical repartition'),
+                   ('CTRL + d', 'Display / hide setting panel'),
+                   ('CTRL + e', 'Show the documentation'),
+                   ('CTRL + t', 'Display shortcuts'),
+                   ('CTRL + n', 'Take a screenshot'),
+                   ('CTRL + q', 'Close Sleep graphical interface'),
                    ]
 
         # Add shortcuts to vbCanvas :
