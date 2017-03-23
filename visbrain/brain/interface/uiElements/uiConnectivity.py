@@ -138,4 +138,4 @@ class uiConnectivity(object):
             self.connect.bundling()
         else:
             self._conBlPanel.setEnabled(False)
-            self._set_color()
+            self._set_color('')

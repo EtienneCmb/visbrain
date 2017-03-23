@@ -17,6 +17,7 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .base import base
 from .user import userfcn
+from ..utils import GuideLines
 
 
 class Brain(uiInit, uiElements, base, userfcn):
@@ -240,7 +241,6 @@ class Brain(uiInit, uiElements, base, userfcn):
                           'fly': {'x': (-120, 120), 'y': (-100, 200),
                                   'z': (-90, 90)},
                           }
-        self._xRange = (-70, 70)
         self._cbfontsize = kwargs.get('cb_fontsize', 15)
         self._cbfontcolor = kwargs.get('cb_fontcolor', 'white')
         self._cblabel = kwargs.get('cb_label', '')
@@ -266,7 +266,7 @@ class Brain(uiInit, uiElements, base, userfcn):
         # Link UI and visbrain function :
         uiElements.__init__(self)
 
-        # # ====================== Cameras ======================
+        # ====================== Cameras ======================
         # # Main camera :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(self.view.wc.camera)
@@ -280,6 +280,10 @@ class Brain(uiInit, uiElements, base, userfcn):
         self.cb._cbNode.parent = self.view.cbwc.scene
         self._rotate(fixed='axial')
 
+        # ====================== Guidelines ======================
+        # Create guide lines for exportation :
+        self.guide = GuideLines(self.view.canvas.size, parent=self._vbNode,
+                                camrange=self._xyzRange['turntable'])
         # print(self.view.wc.scene.describe_tree(with_transform=True))
 
     def show(self):
