@@ -288,16 +288,28 @@ class uiDetection(object):
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     ref[int(self._hypno[k])]))
 
+    # =====================================================================
+    # GO TO THE LOCATION
+    # =====================================================================
     def _fcn_gotoLocation(self):
         """Go to the selected row REM / spindles / peak."""
-        # Get selected row :
+        # Get selected row and channel :
         row = self._DetectLocations.currentRow()
+        idx = self._ToolDetectChan.currentIndex()
         # Get starting and ending point :
-        st = float(str(self._DetectLocations.item(row, 0).text()))
+        sta = float(str(self._DetectLocations.item(row, 0).text()))
+        end = sta + float(str(self._DetectLocations.item(row, 1).text()))/1000.
+        # Get best looking location :
+        goto = ((sta + end) / 2.) - (self._SigWin.value() / 2.)
         # Go to :
-        self._SlGoto.setValue(
-            st - self._SigWin.value() / self._SigSlStep.value())
+        self._SigSlStep.setValue(1)
+        self._SlGoto.setValue(goto)
+        # Set vertical lines to the location :
+        self._chan.set_location(self._sf, self._data[idx, :], idx, sta, end)
 
+    # =====================================================================
+    # EXPORT TABLE
+    # =====================================================================
     def _fcn_exportLocation(self):
         """Export locations info."""
         method = str(self._ToolDetectType.currentText())
