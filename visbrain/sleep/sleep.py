@@ -12,7 +12,8 @@ import vispy.app as visapp
 from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
-from ..utils import FixedCam, load_sleepdataset, load_hypno, color2vb
+from ..utils import (FixedCam, load_sleepdataset, load_hypno, color2vb,
+                     ShortcutPopup)
 # from ...utils import id
 # from .user import userfcn
 
@@ -118,6 +119,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._defcmap = 'viridis'
         # Spindles / REM / Peaks colors :
         self._defspin = color2vb('#d73737')
+        self._defsw = color2vb('#56bf8b')
         self._defrem = color2vb('#6684e1')
         self._defpeaks = '#b854d4'
         # Get some data info (min / max / std / mean)
@@ -128,6 +130,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
         uiElements.__init__(self)
+
+        # Shortcuts popup window :
+        self._shpopup = ShortcutPopup()
 
         # ====================== CAMERAS ======================
         # ------------------- Channels -------------------

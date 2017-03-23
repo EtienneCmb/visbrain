@@ -1,9 +1,10 @@
 """Main class for settings managment."""
 import numpy as np
-
+import os
 from PyQt4 import QtGui
 
 from ....utils import transient
+from ....utils import listToCsv, listToTxt
 
 __all__ = ['uiScoring']
 
@@ -21,6 +22,9 @@ class uiScoring(object):
 
         # Table edited :
         self._scoreTable.cellChanged.connect(self._fcn_Score2Hypno)
+
+        # Export file :
+        self._scoreExport.clicked.connect(self._fcn_exportScore)
 
     ##########################################################################
     # UPDATE SCORE <=> HYPNO
@@ -145,3 +149,27 @@ class uiScoring(object):
         self._scoreTable.removeRow(self._scoreTable.currentRow())
         # Update hypnogram from table :
         self._fcn_Score2Hypno()
+
+    ##########################################################################
+    # EXPORT TABLE
+    ##########################################################################
+    def _fcn_exportScore(self):
+        """Export score info."""
+        # Read Table
+        rowCount = self._scoreTable.rowCount()
+        staInd, endInd, stage = [], [], []
+        for row in np.arange(rowCount):
+            staInd.append(str(self._scoreTable.item(row, 0).text()))
+            endInd.append(str(self._scoreTable.item(row, 1).text()))
+            stage.append(str(self._scoreTable.item(row, 2).text()))
+        # Find extension :
+        selected_ext = str(self._scoreExportAs.currentText())
+        # Get file name :
+        path = QtGui.QFileDialog.getSaveFileName(
+            self, "Save File", "scoring_info",
+            filter=selected_ext)
+        file = os.path.splitext(str(path))[0]
+        if selected_ext.find('csv') + 1:
+            listToCsv(file + '.csv', zip(staInd, endInd, stage))
+        elif selected_ext.find('txt') + 1:
+            listToTxt(file + '.txt', zip(staInd, endInd, stage))

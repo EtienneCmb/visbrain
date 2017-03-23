@@ -105,6 +105,7 @@ class ChannelPlot(PrepareData):
         # Create one line pear channel :
         pos = np.zeros((1, 3), dtype=np.float32)
         self.mesh, self.report, self.grid, self.peak = [], [], [], []
+        self.loc = []
         for i, k in enumerate(channels):
             # ----------------------------------------------
             # Create main line (for channel plot) :
@@ -127,12 +128,26 @@ class ChannelPlot(PrepareData):
             rep.set_gl_state('translucent')
             self.report.append(rep)
             # ----------------------------------------------
+            # Locations :
+            loc = scene.visuals.Line(pos, name=k+'location', method=method,
+                                     color=(.1, .1, .1, .3),
+                                     parent=parent[i].wc.scene,
+                                     connect='segments')
+            loc.set_gl_state('translucent')
+            self.loc.append(loc)
+            # ----------------------------------------------
             # Create a grid :
             grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
                                            scale=(30.*time[-1]/len(time), .1),
                                            parent=parent[i].wc.scene)
             grid.set_gl_state('translucent')
             self.grid.append(grid)
+
+    def __iter__(self):
+        """Iterate over visible mesh."""
+        for i, k in enumerate(self.mesh):
+            if self.visible[i]:
+                yield i, k
 
     def set_data(self, sf, data, time, sl=None, ylim=None):
         """Set data to channels.
@@ -199,12 +214,6 @@ class ChannelPlot(PrepareData):
             k.update()
             self.rect.append(rect)
 
-    def __iter__(self):
-        """Iterate over visible mesh."""
-        for i, k in enumerate(self.mesh):
-            if self.visible[i]:
-                yield i, k
-
     def set_grid(self, time, length=30., y=1.):
         """Set grid lentgh."""
         # Get scaling factor :
@@ -213,6 +222,19 @@ class ChannelPlot(PrepareData):
         for k in self.grid:
             k._grid_color_fn['scale'].value = sc
             k.update()
+
+    def set_location(self, sf, data, channel, start, end, factor=100.):
+        """Set vertical lines for detections."""
+        # Get data limits :
+        y = (data.min(), data.max())
+        # # Build pos :
+        pos = np.zeros((4, 3), dtype=np.float32)
+        pos[0, 0:2] = [start, y[0]]
+        pos[1, 0:2] = [start, y[1]]
+        pos[2, 0:2] = [end, y[0]]
+        pos[3, 0:2] = [end, y[1]]
+        # Set data pos :
+        self.loc[channel].set_data(pos=pos, width=2.)
 
     # ----------- PARENT -----------
     @property
@@ -248,7 +270,7 @@ class Spectrogram(PrepareData):
                                         parent=parent)
 
     def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=.5,
-                 fstart=.5, fend=25., contraste=.7):
+                 fstart=.5, fend=20., contraste=.5):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
@@ -277,10 +299,10 @@ class Spectrogram(PrepareData):
             fstart: float, optional, (def: .5)
                 Frequency from which the spectrogram have to start.
 
-            fend: float, optional, (def: 25.)
+            fend: float, optional, (def: 20.)
                 Frequency from which the spectrogram have to finish.
 
-            contraste: float, optional, (def: .7)
+            contraste: float, optional, (def: .5)
                 Contraste of the colormap.
         """
         # =================== CONVERSION ===================
@@ -511,6 +533,23 @@ class vbShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
+        self.sh = [('n', 'Go to the next window'),
+                   ('b', 'Go to the previous window'),
+                   ('s', 'Display / hide spectrogram'),
+                   ('h', 'Display / hide hypnogram'),
+                   ('z', 'Enable / disable zooming'),
+                   ('a', 'Scoring: set current window to Art (-1)'),
+                   ('w', 'Scoring: set current window to Wake (0)'),
+                   ('1', 'Scoring: set current window to N1 (1)'),
+                   ('2', 'Scoring: set current window to N2 (2)'),
+                   ('3', 'Scoring: set current window to N3 (3)'),
+                   ('r', 'Scoring: set current window to REM (4)'),
+                   ('CTRL+s', 'Save hypnogram'),
+                   ('CTRL+d', 'Display / hide setting panel'),
+                   ('CTRL+n', 'Take a screenshot'),
+                   ('CTRL+q', 'Close Sleep graphical interface'),
+                   ]
+
         # Add shortcuts to vbCanvas :
         @canvas.events.key_press.connect
         def on_key_press(event):
@@ -637,3 +676,6 @@ class visuals(vbShortcuts):
         vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
             vbShortcuts.__init__(self, k.canvas)
+
+        # Initialize popup window with shotcuts :
+        self._shpopup.set_shortcuts(self.sh)
