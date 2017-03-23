@@ -45,6 +45,8 @@ class uiSettings(object):
         # Shortcut :
         self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
 
+        self.actionDocumentation.triggered.connect(self._fcn_openDoc)
+
         # =====================================================================
         # SETTINGS PANEL
         # =====================================================================
@@ -85,6 +87,11 @@ class uiSettings(object):
 
     def _fcn_showShortPopup(self):
         self._shpopup.show()
+
+    def _fcn_openDoc(self):
+        """Open documentation."""
+        import webbrowser
+        webbrowser.open('http://etiennecmb.github.io/visbrain/sleep.html')
 
     # =====================================================================
     # MENU & FILE MANAGMENT

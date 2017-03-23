@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -1332,6 +1332,12 @@ hypnogram. Those informations change while editing it.</string>
            </item>
            <item>
             <widget class="QTableWidget" name="_scoreTable">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="sortingEnabled">
               <bool>true</bool>
              </property>
