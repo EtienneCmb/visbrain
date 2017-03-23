@@ -24,30 +24,24 @@ class uiSettings(object):
         # =============================================================
         self.progressBar.hide()
 
-        # ------------------------------- FILE -------------------------------
-        # Screenshot :
-        screenshot = QAction("Screenshot", self)
-        screenshot.setShortcut("Ctrl+N")
-        screenshot.triggered.connect(self._screenshot)
-        self.menuFiles.addAction(screenshot)
+        # ------------- Screenshot / Exit -------------
+        self.actionScreenshot.triggered.connect(self._screenshot)
+        self.actionExit.triggered.connect(qApp.quit)
 
-        # Quit :
-        exitAction = QAction(QIcon('exit.png'), '&Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(qApp.quit)
-        self.menuFiles.addAction(exitAction)
-
-        # ------------------------------- FILE -------------------------------
+        # ------------- Display -------------
         self.actionUi_settings.triggered.connect(self._fcn_panSettingsViz)
         self.actionMNI.triggered.connect(self._fcn_panSettingsViz)
         self.actionSources.triggered.connect(self._fcn_panSettingsViz)
         self.actionConnectivity.triggered.connect(self._fcn_panSettingsViz)
         self.actionColormap.triggered.connect(self._fcn_panSettingsViz)
 
-        # Transform :
+        # ------------- Transform -------------
         self.actionProjection.triggered.connect(self._cortical_projection)
         self.actionRepartition.triggered.connect(self._cortical_repartition)
+
+        # ------------- Help -------------
+        self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
+        self.actionDocumentation.triggered.connect(self._fcn_openDoc)
 
         # =============================================================
         # SCREENSHOT
@@ -134,6 +128,16 @@ class uiSettings(object):
     # =============================================================
     # MENU & FILE MANAGMENT
     # =============================================================
+    def _fcn_showShortPopup(self):
+        """Open shortcut window."""
+        self._shpopup.show()
+
+    def _fcn_openDoc(self):
+        """Open documentation."""
+        import webbrowser
+        webbrowser.open('http://etiennecmb.github.io/visbrain/brain.html')
+
+
     def _fcn_panSettingsViz(self):
         """
         """

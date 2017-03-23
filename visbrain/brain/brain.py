@@ -17,7 +17,7 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .base import base
 from .user import userfcn
-from ..utils import GuideLines
+from ..utils import GuideLines, ShortcutPopup
 
 
 class Brain(uiInit, uiElements, base, userfcn):
@@ -250,6 +250,10 @@ class Brain(uiInit, uiElements, base, userfcn):
         # Create the app and initialize all graphical elements :
         self._app = QtGui.QApplication(sys.argv)
         uiInit.__init__(self, bgcolor)
+
+        # Shortcuts popup window :
+        self._shpopup = ShortcutPopup()
+        self._shpopup.set_shortcuts(self.sh)
 
         # Set icon :
         pathfile = sys.modules[__name__].__file__

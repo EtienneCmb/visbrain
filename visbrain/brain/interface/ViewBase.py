@@ -23,6 +23,24 @@ class vbShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
+        self.sh = [('0', 'Axial rotation (top / bottom)'),
+                   ('1', 'Coronal rotation (front / back)'),
+                   ('2', 'Sagittal rotation (left / right)'),
+                   ('3', 'Set the brain transparent/opaque'),
+                   ('4', 'Display / hide the brain.'),
+                   ('5', 'Display / hide sources'),
+                   ('6', 'Display / hide connectivity'),
+                   ('c', 'Display / hide colorbar'),
+                   ('+', 'Increase brain opacity'),
+                   ('-', 'Decrease brain opacity'),
+                   ('CTRL+p', 'Run the cortical projection'),
+                   ('CTRL+r', 'Run the cortical repartition'),
+                   ('CTRL+d', 'Display / hide setting panel'),
+                   ('CTRL+e', 'Show the documentation'),
+                   ('CTRL+t', 'Display shortcuts'),
+                   ('CTRL+n', 'Take a screenshot'),
+                   ('CTRL+q', 'Close Sleep graphical interface'),
+                   ]
 
         # Add shortcuts to vbCanvas :
         @canvas.events.key_press.connect
