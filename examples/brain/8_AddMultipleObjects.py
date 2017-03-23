@@ -58,7 +58,8 @@ vb.add_sources('sources_RB', s_xyz=s_xyzRB, s_symbol='x',
 # Add left hemisphere connectivity :
 connectL = create_connect(s_xyzL, 0., 0.5)
 vb.add_connect('connect_L', c_xyz=s_xyzL, c_connect=connectL,
-               c_cmap='Spectral_r', c_linewidth=2.)
+               c_cmap='Spectral_r', c_linewidth=2., c_colorby='density',
+               c_dynamic=(.1, 1.))
 
 # Add right / front connectivity :
 connectL = create_connect(s_xyzRF, 31., 31.5)
