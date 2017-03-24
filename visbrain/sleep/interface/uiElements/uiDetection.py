@@ -184,10 +184,12 @@ class uiDetection(object):
                 nrem_only = self._ToolKCNremOnly.isChecked()
                 # Get Slow Waves indices :
                 index, number, density, duration = kcdetect(self._data[k, :],
-                                            self._sf, self._hypno, nrem_only)
+                                                            self._sf,
+                                                            self._hypno,
+                                                            nrem_only)
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defkc,
-                                        'disc', toReport, number, 0.)
+                                              'diamond', toReport, number, 0.)
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
