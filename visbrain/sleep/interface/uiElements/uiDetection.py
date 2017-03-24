@@ -183,12 +183,11 @@ class uiDetection(object):
                 # Get variables :
                 nrem_only = self._ToolKCNremOnly.isChecked()
                 # Get Slow Waves indices :
-                kcdetect(self._data[k], self._sf, self._hypno, nrem_only)
-                index, _, _, _ = kcdetect(self._data[k, :], self._sf,
-                                                   self._hypno, nrem_only)
+                index, number, density, duration = kcdetect(self._data[k, :],
+                                            self._sf, self._hypno, nrem_only)
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defkc,
-                                              'o', toReport, number, 0.)
+                                        'triangle_up', toReport, number, 0.)
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
@@ -272,7 +271,7 @@ class uiDetection(object):
         # Clean table :
         self._DetectLocations.setRowCount(0)
         # Get kind :
-        kindIn = kind in ['REM', 'Spindles', 'Slow waves']
+        kindIn = kind in ['REM', 'Spindles', 'Slow waves', 'K-complexes']
         if kindIn and self._ToolRdSelected.isChecked():
             # Get starting index:
             staInd = index[0::2]

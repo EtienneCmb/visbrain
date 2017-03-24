@@ -18,6 +18,7 @@ __all__ = ['peakdetect', 'remdetect',
 # K-COMPLEX DETECTION
 ###########################################################################
 
+
 def kcdetect(elec, sf, hypno, nrem_only):
     """Perform a K-complex detection
 
@@ -61,43 +62,74 @@ def kcdetect(elec, sf, hypno, nrem_only):
         length = max(data.shape)
 
     # Main parameters (raw values per algorithm construction)
-    delta_window = 20
-    spindles_thresh = 3
+    delta_thr = 0.75
+    moving_s = 20
+    spindles_thresh = 2
+    range_spin_sec = 120
+    threshold = 2
     fMin = 0.5
-    fMax = 2
-    tMin = 500
-    tMax = 1500
+    fMax = 4
+    tMin = 800
+    tMax = 2500
     min_distance_ms = 500
-    daub_coeff = 6
-    daub_mult = 10
+    daub_coeff = 5
+    daub_mult = 100
 
     # PRE DETECTION
     # Compute delta band power
-    delta_nspec = _welch_bpower(elec, fMin, fMax, sf,
-                                window_s=delta_window, norm=True)
+    # delta_nspec = _welch_bpower(data, fMin, fMax, sf,
+    #                             window_s=delta_window, norm=True)
+
+    freqs = np.array([0.5, 4, 8, 12, 16])
+    delta_npow, _, _, _ = _wavelet_bpower(data, freqs, sf, norm=True)
+    delta_nfpow = _movingaverage(delta_npow, moving_s * 1000, sf)
+    # delta_thr = np.nanmean(delta_nfpow) + np.nanstd(delta_nfpow)
+    idx_delta = np.where(delta_nfpow > delta_thr)[0]
+
     # Compute spindles detection
     spindles, _, _, _ = spindlesdetect(
-        elec, sf, spindles_thresh, hypno, nrem_only=False)
+        data, sf, spindles_thresh, hypno, nrem_only=False)
 
     # MAIN DETECTION
     from scipy.signal import daub
-    sig_filt = filt(sf, np.array([fMin, fMax]), elec)
+    sig_filt = filt(sf, np.array([fMin, fMax]), data)
     wavelet = daub(daub_coeff)
     sig_transformed = np.convolve(sig_filt, wavelet * daub_mult, mode='same')
 
     if hypLoaded:
         sig_transformed[idx_zero] = np.nan
 
-    thresh = np.nanmean(sig_transformed) + np.nanstd(sig_transformed)
+    thresh = np.nanmean(sig_transformed) + threshold * \
+        np.nanstd(sig_transformed)
 
     # Amplitude criteria
     with np.errstate(divide='ignore', invalid='ignore'):
-        idx_sup_thr = np.where(amplitude > thresh)[0]
+        idx_sup_thr = np.where(abs(sig_transformed) > thresh)[0]
 
     if idx_sup_thr.size > 0:
+
+        # PROBABILITY
+        # Remove slow wave
+        idx_kc_delta = np.intersect1d(idx_sup_thr, idx_delta)
+        idx_sup_thr = np.setdiff1d(idx_sup_thr, idx_kc_delta)
+
+        # Check if spindles are present in range_spin_sec
+        # Current state: Inactive
+        number, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+        spin_bool = np.array([], dtype=np.bool)
+        for i, j in enumerate(idx_start):
+            step = range_spin_sec * sf
+            is_spin = np.in1d(np.arange(j - step, j + step), spindles)
+            spin_bool = np.append(spin_bool, any(is_spin))
+
+        good_kc = np.where(spin_bool == True)[0]
+        good_idx = _events_removal(idx_start, idx_stop, good_kc)
+        # idx_sup_thr = idx_sup_thr[good_idx]
+        del good_idx, idx_start, idx_stop
+
         # Get where KC start / end and duration :
-        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
-                                                               sf)
+        number, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
+                                                                    sf)
         # Get where min_dur <  KC duration < max_dur :
         good_dur = np.where(np.logical_and(duration_ms > tMin,
                                            duration_ms < tMax))[0]
@@ -115,8 +147,6 @@ def kcdetect(elec, sf, hypno, nrem_only):
 
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
-
-    # PROBABILITY
 
 
 ###########################################################################
