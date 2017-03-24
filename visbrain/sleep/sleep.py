@@ -125,6 +125,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Spindles / REM / Peaks colors :
         self._defspin = color2vb('#d73737')
         self._defsw = color2vb('#56bf8b')
+        self._defkc = color2vb('#b45a3c')
         self._defrem = color2vb('#6684e1')
         self._defpeaks = '#b854d4'
         # Get some data info (min / max / std / mean)

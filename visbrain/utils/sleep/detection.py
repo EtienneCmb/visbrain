@@ -48,11 +48,26 @@ def kcdetect(elec, sf, hypno, nrem_only):
         duration_ms: float
             Duration (ms) of each K-complex detected
     """
+    # Find if hypnogram is loaded :
+    hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
+
+    if hypLoaded:
+        data = elec.copy()
+        data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
+        length = np.count_nonzero(data)
+        idx_zero = np.where(data == 0)[0]
+    else:
+        data = elec
+        length = max(data.shape)
+
     # Main parameters (raw values per algorithm construction)
     delta_window = 20
     spindles_thresh = 3
     fMin = 0.5
     fMax = 2
+    tMin = 500
+    tMax = 1500
+    min_distance_ms = 500
     daub_coeff = 6
     daub_mult = 10
 
@@ -70,8 +85,36 @@ def kcdetect(elec, sf, hypno, nrem_only):
     wavelet = daub(daub_coeff)
     sig_transformed = np.convolve(sig_filt, wavelet * daub_mult, mode='same')
 
-    # Find suprathreshold
-    thresh = np.mean(sig_transformed) + np.std(sig_transformed)
+    if hypLoaded:
+        sig_transformed[idx_zero] = np.nan
+
+    thresh = np.nanmean(sig_transformed) + np.nanstd(sig_transformed)
+
+    # Amplitude criteria
+    with np.errstate(divide='ignore', invalid='ignore'):
+        idx_sup_thr = np.where(amplitude > thresh)[0]
+
+    if idx_sup_thr.size > 0:
+        # Get where KC start / end and duration :
+        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
+                                                               sf)
+        # Get where min_dur <  KC duration < max_dur :
+        good_dur = np.where(np.logical_and(duration_ms > tMin,
+                                           duration_ms < tMax))[0]
+
+        good_idx = _events_removal(idx_start, idx_stop, good_dur)
+        idx_sup_thr = idx_sup_thr[good_idx]
+
+        # Fill gap between KC separated by less than min_distance_ms
+        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
+
+        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+        density = number / (length / sf / 60.)
+
+        return idx_sup_thr, number, density, duration_ms
+
+    else:
+        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
     # PROBABILITY
 
