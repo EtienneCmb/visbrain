@@ -149,6 +149,10 @@ class ChannelPlot(PrepareData):
             if self.visible[i]:
                 yield i, k
 
+    def __len__(self):
+        """Return the number of channels."""
+        return len(self.mesh)
+
     def set_data(self, sf, data, time, sl=None, ylim=None):
         """Set data to channels.
 
@@ -235,6 +239,17 @@ class ChannelPlot(PrepareData):
         pos[3, 0:2] = [end, y[1]]
         # Set data pos :
         self.loc[channel].set_data(pos=pos, width=2.)
+
+    def clean(self):
+        """Clean all the data."""
+        for k in range(len(self)):
+            self.mesh[k].parent = None
+            self.report[k].parent = None
+            self.grid[k].parent = None
+            self.peak[k].parent = None
+            self.loc[k].parent = None
+        self.mesh, self.report, self.grid, self.peak = [], [], [], []
+        self.loc = []
 
     # ----------- PARENT -----------
     @property
@@ -350,6 +365,10 @@ class Spectrogram(PrepareData):
                      freq.max()-freq.min())
         self.freq = freq
 
+    def clean(self):
+        """Clean indicators."""
+        self.mesh.parent = None
+
     # ----------- RECT -----------
     @property
     def rect(self):
@@ -464,6 +483,13 @@ class Hypnogram(object):
         self.grid._grid_color_fn['scale'].value = sc
         self.grid.update()
 
+    def clean(self):
+        """Clean indicators."""
+        self.mesh.parent = None
+        self.edit.parent = None
+        self.report.parent = None
+        self.grid.parent = None
+
     # ----------- RECT -----------
     @property
     def rect(self):
@@ -511,6 +537,10 @@ class Indicator(object):
         sc = (xlim[1]-xlim[0], ylim[1]-ylim[0], 1.)
         # Move the square
         self.mesh.transform = vist.STTransform(translate=tox, scale=sc)
+
+    def clean(self):
+        """Clean indicators."""
+        self.mesh.parent = None
 
 
 """
@@ -644,9 +674,13 @@ class vbShortcuts(object):
 class visuals(vbShortcuts):
     """Create the visual objects to be added to the scene."""
 
-    def __init__(self, sf, data, time, channels, hypno, cameras=None,
-                 method='gl', **kwargs):
+    def __init__(self):
         """Init."""
+        # =================== VARIABLES ===================
+        sf, data, time = self._sf, self._data, self._time
+        channels, hypno, cameras = self._channels, self._hypno, self._allCams
+        method = self._linemeth
+
         # =================== CHANNELS ===================
         self._chan = ChannelPlot(channels, time, camera=cameras[0],
                                  method=method, color=self._chancolor,
