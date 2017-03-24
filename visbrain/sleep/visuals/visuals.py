@@ -242,11 +242,22 @@ class ChannelPlot(PrepareData):
 
     def clean(self):
         """Clean all the data."""
+        # Empty position :
+        pos = np.zeros((1, 3), dtype=np.float32)
         for k in range(len(self)):
+            # Main mesh :
+            self.mesh[k].set_data(pos=pos, color='gray')
             self.mesh[k].parent = None
+            # Report :
+            self.report[k].set_data(pos=pos, color='gray')
             self.report[k].parent = None
+            # Grid :
             self.grid[k].parent = None
+            # Peak locations :
+            self.peak[k].set_data(pos=pos, face_color='gray')
             self.peak[k].parent = None
+            # Vertical lines :
+            self.loc[k].set_data(pos=pos, color='gray')
             self.loc[k].parent = None
         self.mesh, self.report, self.grid, self.peak = [], [], [], []
         self.loc = []
@@ -367,6 +378,8 @@ class Spectrogram(PrepareData):
 
     def clean(self):
         """Clean indicators."""
+        pos = np.zeros((3, 4), dtype=np.float32)
+        self.mesh.set_data(pos)
         self.mesh.parent = None
         self.mesh = None
 
@@ -486,13 +499,21 @@ class Hypnogram(object):
 
     def clean(self):
         """Clean indicators."""
+        pos = np.zeros((1, 3), dtype=np.float32)
+        # Mesh :
+        self.mesh.set_data(pos=pos, color='gray')
         self.mesh.parent = None
-        self.edit.parent = None
-        self.report.parent = None
-        self.grid.parent = None
         self.mesh = None
+        # Edit :
+        self.edit.set_data(pos=pos, face_color='gray')
+        self.edit.parent = None
         self.edit = None
+        # Report :
+        self.report.set_data(pos=pos, face_color='gray')
+        self.report.parent = None
         self.report = None
+        # Grid :
+        self.grid.parent = None
         self.grid = None
 
     # ----------- RECT -----------
