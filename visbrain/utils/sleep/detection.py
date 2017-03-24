@@ -8,7 +8,7 @@ Perform:
 - Peak detection
 """
 import numpy as np
-from scipy.signal import hilbert
+from scipy.signal import hilbert, daub, welch
 from ..filtering import filt, morlet
 
 __all__ = ['peakdetect', 'remdetect',
@@ -20,7 +20,7 @@ __all__ = ['peakdetect', 'remdetect',
 
 
 def kcdetect(elec, sf, hypno, nrem_only):
-    """Perform a K-complex detection
+    """Perform a K-complex detection.
 
     Args:
         elec: np.ndarray
@@ -91,7 +91,6 @@ def kcdetect(elec, sf, hypno, nrem_only):
         data, sf, spindles_thresh, hypno, nrem_only=False)
 
     # MAIN DETECTION
-    from scipy.signal import daub
     sig_filt = filt(sf, np.array([fMin, fMax]), data)
     wavelet = daub(daub_coeff)
     sig_transformed = np.convolve(sig_filt, wavelet * daub_mult, mode='same')
@@ -120,7 +119,7 @@ def kcdetect(elec, sf, hypno, nrem_only):
             is_spin = np.in1d(np.arange(j - step, j + step), spindles)
             spin_bool = np.append(spin_bool, any(is_spin))
 
-        good_kc = np.where(spin_bool == True)[0]
+        good_kc = np.where(spin_bool)[0]
         good_idx = _events_removal(idx_start, idx_stop, good_kc)
 
         # PROBABILITY
@@ -133,8 +132,8 @@ def kcdetect(elec, sf, hypno, nrem_only):
 
         # K-COMPLEX MORPHOLOGY
         # Get where KC start / end and duration :
-        number, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
-                                                                    sf)
+        number, duration_ms, idx_start, idx_stop = _events_duration(
+                                                            idx_sup_thr, sf)
         # Get where min_dur <  KC duration < max_dur :
         good_dur = np.where(np.logical_and(duration_ms > tMin,
                                            duration_ms < tMax))[0]
@@ -721,7 +720,6 @@ def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
             If True, return normalized band power
 
     """
-    from scipy.signal import welch
     sf = int(sf)
     freq_spacing = 0.1
     f_vector = np.arange(0, sf / 2 + freq_spacing, freq_spacing)
