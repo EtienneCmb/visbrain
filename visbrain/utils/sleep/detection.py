@@ -8,10 +8,151 @@ Perform:
 - Peak detection
 """
 import numpy as np
-from scipy.signal import hilbert
+from scipy.signal import hilbert, daub, welch
 from ..filtering import filt, morlet
 
-__all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect']
+__all__ = ['peakdetect', 'remdetect',
+           'spindlesdetect', 'slowwavedetect', 'kcdetect']
+
+###########################################################################
+# K-COMPLEX DETECTION
+###########################################################################
+
+
+def kcdetect(elec, sf, hypno, nrem_only):
+    """Perform a K-complex detection.
+
+    Args:
+        elec: np.ndarray
+            eeg signal (preferably central electrodes)
+
+        sf: float
+            Downsampling frequency
+
+        hypno: np.ndarray
+            Hypnogram vector, same length as elec
+            Vector with only 0 if no hypnogram is loaded
+
+        nrem_only: boolean
+            Perfom detection only on NREM sleep period
+
+    Return:
+        idx_kc: np.ndarray
+            Array of supra-threshold indices
+
+        number: int
+            Number of detected K-complexes
+
+        density: float
+            Number of K-complexes per minutes of data
+
+        duration_ms: float
+            Duration (ms) of each K-complex detected
+    """
+    # Find if hypnogram is loaded :
+    hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
+
+    if hypLoaded:
+        data = elec.copy()
+        data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
+        length = np.count_nonzero(data)
+        idx_zero = np.where(data == 0)[0]
+    else:
+        data = elec
+        length = max(data.shape)
+
+    # Main parameters (raw values per algorithm construction)
+    delta_thr = 0.75
+    moving_s = 20
+    spindles_thresh = 1
+    range_spin_sec = 120
+    threshold = 1
+    fMin = 0.5
+    fMax = 4
+    tMin = 500
+    tMax = 2500
+    min_distance_ms = 500
+    daub_coeff = 5
+    daub_mult = 20
+
+    # PRE DETECTION
+    # Compute delta band power
+    # delta_nspec = _welch_bpower(data, fMin, fMax, sf,
+    #                             window_s=delta_window, norm=True)
+
+    freqs = np.array([0.5, 4, 8, 12, 16])
+    delta_npow, _, _, _ = _wavelet_bpower(data, freqs, sf, norm=True)
+    delta_nfpow = _movingaverage(delta_npow, moving_s * 1000, sf)
+    # delta_thr = np.nanmean(delta_nfpow) + np.nanstd(delta_nfpow)
+    idx_delta = np.where(delta_nfpow > delta_thr)[0]
+
+    # Compute spindles detection
+    spindles, _, _, _ = spindlesdetect(
+        data, sf, spindles_thresh, hypno, nrem_only=False)
+
+    # MAIN DETECTION
+    sig_filt = filt(sf, np.array([fMin, fMax]), data)
+    wavelet = daub(daub_coeff)
+    sig_transformed = np.convolve(sig_filt, wavelet * daub_mult, mode='same')
+    sig_transformed = _tkeo(sig_transformed)
+
+    if hypLoaded:
+        sig_transformed[idx_zero] = np.nan
+
+    thresh = np.nanmean(sig_transformed) + threshold * \
+        np.nanstd(sig_transformed)
+
+    # Amplitude criteria
+    with np.errstate(divide='ignore', invalid='ignore'):
+        idx_sup_thr = np.where(abs(sig_transformed) > thresh)[0]
+
+    if idx_sup_thr.size > 0:
+
+        # Find epoch with slow wave
+        idx_kc_delta = np.intersect1d(idx_sup_thr, idx_delta)
+        idx_no_delta = np.setdiff1d(idx_sup_thr, idx_kc_delta)
+
+        # Check if spindles are present in range_spin_sec
+        number, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+        spin_bool = np.array([], dtype=np.bool)
+        for i, j in enumerate(idx_start):
+            step = range_spin_sec * sf
+            is_spin = np.in1d(np.arange(j - step, j + step), spindles)
+            spin_bool = np.append(spin_bool, any(is_spin))
+
+        good_kc = np.where(spin_bool)[0]
+        good_idx = _events_removal(idx_start, idx_stop, good_kc)
+
+        # PROBABILITY
+        proba = np.zeros(shape=data.shape)
+        proba[idx_sup_thr] += 0.1
+        proba[idx_no_delta] *= 3
+        proba[good_idx] *= 2
+
+        idx_sup_thr = np.intersect1d(idx_sup_thr, np.where(proba >= 0.3)[0])
+
+        # K-COMPLEX MORPHOLOGY
+        # Get where KC start / end and duration :
+        number, duration_ms, idx_start, idx_stop = _events_duration(
+                                                            idx_sup_thr, sf)
+        # Get where min_dur <  KC duration < max_dur :
+        good_dur = np.where(np.logical_and(duration_ms > tMin,
+                                           duration_ms < tMax))[0]
+
+        good_idx = _events_removal(idx_start, idx_stop, good_dur)
+        idx_sup_thr = idx_sup_thr[good_idx]
+
+        # Fill gap between KC separated by less than min_distance_ms
+        # idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
+
+        # Export info
+        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+        density = number / (length / sf / 60.)
+
+        return idx_sup_thr, number, density, duration_ms
+
+    else:
+        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
 
 ###########################################################################
@@ -560,6 +701,28 @@ def _wavelet_bpower(x, freqs, sf, norm=True):
         return delta_pow, theta_pow, alpha_pow, beta_pow
 
 
+def _tkeo(a):
+	"""
+	Calculates the TKEO of a given recording by using 2 samples.
+    github.com/lvanderlinden/OnsetDetective/blob/master/OnsetDetective/tkeo.py
+
+	Args:
+	   a: 1d np.array
+        Data
+
+	Returns:
+        aTkeo: 1d np.array
+	       1D numpy array containing the tkeo per sample
+    """
+	# Create two temporary arrays of equal length, shifted 1 sample to the right
+	# and left and squared:
+	i = a[1:-1]*a[1:-1]
+	j = a[2:]*a[:-2]
+
+	# Calculate the difference between the two temporary arrays:
+	aTkeo = i-j
+	return aTkeo
+
 def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
     """Compute bandwise-normalized power of data using morlet wavelet.
 
@@ -579,7 +742,7 @@ def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
             If True, return normalized band power
 
     """
-    from scipy.signal import welch
+    sf = int(sf)
     freq_spacing = 0.1
     f_vector = np.arange(0, sf / 2 + freq_spacing, freq_spacing)
     idx_fMin = np.where(f_vector == fMin)[0][0]

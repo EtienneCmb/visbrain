@@ -3,7 +3,7 @@ import numpy as np
 import os
 from warnings import warn
 
-from ....utils import (remdetect, spindlesdetect, slowwavedetect,
+from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        listToCsv, listToTxt)
 
 from PyQt4 import QtGui
@@ -87,14 +87,15 @@ class uiDetection(object):
     def _fcn_switchDetection(self):
         """Switch between detection types (show / hide panels)."""
         # Define ref :
-        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves']
+        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves', 'K-complexes']
         # Get current selected text :
         viz = [str(self._ToolDetectType.currentText()) == k for k in ref]
         # Set widget visibility :
         _ = [k.setVisible(i) for k, i in zip([self._ToolRemPanel,
                                               self._ToolSpinPanel,
                                               self._ToolPeakPanel,
-                                              self._ToolWavePanel], viz)]
+                                              self._ToolWavePanel,
+                                              self._ToolKCPanel], viz)]
 
     # =====================================================================
     # RUN DETECTION
@@ -119,7 +120,7 @@ class uiDetection(object):
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_applyDetection(self):
-        """Apply detection (either REM / Spindles / Peaks / Slow Wave."""
+        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC)"""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
@@ -176,6 +177,19 @@ class uiDetection(object):
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defsw,
                                               'o', toReport, number, 0.)
+
+            # ------------------- K-COMPLEXES -------------------
+            elif method == 'K-complexes':
+                # Get variables :
+                nrem_only = self._ToolKCNremOnly.isChecked()
+                # Get Slow Waves indices :
+                index, number, density, duration = kcdetect(self._data[k, :],
+                                                            self._sf,
+                                                            self._hypno,
+                                                            nrem_only)
+                # Get starting index :
+                ind = self._get_startingIndex(method, k, index, self._defkc,
+                                              'diamond', toReport, number, 0.)
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
@@ -242,8 +256,8 @@ class uiDetection(object):
             self._ToolSpinTable.setItem(0, 1, QtGui.QTableWidgetItem(
                 str(round(density, 2))))
         else:
-            warn("\nNo " + name + " detected on channel "+self._channels[
-                 k]+". Try to decrease the threshold")
+            warn("\nNo " + name + " detected on channel " + self._channels[
+                 k] + ". Try to decrease the threshold")
             ind = np.array([])
 
         return ind
@@ -259,7 +273,7 @@ class uiDetection(object):
         # Clean table :
         self._DetectLocations.setRowCount(0)
         # Get kind :
-        kindIn = kind in ['REM', 'Spindles', 'Slow waves']
+        kindIn = kind in ['REM', 'Spindles', 'Slow waves', 'K-complexes']
         if kindIn and self._ToolRdSelected.isChecked():
             # Get starting index:
             staInd = index[0::2]
@@ -302,7 +316,8 @@ class uiDetection(object):
         idx = self._ToolDetectChan.currentIndex()
         # Get starting and ending point :
         sta = float(str(self._DetectLocations.item(row, 0).text()))
-        end = sta + float(str(self._DetectLocations.item(row, 1).text()))/1000.
+        end = sta + float(str(self._DetectLocations.item(row, 1).text())) / \
+            1000.
         # Get best looking location :
         goto = ((sta + end) / 2.) - (self._SigWin.value() / 2.)
         # Go to :

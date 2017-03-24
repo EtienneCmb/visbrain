@@ -1,5 +1,8 @@
 """Main class for sleep tools managment."""
 
+import numpy as np
+import gc
+from ....utils import bipolarization
 
 __all__ = ['uiTools']
 
@@ -9,6 +12,15 @@ class uiTools(object):
 
     def __init__(self):
         """Init."""
+        # =====================================================================
+        # RE-REFERENCING
+        # =====================================================================
+        self._ToolsRefLst.addItems(self._channels)
+        self._ToolsRefSingle.clicked.connect(self._fcn_refPanelDisp)
+        self._ToolsRefBipo.clicked.connect(self._fcn_refPanelDisp)
+        self._ToolsRefApply.clicked.connect(self._fcn_refApply)
+        self._fcn_refPanelDisp()
+
         # =====================================================================
         # MEAN / TREND
         # =====================================================================
@@ -21,6 +33,60 @@ class uiTools(object):
         self._SigFiltApply.clicked.connect(self._fcn_sigProcessing)
         self._SigFilt.clicked.connect(self._fcn_filtViz)
         self._SigFiltBand.currentIndexChanged.connect(self._fcn_filtBand)
+
+    def _fcn_refPanelDisp(self):
+        """Display / Hide the reference panel."""
+        viz = self._ToolsRefSingle.isChecked()
+        self._ToolsRefSingleW.setVisible(viz)
+        # self._ToolsRefBipoW.setVisible(not viz)
+
+    def _fcn_refApply(self):
+        """Apply re-referencing."""
+        # ________ Clean ________
+        # GUI :
+        self._fcn_cleanGui()
+        # Visuals :
+        self._chan.clean()
+        self._hyp.clean()
+        self._spec.clean()
+        self._specInd.clean()
+        self._hypInd.clean()
+        self._TimeAxis.clean()
+        del (self._chan, self._hyp, self._spec, self._specInd, self._hypInd,
+             self._TimeAxis)
+
+        # ________ Re-reference ________
+        if self._ToolsRefSingle.isChecked():
+            # Get selected channel :
+            idx = self._ToolsRefLst.currentIndex()
+            chan = self._channels[idx]
+            # Build indexing and remove idx :
+            index = np.arange(len(self._channels))
+            index = np.delete(index, idx)
+            # Re-reference :
+            self._data -= self._data[[idx], ...]
+            # Delete unused row (this operation make a data copy. Because
+            # there's might be a gap in indexing, it don't seems possible to
+            # take a view of it)
+            self._data = self._data[index, :]
+            # Channel processing :
+            del self._channels[idx]
+            self._channels = [k + '-' + chan for k in self._channels]
+            # Clean memory :
+
+        # ________ Bipolarization ________
+        else:
+            self._data, self._channels, _ = bipolarization(self._data, self._channels)
+
+        # ________ Reset GUI ________
+        # Update data info :
+        gc.collect()
+        self._get_dataInfo()
+        # Reset visuals, shortcuts and GUI elements :
+        self._fcn_resetGui()
+
+        # Finally disable GroupBox :
+        self._ToolsRefGrp.setEnabled(False)
 
     # =====================================================================
     # DEMEAN / DETREND / FILTERING

@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -82,7 +82,7 @@
            <item>
             <widget class="QFrame" name="frame">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -830,7 +830,7 @@ on</string>
            <item>
             <widget class="QFrame" name="frame_2">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -856,6 +856,170 @@ trend, filtering)</string>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
                 </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="_ToolsRefGrp">
+             <property name="title">
+              <string>Re-referencing</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_13">
+              <item row="3" column="0" colspan="2">
+               <widget class="QWidget" name="_ToolsRefSingleW" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_16">
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_56">
+                   <property name="text">
+                    <string>Use as  reference</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="3">
+                  <spacer name="horizontalSpacer_25">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QComboBox" name="_ToolsRefLst"/>
+                 </item>
+                 <item row="0" column="1">
+                  <spacer name="horizontalSpacer_30">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Minimum</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="2">
+               <layout class="QHBoxLayout" name="horizontalLayout_9">
+                <property name="topMargin">
+                 <number>9</number>
+                </property>
+                <item>
+                 <spacer name="horizontalSpacer_20">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="_ToolsRefApply">
+                  <property name="text">
+                   <string>Apply</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_21">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item row="2" column="1">
+               <widget class="QRadioButton" name="_ToolsRefBipo">
+                <property name="text">
+                 <string>Bipolarization</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0" colspan="2">
+               <widget class="Line" name="line_20">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QRadioButton" name="_ToolsRefSingle">
+                <property name="text">
+                 <string>Single channel</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <widget class="QFrame" name="frame_6">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item>
+                  <widget class="QLabel" name="label_59">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Warning : re-referencing from the graphical
+interface might not work properly on some system.</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -1150,7 +1314,7 @@ trend, filtering)</string>
            <item>
             <widget class="QFrame" name="frame_4">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -1299,7 +1463,7 @@ hypnogram. Those informations change while editing it.</string>
            <item>
             <widget class="QFrame" name="frame_3">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -1482,7 +1646,7 @@ hypnogram. Those informations change while editing it.</string>
            <item>
             <widget class="QFrame" name="frame_5">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -1525,7 +1689,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -1654,6 +1818,11 @@ selected, visible or all channels.</string>
                       <item>
                        <property name="text">
                         <string>Slow waves</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>K-complexes</string>
                        </property>
                       </item>
                      </widget>
@@ -2294,6 +2463,83 @@ waves</string>
                     </layout>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QWidget" name="_ToolKCPanel" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_6">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <property name="margin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <layout class="QGridLayout" name="gridLayout_8">
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <item row="0" column="1">
+                        <widget class="Line" name="line_19">
+                         <property name="minimumSize">
+                          <size>
+                           <width>10</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2">
+                        <widget class="QCheckBox" name="_ToolKCNremOnly">
+                         <property name="text">
+                          <string>Perform detection only for NREM
+sleep</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="kc_label">
+                         <property name="font">
+                          <font>
+                           <italic>true</italic>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>K-complexes</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="3">
+                        <spacer name="horizontalSpacer_19">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
                  </layout>
                 </widget>
                </item>
@@ -2489,142 +2735,14 @@ waves</string>
      </widget>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_18">
-      <property name="spacing">
-       <number>0</number>
-      </property>
+     <layout class="QGridLayout" name="gridLayout_21">
       <property name="topMargin">
        <number>0</number>
       </property>
       <property name="rightMargin">
        <number>0</number>
       </property>
-      <item>
-       <spacer name="horizontalSpacer_13">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QGridLayout" name="_chanGrid">
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <property name="spacing">
-         <number>3</number>
-        </property>
-       </layout>
-      </item>
-      <item>
-       <widget class="QWidget" name="_TimeAxisW" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_21">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <layout class="QVBoxLayout" name="_TimeLayout">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="sizeConstraint">
-            <enum>QLayout::SetFixedSize</enum>
-           </property>
-           <property name="leftMargin">
-            <number>9</number>
-           </property>
-           <property name="rightMargin">
-            <number>9</number>
-           </property>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="_SpecW" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_17">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <layout class="QVBoxLayout" name="_SpecLayout">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>9</number>
-           </property>
-           <property name="rightMargin">
-            <number>9</number>
-           </property>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="_HypW" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_16">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <layout class="QVBoxLayout" name="_HypLayout">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>9</number>
-           </property>
-           <property name="rightMargin">
-            <number>9</number>
-           </property>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
+      <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="spacing">
          <number>6</number>
@@ -2904,6 +3022,19 @@ waves</string>
         </item>
        </layout>
       </item>
+      <item row="0" column="0">
+       <spacer name="horizontalSpacer_13">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </item>
    </layout>
@@ -3106,10 +3237,16 @@ waves</string>
    <property name="text">
     <string>Shortcuts</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
   </action>
   <action name="actionDocumentation">
    <property name="text">
     <string>Documentation</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
   <action name="actionScreenshot">

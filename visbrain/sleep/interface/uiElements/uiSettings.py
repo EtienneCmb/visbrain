@@ -3,6 +3,7 @@ import numpy as np
 import os
 
 from PyQt4.QtGui import *
+from PyQt4.QtCore import QObjectCleanupHandler
 
 from ....utils import save_hypnoTotxt, save_hypnoToElan
 
@@ -20,6 +21,7 @@ class uiSettings(object):
         # =====================================================================
         # ---------------------- Screenshot ----------------------
         self.actionScreenshot.triggered.connect(self._screenshot)
+        self.actionExit.triggered.connect(qApp.quit)
 
         # ---------------------- Save ----------------------
         self.actionHypnogram_data.triggered.connect(self.saveFile)
@@ -327,3 +329,65 @@ class uiSettings(object):
         # Update scoring table :
         self._fcn_Hypno2Score()
         self._fcn_Score2Hypno()
+
+    # =====================================================================
+    # CLEAN / RESET GUI
+    # =====================================================================
+    def _fcn_cleanGui(self):
+        """Clean the entire GUI."""
+        # -------------- TABLES --------------
+        # Info :
+        self._infoTable.clear()
+        self._infoTable.setRowCount(0)
+
+        # Detection :
+        self._DetectLocations.clear()
+        self._DetectLocations.setRowCount(0)
+
+        # -------------- LIST BOX --------------
+        # Disconnect :
+        self._PanSpecChan.currentIndexChanged.disconnect()
+        # Clear items :
+        self._PanSpecChan.clear()
+        self._ToolDetectChan.clear()
+
+        # -------------- VISUALS --------------
+        # Channels :
+        for k in range(len(self)):
+            # Disconnect buttons :
+            self._chanChecks[k].clicked.disconnect()
+            self._yminSpin[k].valueChanged.disconnect()
+            self._ymaxSpin[k].valueChanged.disconnect()
+            # Delete elements :
+            self._chanChecks[k].deleteLater()
+            self._yminSpin[k].deleteLater(), self._ymaxSpin[k].deleteLater()
+            self._chanWidget[k].deleteLater()
+            self._chanLayout[k].deleteLater()
+            self._chanLabels[k].deleteLater()
+            self._amplitudeTxt[k].deleteLater()
+            self._chanCanvas[k].parent = None
+        QObjectCleanupHandler().add(self._chanGrid)
+        QObjectCleanupHandler().clear()
+        # Spectrogram :
+        self._specCanvas.parent = None
+        self._SpecW.deleteLater(), self._SpecLayout.deleteLater()
+        self._specLabel.deleteLater()
+        # Hypnogram :
+        self._hypCanvas.parent = None
+        self._HypW.deleteLater(), self._HypLayout.deleteLater()
+        self._hypLabel.deleteLater()
+        # Time axis :
+        self._TimeAxis.parent = None
+        self._TimeAxisW.deleteLater(), self._TimeLayout.deleteLater()
+        self._timeLabel.deleteLater()
+
+    def _fcn_resetGui(self):
+        """Reset the GUI."""
+        from .uiElements import uiElements
+        from ...visuals import visuals
+        from ...tools import Tools
+        uiElements.__init__(self)
+        self._camCreation()
+        visuals.__init__(self)
+        Tools.__init__(self)
+        self._fcnsOnCreation()

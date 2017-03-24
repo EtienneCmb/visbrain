@@ -149,6 +149,10 @@ class ChannelPlot(PrepareData):
             if self.visible[i]:
                 yield i, k
 
+    def __len__(self):
+        """Return the number of channels."""
+        return len(self.mesh)
+
     def set_data(self, sf, data, time, sl=None, ylim=None):
         """Set data to channels.
 
@@ -235,6 +239,28 @@ class ChannelPlot(PrepareData):
         pos[3, 0:2] = [end, y[1]]
         # Set data pos :
         self.loc[channel].set_data(pos=pos, width=2.)
+
+    def clean(self):
+        """Clean all the data."""
+        # Empty position :
+        pos = np.zeros((1, 3), dtype=np.float32)
+        for k in range(len(self)):
+            # Main mesh :
+            self.mesh[k].set_data(pos=pos, color='gray')
+            self.mesh[k].parent = None
+            # Report :
+            self.report[k].set_data(pos=pos, color='gray')
+            self.report[k].parent = None
+            # Grid :
+            self.grid[k].parent = None
+            # Peak locations :
+            self.peak[k].set_data(pos=pos, face_color='gray')
+            self.peak[k].parent = None
+            # Vertical lines :
+            self.loc[k].set_data(pos=pos, color='gray')
+            self.loc[k].parent = None
+        self.mesh, self.report, self.grid, self.peak = [], [], [], []
+        self.loc = []
 
     # ----------- PARENT -----------
     @property
@@ -350,6 +376,13 @@ class Spectrogram(PrepareData):
                      freq.max()-freq.min())
         self.freq = freq
 
+    def clean(self):
+        """Clean indicators."""
+        pos = np.zeros((3, 4), dtype=np.float32)
+        self.mesh.set_data(pos)
+        self.mesh.parent = None
+        self.mesh = None
+
     # ----------- RECT -----------
     @property
     def rect(self):
@@ -464,6 +497,25 @@ class Hypnogram(object):
         self.grid._grid_color_fn['scale'].value = sc
         self.grid.update()
 
+    def clean(self):
+        """Clean indicators."""
+        pos = np.zeros((1, 3), dtype=np.float32)
+        # Mesh :
+        self.mesh.set_data(pos=pos, color='gray')
+        self.mesh.parent = None
+        self.mesh = None
+        # Edit :
+        self.edit.set_data(pos=pos, face_color='gray')
+        self.edit.parent = None
+        self.edit = None
+        # Report :
+        self.report.set_data(pos=pos, face_color='gray')
+        self.report.parent = None
+        self.report = None
+        # Grid :
+        self.grid.parent = None
+        self.grid = None
+
     # ----------- RECT -----------
     @property
     def rect(self):
@@ -512,6 +564,11 @@ class Indicator(object):
         # Move the square
         self.mesh.transform = vist.STTransform(translate=tox, scale=sc)
 
+    def clean(self):
+        """Clean indicators."""
+        self.mesh.parent = None
+        self.mesh = None
+
 
 """
 ###############################################################################
@@ -544,10 +601,12 @@ class vbShortcuts(object):
                    ('2', 'Scoring: set current window to N2 (2)'),
                    ('3', 'Scoring: set current window to N3 (3)'),
                    ('r', 'Scoring: set current window to REM (4)'),
-                   ('CTRL+s', 'Save hypnogram'),
-                   ('CTRL+d', 'Display / hide setting panel'),
-                   ('CTRL+n', 'Take a screenshot'),
-                   ('CTRL+q', 'Close Sleep graphical interface'),
+                   ('CTRL + s', 'Save hypnogram'),
+                   ('CTRL + t', 'Display shortcuts'),
+                   ('CTRL + e', 'Display documentation'),
+                   ('CTRL + d', 'Display / hide setting panel'),
+                   ('CTRL + n', 'Take a screenshot'),
+                   ('CTRL + q', 'Close Sleep graphical interface'),
                    ]
 
         # Add shortcuts to vbCanvas :
@@ -642,9 +701,13 @@ class vbShortcuts(object):
 class visuals(vbShortcuts):
     """Create the visual objects to be added to the scene."""
 
-    def __init__(self, sf, data, time, channels, hypno, cameras=None,
-                 method='gl', **kwargs):
+    def __init__(self):
         """Init."""
+        # =================== VARIABLES ===================
+        sf, data, time = self._sf, self._data, self._time
+        channels, hypno, cameras = self._channels, self._hypno, self._allCams
+        method = self._linemeth
+
         # =================== CHANNELS ===================
         self._chan = ChannelPlot(channels, time, camera=cameras[0],
                                  method=method, color=self._chancolor,

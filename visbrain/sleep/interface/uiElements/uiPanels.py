@@ -24,6 +24,16 @@ class uiPanels(object):
         # Bold font :
         self._font = QtGui.QFont()
         self._font.setBold(True)
+
+        # =====================================================================
+        # MAIN GRID :
+        # =====================================================================
+        self._chanGrid = QtGui.QGridLayout()
+        self._chanGrid.setContentsMargins(-1, -1, -1, 6)
+        self._chanGrid.setSpacing(3)
+        self._chanGrid.setObjectName(_fromUtf8("_chanGrid"))
+        self.gridLayout_21.addLayout(self._chanGrid, 0, 0, 1, 1)
+
         # =====================================================================
         # CHANNELS
         # =====================================================================
@@ -51,6 +61,8 @@ class uiPanels(object):
                                       yargs={'text_color': 'black'},
                                       xargs={'text_color': 'black'},
                                       fcn=[self.on_mouse_wheel])
+        self._SpecW, self._SpecLayout = self._createCompatibleW("SpecW",
+                                                                "SpecL")
         self._SpecLayout.addWidget(self._specCanvas.canvas.native)
         self._chanGrid.addWidget(self._SpecW, len(self) + 1, 1, 1, 1)
         # Add label :
@@ -86,6 +98,7 @@ class uiPanels(object):
                                      yargs={'text_color': 'black'},
                                      xargs={'text_color': 'black'},
                                      fcn=[self.on_mouse_wheel])
+        self._HypW, self._HypLayout = self._createCompatibleW("HypW", "HypL")
         self._HypLayout.addWidget(self._hypCanvas.canvas.native)
         self._chanGrid.addWidget(self._HypW, len(self) + 2, 1, 1, 1)
         # Add label :
@@ -112,6 +125,8 @@ class uiPanels(object):
                                   bgcolor=(1., 1., 1.), color='black',
                                   indic_color=self._indicol,
                                   fcn=[self.on_mouse_wheel])
+        self._TimeAxisW, self._TimeLayout = self._createCompatibleW("TimeW",
+                                                                    "TimeL")
         self._TimeLayout.addWidget(self._TimeAxis.canvas.native)
         self._TimeAxisW.setMaximumHeight(400)
         self._TimeAxisW.setMinimumHeight(50)
@@ -132,6 +147,24 @@ class uiPanels(object):
     # =====================================================================
     # CHANNELS
     # =====================================================================
+    def _createCompatibleW(self, nameWiget, nameLayout, visible=False):
+        """This function create a widget and a layout."""
+        Widget = QtGui.QWidget(self.centralwidget)
+        Widget.setMinimumSize(QtCore.QSize(0, 0))
+        Widget.setObjectName(_fromUtf8(nameWiget))
+        Widget.setVisible(visible)
+        vlay = QtGui.QVBoxLayout(Widget)
+        vlay.setContentsMargins(9, 0, 9, 0)
+        vlay.setSpacing(0)
+        vlay.setObjectName(_fromUtf8("vlay"))
+        # Create layout :
+        Layout = QtGui.QVBoxLayout()
+        Layout.setSpacing(0)
+        Layout.setObjectName(_fromUtf8(nameLayout))
+        vlay.addLayout(Layout)
+
+        return Widget, Layout
+
     def _fcn_chanCheckAndWCreate(self):
         """Create one checkbox and one widget/layout per channel."""
         # Empty list of checkbox and widgets/layouts :
@@ -141,6 +174,7 @@ class uiPanels(object):
         self._chanLayout = [0] * len(self)
         self._chanCanvas = [0] * len(self)
         self._chanLabels = []
+        self._amplitudeTxt = []
 
         # Define a vertical and horizontal spacers :
         vspacer = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Expanding,
@@ -159,8 +193,6 @@ class uiPanels(object):
             self._chanChecks[i].setText(k)
             # Add checkbox to the grid :
             self._PanChanLay.addWidget(self._chanChecks[i], i, 0, 1, 1)
-            # Add horizontal spacer :
-            self._PanChanLay.addItem(hspacer, i, 1, 1, 1)
             # Connect with the function :
             self._chanChecks[i].clicked.connect(self._fcn_chanViz)
 
@@ -169,6 +201,7 @@ class uiPanels(object):
             # Add amplitude label :
             amplitude = QtGui.QLabel(self._PanScrollChan)
             amplitude.setText('Amp')
+            self._amplitudeTxt.append(amplitude)
             self._PanChanLay.addWidget(amplitude, i, 2, 1, 1)
             # Add ymin spinbox :
             self._yminSpin[i] = QtGui.QDoubleSpinBox(self._PanScrollChan)
@@ -192,20 +225,8 @@ class uiPanels(object):
 
             # ============ WIDGETS / LAYOUTS ============
             # Create a widget :
-            self._chanWidget[i] = QtGui.QWidget(self.centralwidget)
-            self._chanWidget[i].setMinimumSize(QtCore.QSize(0, 0))
-            self._chanWidget[i].setObjectName(_fromUtf8("_widgetChan"+k))
-            self._chanWidget[i].setVisible(False)
-            vlay = QtGui.QVBoxLayout(self._chanWidget[i])
-            vlay.setContentsMargins(9, 0, 9, 0)
-            vlay.setSpacing(0)
-            vlay.setObjectName(_fromUtf8("vlay"))
-            # Create layout :
-            self._chanLayout[i] = QtGui.QVBoxLayout()
-            self._chanLayout[i].setSpacing(0)
-            self._chanLayout[i].setObjectName(_fromUtf8("_LayoutChan"+k))
-            vlay.addLayout(self._chanLayout[i])
-            # Add widget to the grid :
+            self._chanWidget[i], self._chanLayout[
+                i] = self._createCompatibleW("_widgetChan"+k, "_LayoutChan"+k)
             self._chanGrid.addWidget(self._chanWidget[i], i, 1, 1, 1)
             # Add channel label :
             self._chanLabels.append(QtGui.QLabel(self.centralwidget))
