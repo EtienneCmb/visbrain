@@ -115,9 +115,8 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
         consider[to_ignore] = False
 
     # Bipolarize :
-    chansr = []
-    databck = data.copy()
-    for num in range(nchan):
+    # databck = data.copy()
+    for num in reversed(range(nchan)):
         # If there's a number :
         if chnums[num] and (num in sl):
             # Get the name of the channel to find :
@@ -127,14 +126,10 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
                 # Get the index :
                 ind = chans.index(chanTofind)
                 # Substract to data :
-                data[num, :] -= databck[ind, :]
+                data[num, :] -= data[ind, :]
                 # Update channel name :
-                chansr.append(chans[num] + '-' + chanTofind)
+                chans[num] = chans[num] + '-' + chanTofind
                 # Set consider :
                 consider[num] = False
-            else:
-                chansr.append(chans[num])
-        else:
-            chansr.append(chans[num])
 
-    return data, chansr, consider
+    return data, chans, consider
