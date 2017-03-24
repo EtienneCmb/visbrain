@@ -68,6 +68,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._app = QtGui.QApplication(sys.argv)
         uiInit.__init__(self)
 
+        # Shortcuts popup window :
+        self._shpopup = ShortcutPopup()
+
         # ====================== LOAD FILE ======================
         # Load file and convert if needed :
         if not all([k is not None for k in [data, channels, sf]]):
@@ -105,9 +108,11 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._channels = [k.split('.')[0] for k in channels]
         self._ax = axis
         # ---------- Default line width ----------
+        self._linemeth = line
         self._lw = 1.
         self._lwhyp = 2.5
         self._defwin = 30.
+        self._defstd = 5.
         # ---------- Default colors ----------
         self._chancolor = '#292824'
         # self._hypcolor = '#292824'
@@ -125,49 +130,21 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Get some data info (min / max / std / mean)
         self._get_dataInfo()
 
-        self._defstd = 5.
-
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
         uiElements.__init__(self)
 
-        # Shortcuts popup window :
-        self._shpopup = ShortcutPopup()
-
         # ====================== CAMERAS ======================
-        # ------------------- Channels -------------------
-        self._chanCam = []
-        for k in range(len(self)):
-            self._chanCam.append(FixedCam())  # viscam.PanZoomCamera()
-        # ------------------- Spectrogram -------------------
-        self._speccam = FixedCam()  # viscam.PanZoomCamera()
-        self._specCanvas.set_camera(self._speccam)
-        # ------------------- Hypnogram -------------------
-        self._hypcam = FixedCam()  # viscam.PanZoomCamera()
-        self._hypCanvas.set_camera(self._hypcam)
-        # ------------------- Time axis -------------------
-        self._timecam = FixedCam()
-        self._TimeAxis.set_camera(self._timecam)
-
-        # Keep all cams :
-        cams = (self._chanCam, self._speccam, self._hypcam, self._timecam)
+        self._camCreation()
 
         # ====================== OBJECTS CREATION ======================
-        visuals.__init__(self, self._sf, self._data, self._time,
-                         self._channels, self._hypno, cameras=cams,
-                         method=line,)
+        visuals.__init__(self)
 
         # ====================== TOOLS ======================
         Tools.__init__(self)
 
-        # Finally set data and first channel only visible:
-        self._fcn_sliderMove()
-        self._chanChecks[0].setChecked(True)
-        self._hypLabel.setVisible(self._PanHypViz.isChecked())
-        self._fcn_chanViz()
-        self._fcn_chanAmplitude()
-        self._fcn_infoUpdate()
-        self._fcn_Hypno2Score()
+        # ====================== FUNCTIONS ON LOAD ======================
+        self._fcnsOnCreation()
 
     def __len__(self):
         """Return the number of channels."""
@@ -288,6 +265,36 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._datainfo = {'min': self._data.min(1), 'max': self._data.max(1),
                           'std': self._data.std(1), 'mean': self._data.mean(1),
                           'dist': self._data.max(1) - self._data.min(1)}
+
+    def _camCreation(self):
+        """Create a set of cameras."""
+        # ------------------- Channels -------------------
+        self._chanCam = []
+        for k in range(len(self)):
+            self._chanCam.append(FixedCam())  # viscam.PanZoomCamera()
+        # ------------------- Spectrogram -------------------
+        self._speccam = FixedCam()  # viscam.PanZoomCamera()
+        self._specCanvas.set_camera(self._speccam)
+        # ------------------- Hypnogram -------------------
+        self._hypcam = FixedCam()  # viscam.PanZoomCamera()
+        self._hypCanvas.set_camera(self._hypcam)
+        # ------------------- Time axis -------------------
+        self._timecam = FixedCam()
+        self._TimeAxis.set_camera(self._timecam)
+
+        # Keep all cams :
+        self._allCams = (self._chanCam, self._speccam, self._hypcam,
+                         self._timecam)
+
+    def _fcnsOnCreation(self):
+        """Functions that need to be applied on creation."""
+        self._fcn_sliderMove()
+        self._chanChecks[0].setChecked(True)
+        self._hypLabel.setVisible(self._PanHypViz.isChecked())
+        self._fcn_chanViz()
+        self._fcn_chanAmplitude()
+        self._fcn_infoUpdate()
+        self._fcn_Hypno2Score()
 
     def show(self):
         """Display the graphical user interface."""
