@@ -21,6 +21,11 @@ class uiPanels(object):
 
     def __init__(self):
         """Init."""
+        self._chanGrid = QtGui.QGridLayout()
+        self._chanGrid.setContentsMargins(-1, -1, -1, 6)
+        self._chanGrid.setSpacing(3)
+        self._chanGrid.setObjectName(_fromUtf8("_chanGrid"))
+        self.verticalLayout_18.addLayout(self._chanGrid)
         # Bold font :
         self._font = QtGui.QFont()
         self._font.setBold(True)
