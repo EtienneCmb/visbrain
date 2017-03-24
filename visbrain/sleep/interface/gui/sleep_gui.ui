@@ -867,7 +867,40 @@ trend, filtering)</string>
               <string>Re-referencing</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_13">
-              <item row="3" column="0" colspan="2">
+              <item row="1" column="0" colspan="2">
+               <widget class="QFrame" name="frame_6">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item>
+                  <widget class="QLabel" name="label_59">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Warning : re-referencing can not be reversed</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="2">
                <widget class="QWidget" name="_ToolsRefSingleW" native="true">
                 <property name="minimumSize">
                  <size>
@@ -924,7 +957,7 @@ trend, filtering)</string>
                 </layout>
                </widget>
               </item>
-              <item row="4" column="0" colspan="2">
+              <item row="6" column="0" colspan="2">
                <layout class="QHBoxLayout" name="horizontalLayout_9">
                 <property name="topMargin">
                  <number>9</number>
@@ -988,38 +1021,14 @@ trend, filtering)</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="0" colspan="2">
-               <widget class="QFrame" name="frame_6">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>0</height>
-                 </size>
+              <item row="5" column="0" colspan="2">
+               <widget class="QCheckBox" name="_ToolsRefIgnore">
+                <property name="text">
+                 <string>Ignore non-referenced channel</string>
                 </property>
-                <property name="frameShape">
-                 <enum>QFrame::Box</enum>
+                <property name="checked">
+                 <bool>true</bool>
                 </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_11">
-                 <item>
-                  <widget class="QLabel" name="label_59">
-                   <property name="font">
-                    <font>
-                     <italic>true</italic>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Warning : re-referencing from the graphical
-interface might not work properly on some system.</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
                </widget>
               </item>
              </layout>

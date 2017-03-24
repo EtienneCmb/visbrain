@@ -128,7 +128,9 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
                 data[num, :] -= data[ind, :]
                 # Update channel name :
                 chans[num] = chans[num] + '-' + chanTofind
-                # Set consider :
+            else:
                 consider[num] = False
+        else:
+            consider[num] = False
 
     return data, chans, consider

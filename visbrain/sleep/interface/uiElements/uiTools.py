@@ -45,25 +45,22 @@ class uiTools(object):
         # Get selected channel :
         idx = self._ToolsRefLst.currentIndex()
 
-        # ________ Re-reference ________
+        # ____________________ Re-reference ____________________
         if self._ToolsRefSingle.isChecked():
             self._data, self._channels, consider = rereferencing(
                                             self._data, self._channels, idx)
             self._chanChecks[idx].setChecked(False)
 
-        # ________ Bipolarization ________
+        # ____________________ Bipolarization ____________________
         else:
             self._data, self._channels, consider = bipolarization(
                                                   self._data, self._channels)
 
-        # ________ Update ________
+        # ____________________ Update ____________________
         aM = np.argmax(consider)
         # Update data info :
         self._get_dataInfo()
 
-        # Checkbox :
-        if not any([k.isChecked() for k in self._chanChecks]):
-            self._chanChecks[aM].setChecked(True)
         # Disconnect and clear listbox :
         self._PanSpecChan.currentIndexChanged.disconnect()
         self._PanSpecChan.clear()
@@ -71,14 +68,32 @@ class uiTools(object):
         self._PanSpecChan.addItems(self._channels)
         self._ToolDetectChan.addItems(self._channels)
         # Reconnect :
-        self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
         self._PanSpecChan.setCurrentIndex(aM)
+        self._ToolDetectChan.setCurrentIndex(aM)
         self._ToolDetectChan.model().item(idx).setEnabled(False)
 
         # Update channel names :
         for num, k in enumerate(self._channels):
             self._chanChecks[num].setText(k)
             self._chanLabels[num].setText(k)
+
+        # Ignore non re-referenced channels :
+        if self._ToolsRefIgnore.isChecked():
+            for num, k in enumerate(consider):
+                # Remove from visible channels :
+                self._chanChecks[num].setChecked(False)
+                self._chanChecks[num].setVisible(k)
+                self._chanLabels[num].setVisible(k)
+                self._yminSpin[num].setVisible(k)
+                self._ymaxSpin[num].setVisible(k)
+                self._amplitudeTxt[num].setVisible(k)
+                # Remove from chan list :
+                self._PanSpecChan.model().item(num).setEnabled(k)
+                self._ToolDetectChan.model().item(num).setEnabled(k)
+        if not any([k.isChecked() for k in self._chanChecks]):
+            self._chanChecks[aM].setChecked(True)
+        # Reconnect :
+        self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
 
         self._chan.update()
         self._fcn_chanViz()
