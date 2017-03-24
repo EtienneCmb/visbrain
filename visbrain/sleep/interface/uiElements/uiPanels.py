@@ -52,7 +52,7 @@ class uiPanels(object):
                                       xargs={'text_color': 'black'},
                                       fcn=[self.on_mouse_wheel])
         self._SpecW, self._SpecLayout = self._createCompatibleW("SpecW",
-                                                                "SpecL", True)
+                                                                "SpecL")
         self._SpecLayout.addWidget(self._specCanvas.canvas.native)
         self._chanGrid.addWidget(self._SpecW, len(self) + 1, 1, 1, 1)
         # Add label :
@@ -88,8 +88,7 @@ class uiPanels(object):
                                      yargs={'text_color': 'black'},
                                      xargs={'text_color': 'black'},
                                      fcn=[self.on_mouse_wheel])
-        self._HypW, self._HypLayout = self._createCompatibleW("HypW", "HypL",
-                                                              True)
+        self._HypW, self._HypLayout = self._createCompatibleW("HypW", "HypL")
         self._HypLayout.addWidget(self._hypCanvas.canvas.native)
         self._chanGrid.addWidget(self._HypW, len(self) + 2, 1, 1, 1)
         # Add label :
@@ -117,8 +116,7 @@ class uiPanels(object):
                                   indic_color=self._indicol,
                                   fcn=[self.on_mouse_wheel])
         self._TimeAxisW, self._TimeLayout = self._createCompatibleW("TimeW",
-                                                                    "TimeL",
-                                                                    True)
+                                                                    "TimeL")
         self._TimeLayout.addWidget(self._TimeAxis.canvas.native)
         self._TimeAxisW.setMaximumHeight(400)
         self._TimeAxisW.setMinimumHeight(50)

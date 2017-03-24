@@ -295,6 +295,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._fcn_chanAmplitude()
         self._fcn_infoUpdate()
         self._fcn_Hypno2Score()
+        # Set objects visible :
+        self._SpecW.setVisible(True)
+        self._HypW.setVisible(True)
+        self._TimeAxisW.setVisible(True)
 
     def show(self):
         """Display the graphical user interface."""
