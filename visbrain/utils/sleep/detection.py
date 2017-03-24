@@ -68,7 +68,7 @@ def kcdetect(elec, sf, hypno, nrem_only):
     range_spin_sec = 120
     threshold = 1
     fMin = 0.5
-    fMax = 2
+    fMax = 4
     tMin = 500
     tMax = 2500
     min_distance_ms = 500
@@ -94,6 +94,7 @@ def kcdetect(elec, sf, hypno, nrem_only):
     sig_filt = filt(sf, np.array([fMin, fMax]), data)
     wavelet = daub(daub_coeff)
     sig_transformed = np.convolve(sig_filt, wavelet * daub_mult, mode='same')
+    sig_transformed = _tkeo(sig_transformed)
 
     if hypLoaded:
         sig_transformed[idx_zero] = np.nan
@@ -148,7 +149,6 @@ def kcdetect(elec, sf, hypno, nrem_only):
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
 
-        print(number)
         return idx_sup_thr, number, density, duration_ms
 
     else:
@@ -700,6 +700,28 @@ def _wavelet_bpower(x, freqs, sf, norm=True):
     else:
         return delta_pow, theta_pow, alpha_pow, beta_pow
 
+
+def _tkeo(a):
+	"""
+	Calculates the TKEO of a given recording by using 2 samples.
+    github.com/lvanderlinden/OnsetDetective/blob/master/OnsetDetective/tkeo.py
+
+	Args:
+	   a: 1d np.array
+        Data
+
+	Returns:
+        aTkeo: 1d np.array
+	       1D numpy array containing the tkeo per sample
+    """
+	# Create two temporary arrays of equal length, shifted 1 sample to the right
+	# and left and squared:
+	i = a[1:-1]*a[1:-1]
+	j = a[2:]*a[:-2]
+
+	# Calculate the difference between the two temporary arrays:
+	aTkeo = i-j
+	return aTkeo
 
 def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
     """Compute bandwise-normalized power of data using morlet wavelet.
