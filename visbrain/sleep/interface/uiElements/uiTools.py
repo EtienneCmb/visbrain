@@ -1,6 +1,7 @@
 """Main class for sleep tools managment."""
 
 import numpy as np
+import gc
 
 __all__ = ['uiTools']
 
@@ -58,11 +59,20 @@ class uiTools(object):
             # Get selected channel :
             idx = self._ToolsRefLst.currentIndex()
             chan = self._channels[idx]
-            # Re-reference data and update channel names :
+            # Build indexing and remove idx :
+            index = np.arange(len(self._channels))
+            index = np.delete(index, idx)
+            # Re-reference :
             self._data -= self._data[[idx], ...]
-            self._data = np.delete(self._data, idx, axis=0)
+            # Delete unused row (this operation make a data copy. Because
+            # there's might be a gap in indexing, it don't seems possible to
+            # take a view of it)
+            self._data = self._data[index, :]
+            # Channel processing :
             del self._channels[idx]
             self._channels = [k + '-' + chan for k in self._channels]
+            # Clean memory :
+            gc.collect()
 
         # ________ Bipolarization ________
         else:

@@ -374,12 +374,15 @@ class uiSettings(object):
         # Spectrogram :
         self._specCanvas.parent = None
         self._SpecW.deleteLater(), self._SpecLayout.deleteLater()
+        self._specLabel.deleteLater()
         # Hypnogram :
         self._hypCanvas.parent = None
         self._HypW.deleteLater(), self._HypLayout.deleteLater()
+        self._hypLabel.deleteLater()
         # Time axis :
         self._TimeAxis.parent = None
         self._TimeAxisW.deleteLater(), self._TimeLayout.deleteLater()
+        self._timeLabel.deleteLater()
 
     def _fcn_resetGui(self):
         """Reset the GUI."""
