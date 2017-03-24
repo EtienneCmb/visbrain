@@ -17,10 +17,13 @@ class uiConnectivity(object):
         self.uiConnect_lw.setValue(self.connect.lw)
         self.uiConnect_lw.valueChanged.connect(self._update_lw)
 
+        # ================== COLOR ==================
+        col = ['strength', 'count', 'density']
         # Colorby :
-        self.uiConnect_colorby.setCurrentIndex(self._colorby2index(
-                                                        self.connect.colorby))
-        self.uiConnect_colorby.currentIndexChanged.connect(self._set_color)
+        self.uiConnect_colorby.setCurrentIndex(col.index(self.connect.colorby))
+        self.uiConnect_colorby.currentIndexChanged.connect(self._fcn_conColor)
+        self._densityRadius.setValue(self.connect.dradius)
+        self._densityRadius.valueChanged.connect(self._fcn_conColor)
 
         # Dynamic / static control of transparency : :
         self._dyn2send = self.connect.dynamic
@@ -38,6 +41,13 @@ class uiConnectivity(object):
         self.uiConnect_dynMin.valueChanged.connect(self._set_color)
         self.uiConnect_dynMax.valueChanged.connect(self._set_color)
 
+        # ================== BUNDLING ==================
+        self._conBlRadius.setValue(self.connect.blradius)
+        self._conBlDxyz.setValue(self.connect.blxyz)
+        self._conBlRadius.valueChanged.connect(self._fcn_applyBundle)
+        self._conBlDxyz.valueChanged.connect(self._fcn_applyBundle)
+        self._conBlEnable.clicked.connect(self._fcn_applyBundle)
+
     def _update_lw(self):
         """Update line width of each connection.
 
@@ -50,7 +60,23 @@ class uiConnectivity(object):
         # Set the LW :
         self.connect.lw = self._lw
 
-    def _set_color(self):
+    def _fcn_conColor(self):
+        """Change colorby type."""
+        # Get color type :
+        col = str(self.uiConnect_colorby.currentText())
+        if col == 'density':
+            self._densityPanel.setVisible(True)
+        else:
+            self._densityPanel.setVisible(False)
+        self.connect.needupdate = True
+        self.connect._cb['vmin'] = None
+        self.connect._cb['vmax'] = None
+        # Get density radius :
+        self.connect.dradius = self._densityRadius.value()
+        # Update color :
+        self._set_color('', update=True)
+
+    def _set_color(self, _, update=False):
         """Graphic control of color connectivity settings.
 
         This method is used to control the color code of connectivity (either
@@ -72,6 +98,9 @@ class uiConnectivity(object):
         # Update color :
         self.connect._check_color()
 
+        if update:
+            self._auto_scale()
+
     def _getMinMax_dyn(self):
         """Dynamic lines opacity.
 
@@ -86,21 +115,6 @@ class uiConnectivity(object):
             self.connect.dynamic = tuple([self.uiConnect_dynMin.value(),
                                          self.uiConnect_dynMax.value()])
 
-    def _colorby2index(self, colorby):
-        """Get index from the selected connectivity mesure.
-
-        There's two way of coloring connectivity:
-            * strength : color code by strength of connection.
-            * count : color code by the number of connection per node.
-        This method return 0 for a connectivity by strength, 1 for count.
-        """
-        if colorby == 'strength':
-            return 0
-        elif colorby == 'count':
-            return 1
-        else:
-            raise ValueError('c_colorby not in ["strength", "count"]')
-
     def _ShowHide(self):
         """Show or hide connections between nodes."""
         self.connect.mesh.visible = self.uiConnectShow.isChecked()
@@ -111,3 +125,19 @@ class uiConnectivity(object):
         self.connect.mesh.visible = viz
         self.uiConnectShow.setChecked(viz)
         self.toolBox_5.setEnabled(viz)
+        self.toolBox_6.setEnabled(viz)
+        self.o_Connect.setEnabled(viz)
+        self.o_Connect.setChecked(viz)
+
+    def _fcn_applyBundle(self):
+        """Apply line bundling."""
+        viz = self._conBlEnable.isChecked()
+        self.connect.bl = viz
+        if viz:
+            self._conBlPanel.setEnabled(True)
+            self.connect.blradius = self._conBlRadius.value()
+            self.connect.blxyz = self._conBlDxyz.value()
+            self.connect.bundling()
+        else:
+            self._conBlPanel.setEnabled(False)
+        self._set_color('')

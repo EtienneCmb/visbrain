@@ -23,13 +23,24 @@ class vbShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
-        # Shortcuts panel :
-        self.table_panel.hide()
-        self.actionShortcuts.triggered.connect(self.shortcuts_panel)
-        # self.sh_table.resizeColumnsToContents()
-        self.sh_table.resizeRowsToContents()
-        self.sh_table.setColumnWidth(self.sh_table.columnCount()-2, 200)
-        self.sh_table.setColumnWidth(self.sh_table.columnCount()-1, 100)
+        self.sh = [('0', 'Axial rotation (top / bottom)'),
+                   ('1', 'Coronal rotation (front / back)'),
+                   ('2', 'Sagittal rotation (left / right)'),
+                   ('3', 'Set the brain transparent/opaque'),
+                   ('4', 'Display / hide the brain.'),
+                   ('5', 'Display / hide sources'),
+                   ('6', 'Display / hide connectivity'),
+                   ('c', 'Display / hide colorbar'),
+                   ('+', 'Increase brain opacity'),
+                   ('-', 'Decrease brain opacity'),
+                   ('CTRL + p', 'Run the cortical projection'),
+                   ('CTRL + r', 'Run the cortical repartition'),
+                   ('CTRL + d', 'Display / hide setting panel'),
+                   ('CTRL + e', 'Show the documentation'),
+                   ('CTRL + t', 'Display shortcuts'),
+                   ('CTRL + n', 'Take a screenshot'),
+                   ('CTRL + q', 'Close Sleep graphical interface'),
+                   ]
 
         # Add shortcuts to vbCanvas :
         @canvas.events.key_press.connect
@@ -76,6 +87,12 @@ class vbShortcuts(object):
             elif event.text == '6':
                 self._toggle_connect_visible()
 
+            # Colorbar visibility :
+            elif event.text == 'c':
+                viz = not self._qcmapVisible.isChecked()
+                self._qcmapVisible.setChecked(viz)
+                self._toggle_cmap()
+
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
             """Executed function when the mouse is pressed over Brain canvas.
@@ -114,14 +131,6 @@ class vbShortcuts(object):
                 self._fcn_userRotation()
                 self.userRotationPanel.setVisible(True)
 
-    def shortcuts_panel(self):
-        """Display or hide the shortcuts panel."""
-        isVisible = self.table_panel.isVisible()
-        if not isVisible:
-            self.table_panel.show()
-        else:
-            self.table_panel.hide()
-
 
 class vbCanvas(object):
     """This class is responsible of cannvas creation.
@@ -144,12 +153,13 @@ class vbCanvas(object):
         self.wc = self.canvas.central_widget.add_view()
 
         # Initialize colorbar canvas :
-        self.cbcanvas = scene.SceneCanvas(bgcolor=bgcolor)
+        self.cbcanvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
+                                          resizable=True, )
         self.cbwc = self.cbcanvas.central_widget.add_view()
 
         # Add axis (debugging):
-        # ax = scene.visuals.XYZAxis()
-        # self.wc.add(ax)
+        # self._axis = scene.visuals.XYZAxis()
+        # self.wc.add(self._axis)
 
         # Visualization settings. The min/maxOpacity attributes are defined
         # because it seems that OpenGL have trouble with small opacity (usually

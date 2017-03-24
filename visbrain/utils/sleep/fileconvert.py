@@ -7,7 +7,8 @@ specific files including *.eeg, *.edf...
 import numpy as np
 import os
 
-__all__ = ['load_sleepdataset', 'load_hypno']
+__all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
+           'save_hypnoTotxt']
 
 
 def load_sleepdataset(path, downsample=100):
@@ -184,7 +185,7 @@ def txt_hyp(path, ds_freq):
     if np.issubdtype(hyp.dtype, np.integer) == False:
         hyp = np.char.decode(hyp)
         hypno = np.array([s for s in hyp if s.lstrip('-').isdigit()],
-                          dtype=int)
+                         dtype=int)
     else:
         hypno = hyp.astype(int)
 
@@ -355,10 +356,10 @@ def elan2array(path, ds_freq):
     m_ds = m_raw[:, ::ds_factor]
 
     # Multiply by gain :
-    #data = np.diag(Gain[chan_list]).dot(m_ds[chan_list, ])
-    data = m_ds[chan_list, ] * Gain[chan_list][..., np.newaxis]
+    data = m_ds[chan_list, ] * \
+        Gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return float(sf), data.astype(np.float32), list(chan)
+    return float(sf), data, list(chan)
 
 
 def edf2array(path):
@@ -486,6 +487,68 @@ def brainvision2array(path):
         ints = np.ndarray((n_chan, int(size / n_chan)),
                           dtype='<i2', order='F', buffer=raw)
 
-        data = np.diag(resolution).dot(ints)
+        data = np.float32(np.diag(resolution)).dot(ints)
 
-    return float(sf), data.astype(np.float32), list(chan)
+    return float(sf), data, list(chan)
+
+
+def save_hypnoToElan(filename, hypno, sf):
+        """Save hypnogram in Elan file format (*.hyp).
+
+        Args:
+            filename: str
+                Filename (with full path) of the file to save
+
+            hypno: np.ndarray
+                Hypnogram array, same length as data
+
+            sf: int
+                Sampling frequency of the data (after downsampling)
+        """
+        hdr = np.array([['time_base 1.000000'],
+                        ['sampling_period ' + str(round(1/sf, 8))],
+                        ['epoch_nb ' + str(int(hypno.size / sf))],
+                        ['epoch_list']]).flatten()
+
+        # Check data format
+        sf = int(sf)
+        hypno = hypno.astype(int)
+        # Save
+        export = np.append(hdr, hypno[::sf].astype(str))
+        np.savetxt(filename, export, fmt='%s')
+
+
+def save_hypnoTotxt(filename, hypno, sf, window=1.):
+        """Save hypnogram in txt file format (*.txt).
+
+        Header is in file filename_description.txt
+
+        Args:
+            filename: str
+                Filename (with full path) of the file to save
+
+            hypno: np.ndarray
+                Hypnogram array, same length as data
+
+            sf: float
+                Sampling frequency of the data (after downsampling)
+
+        Kargs:
+            window: float, optional, (def 1)
+                Time window (second) of each point in the hypno
+                Default is one value per second
+                (e.g. window = 30 = 1 value per 30 second)
+        """
+        base = os.path.basename(filename)
+        dirname = os.path.dirname(filename)
+        descript = os.path.join(dirname,
+                                os.path.splitext(base)[0] + '_description.txt')
+
+        # Save hypno
+        ds_fac = int(sf * window)
+        np.savetxt(filename, hypno[::ds_fac].astype(int), fmt='%s')
+
+        # Save header file
+        hdr = np.array([['time ' + str(window)], ['W 0'], ['N1 1'], ['N2 2'],
+                        ['N3 3'], ['REM 4'], ['Art -1']]).flatten()
+        np.savetxt(descript, hdr, fmt='%s')

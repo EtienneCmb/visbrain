@@ -42,8 +42,12 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-5 Minimum duration sur REM?
-	-3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
+	+4 Detection K-complexes
+	+3 Implémentation ICA + rejection
+	+2 Scorage automatique du sommeil
+	+5 Minimum duration sur REM?
+	+3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
+	+5 Choix des couleurs de l'hypno
 	+5 Intégration de la REM détection
 	+5 Intégration de la Spindle détection
 	+5 Chargement hypnogram
@@ -51,9 +55,10 @@ Raph
 	
 Commun
 	-5 Documentation
-	-5 About
-	-5 Aide directement depuis l'interface?
-	-5 Ajouter collaborateurs
+	-5 About: tu en penses quoi? moi je pensais plutôt faire une classe "WhatsNew" qui montrerai un simple popup window avec les dernières nouveautés.
+	-5 Aide directement depuis l'interface?: j'y ai pensé. Ce qui me gène avec cette idée, c'est que l'on va devoir compiler la doc en pdf et la mettre dans visbrain. Donc ça va alourdir le clonage. Visbrain commence à être sérieusement lourd. Autree chose, mais je suis entrain de réfléchir à bouger la doc de nouveau, notemment à cause de ce problème...
+	-5 Ajouter collaborateurs: ça c'est plus pour toi, c'est si tu veux que ton nom apparaisse dans la GUI. Moi je suis pas friant de voir le miens, notemment parce que sinon je vais devoir le mettre partout ! Mais on peut faire une simple popup window avec ton nom, je n'y vois aucun inconvénient. Visbrain est déjà hébergé sur mon profil, donc moi j'ai ma pub mais je laisse cette partie à ta discrétion (PS: j'ai ausi mis ton nom dans mon site web)
+	+4 Ajout option de bipolarisation / re-referencement dans un menu ou panel Tools
 	+5 Indicateur temporel + stage
 	+2 Possibilité de scorer un hypnogramme en temps réel
 	+3 Fréquence de down-sampling pour ELAN à modifier quand chargement sera bon (pour le moment, fixe à 100hz)

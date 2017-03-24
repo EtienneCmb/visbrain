@@ -17,6 +17,7 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .base import base
 from .user import userfcn
+from ..utils import GuideLines, ShortcutPopup
 
 
 class Brain(uiInit, uiElements, base, userfcn):
@@ -126,8 +127,13 @@ class Brain(uiInit, uiElements, base, userfcn):
 
         c_colorby: string, optional, (def: 'strength')
             Define how to color connexions. Use 'strength' if the color has to
-            be modulate by the connectivity strength or use 'count' if the
-            color depends on the number of connexions per node.
+            be modulate by the connectivity strength. Use 'count' if the
+            color depends on the number of connexions per node. Use 'density'
+            to define colors according to the number of line in a sphere of
+            radius c_dradius.
+
+        c_dradius: float, optional, (def: 30.)
+            Radius for the density color line method.
 
         c_colval: dict, optional, (def: None)
             Define colors for a specifics values. For example, c_colval=
@@ -235,7 +241,6 @@ class Brain(uiInit, uiElements, base, userfcn):
                           'fly': {'x': (-120, 120), 'y': (-100, 200),
                                   'z': (-90, 90)},
                           }
-        self._xRange = (-70, 70)
         self._cbfontsize = kwargs.get('cb_fontsize', 15)
         self._cbfontcolor = kwargs.get('cb_fontcolor', 'white')
         self._cblabel = kwargs.get('cb_label', '')
@@ -245,6 +250,10 @@ class Brain(uiInit, uiElements, base, userfcn):
         # Create the app and initialize all graphical elements :
         self._app = QtGui.QApplication(sys.argv)
         uiInit.__init__(self, bgcolor)
+
+        # Shortcuts popup window :
+        self._shpopup = ShortcutPopup()
+        self._shpopup.set_shortcuts(self.sh)
 
         # Set icon :
         pathfile = sys.modules[__name__].__file__
@@ -261,7 +270,7 @@ class Brain(uiInit, uiElements, base, userfcn):
         # Link UI and visbrain function :
         uiElements.__init__(self)
 
-        # # ====================== Cameras ======================
+        # ====================== Cameras ======================
         # # Main camera :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(self.view.wc.camera)
@@ -270,10 +279,15 @@ class Brain(uiInit, uiElements, base, userfcn):
         # Fixed colorbar camera :
         self.view.cbwc.camera = viscam.TurntableCamera(interactive=True,
                                                        azimuth=0, elevation=90)
-        self.view.cbwc.camera.set_range(x=(-24, 24), y=(-0.5, 0.5), margin=0)
-        self.view.wc.scene.children[0].parent = None
+        self.view.cbwc.camera.set_range(x=(-.5, .5), y=(-20, 20), margin=0)
+        # self.view.wc.scene.children[0].parent = None
+        self.cb._cbNode.parent = self.view.cbwc.scene
         self._rotate(fixed='axial')
 
+        # ====================== Guidelines ======================
+        # Create guide lines for exportation :
+        self.guide = GuideLines(self.view.canvas.size, parent=self._vbNode,
+                                camrange=self._xyzRange['turntable'])
         # print(self.view.wc.scene.describe_tree(with_transform=True))
 
     def show(self):

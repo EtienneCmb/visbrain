@@ -24,48 +24,55 @@ class uiSettings(object):
         # =============================================================
         self.progressBar.hide()
 
-        # ------------------------------- FILE -------------------------------
-        # Screenshot :
-        screenshot = QAction("Screenshot", self)
-        screenshot.setShortcut("Ctrl+N")
-        screenshot.triggered.connect(self._screenshot)
-        self.menuFiles.addAction(screenshot)
+        # ------------- Screenshot / Exit -------------
+        self.actionScreenshot.triggered.connect(self._screenshot)
+        self.actionExit.triggered.connect(qApp.quit)
 
-        # Save :
-        save = QAction("Save", self)
-        save.setShortcut("Ctrl+S")
-        save.triggered.connect(self.saveFile)
-        self.menuFiles.addAction(save)
-
-        # Load :
-        openm = QAction("Load", self)
-        openm.setShortcut("Ctrl+O")
-        openm.triggered.connect(self.openFile)
-        self.menuFiles.addAction(openm)
-
-        # Quit :
-        exitAction = QAction(QIcon('exit.png'), '&Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(qApp.quit)
-        self.menuFiles.addAction(exitAction)
-
-        # ------------------------------- FILE -------------------------------
+        # ------------- Display -------------
         self.actionUi_settings.triggered.connect(self._fcn_panSettingsViz)
         self.actionMNI.triggered.connect(self._fcn_panSettingsViz)
         self.actionSources.triggered.connect(self._fcn_panSettingsViz)
         self.actionConnectivity.triggered.connect(self._fcn_panSettingsViz)
         self.actionColormap.triggered.connect(self._fcn_panSettingsViz)
 
-        # Transform :
+        # ------------- Transform -------------
         self.actionProjection.triggered.connect(self._cortical_projection)
         self.actionRepartition.triggered.connect(self._cortical_repartition)
+
+        # ------------- Help -------------
+        self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
+        self.actionDocumentation.triggered.connect(self._fcn_openDoc)
+
+        # =============================================================
+        # SCREENSHOT
+        # =============================================================
+        # Set values :
+        self._ssResolution.setValue(self._uirez)
+        self._ssSaveAs.setPlaceholderText("myfile")
+        if self._crop is not None:
+            self._ssCropXs.setValue(self._crop[0])
+            self._ssCropYs.setValue(self._crop[1])
+            self._ssCropXe.setValue(self._crop[2])
+            self._ssCropYe.setValue(self._crop[2])
+        # Connections :
+        self._ssSaveAs.editingFinished.connect(self._screenshotSettings)
+        self._ssSaveAsExt.currentIndexChanged.connect(self._screenshotSettings)
+        self._ssCropEnable.clicked.connect(self._screenshotSettings)
+        self._ssResolution.valueChanged.connect(self._screenshotSettings)
+        self._ssCbEnable.clicked.connect(self._screenshotSettings)
+        self._ssRun.clicked.connect(self._screenshot)
+        self._ssGuide.clicked.connect(self._screenshotSettings)
+        self._ssCropXs.valueChanged.connect(self._screenshotSettings)
+        self._ssCropYs.valueChanged.connect(self._screenshotSettings)
+        self._ssCropXe.valueChanged.connect(self._screenshotSettings)
+        self._ssCropYe.valueChanged.connect(self._screenshotSettings)
 
         # =============================================================
         # SETTINGS PANEL
         # =============================================================
         # Quick settings panel :
         self.actionQuick_settings.triggered.connect(self._toggle_settings)
+        self.QuickSettings.currentChanged.connect(self._fcn_onTabChange)
         self.q_widget.setVisible(True)
 
         # Background color :
@@ -121,27 +128,15 @@ class uiSettings(object):
     # =============================================================
     # MENU & FILE MANAGMENT
     # =============================================================
-    def saveFile(self):
-        """
-        """
-        raise ValueError("NOT CONFIGURED")
-        # filename = QFileDialog.getSaveFileName(self, 'Save File',
-        #                                        os.getenv('HOME'))
-        # f = open(filename, 'w')
-        # filedata = self.text.toPlainText()
-        # f.write(filedata)
-        # f.close()
+    def _fcn_showShortPopup(self):
+        """Open shortcut window."""
+        self._shpopup.show()
 
-    def openFile(self):
-        """
-        """
-        raise ValueError("NOT CONFIGURED")
-        # filename = QFileDialog.getSaveFileName(self, 'Open File',
-        #                                        os.getenv('HOME'))
-        # f = open(filename, 'w')
-        # filedata = self.text.toPlainText()
-        # f.write(filedata)
-        # f.close()
+    def _fcn_openDoc(self):
+        """Open documentation."""
+        import webbrowser
+        webbrowser.open('http://etiennecmb.github.io/visbrain/brain.html')
+
 
     def _fcn_panSettingsViz(self):
         """
@@ -169,8 +164,40 @@ class uiSettings(object):
             self.actionColormap.setChecked(False)
 
     # =============================================================
-    # GUI
+    # SCREENSHOT
     # =============================================================
+    def _screenshotSettings(self):
+        """"""
+        import numpy as np
+        # ------------- MAIN CANVAS -------------
+        # Get filename :
+        file = str(self._ssSaveAs.text())
+        ext = str(self._ssSaveAsExt.currentText())
+        self._savename = file + ext
+        # Cropping :
+        viz = self._ssCropEnable.isChecked()
+        crop = (self._ssCropXs.value(), self._ssCropYs.value(),
+                self._ssCropXe.value(), self._ssCropYe.value())
+        self._crop = crop if viz else None
+        self._ssCropW.setEnabled(viz)
+        # self.guide.mesh.visible = self._ssGuide.isChecked()
+        # if self._ssGuide.isChecked() and self._ssCropW.isEnabled():
+        #     print(self.view.wc.camera.center)
+        #     self.guide.size = self.view.canvas.size
+        #     self.guide.range['x'] = self.view.wc.camera._xlim
+        #     self.guide.range['y'] = self.view.wc.camera._ylim
+        #     print(self.guide.range)
+        #     self.guide.set_data(crop=crop)
+        # Resolution :
+        self._uirez = float(self._ssResolution.value())
+
+        # ------------- COLORBAR CANVAS -------------
+        # Colorbar :
+        viz = self._ssCbEnable.isChecked()
+        self._qcmapVisible.setChecked(viz)
+        self._toggle_cmap()
+        self.cb['export'] = viz
+
     def _screenshot(self):
         """Screenshot using the GUI.
 
@@ -179,8 +206,12 @@ class uiSettings(object):
         an extension (png) and a boolean parameter (self.cb['export']) to
         specify if the colorbar has to be exported.
         """
+        # Get latest settings :
+        self._screenshotSettings()
         # Manage filename :
-        if self._savename is None:
+        if isinstance(self._savename, str):
+            cond = self._savename.split('.')[0] == ''
+        if (self._savename is None) or cond:
             saveas = str(QFileDialog.getSaveFileName(self, 'Save screenshot',
                                                      os.getenv('HOME')))
         else:
@@ -204,29 +235,27 @@ class uiSettings(object):
         self.view.canvas._backend._physical_size = new_size
 
         # Render and save :
-        img = self.view.canvas.render(region=self._crop)
+        img = self.view.canvas.render(region=self._crop, size=new_size)
         io.imsave(saveas, img)
 
         # Set to the canvas it's previous size :
         self.view.canvas._backend._physical_size = backp_size
 
         # Export the colorbar :
+        # self.cb['export'] = True
         if self.cb['export']:
             # Get a copy of the actual canvas physical size :
-            backp_size = self.view.canvas.physical_size
+            backp_size = self.view.cbcanvas.physical_size
             new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
             self.view.cbcanvas._backend._physical_size = new_size
             # Render colorbar panel :
-            cbimg = self.view.cbcanvas.render(region=self._cbcrop)
+            cbimg = self.view.cbcanvas.render(region=self._cbcrop,
+                                              size=new_size)
             # Colorbar file name : filename_colorbar.extension
             filename = saveas.replace('.', '_colorbar.')
             io.imsave(filename, cbimg)
             # Set to the canvas it's previous size :
             self.view.cbcanvas._backend._physical_size = backp_size
-
-        # Update the canvas :
-        self.view.canvas.update()
-        self.atlas.mesh.update()
 
     def _toggle_settings(self):
         """Toggle method for display / hide the settings panel."""
@@ -237,6 +266,17 @@ class uiSettings(object):
         bgd = (self.bgd_red.value(), self.bgd_green.value(),
                self.bgd_blue.value())
         self.view.canvas.bgcolor = bgd
+        self.view.cbcanvas.bgcolor = bgd
+
+    def _fcn_onTabChange(self):
+        """Triggered method when tab changed."""
+        # Get current tab :
+        currentIndex = self.QuickSettings.currentIndex()
+        if currentIndex == 2:
+            self.cmapSources.setChecked(True)
+        if currentIndex == 3:
+            self.cmapConnect.setChecked(True)
+        self._select_object_cmap()
 
     # =============================================================
     # ROTATION

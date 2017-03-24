@@ -29,7 +29,7 @@ class uiCmap(object):
         self._cmap2GUI()
 
         # Interactive :
-        self.q_cmap_interact.clicked.connect(self._toggle_cmap)
+        self._qcmapVisible.clicked.connect(self._toggle_cmap)
         self._toggle_cmap()
 
         # Colorbar label :
@@ -43,7 +43,6 @@ class uiCmap(object):
         self.q_vmax_chk.clicked.connect(self._GUI2cmap)
         self.q_under.editingFinished.connect(self._GUI2cmap)
         self.q_over.editingFinished.connect(self._GUI2cmap)
-        self.q_cmap_interact.clicked.connect(self._GUI2cmap)
         self.q_cblabel.editingFinished.connect(self._GUI2cmap)
         self.q_auto_scale.clicked.connect(self._auto_scale)
         self.cmapSources.clicked.connect(self._select_object_cmap)
@@ -143,7 +142,10 @@ class uiCmap(object):
                 self.q_vmin.setEnabled(True)
                 self.qUnder_txt.setEnabled(True)
                 self.q_under.setEnabled(True)
-                self.cb['vmin'] = self.q_vmin.value()
+                if self.q_vmin.value() > self.cb['clim'][0]:
+                    self.cb['vmin'] = self.q_vmin.value()
+                else:
+                    self.cb['vmin'] = None
                 self.cb['under'], _ = textline2color(str(self.q_under.text()))
             else:
                 self.q_vmin.setEnabled(False)
@@ -156,7 +158,10 @@ class uiCmap(object):
                 self.q_vmax.setEnabled(True)
                 self.qOver_txt.setEnabled(True)
                 self.q_over.setEnabled(True)
-                self.cb['vmax'] = self.q_vmax.value()
+                if self.q_vmax.value() < self.cb['clim'][1]:
+                    self.cb['vmax'] = self.q_vmax.value()
+                else:
+                    self.cb['vmax'] = None
                 self.cb['over'], _ = textline2color(str(self.q_over.text()))
             else:
                 self.q_vmax.setEnabled(False)
@@ -165,38 +170,38 @@ class uiCmap(object):
                 self.q_over.setEnabled(False)
                 self.cb['vmax'] = None
                 self.cb['over'] = None
+            # Vmin / vmax :
+            if (self.cb['vmin'] is not None) and (self.cb['vmax'] is not None):
+                if self.cb['vmin'] >= self.cb['vmax']:
+                    self.cb['vmin'] = None
+                    self.cb['vmax'] = None
 
             # Update colorbar label :
             self.cb['label'] = str(self.q_cblabel.text())
 
             # Direct interaction : if this button is checked, the user can see
             # the colormap changements inline :
-            if self.q_cmap_interact.isChecked():
+            # Update sources :
+            if self.cmapSources.isChecked():
+                # If cortical projection never run :
+                if self.current_mask is None:
+                    self._userMsg("To control the colormap of sources, "
+                                  "run either the cortical\nprojection / "
+                                  "repartition first.", 'warn', 10, 9)
+                    # self._cortical_projection()
+                # Otherwise update colormap :
+                else:
+                    self.sources.cbUpdateFrom(self.cb)
+                    self._array2cmap(self.current_mask,
+                                     non_zero=self.current_non_zero)
+                # Update colorbar :
+                self.cb.cbupdate(self.current_mask, **self.cb._cb)
 
-                # Update sources :
-                if self.cmapSources.isChecked():
-                    # If cortical projection never run :
-                    if self.current_mask is None:
-                        self._userMsg("To control the colormap of sources, "
-                                      "run either the cortical\nprojection / "
-                                      "repartition first.", 'warn', 10, 9)
-                        # self._cortical_projection()
-                    # Otherwise update colormap :
-                    else:
-                        self.sources.cbUpdateFrom(self.cb)
-                        self._array2cmap(self.current_mask,
-                                         non_zero=self.current_non_zero)
-                    # Update colorbar :
-                    self.cb.cbupdate(self.current_mask, **self.cb._cb)
-
-                # Update connectivity :
-                elif self.cmapConnect.isChecked():
-                    self.connect.cbUpdateFrom(self.cb)
-                    self.connect._check_color()
-                    self.cb.cbupdate(self.connect._all_nnz, **self.cb._cb)
-
-            # except:
-            #     pass
+            # Update connectivity :
+            elif self.cmapConnect.isChecked():
+                self.connect.cbUpdateFrom(self.cb)
+                self.connect._check_color()
+                self.cb.cbupdate(self.connect._all_nnz, **self.cb._cb)
 
     def _select_object_cmap(self):
         """Specify the object for which colormap properties need to be applied.
@@ -255,4 +260,6 @@ class uiCmap(object):
 
     def _toggle_cmap(self):
         """Toggle colorbar panel."""
-        self.colorbar_pan.setEnabled(self.q_cmap_interact.isChecked())
+        viz = self._qcmapVisible.isChecked()
+        self.colorbar_pan.setEnabled(viz)
+        self.cbpanelW.setVisible(viz)

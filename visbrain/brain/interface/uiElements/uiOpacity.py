@@ -120,7 +120,8 @@ class uiOpacity(object):
 
         # =================== Connectivity opacity ===================
         if self.o_Connect.isChecked():
-            self.connect.mesh.set_opacity(sl_01)
+            self.connect.mesh.color[:, 3] = sl_01
+            self.connect.mesh.update()
             self.connect.mesh.visible = visible
             self.connect.mesh.set_gl_state('translucent', depth_test=deep_test)
 
@@ -160,8 +161,9 @@ class uiOpacity(object):
             vcolor = self.atlas.mesh.get_color
             # Update opacity for non-hide vertices :
             vcolor[self.atlas.mask, 3] = self.view.minOpacity
-            vcolor[~self.atlas.mask, 3] = self._getOpacitySlider(
-                tomin=self.view.minOpacity, tomax=self.view.maxOpacity)[0]
+            sl = float(self.OpacitySlider.value())
+            sl_01 = (sl-self._slmin)/(self._slmax-self._slmin)
+            vcolor[~self.atlas.mask, 3] = sl_01
             self.atlas.mesh.set_color(vcolor)
 
         # =================== Sources/Text slice ===================
@@ -186,11 +188,14 @@ class uiOpacity(object):
             # Update mask :
             self.connect.connect.mask[tohide, :] = True
             self.connect.connect.mask[:, tohide] = True
+            self.connect.select[tohide, :] = 0
+            self.connect.select[:, tohide] = 0
             if len(self.connect.connect.compressed()) <= 1:
                 self.connect.mesh.visible = False
             else:
                 self.connect.mesh.visible = True
-                self.connect.mesh.set_data(self.connect.connect)
+                # self.connect.mesh.set_data(self.connect.connect)
+                self.connect.update()
 
         # =================== Areas slice ===================
         if self.o_Areas.isChecked():

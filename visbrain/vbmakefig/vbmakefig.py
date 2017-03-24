@@ -116,8 +116,8 @@ if __name__ == '__main__':
 
     hw = picsize(shapes, interh=2, beforeh=5, afterh=10)
 
-    print(np.array(shapes))
-    print(hw)
+    # print(np.array(shapes))
+    # print(hw)
 
     y = piccomplete(x[0].astype(int), (3, 4, 4), picposh='center', val=1)
-    print(y, y.shape)
+    # print(y, y.shape)

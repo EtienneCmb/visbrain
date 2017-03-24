@@ -16,7 +16,7 @@ Sleep is a graphical user interface dedicated to visualization and scoring of sl
 * Dynamic display of polysomnographic data, spectrogram and hypnogram, with individual real-time adjustment of channel amplitude and visibility. 
 * Spectrogram display with several controllable parameters (e.g. frequency, channel, colormap)
 * Hypnogram editing and saving functions, as well as real-time computation of the main sleep parameters (see Hypnogram section). 
-* Implementation of several semi-automatic detection method such as sleep spindles, rapid eye movements or peak detection. These can be performed either on single or multiple channels and report where each one of them on the hypnogram or inside a table. Each detection comes with several parameters that the user can adjust to find the optimal detection. 
+* Implementation of several semi-automatic detection method such as sleep spindles, rapid eye movements, slow waves, K-complex or peak detection. These can be performed either on single or multiple channels and report where each one of them on the hypnogram or inside a table. Each detection comes with several parameters that the user can adjust to find the optimal detection. 
 * Several others signal processing tools such as de-mean, de-trend and filtering. Those tools are directly applied to each channel and to the spectrogram
 * Nice and intuitive interface to help you scroll and explore your data.
 
@@ -45,7 +45,7 @@ Here’s the list of currently supported extensions for data files:
 * European Data Format (**.edf**)
 
 .. note::
-   Extensions above are files that are natively supported inside Sleep. But, tha data can be directly pass to the Sleep module if you load them before.
+   Extensions above are the ones natively supported inside Sleep, but you can also directly pass numpy array or .mat file (loaded with scipy.loadmat)
 
 .. warning::
    Sleep applies an automatic downsampling to 100 Hz upon loading. You can change this value with the “downsample” argument of Sleep (command-line only). 
@@ -106,7 +106,7 @@ There is three way for loading your files :
 From the GUI
 ~~~~~~~~~~~~
 
-Don't send anything, just open the interface and you will have a popup window asking for the filename of your data and hypnogram
+Don't send anything, just open the interface and you will have a popup window asking for the filename of your data and hypnogram. If you do not have a hypnogram for your data and/or wish to display only the data, just press Cancel when the hypnogram popup opens.
 
 .. code-block:: python
 
@@ -145,10 +145,11 @@ Instead of leaving inputs arguments empty, send the path to the data :
 Raw data
 ~~~~~~~~
 
-This third way is the manually one. You have to load your data before and sending it to the sleep module. This may seems to be more difficult but it allow advanced user to pass any kind of data :
+This third way is the manually one. You have to load your data before and sending it to the sleep module. For example if you want to import Matlab .mat file:
 
 .. code-block:: python
 
+	from scipy.io import loadmat
     # Import the Sleep module from visbrain :
     from visbrain import Sleep
     # Load your dataset :
@@ -166,7 +167,7 @@ This third way is the manually one. You have to load your data before and sendin
           hypno=raw_hypno).show()
 
 .. warning::
-   The data must have the same number of points as the hypnogram and the same number of channels in the *channels* variable.
+   The data must have the same number of points as the hypnogram and the same number of channels as in the *channels* variable.
 
 Tabs descripion
 ---------------
@@ -175,9 +176,9 @@ Sleep provide five settings tabs :
 
 * :ref:`paneltab` : manage object visibility, channel's amplitudes, spectrogram properties...
 * :ref:`toolstab` : a bundle of signal processing tools (like *filtering*)
-* :ref:`infotab` : some usefull informations about the hypnogram
+* :ref:`infotab` : Sleep statistics and record basic infos
 * :ref:`scoringtab` : a scoring table that can be used to edit the hypnogram
-* :ref:`detectiontab` : run the spindles / REM / peak detection
+* :ref:`detectiontab` : Automatic detection of sleep spindles, rapid eye movements (REMs) and peaks
 
 .. _paneltab:
 
@@ -209,7 +210,7 @@ Apply either a lowpass, highpass or bandpass butterworth filter on the channel d
 Info
 ~~~~
 
-The Info panel displays recording information (name and Downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time if you modify the hypnogram using either live edition or the Scoring panel. Sleep statistics can be exported to **.csv** or **.txt** file.
+The Info panel displays recording information (name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time if you modify the hypnogram using either live edition or the Scoring panel. Sleep statistics can be exported to **.csv** or **.txt** file.
 
 .. figure::  picture/Sleep_info.png
    :align:   center
@@ -260,7 +261,7 @@ r                       REM stage
 After pressing one of those keys, data coming from the next window will be prompted automatically so that you can continu scoring.
 
 .. warning::
-   If you feel that shortcuts doesn't works, this is because no canvas are selected. Simply click on a canvas (on a channel / spectrogram / histogam)
+   If no canvas are selected the shortcuts might be not working. Simply click on a canvas (on a channel / spectrogram / histogam) before starting to score to avoid this issue.
 
 .. _scoretable:
 

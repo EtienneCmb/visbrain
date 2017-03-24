@@ -82,6 +82,11 @@ class TimeAxis(object):
         # Link transformations with axis :
         self.xaxis.link_view(self.wc)
 
+    def clean(self):
+        """Clean axis."""
+        self.mesh.parent = None
+        self.mesh = None
+
 
 # class AxisCanvas(object):
 #     """Create a canvas with an embeded axis."""

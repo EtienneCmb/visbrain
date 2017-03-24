@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name='visbrain',
-    version='0.1.6',
+    version='0.1.8',
     packages=find_packages(),
     description='Hardware-accelerated data visualization for neuroscientific data in Python',
     long_description=read('README.md'),
@@ -19,7 +19,7 @@ setup(
         'pillow',
         'matplotlib<=1.5.1',
         'pyopengl',
-        'vispy',
+        'vispy==0.5.0',
     ],
     dependency_links=[],
     author='Etienne Combrisson',

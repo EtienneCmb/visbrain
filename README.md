@@ -2,6 +2,21 @@
 
 Visbrain is a python package dedicated (mainly) to the visualization of neuroscientist data. Check the [documentation](http://etiennecmb.github.io/visbrain/) for further details
 
+## Installation
+
+To see the installation requirements, check the [documentation](http://etiennecmb.github.io/visbrain/).
+Clone the repository :
+
+```{r, engine='bash', count_lines}
+    git clone https://github.com/EtienneCmb/visbrain.git
+```
+
+Install the package :
+
+```{r, engine='bash', count_lines}
+    pip install .
+```
+
 ## Modules
 
 ### Brain
@@ -33,7 +48,7 @@ The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard
 - Load .eeg (Brainvision and ELAN), .edf or directly pass raw data
 - Visualize channels / spectrogram / hypnogram, time window control and fast plot update
 - Hypnogram edition (either by manually adding where stages start / finish or interactively by adding / dragging and moving points) and save the edited hypnogram (.txt, .csv and .hyp)
-- Spindles / REM / Peaks detection and report results on each channel and hypnogram
+- Spindles / REM / Peaks / Slow waves / K-complex detection and report results on each channel and hypnogram
 - Signal processing tools (filtering...)
 
 ![sleep](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_main.png "Sleep : load, visualize and edit sleep data")
@@ -54,30 +69,16 @@ The [Ndviz](http://etiennecmb.github.io/visbrain/ndviz.html) module help you to 
 
 ![ndviz](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/ndviz_example.png "Ndviz : data mining")
 
-## Installation
-
-To see the installation requirements, check the [documentation](http://etiennecmb.github.io/visbrain/).
-Clone the repository :
-
-```{r, engine='bash', count_lines}
-    git clone https://github.com/EtienneCmb/visbrain.git
-```
-
-Install the pckage :
-
-```{r, engine='bash', count_lines}
-    python setup.py install
-```
-
 ## Contributors
 
 ### Main contributors
 
 - [Etienne Combrisson](http://etiennecmb.github.io)
 - [Raphael Vallat](https://raphaelvallat.github.io/)
+- [Dmitri Altukchov](https://github.com/dmalt)
 - [David Meunier](https://github.com/davidmeunier79)
 - [Tarek Lajnef](https://github.com/TarekLaj)
 - [Karim Jerbi](www.karimjerbi.com)
 
 ### Thx to...
-*Dmitri Altukchov, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian...*
+*Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian...*

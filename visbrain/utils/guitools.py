@@ -1,11 +1,13 @@
 """Usefull functions for graphical interface managment."""
 
 import numpy as np
+from vispy.scene import visuals
+
 from .color import color2vb
 
 
 __all__ = ['slider2opacity', 'textline2color', 'uiSpinValue',
-           'ndsubplot', 'combo', 'is_color']
+           'ndsubplot', 'combo', 'is_color', 'GuideLines']
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -205,3 +207,76 @@ def combo(lst, idx):
         ind.append(list(out)[k][0])
         # ind.append(out[k].index(idx[k]))
     return out, ind
+
+
+class GuideLines(object):
+    """Display GUI guidelines for screenshot.
+
+    Args:
+        size: tuple
+            Size of the canvas.
+
+    Kargs:
+        parent: vispy, optional, (def: None)
+            The guide lines parent.
+
+        camrange: dict, optional, (def: None)
+            Dictionary with the camera range.
+    """
+
+    def __init__(self, size, parent=None, color='#ab4642', camrange=None):
+        """Init."""
+        self.size = size
+        self.range = camrange
+        self.xm, self.xM = self.range['x'][0], self.range['x'][1]
+        self.ym, self.yM = self.range['y'][0], self.range['y'][1]
+        # Create line object :
+        # pos = np.zeros((2, 2), dtype=np.float32)
+        pos = np.random.rand(100, 3)
+        self.mesh = visuals.Line(pos=pos, parent=parent, connect='segments',
+                                 color=color)
+        self.mesh.visible = False
+
+    def set_data(self, crop=None):
+        """"""
+        self.xm, self.xM = self.range['x'][0], self.range['x'][1]
+        self.ym, self.yM = self.range['y'][0], self.range['y'][1]
+        # Get range :
+        # crop = (0, 0, self.size[0], self.size[1])
+        # Convert each value :
+        cropXY = self._convert(crop[0], crop[1])
+        cropHW = self._convert(crop[0] + crop[2], crop[1] + crop[3])
+        # # Build segment :
+        # segment = np.zeros((8, 3), dtype=np.float32)
+        # segment[0, :] = (cropXY[0], cropXY[1], 0.)
+        # segment[1, :] = (cropXY[0], cropHW[1], 0.)
+        # segment[2, :] = (cropXY[0], cropHW[1], 0.)
+        # segment[3, :] = (cropHW[0], cropHW[1], 0.)
+        # segment[4, :] = (cropHW[0], cropHW[1], 0.)
+        # segment[5, :] = (cropHW[0], cropXY[1], 0.)
+        # segment[6, :] = (cropHW[0], cropXY[1], 0.)
+        # segment[7, :] = (cropXY[0], cropXY[1], 0.)
+        segment = np.array([
+                           [-154., -100., 0.], 
+                           [154., 100., 0.]
+                           ])
+        self.mesh.set_data(pos=segment)
+
+    def _convert(self, x, y):
+        xc = self.xm + ((self.xM - self.xm) * x / self.size[0])
+        yc = self.ym + ((self.yM - self.ym) * y / self.size[1])
+        return xc, yc
+
+    # ----------- RANGE -----------
+    @property
+    def range(self):
+        """Get the range value."""
+        return self._range
+    
+    @range.setter
+    def range(self, value):
+        """Set range value."""
+        self._range = value
+        self.xm, self.xM = self.range['x'][0], self.range['x'][1]
+        self.ym, self.yM = self.range['y'][0], self.range['y'][1]
+    

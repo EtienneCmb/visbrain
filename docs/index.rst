@@ -4,7 +4,7 @@ Visbrain documentation
 Visbrain is a python package in development and it's dedicated to neuroscience visualization tools. Here is the list of the current modules :
 
 * :ref:`brain` : plot your data onto a 3D MNI brain control it via the graphical interface
-* :ref:`Sleep` : display sleep data, perform spindles / REM / peaks detection and live hypnogram edition
+* :ref:`Sleep` : display sleep data, perform spindles / REM / peaks / slow waves / K-complex detection and live hypnogram edition
 * :ref:`Ndviz` : inspect data your n-dimentional data.
 * :ref:`makefig` : concatenate several pictures
 
@@ -19,14 +19,24 @@ Clone visbrain repository :
 
     git clone https://github.com/EtienneCmb/visbrain.git
 
-Finally, install visbrain :
+Go to the cloned folder and run :
 
 .. code-block:: bash
 
-    python setup.py install
+    pip install .
 
 What's new?
 ***********
+
+* New in version v0.1.8
+
+  * Brain : New density color and start bundling
+  * Brain : possibility to add multiple source / connectivity objects
+  * Brain : screenshot improvements and GUI integration
+  * Sleep : new slow wave / K-complex detection
+  * Sleep : REM / spindles detection improvements
+  * Sleep : everything can now be exported.
+  * Sleep : GUI re-organization and improvements
 
 * New in version v0.1.4
 
