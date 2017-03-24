@@ -396,6 +396,7 @@ class uiSettings(object):
         # print(self._chanGrid.rowCount(), self._chanGrid.columnCount())
         # self._chanGrid.deleteLater()
         QObjectCleanupHandler().add(self._chanGrid)
+        QObjectCleanupHandler().clear()
         # while self._chanGrid.count():
         #     child = self._chanGrid.takeAt(0)
         #     if child.widget() is not None:

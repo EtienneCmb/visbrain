@@ -2,6 +2,7 @@
 
 import numpy as np
 import gc
+from ....utils import bipolarization
 
 __all__ = ['uiTools']
 
@@ -72,14 +73,14 @@ class uiTools(object):
             del self._channels[idx]
             self._channels = [k + '-' + chan for k in self._channels]
             # Clean memory :
-            gc.collect()
 
         # ________ Bipolarization ________
         else:
-            pass
+            self._data, self._channels, _ = bipolarization(self._data, self._channels)
 
         # ________ Reset GUI ________
         # Update data info :
+        gc.collect()
         self._get_dataInfo()
         # Reset visuals, shortcuts and GUI elements :
         self._fcn_resetGui()
