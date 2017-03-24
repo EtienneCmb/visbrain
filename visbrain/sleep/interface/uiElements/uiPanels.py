@@ -283,7 +283,6 @@ class uiPanels(object):
     # =====================================================================
     def _fcn_chanViz(self):
         """Control visible panels of channels."""
-        print('IM IN')
         for i, k in enumerate(self._chanChecks):
             viz = k.isChecked()
             self._chanWidget[i].setVisible(viz)

@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1328</width>
+    <width>1242</width>
     <height>1017</height>
    </rect>
   </property>
@@ -862,456 +862,658 @@ trend, filtering)</string>
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="_ToolsRefGrp">
-             <property name="title">
-              <string>Re-referencing</string>
+            <widget class="QToolBox" name="toolBox">
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
              </property>
-             <layout class="QGridLayout" name="gridLayout_13">
-              <item row="1" column="0" colspan="2">
-               <widget class="QFrame" name="frame_6">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::Box</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_11">
-                 <item>
-                  <widget class="QLabel" name="label_59">
-                   <property name="font">
-                    <font>
-                     <italic>true</italic>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Warning : re-referencing can not be reversed</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item row="4" column="0" colspan="2">
-               <widget class="QWidget" name="_ToolsRefSingleW" native="true">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>30</height>
-                 </size>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_16">
-                 <property name="margin">
-                  <number>0</number>
+             <property name="currentIndex">
+              <number>1</number>
+             </property>
+             <widget class="QWidget" name="page">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>360</width>
+                <height>362</height>
+               </rect>
+              </property>
+              <attribute name="label">
+               <string>Re-referencing</string>
+              </attribute>
+              <layout class="QVBoxLayout" name="verticalLayout_16">
+               <item>
+                <widget class="QWidget" name="_ToolsRefGrp" native="true">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>30</height>
+                  </size>
                  </property>
-                 <property name="spacing">
-                  <number>0</number>
+                 <layout class="QVBoxLayout" name="verticalLayout_18">
+                  <property name="spacing">
+                   <number>6</number>
+                  </property>
+                  <property name="margin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QFrame" name="frame_6">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::Box</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Raised</enum>
+                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_11">
+                     <item>
+                      <widget class="QLabel" name="label_59">
+                       <property name="font">
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Warning : re-referencing can only be achieved once</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_22">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="3">
+                     <widget class="QRadioButton" name="_ToolsRefBipo">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Data bipolarization : every consecutive channels are subtracted (Ex : if channels is [ O1, O2, O3, Cz, Pz ]  the bipolarized channels will be [ O1, O2-O1, O3-O2, Cz, Pz ])&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Bipolarization</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2" colspan="3">
+                     <widget class="QWidget" name="_ToolsRefSingleW" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_16">
+                       <property name="margin">
+                        <number>0</number>
+                       </property>
+                       <property name="spacing">
+                        <number>0</number>
+                       </property>
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_56">
+                         <property name="text">
+                          <string>Use as  reference</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2">
+                        <widget class="QComboBox" name="_ToolsRefLst">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Channel to use as the reference&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <spacer name="horizontalSpacer_30">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Minimum</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>20</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="0" column="3">
+                        <spacer name="horizontalSpacer_25">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="2" column="2" colspan="3">
+                     <widget class="QCheckBox" name="_ToolsRefIgnore">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When this option is checked, channels that are not re-referenced are going to be ignored in the interface  (Ex : if channels is [ O1, O2, O3, Cz, Pz ]  the bipolarized channels will be [ O1, O2-O1, O3-O2, Cz, Pz ] but if this checkbox is activated you will only see the clean version [ O2-O1, 03-O2 ] )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Ignore non-referenced channels</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QRadioButton" name="_ToolsRefSingle">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use a single channel as reference. The activity of this channel will be subtract to other channels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Single channel</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="Line" name="line_6">
+                      <property name="minimumSize">
+                       <size>
+                        <width>10</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_60">
+                      <property name="font">
+                       <font>
+                        <italic>true</italic>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Type</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="4">
+                     <spacer name="horizontalSpacer_37">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="3" column="2" colspan="3">
+                     <widget class="QCheckBox" name="_ToolsRefIgn">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If some channels doesn't need to be re-referenced, and if you want to visualize them, be sure to deactivate &amp;quot;Ignore non-referenced channels&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Add channels that don't need to be
+re-referenced</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0" rowspan="3">
+                     <widget class="QLabel" name="label_61">
+                      <property name="font">
+                       <font>
+                        <italic>true</italic>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Settings</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1" rowspan="3">
+                     <widget class="Line" name="line_21">
+                      <property name="minimumSize">
+                       <size>
+                        <width>10</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <widget class="QScrollArea" name="_ToolsRefIgnArea">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>1000</height>
+                     </size>
+                    </property>
+                    <property name="widgetResizable">
+                     <bool>true</bool>
+                    </property>
+                    <widget class="QWidget" name="scrollAreaWidgetContents">
+                     <property name="geometry">
+                      <rect>
+                       <x>0</x>
+                       <y>0</y>
+                       <width>340</width>
+                       <height>998</height>
+                      </rect>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_2">
+                      <item>
+                       <layout class="QGridLayout" name="_ToolsRefIgnGrd"/>
+                      </item>
+                      <item>
+                       <spacer name="verticalSpacer_2">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
+                    </widget>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_9">
+                    <property name="topMargin">
+                     <number>9</number>
+                    </property>
+                    <item>
+                     <spacer name="horizontalSpacer_20">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="_ToolsRefApply">
+                      <property name="text">
+                       <string>Apply</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_21">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
                  </property>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_56">
-                   <property name="text">
-                    <string>Use as  reference</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="3">
-                  <spacer name="horizontalSpacer_25">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item row="0" column="2">
-                  <widget class="QComboBox" name="_ToolsRefLst"/>
-                 </item>
-                 <item row="0" column="1">
-                  <spacer name="horizontalSpacer_30">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeType">
-                    <enum>QSizePolicy::Minimum</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item row="6" column="0" colspan="2">
-               <layout class="QHBoxLayout" name="horizontalLayout_9">
-                <property name="topMargin">
-                 <number>9</number>
-                </property>
-                <item>
-                 <spacer name="horizontalSpacer_20">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_2">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>360</width>
+                <height>792</height>
+               </rect>
+              </property>
+              <attribute name="label">
+               <string>Processing</string>
+              </attribute>
+              <layout class="QVBoxLayout" name="verticalLayout_17">
+               <item>
+                <widget class="QGroupBox" name="groupBox_5">
+                 <property name="title">
+                  <string>Mean and trend</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_7">
+                  <property name="leftMargin">
+                   <number>0</number>
                   </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
+                  <property name="rightMargin">
+                   <number>0</number>
                   </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="_ToolsRefApply">
-                  <property name="text">
-                   <string>Apply</string>
+                  <item>
+                   <widget class="Line" name="line_12">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_2">
+                    <item row="0" column="0">
+                     <widget class="QCheckBox" name="_SigMean">
+                      <property name="text">
+                       <string>Remove the mean</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QCheckBox" name="_SigTrend">
+                      <property name="text">
+                       <string>Remove the linear trend</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_6">
+                 <property name="title">
+                  <string>Filtering</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_8">
+                  <property name="leftMargin">
+                   <number>0</number>
                   </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_21">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                  <property name="rightMargin">
+                   <number>0</number>
                   </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item row="2" column="1">
-               <widget class="QRadioButton" name="_ToolsRefBipo">
-                <property name="text">
-                 <string>Bipolarization</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0" colspan="2">
-               <widget class="Line" name="line_20">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QRadioButton" name="_ToolsRefSingle">
-                <property name="text">
-                 <string>Single channel</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="0" colspan="2">
-               <widget class="QCheckBox" name="_ToolsRefIgnore">
-                <property name="text">
-                 <string>Ignore non-referenced channel</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
+                  <item>
+                   <widget class="Line" name="line_11">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="_SigFilt">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter your data and spectrogram :&lt;/p&gt;&lt;p&gt;- Select the filter type (bandpass / bandstop / highpass / lowpass)&lt;/p&gt;&lt;p&gt;- Select the frequencies for filtering&lt;/p&gt;&lt;p&gt;- Select the filter method (butterworth or bessel) and its order&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Enable</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="_SigFiltW" native="true">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_9">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <property name="margin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <layout class="QGridLayout" name="gridLayout_3">
+                       <property name="spacing">
+                        <number>9</number>
+                       </property>
+                       <item row="2" column="0">
+                        <widget class="QLabel" name="label_10">
+                         <property name="text">
+                          <string>Method</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="4">
+                        <widget class="QLabel" name="label_9">
+                         <property name="text">
+                          <string>hz</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="QDoubleSpinBox" name="_SigFiltFrom">
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
+                         <property name="minimum">
+                          <double>0.100000000000000</double>
+                         </property>
+                         <property name="maximum">
+                          <double>200.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>12.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QLabel" name="label_7">
+                         <property name="text">
+                          <string>Fmin</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="0" colspan="5">
+                        <spacer name="horizontalSpacer_24">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>10</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="2" column="2">
+                        <widget class="QLabel" name="label_11">
+                         <property name="text">
+                          <string>order</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="2">
+                        <widget class="QLabel" name="label_8">
+                         <property name="text">
+                          <string>Fmax</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="QComboBox" name="_SigFiltMeth">
+                         <item>
+                          <property name="text">
+                           <string>butterworth</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>bessel</string>
+                          </property>
+                         </item>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QComboBox" name="_SigFiltBand">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;- bandpass: keep only frequencies between [fmin, fmax]&lt;/p&gt;&lt;p&gt;- bandstop: remove frequencies between [fmin, fmax]&lt;/p&gt;&lt;p&gt;- lowpass: keep only frequencies under fmax&lt;/p&gt;&lt;p&gt;- highpass: keep only frequencies over fmin&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <item>
+                          <property name="text">
+                           <string>bandpass</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>bandstop</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>lowpass</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>highpass</string>
+                          </property>
+                         </item>
+                        </widget>
+                       </item>
+                       <item row="2" column="3" colspan="2">
+                        <widget class="QSpinBox" name="_SigFiltOrder">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose filter order and control narrow band. It is not recommended to use filter order over 3 (can provoc distorsion).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="minimum">
+                          <number>1</number>
+                         </property>
+                         <property name="maximum">
+                          <number>20</number>
+                         </property>
+                         <property name="value">
+                          <number>3</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="3">
+                        <widget class="QDoubleSpinBox" name="_SigFiltTo">
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
+                         <property name="minimum">
+                          <double>0.100000000000000</double>
+                         </property>
+                         <property name="maximum">
+                          <double>200.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>16.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_18">
+                         <property name="text">
+                          <string>Type</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_4">
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <spacer name="horizontalSpacer_22">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="_SigFiltApply">
+                         <property name="text">
+                          <string>Apply</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_23">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="verticalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_5">
-             <property name="title">
-              <string>Mean and trend</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_7">
-              <item>
-               <widget class="Line" name="line_12">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QGridLayout" name="gridLayout_2">
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="_SigMean">
-                  <property name="text">
-                   <string>Remove the mean</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="_SigTrend">
-                  <property name="text">
-                   <string>Remove the linear trend</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_6">
-             <property name="title">
-              <string>Filtering</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_8">
-              <item>
-               <widget class="Line" name="line_11">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="_SigFilt">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter your data and spectrogram :&lt;/p&gt;&lt;p&gt;- Select the filter type (bandpass / bandstop / highpass / lowpass)&lt;/p&gt;&lt;p&gt;- Select the frequencies for filtering&lt;/p&gt;&lt;p&gt;- Select the filter method (butterworth or bessel) and its order&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <property name="text">
-                 <string>Enable</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="_SigFiltW" native="true">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_9">
-                 <property name="spacing">
-                  <number>0</number>
-                 </property>
-                 <property name="margin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <layout class="QGridLayout" name="gridLayout_3">
-                   <property name="spacing">
-                    <number>9</number>
-                   </property>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_10">
-                     <property name="text">
-                      <string>Method</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="4">
-                    <widget class="QLabel" name="label_9">
-                     <property name="text">
-                      <string>hz</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QDoubleSpinBox" name="_SigFiltFrom">
-                     <property name="decimals">
-                      <number>1</number>
-                     </property>
-                     <property name="minimum">
-                      <double>0.100000000000000</double>
-                     </property>
-                     <property name="maximum">
-                      <double>200.000000000000000</double>
-                     </property>
-                     <property name="value">
-                      <double>12.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_7">
-                     <property name="text">
-                      <string>Fmin</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="0" colspan="5">
-                    <spacer name="horizontalSpacer_24">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>10</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item row="2" column="2">
-                    <widget class="QLabel" name="label_11">
-                     <property name="text">
-                      <string>order</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="2">
-                    <widget class="QLabel" name="label_8">
-                     <property name="text">
-                      <string>Fmax</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QComboBox" name="_SigFiltMeth">
-                     <item>
-                      <property name="text">
-                       <string>butterworth</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>bessel</string>
-                      </property>
-                     </item>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QComboBox" name="_SigFiltBand">
-                     <property name="toolTip">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;- bandpass: keep only frequencies between [fmin, fmax]&lt;/p&gt;&lt;p&gt;- bandstop: remove frequencies between [fmin, fmax]&lt;/p&gt;&lt;p&gt;- lowpass: keep only frequencies under fmax&lt;/p&gt;&lt;p&gt;- highpass: keep only frequencies over fmin&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                     </property>
-                     <item>
-                      <property name="text">
-                       <string>bandpass</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>bandstop</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>lowpass</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>highpass</string>
-                      </property>
-                     </item>
-                    </widget>
-                   </item>
-                   <item row="2" column="3" colspan="2">
-                    <widget class="QSpinBox" name="_SigFiltOrder">
-                     <property name="toolTip">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose filter order and control narrow band. It is not recommended to use filter order over 3 (can provoc distorsion).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                     </property>
-                     <property name="minimum">
-                      <number>1</number>
-                     </property>
-                     <property name="maximum">
-                      <number>20</number>
-                     </property>
-                     <property name="value">
-                      <number>3</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="3">
-                    <widget class="QDoubleSpinBox" name="_SigFiltTo">
-                     <property name="decimals">
-                      <number>1</number>
-                     </property>
-                     <property name="minimum">
-                      <double>0.100000000000000</double>
-                     </property>
-                     <property name="maximum">
-                      <double>200.000000000000000</double>
-                     </property>
-                     <property name="value">
-                      <double>16.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_18">
-                     <property name="text">
-                      <string>Type</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_4">
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <spacer name="horizontalSpacer_22">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="_SigFiltApply">
-                     <property name="text">
-                      <string>Apply</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <spacer name="horizontalSpacer_23">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </widget>
@@ -3053,7 +3255,7 @@ sleep</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1328</width>
+     <width>1242</width>
      <height>25</height>
     </rect>
    </property>

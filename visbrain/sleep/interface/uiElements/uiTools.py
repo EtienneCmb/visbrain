@@ -1,7 +1,7 @@
 """Main class for sleep tools managment."""
 
 import numpy as np
-import gc
+from PyQt4 import QtGui
 from ....utils import rereferencing, bipolarization, id
 
 __all__ = ['uiTools']
@@ -15,6 +15,18 @@ class uiTools(object):
         # =====================================================================
         # RE-REFERENCING
         # =====================================================================
+        # Add channels to scrolling area :
+        self._ToolsRefIgnArea.setVisible(False)
+        self._reChecks = [0] * len(self._channels)
+        for i, k in enumerate(self._channels):
+            # Add a checkbox to the scrolling panel :
+            self._reChecks[i] = QtGui.QCheckBox(self._PanScrollChan)
+            # Name checkbox with channel name :
+            self._reChecks[i].setText(k)
+            # Add checkbox to the grid :
+            self._ToolsRefIgnGrd.addWidget(self._reChecks[i], i, 0, 1, 1)
+        # Connections :
+        self._ToolsRefIgn.clicked.connect(self._fcn_refChanIgnore)
         self._ToolsRefLst.addItems(self._channels)
         self._ToolsRefSingle.clicked.connect(self._fcn_refPanelDisp)
         self._ToolsRefBipo.clicked.connect(self._fcn_refPanelDisp)
@@ -34,6 +46,13 @@ class uiTools(object):
         self._SigFilt.clicked.connect(self._fcn_filtViz)
         self._SigFiltBand.currentIndexChanged.connect(self._fcn_filtBand)
 
+    # =====================================================================
+    # RE-REFERENCING
+    # =====================================================================
+    def _fcn_refChanIgnore(self):
+        """Display / hide list of channels to ignore."""
+        self._ToolsRefIgnArea.setVisible(self._ToolsRefIgn.isChecked())
+
     def _fcn_refPanelDisp(self):
         """Display / Hide the reference panel."""
         viz = self._ToolsRefSingle.isChecked()
@@ -44,17 +63,24 @@ class uiTools(object):
         """Apply re-referencing."""
         # Get selected channel :
         idx = self._ToolsRefLst.currentIndex()
+        if self._ToolsRefIgn.isChecked():
+            to_ignore = [num for num, k in enumerate(
+                                             self._reChecks) if k.isChecked()]
+        else:
+            to_ignore = None
 
         # ____________________ Re-reference ____________________
         if self._ToolsRefSingle.isChecked():
             self._data, self._channels, consider = rereferencing(
-                                            self._data, self._channels, idx)
+                                            self._data, self._channels, idx,
+                                            to_ignore)
             self._chanChecks[idx].setChecked(False)
 
         # ____________________ Bipolarization ____________________
         else:
             self._data, self._channels, consider = bipolarization(
-                                                  self._data, self._channels)
+                                                  self._data, self._channels,
+                                                  to_ignore)
 
         # ____________________ Update ____________________
         aM = np.argmax(consider)
