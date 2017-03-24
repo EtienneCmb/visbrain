@@ -97,6 +97,7 @@ class ChannelPlot(PrepareData):
                                             ])} for _ in range(len(channels))]
         self._fcn = fcn
         self.visible = np.array([True] + [False] * (len(channels) - 1))
+        self.consider = np.ones((len(channels),), dtype=bool)
 
         # Get color :
         self.color = color2vb(color)

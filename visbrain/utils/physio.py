@@ -1,7 +1,8 @@
+"""Group of functions for physiological processing."""
 import numpy as np
 from re import findall
 
-__all__ = ['bipolarization']
+__all__ = ['rereferencing', 'bipolarization']
 
 
 def _chaninspect(strlst, tofind):
@@ -21,6 +22,56 @@ def _chaninspect(strlst, tofind):
             idx.append(name)
 
     return idx
+
+
+def rereferencing(data, chans, reference, to_ignore=None):
+    """Re-reference data.
+
+    Args:
+        data: np.ndarray
+            The array of data of shape (nchan, npts).
+
+        chans: list
+            List of channel names of length nchan.
+
+        reference: int
+            The index of the channel to consider as a reference.
+
+    Kargs:
+        to_ignore: list, optional, (def: None)
+            List of channels to ignore in the re-referencing.
+
+    Returns:
+        datar: np.ndarray
+            The re-referenced data.
+
+        channelsr: list
+            List of re-referenced channel names.
+
+        consider: list
+            List of boolean values of channels that have to be considered
+            during the ploting processus.
+    """
+    # Get shapes :
+    nchan, npts = data.shape
+    # Get data to use as the reference :
+    ref = data[[reference], :]
+    name = chans[reference]
+    # Build ignore vector :
+    consider = np.ones((nchan,), dtype=bool)
+    consider[reference] = False
+    # Find if some channels have to be ignored :
+    if to_ignore is None:
+        sl = slice(nchan)
+    else:
+        sl = np.setdiff1d(np.arange(nchan), to_ignore)
+        consider[to_ignore] = False
+    # Re-reference data :
+    data[sl, :] -= ref
+    # Build channel names :
+    chan = [k+'-'+name if consider[num] else k for num, k in enumerate(chans)]
+
+    return data, chan, consider
 
 
 def bipolarization(data, channel, dim=0, xyz=None, sep='.', unbip=None,
