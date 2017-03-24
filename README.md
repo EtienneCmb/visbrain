@@ -33,7 +33,7 @@ The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard
 - Load .eeg (Brainvision and ELAN), .edf or directly pass raw data
 - Visualize channels / spectrogram / hypnogram, time window control and fast plot update
 - Hypnogram edition (either by manually adding where stages start / finish or interactively by adding / dragging and moving points) and save the edited hypnogram (.txt, .csv and .hyp)
-- Spindles / REM / Peaks detection and report results on each channel and hypnogram
+- Spindles / REM / Peaks / Slow waves / K-complex detection and report results on each channel and hypnogram
 - Signal processing tools (filtering...)
 
 ![sleep](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_main.png "Sleep : load, visualize and edit sleep data")
@@ -63,10 +63,10 @@ Clone the repository :
     git clone https://github.com/EtienneCmb/visbrain.git
 ```
 
-Install the pckage :
+Install the package :
 
 ```{r, engine='bash', count_lines}
-    python setup.py install
+    python setup.py install --editable
 ```
 
 ## Contributors
@@ -75,9 +75,10 @@ Install the pckage :
 
 - [Etienne Combrisson](http://etiennecmb.github.io)
 - [Raphael Vallat](https://raphaelvallat.github.io/)
+- [Dmitri Altukchov](https://github.com/dmalt)
 - [David Meunier](https://github.com/davidmeunier79)
 - [Tarek Lajnef](https://github.com/TarekLaj)
 - [Karim Jerbi](www.karimjerbi.com)
 
 ### Thx to...
-*Dmitri Altukchov, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian...*
+*Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian...*

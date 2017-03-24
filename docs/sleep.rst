@@ -16,7 +16,7 @@ Sleep is a graphical user interface dedicated to visualization and scoring of sl
 * Dynamic display of polysomnographic data, spectrogram and hypnogram, with individual real-time adjustment of channel amplitude and visibility. 
 * Spectrogram display with several controllable parameters (e.g. frequency, channel, colormap)
 * Hypnogram editing and saving functions, as well as real-time computation of the main sleep parameters (see Hypnogram section). 
-* Implementation of several semi-automatic detection method such as sleep spindles, rapid eye movements or peak detection. These can be performed either on single or multiple channels and report where each one of them on the hypnogram or inside a table. Each detection comes with several parameters that the user can adjust to find the optimal detection. 
+* Implementation of several semi-automatic detection method such as sleep spindles, rapid eye movements, slow waves, K-complex or peak detection. These can be performed either on single or multiple channels and report where each one of them on the hypnogram or inside a table. Each detection comes with several parameters that the user can adjust to find the optimal detection. 
 * Several others signal processing tools such as de-mean, de-trend and filtering. Those tools are directly applied to each channel and to the spectrogram
 * Nice and intuitive interface to help you scroll and explore your data.
 
