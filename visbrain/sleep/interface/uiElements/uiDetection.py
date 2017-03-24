@@ -187,7 +187,7 @@ class uiDetection(object):
                                             self._sf, self._hypno, nrem_only)
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defkc,
-                                        'triangle_up', toReport, number, 0.)
+                                        'disc', toReport, number, 0.)
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':

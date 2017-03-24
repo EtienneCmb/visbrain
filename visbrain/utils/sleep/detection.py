@@ -68,8 +68,8 @@ def kcdetect(elec, sf, hypno, nrem_only):
     range_spin_sec = 120
     threshold = 2
     fMin = 0.5
-    fMax = 4
-    tMin = 800
+    fMax = 2
+    tMin = 500
     tMax = 2500
     min_distance_ms = 500
     daub_coeff = 5
@@ -108,13 +108,11 @@ def kcdetect(elec, sf, hypno, nrem_only):
 
     if idx_sup_thr.size > 0:
 
-        # PROBABILITY
-        # Remove slow wave
+        # Find epoch with slow wave
         idx_kc_delta = np.intersect1d(idx_sup_thr, idx_delta)
-        idx_sup_thr = np.setdiff1d(idx_sup_thr, idx_kc_delta)
+        idx_no_delta = np.setdiff1d(idx_sup_thr, idx_kc_delta)
 
         # Check if spindles are present in range_spin_sec
-        # Current state: Inactive
         number, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
         spin_bool = np.array([], dtype=np.bool)
         for i, j in enumerate(idx_start):
@@ -124,8 +122,16 @@ def kcdetect(elec, sf, hypno, nrem_only):
 
         good_kc = np.where(spin_bool == True)[0]
         good_idx = _events_removal(idx_start, idx_stop, good_kc)
-        # idx_sup_thr = idx_sup_thr[good_idx]
-        del good_idx, idx_start, idx_stop
+
+        # PROBABILITY
+        proba = np.zeros(shape=data.shape)
+        proba[idx_no_delta] += 0.1
+        proba[idx_sup_thr] += 0.1
+        proba[good_idx] += 0.1
+
+        idx_good_proba = np.where(proba == 0.3)[0]
+
+        idx_sup_thr = np.intersect1d(idx_sup_thr, idx_good_proba)
 
         # Get where KC start / end and duration :
         number, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
@@ -138,8 +144,9 @@ def kcdetect(elec, sf, hypno, nrem_only):
         idx_sup_thr = idx_sup_thr[good_idx]
 
         # Fill gap between KC separated by less than min_distance_ms
-        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
+        # idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
 
+        # Export info
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
 
