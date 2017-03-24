@@ -2,6 +2,7 @@ Bug
 	-5 Peut-être il faut vider la mémoire après downsampling.
 	-5 SEGMENTATION ERROR: à l fermeture, l'interface bug (fait bugger ipython). Continuous array? Voir modifs pyqt5, dernière ligne
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
+	-5 Bug dans le reréférencement pour de larges données
 	+5 Convertir window
 	+4 Screenshot page complète mais par PyQt (pas vispy canvas)
 	+5 Bug quand aucun spindle détecté (à reproduire sur small + th=2. + wavelet)
