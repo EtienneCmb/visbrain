@@ -47,7 +47,9 @@ class uiTools(object):
         self._spec.clean()
         self._specInd.clean()
         self._hypInd.clean()
-        del self._chan, self._hyp, self._spec, self._specInd, self._hypInd
+        self._TimeAxis.clean()
+        del (self._chan, self._hyp, self._spec, self._specInd, self._hypInd,
+             self._TimeAxis)
 
         # GUI :
         self._fcn_cleanGui()

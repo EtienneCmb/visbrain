@@ -368,6 +368,7 @@ class Spectrogram(PrepareData):
     def clean(self):
         """Clean indicators."""
         self.mesh.parent = None
+        self.mesh = None
 
     # ----------- RECT -----------
     @property
@@ -489,6 +490,10 @@ class Hypnogram(object):
         self.edit.parent = None
         self.report.parent = None
         self.grid.parent = None
+        self.mesh = None
+        self.edit = None
+        self.report = None
+        self.grid = None
 
     # ----------- RECT -----------
     @property
@@ -541,6 +546,7 @@ class Indicator(object):
     def clean(self):
         """Clean indicators."""
         self.mesh.parent = None
+        self.mesh = None
 
 
 """
