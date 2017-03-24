@@ -64,16 +64,16 @@ def kcdetect(elec, sf, hypno, nrem_only):
     # Main parameters (raw values per algorithm construction)
     delta_thr = 0.75
     moving_s = 20
-    spindles_thresh = 2
+    spindles_thresh = 1
     range_spin_sec = 120
-    threshold = 2
+    threshold = 1
     fMin = 0.5
     fMax = 2
     tMin = 500
     tMax = 2500
     min_distance_ms = 500
     daub_coeff = 5
-    daub_mult = 100
+    daub_mult = 20
 
     # PRE DETECTION
     # Compute delta band power
@@ -125,14 +125,13 @@ def kcdetect(elec, sf, hypno, nrem_only):
 
         # PROBABILITY
         proba = np.zeros(shape=data.shape)
-        proba[idx_no_delta] += 0.1
         proba[idx_sup_thr] += 0.1
-        proba[good_idx] += 0.1
+        proba[idx_no_delta] *= 3
+        proba[good_idx] *= 2
 
-        idx_good_proba = np.where(proba == 0.3)[0]
+        idx_sup_thr = np.intersect1d(idx_sup_thr, np.where(proba >= 0.3)[0])
 
-        idx_sup_thr = np.intersect1d(idx_sup_thr, idx_good_proba)
-
+        # K-COMPLEX MORPHOLOGY
         # Get where KC start / end and duration :
         number, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
                                                                     sf)
@@ -150,6 +149,7 @@ def kcdetect(elec, sf, hypno, nrem_only):
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
 
+        print(number)
         return idx_sup_thr, number, density, duration_ms
 
     else:
