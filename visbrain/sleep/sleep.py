@@ -105,7 +105,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._file = file
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
-        self._channels = [k.split('.')[0] for k in channels]
+        self._channels = [k.strip().replace(' ', '').split('.')[
+                                                        0] for k in channels]
         self._ax = axis
         # ---------- Default line width ----------
         self._linemeth = line

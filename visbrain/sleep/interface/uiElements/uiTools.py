@@ -53,7 +53,8 @@ class uiTools(object):
 
         # ________ Bipolarization ________
         else:
-            self._data, self._channels, _ = bipolarization(self._data, self._channels)
+            self._data, self._channels, consider = bipolarization(
+                                                  self._data, self._channels)
 
         # ________ Update ________
         aM = np.argmax(consider)
