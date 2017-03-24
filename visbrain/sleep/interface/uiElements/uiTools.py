@@ -41,6 +41,8 @@ class uiTools(object):
     def _fcn_refApply(self):
         """Apply re-referencing."""
         # ________ Clean ________
+        # GUI :
+        self._fcn_cleanGui()
         # Visuals :
         self._chan.clean()
         self._hyp.clean()
@@ -50,9 +52,6 @@ class uiTools(object):
         self._TimeAxis.clean()
         del (self._chan, self._hyp, self._spec, self._specInd, self._hypInd,
              self._TimeAxis)
-
-        # GUI :
-        self._fcn_cleanGui()
 
         # ________ Re-reference ________
         if self._ToolsRefSingle.isChecked():

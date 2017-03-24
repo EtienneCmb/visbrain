@@ -350,7 +350,8 @@ class uiSettings(object):
         self._PanSpecChan.clear()
         self._ToolDetectChan.clear()
 
-        # -------------- CHANNELS --------------
+        # -------------- VISUALS --------------
+        # Channels :
         for k in range(len(self)):
             # Disconnect buttons :
             self._chanChecks[k].clicked.disconnect()
@@ -370,6 +371,15 @@ class uiSettings(object):
                 child.widget().deleteLater()
             elif child.layout() is not None:
                 clearLayout(child.layout())
+        # Spectrogram :
+        self._specCanvas.parent = None
+        self._SpecW.deleteLater(), self._SpecLayout.deleteLater()
+        # Hypnogram :
+        self._hypCanvas.parent = None
+        self._HypW.deleteLater(), self._HypLayout.deleteLater()
+        # Time axis :
+        self._TimeAxis.parent = None
+        self._TimeAxisW.deleteLater(), self._TimeLayout.deleteLater()
 
     def _fcn_resetGui(self):
         """Reset the GUI."""
