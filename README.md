@@ -2,6 +2,21 @@
 
 Visbrain is a python package dedicated (mainly) to the visualization of neuroscientist data. Check the [documentation](http://etiennecmb.github.io/visbrain/) for further details
 
+## Installation
+
+To see the installation requirements, check the [documentation](http://etiennecmb.github.io/visbrain/).
+Clone the repository :
+
+```{r, engine='bash', count_lines}
+    git clone https://github.com/EtienneCmb/visbrain.git
+```
+
+Install the package :
+
+```{r, engine='bash', count_lines}
+    pip install .
+```
+
 ## Modules
 
 ### Brain
@@ -53,21 +68,6 @@ The [Ndviz](http://etiennecmb.github.io/visbrain/ndviz.html) module help you to 
 	Each object inherit from a large number of color control or different settings.
 
 ![ndviz](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/ndviz_example.png "Ndviz : data mining")
-
-## Installation
-
-To see the installation requirements, check the [documentation](http://etiennecmb.github.io/visbrain/).
-Clone the repository :
-
-```{r, engine='bash', count_lines}
-    git clone https://github.com/EtienneCmb/visbrain.git
-```
-
-Install the package :
-
-```{r, engine='bash', count_lines}
-    python setup.py install --editable
-```
 
 ## Contributors
 

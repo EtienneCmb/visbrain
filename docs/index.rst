@@ -19,11 +19,11 @@ Clone visbrain repository :
 
     git clone https://github.com/EtienneCmb/visbrain.git
 
-Finally, install visbrain :
+Go to the cloned folder and run :
 
 .. code-block:: bash
 
-    python setup.py install --editable
+    pip install .
 
 What's new?
 ***********
@@ -34,7 +34,7 @@ What's new?
   * Brain : possibility to add multiple source / connectivity objects
   * Brain : screenshot improvements and GUI integration
   * Sleep : new slow wave / K-complex detection
-  * Sleep : REM / spindles detection improvements and slow waves detection
+  * Sleep : REM / spindles detection improvements
   * Sleep : everything can now be exported.
   * Sleep : GUI re-organization and improvements
 
