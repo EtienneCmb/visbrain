@@ -20,6 +20,7 @@ class uiSettings(object):
         # =====================================================================
         # ---------------------- Screenshot ----------------------
         self.actionScreenshot.triggered.connect(self._screenshot)
+        self.actionExit.triggered.connect(qApp.quit)
 
         # ---------------------- Save ----------------------
         self.actionHypnogram_data.triggered.connect(self.saveFile)
@@ -327,3 +328,56 @@ class uiSettings(object):
         # Update scoring table :
         self._fcn_Hypno2Score()
         self._fcn_Score2Hypno()
+
+    # =====================================================================
+    # CLEAN / RESET GUI
+    # =====================================================================
+    def _fcn_cleanGui(self):
+        """Clean the entire GUI."""
+        # -------------- TABLES --------------
+        # Info :
+        self._infoTable.clear()
+        self._infoTable.setRowCount(0)
+
+        # Detection :
+        self._DetectLocations.clear()
+        self._DetectLocations.setRowCount(0)
+
+        # -------------- LIST BOX --------------
+        # Disconnect :
+        self._PanSpecChan.currentIndexChanged.disconnect()
+        # Clear items :
+        self._PanSpecChan.clear()
+        self._ToolDetectChan.clear()
+
+        # -------------- CHANNELS --------------
+        for k in range(len(self)):
+            # Disconnect buttons :
+            self._chanChecks[k].clicked.disconnect()
+            self._yminSpin[k].valueChanged.disconnect()
+            self._ymaxSpin[k].valueChanged.disconnect()
+            # Delete elements :
+            self._chanChecks[k].deleteLater()
+            self._yminSpin[k].deleteLater(), self._ymaxSpin[k].deleteLater()
+            self._chanWidget[k].deleteLater()
+            self._chanLayout[k].deleteLater()
+            self._chanLabels[k].deleteLater()
+            self._amplitudeTxt[k].deleteLater()
+            self._chanCanvas[k].parent = None
+        while self._chanGrid.count():
+            child = self._chanGrid.takeAt(0)
+            if child.widget() is not None:
+                child.widget().deleteLater()
+            elif child.layout() is not None:
+                clearLayout(child.layout())
+
+    def _fcn_resetGui(self):
+        """Reset the GUI."""
+        from .uiElements import uiElements
+        from ...visuals import visuals
+        from ...tools import Tools
+        uiElements.__init__(self)
+        self._camCreation()
+        visuals.__init__(self)
+        Tools.__init__(self)
+        self._fcnsOnCreation()
