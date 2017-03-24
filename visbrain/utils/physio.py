@@ -106,7 +106,6 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
             chnums.append('')
             chnames.append(k)
 
-    print(chnames, chnums)
     # Find if some channels have to be ignored :
     if to_ignore is None:
         sl = range(nchan)
