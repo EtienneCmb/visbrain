@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -82,7 +82,7 @@
            <item>
             <widget class="QFrame" name="frame">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -830,7 +830,7 @@ on</string>
            <item>
             <widget class="QFrame" name="frame_2">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -867,7 +867,7 @@ trend, filtering)</string>
               <string>Re-referencing</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_13">
-              <item row="2" column="0" colspan="2">
+              <item row="3" column="0" colspan="2">
                <widget class="QWidget" name="_ToolsRefSingleW" native="true">
                 <property name="minimumSize">
                  <size>
@@ -964,20 +964,10 @@ trend, filtering)</string>
                 </item>
                </layout>
               </item>
-              <item row="1" column="1">
+              <item row="2" column="1">
                <widget class="QRadioButton" name="_ToolsRefBipo">
                 <property name="text">
                  <string>Bipolarization</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QRadioButton" name="_ToolsRefSingle">
-                <property name="text">
-                 <string>Single channel</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -988,14 +978,48 @@ trend, filtering)</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="0" colspan="2">
-               <widget class="QWidget" name="_ToolsRefBipoW" native="true">
+              <item row="2" column="0">
+               <widget class="QRadioButton" name="_ToolsRefSingle">
+                <property name="text">
+                 <string>Single channel</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <widget class="QFrame" name="frame_6">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
-                  <height>30</height>
+                  <height>0</height>
                  </size>
                 </property>
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item>
+                  <widget class="QLabel" name="label_59">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Warning : re-referencing from the graphical
+interface might not work properly on some system.</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -1290,7 +1314,7 @@ trend, filtering)</string>
            <item>
             <widget class="QFrame" name="frame_4">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -1439,7 +1463,7 @@ hypnogram. Those informations change while editing it.</string>
            <item>
             <widget class="QFrame" name="frame_3">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -1622,7 +1646,7 @@ hypnogram. Those informations change while editing it.</string>
            <item>
             <widget class="QFrame" name="frame_5">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Panel</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
@@ -2711,40 +2735,14 @@ sleep</string>
      </widget>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_18">
-      <property name="spacing">
-       <number>0</number>
-      </property>
+     <layout class="QGridLayout" name="gridLayout_21">
       <property name="topMargin">
        <number>0</number>
       </property>
       <property name="rightMargin">
        <number>0</number>
       </property>
-      <item>
-       <spacer name="horizontalSpacer_13">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QGridLayout" name="_chanGrid">
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <property name="spacing">
-         <number>3</number>
-        </property>
-       </layout>
-      </item>
-      <item>
+      <item row="0" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="spacing">
          <number>6</number>

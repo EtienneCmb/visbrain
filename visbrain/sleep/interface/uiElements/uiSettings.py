@@ -333,31 +333,6 @@ class uiSettings(object):
     # =====================================================================
     # CLEAN / RESET GUI
     # =====================================================================
-    def clearLayout(self, layout):
-        nrows = layout.rowCount()
-        ncols = layout.columnCount()
-        for i in reversed(range(nrows)):
-            for k in reversed(range(ncols)):
-                item = layout.itemAtPosition(i, k)
-
-                if isinstance(item, QWidgetItem):
-                    print("widget" + str(item))
-                    item.widget().close()
-                    # or
-                    # item.widget().setParent(None)
-                elif isinstance(item, QSpacerItem):
-                    print("spacer " + str(item))
-                    # no need to do extra stuff
-                else:
-                    print("layout " + str(item))
-                    try:
-                        self.clearLayout(item.layout())
-                    except:
-                        pass
-
-                # remove the item from layout
-                layout.removeItem(item)
-
     def _fcn_cleanGui(self):
         """Clean the entire GUI."""
         # -------------- TABLES --------------
@@ -391,20 +366,8 @@ class uiSettings(object):
             self._chanLabels[k].deleteLater()
             self._amplitudeTxt[k].deleteLater()
             self._chanCanvas[k].parent = None
-        # print(self._chanGrid.rowCount(), self._chanGrid.columnCount())
-        # self.clearLayout(self._chanGrid)
-        # print(self._chanGrid.rowCount(), self._chanGrid.columnCount())
-        # self._chanGrid.deleteLater()
         QObjectCleanupHandler().add(self._chanGrid)
         QObjectCleanupHandler().clear()
-        # while self._chanGrid.count():
-        #     child = self._chanGrid.takeAt(0)
-        #     if child.widget() is not None:
-        #         child.widget().deleteLater()
-        #     elif child.layout() is not None:
-        #         clearLayout(child.layout())
-        # print(self._chanGrid.rowCount(), self._chanGrid.columnCount())
-        # 0/0
         # Spectrogram :
         self._specCanvas.parent = None
         self._SpecW.deleteLater(), self._SpecLayout.deleteLater()

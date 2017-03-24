@@ -38,7 +38,7 @@ class uiTools(object):
         """Display / Hide the reference panel."""
         viz = self._ToolsRefSingle.isChecked()
         self._ToolsRefSingleW.setVisible(viz)
-        self._ToolsRefBipoW.setVisible(not viz)
+        # self._ToolsRefBipoW.setVisible(not viz)
 
     def _fcn_refApply(self):
         """Apply re-referencing."""

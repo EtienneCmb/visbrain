@@ -24,6 +24,16 @@ class uiPanels(object):
         # Bold font :
         self._font = QtGui.QFont()
         self._font.setBold(True)
+
+        # =====================================================================
+        # MAIN GRID :
+        # =====================================================================
+        self._chanGrid = QtGui.QGridLayout()
+        self._chanGrid.setContentsMargins(-1, -1, -1, 6)
+        self._chanGrid.setSpacing(3)
+        self._chanGrid.setObjectName(_fromUtf8("_chanGrid"))
+        self.gridLayout_21.addLayout(self._chanGrid, 0, 0, 1, 1)
+
         # =====================================================================
         # CHANNELS
         # =====================================================================
