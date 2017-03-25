@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -140,7 +140,7 @@ spectrogram, hypnogram and the time axis</string>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
-                  <height>300</height>
+                  <height>0</height>
                  </size>
                 </property>
                 <property name="toolTip">
@@ -163,8 +163,8 @@ spectrogram, hypnogram and the time axis</string>
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>98</width>
-                   <height>298</height>
+                   <width>350</width>
+                   <height>299</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -874,7 +874,7 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>287</width>
+                <width>316</width>
                 <height>54</height>
                </rect>
               </property>
@@ -1212,8 +1212,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>264</width>
-                <height>303</height>
+                <width>360</width>
+                <height>792</height>
                </rect>
               </property>
               <attribute name="label">
@@ -2712,26 +2712,6 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="2" column="2">
-                        <widget class="QCheckBox" name="_ToolKCNremOnly">
-                         <property name="text">
-                          <string>Use hypnogram to improve detection</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="3">
-                        <spacer name="horizontalSpacer_19">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
                        <item row="1" column="2">
                         <widget class="QLabel" name="label_57">
                          <property name="sizePolicy">
@@ -2788,6 +2768,13 @@ waves</string>
                         <widget class="Line" name="line_20">
                          <property name="orientation">
                           <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="2" colspan="2">
+                        <widget class="QCheckBox" name="_ToolKCNremOnly">
+                         <property name="text">
+                          <string>Use hypnogram to improve detection</string>
                          </property>
                         </widget>
                        </item>
@@ -3301,7 +3288,7 @@ waves</string>
      <x>0</x>
      <y>0</y>
      <width>1242</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">
