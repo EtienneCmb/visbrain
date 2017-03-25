@@ -729,8 +729,9 @@ def _events_distance_fill(index, min_distance_ms, sf):
     # Convert min_distance_ms
     min_distance = min_distance_ms / 1000. * sf
     idx_diff = np.diff(index)
-    idx_distance = np.where(idx_diff > 1)[0]
-    distance = idx_diff[idx_diff > 1]
+    condition = idx_diff > 1
+    idx_distance = np.where(condition)[0]
+    distance = idx_diff[condition]
     bad = idx_distance[np.where(distance < min_distance)[0]]
     # Fill gap between events separated with less than min_distance_ms
     if len(bad) > 0:
