@@ -92,6 +92,7 @@ class ChannelPlot(PrepareData):
         self._camera = camera
         self.rect = []
         self.width = width
+        self.autoamp = False
         # Don't use self.colidx = [{...}] * len(channels)
         self.colidx = [{'color': color_detection, 'idx': np.array([
                                             ])} for _ in range(len(channels))]
@@ -154,7 +155,7 @@ class ChannelPlot(PrepareData):
         """Return the number of channels."""
         return len(self.mesh)
 
-    def set_data(self, sf, data, time, sl=None, ylim=None):
+    def set_data(self, sf, data, time, sl=None, ylim=None, autoamp=True):
         """Set data to channels.
 
         Args:
@@ -192,13 +193,17 @@ class ChannelPlot(PrepareData):
 
         # Set data to each plot :
         for l, (i, k) in enumerate(self):
+            # ________ MAIN DATA ________
+            # Select channel ;
+            datchan = dataSl[l, :]
+
             # Concatenate time / data / z axis :
-            dat = np.vstack((timeSl, dataSl[l, :], z)).T
+            dat = np.vstack((timeSl, datchan, z)).T
 
             # Set main ligne :
-            # dat = np.ascontiguousarray(dat)
             k.set_data(dat, color=self.color, width=self.width)
 
+            # ________ COLOR ________
             # Indicator line :
             if self.colidx[i]['idx'].size:
                 # Find index that are both in idx and in indicator :
@@ -212,9 +217,13 @@ class ChannelPlot(PrepareData):
                 self.report[i].set_data(pos=dat, connect=index, width=4.,
                                         color=self.colidx[i]['color'])
 
+            # ________ CAMERA ________
+            # Use either auto / fixed adaptative camera :
+            ycam = (datchan.min(), datchan.max()) if self.autoamp else ylim[i]
+
             # Get camera rectangle and set it:
-            rect = (self.x[0], ylim[i][0], self.x[1]-self.x[0],
-                    ylim[i][1] - ylim[i][0])
+            rect = (self.x[0], ycam[0], self.x[1]-self.x[0],
+                    ycam[1] - ycam[0])
             self._camera[i].rect = rect
             k.update()
             self.rect.append(rect)
@@ -274,6 +283,17 @@ class ChannelPlot(PrepareData):
         """Set parent value."""
         for i, k, in zip(value, self.mesh):
             k.parent = i.wc.scene
+
+    # ----------- AUTOAMP -----------
+    @property
+    def autoamp(self):
+        """Get the autoamp value."""
+        return self._autoamp
+
+    @autoamp.setter
+    def autoamp(self, value):
+        """Set autoamp value."""
+        self._autoamp = value
 
 
 class Spectrogram(PrepareData):

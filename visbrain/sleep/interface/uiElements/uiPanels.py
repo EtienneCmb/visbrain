@@ -41,6 +41,8 @@ class uiPanels(object):
         self._fcn_chanCheckAndWCreate()
         self._PanChanSelectAll.clicked.connect(self._fcn_SelectAllchan)
         self._PanChanDeselectAll.clicked.connect(self._fcn_DeselectAllchan)
+        self._PanAmpAuto.clicked.connect(self._fcn_chanAutoAmp)
+        self._PanAmpSym.clicked.connect(self._fcn_chanSymAmp)
 
         # =====================================================================
         # AMPLITUDES
@@ -196,7 +198,7 @@ class uiPanels(object):
             # Connect with the function :
             self._chanChecks[i].clicked.connect(self._fcn_chanViz)
 
-            # ----- Y-MIN / Y-MAX -----
+            # ----- LABEL/ Y-MIN / Y-MAX -----
             fact = 5.
             # Add amplitude label :
             amplitude = QtGui.QLabel(self._PanScrollChan)
@@ -209,14 +211,14 @@ class uiPanels(object):
             self._yminSpin[i].setMinimum(self['min'][i])
             self._yminSpin[i].setMaximum(self['max'][i])
             self._yminSpin[i].setProperty("value", -int(fact * self['std'][i]))
-            self._yminSpin[i].setSingleStep(self['dist'][i] / 10.)
+            self._yminSpin[i].setSingleStep(1.)
             self._PanChanLay.addWidget(self._yminSpin[i], i, 3, 1, 1)
             # Add ymax spinbox :
             self._ymaxSpin[i] = QtGui.QDoubleSpinBox(self._PanScrollChan)
             self._ymaxSpin[i].setDecimals(1)
             self._ymaxSpin[i].setMinimum(self['min'][i])
             self._ymaxSpin[i].setMaximum(self['max'][i])
-            self._ymaxSpin[i].setSingleStep(self['dist'][i] / 10.)
+            self._ymaxSpin[i].setSingleStep(1.)
             self._ymaxSpin[i].setProperty("value", int(fact * self['std'][i]))
             self._PanChanLay.addWidget(self._ymaxSpin[i], i, 4, 1, 1)
             # Connect buttons :
@@ -253,11 +255,51 @@ class uiPanels(object):
     # =====================================================================
     # AMPLITUDES
     # =====================================================================
+    def _fcn_chanAutoAmp(self):
+        """Use automatic amplitudes."""
+        viz = not self._PanAmpAuto.isChecked()
+        # Set auto-amp :
+        self._chan.autoamp = not viz
+        # Disable all amplitude related buttons :
+        for k in range(len(self._channels)):
+            self._amplitudeTxt[k].setEnabled(viz)
+            self._yminSpin[k].setEnabled(viz)
+            self._ymaxSpin[k].setEnabled(viz)
+        self._PanAllAmpMin.setEnabled(viz)
+        self._PanAllAmpMax.setEnabled(viz)
+        self._PanAmpSym.setEnabled(viz)
+        # Finaly, update :
+        if viz:
+            self._fcn_chanAmplitude()
+        else:
+            self._chan.update()
+
+    def _fcn_chanSymAmp(self):
+        """Use symetric amplitudes."""
+        viz = not self._PanAmpSym.isChecked()
+        # Hide amplitude min for all chan :
+        for k in range(len(self._channels)):
+            self._yminSpin[k].setVisible(viz)
+            if not viz:
+                self._ymaxSpin[k].setMinimum(.1)
+            else:
+                self._ymaxSpin[k].setMinimum(self['min'][k])
+        self._PanAllAmpMin.setVisible(viz)
+        if not viz:
+            self._PanAllAmpMax.setMinimum(.1)
+        else:
+            self._PanAllAmpMax.setMinimum(self['min'].min())
+        self._fcn_chanAmplitude()
+
     def _fcn_chanAmplitude(self):
         """Change amplitude of each channel."""
         # Loop over spinbox and update camera rect :
         for k, (m, M) in enumerate(zip(self._yminSpin, self._ymaxSpin)):
-            self._ylims[k, :] = np.array([m.value(), M.value()])
+            # Use either symetric / non-symetric amplitudes :
+            if self._PanAmpSym.isChecked():
+                self._ylims[k, :] = np.array([-M.value(), M.value()])
+            else:
+                self._ylims[k, :] = np.array([m.value(), M.value()])
             rect = (self._chan.x[0], self._ylims[k, 0],
                     self._chan.x[1] - self._chan.x[0],
                     self._ylims[k, 1] - self._ylims[k, 0])

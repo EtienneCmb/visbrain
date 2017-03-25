@@ -294,7 +294,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._chanChecks[0].setChecked(True)
         self._hypLabel.setVisible(self._PanHypViz.isChecked())
         self._fcn_chanViz()
-        self._fcn_chanAmplitude()
+        self._fcn_chanSymAmp()
         self._fcn_infoUpdate()
         self._fcn_Hypno2Score()
         # Set objects visible :
