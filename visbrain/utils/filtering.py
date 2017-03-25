@@ -176,46 +176,42 @@ def morlet_power(x, freqs, sf, norm=True):
 
     Args:
         x: np.ndarray
-            Signal
+            Row vector signal.
 
         freqs: np.array
-            Frequency band low and hi cutoff frequencies (must be odd length)
+            Frequency bands for power computation. The power will be computed
+            using successive frequency band (e.g freqs=(1., 2, .3)).
 
-        sf: int
-            Downsampling frequency
+        sf: float
+            Sampling frequency.
 
     Kargs:
         norm: boolean, optional (def True)
             If True, return bandwise normalized band power
             (For each time point, the sum of power in the 4 band equals 1)
 
+    Returns:
+        xpow: np.ndarray
+            The power in the specified frequency bands of shape
+            (len(freqs)-1, npts).
     """
-    # Analytic
-    delta = morlet(x, sf, np.mean([freqs[0], freqs[1]]))
-    theta = morlet(x, sf, np.mean([freqs[1], freqs[2]]))
-    alpha = morlet(x, sf, np.mean([freqs[2], freqs[3]]))
-    beta = morlet(x, sf, np.mean([freqs[3], freqs[4]]))
-    # Power
-    delta_pow = np.abs(np.power(delta, 2))
-    theta_pow = np.abs(np.power(theta, 2))
-    alpha_pow = np.abs(np.power(alpha, 2))
-    beta_pow = np.abs(np.power(beta, 2))
-
+    # Build frequency vector :
+    f = np.c_[freqs[0:-1], freqs[1::]].mean(1)
+    # Get wavelet transform :
+    xpow = np.zeros((len(f), len(x)), dtype=np.float)
+    for num, k in enumerate(f):
+        xpow[num, :] = np.abs(morlet(x, sf, k))
+    # Compute inplace power :
+    np.power(xpow, 2, out=xpow)
+    # Normalize by the band sum :
     if norm:
-        # Bandwise normalize power
-        sum_pow = delta_pow + theta_pow + alpha_pow + beta_pow
-        delta_npow = np.divide(delta_pow, sum_pow)
-        theta_npow = np.divide(theta_pow, sum_pow)
-        alpha_npow = np.divide(alpha_pow, sum_pow)
-        beta_npow = np.divide(beta_pow, sum_pow)
-        return delta_npow, theta_npow, alpha_npow, beta_npow
-
-    else:
-        return delta_pow, theta_pow, alpha_pow, beta_pow
+        sum_pow = xpow.sum(0).reshape(1, -1)
+        np.divide(xpow, sum_pow, out=xpow)
+    return xpow
 
 
 def welch_power(x, fMin, fMax, sf, window_s=30, norm=True):
-    """Compute bandwise-normalized power of data using morlet wavelet.
+    """Compute bandwise-normalized power of data using welch.
 
     Args:
         x: np.ndarray
@@ -226,8 +222,7 @@ def welch_power(x, fMin, fMax, sf, window_s=30, norm=True):
 
     Kargs:
         window_s: int, optional (def 30)
-            Time resolution (sec) of Welch's periodogram
-            Must be > 10 seconds
+            Time resolution (sec) of Welch's periodogram. Must be > 10 seconds.
 
         norm: boolean, optional (def True)
             If True, return normalized band power
