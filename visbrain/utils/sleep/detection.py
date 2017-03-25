@@ -13,8 +13,8 @@ from scipy.signal import hilbert, daub
 from ..filtering import filt, morlet, morlet_power
 from ..sigproc import movingaverage, derivative
 
-__all__ = ['peakdetect', 'remdetect',
-           'spindlesdetect', 'slowwavedetect', 'kcdetect']
+__all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
+           'kcdetect']
 
 ###########################################################################
 # K-COMPLEX DETECTION
