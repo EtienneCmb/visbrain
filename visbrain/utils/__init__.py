@@ -1,6 +1,6 @@
 from .color import *
 from .guitools import *
-from .math import *
+from .sigproc import *
 from .memory import *
 from .others import *
 from .cameras import *

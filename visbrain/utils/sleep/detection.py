@@ -9,7 +9,9 @@ Perform:
 """
 import numpy as np
 from scipy.signal import hilbert, daub, welch
-from ..filtering import filt, morlet
+
+from ..filtering import filt, morlet, morlet_power
+from ..sigproc import movingaverage, derivative
 
 __all__ = ['peakdetect', 'remdetect',
            'spindlesdetect', 'slowwavedetect', 'kcdetect']
@@ -77,12 +79,12 @@ def kcdetect(elec, sf, hypno, nrem_only):
 
     # PRE DETECTION
     # Compute delta band power
-    # delta_nspec = _welch_bpower(data, fMin, fMax, sf,
+    # delta_nspec = welch_power(data, fMin, fMax, sf,
     #                             window_s=delta_window, norm=True)
 
     freqs = np.array([0.5, 4, 8, 12, 16])
-    delta_npow, _, _, _ = _wavelet_bpower(data, freqs, sf, norm=True)
-    delta_nfpow = _movingaverage(delta_npow, moving_s * 1000, sf)
+    delta_npow, _, _, _ = morlet_power(data, freqs, sf, norm=True)
+    delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
     # delta_thr = np.nanmean(delta_nfpow) + np.nanstd(delta_nfpow)
     idx_delta = np.where(delta_nfpow > delta_thr)[0]
 
@@ -349,13 +351,13 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
         length = max(eog.shape)
 
     # Smooth signal with moving average
-    sm_sig = _movingaverage(eog, moving_ms, sf)
+    sm_sig = movingaverage(eog, moving_ms, sf)
 
     # Compute first derivative
-    deriv = _derivative(sm_sig, deriv_ms, sf)
+    deriv = derivative(sm_sig, deriv_ms, sf)
 
     # Smooth derivative
-    deriv = _movingaverage(deriv, moving_ms, sf)
+    deriv = movingaverage(deriv, moving_ms, sf)
 
     # Define threshold
     if rem_only and 4 in hypno:
@@ -437,10 +439,10 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
     """
     # Get complex decomposition of filtered data in the main EEG freq band:
     freqs = np.array([fMin, fMax, 8, 12, 16])
-    delta_npow, _, _, _ = _wavelet_bpower(elec, freqs, sf, norm=True)
+    delta_npow, _, _, _ = morlet_power(elec, freqs, sf, norm=True)
 
     # Smooth
-    delta_nfpow = _movingaverage(delta_npow, moving_s * 1000, sf)
+    delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
 
     # Normalized power criteria
     thresh = np.nanmean(delta_nfpow) + threshold * np.nanstd(delta_nfpow)
@@ -457,7 +459,7 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
 
     # WELCH METHOD
     # WARNING: only return one value per epoch (and not per ms)
-    # delta_spec_norm = _welch_bpower(elec, fMin, fMax, sf,
+    # delta_spec_norm = welch_power(elec, fMin, fMax, sf,
     #                             window_s=30, norm=True)
 
     # WAVELET AMPLITUDE
@@ -611,156 +613,28 @@ def _datacheck(x_axis, y_axis):
 ###########################################################################
 
 
-def _movingaverage(x, window, sf):
-    """Perform a moving average.
-
-    Args:
-        x: np.ndarray
-            Signal
-
-        window: int
-            Time (ms) window to compute moving average
-
-        sf: int
-            Downsampling frequency
-
-    """
-    window = int(window / (1000 / sf))
-    weights = np.repeat(1.0, window) / window
-    sma = np.convolve(x, weights, 'same')
-    return sma
-
-
-def _derivative(x, window, sf):
-    """Compute first derivative of signal.
-
-       Equivalent to np.gradient function
-
-    Args:
-        x: np.ndarray
-            Signal
-
-        window: int
-            Time (ms) window to compute first derivative
-
-        sf: int
-            Downsampling frequency
-
-    """
-    length = x.size
-    step = int(window / (1000 / sf))
-    tail = np.zeros(shape=(int(step / 2),))
-
-    deriv = np.hstack((tail, x[step:length] - x[0:length - step], tail))
-
-    deriv = np.abs(deriv)
-
-    return deriv
-
-
-def _wavelet_bpower(x, freqs, sf, norm=True):
-    """Compute bandwise-normalized power of data using morlet wavelet.
-
-    Args:
-        x: np.ndarray
-            Signal
-
-        freqs: np.array
-            Frequency band low and hi cutoff frequencies (must be odd length)
-
-        sf: int
-            Downsampling frequency
-
-    Kargs:
-        norm: boolean, optional (def True)
-            If True, return bandwise normalized band power
-            (For each time point, the sum of power in the 4 band equals 1)
-
-    """
-    # Analytic
-    delta = morlet(x, sf, np.mean([freqs[0], freqs[1]]))
-    theta = morlet(x, sf, np.mean([freqs[1], freqs[2]]))
-    alpha = morlet(x, sf, np.mean([freqs[2], freqs[3]]))
-    beta = morlet(x, sf, np.mean([freqs[3], freqs[4]]))
-    # Power
-    delta_pow = np.abs(np.power(delta, 2))
-    theta_pow = np.abs(np.power(theta, 2))
-    alpha_pow = np.abs(np.power(alpha, 2))
-    beta_pow = np.abs(np.power(beta, 2))
-
-    if norm:
-        # Bandwise normalize power
-        sum_pow = delta_pow + theta_pow + alpha_pow + beta_pow
-        delta_npow = np.divide(delta_pow, sum_pow)
-        theta_npow = np.divide(theta_pow, sum_pow)
-        alpha_npow = np.divide(alpha_pow, sum_pow)
-        beta_npow = np.divide(beta_pow, sum_pow)
-        return delta_npow, theta_npow, alpha_npow, beta_npow
-
-    else:
-        return delta_pow, theta_pow, alpha_pow, beta_pow
-
-
 def _tkeo(a):
-	"""
-	Calculates the TKEO of a given recording by using 2 samples.
+    """Calculates the TKEO of a given recording by using 2 samples.
+
     github.com/lvanderlinden/OnsetDetective/blob/master/OnsetDetective/tkeo.py
 
-	Args:
-	   a: 1d np.array
+    Args:
+       a: 1d np.array
         Data
 
-	Returns:
+    Returns:
         aTkeo: 1d np.array
-	       1D numpy array containing the tkeo per sample
+           1D numpy array containing the tkeo per sample
     """
-	# Create two temporary arrays of equal length, shifted 1 sample to the right
-	# and left and squared:
-	i = a[1:-1]*a[1:-1]
-	j = a[2:]*a[:-2]
+    # Create two temporary arrays of equal length, shifted 1 sample to the
+    # right and left and squared:
+    i = a[1:-1]*a[1:-1]
+    j = a[2:]*a[:-2]
 
-	# Calculate the difference between the two temporary arrays:
-	aTkeo = i-j
-	return aTkeo
+    # Calculate the difference between the two temporary arrays:
+    aTkeo = i-j
+    return aTkeo
 
-def _welch_bpower(x, fMin, fMax, sf, window_s=30, norm=True):
-    """Compute bandwise-normalized power of data using morlet wavelet.
-
-    Args:
-        x: np.ndarray
-            Signal
-
-        sf: int
-            Downsampling frequency
-
-    Kargs:
-        window_s: int, optional (def 30)
-            Time resolution (sec) of Welch's periodogram
-            Must be > 10 seconds
-
-        norm: boolean, optional (def True)
-            If True, return normalized band power
-
-    """
-    sf = int(sf)
-    freq_spacing = 0.1
-    f_vector = np.arange(0, sf / 2 + freq_spacing, freq_spacing)
-    idx_fMin = np.where(f_vector == fMin)[0][0]
-    idx_fMax = np.where(f_vector == fMax)[0][0] + 1
-
-    delta_spec = np.array([], dtype=float)
-    delta_spec_norm = np.array([], dtype=float)
-
-    for i in np.arange(0, len(x), window_s * sf):
-        f, Pxx_spec = welch(x[i:i + window_s * sf], sf, 'flattop',
-                            nperseg=sf * (1 / freq_spacing),
-                            scaling='spectrum')
-        mean_delta = np.mean(Pxx_spec[idx_fMin:idx_fMax, ])
-        norm_delta = np.sum(Pxx_spec[idx_fMin:idx_fMax, ]) / np.sum(Pxx_spec)
-        delta_spec = np.append(delta_spec, mean_delta)
-        delta_spec_norm = np.append(delta_spec_norm, norm_delta)
-
-    return delta_spec_norm if norm else delta_spec
 
 ###########################################################################
 # INDEX MANIPULATION FUNCTIONS
