@@ -8,7 +8,7 @@ Perform:
 - Peak detection
 """
 import numpy as np
-from scipy.signal import hilbert, daub, welch
+from scipy.signal import hilbert, daub
 
 from ..filtering import filt, morlet, morlet_power
 from ..sigproc import movingaverage, derivative
@@ -82,20 +82,20 @@ def kcdetect(elec, sf, hypno, nrem_only):
     # delta_nspec = welch_power(data, fMin, fMax, sf,
     #                             window_s=delta_window, norm=True)
 
-    freqs = np.array([0.5, 4, 8, 12, 16])
+    freqs = np.array([0.5, 4., 8., 12., 16.])
     delta_npow, _, _, _ = morlet_power(data, freqs, sf, norm=True)
     delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
     # delta_thr = np.nanmean(delta_nfpow) + np.nanstd(delta_nfpow)
     idx_delta = np.where(delta_nfpow > delta_thr)[0]
 
     # Compute spindles detection
-    spindles, _, _, _ = spindlesdetect(
-        data, sf, spindles_thresh, hypno, nrem_only=False)
+    spindles, _, _, _ = spindlesdetect(data, sf, spindles_thresh, hypno,
+                                       nrem_only=False)
 
     # MAIN DETECTION
     sig_filt = filt(sf, np.array([fMin, fMax]), data)
-    wavelet = daub(daub_coeff)
-    sig_transformed = np.convolve(sig_filt, wavelet * daub_mult, mode='same')
+    wavelet = daub_mult * daub(daub_coeff)
+    sig_transformed = np.convolve(sig_filt, wavelet, mode='same')
     sig_transformed = _tkeo(sig_transformed)
 
     if hypLoaded:
@@ -438,7 +438,7 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
 
     """
     # Get complex decomposition of filtered data in the main EEG freq band:
-    freqs = np.array([fMin, fMax, 8, 12, 16])
+    freqs = np.array([fMin, fMax, 8., 12., 16.])
     delta_npow, _, _, _ = morlet_power(elec, freqs, sf, norm=True)
 
     # Smooth
