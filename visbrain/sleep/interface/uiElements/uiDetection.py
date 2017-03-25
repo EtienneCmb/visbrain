@@ -181,10 +181,11 @@ class uiDetection(object):
             # ------------------- K-COMPLEXES -------------------
             elif method == 'K-complexes':
                 # Get variables :
+                thr = self._ToolKCTh.value()
                 nrem_only = self._ToolKCNremOnly.isChecked()
                 # Get Slow Waves indices :
                 index, number, density, duration = kcdetect(self._data[k, :],
-                                                            self._sf,
+                                                            self._sf, thr,
                                                             self._hypno,
                                                             nrem_only)
                 # Get starting index :

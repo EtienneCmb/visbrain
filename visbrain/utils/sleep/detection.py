@@ -5,13 +5,15 @@
 Perform:
 - REM detection
 - Spindles detection
+- Slow wave detection
+- KCs detection
 - Peak detection
 """
 import numpy as np
 from scipy.signal import hilbert, daub
 
 from ..filtering import filt, morlet, morlet_power
-from ..sigproc import movingaverage, derivative
+from ..sigproc import movingaverage, derivative, tkeo, soft_thresh
 
 __all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
            'kcdetect']
@@ -21,7 +23,7 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
 ###########################################################################
 
 
-def kcdetect(elec, sf, hypno, nrem_only):
+def kcdetect(elec, sf, threshold, hypno, nrem_only):
     """Perform a K-complex detection.
 
     Args:
@@ -30,6 +32,9 @@ def kcdetect(elec, sf, hypno, nrem_only):
 
         sf: float
             Downsampling frequency
+
+        threshold: float
+            Threshold to use for KC detection
 
         hypno: np.ndarray
             Hypnogram vector, same length as elec
@@ -54,34 +59,34 @@ def kcdetect(elec, sf, hypno, nrem_only):
     # Find if hypnogram is loaded :
     hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
 
-    if hypLoaded:
-        data = elec.copy()
-        data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
-        length = np.count_nonzero(data)
-        idx_zero = np.where(data == 0)[0]
-    else:
-        data = elec
-        length = max(data.shape)
+    # if hypLoaded:
+    #     data = elec.copy()
+    #     data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
+    #     length = np.count_nonzero(data)
+    #     idx_zero = np.where(data == 0)[0]
+    # else:
+    #     data = elec
+    #     length = max(data.shape)
+
+    data = elec
+    length = max(data.shape)
 
     # Main parameters (raw values per algorithm construction)
     delta_thr = 0.75
-    moving_s = 20
+    moving_s = 30
     spindles_thresh = 1
-    range_spin_sec = 120
-    threshold = 1
+    range_spin_sec = 60
+    threshold = 3
     fMin = 0.5
     fMax = 4
-    tMin = 500
-    tMax = 2500
+    tMin = 300
+    tMax = 3000
     min_distance_ms = 500
-    daub_coeff = 5
-    daub_mult = 20
+    daub_coeff = 6
+    daub_mult = 10
 
     # PRE DETECTION
     # Compute delta band power
-    # delta_nspec = welch_power(data, fMin, fMax, sf,
-    #                             window_s=delta_window, norm=True)
-
     freqs = np.array([0.5, 4., 8., 12., 16.])
     delta_npow, _, _, _ = morlet_power(data, freqs, sf, norm=True)
     delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
@@ -96,20 +101,17 @@ def kcdetect(elec, sf, hypno, nrem_only):
     sig_filt = filt(sf, np.array([fMin, fMax]), data)
     wavelet = daub_mult * daub(daub_coeff)
     sig_transformed = np.convolve(sig_filt, wavelet, mode='same')
-    sig_transformed = _tkeo(sig_transformed)
+    sig_transformed = tkeo(sig_transformed)
 
-    if hypLoaded:
-        sig_transformed[idx_zero] = np.nan
-
-    thresh = np.nanmean(sig_transformed) + threshold * \
-        np.nanstd(sig_transformed)
+    thresh = np.mean(sig_transformed) + threshold * np.std(sig_transformed)
 
     # Amplitude criteria
-    with np.errstate(divide='ignore', invalid='ignore'):
-        idx_sup_thr = np.where(abs(sig_transformed) > thresh)[0]
+    val_sup_thr = soft_thresh(sig_transformed, thresh)
+    idx_sup_thr = np.where(val_sup_thr != 0)[0]
 
     if idx_sup_thr.size > 0:
 
+        # PROBABILITY
         # Find epoch with slow wave
         idx_kc_delta = np.intersect1d(idx_sup_thr, idx_delta)
         idx_no_delta = np.setdiff1d(idx_sup_thr, idx_kc_delta)
@@ -118,39 +120,50 @@ def kcdetect(elec, sf, hypno, nrem_only):
         number, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
         spin_bool = np.array([], dtype=np.bool)
         for i, j in enumerate(idx_start):
-            step = range_spin_sec * sf
-            is_spin = np.in1d(np.arange(j - step, j + step), spindles)
+            step = 0.5 * range_spin_sec * sf
+            is_spin = np.in1d(np.arange(j - step, j + step, 1),
+                              spindles, assume_unique=True)
             spin_bool = np.append(spin_bool, any(is_spin))
 
         good_kc = np.where(spin_bool)[0]
         good_idx = _events_removal(idx_start, idx_stop, good_kc)
 
-        # PROBABILITY
+        # Compute probability
         proba = np.zeros(shape=data.shape)
         proba[idx_sup_thr] += 0.1
         proba[idx_no_delta] *= 3
         proba[good_idx] *= 2
 
+        if hypLoaded:
+            proba[np.where(hypno == 0)[0]] *= 0.2
+            proba[np.where(hypno == 2)[0]] *= 3
+            proba[np.where(hypno == 3)[0]] *= 0.5
+            proba[np.where(hypno == 4)[0]] *= 0.2
+            proba[np.where(hypno == -1)[0]] *= 0.5
+
         idx_sup_thr = np.intersect1d(idx_sup_thr, np.where(proba >= 0.3)[0])
 
         # K-COMPLEX MORPHOLOGY
         # Get where KC start / end and duration :
-        number, duration_ms, idx_start, idx_stop = _events_duration(
-                                                            idx_sup_thr, sf)
+        _, _, idx_start, idx_stop = _events_duration(
+            idx_sup_thr, sf)
+
         # Get where min_dur <  KC duration < max_dur :
+        _, duration_ms, idx_start, idx_stop = _events_duration(
+            idx_sup_thr, sf)
         good_dur = np.where(np.logical_and(duration_ms > tMin,
                                            duration_ms < tMax))[0]
 
-        good_idx = _events_removal(idx_start, idx_stop, good_dur)
-        idx_sup_thr = idx_sup_thr[good_idx]
+        idx_dur = _events_removal(idx_start, idx_stop, good_dur)
+        idx_sup_thr = idx_sup_thr[idx_dur]
 
-        # Fill gap between KC separated by less than min_distance_ms
-        # idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
+        # Check amplitude > 75 mV
 
         # Export info
-        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+        number, duration_ms, idx_start, idx_stop = _events_duration(
+            idx_sup_thr, sf)
+        # mfreq = _events_mean_freq(data, idx_start, idx_stop, sf)
         density = number / (length / sf / 60.)
-
         return idx_sup_thr, number, density, duration_ms
 
     else:
@@ -608,33 +621,6 @@ def _datacheck(x_axis, y_axis):
     x_axis = np.array(x_axis)
     return x_axis, y_axis
 
-###########################################################################
-# SIGNAL PROCESSING FUNCTIONS
-###########################################################################
-
-
-def _tkeo(a):
-    """Calculates the TKEO of a given recording by using 2 samples.
-
-    github.com/lvanderlinden/OnsetDetective/blob/master/OnsetDetective/tkeo.py
-
-    Args:
-       a: 1d np.array
-        Data
-
-    Returns:
-        aTkeo: 1d np.array
-           1D numpy array containing the tkeo per sample
-    """
-    # Create two temporary arrays of equal length, shifted 1 sample to the
-    # right and left and squared:
-    i = a[1:-1]*a[1:-1]
-    j = a[2:]*a[:-2]
-
-    # Calculate the difference between the two temporary arrays:
-    aTkeo = i-j
-    return aTkeo
-
 
 ###########################################################################
 # INDEX MANIPULATION FUNCTIONS
@@ -742,3 +728,34 @@ def _events_distance_fill(index, min_distance_ms, sf):
         return f_index
     else:
         return index
+
+
+def _events_mean_freq(x, idx_start, idx_stop, sf):
+    """Remove events that do not have the good duration.
+
+    Args:
+        idx_start: np.ndarray
+            Starting indices of event.
+
+        idx_stop: np.ndarray
+            Ending indices of event.
+
+        sf: int
+            Sampling frequency of the data (Hz)
+
+    Return:
+        mfreq: np.ndarray
+            Mean frequency of each event (Hz)
+    """
+    analytic = hilbert(x) if x.size % 2 else hilbert(
+        x[:-1], len(x))
+    amplitude = np.abs(analytic)
+    phase = np.unwrap(np.angle(analytic))
+    inst_freq = abs(np.diff(phase) / (2.0 * np.pi) * sf)
+    mfreq = np.array([])
+    # Loop on each event
+    for i, j in zip(idx_start, idx_stop):
+        idx_event = np.array([np.arange(i, j)])
+        mfreq = np.append(mfreq, np.mean(inst_freq[idx_event]))
+
+    return mfreq

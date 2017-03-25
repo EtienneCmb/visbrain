@@ -4,7 +4,7 @@ import numpy as np
 from warnings import warn
 
 
-__all__ = ['normalize', 'movingaverage', 'derivative']
+__all__ = ['normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh']
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -29,7 +29,7 @@ def normalize(x, tomin=0., tomax=1.):
         x = np.float32(x)
         xm, xM = np.float32(x.min()), np.float32(x.max())
         if xm != xM:
-            coef = (tomax - tomin) / (xM-xm)
+            coef = (tomax - tomin) / (xM - xm)
             np.subtract(x, xM, out=x)
             np.multiply(x, coef, out=x)
             np.add(x, tomax, out=x)
@@ -37,7 +37,7 @@ def normalize(x, tomin=0., tomax=1.):
             # return tomax - (((tomax - tomin) * (xM - x)) / (xM-xm))
         else:
             warn('Normalization has been ignored because minimum '
-                 'and maximum are both equal to '+str(xm))
+                 'and maximum are both equal to ' + str(xm))
             return tomax * x / xM
     else:
         return x
@@ -88,3 +88,54 @@ def derivative(x, window, sf):
     deriv = np.abs(deriv)
 
     return deriv
+
+
+def tkeo(x):
+    """Calculates the TKEO of a given recording by using 2 samples.
+
+    github.com/lvanderlinden/OnsetDetective/blob/master/OnsetDetective/tkeo.py
+
+    Args:
+       x: 1d np.array
+        Data
+
+    Returns:
+        aTkeo: 1d np.array
+           1D numpy array containing the tkeo per sample
+    """
+    # Create two temporary arrays of equal length, shifted 1 sample to the
+    # right and left and squared:
+    i = x[1:-1] * x[1:-1]
+    j = x[2:] * x[:-2]
+
+    # Calculate the difference between the two temporary arrays:
+    aTkeo = i - j
+    return aTkeo
+
+
+def soft_thresh(x, thresh):
+    """Function to solve soft thresholding problem
+     arg min_{x} ||x - b||_{2}^{2} + lambda*||x||_{1}
+
+    Args:
+        x: 1d np.array
+            Data
+        thresh: float
+            weighting on the l1 penalty
+    Returns:
+        x_thresh: 1d np.array
+            Solution to the problem (vector with same size as x vector)
+     Written by Simon Lucey 2012
+     """
+    th = thresh / 2
+    k = np.where(x > th)[0]
+    # First find elements that are larger than the threshold
+    x_thresh = np.zeros(x.shape)
+    x_thresh[k] = x[k] - th
+    # Next find elements that are less than abs
+    k = np.where(abs(x) <= th)[0]
+    x_thresh[k] = 0
+    #  Finally find elements that are less than -th
+    k = np.where(x < -th)
+    x_thresh[k] = x[k] + th
+    return x_thresh

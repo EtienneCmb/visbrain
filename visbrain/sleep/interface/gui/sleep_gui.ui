@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>4</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -163,8 +163,8 @@ spectrogram, hypnogram and the time axis</string>
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>350</width>
-                   <height>299</height>
+                   <width>98</width>
+                   <height>298</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -874,8 +874,8 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>362</height>
+                <width>287</width>
+                <height>54</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1124,7 +1124,7 @@ re-referenced</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>340</width>
+                       <width>98</width>
                        <height>998</height>
                       </rect>
                      </property>
@@ -1212,8 +1212,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>792</height>
+                <width>264</width>
+                <height>303</height>
                </rect>
               </property>
               <attribute name="label">
@@ -2700,28 +2700,7 @@ waves</string>
                        <property name="topMargin">
                         <number>0</number>
                        </property>
-                       <item row="0" column="1">
-                        <widget class="Line" name="line_19">
-                         <property name="minimumSize">
-                          <size>
-                           <width>10</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="orientation">
-                          <enum>Qt::Vertical</enum>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="2">
-                        <widget class="QCheckBox" name="_ToolKCNremOnly">
-                         <property name="text">
-                          <string>Perform detection only for NREM
-sleep</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0">
+                       <item row="1" column="0" rowspan="2">
                         <widget class="QLabel" name="kc_label">
                          <property name="font">
                           <font>
@@ -2733,7 +2712,14 @@ sleep</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="3">
+                       <item row="2" column="2">
+                        <widget class="QCheckBox" name="_ToolKCNremOnly">
+                         <property name="text">
+                          <string>Use hypnogram to improve detection</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="3">
                         <spacer name="horizontalSpacer_19">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
@@ -2745,6 +2731,65 @@ sleep</string>
                           </size>
                          </property>
                         </spacer>
+                       </item>
+                       <item row="1" column="2">
+                        <widget class="QLabel" name="label_57">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="text">
+                          <string>Threshold (std)</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="Line" name="line_19">
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="3">
+                        <widget class="QDoubleSpinBox" name="_ToolKCTh">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="maximum">
+                          <double>100.000000000000000</double>
+                         </property>
+                         <property name="singleStep">
+                          <double>0.500000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>1.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="4">
+                        <spacer name="horizontalSpacer_31">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="Line" name="line_20">
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
                        </item>
                       </layout>
                      </item>
@@ -3256,7 +3301,7 @@ sleep</string>
      <x>0</x>
      <y>0</y>
      <width>1242</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">
