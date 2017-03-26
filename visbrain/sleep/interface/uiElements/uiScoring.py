@@ -169,7 +169,7 @@ class uiScoring(object):
             self, "Save File", "scoring_info",
             filter=selected_ext)
         if filename:
-        file = os.path.splitext(str(path))[0]
+            file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:
                 listToCsv(file + '.csv', zip(staInd, endInd, stage))
             elif selected_ext.find('txt') + 1:
