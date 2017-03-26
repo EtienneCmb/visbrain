@@ -36,7 +36,7 @@ def _events_duration(index, sf):
     number = bool_break.sum()
     # Build starting / ending spindles index :
     idx_start = np.hstack([np.array([0]), np.where(bool_break)[0] + 1])
-    idx_stop = np.hstack((idx_start[1::], len(index)))
+    idx_stop = np.hstack((idx_start[1::], len(index)-1))
     # Compute duration :
     duration_ms = np.diff(idx_start) * (1000. / sf)
 
@@ -109,10 +109,13 @@ def _events_distance_fill(index, min_distance_ms, sf):
         return index
 
 
-def _events_mean_freq(x, idx_start, idx_stop, sf):
+def _events_mean_freq(x, idx_sup_thr, idx_start, idx_stop, sf):
     """Remove events that do not have the good duration.
 
     Args:
+        idx_sup_thr: np.ndarray
+                Vector of supra-threshold events
+
         idx_start: np.ndarray
             Starting indices of event.
 
@@ -126,23 +129,27 @@ def _events_mean_freq(x, idx_start, idx_stop, sf):
         mfreq: np.ndarray
             Mean frequency of each event (Hz)
     """
-    analytic = hilbert(x) if x.size % 2 else hilbert(
-        x[:-1], len(x))
-    amplitude = np.abs(analytic)
+    if x.size % 2:
+        analytic = hilbert(x)
+    else:
+        analytic = hilbert(x[:-1], len(x))
     phase = np.unwrap(np.angle(analytic))
     inst_freq = abs(np.diff(phase) / (2.0 * np.pi) * sf)
     mfreq = np.array([])
     # Loop on each event
     for i, j in zip(idx_start, idx_stop):
-        idx_event = np.arange(i, j)
+        idx_event = np.arange(idx_sup_thr[i], idx_sup_thr[j])
         mfreq = np.append(mfreq, np.mean(inst_freq[idx_event]))
 
     return mfreq
 
-def _event_amplitude(x, idx_start, idx_stop, sf):
+def _event_amplitude(x, idx_sup_thr, idx_start, idx_stop, sf):
         """Find amplitude range of events
 
         Args:
+            idx_sup_thr: np.ndarray
+                Vector of supra-threshold events
+
             idx_start: np.ndarray
                 Starting indices of event.
 
@@ -163,7 +170,7 @@ def _event_amplitude(x, idx_start, idx_stop, sf):
         distance_ms = np.array([])
         # Loop on each event
         for i, j in zip(idx_start, idx_stop):
-            idx_event = np.arange(i, j)
+            idx_event = np.arange(idx_sup_thr[i], idx_sup_thr[j])
             # amp_range = np.append(amp_range, np.abs(x[idx_event].max() - x[idx_event].min()))
             amp_range = np.append(amp_range, np.ptp(x[idx_event]))
             distance = np.abs(np.argmax(x[idx_event]) - np.argmin(x[idx_event]))

@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -102,7 +102,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>Manage visible channels, amplitude, 
+                 <string>Manage visible channels, amplitude,
 spectrogram, hypnogram and the time axis</string>
                 </property>
                 <property name="alignment">
@@ -123,8 +123,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>792</height>
+                <width>358</width>
+                <height>820</height>
                </rect>
               </property>
               <attribute name="label">
@@ -181,8 +181,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>332</width>
-                       <height>546</height>
+                       <width>336</width>
+                       <height>595</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -403,8 +403,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>367</width>
-                <height>781</height>
+                <width>314</width>
+                <height>413</height>
                </rect>
               </property>
               <attribute name="label">
@@ -958,7 +958,7 @@ on</string>
                  </font>
                 </property>
                 <property name="text">
-                 <string>Set of signal processing tools (remove the mean and 
+                 <string>Set of signal processing tools (remove the mean and
 trend, filtering)</string>
                 </property>
                 <property name="alignment">
@@ -982,8 +982,8 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>792</height>
+                <width>287</width>
+                <height>54</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1232,7 +1232,7 @@ re-referenced</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>340</width>
+                       <width>267</width>
                        <height>998</height>
                       </rect>
                      </property>
@@ -1320,8 +1320,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>792</height>
+                <width>358</width>
+                <height>820</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1734,7 +1734,7 @@ re-referenced</string>
                  </font>
                 </property>
                 <property name="text">
-                 <string>Get and export usefull informations about the 
+                 <string>Get and export usefull informations about the
 hypnogram. Those informations change while editing it.</string>
                 </property>
                 <property name="alignment">
@@ -2075,7 +2075,7 @@ hypnogram. Those informations change while editing it.</string>
                  </font>
                 </property>
                 <property name="text">
-                 <string>Perform a REM, spindles or peak detection either on 
+                 <string>Perform a REM, spindles or peak detection either on
 selected, visible or all channels.</string>
                 </property>
                 <property name="alignment">
@@ -2889,19 +2889,21 @@ waves</string>
                        <property name="topMargin">
                         <number>0</number>
                        </property>
-                       <item row="1" column="0" rowspan="2">
-                        <widget class="QLabel" name="kc_label">
-                         <property name="font">
-                          <font>
-                           <italic>true</italic>
-                          </font>
-                         </property>
+                       <item row="3" column="3">
+                        <widget class="QLabel" name="label_65">
                          <property name="text">
-                          <string>K-complexes</string>
+                          <string>Max amp.</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="2">
+                       <item row="3" column="1">
+                        <widget class="QLabel" name="label_64">
+                         <property name="text">
+                          <string>Min amp.</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1" rowspan="2" colspan="2">
                         <widget class="QLabel" name="label_57">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -2914,33 +2916,35 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="1">
-                        <widget class="Line" name="line_19">
-                         <property name="orientation">
-                          <enum>Qt::Vertical</enum>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="3">
-                        <widget class="QDoubleSpinBox" name="_ToolKCTh">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
+                       <item row="3" column="2">
+                        <widget class="QDoubleSpinBox" name="_ToolKCMinAmp">
+                         <property name="toolTip">
+                          <string>Min amplitude of KC</string>
                          </property>
                          <property name="maximum">
-                          <double>100.000000000000000</double>
+                          <double>1000.000000000000000</double>
                          </property>
                          <property name="singleStep">
-                          <double>0.500000000000000</double>
+                          <double>5.000000000000000</double>
                          </property>
                          <property name="value">
-                          <double>1.000000000000000</double>
+                          <double>75.000000000000000</double>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="4">
+                       <item row="0" column="0" rowspan="5">
+                        <widget class="QLabel" name="kc_label">
+                         <property name="font">
+                          <font>
+                           <italic>true</italic>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>K-complexes</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="5">
                         <spacer name="horizontalSpacer_31">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
@@ -2953,17 +2957,106 @@ waves</string>
                          </property>
                         </spacer>
                        </item>
-                       <item row="2" column="1">
-                        <widget class="Line" name="line_20">
-                         <property name="orientation">
-                          <enum>Qt::Vertical</enum>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="2" colspan="2">
+                       <item row="4" column="1" colspan="4">
                         <widget class="QCheckBox" name="_ToolKCNremOnly">
                          <property name="text">
                           <string>Use hypnogram to improve detection</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="3">
+                        <widget class="QLabel" name="label_63">
+                         <property name="toolTip">
+                          <string/>
+                         </property>
+                         <property name="text">
+                          <string>Tmax (ms)</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="2">
+                        <widget class="QDoubleSpinBox" name="_ToolKCMinDur">
+                         <property name="toolTip">
+                          <string>Minimum duration of KC</string>
+                         </property>
+                         <property name="maximum">
+                          <double>1000.000000000000000</double>
+                         </property>
+                         <property name="singleStep">
+                          <double>50.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>500.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="QLabel" name="label_62">
+                         <property name="toolTip">
+                          <string/>
+                         </property>
+                         <property name="text">
+                          <string>Tmin (ms)</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="4">
+                        <widget class="QDoubleSpinBox" name="_ToolKCMaxDur">
+                         <property name="toolTip">
+                          <string>Maximum duration of KC</string>
+                         </property>
+                         <property name="minimum">
+                          <double>1000.000000000000000</double>
+                         </property>
+                         <property name="maximum">
+                          <double>10000.000000000000000</double>
+                         </property>
+                         <property name="singleStep">
+                          <double>50.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>1500.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="3" rowspan="2" colspan="2">
+                        <widget class="QDoubleSpinBox" name="_ToolKCTh">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="toolTip">
+                          <string>Number of standard deviations of the wavelet envelope</string>
+                         </property>
+                         <property name="maximum">
+                          <double>100.000000000000000</double>
+                         </property>
+                         <property name="singleStep">
+                          <double>0.500000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>2.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="4">
+                        <widget class="QDoubleSpinBox" name="_ToolKCMaxAmp">
+                         <property name="toolTip">
+                          <string>Max amplitude of KC</string>
+                         </property>
+                         <property name="minimum">
+                          <double>75.000000000000000</double>
+                         </property>
+                         <property name="maximum">
+                          <double>2000.000000000000000</double>
+                         </property>
+                         <property name="singleStep">
+                          <double>5.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>500.000000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -3484,7 +3577,7 @@ waves</string>
      <x>0</x>
      <y>0</y>
      <width>1242</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">
