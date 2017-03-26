@@ -48,12 +48,12 @@ class uiScoring(object):
         for k in range(len(stages)):
             # Add stage start / end :
             self._scoreTable.setItem(k, 0, QtGui.QTableWidgetItem(
-                                                              str(idx[k, 0])))
+                str(idx[k, 0])))
             self._scoreTable.setItem(k, 1, QtGui.QTableWidgetItem(
-                                                              str(idx[k, 1])))
+                str(idx[k, 1])))
             # Add stage :
             self._scoreTable.setItem(k, 2, QtGui.QTableWidgetItem(
-                                                          items[stages[k]]))
+                items[stages[k]]))
         self._scoreSet = True
 
     def _fcn_Score2Hypno(self):
@@ -119,11 +119,11 @@ class uiScoring(object):
         if tstartItem and tendItem and stageItem:
             # ============= PROPER FORMAT =============
             if all([bool(str(tstartItem.text())), bool(str(tendItem.text())),
-                   str(stageItem.text()).lower() in it.keys()]):
+                    str(stageItem.text()).lower() in it.keys()]):
                 try:
                     # Get start / end / stage :
                     tstart = int(float(str(tstartItem.text(
-                                                       ))) * fact * self._sf)
+                    ))) * fact * self._sf)
                     tend = int(float(str(tendItem.text())) * fact * self._sf)
                     stage = it[str(stageItem.text()).lower()]
 
@@ -168,8 +168,9 @@ class uiScoring(object):
         path = QtGui.QFileDialog.getSaveFileName(
             self, "Save File", "scoring_info",
             filter=selected_ext)
+        if filename:
         file = os.path.splitext(str(path))[0]
-        if selected_ext.find('csv') + 1:
-            listToCsv(file + '.csv', zip(staInd, endInd, stage))
-        elif selected_ext.find('txt') + 1:
-            listToTxt(file + '.txt', zip(staInd, endInd, stage))
+            if selected_ext.find('csv') + 1:
+                listToCsv(file + '.csv', zip(staInd, endInd, stage))
+            elif selected_ext.find('txt') + 1:
+                listToTxt(file + '.txt', zip(staInd, endInd, stage))

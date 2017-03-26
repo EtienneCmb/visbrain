@@ -106,9 +106,7 @@ class uiSettings(object):
 
     def saveFile(self):
         """Save the hypnogram."""
-        filename = QFileDialog.getSaveFileName(self, 'Save File',
-                                               os.path.join(os.getenv('HOME'),
-                                                            'hypno.txt'),
+        filename = QFileDialog.getSaveFileName(self, 'Save File', 'hypno',
                                                "Text file (*.txt);;Elan file "
                                                "(*.hyp);;All files (*.*)")
         filename = str(filename)

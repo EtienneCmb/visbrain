@@ -49,8 +49,9 @@ class uiInfo(object):
         path = QtGui.QFileDialog.getSaveFileName(
             self, "Save File", "statsinfo",
             filter=selected_ext)
-        file = os.path.splitext(str(path))[0]
-        if selected_ext.find('csv') + 1:
-            listToCsv(file + '.csv', zip(self._keysInfo, self._valInfo))
-        elif selected_ext.find('txt') + 1:
-            listToTxt(file + '.txt', zip(self._keysInfo, self._valInfo))
+        if filename:
+            file = os.path.splitext(str(path))[0]
+            if selected_ext.find('csv') + 1:
+                listToCsv(file + '.csv', zip(self._keysInfo, self._valInfo))
+            elif selected_ext.find('txt') + 1:
+                listToTxt(file + '.txt', zip(self._keysInfo, self._valInfo))
