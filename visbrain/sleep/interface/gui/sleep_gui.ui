@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -3218,47 +3218,20 @@ waves</string>
              <property name="topMargin">
               <number>0</number>
              </property>
-             <item row="2" column="1">
-              <widget class="QDoubleSpinBox" name="_SlGoto">
-               <property name="decimals">
-                <number>1</number>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="12">
-              <widget class="QLabel" name="label_31">
+             <item row="2" column="10">
+              <widget class="QLabel" name="label_6">
                <property name="text">
-                <string>Rule</string>
+                <string>sec</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="14">
-              <spacer name="horizontalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label">
-               <property name="text">
-                <string>Go to</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="7">
-              <spacer name="horizontalSpacer_5">
+             <item row="2" column="3">
+              <spacer name="horizontalSpacer_4">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeType">
-                <enum>QSizePolicy::Minimum</enum>
+                <enum>QSizePolicy::Maximum</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -3267,56 +3240,6 @@ waves</string>
                 </size>
                </property>
               </spacer>
-             </item>
-             <item row="2" column="15">
-              <widget class="QCheckBox" name="_slGrid">
-               <property name="text">
-                <string>Grid</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="6">
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string> seconds</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0" colspan="16">
-              <widget class="QSlider" name="_SlVal">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>10</number>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="9">
-              <widget class="QDoubleSpinBox" name="_SigSlStep">
-               <property name="decimals">
-                <number>1</number>
-               </property>
-               <property name="minimum">
-                <double>0.100000000000000</double>
-               </property>
-               <property name="value">
-                <double>30.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="4">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>Window</string>
-               </property>
-              </widget>
              </item>
              <item row="2" column="5">
               <widget class="QDoubleSpinBox" name="_SigWin">
@@ -3328,6 +3251,23 @@ waves</string>
                </property>
                <property name="value">
                 <double>30.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="6">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>sec</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="15">
+              <widget class="QCheckBox" name="_slGrid">
+               <property name="text">
+                <string>Grid</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -3369,9 +3309,32 @@ waves</string>
              <item row="2" column="2">
               <widget class="QLabel" name="label_12">
                <property name="text">
-                <string> seconds</string>
+                <string>sec</string>
                </property>
               </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Go to</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="7">
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
              <item row="2" column="8">
               <widget class="QLabel" name="label_5">
@@ -3380,7 +3343,74 @@ waves</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="0" colspan="16">
+             <item row="2" column="9">
+              <widget class="QDoubleSpinBox" name="_SigSlStep">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="minimum">
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value">
+                <double>30.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="_SlGoto">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="12">
+              <widget class="QLabel" name="label_31">
+               <property name="text">
+                <string>Rule</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="14">
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="2" column="4">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Window</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="16">
+              <widget class="QCheckBox" name="_slMagnify">
+               <property name="text">
+                <string>Magnify</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="17">
+              <widget class="QSlider" name="_SlVal">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::NoTicks</enum>
+               </property>
+               <property name="tickInterval">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="17">
               <widget class="QLabel" name="_SlText">
                <property name="text">
                 <string>TextLabel</string>
@@ -3392,29 +3422,6 @@ waves</string>
                 <number>0</number>
                </property>
               </widget>
-             </item>
-             <item row="2" column="10">
-              <widget class="QLabel" name="label_6">
-               <property name="text">
-                <string> seconds</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="3">
-              <spacer name="horizontalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Maximum</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
             </layout>
            </item>

@@ -107,33 +107,37 @@ class ChannelPlot(PrepareData):
         # Create one line pear channel :
         pos = np.zeros((1, 3), dtype=np.float32)
         self.mesh, self.report, self.grid, self.peak = [], [], [], []
-        self.loc = []
+        self.loc, self.node = [], []
         for i, k in enumerate(channels):
+            # ----------------------------------------------
+            # Create a node parent :
+            node = scene.Node(name=k+'plot')
+            node.parent = parent[i].wc.scene
+            self.node.append(node)
+
             # ----------------------------------------------
             # Create main line (for channel plot) :
             mesh = scene.visuals.Line(pos, name=k+'plot', color=self.color,
-                                      method=method, parent=parent[i].wc.scene)
+                                      method=method, parent=node)
             mesh.set_gl_state('translucent')
             self.mesh.append(mesh)
             # ----------------------------------------------
             # Create marker peaks :
             mark = Markers(pos=np.zeros((1, 3), dtype=np.float32),
-                           parent=parent[i].wc.scene)
+                           parent=node)
             mark.set_gl_state('translucent')
             mark.visible = False
             self.peak.append(mark)
             # ----------------------------------------------
             # Report line :
             rep = scene.visuals.Line(pos, name=k+'report', method=method,
-                                     color=self.color_detection,
-                                     parent=parent[i].wc.scene)
+                                     color=self.color_detection, parent=node)
             rep.set_gl_state('translucent')
             self.report.append(rep)
             # ----------------------------------------------
             # Locations :
             loc = scene.visuals.Line(pos, name=k+'location', method=method,
-                                     color=(.1, .1, .1, .3),
-                                     parent=parent[i].wc.scene,
+                                     color=(.1, .1, .1, .3), parent=node,
                                      connect='segments')
             loc.set_gl_state('translucent')
             self.loc.append(loc)
@@ -650,15 +654,23 @@ class vbShortcuts(object):
             if event.text == 's':  # Toggle visibility on spec
                 self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
                 self._fcn_specViz()
+
             if event.text == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
+
             if event.text == 'z':  # Enable zoom
                 viz = self._PanTimeZoom.isChecked()
                 self._PanTimeZoom.setChecked(not viz)
                 self._PanHypZoom.setChecked(not viz)
                 self._PanSpecZoom.setChecked(not viz)
                 self._fcn_Zooming()
+
+            if event.text == 'm':
+                viz = self._slMagnify.isChecked()
+                self._slMagnify.setChecked(not viz)
+                self._fcn_sliderMagnify()
+
             # ------------ SCORING ------------
             if event.text == 'a':
                 self._add_stage_on_win(-1)
@@ -689,9 +701,18 @@ class vbShortcuts(object):
         def on_mouse_release(event):
             """Executed function when the mouse is pressed over canvas.
 
-            :event: the trigger event
+            This method set the transformation to the canvas to NullTransform.
             """
-            pass
+            # Get canvas name :
+            name = canvas.title
+            condition = bool(name.find('Canvas') + 1)
+            if condition and not self._slMagnify.isChecked():
+                # Get channel name :
+                chan = name.split('Canvas_')[1]
+                # Get index :
+                idx = self._channels.index(chan)
+                # Build transformation :
+                self._chan.node[idx].transform = vist.NullTransform()
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
@@ -705,18 +726,45 @@ class vbShortcuts(object):
         def on_mouse_move(event):
             """Executed function when the mouse move over canvas.
 
-            :event: the trigger event
+            Magnify for all channels under cursor locations.
             """
-            pass
+            if self._slMagnify.isChecked():
+                val = self._SlVal.value()
+                step = self._SigSlStep.value()
+                win = self._SigWin.value()
+                tm, tM = (val*step, val*step+win)
+                # tm, tM = self._time.min(), self._time.max()
+                cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
+                # print(cursor, canvas.title)
+                for i, k in self._chan:
+                    self._chan.node[i].transform.center = (cursor, 0.)
+                    k.update()
+                tm, tM = self._time.min(), self._time.max()
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
             """Executed function when single click mouse over canvas.
 
-            :event: the trigger event
+            Magnigy the signal under the mouse cursor only.
             """
-            # Display the rotation panel :
-            pass
+            # Get canvas name :
+            name = canvas.title
+            condition = bool(name.find('Canvas') + 1)
+            if condition and not self._slMagnify.isChecked():
+                # Get channel name :
+                chan = name.split('Canvas_')[1]
+                # Get index :
+                idx = self._channels.index(chan)
+                # Get cursor position :
+                val = self._SlVal.value()
+                step = self._SigSlStep.value()
+                win = self._SigWin.value()
+                tm, tM = (val*step, val*step+win)
+                cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
+                # Build transformation :
+                transform = vist.nonlinear.Magnify1DTransform(center=(cursor,
+                                                                      0.))
+                self._chan.node[idx].transform = transform
 
 
 class visuals(vbShortcuts):

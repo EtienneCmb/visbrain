@@ -5,6 +5,8 @@ import os
 from PyQt4.QtGui import *
 from PyQt4.QtCore import QObjectCleanupHandler
 
+import vispy.visuals.transforms as vist
+
 from ....utils import save_hypnoTotxt, save_hypnoToElan
 
 
@@ -63,6 +65,8 @@ class uiSettings(object):
         # Text format :
         self._slTxtFormat = "Window: [ {start} ; {end} ] {unit} || " + \
                             "Sleep stage: {conv}"
+        # Magnify :
+        self._slMagnify.clicked.connect(self._fcn_sliderMagnify)
 
         # =====================================================================
         # ZOOMING
@@ -240,6 +244,17 @@ class uiSettings(object):
     def _fcn_sliderWinSelection(self):
         """Move slider using window spin."""
         self._SlVal.setValue(self._SlGoto.value() / self._SigSlStep.value())
+
+    def _fcn_sliderMagnify(self):
+        """Magnify signals."""
+        # Set transformation to each node parent :
+        for k in self._chan.node:
+            # Use either Magnify / Null transformation :
+            if self._slMagnify.isChecked():
+                transform = vist.nonlinear.Magnify1DTransform()
+            else:
+                transform = vist.NullTransform()
+            k.transform = transform
 
     # =====================================================================
     # GRID
