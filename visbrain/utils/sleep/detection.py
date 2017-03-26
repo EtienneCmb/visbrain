@@ -15,7 +15,7 @@ from scipy.signal import hilbert, daub
 from ..filtering import filt, morlet, morlet_power
 from ..sigproc import movingaverage, derivative, tkeo, soft_thresh
 from .event import (_events_duration, _events_removal, _events_distance_fill,
-                    _events_mean_freq)
+                    _events_mean_freq, _event_amplitude)
 
 __all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
            'kcdetect']
@@ -73,12 +73,16 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only):
     data = elec
     length = max(data.shape)
 
+    print(np.abs(data.max()-data.min()))
+
     # Main parameters (raw values per algorithm construction)
     delta_thr = 0.75
     moving_s = 30
     spindles_thresh = 1
     range_spin_sec = 60
     threshold = 3
+    kc_min_amp = 75
+    kc_max_amp = 500
     fMin = 0.5
     fMax = 4
     tMin = 300
@@ -92,7 +96,6 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only):
     freqs = np.array([0.5, 4., 8., 12., 16.])
     delta_npow, _, _, _ = morlet_power(data, freqs, sf, norm=True)
     delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
-    # delta_thr = np.nanmean(delta_nfpow) + np.nanstd(delta_nfpow)
     idx_delta = np.where(delta_nfpow > delta_thr)[0]
 
     # Compute spindles detection
@@ -107,7 +110,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only):
 
     thresh = np.mean(sig_transformed) + threshold * np.std(sig_transformed)
 
-    # Amplitude criteria
+    # Enveloppe amplitude criteria
     val_sup_thr = soft_thresh(sig_transformed, thresh)
     idx_sup_thr = np.where(val_sup_thr != 0)[0]
 
@@ -146,10 +149,10 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only):
         idx_sup_thr = np.intersect1d(idx_sup_thr, np.where(proba >= 0.3)[0])
 
         # K-COMPLEX MORPHOLOGY
-        # Get where KC start / end and duration :
+        # 1 - Get where KC start / end and duration :
         _, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-        # Get where min_dur <  KC duration < max_dur :
+        # 2 - Get where min_dur <  KC duration < max_dur :
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
         good_dur = np.where(np.logical_and(duration_ms > tMin,
                                            duration_ms < tMax))[0]
@@ -157,7 +160,15 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only):
         idx_dur = _events_removal(idx_start, idx_stop, good_dur)
         idx_sup_thr = idx_sup_thr[idx_dur]
 
-        # Check amplitude > 75 mV
+        # 3 - Check amplitude > kc_min_amp
+        _, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+        kc_amp, distance_ms = _event_amplitude(data, idx_start, idx_stop, sf)
+        print("Amplitude:\n", kc_amp)
+        # print("Distance (ms)\n", distance_ms)
+        good_amp = np.where(np.logical_and(kc_amp > kc_min_amp,
+                                           kc_amp < kc_max_amp))[0]
+        idx_amp = _events_removal(idx_start, idx_stop, good_amp)
+        # idx_sup_thr = idx_sup_thr[idx_amp]
 
         # Export info
         number, duration_ms, idx_start, idx_stop = _events_duration(
@@ -254,10 +265,6 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 
     # Get amplitude and phase :
     amplitude = np.abs(analytic)
-    phase = np.unwrap(np.angle(analytic))
-    # Phase derivative (instantaneaous frequencies) :
-    inst_freq = np.diff(phase) / (2.0 * np.pi) * sf
-    inst_freq = np.append(inst_freq, 0.)  # What for?
 
     if hypLoaded:
         amplitude[idx_zero] = np.nan
@@ -299,7 +306,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 
 
 def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
-              max_dur_ms=500, min_distance_ms=100, moving_ms=100, deriv_ms=40):
+              max_dur_ms=500, min_distance_ms=200, moving_ms=100, deriv_ms=40):
     """Perform a rapid eye movement (REM) detection.
 
     Function to perform a semi-automatic detection of rapid eye movements

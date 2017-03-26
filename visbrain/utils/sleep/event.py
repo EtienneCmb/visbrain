@@ -134,7 +134,39 @@ def _events_mean_freq(x, idx_start, idx_stop, sf):
     mfreq = np.array([])
     # Loop on each event
     for i, j in zip(idx_start, idx_stop):
-        idx_event = np.array([np.arange(i, j)])
+        idx_event = np.arange(i, j)
         mfreq = np.append(mfreq, np.mean(inst_freq[idx_event]))
 
     return mfreq
+
+def _event_amplitude(x, idx_start, idx_stop, sf):
+        """Find amplitude range of events
+
+        Args:
+            idx_start: np.ndarray
+                Starting indices of event.
+
+            idx_stop: np.ndarray
+                Ending indices of event.
+
+            sf: int
+                Sampling frequency of the data (Hz)
+
+        Return:
+            amp_range: np.ndarray
+                Amplitude range (max - min) of each event
+
+            distance_ms: np.ndarray
+                Distance (ms) between min and max
+        """
+        amp_range = np.array([])
+        distance_ms = np.array([])
+        # Loop on each event
+        for i, j in zip(idx_start, idx_stop):
+            idx_event = np.arange(i, j)
+            # amp_range = np.append(amp_range, np.abs(x[idx_event].max() - x[idx_event].min()))
+            amp_range = np.append(amp_range, np.ptp(x[idx_event]))
+            distance = np.abs(np.argmax(x[idx_event]) - np.argmin(x[idx_event]))
+            distance_ms = np.append(distance_ms, distance / sf * 1000)
+
+        return amp_range, distance_ms
