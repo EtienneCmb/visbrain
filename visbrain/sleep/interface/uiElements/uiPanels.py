@@ -48,6 +48,7 @@ class uiPanels(object):
         # AMPLITUDES
         # =====================================================================
         # Save all current amplitudes :
+        self._PanAllAmpMax.setValue(0.1)
         self._ylims = np.zeros((len(self), 2), dtype=np.float32)
         self._PanAllAmpMin.valueChanged.connect(self._fcn_allAmp)
         self._PanAllAmpMax.valueChanged.connect(self._fcn_allAmp)

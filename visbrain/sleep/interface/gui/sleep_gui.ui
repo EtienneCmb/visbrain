@@ -358,12 +358,30 @@ spectrogram, hypnogram and the time axis</string>
                             <property name="toolTip">
                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change minimum amplitude for all channels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                             </property>
+                            <property name="decimals">
+                             <number>1</number>
+                            </property>
+                            <property name="maximum">
+                             <double>100000.000000000000000</double>
+                            </property>
+                            <property name="value">
+                             <double>0.000000000000000</double>
+                            </property>
                            </widget>
                           </item>
                           <item>
                            <widget class="QDoubleSpinBox" name="_PanAllAmpMax">
                             <property name="toolTip">
                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change maximum amplitude for all channels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                            </property>
+                            <property name="decimals">
+                             <number>1</number>
+                            </property>
+                            <property name="minimum">
+                             <double>-100000.000000000000000</double>
+                            </property>
+                            <property name="maximum">
+                             <double>100000.000000000000000</double>
                             </property>
                            </widget>
                           </item>

@@ -762,8 +762,8 @@ class vbShortcuts(object):
                 tm, tM = (val*step, val*step+win)
                 cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
                 # Build transformation :
-                transform = vist.nonlinear.Magnify1DTransform(center=(cursor,
-                                                                      0.))
+                kwargs = {'center': (cursor, 0.), 'radii': (3, 15), 'mag': 10}
+                transform = vist.nonlinear.Magnify1DTransform(**kwargs)
                 self._chan.node[idx].transform = transform
 
 
