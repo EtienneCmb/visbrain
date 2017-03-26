@@ -171,9 +171,12 @@ def _event_amplitude(x, idx_sup_thr, idx_start, idx_stop, sf):
         # Loop on each event
         for i, j in zip(idx_start, idx_stop):
             idx_event = np.arange(idx_sup_thr[i], idx_sup_thr[j])
-            # amp_range = np.append(amp_range, np.abs(x[idx_event].max() - x[idx_event].min()))
-            amp_range = np.append(amp_range, np.ptp(x[idx_event]))
-            distance = np.abs(np.argmax(x[idx_event]) - np.argmin(x[idx_event]))
-            distance_ms = np.append(distance_ms, distance / sf * 1000)
+            if idx_event.size > 0:
+                amp_range = np.append(amp_range, np.ptp(x[idx_event]))
+                distance = np.abs(np.argmax(x[idx_event]) - np.argmin(x[idx_event]))
+                distance_ms = np.append(distance_ms, distance / sf * 1000)
+            else:
+                amp_range = 0.
+                distance_ms = 0.
 
         return amp_range, distance_ms

@@ -47,7 +47,7 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-4 Finir detection K-complexes
+	-4 Finir detection K-complexes: mettre un seul critère de probabilité (0 à 1) pour la detection
 	-4 Améliorer les détections
 	-3 Ajout collaborateur
 	-2 Scorage automatique du sommeil

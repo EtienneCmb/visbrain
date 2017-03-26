@@ -188,7 +188,6 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
 
         idx_sup_thr = np.intersect1d(idx_sup_thr, np.where(proba >= 0.3)[0],
                                                             assume_unique=True)
-
         # K-COMPLEX MORPHOLOGY
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
@@ -197,13 +196,13 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
 
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-        kc_amp, distance_ms = _event_amplitude(sig_filt, idx_sup_thr,
+        kc_amp, distance_ms = _event_amplitude(data, idx_sup_thr,
                                             idx_start, idx_stop, sf)
 
         # Warning: Mean frequency computation is time-consuming.
         # Current status: inactive (fake vector mfreq)
         # mfreq = _events_mean_freq(data, idx_sup_thr, idx_start, idx_stop, sf)
-        mfreq = 3 * np.ones(shape=idx_start.shape)
+        mfreq = np.ones(shape=idx_start.shape)
 
         good_dur = np.where(np.logical_and(duration_ms > tMin,
                                                    duration_ms < tMax))[0]
