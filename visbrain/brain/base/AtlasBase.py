@@ -41,7 +41,7 @@ class AtlasBase(object):
         self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
                                                     'Atlas')[0], 'templates')
         self._defcolor = (1., 1., 1.)
-        self._scaleMax = 1000.
+        self._scaleMax = 800.
 
         # Initialize visualization :
         vertices, faces, normals, color = self.load(self.template,

@@ -331,8 +331,9 @@ class BrainVisual(Visual):
 
             # Get the mean across (x, y, z) axis :
             xScale = vertices[:, :, 0].mean()
-            yScale = vertices[:, :, 1].mean()
-            zScale = vertices[:, :, 2].mean()
+            yScale = vertices[:, :, 1].mean()# - 100.
+            zScale = vertices[:, :, 2].mean()# + 800.
+            print(xScale, yScale, zScale, self._scaleFactor / vM)
 
             # Recenter the brain around (0, 0, 0) and rescale it:
             sc = [self._scaleFactor / vM] * 3

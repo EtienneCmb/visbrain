@@ -263,7 +263,7 @@ class Brain(uiInit, uiElements, base, userfcn):
 
         # ====================== Objects creation ======================
         camera = viscam.TurntableCamera(azimuth=0, distance=1000,
-                                        name='turntable')
+                                        name='turntable', center=(10000., 10000., 10000.))
         base.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
         # ====================== UI to visbrain ======================
@@ -273,6 +273,8 @@ class Brain(uiInit, uiElements, base, userfcn):
         # ====================== Cameras ======================
         # # Main camera :
         self.view.wc.camera = camera
+        # self.view.wc.camera.center = (1000., 1000.)
+        # self.view.wc.camera.update()
         self.atlas.mesh.set_camera(self.view.wc.camera)
         self._vbNode.parent = self.view.wc.scene
 
