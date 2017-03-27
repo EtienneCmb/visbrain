@@ -1,9 +1,9 @@
 """Set of tools to filter data."""
 
 import numpy as np
-from scipy.signal import butter, filtfilt, lfilter, bessel
+from scipy.signal import butter, filtfilt, lfilter, bessel, welch
 
-__all__ = ['filt', 'morlet', 'ndmorlet']
+__all__ = ['filt', 'morlet', 'ndmorlet', 'morlet_power', 'welch_power']
 
 #############################################################################
 # FILTERING
@@ -68,7 +68,7 @@ def filt(sf, f, x, btype='bandpass', order=3, method='butterworth',
         return lfilter(b, a, x, axis=axis)
 
 #############################################################################
-# MORLET
+# WAVELET
 #############################################################################
 
 
@@ -169,3 +169,81 @@ def ndmorlet(x, sf, f, axis=0, get=None, width=7.0):
                                                                 len(m) / 2))]
 
     return np.apply_along_axis(morletFcn, axis, x)
+
+
+def morlet_power(x, freqs, sf, norm=True):
+    """Compute bandwise-normalized power of data using morlet wavelet.
+
+    Args:
+        x: np.ndarray
+            Row vector signal.
+
+        freqs: np.array
+            Frequency bands for power computation. The power will be computed
+            using successive frequency band (e.g freqs=(1., 2, .3)).
+
+        sf: float
+            Sampling frequency.
+
+    Kargs:
+        norm: boolean, optional (def True)
+            If True, return bandwise normalized band power
+            (For each time point, the sum of power in the 4 band equals 1)
+
+    Returns:
+        xpow: np.ndarray
+            The power in the specified frequency bands of shape
+            (len(freqs)-1, npts).
+    """
+    # Build frequency vector :
+    f = np.c_[freqs[0:-1], freqs[1::]].mean(1)
+    # Get wavelet transform :
+    xpow = np.zeros((len(f), len(x)), dtype=np.float)
+    for num, k in enumerate(f):
+        xpow[num, :] = np.abs(morlet(x, sf, k))
+    # Compute inplace power :
+    np.power(xpow, 2, out=xpow)
+    # Normalize by the band sum :
+    if norm:
+        sum_pow = xpow.sum(0).reshape(1, -1)
+        np.divide(xpow, sum_pow, out=xpow)
+    return xpow
+
+
+def welch_power(x, fMin, fMax, sf, window_s=30, norm=True):
+    """Compute bandwise-normalized power of data using welch.
+
+    Args:
+        x: np.ndarray
+            Signal
+
+        sf: int
+            Downsampling frequency
+
+    Kargs:
+        window_s: int, optional (def 30)
+            Time resolution (sec) of Welch's periodogram. Must be > 10 seconds.
+
+        norm: boolean, optional (def True)
+            If True, return normalized band power
+
+    """
+    sf = int(sf)
+    freq_spacing = 0.1
+    f_vector = np.arange(0, sf / 2 + freq_spacing, freq_spacing)
+    idx_fMin = np.where(f_vector == fMin)[0][0]
+    idx_fMax = np.where(f_vector == fMax)[0][0] + 1
+
+    delta_spec = np.array([], dtype=float)
+    delta_spec_norm = np.array([], dtype=float)
+
+    for i in np.arange(0, len(x), window_s * sf):
+        f, Pxx_spec = welch(x[i:i + window_s * sf], sf, 'flattop',
+                            nperseg=sf * (1 / freq_spacing),
+                            scaling='spectrum')
+        mean_delta = np.mean(Pxx_spec[idx_fMin:idx_fMax, ])
+        norm_delta = np.sum(Pxx_spec[idx_fMin:idx_fMax, ]) / np.sum(Pxx_spec)
+        delta_spec = np.append(delta_spec, mean_delta)
+        delta_spec_norm = np.append(delta_spec_norm, norm_delta)
+
+    return delta_spec_norm if norm else delta_spec

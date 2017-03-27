@@ -11,7 +11,7 @@ from matplotlib import cm
 import matplotlib.colors as mplcol
 from warnings import warn
 
-from .math import normalize
+from .sigproc import normalize
 
 
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',

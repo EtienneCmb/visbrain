@@ -181,12 +181,19 @@ class uiDetection(object):
             # ------------------- K-COMPLEXES -------------------
             elif method == 'K-complexes':
                 # Get variables :
+                thr = self._ToolKCTh.value()
+                tmin = self._ToolKCMinDur.value()
+                tmax = self._ToolKCMaxDur.value()
+                min_amp = self._ToolKCMinAmp.value()
+                max_amp = self._ToolKCMaxAmp.value()
                 nrem_only = self._ToolKCNremOnly.isChecked()
                 # Get Slow Waves indices :
                 index, number, density, duration = kcdetect(self._data[k, :],
-                                                            self._sf,
+                                                            self._sf, thr,
                                                             self._hypno,
-                                                            nrem_only)
+                                                            nrem_only, tmin,
+                                                            tmax, min_amp,
+                                                            max_amp)
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defkc,
                                               'diamond', toReport, number, 0.)
@@ -243,7 +250,6 @@ class uiDetection(object):
             # Find only where index start / finish :
             ind = np.where(np.gradient(index) != 1.)[0]
             ind = index[np.hstack(([0], ind, [len(index) - 1]))]
-
             # Report index on hypnogram :
             if toReport:
                 self._hyp.set_report(self._time, ind, symbol=symbol,
@@ -345,8 +351,9 @@ class uiDetection(object):
         path = QtGui.QFileDialog.getSaveFileName(
             self, "Save File", method + "_locinfo",
             filter=selected_ext)
-        file = os.path.splitext(str(path))[0]
-        if selected_ext.find('csv') + 1:
-            listToCsv(file + '.csv', zip(staInd, duration, stage))
-        elif selected_ext.find('txt') + 1:
-            listToTxt(file + '.txt', zip(staInd, duration, stage))
+        if filename:
+            file = os.path.splitext(str(path))[0]
+            if selected_ext.find('csv') + 1:
+                listToCsv(file + '.csv', zip(staInd, duration, stage))
+            elif selected_ext.find('txt') + 1:
+                listToTxt(file + '.txt', zip(staInd, duration, stage))

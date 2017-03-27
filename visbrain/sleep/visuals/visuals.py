@@ -92,11 +92,13 @@ class ChannelPlot(PrepareData):
         self._camera = camera
         self.rect = []
         self.width = width
+        self.autoamp = False
         # Don't use self.colidx = [{...}] * len(channels)
         self.colidx = [{'color': color_detection, 'idx': np.array([
                                             ])} for _ in range(len(channels))]
         self._fcn = fcn
         self.visible = np.array([True] + [False] * (len(channels) - 1))
+        self.consider = np.ones((len(channels),), dtype=bool)
 
         # Get color :
         self.color = color2vb(color)
@@ -105,33 +107,37 @@ class ChannelPlot(PrepareData):
         # Create one line pear channel :
         pos = np.zeros((1, 3), dtype=np.float32)
         self.mesh, self.report, self.grid, self.peak = [], [], [], []
-        self.loc = []
+        self.loc, self.node = [], []
         for i, k in enumerate(channels):
+            # ----------------------------------------------
+            # Create a node parent :
+            node = scene.Node(name=k+'plot')
+            node.parent = parent[i].wc.scene
+            self.node.append(node)
+
             # ----------------------------------------------
             # Create main line (for channel plot) :
             mesh = scene.visuals.Line(pos, name=k+'plot', color=self.color,
-                                      method=method, parent=parent[i].wc.scene)
+                                      method=method, parent=node)
             mesh.set_gl_state('translucent')
             self.mesh.append(mesh)
             # ----------------------------------------------
             # Create marker peaks :
             mark = Markers(pos=np.zeros((1, 3), dtype=np.float32),
-                           parent=parent[i].wc.scene)
+                           parent=node)
             mark.set_gl_state('translucent')
             mark.visible = False
             self.peak.append(mark)
             # ----------------------------------------------
             # Report line :
             rep = scene.visuals.Line(pos, name=k+'report', method=method,
-                                     color=self.color_detection,
-                                     parent=parent[i].wc.scene)
+                                     color=self.color_detection, parent=node)
             rep.set_gl_state('translucent')
             self.report.append(rep)
             # ----------------------------------------------
             # Locations :
             loc = scene.visuals.Line(pos, name=k+'location', method=method,
-                                     color=(.1, .1, .1, .3),
-                                     parent=parent[i].wc.scene,
+                                     color=(.1, .1, .1, .3), parent=node,
                                      connect='segments')
             loc.set_gl_state('translucent')
             self.loc.append(loc)
@@ -153,7 +159,7 @@ class ChannelPlot(PrepareData):
         """Return the number of channels."""
         return len(self.mesh)
 
-    def set_data(self, sf, data, time, sl=None, ylim=None):
+    def set_data(self, sf, data, time, sl=None, ylim=None, autoamp=True):
         """Set data to channels.
 
         Args:
@@ -191,13 +197,17 @@ class ChannelPlot(PrepareData):
 
         # Set data to each plot :
         for l, (i, k) in enumerate(self):
+            # ________ MAIN DATA ________
+            # Select channel ;
+            datchan = dataSl[l, :]
+
             # Concatenate time / data / z axis :
-            dat = np.vstack((timeSl, dataSl[l, :], z)).T
+            dat = np.vstack((timeSl, datchan, z)).T
 
             # Set main ligne :
-            # dat = np.ascontiguousarray(dat)
             k.set_data(dat, color=self.color, width=self.width)
 
+            # ________ COLOR ________
             # Indicator line :
             if self.colidx[i]['idx'].size:
                 # Find index that are both in idx and in indicator :
@@ -211,9 +221,13 @@ class ChannelPlot(PrepareData):
                 self.report[i].set_data(pos=dat, connect=index, width=4.,
                                         color=self.colidx[i]['color'])
 
+            # ________ CAMERA ________
+            # Use either auto / fixed adaptative camera :
+            ycam = (datchan.min(), datchan.max()) if self.autoamp else ylim[i]
+
             # Get camera rectangle and set it:
-            rect = (self.x[0], ylim[i][0], self.x[1]-self.x[0],
-                    ylim[i][1] - ylim[i][0])
+            rect = (self.x[0], ycam[0], self.x[1]-self.x[0],
+                    ycam[1] - ycam[0])
             self._camera[i].rect = rect
             k.update()
             self.rect.append(rect)
@@ -273,6 +287,17 @@ class ChannelPlot(PrepareData):
         """Set parent value."""
         for i, k, in zip(value, self.mesh):
             k.parent = i.wc.scene
+
+    # ----------- AUTOAMP -----------
+    @property
+    def autoamp(self):
+        """Get the autoamp value."""
+        return self._autoamp
+
+    @autoamp.setter
+    def autoamp(self, value):
+        """Set autoamp value."""
+        self._autoamp = value
 
 
 class Spectrogram(PrepareData):
@@ -629,15 +654,23 @@ class vbShortcuts(object):
             if event.text == 's':  # Toggle visibility on spec
                 self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
                 self._fcn_specViz()
+
             if event.text == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
+
             if event.text == 'z':  # Enable zoom
                 viz = self._PanTimeZoom.isChecked()
                 self._PanTimeZoom.setChecked(not viz)
                 self._PanHypZoom.setChecked(not viz)
                 self._PanSpecZoom.setChecked(not viz)
                 self._fcn_Zooming()
+
+            if event.text == 'm':
+                viz = self._slMagnify.isChecked()
+                self._slMagnify.setChecked(not viz)
+                self._fcn_sliderMagnify()
+
             # ------------ SCORING ------------
             if event.text == 'a':
                 self._add_stage_on_win(-1)
@@ -668,9 +701,18 @@ class vbShortcuts(object):
         def on_mouse_release(event):
             """Executed function when the mouse is pressed over canvas.
 
-            :event: the trigger event
+            This method set the transformation to the canvas to NullTransform.
             """
-            pass
+            # Get canvas name :
+            name = canvas.title
+            condition = bool(name.find('Canvas') + 1)
+            if condition and not self._slMagnify.isChecked():
+                # Get channel name :
+                chan = name.split('Canvas_')[1]
+                # Get index :
+                idx = self._channels.index(chan)
+                # Build transformation :
+                self._chan.node[idx].transform = vist.NullTransform()
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
@@ -684,18 +726,45 @@ class vbShortcuts(object):
         def on_mouse_move(event):
             """Executed function when the mouse move over canvas.
 
-            :event: the trigger event
+            Magnify for all channels under cursor locations.
             """
-            pass
+            if self._slMagnify.isChecked():
+                val = self._SlVal.value()
+                step = self._SigSlStep.value()
+                win = self._SigWin.value()
+                tm, tM = (val*step, val*step+win)
+                # tm, tM = self._time.min(), self._time.max()
+                cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
+                # print(cursor, canvas.title)
+                for i, k in self._chan:
+                    self._chan.node[i].transform.center = (cursor, 0.)
+                    k.update()
+                tm, tM = self._time.min(), self._time.max()
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
             """Executed function when single click mouse over canvas.
 
-            :event: the trigger event
+            Magnigy the signal under the mouse cursor only.
             """
-            # Display the rotation panel :
-            pass
+            # Get canvas name :
+            name = canvas.title
+            condition = bool(name.find('Canvas') + 1)
+            if condition and not self._slMagnify.isChecked():
+                # Get channel name :
+                chan = name.split('Canvas_')[1]
+                # Get index :
+                idx = self._channels.index(chan)
+                # Get cursor position :
+                val = self._SlVal.value()
+                step = self._SigSlStep.value()
+                win = self._SigWin.value()
+                tm, tM = (val*step, val*step+win)
+                cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
+                # Build transformation :
+                kwargs = {'center': (cursor, 0.), 'radii': (3, 15), 'mag': 10}
+                transform = vist.nonlinear.Magnify1DTransform(**kwargs)
+                self._chan.node[idx].transform = transform
 
 
 class visuals(vbShortcuts):
