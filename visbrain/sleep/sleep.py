@@ -220,10 +220,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             # Check hypno length :
             if len(hypno) != npts:
                 if len(hypno) < npts:
-                    # Classic bug in Elan hypnogram file where EEG data is
-                    # slightly longer than hyp file
-                    hypno = np.append(hypno,
-                                      (-1 * np.zeros((npts-len(hypno), 1))))
+                    # Complete hypnogram :
+                    hypno = np.append(hypno, hypno[-1]*np.ones(
+                                                           (npts-len(hypno),)))
                 else:
                     raise ValueError("The length of the hypnogram \
                                      vector must be" + str(npts) +
