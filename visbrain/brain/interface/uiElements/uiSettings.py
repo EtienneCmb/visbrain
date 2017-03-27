@@ -2,6 +2,7 @@
 
 """Main class for settings managment (save / load / light / cameras...)."""
 import os
+import numpy as np
 from PyQt4.QtGui import *
 from PyQt4 import QtCore
 
@@ -60,7 +61,7 @@ class uiSettings(object):
         self._ssCropEnable.clicked.connect(self._screenshotSettings)
         self._ssResolution.valueChanged.connect(self._screenshotSettings)
         self._ssCbEnable.clicked.connect(self._screenshotSettings)
-        self._ssRun.clicked.connect(self._screenshot)
+        self._ssRun.clicked.connect(self._fcn_runScreenshot)
         self._ssGuide.clicked.connect(self._screenshotSettings)
         self._ssCropXs.valueChanged.connect(self._screenshotSettings)
         self._ssCropYs.valueChanged.connect(self._screenshotSettings)
@@ -166,9 +167,15 @@ class uiSettings(object):
     # =============================================================
     # SCREENSHOT
     # =============================================================
+    def _fcn_runScreenshot(self):
+        """Run the screenshot."""
+        # Get latest settings :
+        self._screenshotSettings()
+        # Run screenshot :
+        self._screenshot()
+
     def _screenshotSettings(self):
-        """"""
-        import numpy as np
+        """Get screenshot settings from the GUI.s"""
         # ------------- MAIN CANVAS -------------
         # Get filename :
         file = str(self._ssSaveAs.text())
@@ -206,8 +213,6 @@ class uiSettings(object):
         an extension (png) and a boolean parameter (self.cb['export']) to
         specify if the colorbar has to be exported.
         """
-        # Get latest settings :
-        self._screenshotSettings()
         # Manage filename :
         if isinstance(self._savename, str):
             cond = self._savename.split('.')[0] == ''
@@ -235,7 +240,11 @@ class uiSettings(object):
         self.view.canvas._backend._physical_size = new_size
 
         # Render and save :
-        img = self.view.canvas.render(region=self._crop, size=new_size)
+        if self._crop is not None:
+            kwargs = {'region': self._crop}
+        else:
+            kwargs = {'size': new_size}
+        img = self.view.canvas.render(**kwargs)
         io.imsave(saveas, img)
 
         # Set to the canvas it's previous size :
@@ -249,8 +258,11 @@ class uiSettings(object):
             new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
             self.view.cbcanvas._backend._physical_size = new_size
             # Render colorbar panel :
-            cbimg = self.view.cbcanvas.render(region=self._cbcrop,
-                                              size=new_size)
+            if self._crop is not None:
+                kwargs = {'region': self._cbcrop}
+            else:
+                kwargs = {'size': new_size}
+            cbimg = self.view.cbcanvas.render(**kwargs)
             # Colorbar file name : filename_colorbar.extension
             filename = saveas.replace('.', '_colorbar.')
             io.imsave(filename, cbimg)
