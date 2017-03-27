@@ -1,8 +1,8 @@
 """Main class for sleep tools managment."""
 
 import numpy as np
-import gc
-from ....utils import bipolarization
+from PyQt4 import QtGui
+from ....utils import rereferencing, bipolarization, id
 
 __all__ = ['uiTools']
 
@@ -15,6 +15,18 @@ class uiTools(object):
         # =====================================================================
         # RE-REFERENCING
         # =====================================================================
+        # Add channels to scrolling area :
+        self._ToolsRefIgnArea.setVisible(False)
+        self._reChecks = [0] * len(self._channels)
+        for i, k in enumerate(self._channels):
+            # Add a checkbox to the scrolling panel :
+            self._reChecks[i] = QtGui.QCheckBox(self._PanScrollChan)
+            # Name checkbox with channel name :
+            self._reChecks[i].setText(k)
+            # Add checkbox to the grid :
+            self._ToolsRefIgnGrd.addWidget(self._reChecks[i], i, 0, 1, 1)
+        # Connections :
+        self._ToolsRefIgn.clicked.connect(self._fcn_refChanIgnore)
         self._ToolsRefLst.addItems(self._channels)
         self._ToolsRefSingle.clicked.connect(self._fcn_refPanelDisp)
         self._ToolsRefBipo.clicked.connect(self._fcn_refPanelDisp)
@@ -34,6 +46,13 @@ class uiTools(object):
         self._SigFilt.clicked.connect(self._fcn_filtViz)
         self._SigFiltBand.currentIndexChanged.connect(self._fcn_filtBand)
 
+    # =====================================================================
+    # RE-REFERENCING
+    # =====================================================================
+    def _fcn_refChanIgnore(self):
+        """Display / hide list of channels to ignore."""
+        self._ToolsRefIgnArea.setVisible(self._ToolsRefIgn.isChecked())
+
     def _fcn_refPanelDisp(self):
         """Display / Hide the reference panel."""
         viz = self._ToolsRefSingle.isChecked()
@@ -42,48 +61,68 @@ class uiTools(object):
 
     def _fcn_refApply(self):
         """Apply re-referencing."""
-        # ________ Clean ________
-        # GUI :
-        self._fcn_cleanGui()
-        # Visuals :
-        self._chan.clean()
-        self._hyp.clean()
-        self._spec.clean()
-        self._specInd.clean()
-        self._hypInd.clean()
-        self._TimeAxis.clean()
-        del (self._chan, self._hyp, self._spec, self._specInd, self._hypInd,
-             self._TimeAxis)
-
-        # ________ Re-reference ________
-        if self._ToolsRefSingle.isChecked():
-            # Get selected channel :
-            idx = self._ToolsRefLst.currentIndex()
-            chan = self._channels[idx]
-            # Build indexing and remove idx :
-            index = np.arange(len(self._channels))
-            index = np.delete(index, idx)
-            # Re-reference :
-            self._data -= self._data[[idx], ...]
-            # Delete unused row (this operation make a data copy. Because
-            # there's might be a gap in indexing, it don't seems possible to
-            # take a view of it)
-            self._data = self._data[index, :]
-            # Channel processing :
-            del self._channels[idx]
-            self._channels = [k + '-' + chan for k in self._channels]
-            # Clean memory :
-
-        # ________ Bipolarization ________
+        # Get selected channel :
+        idx = self._ToolsRefLst.currentIndex()
+        if self._ToolsRefIgn.isChecked():
+            to_ignore = [num for num, k in enumerate(
+                                             self._reChecks) if k.isChecked()]
         else:
-            self._data, self._channels, _ = bipolarization(self._data, self._channels)
+            to_ignore = None
 
-        # ________ Reset GUI ________
+        # ____________________ Re-reference ____________________
+        if self._ToolsRefSingle.isChecked():
+            self._data, self._channels, consider = rereferencing(
+                                            self._data, self._channels, idx,
+                                            to_ignore)
+            self._chanChecks[idx].setChecked(False)
+
+        # ____________________ Bipolarization ____________________
+        else:
+            self._data, self._channels, consider = bipolarization(
+                                                  self._data, self._channels,
+                                                  to_ignore)
+
+        # ____________________ Update ____________________
+        aM = np.argmax(consider)
         # Update data info :
-        gc.collect()
         self._get_dataInfo()
-        # Reset visuals, shortcuts and GUI elements :
-        self._fcn_resetGui()
+
+        # Disconnect and clear listbox :
+        self._PanSpecChan.currentIndexChanged.disconnect()
+        self._PanSpecChan.clear()
+        self._ToolDetectChan.clear()
+        self._PanSpecChan.addItems(self._channels)
+        self._ToolDetectChan.addItems(self._channels)
+        # Reconnect :
+        self._PanSpecChan.setCurrentIndex(aM)
+        self._ToolDetectChan.setCurrentIndex(aM)
+        self._ToolDetectChan.model().item(idx).setEnabled(False)
+
+        # Update channel names :
+        for num, k in enumerate(self._channels):
+            self._chanChecks[num].setText(k)
+            self._chanLabels[num].setText(k)
+
+        # Ignore non re-referenced channels :
+        if self._ToolsRefIgnore.isChecked():
+            for num, k in enumerate(consider):
+                # Remove from visible channels :
+                self._chanChecks[num].setChecked(False)
+                self._chanChecks[num].setVisible(k)
+                self._chanLabels[num].setVisible(k)
+                self._yminSpin[num].setVisible(k)
+                self._ymaxSpin[num].setVisible(k)
+                self._amplitudeTxt[num].setVisible(k)
+                # Remove from chan list :
+                self._PanSpecChan.model().item(num).setEnabled(k)
+                self._ToolDetectChan.model().item(num).setEnabled(k)
+        if not any([k.isChecked() for k in self._chanChecks]):
+            self._chanChecks[aM].setChecked(True)
+        # Reconnect :
+        self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
+
+        self._chan.update()
+        self._fcn_chanViz()
 
         # Finally disable GroupBox :
         self._ToolsRefGrp.setEnabled(False)

@@ -105,7 +105,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._file = file
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample)
-        self._channels = [k.split('.')[0] for k in channels]
+        self._channels = [k.strip().replace(' ', '').split('.')[
+                                                        0] for k in channels]
         self._ax = axis
         # ---------- Default line width ----------
         self._linemeth = line
@@ -293,7 +294,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._chanChecks[0].setChecked(True)
         self._hypLabel.setVisible(self._PanHypViz.isChecked())
         self._fcn_chanViz()
-        self._fcn_chanAmplitude()
+        self._fcn_chanSymAmp()
         self._fcn_infoUpdate()
         self._fcn_Hypno2Score()
         # Set objects visible :

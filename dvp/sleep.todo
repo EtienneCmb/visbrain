@@ -1,7 +1,9 @@
 Bug
+	-5 La barre de progres sur les detections ne s'affiche qu'en cas de bug de mon côté (valeur à 24 % qui est la valeur définie dans designer)
 	-5 Peut-être il faut vider la mémoire après downsampling.
 	-5 SEGMENTATION ERROR: à l fermeture, l'interface bug (fait bugger ipython). Continuous array? Voir modifs pyqt5, dernière ligne
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
+	-5 Bug dans le reréférencement pour de larges données
 	+5 Convertir window
 	+4 Screenshot page complète mais par PyQt (pas vispy canvas)
 	+5 Bug quand aucun spindle détecté (à reproduire sur small + th=2. + wavelet)
@@ -16,13 +18,16 @@ Bug
 
 Etienne
 	-5 Améliorer le départ d'un hypno vide
+	-5 Table nombre / densité sur toutes les detections
 	-5 Ajouter un bouton (radio) link qui link min/max anplitude
 	-5 Améliorer la gestion des amplitudes + bouton auto
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-3 Grilles peu lisibles
+	-4 Hypnogramme: on pourrait faire une chekcbox "Edit mode" qui lorsqu'elle estt cochée permet d'activer les fonctions de modifications de l'hypno. Lorsque l'utilisateur la coche, il doit selectionner un nom de fichier d'hhypnogramme, puis à chaque modification ça enregistre automatiquement dans le fichier .hyp ou .txt
+	-3 Spectrogramme en ondelettes ?
 	+5 Faire une couleur par état d'hypno
 	+4 Tableau Locations start / duration / stage + header electrode et type
-	+5 Scoring avancer fenêtre par fenêtre + (a / w / 1 / 2 / 3 / r) et ajout de points 
+	+5 Scoring avancer fenêtre par fenêtre + (a / w / 1 / 2 / 3 / r) et ajout de points
 	+5 Test de mémoire et tracking des données (URGENT quand on passera en données réelles)
 	+5 Couleur spindles / REM devrait fitter avec l'hypno (self._spin, self._rem)
 	+4 Possibilité de sort sur scoring table (en fonction du time start)
@@ -42,22 +47,24 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	+4 Detection K-complexes
-	+3 Implémentation ICA + rejection
-	+2 Scorage automatique du sommeil
-	+5 Minimum duration sur REM?
+	-4 Finir detection K-complexes: mettre un seul critère de probabilité (0 à 1) pour la detection
+	-4 Améliorer les détections
+	-3 Ajout collaborateur
+	-2 Scorage automatique du sommeil
+	+5 Minimum duration sur REM
 	+3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
 	+5 Choix des couleurs de l'hypno
 	+5 Intégration de la REM détection
 	+5 Intégration de la Spindle détection
 	+5 Chargement hypnogram
 	+4 Calcul statistiques de sommeil
-	
+
 Commun
+	-4 uiTools: implémentation ICA + reconstruction du signal après selection des composantes artefactuelles. Denoising intéressant pour nos detections ?
 	-5 Documentation
-	-5 About: tu en penses quoi? moi je pensais plutôt faire une classe "WhatsNew" qui montrerai un simple popup window avec les dernières nouveautés.
+	-5 About: tu en penses quoi? moi je pensais plutôt faire une classe "WhatsNew" qui montrerai un simple popup window avec les dernières nouveautés. Ok avec ça.
 	-5 Aide directement depuis l'interface?: j'y ai pensé. Ce qui me gène avec cette idée, c'est que l'on va devoir compiler la doc en pdf et la mettre dans visbrain. Donc ça va alourdir le clonage. Visbrain commence à être sérieusement lourd. Autree chose, mais je suis entrain de réfléchir à bouger la doc de nouveau, notemment à cause de ce problème...
-	-5 Ajouter collaborateurs: ça c'est plus pour toi, c'est si tu veux que ton nom apparaisse dans la GUI. Moi je suis pas friant de voir le miens, notemment parce que sinon je vais devoir le mettre partout ! Mais on peut faire une simple popup window avec ton nom, je n'y vois aucun inconvénient. Visbrain est déjà hébergé sur mon profil, donc moi j'ai ma pub mais je laisse cette partie à ta discrétion (PS: j'ai ausi mis ton nom dans mon site web)
+	+5 Ajouter collaborateurs: ça c'est plus pour toi, c'est si tu veux que ton nom apparaisse dans la GUI. Moi je suis pas friant de voir le miens, notemment parce que sinon je vais devoir le mettre partout ! Mais on peut faire une simple popup window avec ton nom, je n'y vois aucun inconvénient. Visbrain est déjà hébergé sur mon profil, donc moi j'ai ma pub mais je laisse cette partie à ta discrétion (PS: j'ai ausi mis ton nom dans mon site web).
 	+4 Ajout option de bipolarisation / re-referencement dans un menu ou panel Tools
 	+5 Indicateur temporel + stage
 	+2 Possibilité de scorer un hypnogramme en temps réel
@@ -66,4 +73,3 @@ Commun
 	+4 Possibilité d'afficher une grid sur les channels pour voir la seconde (important pour distinguer spindles, KCs, etc)
 	+3 Modifier les unités de la règle en bas pour que ça affiche en minutes ? ( / 60)
 	+4 Augmenter la hauteur du panel "Visible channels"
-	

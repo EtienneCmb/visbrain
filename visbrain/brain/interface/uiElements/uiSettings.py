@@ -259,7 +259,9 @@ class uiSettings(object):
 
     def _toggle_settings(self):
         """Toggle method for display / hide the settings panel."""
-        self.q_widget.setVisible(not self.q_widget.isVisible())
+        viz = self.q_widget.isVisible()
+        self.q_widget.setVisible(not viz)
+        self._xyzRange['turntable']['x'] = (-950, 1050) if viz else (-750, 850)
 
     def _fcn_bgd_color(self):
         """Change canvas background color."""
