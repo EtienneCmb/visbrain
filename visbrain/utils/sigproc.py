@@ -4,8 +4,11 @@ import numpy as np
 from warnings import warn
 
 
-__all__ = ['normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh']
+__all__ = ['is_power2', 'normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh']
 
+def is_power2(x):
+    """Function to check if a number is a power of 2"""
+    return x != 0 and ((x & (x - 1)) == 0)
 
 def normalize(x, tomin=0., tomax=1.):
     """Normalize the array x between tomin and tomax.

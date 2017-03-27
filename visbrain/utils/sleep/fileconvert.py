@@ -7,6 +7,9 @@ specific files including *.eeg, *.edf...
 import numpy as np
 import os
 
+from ..sigproc import is_power2
+
+
 __all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
            'save_hypnoTotxt']
 
@@ -46,6 +49,7 @@ def load_sleepdataset(path, downsample=100):
         # ELAN :
         if os.path.isfile(path + '.ent'):
             # Apply an automatic downsampling to 100 Hz
+            return sf, data, chan
             sf, data, chan = elan2array(path)
             return sf, data, chan
 
@@ -276,7 +280,7 @@ def elan2array(path):
             Filename(with full path) to Elan .eeg file
 
     Return:
-        sf: int
+        sf: float
             The sampling frequency.
 
         data: np.ndarray
@@ -314,11 +318,10 @@ def elan2array(path):
         formread = '>i4'
 
     # Sampling rate
-    sf = np.int(1 / float(ent[8]))
+    sf = int(1 / float(ent[8]))
 
     # Channels
     nb_chan = np.int(ent[9])
-    nb_chan = nb_chan
 
     # Last 2 channels do not contain data
     nb_chan_data = nb_chan - 2
@@ -352,7 +355,7 @@ def elan2array(path):
     data = m_raw[chan_list, ] * \
         Gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return float(sf), data, list(chan)
+    return float(ds_freq), data, list(chan)
 
 
 def edf2array(path):

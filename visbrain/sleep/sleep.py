@@ -13,7 +13,7 @@ from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
 from ..utils import (FixedCam, load_sleepdataset, load_hypno, color2vb,
-                     ShortcutPopup)
+                     ShortcutPopup, is_power2)
 # from ...utils import id
 # from .user import userfcn
 
@@ -61,7 +61,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     """
 
     def __init__(self, file=None, hypno_file=None, data=None, channels=None,
-                 sf=None, hypno=None, downsample=100., axis=False, line='gl'):
+                 sf=None, hypno=None, downsample=100, axis=False, line='gl'):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
@@ -198,8 +198,16 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Check sampling frequency :
         if not isinstance(sf, (int, float)):
             raise ValueError("The sampling frequency must be a float number "
-                             "(e.g. 1024., 512., etc)")
+                             "(e.g. 1024., 512., 100. etc)")
         sf = float(sf)
+
+        if sf % downsample != 0:
+            # Check if sf is a power of 2
+            power2 = is_power2(int(sf))
+            # Find nearest power of 2 (e.g. downsample 100 --> 128 Hz)
+            if power2:
+                downsample = np.power(2, int(np.math.log(downsample, 2) + 0.5))
+
         # Check data shape and format to float32 :
         # data = np.atleast_2d(data)
         if data.ndim is not 2:
