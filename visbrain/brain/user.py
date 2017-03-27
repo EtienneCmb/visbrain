@@ -7,7 +7,7 @@ Brain instance.
 """
 
 import numpy as np
-import os.path
+import os
 
 from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
