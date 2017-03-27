@@ -96,8 +96,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 # Default: Apply 100 Hz downsampling (Elan only)
                 sf, data, channels = load_sleepdataset(file)
 
+            # Load hypnogram :
             if hypno_file:
-                # Load hypnogram :
                 hypno = load_hypno(hypno_file, sf)
 
         # ====================== VARIABLES ======================

@@ -46,8 +46,8 @@ def load_sleepdataset(path, downsample=100):
         # ELAN :
         if os.path.isfile(path + '.ent'):
             # Apply an automatic downsampling to 100 Hz
-            sf, data, chan = elan2array(path, downsample)
-            return downsample, data, chan
+            sf, data, chan = elan2array(path)
+            return sf, data, chan
 
         # BRAINVISION :
         elif os.path.isfile(file + '.vhdr'):
@@ -262,7 +262,7 @@ def swap_hyp_values(hypno, desc):
     return hypno_s
 
 
-def elan2array(path, ds_freq):
+def elan2array(path):
     """Read Elan eeg file into NumPy.
 
     Elan format specs: http: // elan.lyon.inserm.fr/
@@ -274,9 +274,6 @@ def elan2array(path, ds_freq):
     Args:
         path: str
             Filename(with full path) to Elan .eeg file
-
-        ds_freq: int, (def 100)
-            Down - sampling frequency
 
     Return:
         sf: int
@@ -349,14 +346,10 @@ def elan2array(path, ds_freq):
     nb_samples = int(nb_bytes / (nb_oct * nb_chan))
 
     m_raw = np.memmap(path, dtype=formread, mode='r',
-                      shape=(nb_chan, nb_samples), order={'F'})
-
-    # Downsample
-    ds_factor = np.int(sf / ds_freq)
-    m_ds = m_raw[:, ::ds_factor]
+                      shape=(nb_chan, nb_samples), order={'F'}).copy()
 
     # Multiply by gain :
-    data = m_ds[chan_list, ] * \
+    data = m_raw[chan_list, ] * \
         Gain[chan_list][..., np.newaxis].astype(np.float32)
 
     return float(sf), data, list(chan)
