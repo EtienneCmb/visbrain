@@ -51,10 +51,10 @@ vb.screenshot('screenshot2.tiff', region=region)
 vb.roi_plot(selection=[4, 6, 40],       # Display Brodmann area 4 and 6 :
             subdivision='brod',
             smooth=5)
-vb.sources_opacity(show=True)           # Display sources
 vb.sources_colormap(cmap='Spectral_r')
 vb.cortical_repartition(radius=20.,     # Run the cortical repartition
                         project_on='roi')
+vb.sources_opacity(show=False)           # Display sources
 vb.rotate(custom=(-210, 10.))           # Rotate the brain
 vb.brain_control(show=False)            # Hide the brain
 vb.screenshot('screenshot3.png',        # Export with transparent background and colorbar
