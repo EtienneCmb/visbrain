@@ -16,7 +16,7 @@ from vispy.visuals import Visual
 from vispy.geometry import MeshData
 import vispy.visuals.transforms as vist
 
-from ....utils import array2colormap, color2vb, normalize
+from ....utils import array2colormap, color2vb, normalize, vpnormalize
 
 __all__ = ['BrainVisual']
 
@@ -326,19 +326,8 @@ class BrainVisual(Visual):
 
         # -------------- Transformations --------------
         if self._recenter:
-            # Inspect minimum and maximum :
-            vM = vertices.max()
-
-            # Get the mean across (x, y, z) axis :
-            xScale = vertices[:, :, 0].mean()
-            yScale = vertices[:, :, 1].mean()# - 100.
-            zScale = vertices[:, :, 2].mean()# + 800.
-            print(xScale, yScale, zScale, self._scaleFactor / vM)
-
             # Recenter the brain around (0, 0, 0) and rescale it:
-            sc = [self._scaleFactor / vM] * 3
-            tr = (-xScale, -yScale, -zScale)
-            self._btransform = vist.STTransform(scale=sc, translate=tr)
+            self._btransform = vpnormalize(vertices, 2 * self._scaleFactor)
 
             # Keep maximum/minimum pear coordinates :
             self._vertsize = [(vertices[:, 0, 0].min(),

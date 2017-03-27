@@ -236,8 +236,8 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._crop = kwargs.get('ui_region', None)
         self._cbcrop = kwargs.get('ui_cbregion', None)
         self._uirez = kwargs.get('ui_resolution', 3000.)
-        self._xyzRange = {'turntable': {'x': (-600, 700), 'y': (-4000, 700),
-                                        'z': (-2000, 10)},
+        self._xyzRange = {'turntable': {'x': (-750, 850), 'y': (-0, 0),
+                                        'z': (-0, 0)},
                           'fly': {'x': (-120, 120), 'y': (-100, 200),
                                   'z': (-90, 90)},
                           }
@@ -263,7 +263,7 @@ class Brain(uiInit, uiElements, base, userfcn):
 
         # ====================== Objects creation ======================
         camera = viscam.TurntableCamera(azimuth=0, distance=1000,
-                                        name='turntable', center=(10000., 10000., 10000.))
+                                        name='turntable')
         base.__init__(self, self.view.wc, self.progressBar, **kwargs)
 
         # ====================== UI to visbrain ======================
@@ -273,8 +273,6 @@ class Brain(uiInit, uiElements, base, userfcn):
         # ====================== Cameras ======================
         # # Main camera :
         self.view.wc.camera = camera
-        # self.view.wc.camera.center = (1000., 1000.)
-        # self.view.wc.camera.update()
         self.atlas.mesh.set_camera(self.view.wc.camera)
         self._vbNode.parent = self.view.wc.scene
 
