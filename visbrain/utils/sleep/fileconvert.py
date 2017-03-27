@@ -7,6 +7,9 @@ specific files including *.eeg, *.edf...
 import numpy as np
 import os
 
+from ..sigproc import is_power2
+
+
 __all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
            'save_hypnoTotxt']
 
@@ -47,7 +50,7 @@ def load_sleepdataset(path, downsample=100):
         if os.path.isfile(path + '.ent'):
             # Apply an automatic downsampling to 100 Hz
             sf, data, chan = elan2array(path, downsample)
-            return downsample, data, chan
+            return sf, data, chan
 
         # BRAINVISION :
         elif os.path.isfile(file + '.vhdr'):
@@ -275,11 +278,11 @@ def elan2array(path, ds_freq):
         path: str
             Filename(with full path) to Elan .eeg file
 
-        ds_freq: int, (def 100)
-            Down - sampling frequency
+        ds_freq: float, (def 100)
+            Downsampling frequency
 
     Return:
-        sf: int
+        sf: float
             The sampling frequency.
 
         data: np.ndarray
@@ -317,11 +320,10 @@ def elan2array(path, ds_freq):
         formread = '>i4'
 
     # Sampling rate
-    sf = np.int(1 / float(ent[8]))
+    sf = int(1 / float(ent[8]))
 
     # Channels
     nb_chan = np.int(ent[9])
-    nb_chan = nb_chan
 
     # Last 2 channels do not contain data
     nb_chan_data = nb_chan - 2
@@ -352,6 +354,13 @@ def elan2array(path, ds_freq):
                       shape=(nb_chan, nb_samples), order={'F'})
 
     # Downsample
+    if sf % ds_freq != 0:
+        # Check if sf is a power of 2
+        power2 = is_power2(sf)
+        # Find nearest power of 2
+        if power2:
+            ds_freq = np.power(2, int(np.math.log(ds_freq, 2) + 0.5))
+
     ds_factor = np.int(sf / ds_freq)
     m_ds = m_raw[:, ::ds_factor]
 
@@ -359,7 +368,7 @@ def elan2array(path, ds_freq):
     data = m_ds[chan_list, ] * \
         Gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return float(sf), data, list(chan)
+    return float(ds_freq), data, list(chan)
 
 
 def edf2array(path):
