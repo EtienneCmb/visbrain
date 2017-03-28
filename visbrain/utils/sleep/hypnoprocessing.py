@@ -109,7 +109,6 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
     stats = {}
     tov = np.nan
 
-    stats['Duration (TIB)_3'] = hypno.size
     stats['TDT_4'] = np.where(hypno != 0)[0].max() if np.nonzero(
         hypno)[0].size else tov
 
@@ -143,10 +142,7 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
         stats[key] = value / (60. / time_window)
 
     # Add global informations
-    if file == None:
-        stats['Filename_0'] = ''
-    else:
-        stats['Filename_0'] = path.basename(file)
+    stats['Filename_0'] = path.basename(file) if file is not None else ''
     stats['Downsampling_1'] = str(int(sf)) + " Hz"
     stats['Units_2'] = 'minutes'
     stats['Duration (TIB)_3'] = N / (sfori * 60.)
