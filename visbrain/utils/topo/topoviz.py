@@ -3,12 +3,16 @@ import numpy as np
 from scipy.interpolate import interp2d
 
 from warnings import warn
+import os
+import sys
+
 from vispy.scene import visuals
 from vispy.scene import Node
 import vispy.visuals.transforms as vist
 
 from .projection import array_project_radial_to3d, array_project_radial_to2d
-from ...utils import array2colormap, color2vb, normalize, vpnormalize
+from .. import array2colormap, color2vb, normalize#, vpnormalize
+from visbrain.utils.transform import vpnormalize
 
 
 class TopoPlot(object):
@@ -78,20 +82,21 @@ class TopoPlot(object):
             if xyz.shape[1] == 2:
                 xyz = np.c_[xyz, np.zeros((nchan), dtype=np.float)]
             xyz[:, 2] = 1.
+            keeponly = np.ones((xyz.shape[0],), dtype=bool)
         elif (xyz is None) and (chans is not None):
             if all([isinstance(k, str) for k in chans]):
-                xyz, abort = self._load_chan(chans)
-                xyz = np.c_[xyz, np.zeros((xyz.shape[0]), dtype=np.float)]
+                xyz, abort, keeponly = self._load_chan(chans)
                 self.system = 'spheric'
             if abort:
                 warn("No channels found.")
+        self.keeponly = keeponly
 
         # ----------- Conversion -----------D
         if isinstance(xyz, np.ndarray):
             if self.system == 'cart':
-                self.xyzp = xyz
+                self.xyzp = xyz[keeponly, :]
             elif self.system == 'spheric':
-                xyz = self._sphere2cart(xyz, unit='degree')
+                xyz = self._sphere2cart(xyz[keeponly, :], unit='degree')
                 self.xyzp = array_project_radial_to2d(xyz)
         self.xyz = xyz
 
@@ -176,20 +181,23 @@ class TopoPlot(object):
                 List of channel names.
         """
         # Load the coordinates template :
-        file = np.load('eegref.npz')
+        path = sys.modules[__name__].__file__.split('topoviz')[0]
+        file = np.load(os.path.join(path, 'eegref.npz'))
         nameRef, xyzRef = file['chan'], file['xyz']
+        keeponly = np.ones((len(chan)), dtype=bool)
         # nameRef = list(nameRef)
         # Find and load xyz coordinates :
-        xyz, abort = [], True
-        for k in chan:
+        xyz, abort = np.zeros((len(chan), 3), dtype=np.float32), True
+        for num, k in enumerate(chan):
             # Find if the channel is present :
             idx = np.where(nameRef == k)[0]
             if idx.size:
-                xyz.append(xyzRef[idx, :].ravel())
+                xyz[num, 0:2] = np.array(xyzRef[idx[0], :])
                 abort = False
             else:
+                keeponly[num] = False
                 warn("\n"+k+" not found. This channel will be ignore.")
-        return np.array(xyz), abort
+        return np.array(xyz), abort, keeponly
 
     @staticmethod
     def _sphere2cart(xyz, axtheta=0, axphi=1, unit='rad'):
@@ -289,11 +297,12 @@ class TopoPlot(object):
                 The topoplot image.
         """
         xyz, nchan = self.xyz, len(self)
+        print(xyz.shape, nchan, data.shape)
         # Check data shape :
         if data.ndim > 1:
             data = data.ravel()
-        if len(data) is not nchan:
-            raise ValueError("The length of data must be (nchans,)")
+        # if len(data) is not nchan:
+        #     raise ValueError("The length of data must be (nchans,)")
 
         # =================== LOCATIONS ===================
         g = np.zeros((1 + nchan, 1 + nchan))
@@ -363,6 +372,7 @@ class TopoPlot(object):
                 Coordinates system. Use 'cart' for cartesian system, 'sphere'
                 for spheric (with a theta / phi angle).
         """
+        data = data[self.keeponly]
         # =================== GET IMAGE ===================
         if self.system == 'cart':
             image = self._topoMNE(data)

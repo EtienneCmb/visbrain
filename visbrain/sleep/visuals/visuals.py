@@ -10,7 +10,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .marker import Markers
-from ...utils import array2colormap, color2vb, filt
+from ...utils import array2colormap, color2vb, filt, TopoPlot
 
 
 __all__ = ["visuals"]
@@ -818,3 +818,7 @@ class visuals(vbShortcuts):
 
         # Initialize popup window with shotcuts :
         self._shpopup.set_shortcuts(self.sh)
+
+        # =================== TOPOPLOT ===================
+        self._topo = TopoPlot(chans=self._channels)
+        self._topo.set_data(np.arange(len(self._channels)))
