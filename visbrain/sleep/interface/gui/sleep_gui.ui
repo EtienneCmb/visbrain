@@ -3284,7 +3284,7 @@ waves</string>
        <widget class="QWidget" name="_topoW" native="true">
         <property name="minimumSize">
          <size>
-          <width>400</width>
+          <width>600</width>
           <height>0</height>
          </size>
         </property>
@@ -3296,7 +3296,7 @@ waves</string>
           <number>0</number>
          </property>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_30"/>
+          <layout class="QVBoxLayout" name="_topoLayout"/>
          </item>
         </layout>
        </widget>

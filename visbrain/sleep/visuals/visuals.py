@@ -812,13 +812,16 @@ class visuals(vbShortcuts):
                                  parent=self._hypCanvas.wc.scene)
         self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
 
+        # =================== TOPOPLOT ===================
+        self._topo = TopoPlot(chans=self._channels, camera=cameras[3],
+                              parent=self._topoCanvas.wc.scene)
+        value = np.zeros((len(self)))
+        value[self._topo.keeponly] = self._topo.xyz[:, 0]
+        self._topo.set_data(value)
+
         vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
             vbShortcuts.__init__(self, k.canvas)
 
         # Initialize popup window with shotcuts :
         self._shpopup.set_shortcuts(self.sh)
-
-        # =================== TOPOPLOT ===================
-        self._topo = TopoPlot(chans=self._channels)
-        self._topo.set_data(np.arange(len(self._channels)))

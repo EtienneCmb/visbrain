@@ -7,7 +7,7 @@ import os
 from warnings import warn
 
 import vispy.app as visapp
-# import vispy.scene.cameras as viscam
+import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
 from .visuals import visuals
@@ -287,13 +287,16 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ------------------- Hypnogram -------------------
         self._hypcam = FixedCam()  # viscam.PanZoomCamera()
         self._hypCanvas.set_camera(self._hypcam)
+        # ------------------- Topoplot -------------------
+        self._topocam = viscam.PanZoomCamera()
+        self._topoCanvas.set_camera(self._topocam)
         # ------------------- Time axis -------------------
         self._timecam = FixedCam()
         self._TimeAxis.set_camera(self._timecam)
 
         # Keep all cams :
         self._allCams = (self._chanCam, self._speccam, self._hypcam,
-                         self._timecam)
+                         self._topocam, self._timecam)
 
     def _fcnsOnCreation(self):
         """Functions that need to be applied on creation."""

@@ -45,9 +45,9 @@ class TopoPlot(object):
     """
 
     def __init__(self, xyz=None, system='cart', unit='rad', axtheta=0, axphi=1,
-                 chans=None, pixels=32, bgcolor='white', levels=10,
+                 chans=None, pixels=64, bgcolor='white', levels=10,
                  linecolor='black', width=4, textcolor='black', interp=.1,
-                 scale=800., parent=None):
+                 scale=800., parent=None, camera=None):
         """Init."""
         # ================== VARIABLES ==================
         self.width = width
@@ -62,7 +62,9 @@ class TopoPlot(object):
         self.scale = scale
         self.onload = True
         self.xyz = None
+        self._params = {}
         self.levels = levels
+        self.camera = camera
         # Legendre factors :
         m = 4
         num_lterms = 10
@@ -71,39 +73,9 @@ class TopoPlot(object):
         self.node = Node(name='Topoplot', parent=parent)
         self.headset = Node(name='Headset', parent=self.node)
 
-        # ================== CHANNELS ==================
-        # ----------- Checking -----------D
-        # Check coordinates shape :
-        if (xyz is not None) and isinstance(xyz, np.ndarray):
-            if xyz.shape[1] not in [2, 3]:
-                raise ValueError("Shape of xyz must be (nchan, 2) or "
-                                 "(nchan, 3)")
-            nchan = xyz.shape[0]
-            if xyz.shape[1] == 2:
-                xyz = np.c_[xyz, np.zeros((nchan), dtype=np.float)]
-            xyz[:, 2] = 1.
-            keeponly = np.ones((xyz.shape[0],), dtype=bool)
-        elif (xyz is None) and (chans is not None):
-            if all([isinstance(k, str) for k in chans]):
-                xyz, abort, keeponly = self._load_chan(chans)
-                self.system = 'spheric'
-            if abort:
-                warn("No channels found.")
-        self.keeponly = keeponly
-
-        # ----------- Conversion -----------D
-        if isinstance(xyz, np.ndarray):
-            if self.system == 'cart':
-                self.xyzp = xyz[keeponly, :]
-            elif self.system == 'spheric':
-                xyz = self._sphere2cart(xyz[keeponly, :], unit='degree')
-                self.xyzp = array_project_radial_to2d(xyz)
-        self.xyz = xyz
-
         # ================== OBJECT ==================
         pos = np.zeros((2, 3), dtype=np.float32)
-        self.mesh = visuals.Image(pos=pos, parent=self.headset, name='cmap',
-                                  interpolation='gaussian')
+        self.mesh = visuals.Image(pos=pos, parent=self.headset, name='cmap')
         self.head = visuals.Line(pos=pos, parent=self.headset, name='Head')
         self.nose = visuals.Line(pos=pos, parent=self.headset, name='Nose')
         self.earL = visuals.Line(pos=pos, parent=self.headset, name='EarL')
@@ -149,24 +121,75 @@ class TopoPlot(object):
         self.earR.set_data(pos=earR, color=self.linecolor,
                            width=self.width)
 
-        # ------------- Channel names -------------
-        if chans is not None:
-            self.name = visuals.Text(pos=self.xyzp, text=chans,
-                                     parent=self.node, color=self.textcolor)
-
         # =================== TRANSFORMATIONS ===================
         self.node.transform = vist.STTransform(scale=[self.scale] * 3)
+
+        # ================== XYZ / CHANNELS ==================
+        # ----------- Checking -----------
+        # Coordinates given as a input :
+        if (xyz is not None) and isinstance(xyz, np.ndarray):
+            if xyz.shape[1] not in [2, 3]:
+                raise ValueError("Shape of xyz must be (nchan, 2) or "
+                                 "(nchan, 3)")
+            nchan = xyz.shape[0]
+            if xyz.shape[1] == 2:
+                xyz = np.c_[xyz, np.zeros((nchan), dtype=np.float)]
+            xyz[:, 2] = 1.
+            keeponly = np.ones((xyz.shape[0],), dtype=bool)
+
+        # No coordinates -> search in the npz file :
+        elif (xyz is None) and (chans is not None):
+            if all([isinstance(k, str) for k in chans]):
+                xyz, keeponly = self._load_chan(chans)
+                self.system = 'spheric'
+        self.keeponly = keeponly
+
+        if any(self.keeponly):
+            if not all(keeponly):
+                ignore = list(np.array(chans)[np.invert(keeponly)])
+                warn("Channels " + str(ignore) + " have been "
+                     "ignored")
+
+            # ----------- Selection -----------
+            xyz = xyz[keeponly, :]
+            chans = list(np.array(chans)[keeponly])
+
+            # ----------- Conversion -----------
+            if isinstance(xyz, np.ndarray):
+                if self.system == 'cart':
+                    self.xyzp = xyz
+                elif self.system == 'spheric':
+                    xyz = self._sphere2cart(xyz, unit='degree')
+                    self.xyzp = array_project_radial_to2d(xyz)
+            self.xyz = xyz
+
+            # ------------- Channel names -------------
+            if chans is not None:
+                self.name = visuals.Text(pos=self.xyzp, text=chans,
+                                         parent=self.node,
+                                         color=self.textcolor)
+
+            # ------------- Prepare data -------------
+            self._prepare_data()
 
         # =================== CAMERA ===================
         marge = 100.
         factor = self.scale * self.interprange
-        self.cam = {'rect': (-factor-marge, -factor-marge,
-                             2*(factor+marge), 2*(factor+h+marge)),
-                    'aspect': 1.}
+        self.rect = {'rect': (-factor-marge, -factor-marge,
+                              2*(factor+marge), 2*(factor+h+marge)),
+                     'aspect': 1.}
 
     def __len__(self):
         """Return the number of channels."""
         return self.xyz.shape[0]
+
+    def __getitem__(self, key):
+        """Get the parameter."""
+        return self._params[key]
+
+    def __setitem__(self, key, value):
+        """Set parameter."""
+        self._params[key] = value
 
     ###########################################################################
     # STATIC METHODS
@@ -187,17 +210,16 @@ class TopoPlot(object):
         keeponly = np.ones((len(chan)), dtype=bool)
         # nameRef = list(nameRef)
         # Find and load xyz coordinates :
-        xyz, abort = np.zeros((len(chan), 3), dtype=np.float32), True
+        xyz = np.zeros((len(chan), 3), dtype=np.float32)
         for num, k in enumerate(chan):
             # Find if the channel is present :
             idx = np.where(nameRef == k)[0]
             if idx.size:
                 xyz[num, 0:2] = np.array(xyzRef[idx[0], :])
-                abort = False
             else:
                 keeponly[num] = False
-                warn("\n"+k+" not found. This channel will be ignore.")
-        return np.array(xyz), abort, keeponly
+
+        return np.array(xyz), keeponly
 
     @staticmethod
     def _sphere2cart(xyz, axtheta=0, axphi=1, unit='rad'):
@@ -297,12 +319,11 @@ class TopoPlot(object):
                 The topoplot image.
         """
         xyz, nchan = self.xyz, len(self)
-        print(xyz.shape, nchan, data.shape)
         # Check data shape :
         if data.ndim > 1:
             data = data.ravel()
         # if len(data) is not nchan:
-        #     raise ValueError("The length of data must be (nchans,)")
+            # raise ValueError("The length of data must be (nchans,)")
 
         # =================== LOCATIONS ===================
         g = np.zeros((1 + nchan, 1 + nchan))
@@ -363,7 +384,29 @@ class TopoPlot(object):
     ###########################################################################
     # SETTING METHODS
     ###########################################################################
-    def set_data(self, data, cmap='Spectral_r', clim=None, vmin=None,
+    def _prepare_data(self):
+        """"""
+        self._params = {}
+        if self.interp is not None:
+            # Initialize interpolation function :
+            self['x'] = np.arange(0, self.pixels, 1)
+            self['y'] = np.arange(0, self.pixels, 1)
+            # Define newaxis :
+            self['xnew'] = np.arange(0, self.pixels, self.interp)
+            self['ynew'] = np.arange(0, self.pixels, self.interp)
+            self['csize'] = len(self['xnew'])
+        else:
+            self['csize'] = self.pixels
+        # Variables :
+        l = self['csize']/2
+        self['l'] = l
+        y, x = np.ogrid[-l:l, -l:l]
+        disc = x**2 + y**2
+        self['mask'] = disc < l**2
+        self['nmask'] = np.invert(self['mask'])
+        self['image'] = np.tile(self.bgcolor[np.newaxis, ...], (2*l, 2*l, 1))
+
+    def set_data(self, data, cmap='viridis', clim=None, vmin=None,
                  vmax=None, under=None, over=None, chans_color='white'):
         """Set data to the topoplot.
 
@@ -382,42 +425,29 @@ class TopoPlot(object):
         # =================== INTERPOLATION ===================
         if self.interp is not None:
             # Initialize interpolation function :
-            x = np.arange(0, image.shape[1], 1)
-            y = np.arange(0, image.shape[1], 1)
-            xx, yy = np.meshgrid(x, y)
-            f = interp2d(x, y, image, kind='cubic')
-            # Define newaxis :
-            xnew = np.arange(0, image.shape[1], self.interp)
-            ynew = np.arange(0, image.shape[1], self.interp)
-            image = f(xnew, ynew)
-            csize = len(xnew)
-        else:
-            csize = self.pixels
-        # Variables :
-        l = csize/2
-        y, x = np.ogrid[-l:l, -l:l]
-        disc = x**2 + y**2
-        mask = disc >= l**2
+            f = interp2d(self['x'], self['y'], image, kind='linear')
+            image = f(self['xnew'], self['ynew'])
 
         # ------------- Head map -------------
         # Turn it into a colormap and set it :
-        image[mask] = data.mean()
+        image[self['nmask']] = data.mean()
+        image = normalize(image, data.min(), data.max())
         cm = array2colormap(image, cmap=cmap, clim=clim, vmin=vmin,
                             vmax=vmax, under=under, over=over)
-        cm[mask] = self.bgcolor
+        cm[self['nmask']] = self.bgcolor
         self.mesh.set_data(cm)
 
         # =================== ISOCURVE ===================
-        if self.levels is not None:
-            # Get levels and color :
-            levels = np.linspace(image.min(), image.max(), self.levels)
-            color_lev = array2colormap(levels, cmap='Spectral_r')
-            # Set image :
-            image[mask] = np.inf
-            self.iso = visuals.Isocurve(data=image, parent=self.headset,
-                                        levels=levels, color_lev=color_lev,
-                                        width=2.)
-            self.iso.transform = vist.STTransform(translate=(0., 0., -5.))
+        # if self.levels is not None:
+        #     # Get levels and color :
+        #     levels = np.linspace(image.min(), image.max(), self.levels)
+        #     color_lev = array2colormap(levels, cmap='Spectral_r')
+        #     # Set image :
+        #     image[mask] = np.inf
+        #     self.iso = visuals.Isocurve(data=image, parent=self.headset,
+        #                                 levels=levels, color_lev=color_lev,
+        #                                 width=2.)
+        #     self.iso.transform = vist.STTransform(translate=(0., 0., -5.))
 
         # =================== CHANNELS ===================
         # Markers :
@@ -425,3 +455,15 @@ class TopoPlot(object):
         radius = normalize(data, 5., 20.)
         self.chan.set_data(pos=self.xyzp, size=radius, face_color=chanc,
                            edge_color=self.linecolor)
+
+    # ----------- RECT -----------
+    @property
+    def rect(self):
+        """Get the rect value."""
+        return self._rect
+
+    @rect.setter
+    def rect(self, value):
+        """Set rect value."""
+        self._rect = value
+        self.camera.rect = self._rect['rect']

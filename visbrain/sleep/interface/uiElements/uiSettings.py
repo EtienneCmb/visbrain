@@ -161,6 +161,11 @@ class uiSettings(object):
             self._hypInd.set_data(xlim=xlim, ylim=(-6., 2.))
 
         # ---------------------------------------
+        # Update topoplot if visible :
+        if self._topoW.isVisible():
+            self._topo.set_data(self._data[:, sl].mean(1))
+
+        # ---------------------------------------
         # Update Time indicator :
         if self._PanTimeIndic.isEnabled():
             self._TimeAxis.set_data(xlim[0], win, self._time, unit=unit)

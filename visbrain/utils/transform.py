@@ -6,7 +6,7 @@ from vispy.visuals.transforms import (STTransform, ChainTransform)
 __all__ = ['vprescale', 'vprecenter', 'vpnormalize']
 
 
-def vprescale(obj, tomax=1.):
+def vprescale(obj, dist=1.):
     """Get the vispy transformation for rescaling objects.
 
     Args:
@@ -15,7 +15,7 @@ def vprescale(obj, tomax=1.):
             (..., 3)
 
     Kargs:
-        tomax: float, optional, (def: 1.)
+        dist: float, optional, (def: 1.)
             The final rescaling value.
 
     Returns:
@@ -25,7 +25,7 @@ def vprescale(obj, tomax=1.):
     # Get minimum / maximum trough last dimension :
     dim = tuple(np.arange(obj.ndim-1, dtype=int))
     ptp = np.max(obj, axis=dim) - np.min(obj, axis=dim)
-    return STTransform(scale=[tomax / np.max(ptp)]*3)
+    return STTransform(scale=[dist / np.max(ptp)]*3)
 
 
 def vprecenter(obj):
@@ -52,7 +52,7 @@ def vprecenter(obj):
     return STTransform(translate=-center)
 
 
-def vpnormalize(obj, tomax=1.):
+def vpnormalize(obj, dist=1.):
     """Get the vispy transformation for normalizing objects.
 
     Args:
@@ -61,7 +61,7 @@ def vpnormalize(obj, tomax=1.):
             (..., 3)
 
     Kargs:
-        tomax: float, optional, (def: 1.)
+        dist: float, optional, (def: 1.)
             The final rescaling value.
 
     Returns:
@@ -73,5 +73,5 @@ def vpnormalize(obj, tomax=1.):
     # Recenter the object :
     t.prepend(vprecenter(obj))
     # Rescale :
-    t.prepend(vprescale(obj, tomax))
+    t.prepend(vprescale(obj, dist))
     return t

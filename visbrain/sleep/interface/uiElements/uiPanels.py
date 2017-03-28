@@ -119,6 +119,17 @@ class uiPanels(object):
         self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0, 1, 1)
 
         # =====================================================================
+        # TOPOPLOT
+        # =====================================================================
+        # Main canvas for the spectrogram :
+        self._topoCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
+                                      y_label=None, x_label=None,
+                                      name='Topoplot', color='black',
+                                      yargs={'text_color': 'black'},
+                                      xargs={'text_color': 'black'})
+        self._topoLayout.addWidget(self._topoCanvas.canvas.native)
+
+        # =====================================================================
         # TIME AXIS
         # =====================================================================
         self._PanTimeViz.clicked.connect(self._fcn_timeViz)
