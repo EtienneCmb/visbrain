@@ -19,12 +19,12 @@ Bug
 Etienne
 	-5 Améliorer le départ d'un hypno vide
 	-5 Table nombre / densité sur toutes les detections
-	-5 Ajouter un bouton (radio) link qui link min/max anplitude
 	-5 Améliorer la gestion des amplitudes + bouton auto
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-3 Grilles peu lisibles
 	-4 Hypnogramme: on pourrait faire une chekcbox "Edit mode" qui lorsqu'elle estt cochée permet d'activer les fonctions de modifications de l'hypno. Lorsque l'utilisateur la coche, il doit selectionner un nom de fichier d'hhypnogramme, puis à chaque modification ça enregistre automatiquement dans le fichier .hyp ou .txt
 	-3 Spectrogramme en ondelettes ?
+	+5 Ajouter un bouton (radio) link qui link min/max anplitude
 	+5 Faire une couleur par état d'hypno
 	+4 Tableau Locations start / duration / stage + header electrode et type
 	+5 Scoring avancer fenêtre par fenêtre + (a / w / 1 / 2 / 3 / r) et ajout de points
