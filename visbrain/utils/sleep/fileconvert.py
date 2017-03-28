@@ -46,13 +46,13 @@ def load_sleepdataset(path, downsample=100.):
         # ELAN :
         if os.path.isfile(path + '.ent'):
             # Apply an automatic downsampling to 100 Hz
-            sf, data, chan = elan2array(path)
-            return sf, data, chan
+            sf, data, chan, N = elan2array(path, downsample)
+            return sf, data, chan, N
 
         # BRAINVISION :
         elif os.path.isfile(file + '.vhdr'):
-            sf, data, chan = brainvision2array(path)
-            return sf, data, chan
+            sf, data, chan, N = brainvision2array(path, downsample)
+            return sf, data, chan, N
 
         # None :
         else:
@@ -262,7 +262,7 @@ def swap_hyp_values(hypno, desc):
     return hypno_s
 
 
-def elan2array(path):
+def elan2array(path, downsample=100.):
     """Read Elan eeg file into NumPy.
 
     Elan format specs: http: // elan.lyon.inserm.fr/
@@ -275,6 +275,10 @@ def elan2array(path):
         path: str
             Filename(with full path) to Elan .eeg file
 
+    Kargs
+        downsample: float, optional, (def: 100.)
+            The downsampling frequncy.
+
     Return:
         sf: int
             The sampling frequency.
@@ -284,6 +288,9 @@ def elan2array(path):
 
         chan: list
             The list of channel's names.
+
+        time: np.ndarray
+            The down-sampled time vector.
 
     Example:
         >> > import os
@@ -346,16 +353,25 @@ def elan2array(path):
     nb_samples = int(nb_bytes / (nb_oct * nb_chan))
 
     m_raw = np.memmap(path, dtype=formread, mode='r',
-                      shape=(nb_chan, nb_samples), order={'F'}).copy()
+                      shape=(nb_chan, nb_samples), order={'F'})
+
+    # Get original signal length :
+    N = m_raw.shape[1]
+
+    # Get downsample factor :
+    if downsample is not None:
+        ds = int(np.round(sf / downsample))
+    else:
+        ds = 1
 
     # Multiply by gain :
-    data = m_raw[chan_list, ] * \
+    data = m_raw[chan_list, ::ds] * \
         Gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return float(sf), data, list(chan)
+    return sf, data, list(chan), N
 
 
-def edf2array(path):
+def edf2array(path, downsample=100.):
     """Read European Data Format (EDF) file into NumPy.
 
     Use phypno class for reading EDF files:
@@ -364,6 +380,10 @@ def edf2array(path):
     Args:
         path: str
             Filename(with full path) to EDF file
+
+    Kargs:
+        downsample: float, optional, (def: 100.)
+            The downsampling frequency.
 
     Return:
         sf: int
@@ -403,10 +423,19 @@ def edf2array(path):
     np.seterr(divide='ignore', invalid='ignore')
     data = edf.return_dat(chan, 0, n_samples)
 
-    return float(sf), data.astype(np.float32), list(chan)
+    # Get original signal length :
+    N = data.shape[1]
+
+    # Get downsample factor :
+    if downsample is not None:
+        ds = int(np.round(sf / downsample))
+    else:
+        ds = 1
+
+    return float(sf), data[:, ::ds], list(chan), N
 
 
-def brainvision2array(path):
+def brainvision2array(path, downsample=100.):
     """Read BrainVision file.
 
     Poor man's version of https: // gist.github.com / breuderink / 6266871
@@ -420,8 +449,12 @@ def brainvision2array(path):
         path: str
             Filename(with full path) to .eeg file
 
+    Kargs:
+        downsample: float, optional, (def: 100.)
+            The downsampling frequency.
+
     Return:
-        sf: int
+        sf: float
             The sampling frequency.
 
         data: np.ndarray
@@ -455,7 +488,7 @@ def brainvision2array(path):
     # Channels info
     n_chan = int(re.findall('\d+', ent[10])[0])
     # n_samples = int(re.findall('\d+', ent[11])[0])
-    sf = int(re.findall('\d+', ent[14])[0])
+    sf = float(re.findall('\d+', ent[14])[0])
 
     # Extract channel labels and resolution
     start_label = np.array(np.where(np.char.find(ent, 'Ch1=') == 0)).min()
@@ -482,7 +515,16 @@ def brainvision2array(path):
 
         data = np.float32(np.diag(resolution)).dot(ints)
 
-    return float(sf), data, list(chan)
+    # Get original signal length :
+    N = data.shape[1]
+
+    # Get downsample factor :
+    if downsample is not None:
+        ds = int(np.round(sf / downsample))
+    else:
+        ds = 1
+
+    return sf, data[:, ::ds], list(chan), N
 
 
 def save_hypnoToElan(filename, hypno, sf):
