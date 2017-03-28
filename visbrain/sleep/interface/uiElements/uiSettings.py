@@ -115,9 +115,11 @@ class uiSettings(object):
 
             # Switch between differents types :
             if ext == '.hyp':
-                save_hypnoToElan(filename, self._hypno, self._sf)
+                save_hypnoToElan(filename, self._hypno, self._sf, self._sfori,
+                                                                    self._N)
             elif ext == '.txt':
-                save_hypnoTotxt(filename, self._hypno, self._sf, 1)
+                save_hypnoTotxt(filename, self._hypno, self._sf, self._sfori,
+                                                                    self._N, 1)
             else:
                 raise ValueError("Not a valid extension")
 
