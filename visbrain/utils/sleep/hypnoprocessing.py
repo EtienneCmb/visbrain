@@ -46,7 +46,7 @@ def transient(data, xvec=None):
     return np.array(t), st, stages.astype(int)
 
 
-def sleepstats(file, hypno, sf=100, time_window=30.):
+def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
     """Compute sleep stats from an hypnogram vector.
 
     Args:
@@ -56,10 +56,18 @@ def sleepstats(file, hypno, sf=100, time_window=30.):
         hypno: np.ndarray
             Hypnogram vector
 
-        sf: int (def 100)
-            Sampling frequency of hypnogram / data
+        N: int
+            Original data shape before down-sampling.
 
-        time_window: int (def 30)
+    Kargs
+        sf: float, optional, (def: 100.)
+            The sampling frequency of displayed elements (could be the
+            down-sampling frequency)
+
+        sfori: float, optional, (def: 1000.)
+            The original sampling frequency before any down-sampling.
+
+        time_window: float, optional, (def: 30.)
             Length (seconds) of the time window on which to compute stats
 
     Return:
@@ -141,6 +149,7 @@ def sleepstats(file, hypno, sf=100, time_window=30.):
         stats['Filename_0'] = path.basename(file)
     stats['Downsampling_1'] = str(int(sf)) + " Hz"
     stats['Units_2'] = 'minutes'
+    stats['Duration (TIB)_3'] = N / (sfori * 60.)
 
     stats['SE (%)_18'] = np.round(stats['TST_17'] / stats['TDT_4'] * 100., 2)
 

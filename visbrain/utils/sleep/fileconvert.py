@@ -11,7 +11,7 @@ __all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
            'save_hypnoTotxt']
 
 
-def load_sleepdataset(path, downsample=100):
+def load_sleepdataset(path, downsample=100.):
     """Load a sleep dataset (elan, edf, brainvision).
 
     Args:
@@ -19,7 +19,7 @@ def load_sleepdataset(path, downsample=100):
             Filename (with full path) to sleep dataset.
 
     Kargs:
-        downsample: int (def 100)
+        downsample: float (def 100.)
             Downsampling frequency
 
     Return:
