@@ -103,7 +103,7 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
 
     """
     # Get a step (integer) and resample to get one value per 30 seconds :
-    step = int(round(sf * time_window))
+    step = int(hypno.shape / np.round(N / (sfori * time_window)))
     hypno = hypno[::step]
 
     stats = {}
@@ -146,7 +146,7 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
     stats['Sampling frequency_1'] = str(int(sfori)) + " Hz"
     stats['Down-sampling_2'] = str(int(sf)) + " Hz"
     stats['Units_3'] = 'minutes'
-    stats['Duration (TIB)_4'] = np.round(10. * N / (sfori * 60.)) / 10.
+    stats['Duration (TIB)_4'] = np.round(N / (sfori * 60.))
 
     stats['SE (%)_19'] = np.round(stats['TST_18'] / stats['TDT_5'] * 100., 2)
 

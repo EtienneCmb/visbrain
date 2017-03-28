@@ -61,7 +61,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     """
 
     def __init__(self, file=None, hypno_file=None, data=None, channels=None,
-                 sf=None, hypno=None, downsample=100., axis=False, line='gl'):
+                 sf=None, hypno=None, downsample=1000., axis=False, line='gl'):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
