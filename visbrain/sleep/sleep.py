@@ -89,12 +89,13 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                         "(*.*)")
 
             # Load dataset :
-            if downsample:
-                # Apply a specific downsampling (Elan only)
-                sf, data, channels = load_sleepdataset(file, downsample)
-            else:
-                # Default: Apply 100 Hz downsampling (Elan only)
-                sf, data, channels = load_sleepdataset(file)
+            sf, data, channels, N = load_sleepdataset(file, downsample)
+            npts = data.shape[1]
+
+            # Build the time vector :
+            time = np.arange(N) / sf
+            self._N = N
+            self._sfori = sf
 
             # Load hypnogram :
             if hypno_file:
