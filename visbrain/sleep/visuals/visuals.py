@@ -381,6 +381,14 @@ class Spectrogram(PrepareData):
         freq = freq[sls]
         self._fstart, self._fend = freq[0], freq[-1]
 
+        # =================== TIME SELECTION ===================
+        t = []
+        q = 0
+        for k in range(mesh.shape[1]):
+            t.append(time[q:q+nperseg].mean())
+            q += nperseg-overlap
+        t = np.array(t)
+
         # =================== COLOR ===================
         # Get clim :
         clim = (contraste * mesh.min(), contraste * mesh.max())
@@ -735,7 +743,6 @@ class vbShortcuts(object):
                 tm, tM = (val*step, val*step+win)
                 # tm, tM = self._time.min(), self._time.max()
                 cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
-                # print(cursor, canvas.title)
                 for i, k in self._chan:
                     self._chan.node[i].transform.center = (cursor, 0.)
                     k.update()
