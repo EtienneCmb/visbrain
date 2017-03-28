@@ -233,18 +233,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if hypno is None:
             hypno = np.zeros((npts,), dtype=np.float32)
         else:
-            # Check hypno length :
-            if len(hypno) != npts:
-                if len(hypno) < npts:
-                    # Complete hypnogram :
-                    hypno = np.append(hypno, hypno[-1]*np.ones(
-                                                           (npts-len(hypno),)))
-                else:
-                    raise ValueError("The length of the hypnogram \
-                                     vector must be" + str(npts) +
-                                     " (Currently : " + str(len(hypno)) + ".")
+            n = len(hypno)
             # Check hypno values :
-            if (hypno.min() < -1.) or (hypno.max() > 4):
+            if (hypno.min() < -1.) or (hypno.max() > 4) or (n != npts):
                 warn("\nHypnogram values must be comprised between -1 and 4 "
                      "(see Iber et al. 2007). Use:\n-1 -> Art (optional)\n 0 "
                      "-> Wake\n 1 -> N1\n 2 -> N2\n 3 -> N4\n 4 -> REM\nEmpty "
