@@ -108,6 +108,12 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 sf = downsample
                 downsample = None
 
+        # Data and sf are givin as an input :
+        elif (data is not None) and (sf is not None):
+            self._N = data.shape[1]
+            self._sfori = sf
+            time = np.arange(self._N) / sf
+
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
