@@ -99,7 +99,14 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
             # Load hypnogram :
             if hypno_file:
-                hypno = load_hypno(hypno_file, sf)
+                # Load the hypnogram :
+                hypno = load_hypno(hypno_file, npts)
+
+            # Change the sampling frequency if down-sample :
+            if downsample is not None:
+                time = time[::int(np.round(sf/downsample))]
+                sf = downsample
+                downsample = None
 
         # ====================== VARIABLES ======================
         # Check all data :
