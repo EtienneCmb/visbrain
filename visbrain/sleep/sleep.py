@@ -89,22 +89,36 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                         "(*.*)")
 
             # Load dataset :
-            if downsample:
-                # Apply a specific downsampling (Elan only)
-                sf, data, channels = load_sleepdataset(file, downsample)
-            else:
-                # Default: Apply 100 Hz downsampling (Elan only)
-                sf, data, channels = load_sleepdataset(file)
+            sf, data, channels, N = load_sleepdataset(file, downsample)
+            npts = data.shape[1]
 
+            # Build the time vector :
+            time = np.arange(N) / sf
+            self._N = N
+            self._sfori = sf
+
+            # Load hypnogram :
             if hypno_file:
-                # Load hypnogram :
-                hypno = load_hypno(hypno_file, sf)
+                # Load the hypnogram :
+                hypno = load_hypno(hypno_file, npts)
+
+            # Change the sampling frequency if down-sample :
+            if downsample is not None:
+                time = time[::int(np.round(sf/downsample))]
+                sf = downsample
+                downsample = None
+
+        # Data and sf are givin as an input :
+        elif (data is not None) and (sf is not None):
+            self._N = data.shape[1]
+            self._sfori = sf
+            time = np.arange(self._N) / sf
 
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
         self._sf, self._data, self._hypno, self._time = self._check_data(
-            sf, data, channels, hypno, downsample)
+            sf, data, channels, hypno, downsample, time)
         self._channels = [k.strip().replace(' ', '').split('.')[
                                                         0] for k in channels]
         self._ax = axis
@@ -156,7 +170,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         """Return corresponding data info."""
         return self._datainfo[key]
 
-    def _check_data(self, sf, data, channels, hypno=None, downsample=None):
+    def _check_data(self, sf, data, channels, hypno=None, downsample=None,
+                    time=None):
         """Check data, hypnogram, channels and sample frequency after loading.
 
         Args:
@@ -176,9 +191,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 If the hypnogram is None, this functions returns a row vector
                 fill with zeros.
 
-            downsample: float, optional, (def: None)
-                The down-sampling frequency. If this variable is not None it
-                will replace the sampling frequency.
+            time: np.ndarray, optional, (def: None)
+                The time vector to use. If the time vector is None, it will be
+                inferred from data length (be carefull to time consistency).
 
         Returns:
             sf: float
@@ -208,6 +223,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             warn("Organize data array as (n_channels, n_time_points) is more "
                  "memory efficient")
             data = data.T
+        # Get data length :
         npts = data.shape[1]
         # Channels checking :
         if nchan not in data.shape:
@@ -217,26 +233,17 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if hypno is None:
             hypno = np.zeros((npts,), dtype=np.float32)
         else:
-            # Check hypno length :
-            if len(hypno) != npts:
-                if len(hypno) < npts:
-                    # Classic bug in Elan hypnogram file where EEG data is
-                    # slightly longer than hyp file
-                    hypno = np.append(hypno,
-                                      (-1 * np.zeros((npts-len(hypno), 1))))
-                else:
-                    raise ValueError("The length of the hypnogram \
-                                     vector must be" + str(npts) +
-                                     " (Currently : " + str(len(hypno)) + ".")
+            n = len(hypno)
             # Check hypno values :
-            if (hypno.min() < -1.) or (hypno.max() > 4):
+            if (hypno.min() < -1.) or (hypno.max() > 4) or (n != npts):
                 warn("\nHypnogram values must be comprised between -1 and 4 "
                      "(see Iber et al. 2007). Use:\n-1 -> Art (optional)\n 0 "
                      "-> Wake\n 1 -> N1\n 2 -> N2\n 3 -> N4\n 4 -> REM\nEmpty "
                      "hypnogram will be used instead")
                 hypno = np.zeros((npts,), dtype=np.float32)
-        # Define time vector :
-        time = np.arange(npts, dtype=np.float32) / sf
+        # Define time vector if needed :
+        if time is None:
+            time = np.arange(npts, dtype=np.float32) / sf
 
         # ========================== DOWN-SAMPLING ==========================
         if isinstance(downsample, (int, float)):

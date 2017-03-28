@@ -6,12 +6,13 @@ specific files including *.eeg, *.edf...
 
 import numpy as np
 import os
+from warnings import warn
 
 __all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
            'save_hypnoTotxt']
 
 
-def load_sleepdataset(path, downsample=100):
+def load_sleepdataset(path, downsample=100.):
     """Load a sleep dataset (elan, edf, brainvision).
 
     Args:
@@ -19,7 +20,7 @@ def load_sleepdataset(path, downsample=100):
             Filename (with full path) to sleep dataset.
 
     Kargs:
-        downsample: int (def 100)
+        downsample: float (def 100.)
             Downsampling frequency
 
     Return:
@@ -46,13 +47,11 @@ def load_sleepdataset(path, downsample=100):
         # ELAN :
         if os.path.isfile(path + '.ent'):
             # Apply an automatic downsampling to 100 Hz
-            sf, data, chan = elan2array(path, downsample)
-            return downsample, data, chan
+            return elan2array(path, downsample)
 
         # BRAINVISION :
         elif os.path.isfile(file + '.vhdr'):
-            sf, data, chan = brainvision2array(path)
-            return sf, data, chan
+            return brainvision2array(path, downsample)
 
         # None :
         else:
@@ -62,15 +61,14 @@ def load_sleepdataset(path, downsample=100):
 
     # EDF :
     elif ext == '.edf':
-        sf, data, chan = edf2array(path)
-        return sf, data, chan
+        return edf2array(path, downsample)
 
     # None :
     else:
         raise ValueError("*" + ext + " files are currently not supported.")
 
 
-def load_hypno(path, ds_freq):
+def load_hypno(path, npts):
     """Load hypnogram file.
 
     Sleep stages in the hypnogram should be scored as follow
@@ -85,10 +83,10 @@ def load_hypno(path, ds_freq):
 
     Args:
         path: string
-            Filename (with full path) to hypnogram file
+            Filename (with full path) to hypnogram file.
 
-        ds_freq: int
-            Down-sampling frequency
+        npts: int
+            Data length.
 
     Return:
         hypno: np.ndarray
@@ -102,27 +100,41 @@ def load_hypno(path, ds_freq):
 
     # Try loading file :
     try:
-        # Switch between differents types :
-        if ext == '.hyp':
-            # ELAN :
-            return elan_hyp(path, ds_freq)
+        if ext in ['.hyp', '.txt', '.csv']:
+            # ----------- ELAN -----------
+            if ext == '.hyp':
+                hypno = elan_hyp(path, npts)
 
-        elif ext == '.txt' or ext == '.csv':
-            return txt_hyp(path, ds_freq)
+            # ----------- TXT / CSV -----------
+            elif ext in ['.txt', '.csv']:
+                hypno = txt_hyp(path, npts)
+
+            # Complete hypnogram if needed :
+            n = len(hypno)
+            if n < npts:
+                hypno = np.append(hypno, hypno[-1]*np.ones((npts-n,)))
+            elif n > npts:
+                raise ValueError("The length of the hypnogram \
+                                 vector must be" + str(npts) +
+                                 " (Currently : " + str(n) + ".")
+
+            return hypno
 
     except:
+        warn("\nAn error ocurred while trying to load the hypnogram. An empty"
+             " one will be used instead.")
         return None
 
 
-def elan_hyp(path, ds_freq):
-    """Read Elan hypnogram (.hyp)
+def elan_hyp(path, npts):
+    """Read Elan hypnogram (hyp).
 
     Args:
         path: str
             Filename(with full path) to Elan .hyp file
 
-        ds_freq: int
-            Downsampling frequency
+        npts: int
+            Data length.
 
     Return:
         hypno: np.ndarray
@@ -145,21 +157,24 @@ def elan_hyp(path, ds_freq):
     hypno[hypno == 4] = 3
     hypno[hypno == 5] = 4
 
+    # Get the repetition number :
+    rep = int(np.floor(npts/len(hypno)))
+
     # Resample to get same number of points as in eeg file
-    hypno = np.repeat(hypno, ds_freq)
+    hypno = np.repeat(hypno, rep)
 
     return hypno
 
 
-def txt_hyp(path, ds_freq):
+def txt_hyp(path, npts):
     """Read text files (.txt / .csv) hypnogram.
 
     Args:
         path: str
             Filename(with full path) to hypnogram(.txt)
 
-        ds_freq: int
-            Downsampling frequency
+        npts: int
+            Data length.
 
     Return:
         hypno: np.ndarray
@@ -182,7 +197,7 @@ def txt_hyp(path, ds_freq):
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
                         dtype=None, skip_header=0)
 
-    if np.issubdtype(hyp.dtype, np.integer) == False:
+    if not np.issubdtype(hyp.dtype, np.integer):
         hyp = np.char.decode(hyp)
         hypno = np.array([s for s in hyp if s.lstrip('-').isdigit()],
                          dtype=int)
@@ -191,8 +206,11 @@ def txt_hyp(path, ds_freq):
 
     hypno = swap_hyp_values(hypno, desc)
 
+    # Get the repetition number :
+    rep = int(np.floor(npts/len(hypno)))
+
     # Resample to get same number of points as in eeg file
-    hypno = np.repeat(hypno, ds_freq * desc['time'])
+    hypno = np.repeat(hypno, rep)
 
     return hypno
 
@@ -262,7 +280,7 @@ def swap_hyp_values(hypno, desc):
     return hypno_s
 
 
-def elan2array(path, ds_freq):
+def elan2array(path, downsample=100.):
     """Read Elan eeg file into NumPy.
 
     Elan format specs: http: // elan.lyon.inserm.fr/
@@ -275,8 +293,9 @@ def elan2array(path, ds_freq):
         path: str
             Filename(with full path) to Elan .eeg file
 
-        ds_freq: int, (def 100)
-            Down - sampling frequency
+    Kargs
+        downsample: float, optional, (def: 100.)
+            The downsampling frequncy.
 
     Return:
         sf: int
@@ -287,6 +306,9 @@ def elan2array(path, ds_freq):
 
         chan: list
             The list of channel's names.
+
+        time: np.ndarray
+            The down-sampled time vector.
 
     Example:
         >> > import os
@@ -317,7 +339,7 @@ def elan2array(path, ds_freq):
         formread = '>i4'
 
     # Sampling rate
-    sf = np.int(1 / float(ent[8]))
+    sf = 1. / float(ent[8])
 
     # Channels
     nb_chan = np.int(ent[9])
@@ -351,18 +373,23 @@ def elan2array(path, ds_freq):
     m_raw = np.memmap(path, dtype=formread, mode='r',
                       shape=(nb_chan, nb_samples), order={'F'})
 
-    # Downsample
-    ds_factor = np.int(sf / ds_freq)
-    m_ds = m_raw[:, ::ds_factor]
+    # Get original signal length :
+    N = m_raw.shape[1]
+
+    # Get downsample factor :
+    if downsample is not None:
+        ds = int(np.round(sf / downsample))
+    else:
+        ds = 1
 
     # Multiply by gain :
-    data = m_ds[chan_list, ] * \
+    data = m_raw[chan_list, ::ds] * \
         Gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return float(sf), data, list(chan)
+    return sf, data, list(chan), N
 
 
-def edf2array(path):
+def edf2array(path, downsample=100.):
     """Read European Data Format (EDF) file into NumPy.
 
     Use phypno class for reading EDF files:
@@ -371,6 +398,10 @@ def edf2array(path):
     Args:
         path: str
             Filename(with full path) to EDF file
+
+    Kargs:
+        downsample: float, optional, (def: 100.)
+            The downsampling frequency.
 
     Return:
         sf: int
@@ -410,10 +441,19 @@ def edf2array(path):
     np.seterr(divide='ignore', invalid='ignore')
     data = edf.return_dat(chan, 0, n_samples)
 
-    return float(sf), data.astype(np.float32), list(chan)
+    # Get original signal length :
+    N = data.shape[1]
+
+    # Get downsample factor :
+    if downsample is not None:
+        ds = int(np.round(sf / downsample))
+    else:
+        ds = 1
+
+    return float(sf), data[:, ::ds], list(chan), N
 
 
-def brainvision2array(path):
+def brainvision2array(path, downsample=100.):
     """Read BrainVision file.
 
     Poor man's version of https: // gist.github.com / breuderink / 6266871
@@ -427,8 +467,12 @@ def brainvision2array(path):
         path: str
             Filename(with full path) to .eeg file
 
+    Kargs:
+        downsample: float, optional, (def: 100.)
+            The downsampling frequency.
+
     Return:
-        sf: int
+        sf: float
             The sampling frequency.
 
         data: np.ndarray
@@ -462,7 +506,7 @@ def brainvision2array(path):
     # Channels info
     n_chan = int(re.findall('\d+', ent[10])[0])
     # n_samples = int(re.findall('\d+', ent[11])[0])
-    sf = int(re.findall('\d+', ent[14])[0])
+    sf = float(re.findall('\d+', ent[14])[0])
 
     # Extract channel labels and resolution
     start_label = np.array(np.where(np.char.find(ent, 'Ch1=') == 0)).min()
@@ -489,7 +533,16 @@ def brainvision2array(path):
 
         data = np.float32(np.diag(resolution)).dot(ints)
 
-    return float(sf), data, list(chan)
+    # Get original signal length :
+    N = data.shape[1]
+
+    # Get downsample factor :
+    if downsample is not None:
+        ds = int(np.round(sf / downsample))
+    else:
+        ds = 1
+
+    return sf, data[:, ::ds], list(chan), N
 
 
 def save_hypnoToElan(filename, hypno, sf):
