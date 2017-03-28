@@ -6,6 +6,7 @@ specific files including *.eeg, *.edf...
 
 import numpy as np
 import os
+from warnings import warn
 
 __all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
            'save_hypnoTotxt']
@@ -62,15 +63,15 @@ def load_sleepdataset(path, downsample=100.):
 
     # EDF :
     elif ext == '.edf':
-        sf, data, chan = edf2array(path)
-        return sf, data, chan
+        sf, data, chan, N = edf2array(path)
+        return sf, data, chan, N
 
     # None :
     else:
         raise ValueError("*" + ext + " files are currently not supported.")
 
 
-def load_hypno(path, ds_freq):
+def load_hypno(path, npts):
     """Load hypnogram file.
 
     Sleep stages in the hypnogram should be scored as follow
@@ -85,10 +86,10 @@ def load_hypno(path, ds_freq):
 
     Args:
         path: string
-            Filename (with full path) to hypnogram file
+            Filename (with full path) to hypnogram file.
 
-        ds_freq: int
-            Down-sampling frequency
+        npts: int
+            Data length.
 
     Return:
         hypno: np.ndarray
@@ -102,27 +103,41 @@ def load_hypno(path, ds_freq):
 
     # Try loading file :
     try:
-        # Switch between differents types :
-        if ext == '.hyp':
-            # ELAN :
-            return elan_hyp(path, ds_freq)
+        if ext in ['.hyp', '.txt', '.csv']:
+            # ----------- ELAN -----------
+            if ext == '.hyp':
+                hypno = elan_hyp(path, npts)
 
-        elif ext == '.txt' or ext == '.csv':
-            return txt_hyp(path, ds_freq)
+            # ----------- TXT / CSV -----------
+            elif ext in ['.txt', '.csv']:
+                hypno = txt_hyp(path, npts)
+
+            # Complete hypnogram if needed :
+            n = len(hypno)
+            if n < npts:
+                hypno = np.append(hypno, hypno[-1]*np.ones((npts-n,)))
+            elif n > npts:
+                raise ValueError("The length of the hypnogram \
+                                 vector must be" + str(npts) +
+                                 " (Currently : " + str(n) + ".")
+
+            return hypno
 
     except:
+        warn("\nAn error ocurred while trying to load the hypnogram. An empty"
+             " one will be used instead.")
         return None
 
 
-def elan_hyp(path, ds_freq):
-    """Read Elan hypnogram (.hyp)
+def elan_hyp(path, npts):
+    """Read Elan hypnogram (hyp).
 
     Args:
         path: str
             Filename(with full path) to Elan .hyp file
 
-        ds_freq: int
-            Downsampling frequency
+        npts: int
+            Data length.
 
     Return:
         hypno: np.ndarray
@@ -145,21 +160,24 @@ def elan_hyp(path, ds_freq):
     hypno[hypno == 4] = 3
     hypno[hypno == 5] = 4
 
+    # Get the repetition number :
+    rep = int(np.floor(npts/len(hypno)))
+
     # Resample to get same number of points as in eeg file
-    hypno = np.repeat(hypno, ds_freq)
+    hypno = np.repeat(hypno, rep)
 
     return hypno
 
 
-def txt_hyp(path, ds_freq):
+def txt_hyp(path, npts):
     """Read text files (.txt / .csv) hypnogram.
 
     Args:
         path: str
             Filename(with full path) to hypnogram(.txt)
 
-        ds_freq: int
-            Downsampling frequency
+        npts: int
+            Data length.
 
     Return:
         hypno: np.ndarray
@@ -182,7 +200,7 @@ def txt_hyp(path, ds_freq):
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
                         dtype=None, skip_header=0)
 
-    if np.issubdtype(hyp.dtype, np.integer) == False:
+    if not np.issubdtype(hyp.dtype, np.integer):
         hyp = np.char.decode(hyp)
         hypno = np.array([s for s in hyp if s.lstrip('-').isdigit()],
                          dtype=int)
@@ -191,8 +209,11 @@ def txt_hyp(path, ds_freq):
 
     hypno = swap_hyp_values(hypno, desc)
 
+    # Get the repetition number :
+    rep = int(np.floor(npts/len(hypno)))
+
     # Resample to get same number of points as in eeg file
-    hypno = np.repeat(hypno, ds_freq * desc['time'])
+    hypno = np.repeat(hypno, rep)
 
     return hypno
 
@@ -321,7 +342,7 @@ def elan2array(path, downsample=100.):
         formread = '>i4'
 
     # Sampling rate
-    sf = np.int(1 / float(ent[8]))
+    sf = 1. / float(ent[8])
 
     # Channels
     nb_chan = np.int(ent[9])
