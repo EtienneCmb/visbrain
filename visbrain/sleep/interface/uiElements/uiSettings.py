@@ -228,7 +228,7 @@ class uiSettings(object):
         self._SlVal.setMinimum(self._time.min())
         # Set maximum :
         step = self._SigSlStep.value()
-        self._SlVal.setMaximum((self._time.max() - win)/step)
+        self._SlVal.setMaximum(((self._time.max() - win)/step) + 1)
         self._SlVal.setTickInterval(step)
         self._SlVal.setSingleStep(step)
         self._SlGoto.setMaximum((self._time.max() - win))
