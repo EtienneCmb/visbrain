@@ -209,6 +209,13 @@ class uiDetection(object):
                 self._peak.set_data(self._sf, self._data[k], self._time,
                                     self._chan.peak[k], disp_types[disp],
                                     look)
+
+                # Report results on table :
+                self._ToolDetectTable.setRowCount(1)
+                self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
+                    str(self._peak.number)))
+                self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
+                    str(round(self._peak.density, 2))))
                 # Get index :
                 ind = self._peak.index
                 duration = 0
@@ -308,7 +315,7 @@ class uiDetection(object):
                     str(self._time[k])))
                 # Duration :
                 self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
-                    ''))
+                    '1'))
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     ref[int(self._hypno[k])]))
