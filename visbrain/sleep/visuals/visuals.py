@@ -626,6 +626,7 @@ class vbShortcuts(object):
         self.sh = [('n', 'Go to the next window'),
                    ('b', 'Go to the previous window'),
                    ('s', 'Display / hide spectrogram'),
+                   ('t', 'Display / hide topoplot'),
                    ('h', 'Display / hide hypnogram'),
                    ('z', 'Enable / disable zooming'),
                    ('a', 'Scoring: set current window to Art (-1)'),
@@ -666,6 +667,10 @@ class vbShortcuts(object):
             if event.text == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
+
+            if event.text == 't':   # Toggle visibility on topo
+                self._PanTopoViz.setChecked(not self._PanTopoViz.isChecked())
+                self._fcn_topoViz()
 
             if event.text == 'z':  # Enable zoom
                 viz = self._PanTimeZoom.isChecked()
@@ -815,10 +820,11 @@ class visuals(vbShortcuts):
         # =================== TOPOPLOT ===================
         self._topo = TopoPlot(chans=self._channels, camera=cameras[3],
                               parent=self._topoCanvas.wc.scene)
-        value = np.zeros((len(self)))
-        value[self._topo.keeponly] = self._topo.xyz[:, 0]
-        self._topo.set_data(value)
+        self._topo.set_cmap(clim=(-1., 1.))
+        if not any(self._topo.keeponly):
+            self.toolBox_2.setItemEnabled(2, False)
 
+        # =================== SHORTCUTS ===================
         vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
             vbShortcuts.__init__(self, k.canvas)
