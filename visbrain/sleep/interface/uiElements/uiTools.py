@@ -159,6 +159,8 @@ class uiTools(object):
         self._chan.filt_type = filttype
         self._chan.filt_band = filtband
 
+        self._chan.update()
+
         # ========== SPECTROGRAM ==========
         # ---- Demean / detrend ----
         self._spec.demean = demean
@@ -173,24 +175,7 @@ class uiTools(object):
         self._spec.filt_type = filttype
         self._spec.filt_band = filtband
 
-        # ========== TOPOPLOT ==========
-        # ---- Demean / detrend ----
-        self._topo.demean = demean
-        self._topo.detrend = detrend
-        # ---- Filtering ----
-        self._topo.dispas = dispas
-        self._topo.filt = filt
-        self._topo.filt = filt
-        self._topo.fstart = fstart
-        self._topo.fend = fend
-        self._topo.forder = filtorder
-        self._topo.filt_type = filttype
-        self._topo.filt_band = filtband
-
         self._spec.update()
-        self._fcn_sliderMove()
-        self._PanTopoCmin.setValue(self._topo.minmax[0])
-        self._PanTopoCmax.setValue(self._topo.minmax[1])
 
     def _fcn_filtDispAs(self):
         """Display / hide settings for amplitude / phase / power."""
