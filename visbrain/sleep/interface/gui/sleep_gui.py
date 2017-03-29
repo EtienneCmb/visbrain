@@ -1308,7 +1308,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8.addItem(spacerItem36)
         self.verticalLayout_38.addLayout(self.horizontalLayout_8)
         self._ToolDetectProgress = QtGui.QProgressBar(self.q_DetectSettings)
-        self._ToolDetectProgress.setProperty("value", 24)
+        self._ToolDetectProgress.setProperty("value", 0)
         self._ToolDetectProgress.setInvertedAppearance(False)
         self._ToolDetectProgress.setObjectName(_fromUtf8("_ToolDetectProgress"))
         self.verticalLayout_38.addWidget(self._ToolDetectProgress)
@@ -1601,7 +1601,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.QuickSettings.setCurrentIndex(0)
+        self.QuickSettings.setCurrentIndex(4)
         self.toolBox_2.setCurrentIndex(2)
         self.toolBox.setCurrentIndex(1)
         self._DetectionTab.setCurrentIndex(0)

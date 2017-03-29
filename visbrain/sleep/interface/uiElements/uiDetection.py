@@ -120,15 +120,16 @@ class uiDetection(object):
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_applyDetection(self):
-        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC)"""
+        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC)."""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
         ind = np.array([], dtype=int)
 
         for i, k in enumerate(idx):
-            # Display progress bar :
-            self._ToolDetectProgress.show()
+            # Display progress bar (only if needed):
+            if len(idx) > 1:
+                self._ToolDetectProgress.show()
 
             # Get if report is enable and checked:
             toReport = self._ToolDetecReport.isEnabled(
