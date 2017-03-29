@@ -133,7 +133,7 @@ class uiDetection(object):
 
             # Get if report is enable and checked:
             toReport = self._ToolDetecReport.isEnabled(
-            ) and self._ToolDetecReport.isChecked()
+                                        ) and self._ToolDetecReport.isChecked()
 
             # Switch between detection types :
             # ------------------- REM -------------------
@@ -352,7 +352,7 @@ class uiDetection(object):
         path = QtGui.QFileDialog.getSaveFileName(
             self, "Save File", method + "_locinfo",
             filter=selected_ext)
-        if path:
+        if filename:
             file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:
                 listToCsv(file + '.csv', zip(staInd, duration, stage))
