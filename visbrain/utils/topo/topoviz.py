@@ -10,7 +10,7 @@ from vispy.scene import visuals
 from vispy.scene import Node
 import vispy.visuals.transforms as vist
 
-from .projection import array_project_radial_to3d, array_project_radial_to2d
+from .projection import array_project_radial_to3d
 from .. import array2colormap, color2vb, normalize#, vpnormalize
 from visbrain.utils.transform import vpnormalize
 
@@ -45,7 +45,7 @@ class TopoPlot(object):
     """
 
     def __init__(self, xyz=None, system='cart', unit='rad', axtheta=0, axphi=1,
-                 chans=None, pixels=64, bgcolor='white', levels=3,
+                 chans=None, pixels=32, bgcolor='white', levels=None,
                  linecolor='black', width=4, textcolor='black', interp=.1,
                  scale=800., parent=None, camera=None):
         """Init."""
@@ -55,8 +55,6 @@ class TopoPlot(object):
         self.linecolor = color2vb(linecolor)
         self.textcolor = color2vb(textcolor)
         self.bgcolor = color2vb(bgcolor)
-        self.electrodescale = np.asarray(1.)
-        self.interprange = np.pi * 3 / 4
         self.interp = interp
         self.pixels = pixels
         self.scale = scale
@@ -67,10 +65,6 @@ class TopoPlot(object):
         self._params = {}
         self.levels = levels
         self.camera = camera
-        # Legendre factors :
-        m = 4
-        num_lterms = 10
-        self.legendre_factors = self.calc_legendre_factors(m, num_lterms)
         # Vispy parents : :
         self.node = Node(name='Topoplot', parent=parent)
         self.headset = Node(name='Headset', parent=self.node)
@@ -159,15 +153,15 @@ class TopoPlot(object):
             # ----------- Conversion -----------
             if isinstance(xyz, np.ndarray):
                 if self.system == 'cart':
-                    self.xyzp = xyz
+                    pass
                 elif self.system == 'spheric':
                     xyz = self._sphere2cart(xyz, unit='degree')
-                    self.xyzp = array_project_radial_to2d(xyz)
+                    xyz = array_project_radial_to3d(xyz)
             self.xyz = xyz
 
             # ------------- Channel names -------------
             if chans is not None:
-                self.name = visuals.Text(pos=self.xyzp, text=chans,
+                self.name = visuals.Text(pos=self.xyz, text=chans,
                                          parent=self.node,
                                          color=self.textcolor)
 
@@ -175,11 +169,11 @@ class TopoPlot(object):
             self._prepare_data()
 
         # =================== CAMERA ===================
-        marge = 100.
-        factor = self.scale * self.interprange
-        self.rect = {'rect': (-factor-marge, -factor-marge,
-                              2*(factor+marge), 2*(factor+h+marge)),
-                     'aspect': 1.}
+        marge = 0.
+        factor = self.scale
+        self.camera.rect = (-factor-marge, -factor-marge,
+                            2*(factor+marge), 2*(factor+h+marge))
+        self.camera.aspect = 1.
 
     def __len__(self):
         """Return the number of channels."""
@@ -261,12 +255,6 @@ class TopoPlot(object):
         return xyz
 
     @staticmethod
-    def calc_legendre_factors(m, num_lterms):
-        """Compute legendre factors."""
-        return [0] + [(2 * n + 1) / (n ** m * (
-                   n + 1) ** m * 4 * np.pi) for n in range(1, num_lterms + 1)]
-
-    @staticmethod
     def _griddata(x, y, v, xi, yi):
         """Make griddata."""
         xy = x.ravel() + y.ravel() * -1j
@@ -298,60 +286,9 @@ class TopoPlot(object):
                 zi[i, j] = g.dot(weights)
         return zi
 
-    def calc_g(self, x):
-        """Get polynom from legendre factors."""
-        return np.polynomial.legendre.legval(x, self.legendre_factors)
-
     ###########################################################################
     # PLOTTING METHODS
     ###########################################################################
-
-    def _topoScott(self, data):
-        """Get topoplot for spheric data using Scott method.
-
-        Args:
-            xyz: np.ndarray
-                The array of converted coordinates (from spheric to cartesian)
-
-            data: np.ndarray
-                Vector of data.
-
-        Returns:
-            image: np.ndarray
-                The topoplot image.
-        """
-        xyz, nchan = self.xyz, len(self)
-        # Check data shape :
-        if data.ndim > 1:
-            data = data.ravel()
-        # if len(data) is not nchan:
-            # raise ValueError("The length of data must be (nchans,)")
-
-        # =================== LOCATIONS ===================
-        g = np.zeros((1 + nchan, 1 + nchan))
-        g[:, 0] = np.ones(1 + nchan)
-        g[-1, :] = np.ones(1 + nchan)
-        g[-1, 0] = 0.
-        for i in range(nchan):
-            for j in range(nchan):
-                g[i, j + 1] = self.calc_g(np.dot(xyz[i], xyz[j]))
-
-        # =================== MESHDATA ===================
-        c = np.linalg.solve(g, np.concatenate((data, [0])))
-        # Create intepolation grid :
-        x = np.linspace(xyz[:, 0].min(), xyz[:, 0].max(), )
-        x = np.linspace(-self.interprange, self.interprange, self.pixels)
-        y = np.linspace(self.interprange, -self.interprange, self.pixels)
-        xy = np.transpose(np.meshgrid(x, y)) / self.electrodescale
-        e = array_project_radial_to3d(xy)
-        gmap = self.calc_g(e.dot(np.transpose(xyz)))
-
-        # =================== TRANSFORMATION ===================
-        self.headset.transform = vpnormalize(self._head,
-                                             dist=2.*self.interprange)
-        self.name.transform = vist.STTransform(translate=(0., .1, 0.))
-
-        return np.flipud(gmap.dot(c[1:]) + c[0])
 
     def _topoMNE(self, data):
         """Get topoplot for spheric data using MNE method.
@@ -379,7 +316,11 @@ class TopoPlot(object):
         # =================== TRANSFORMATION ===================
         eucl = np.sqrt(xyz[:, 0]**2 + xyz[:, 1]**2).max()
         self.headset.transform = vpnormalize(self._head, dist=2*eucl)
-        self.name.transform = vist.STTransform(translate=(0., .03, 0.))
+        self.name.transform = vist.STTransform(translate=(0., .1, 0.))
+        if self.onload:
+            factor = eucl*self.scale + 70.
+            self.camera.rect = (-factor, -factor, 2*factor, 2*factor)
+            self.onload = False
 
         return self._griddata(pos_x, pos_y, data, Xi, Yi)
 
@@ -418,10 +359,7 @@ class TopoPlot(object):
         """
         data = data[self.keeponly]
         # =================== GET IMAGE ===================
-        if self.system == 'cart':
-            image = self._topoMNE(data)
-        elif self.system == 'spheric':
-            image = self._topoScott(data)
+        image = self._topoMNE(data)
 
         # =================== INTERPOLATION ===================
         if self.interp is not None:
@@ -440,22 +378,22 @@ class TopoPlot(object):
         self.mesh.set_data(cm)
 
         # =================== ISOCURVE ===================
-        # if self.levels is not None:
-        #     # Get levels and color :
-        #     levels = np.linspace(image.min(), image.max(), self.levels)
-        #     color_lev = array2colormap(levels, cmap='Spectral_r')
-        #     # Set image :
-        #     image[self['nmask']] = np.inf
-        #     self.iso = visuals.Isocurve(data=image, parent=self.headset,
-        #                                 levels=levels, color_lev=color_lev,
-        #                                 width=2.)
-        #     self.iso.transform = vist.STTransform(translate=(0., 0., -5.))
+        if self.levels is not None:
+            # Get levels and color :
+            levels = np.linspace(image.min(), image.max(), self.levels)
+            color_lev = array2colormap(levels, cmap='Spectral_r')
+            # Set image :
+            image[self['nmask']] = np.inf
+            self.iso = visuals.Isocurve(data=image, parent=self.headset,
+                                        levels=levels, color_lev=color_lev,
+                                        width=2.)
+            self.iso.transform = vist.STTransform(translate=(0., 0., -5.))
 
         # =================== CHANNELS ===================
         # Markers :
         chanc = color2vb(chans_color)
         radius = normalize(data, 5., 20.)
-        self.chan.set_data(pos=self.xyzp, size=radius, face_color=chanc,
+        self.chan.set_data(pos=self.xyz, size=radius, face_color=chanc,
                            edge_color=self.linecolor)
 
     def set_cmap(self, clim=(None, None), cmap='viridis', vmin=None, vmax=None,
@@ -471,16 +409,3 @@ class TopoPlot(object):
         """
         self.clim, self.cmap = clim, cmap
         self.vmin, self.under, self.vmax, self.over = vmin, under, vmax, over
-
-    # ----------- RECT -----------
-    @property
-    def rect(self):
-        """Get the rect value."""
-        return self._rect
-
-    @rect.setter
-    def rect(self, value):
-        """Set rect value."""
-        self._rect = value
-        self.camera.rect = self._rect['rect']
-        self.camera.aspect = 1.
