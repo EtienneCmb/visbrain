@@ -83,6 +83,7 @@ class TopoPlot(PrepareData):
         self.earL = visuals.Line(pos=pos, parent=self.headset, name='EarL')
         self.earR = visuals.Line(pos=pos, parent=self.headset, name='EarR')
         self.chan = visuals.Markers(pos=pos, parent=self.node, name='chan')
+        self.title = visuals.Text(pos=(0., 0., 0.), parent=self.node)
         self.chan.transform = vist.STTransform(translate=(0., 0., -10.))
 
         # ================== HEADSET ==================
@@ -192,6 +193,17 @@ class TopoPlot(PrepareData):
     def __setitem__(self, key, value):
         """Set parameter."""
         self._params[key] = value
+
+    def __str__(self):
+        """Display current settings."""
+        if not self.filt:
+            st = 'Mean of raw data ([' + str(self.time[0]) + \
+                ', ' + str(self.time[1]) + '] min)'
+        else:
+            st = 'Mean of ' + self.dispas  + ' ([' + str(self.time[0]) + \
+                ', ' + str(self.time[1]) + '] min) in [' + \
+                str(self.fstart) + ', ' + str(self.fend) + ']hz'
+        return st
 
     ###########################################################################
     # STATIC METHODS
@@ -323,9 +335,10 @@ class TopoPlot(PrepareData):
         # =================== TRANSFORMATION ===================
         eucl = np.sqrt(xyz[:, 0]**2 + xyz[:, 1]**2).max()
         self.headset.transform = vpnormalize(self._head, dist=2*eucl)
-        self.name.transform = vist.STTransform(translate=(0., .1, 0.))
         if self.onload:
             factor = eucl*self.scale + 70.
+            self.name.transform = vist.STTransform(translate=(0., .1, 0.))
+            self.title.transform = vist.STTransform(translate=(0., 1., 0.))
             self.camera.rect = (-factor, -factor, 2*factor, 2*factor)
             self.onload = False
 
@@ -372,6 +385,7 @@ class TopoPlot(PrepareData):
         else:
             data = data[self.keeponly, :].mean(1)
         self.minmax = (data.min(), data.max())
+        self.time = np.round([10 * time[0] / 60., 10 * time[-1] / 60.]) / 10.
 
         # =================== GET IMAGE ===================
         image = self._topoMNE(data)
@@ -410,6 +424,8 @@ class TopoPlot(PrepareData):
         radius = normalize(data, 5., 20.)
         self.chan.set_data(pos=self.xyz, size=radius, face_color=chanc,
                            edge_color=self.linecolor)
+
+        self.title.text = str(self)
 
     def set_cmap(self, clim=(None, None), cmap='viridis', vmin=None, vmax=None,
                  under=None, over=None):
