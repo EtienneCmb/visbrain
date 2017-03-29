@@ -567,6 +567,7 @@ def save_hypnoToElan(filename, hypno, sf, sfori, N):
         # Check data format
         sf = int(sf)
         hypno = hypno.astype(int)
+        hypno[hypno == 4] = 5
         step = int(hypno.shape / np.round(N / sfori))
 
         hdr = np.array([['time_base 1.000000'],
