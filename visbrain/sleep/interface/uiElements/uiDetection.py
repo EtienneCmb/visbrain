@@ -352,7 +352,7 @@ class uiDetection(object):
         path = QtGui.QFileDialog.getSaveFileName(
             self, "Save File", method + "_locinfo",
             filter=selected_ext)
-        if filename:
+        if path:
             file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:
                 listToCsv(file + '.csv', zip(staInd, duration, stage))
