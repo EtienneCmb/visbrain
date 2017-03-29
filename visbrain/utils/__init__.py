@@ -2,6 +2,7 @@ from .cameras import *
 from .color import *
 from .filtering import *
 from .guitools import *
+from .objects import *
 from .others import *
 from .memory import *
 from .physio import *

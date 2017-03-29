@@ -135,7 +135,9 @@ class uiPanels(object):
         self._PanTopoCmap.addItems(self._cmap_lst)
         self._PanTopoCmap.setCurrentIndex(self._cmap_lst.index(self._defcmap))
         self._PanTopoViz.clicked.connect(self._fcn_topoViz)
+        self._PanTopoCmin.setKeyboardTracking(False)
         self._PanTopoCmin.valueChanged.connect(self._fcn_topoCmap)
+        self._PanTopoCmax.setKeyboardTracking(False)
         self._PanTopoCmax.valueChanged.connect(self._fcn_topoCmap)
         self._PanTopoCmap.currentIndexChanged.connect(self._fcn_topoCmap)
 

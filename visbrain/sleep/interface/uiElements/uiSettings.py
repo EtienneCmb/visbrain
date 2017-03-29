@@ -165,7 +165,7 @@ class uiSettings(object):
         # ---------------------------------------
         # Update topoplot if visible :
         if self._topoW.isVisible():
-            self._topo.set_data(self._data[:, sl].mean(1))
+            self._topo.set_data(self._sf, self._time[sl], self._data[:, sl])
 
         # ---------------------------------------
         # Update Time indicator :
