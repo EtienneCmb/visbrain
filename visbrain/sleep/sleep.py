@@ -13,7 +13,7 @@ from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
 from ..utils import (FixedCam, load_sleepdataset, load_hypno, color2vb,
-                     ShortcutPopup)
+                     ShortcutPopup, check_downsampling)
 # from ...utils import id
 # from .user import userfcn
 
@@ -27,6 +27,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         - Edit hypnogram from the interface
         - Perform a spindle / REM / Peak detection
         - Further signal processing tools (de-mean, de-trend and filtering)
+    Sleep has been developped in collaboration with Raphael Vallat.
 
     Kargs:
         file: string, optional, (def: None)
@@ -89,7 +90,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                         "(*.*)")
 
             # Load dataset :
-            sf, data, channels, N = load_sleepdataset(file, downsample)
+            sf, downsample, data, channels, N = load_sleepdataset(file,
+                                                                  downsample)
             npts = data.shape[1]
 
             # Build the time vector :
@@ -110,6 +112,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         # Data and sf are givin as an input :
         elif (data is not None) and (sf is not None):
+            # Check down-sampling :
+            downsample = check_downsampling(sf, downsample)
             self._N = data.shape[1]
             self._sfori = sf
             time = np.arange(self._N) / sf
@@ -170,6 +174,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         """Return corresponding data info."""
         return self._datainfo[key]
 
+    ###########################################################################
+    # CHECKING
+    ###########################################################################
     def _check_data(self, sf, data, channels, hypno=None, downsample=None,
                     time=None):
         """Check data, hypnogram, channels and sample frequency after loading.
@@ -269,6 +276,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         return sf, data, hypno, time
 
+    ###########################################################################
+    # SUB-FoNCTIONS
+    ###########################################################################
     def _get_dataInfo(self):
         """Get some info about data (min, max, std, mean, dist)."""
         self._datainfo = {'min': self._data.min(1), 'max': self._data.max(1),

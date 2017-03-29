@@ -8,6 +8,8 @@ import numpy as np
 import os
 from warnings import warn
 
+from ..others import check_downsampling
+
 __all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
            'save_hypnoTotxt']
 
@@ -378,6 +380,8 @@ def elan2array(path, downsample=100.):
 
     # Get downsample factor :
     if downsample is not None:
+        # Check down-sampling :
+        downsample = check_downsampling(sf, downsample)
         ds = int(np.round(sf / downsample))
     else:
         ds = 1
@@ -386,7 +390,7 @@ def elan2array(path, downsample=100.):
     data = m_raw[chan_list, ::ds] * \
         Gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return sf, data, list(chan), N
+    return sf, downsample, data, list(chan), N
 
 
 def edf2array(path, downsample=100.):
@@ -446,11 +450,13 @@ def edf2array(path, downsample=100.):
 
     # Get downsample factor :
     if downsample is not None:
+        # Check down-sampling :
+        downsample = check_downsampling(sf, downsample)
         ds = int(np.round(sf / downsample))
     else:
         ds = 1
 
-    return float(sf), data[:, ::ds], list(chan), N
+    return float(sf), downsample, data[:, ::ds], list(chan), N
 
 
 def brainvision2array(path, downsample=100.):
@@ -538,11 +544,13 @@ def brainvision2array(path, downsample=100.):
 
     # Get downsample factor :
     if downsample is not None:
+        # Check down-sampling :
+        downsample = check_downsampling(sf, downsample)
         ds = int(np.round(sf / downsample))
     else:
         ds = 1
 
-    return sf, data[:, ::ds], list(chan), N
+    return sf, downsample, data[:, ::ds], list(chan), N
 
 
 def save_hypnoToElan(filename, hypno, sf, sfori, N):
