@@ -257,10 +257,10 @@ class uiDetection(object):
                                      color=color, y=1.5)
 
             # Report results on table :
-            self._ToolSpinTable.setRowCount(1)
-            self._ToolSpinTable.setItem(0, 0, QtGui.QTableWidgetItem(
+            self._ToolDetectTable.setRowCount(1)
+            self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
                 str(number)))
-            self._ToolSpinTable.setItem(0, 1, QtGui.QTableWidgetItem(
+            self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
                 str(round(density, 2))))
         else:
             warn("\nNo " + name + " detected on channel " + self._channels[
