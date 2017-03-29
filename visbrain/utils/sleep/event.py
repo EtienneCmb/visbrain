@@ -38,7 +38,7 @@ def _events_duration(index, sf):
     idx_start = np.hstack([np.array([0]), np.where(bool_break)[0] + 1])
     idx_stop = np.hstack((idx_start[1::], len(index)-1))
     # Compute duration :
-    duration_ms = np.diff(idx_start) * (1000. / sf)
+    duration_ms = np.diff(np.hstack((idx_start, idx_stop[-1]))) * (1000. / sf)
 
     return number, duration_ms, idx_start, idx_stop
 
