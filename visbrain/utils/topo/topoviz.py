@@ -45,7 +45,7 @@ class TopoPlot(object):
     """
 
     def __init__(self, xyz=None, system='cart', unit='rad', axtheta=0, axphi=1,
-                 chans=None, pixels=64, bgcolor='white', levels=10,
+                 chans=None, pixels=64, bgcolor='white', levels=3,
                  linecolor='black', width=4, textcolor='black', interp=.1,
                  scale=800., parent=None, camera=None):
         """Init."""
@@ -62,6 +62,8 @@ class TopoPlot(object):
         self.scale = scale
         self.onload = True
         self.xyz = None
+        self.clim, self.cmap = (None, None), 'viridis'
+        self.vmin, self.under, self.vmax, self.over = None, None, None, None
         self._params = {}
         self.levels = levels
         self.camera = camera
@@ -385,7 +387,7 @@ class TopoPlot(object):
     # SETTING METHODS
     ###########################################################################
     def _prepare_data(self):
-        """"""
+        """Prepare the data before plotting."""
         self._params = {}
         if self.interp is not None:
             # Initialize interpolation function :
@@ -398,16 +400,15 @@ class TopoPlot(object):
         else:
             self['csize'] = self.pixels
         # Variables :
-        l = self['csize']/2
+        l = int(self['csize'] / 2)
         self['l'] = l
         y, x = np.ogrid[-l:l, -l:l]
         disc = x**2 + y**2
         self['mask'] = disc < l**2
         self['nmask'] = np.invert(self['mask'])
-        self['image'] = np.tile(self.bgcolor[np.newaxis, ...], (2*l, 2*l, 1))
+        # self['image'] = np.tile(self.bgcolor[np.newaxis, ...], (2*l, 2*l, 1))
 
-    def set_data(self, data, cmap='viridis', clim=None, vmin=None,
-                 vmax=None, under=None, over=None, chans_color='white'):
+    def set_data(self, data, chans_color='white'):
         """Set data to the topoplot.
 
         Kargs:
@@ -432,8 +433,9 @@ class TopoPlot(object):
         # Turn it into a colormap and set it :
         image[self['nmask']] = data.mean()
         image = normalize(image, data.min(), data.max())
-        cm = array2colormap(image, cmap=cmap, clim=clim, vmin=vmin,
-                            vmax=vmax, under=under, over=over)
+        cm = array2colormap(image, cmap=self.cmap, clim=self.clim,
+                            vmin=self.vmin, vmax=self.vmax, under=self.under,
+                            over=self.over)
         cm[self['nmask']] = self.bgcolor
         self.mesh.set_data(cm)
 
@@ -443,7 +445,7 @@ class TopoPlot(object):
         #     levels = np.linspace(image.min(), image.max(), self.levels)
         #     color_lev = array2colormap(levels, cmap='Spectral_r')
         #     # Set image :
-        #     image[mask] = np.inf
+        #     image[self['nmask']] = np.inf
         #     self.iso = visuals.Isocurve(data=image, parent=self.headset,
         #                                 levels=levels, color_lev=color_lev,
         #                                 width=2.)
@@ -456,6 +458,20 @@ class TopoPlot(object):
         self.chan.set_data(pos=self.xyzp, size=radius, face_color=chanc,
                            edge_color=self.linecolor)
 
+    def set_cmap(self, clim=(None, None), cmap='viridis', vmin=None, vmax=None,
+                 under=None, over=None):
+        """Set colorbar properties.
+
+        Kargs:
+            clim: float, optional, (def: None)
+                Minimum / Maximum of the colorbar.
+
+            cmap: string, optional, (def: 'viridis')
+                The colormap to use.
+        """
+        self.clim, self.cmap = clim, cmap
+        self.vmin, self.under, self.vmax, self.over = vmin, under, vmax, over
+
     # ----------- RECT -----------
     @property
     def rect(self):
@@ -467,3 +483,4 @@ class TopoPlot(object):
         """Set rect value."""
         self._rect = value
         self.camera.rect = self._rect['rect']
+        self.camera.aspect = 1.
