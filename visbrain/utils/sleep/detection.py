@@ -30,7 +30,6 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
              moving_s=30, spindles_thresh=1, range_spin_sec=20, kc_max_freq=5,
              kc_peak_min_distance=100, min_distance_ms=500,
              daub_coeff=6, daub_mult=10):
-
     """Perform a K-complex detection.
 
     Args:
