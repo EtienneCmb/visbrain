@@ -42,6 +42,7 @@ class uiTools(object):
         # =====================================================================
         # FILTERING
         # =====================================================================
+        self._SigFiltDisp.currentIndexChanged.connect(self._fcn_filtDispAs)
         self._SigFiltApply.clicked.connect(self._fcn_sigProcessing)
         self._SigFilt.clicked.connect(self._fcn_filtViz)
         self._SigFiltBand.currentIndexChanged.connect(self._fcn_filtBand)
@@ -137,6 +138,7 @@ class uiTools(object):
         demean = self._SigMean.isChecked()
         detrend = self._SigTrend.isChecked()
         # Filtering :
+        dispas = self._SigFiltDisp.currentText()
         filt = self._SigFilt.isChecked()
         fstart = self._SigFiltFrom.value()
         fend = self._SigFiltTo.value()
@@ -149,6 +151,7 @@ class uiTools(object):
         self._chan.demean = demean
         self._chan.detrend = detrend
         # ---- Filtering ----
+        self._chan.dispas = dispas
         self._chan.filt = filt
         self._chan.fstart = fstart
         self._chan.fend = fend
@@ -163,6 +166,7 @@ class uiTools(object):
         self._spec.demean = demean
         self._spec.detrend = detrend
         # ---- Filtering ----
+        self._spec.dispas = dispas
         self._spec.filt = filt
         self._spec.filt = filt
         self._spec.fstart = fstart
@@ -172,6 +176,20 @@ class uiTools(object):
         self._spec.filt_band = filtband
 
         self._spec.update()
+
+    def _fcn_filtDispAs(self):
+        """Display / hide settings for amplitude / phase / power."""
+        # Get current type :
+        dispas = self._SigFiltDisp.currentText()
+        if dispas == 'filter':
+            self._SigFiltBand.setEnabled(True)
+            self._SigFiltMeth.setEnabled(True)
+            self._SigFiltOrder.setEnabled(True)
+            self._fcn_filtBand()
+        else:
+            self._SigFiltBand.setEnabled(False)
+            self._SigFiltMeth.setEnabled(False)
+            self._SigFiltOrder.setEnabled(False)
 
     def _fcn_filtViz(self):
         """Display / hide filtering panel."""

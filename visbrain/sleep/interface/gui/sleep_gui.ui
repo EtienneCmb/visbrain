@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -1507,7 +1507,55 @@ re-referenced</string>
                        <property name="spacing">
                         <number>9</number>
                        </property>
-                       <item row="0" column="0">
+                       <item row="5" column="0" colspan="5">
+                        <widget class="QWidget" name="widget_5" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QHBoxLayout" name="horizontalLayout_12">
+                          <property name="topMargin">
+                           <number>6</number>
+                          </property>
+                          <item>
+                           <spacer name="horizontalSpacer_22">
+                            <property name="orientation">
+                             <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>40</width>
+                              <height>20</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="_SigFiltApply">
+                            <property name="text">
+                             <string>Apply</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <spacer name="horizontalSpacer_23">
+                            <property name="orientation">
+                             <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>40</width>
+                              <height>20</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
                         <widget class="QLabel" name="label_18">
                          <property name="font">
                           <font>
@@ -1519,7 +1567,7 @@ re-referenced</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="2" column="0" rowspan="2">
+                       <item row="3" column="0" rowspan="2">
                         <widget class="QLabel" name="label_58">
                          <property name="font">
                           <font>
@@ -1531,7 +1579,7 @@ re-referenced</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="0">
+                       <item row="2" column="0">
                         <widget class="QLabel" name="label_7">
                          <property name="font">
                           <font>
@@ -1543,7 +1591,7 @@ re-referenced</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="2" colspan="3">
+                       <item row="2" column="2" colspan="3">
                         <widget class="QWidget" name="widget_4" native="true">
                          <layout class="QHBoxLayout" name="horizontalLayout_7">
                           <property name="margin">
@@ -1614,62 +1662,14 @@ re-referenced</string>
                          </layout>
                         </widget>
                        </item>
-                       <item row="2" column="2">
+                       <item row="3" column="2">
                         <widget class="QLabel" name="label_10">
                          <property name="text">
                           <string>Method</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="0" colspan="5">
-                        <widget class="QWidget" name="widget_5" native="true">
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <layout class="QHBoxLayout" name="horizontalLayout_12">
-                          <property name="topMargin">
-                           <number>6</number>
-                          </property>
-                          <item>
-                           <spacer name="horizontalSpacer_22">
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>40</width>
-                              <height>20</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                          <item>
-                           <widget class="QPushButton" name="_SigFiltApply">
-                            <property name="text">
-                             <string>Apply</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <spacer name="horizontalSpacer_23">
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>40</width>
-                              <height>20</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                         </layout>
-                        </widget>
-                       </item>
-                       <item row="0" column="2" colspan="2">
+                       <item row="1" column="2" colspan="2">
                         <widget class="QComboBox" name="_SigFiltBand">
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;- bandpass: keep only frequencies between [fmin, fmax]&lt;/p&gt;&lt;p&gt;- bandstop: remove frequencies between [fmin, fmax]&lt;/p&gt;&lt;p&gt;- lowpass: keep only frequencies under fmax&lt;/p&gt;&lt;p&gt;- highpass: keep only frequencies over fmin&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -1696,7 +1696,7 @@ re-referenced</string>
                          </item>
                         </widget>
                        </item>
-                       <item row="3" column="3">
+                       <item row="4" column="3">
                         <widget class="QSpinBox" name="_SigFiltOrder">
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose filter order and control narrow band. It is not recommended to use filter order over 3 (can provoc distorsion).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -1712,7 +1712,7 @@ re-referenced</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="1">
+                       <item row="2" column="1">
                         <widget class="Line" name="line_24">
                          <property name="minimumSize">
                           <size>
@@ -1725,7 +1725,7 @@ re-referenced</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="1">
+                       <item row="1" column="1">
                         <widget class="Line" name="line_23">
                          <property name="minimumSize">
                           <size>
@@ -1738,7 +1738,7 @@ re-referenced</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="2" column="3">
+                       <item row="3" column="3">
                         <widget class="QComboBox" name="_SigFiltMeth">
                          <item>
                           <property name="text">
@@ -1752,14 +1752,14 @@ re-referenced</string>
                          </item>
                         </widget>
                        </item>
-                       <item row="3" column="2">
+                       <item row="4" column="2">
                         <widget class="QLabel" name="label_11">
                          <property name="text">
                           <string>order</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="2" column="1" rowspan="2">
+                       <item row="3" column="1" rowspan="2">
                         <widget class="Line" name="line_25">
                          <property name="minimumSize">
                           <size>
@@ -1770,6 +1770,58 @@ re-referenced</string>
                          <property name="orientation">
                           <enum>Qt::Vertical</enum>
                          </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_68">
+                         <property name="font">
+                          <font>
+                           <italic>true</italic>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Display</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="Line" name="line_26">
+                         <property name="minimumSize">
+                          <size>
+                           <width>10</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2" colspan="2">
+                        <widget class="QComboBox" name="_SigFiltDisp">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display the signal, in a specific frequency band as :&lt;/p&gt;&lt;p&gt;- &amp;quot;filter&amp;quot; : simply, the filtered signal&lt;/p&gt;&lt;p&gt;- &amp;quot;amplitude&amp;quot; : the amplitude of the signal&lt;/p&gt;&lt;p&gt;- &amp;quot;power&amp;quot; : the power of the signal&lt;/p&gt;&lt;p&gt;- &amp;quot;phase&amp;quot; : the phase of the signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <item>
+                          <property name="text">
+                           <string>filter</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>amplitude</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>power</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>phase</string>
+                          </property>
+                         </item>
                         </widget>
                        </item>
                       </layout>

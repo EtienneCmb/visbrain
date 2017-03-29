@@ -10,7 +10,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .marker import Markers
-from ...utils import array2colormap, color2vb, filt, TopoPlot
+from ...utils import array2colormap, color2vb, filt, TopoPlot, ndmorlet
 
 
 __all__ = ["visuals"]
@@ -38,7 +38,7 @@ class PrepareData(object):
 
     def __init__(self, axis=0, demean=False, detrend=False, filt=False,
                  fstart=12., fend=16., forder=3, way='lfilter',
-                 filt_meth='butterworth', btype='bandpass'):
+                 filt_meth='butterworth', btype='bandpass', dispas='filter'):
         # Axis along which to perform preparation :
         self.axis = axis
         # Demean and detrend :
@@ -49,6 +49,7 @@ class PrepareData(object):
         self.fstart, self.fend = fstart, fend
         self.forder, self.filt_meth = forder, filt_meth
         self.way, self.btype = way, btype
+        self.dispas = dispas
 
     def __bool__(self):
         """Return if data have to be prepared."""
@@ -67,9 +68,14 @@ class PrepareData(object):
 
         # ============= FILTERING =============
         if self.filt:
-            data = filt(sf, np.array([self.fstart, self.fend]), data,
-                        btype=self.btype, order=self.forder, way=self.way,
-                        method=self.filt_meth, axis=self.axis)
+            if self.dispas == 'filter':
+                data = filt(sf, np.array([self.fstart, self.fend]), data,
+                            btype=self.btype, order=self.forder, way=self.way,
+                            method=self.filt_meth, axis=self.axis)
+            else:
+                # Compute ndwavelet :
+                f = np.array([self.fstart, self.fend]).mean()
+                data = ndmorlet(data, sf, f, axis=self.axis, get=self.dispas)
 
         return data
 
@@ -82,8 +88,8 @@ class PrepareData(object):
 class ChannelPlot(PrepareData):
     """Plot each channel."""
 
-    def __init__(self, channels, time, color=(.2, .2, .2),
-                 color_detection='red', width=1.5, method='gl', camera=None,
+    def __init__(self, channels, time, color=(.2, .2, .2), width=1.5,
+                 color_detection='red', method='gl', camera=None,
                  parent=None, fcn=None):
         # Initialize PrepareData :
         PrepareData.__init__(self, axis=1)
