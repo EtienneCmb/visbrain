@@ -128,6 +128,16 @@ class uiPanels(object):
                                       yargs={'text_color': 'black'},
                                       xargs={'text_color': 'black'})
         self._topoLayout.addWidget(self._topoCanvas.canvas.native)
+        self._topoW.setVisible(False)
+        self._PanTopoCmin.setValue(-.5)
+        self._PanTopoCmax.setValue(.5)
+        # Connect :
+        self._PanTopoCmap.addItems(self._cmap_lst)
+        self._PanTopoCmap.setCurrentIndex(self._cmap_lst.index(self._defcmap))
+        self._PanTopoViz.clicked.connect(self._fcn_topoViz)
+        self._PanTopoCmin.valueChanged.connect(self._fcn_topoCmap)
+        self._PanTopoCmax.valueChanged.connect(self._fcn_topoCmap)
+        self._PanTopoCmap.currentIndexChanged.connect(self._fcn_topoCmap)
 
         # =====================================================================
         # TIME AXIS
@@ -420,9 +430,9 @@ class uiPanels(object):
     def _fcn_specCompat(self):
         """Check compatibility between spectro parameters."""
         # Get nfft and overlap :
-        nfft, over = self._PanSpecNfft.value(), self._PanSpecStep.value()
+        nfft, _ = self._PanSpecNfft.value(), self._PanSpecStep.value()
         # Get starting / ending frequency :
-        fstart, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()
+        _, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()
 
         self._PanSpecStep.setMaximum(nfft * .99)
         self._PanSpecFend.setMaximum(self._sf / 2)
@@ -439,6 +449,26 @@ class uiPanels(object):
         self._HypW.setVisible(viz)
         self._hypLabel.setVisible(viz)
         self._PanHypIndic.setEnabled(viz)
+
+    # =====================================================================
+    # TOPOPLOT
+    # =====================================================================
+    def _fcn_topoViz(self):
+        """Toggle topo panel visibility."""
+        self._topoW.setVisible(not self._topoW.isVisible())
+        self._fcn_sliderMove()
+
+    def _fcn_topoCmap(self):
+        """Manage colormap of the topoplot."""
+        # Get limits :
+        cmin = self._PanTopoCmin.value()
+        cmax = self._PanTopoCmax.value()
+        # Get and set colormap :
+        cmap = self._PanTopoCmap.currentText()
+        # Send data :
+        self._topo.set_cmap(clim=(cmin, cmax), cmap=cmap)
+        # Update plot :
+        self._fcn_sliderMove()
 
     # =====================================================================
     # TIME AXIS
