@@ -10,12 +10,14 @@ from vispy.scene import visuals
 from vispy.scene import Node
 import vispy.visuals.transforms as vist
 
-from .projection import array_project_radial_to3d
-from .. import array2colormap, color2vb, normalize#, vpnormalize
-from visbrain.utils.transform import vpnormalize
+from .prepare import PrepareData
+from ..topo.projection import array_project_radial_to3d
+from ..color import array2colormap, color2vb
+from ..sigproc import normalize
+from ..transform import vpnormalize
 
 
-class TopoPlot(object):
+class TopoPlot(PrepareData):
     """Create a topoplot.
 
     Kargs:
@@ -50,6 +52,9 @@ class TopoPlot(object):
                  scale=800., parent=None, camera=None):
         """Init."""
         # ================== VARIABLES ==================
+        PrepareData.__init__(self, axis=1)
+
+        # ================== VARIABLES ==================
         self.width = width
         self.system = system
         self.linecolor = color2vb(linecolor)
@@ -65,6 +70,7 @@ class TopoPlot(object):
         self._params = {}
         self.levels = levels
         self.camera = camera
+        self.minmax = (-.5, .5)
         # Vispy parents : :
         self.node = Node(name='Topoplot', parent=parent)
         self.headset = Node(name='Headset', parent=self.node)
@@ -166,7 +172,7 @@ class TopoPlot(object):
                                          color=self.textcolor)
 
             # ------------- Prepare data -------------
-            self._prepare_data()
+            self._getAttributes()
 
         # =================== CAMERA ===================
         marge = 0.
@@ -200,7 +206,8 @@ class TopoPlot(object):
                 List of channel names.
         """
         # Load the coordinates template :
-        path = sys.modules[__name__].__file__.split('topoviz')[0]
+        path = sys.modules[__name__].__file__.split('objects')[0]
+        path = os.path.join(path, 'topo')
         file = np.load(os.path.join(path, 'eegref.npz'))
         nameRef, xyzRef = file['chan'], file['xyz']
         keeponly = np.ones((len(chan)), dtype=bool)
@@ -327,7 +334,7 @@ class TopoPlot(object):
     ###########################################################################
     # SETTING METHODS
     ###########################################################################
-    def _prepare_data(self):
+    def _getAttributes(self):
         """Prepare the data before plotting."""
         self._params = {}
         if self.interp is not None:
@@ -349,7 +356,7 @@ class TopoPlot(object):
         self['nmask'] = np.invert(self['mask'])
         # self['image'] = np.tile(self.bgcolor[np.newaxis, ...], (2*l, 2*l, 1))
 
-    def set_data(self, data, chans_color='white'):
+    def set_data(self, sf, time, data, chans_color='white'):
         """Set data to the topoplot.
 
         Kargs:
@@ -357,7 +364,15 @@ class TopoPlot(object):
                 Coordinates system. Use 'cart' for cartesian system, 'sphere'
                 for spheric (with a theta / phi angle).
         """
-        data = data[self.keeponly]
+        # =================== PREPARE ===================
+        # Prepare data before plotting :
+        if self:
+            data = self._prepare_data(sf, data[self.keeponly, :].copy(),
+                                      time).mean(1)
+        else:
+            data = data[self.keeponly, :].mean(1)
+        self.minmax = (data.min(), data.max())
+
         # =================== GET IMAGE ===================
         image = self._topoMNE(data)
 
