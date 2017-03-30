@@ -16,7 +16,7 @@ kwargs['s_color'] = [u_color[int(k[1])] for k in subjects]  # Set the subject co
 kwargs['s_opacity'] = 0.9 # Sources opacity
 
 # Now, create some random data between [-50,50]
-kwargs['s_data'] = np.round(100*np.random.rand(kwargs['s_xyz'].shape[0])-50)
+kwargs['s_data'] = kwargs['s_xyz'][:, 1] #np.round(100*np.random.rand(kwargs['s_xyz'].shape[0])-50)
 
 # Control the dynamic range of sources radius :
 kwargs['s_radiusmin'] = 2               # Minimum radius

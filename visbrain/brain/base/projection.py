@@ -55,14 +55,17 @@ class Projections(object):
         mod = np.zeros((vsh[0], vsh[1]), dtype=np.float32)
         mask = np.zeros((vsh[0], vsh[1]), dtype=bool)
         mod[:, 0], mask[:, 0] = self.__modulation(v[:, 0, :], xyz, data)
-        mod[:, 1], mask[:, 1] = self.__modulation(v[:, 1, :], xyz, data)
-        mod[:, 2], mask[:, 2] = self.__modulation(v[:, 2, :], xyz, data)
-        print(mod.min(), mod.max())
+        mod[:, 1] = mod[:, 0]
+        mask[:, 1] = mask[:, 0]
+        mod[:, 2] = mod[:, 0]
+        mask[:, 2] = mask[:, 0]
+        # mod[:, 1], mask[:, 1] = self.__modulation(v[:, 1, :], xyz, data)
+        # mod[:, 2], mask[:, 2] = self.__modulation(v[:, 2, :], xyz, data)
+        print(mod[np.invert(mask)].min(), mod[np.invert(mask)].max())
 
         color = array2colormap(mod, cmap='viridis')
         color[mask, ...] = 1.
         self.atlas.mesh.set_color(data=color)
-        print(color)
 
     def _cortRepart(self):
         """Apply corticale repartition."""
@@ -72,15 +75,21 @@ class Projections(object):
         """Compute data modulation by the euclidian distance."""
         # Reshape arrays :
         vsh, xsh = v.shape, xyz.shape
-        xyz = xyz.reshape(1, xsh[0], xsh[1])
+        xyz = xyz.reshape(xsh[1], xsh[0])
         data = data.reshape(-1, 1)
-        v = v.reshape(vsh[0], 1, vsh[1])
+        # v = v.reshape(vsh[0], 1, vsh[1])
         # Compute euclidian distance :
-        eucl = np.ma.masked_array(np.sqrt(np.square(v-xyz).sum(2)))
-        eucl.mask = eucl < self._tradius
+        x = v[:, [0]] - xyz[[0], :]
+        y = v[:, [1]] - xyz[[1], :]
+        z = v[:, [2]] - xyz[[2], :]
+        eucl = x**2 + y**2 + z**2
+        print(self._tradius)
+        mask = eucl > self._tradius ** 2
+        eucl /= eucl.max()
+        eucl = np.ma.masked_array(eucl, mask=mask)
         # Modulate data by euclidian distance :
-        mod = np.ma.dot(eucl, data, strict=True).reshape(-1)
-        return mod.data, np.invert(mod.mask)
+        mod = np.ma.dot(eucl, data, strict=False).reshape(-1)
+        return mod.data, mod.mask
 
 
     # ======================================================================
