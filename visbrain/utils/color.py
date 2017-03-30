@@ -129,18 +129,23 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     # ================== Check input argument types ==================
     # Force data to be an array :
     x = np.array(x)
+    xm, xM = x.min(), x.max()
+
+    # ---------------------------
     # Check clim :
     if (clim is None) or (clim is (None, None)):
-        clim = (x.min(), x.max())
+        clim = (xm, xM)
     else:
         clim = list(clim)
         if len(clim) is not 2:
             raise ValueError("The length of the clim must be 2: (min, max)")
         else:
             if clim[0] is None:
-                clim[0] = x.min()
+                clim[0] = xm
             if clim[1] is None:
-                clim[1] = x.max()
+                clim[1] = xM
+
+    # ---------------------------
     # Check (vmin, under) / (vmax, over) :
     if (vmin is None) or (under is None):
         vmin, under = None, None
@@ -168,6 +173,8 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         vmin, vmax, under, over = None, None, None, None
         warn("vmin > vmax : both arguments have been ignored.")
         # vmin, vmax = vmax, vmin
+
+    # ---------------------------
     # Check alpha :
     if (alpha < 0) or (alpha > 1):
         warn("The alpha parameter must be >= 0 and <= 1.")
@@ -177,9 +184,9 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
 
     # ================== Clip / Peak ==================
     # Force array to clip if x is under / over clim :
-    if clim[0] > x.min():
+    if clim[0] > xm:
         x = colorclip(x, clim[0], kind='under')
-    if clim[1] < x.max():
+    if clim[1] < xM:
         x = colorclip(x, clim[1], kind='over')
 
     # ================== Colormap (under, over) ==================
@@ -195,6 +202,9 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     else:
         sc.set_clim(vmax=vmax)
         sc.cmap.set_over(color=over)
+    # Fix limits :
+    norm = mplcol.Normalize(vmin=clim[0], vmax=clim[1])
+    sc.set_norm(norm)
 
     # ================== Apply colormap ==================
     # Apply colormap to x :

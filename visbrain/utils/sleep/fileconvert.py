@@ -8,6 +8,8 @@ import numpy as np
 import os
 from warnings import warn
 
+from ..others import check_downsampling
+
 __all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
            'save_hypnoTotxt']
 
@@ -378,6 +380,8 @@ def elan2array(path, downsample=100.):
 
     # Get downsample factor :
     if downsample is not None:
+        # Check down-sampling :
+        downsample = check_downsampling(sf, downsample)
         ds = int(np.round(sf / downsample))
     else:
         ds = 1
@@ -386,7 +390,7 @@ def elan2array(path, downsample=100.):
     data = m_raw[chan_list, ::ds] * \
         Gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return sf, data, list(chan), N
+    return sf, downsample, data, list(chan), N
 
 
 def edf2array(path, downsample=100.):
@@ -446,11 +450,13 @@ def edf2array(path, downsample=100.):
 
     # Get downsample factor :
     if downsample is not None:
+        # Check down-sampling :
+        downsample = check_downsampling(sf, downsample)
         ds = int(np.round(sf / downsample))
     else:
         ds = 1
 
-    return float(sf), data[:, ::ds], list(chan), N
+    return float(sf), downsample, data[:, ::ds], list(chan), N
 
 
 def brainvision2array(path, downsample=100.):
@@ -538,14 +544,16 @@ def brainvision2array(path, downsample=100.):
 
     # Get downsample factor :
     if downsample is not None:
+        # Check down-sampling :
+        downsample = check_downsampling(sf, downsample)
         ds = int(np.round(sf / downsample))
     else:
         ds = 1
 
-    return sf, data[:, ::ds], list(chan), N
+    return sf, downsample, data[:, ::ds], list(chan), N
 
 
-def save_hypnoToElan(filename, hypno, sf):
+def save_hypnoToElan(filename, hypno, sf, sfori, N):
         """Save hypnogram in Elan file format (*.hyp).
 
         Args:
@@ -557,21 +565,30 @@ def save_hypnoToElan(filename, hypno, sf):
 
             sf: int
                 Sampling frequency of the data (after downsampling)
-        """
-        hdr = np.array([['time_base 1.000000'],
-                        ['sampling_period ' + str(round(1/sf, 8))],
-                        ['epoch_nb ' + str(int(hypno.size / sf))],
-                        ['epoch_list']]).flatten()
 
+            sfori: int
+                Original sampling rate of the raw data
+
+            N: int
+                Original number of points in the raw data
+        """
         # Check data format
         sf = int(sf)
         hypno = hypno.astype(int)
+        hypno[hypno == 4] = 5
+        step = int(hypno.shape / np.round(N / sfori))
+
+        hdr = np.array([['time_base 1.000000'],
+                        ['sampling_period ' + str(np.round(1/sfori, 8))],
+                        ['epoch_nb ' + str(int(N / sfori))],
+                        ['epoch_list']]).flatten()
+
         # Save
-        export = np.append(hdr, hypno[::sf].astype(str))
+        export = np.append(hdr, hypno[::step].astype(str))
         np.savetxt(filename, export, fmt='%s')
 
 
-def save_hypnoTotxt(filename, hypno, sf, window=1.):
+def save_hypnoTotxt(filename, hypno, sf, sfori, N, window=1.):
         """Save hypnogram in txt file format (*.txt).
 
         Header is in file filename_description.txt
@@ -586,6 +603,12 @@ def save_hypnoTotxt(filename, hypno, sf, window=1.):
             sf: float
                 Sampling frequency of the data (after downsampling)
 
+            sfori: int
+                Original sampling rate of the raw data
+
+            N: int
+                Original number of points in the raw data
+
         Kargs:
             window: float, optional, (def 1)
                 Time window (second) of each point in the hypno
@@ -598,8 +621,8 @@ def save_hypnoTotxt(filename, hypno, sf, window=1.):
                                 os.path.splitext(base)[0] + '_description.txt')
 
         # Save hypno
-        ds_fac = int(sf * window)
-        np.savetxt(filename, hypno[::ds_fac].astype(int), fmt='%s')
+        step = int(hypno.shape / np.round(N / sfori))
+        np.savetxt(filename, hypno[::step].astype(int), fmt='%s')
 
         # Save header file
         hdr = np.array([['time ' + str(window)], ['W 0'], ['N1 1'], ['N2 2'],

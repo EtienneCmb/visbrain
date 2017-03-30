@@ -115,9 +115,11 @@ class uiSettings(object):
 
             # Switch between differents types :
             if ext == '.hyp':
-                save_hypnoToElan(filename, self._hypno, self._sf)
+                save_hypnoToElan(filename, self._hypno, self._sf, self._sfori,
+                                                                    self._N)
             elif ext == '.txt':
-                save_hypnoTotxt(filename, self._hypno, self._sf, 1)
+                save_hypnoTotxt(filename, self._hypno, self._sf, self._sfori,
+                                                                    self._N, 1)
             else:
                 raise ValueError("Not a valid extension")
 
@@ -159,6 +161,11 @@ class uiSettings(object):
         # Update hypnogram indicator :
         if self._PanHypIndic.isEnabled() and not hypZoom:
             self._hypInd.set_data(xlim=xlim, ylim=(-6., 2.))
+
+        # ---------------------------------------
+        # Update topoplot if visible :
+        if self._topoW.isVisible():
+            self._topo.set_data(self._sf, self._time[sl], self._data[:, sl])
 
         # ---------------------------------------
         # Update Time indicator :
@@ -221,7 +228,7 @@ class uiSettings(object):
         self._SlVal.setMinimum(self._time.min())
         # Set maximum :
         step = self._SigSlStep.value()
-        self._SlVal.setMaximum((self._time.max() - win)/step)
+        self._SlVal.setMaximum(((self._time.max() - win)/step) + 1)
         self._SlVal.setTickInterval(step)
         self._SlVal.setSingleStep(step)
         self._SlGoto.setMaximum((self._time.max() - win))

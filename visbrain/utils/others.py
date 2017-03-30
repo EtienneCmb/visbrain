@@ -1,6 +1,8 @@
 """This script contains some other utility functions."""
 
-__all__ = ['vis_args']
+from warnings import warn
+
+__all__ = ['vis_args', 'check_downsampling']
 
 
 def vis_args(kw, prefix, ignore=[]):
@@ -31,3 +33,30 @@ def vis_args(kw, prefix, ignore=[]):
         else:
             others[k] = v
     return args, others
+
+
+def check_downsampling(sf, ds):
+    """Check the down-sampling frequency and return the most appropriate one.
+
+    Args:
+        sf: float
+            The sampling frequency
+
+        ds: float
+            The desired down-sampling frequency.
+
+    Return:
+        dsout: float
+            The most appropriate down-sampling frequency.
+    """
+    if sf % ds != 0:
+        dsbck = ds
+        ds = int(sf / round(sf / (ds)))
+        while sf % ds != 0:
+            ds -= 1
+        # ds = sf / round(sf / ds)
+        warn("Using a down-sampling frequency ("+str(dsbck)+"hz) that is not a"
+             " multiple of the sampling frequency ("+str(sf)+"hz) , might "
+             "occurred time decimals approximations for hypnogram exportation."
+             " A "+str(ds)+"hz will be used instead.")
+    return ds

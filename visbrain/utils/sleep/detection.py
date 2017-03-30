@@ -26,11 +26,10 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
 
 
 def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
-            kc_min_amp, kc_max_amp, fMin=0.5, fMax=4, delta_thr=0.75,
-            moving_s=30, spindles_thresh=1, range_spin_sec=20, kc_max_freq=5,
-            kc_peak_min_distance=100, min_distance_ms=500,
-            daub_coeff=6, daub_mult=10):
-
+             kc_min_amp, kc_max_amp, fMin=0.5, fMax=4, delta_thr=0.75,
+             moving_s=30, spindles_thresh=1, range_spin_sec=20, kc_max_freq=5,
+             kc_peak_min_distance=100, min_distance_ms=500,
+             daub_coeff=6, daub_mult=10):
     """Perform a K-complex detection.
 
     Args:
@@ -139,7 +138,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
 
     # Compute spindles detection
     spindles, _, _, _ = spindlesdetect(data, sf, spindles_thresh, hypno,
-                                                    nrem_only=False)
+                                       nrem_only=False)
 
     # MAIN DETECTION
     sig_filt = filt(sf, np.array([fMin, fMax]), data)
@@ -187,7 +186,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
             proba[np.where(hypno == -1)[0]] *= .5
 
         idx_sup_thr = np.intersect1d(idx_sup_thr, np.where(proba >= 0.3)[0],
-                                                            assume_unique=True)
+                                     assume_unique=True)
         # K-COMPLEX MORPHOLOGY
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
@@ -197,7 +196,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
         kc_amp, distance_ms = _event_amplitude(data, idx_sup_thr,
-                                            idx_start, idx_stop, sf)
+                                               idx_start, idx_stop, sf)
 
         # Warning: Mean frequency computation is time-consuming.
         # Current status: inactive (fake vector mfreq)
@@ -205,7 +204,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
         mfreq = np.ones(shape=idx_start.shape)
 
         good_dur = np.where(np.logical_and(duration_ms > tMin,
-                                                   duration_ms < tMax))[0]
+                                           duration_ms < tMax))[0]
 
         good_amp = np.where(np.logical_and(kc_amp > kc_min_amp,
                                            kc_amp < kc_max_amp))[0]
