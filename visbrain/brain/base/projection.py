@@ -43,6 +43,8 @@ class Projections(object):
 
     def _cortProj(self):
         """Apply corticale projection."""
+        from time import time
+        st = time()
         # ============= VARIABLES =============
         # Get vertices, radius, locations and data :
         v, r, xyz, data = self._projectOn()
@@ -71,6 +73,7 @@ class Projections(object):
         color = array2colormap(mod, cmap='Spectral_r', clim=(-1, 1))
         color[mask, ...] = 1.
         self.atlas.mesh.set_color(data=color)
+        print('END TIME : ', st-time())
 
     def _cortRepart(self):
         """Apply corticale repartition."""
