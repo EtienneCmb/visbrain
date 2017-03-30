@@ -1,6 +1,6 @@
 import numpy as np
 
-from ...utils import array2colormap
+from ...utils import array2colormap, normalize
 
 __all__ = ['Projections']
 
@@ -52,6 +52,7 @@ class Projections(object):
         # Depending on the number of sources, using broadcasting rules can
         # be memory consuming. For that reason, we split computation for each
         # face.
+        print('DATA : ', data.min(), data.max())
         mod = np.zeros((vsh[0], vsh[1]), dtype=np.float32)
         mask = np.zeros((vsh[0], vsh[1]), dtype=bool)
         mod[:, 0], mask[:, 0] = self.__modulation(v[:, 0, :], xyz, data)
@@ -59,6 +60,8 @@ class Projections(object):
         mask[:, 1] = mask[:, 0]
         mod[:, 2] = mod[:, 0]
         mask[:, 2] = mask[:, 0]
+        # m = np.invert(mask)
+        # mod[m] = normalize(mod[m], data.min(), data.max())
         # mod[:, 1], mask[:, 1] = self.__modulation(v[:, 1, :], xyz, data)
         # mod[:, 2], mask[:, 2] = self.__modulation(v[:, 2, :], xyz, data)
         print(mod[np.invert(mask)].min(), mod[np.invert(mask)].max())
@@ -75,17 +78,17 @@ class Projections(object):
         """Compute data modulation by the euclidian distance."""
         # Reshape arrays :
         vsh, xsh = v.shape, xyz.shape
-        xyz = xyz.reshape(xsh[1], xsh[0])
+        # xyz = xyz.reshape(xsh[1], xsh[0])
         data = data.reshape(-1, 1)
         # v = v.reshape(vsh[0], 1, vsh[1])
         # Compute euclidian distance :
-        x = v[:, [0]] - xyz[[0], :]
-        y = v[:, [1]] - xyz[[1], :]
-        z = v[:, [2]] - xyz[[2], :]
+        x = v[:, [0]] - xyz[:, [0]].T
+        y = v[:, [1]] - xyz[:, [1]].T
+        z = v[:, [2]] - xyz[:, [2]].T
         eucl = x**2 + y**2 + z**2
-        print(self._tradius)
+        # self._tradius = 16.
         mask = eucl > self._tradius ** 2
-        eucl /= eucl.max()
+        # eucl /= eucl.max()
         eucl = np.ma.masked_array(eucl, mask=mask)
         # Modulate data by euclidian distance :
         mod = np.ma.dot(eucl, data, strict=False).reshape(-1)
