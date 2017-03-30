@@ -82,6 +82,9 @@ class SourcesBase(_colormap):
         """Get sources coordinates matrix."""
         return self.xyz
 
+    ##########################################################################
+    # DATA CHECKING
+    ##########################################################################
     def prepare2plot(self):
         """Prepare data before plotting.
 
@@ -170,6 +173,9 @@ class SourcesBase(_colormap):
                 raise ValueError("The length of text data must be the same "
                                  "as the number of electrodes")
 
+    ##########################################################################
+    # PLOTTING
+    ##########################################################################
     def array2radius(self, factor=1.5):
         """Transform an array of data to source's radius.
 
@@ -225,6 +231,9 @@ class SourcesBase(_colormap):
         else:
             self.mesh.visible = False
 
+    ##########################################################################
+    # MASK
+    ##########################################################################
     def _select_unmasked(self):
         """Get some attributes of non-masked sources.
 
@@ -258,6 +267,9 @@ class SourcesBase(_colormap):
         """
         self.data.mask = reset_to
 
+    ##########################################################################
+    # TEXT
+    ##########################################################################
     def text_plot(self):
         """Plot some text for each source.
 

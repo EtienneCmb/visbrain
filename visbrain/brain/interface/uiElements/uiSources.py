@@ -121,7 +121,8 @@ class uiSources(object):
         self._tprojecton = str(self._uitProjectOn.currentText()).lower()
         # Run either the activity / repartition projection :
         if self._uitActivity.isChecked():
-            self._cortical_projection()
+            self._cortProj()
+            # self._cortical_projection()
         elif self._uitRepartition.isChecked():
             self._cortical_repartition()
 

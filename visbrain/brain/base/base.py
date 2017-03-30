@@ -15,7 +15,6 @@ The following elements are initialized :
     can have access to the previously defined elements.
 """
 
-import vispy.visuals.transforms as vist
 from vispy.scene import Node
 
 from .AtlasBase import AtlasBase
@@ -24,9 +23,10 @@ from .ConnectBase import ConnectBase
 from .CbarBase import CbarBase
 from .AreaBase import AreaBase
 from .transformations import transformations
+from .projection import Projections
 
 
-class base(CbarBase, transformations):
+class base(CbarBase, Projections, transformations):
     """Initialize Brain objects.
 
     Initialize sources / connectivity / areas / colorbar / transformations.
@@ -56,7 +56,8 @@ class base(CbarBase, transformations):
                            cb_label=self._cblabel, **self.sources._cb)
 
         # Add transformations :
-        transformations.__init__(self, **kwargs)
+        # transformations.__init__(self, **kwargs)
+        Projections.__init__(self, **kwargs)
 
         # ---------- Panel management ----------
         # Some GUI panels are systematically deactivate if there's no

@@ -465,7 +465,8 @@ class userfcn(object):
                              "'brain' or 'roi'")
 
         # Run the corticale projection :
-        self._cortical_projection()
+        self._cortProj()
+        # self._cortical_projection()
 
     def cortical_repartition(self, radius=10., project_on='brain'):
         """Get the number of contributing sources per vertex.
