@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/sleep/interface/gui/sleep_gui.ui'
+# Form implementation generated from reading ui file 'sleep_gui.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -1274,9 +1274,9 @@ class Ui_MainWindow(object):
         self._ToolWaveAmp.setObjectName(_fromUtf8("_ToolWaveAmp"))
         self.gridLayout_9.addWidget(self._ToolWaveAmp, 1, 4, 1, 1)
         self._ToolWaveTh = QtGui.QDoubleSpinBox(self._ToolWavePanel)
-        self._ToolWaveTh.setMaximum(10.0)
-        self._ToolWaveTh.setSingleStep(0.5)
-        self._ToolWaveTh.setProperty("value", 1.0)
+        self._ToolWaveTh.setMaximum(1.0)
+        self._ToolWaveTh.setSingleStep(0.05)
+        self._ToolWaveTh.setProperty("value", 0.8)
         self._ToolWaveTh.setObjectName(_fromUtf8("_ToolWaveTh"))
         self.gridLayout_9.addWidget(self._ToolWaveTh, 0, 4, 1, 1)
         self.label_46 = QtGui.QLabel(self._ToolWavePanel)
@@ -1930,8 +1930,8 @@ class Ui_MainWindow(object):
         self.label_53.setText(_translate("MainWindow", "Slow\n"
 "waves", None))
         self._ToolWaveAmp.setToolTip(_translate("MainWindow", "<html><head/><body><p>Minimum amplitude (mV) of Slow Wave (0 for no amplitude criteria)</p></body></html>", None))
-        self._ToolWaveTh.setToolTip(_translate("MainWindow", "<html><head/><body><p>Number of standard deviations of delta power</p></body></html>", None))
-        self.label_46.setText(_translate("MainWindow", "Power (std)", None))
+        self._ToolWaveTh.setToolTip(_translate("MainWindow", "<html><head/><body><p>Normalized Delta power threshold (between 0 and 1) </p></body></html>", None))
+        self.label_46.setText(_translate("MainWindow", "Delta power (norm.)", None))
         self.label_47.setText(_translate("MainWindow", "Amplitude (mV)", None))
         self.label_64.setText(_translate("MainWindow", "Min / Max", None))
         self._ToolKCMaxAmp.setToolTip(_translate("MainWindow", "Max amplitude of KC", None))

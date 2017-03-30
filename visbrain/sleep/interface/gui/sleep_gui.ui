@@ -3164,23 +3164,23 @@ waves</string>
                        <item row="0" column="4">
                         <widget class="QDoubleSpinBox" name="_ToolWaveTh">
                          <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of standard deviations of delta power&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Normalized Delta power threshold (between 0 and 1) &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="maximum">
-                          <double>10.000000000000000</double>
+                          <double>1.000000000000000</double>
                          </property>
                          <property name="singleStep">
-                          <double>0.500000000000000</double>
+                          <double>0.050000000000000</double>
                          </property>
                          <property name="value">
-                          <double>1.000000000000000</double>
+                          <double>0.800000000000000</double>
                          </property>
                         </widget>
                        </item>
                        <item row="0" column="2">
                         <widget class="QLabel" name="label_46">
                          <property name="text">
-                          <string>Power (std)</string>
+                          <string>Delta power (norm.)</string>
                          </property>
                         </widget>
                        </item>
