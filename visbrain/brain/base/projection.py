@@ -1,6 +1,7 @@
 import numpy as np
 
 from ...utils import array2colormap, normalize
+from scipy.spatial.distance import cdist
 
 __all__ = ['Projections']
 
@@ -56,17 +57,18 @@ class Projections(object):
         mod = np.zeros((vsh[0], vsh[1]), dtype=np.float32)
         mask = np.zeros((vsh[0], vsh[1]), dtype=bool)
         mod[:, 0], mask[:, 0] = self.__modulation(v[:, 0, :], xyz, data)
-        mod[:, 1] = mod[:, 0]
-        mask[:, 1] = mask[:, 0]
-        mod[:, 2] = mod[:, 0]
-        mask[:, 2] = mask[:, 0]
+        # 0/0
+        # mod[:, 1] = mod[:, 0]
+        # mask[:, 1] = mask[:, 0]
+        # mod[:, 2] = mod[:, 0]
+        # mask[:, 2] = mask[:, 0]
         # m = np.invert(mask)
+        mod[:, 1], mask[:, 1] = self.__modulation(v[:, 1, :], xyz, data)
+        mod[:, 2], mask[:, 2] = self.__modulation(v[:, 2, :], xyz, data)
         # mod[m] = normalize(mod[m], data.min(), data.max())
-        # mod[:, 1], mask[:, 1] = self.__modulation(v[:, 1, :], xyz, data)
-        # mod[:, 2], mask[:, 2] = self.__modulation(v[:, 2, :], xyz, data)
         print(mod[np.invert(mask)].min(), mod[np.invert(mask)].max())
 
-        color = array2colormap(mod, cmap='viridis')
+        color = array2colormap(mod, cmap='Spectral_r', clim=(-1, 1))
         color[mask, ...] = 1.
         self.atlas.mesh.set_color(data=color)
 
@@ -76,24 +78,19 @@ class Projections(object):
 
     def __modulation(self, v, xyz, data, kind='projection'):
         """Compute data modulation by the euclidian distance."""
-        # Reshape arrays :
-        vsh, xsh = v.shape, xyz.shape
-        # xyz = xyz.reshape(xsh[1], xsh[0])
-        data = data.reshape(-1, 1)
-        # v = v.reshape(vsh[0], 1, vsh[1])
         # Compute euclidian distance :
-        x = v[:, [0]] - xyz[:, [0]].T
-        y = v[:, [1]] - xyz[:, [1]].T
-        z = v[:, [2]] - xyz[:, [2]].T
-        eucl = x**2 + y**2 + z**2
-        # self._tradius = 16.
-        mask = eucl > self._tradius ** 2
-        # eucl /= eucl.max()
-        eucl = np.ma.masked_array(eucl, mask=mask)
+        eucl = cdist(v, xyz)
+        mask = eucl <= self._tradius
+        eucl = np.abs((eucl / eucl.max()) - 1)
+        cl = np.ma.masked_array(eucl, mask=np.invert(mask))
         # Modulate data by euclidian distance :
-        mod = np.ma.dot(eucl, data, strict=False).reshape(-1)
-        return mod.data, mod.mask
+        mod = np.ma.dot(cl, data.reshape(-1, 1), strict=False).reshape(-1)
+        # Get the mean :
+        mod /= mask.sum(1)
+        nnz = np.nonzero(mask.sum(0))
+        mod = normalize(mod, data[nnz].min(), data[nnz].max())
 
+        return mod.data, mod.mask
 
     # ======================================================================
     # DISPLAY

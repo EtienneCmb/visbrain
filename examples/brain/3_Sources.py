@@ -16,11 +16,12 @@ kwargs['s_color'] = [u_color[int(k[1])] for k in subjects]  # Set the subject co
 kwargs['s_opacity'] = 0.9 # Sources opacity
 
 # Now, create some random data between [-50,50]
-kwargs['s_data'] = kwargs['s_xyz'][:, 1] #np.round(100*np.random.rand(kwargs['s_xyz'].shape[0])-50)
+kwargs['s_data'] = kwargs['s_xyz'][:, 0].copy() #np.round(100*np.random.rand(kwargs['s_xyz'].shape[0])-50)
+# kwargs['s_data'][kwargs['s_xyz'][:, 2].argmax()] = 1000
 
 # Control the dynamic range of sources radius :
 kwargs['s_radiusmin'] = 2               # Minimum radius
-kwargs['s_radiusmax'] = 8               # Maximum radius
+kwargs['s_radiusmax'] = 20               # Maximum radius
 kwargs['s_edgecolor'] = (1, 1, 1, 0.5)  # Color of the edges
 kwargs['s_edgewidth'] = .5              # Width of the edges
 kwargs['s_symbol'] = 'square'           # Source's symbol
@@ -53,4 +54,5 @@ kwargs['s_textshift'] = (1.5, 1.5, 0)   # To avoid a superposition between the t
 # Pass all arguments in the dictionnary :
 vb = Brain(**kwargs)
 vb._cortProj()
+vb.light_reflection('external')
 vb.show()
