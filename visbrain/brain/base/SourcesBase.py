@@ -93,7 +93,7 @@ class SourcesBase(_colormap):
         """
         # ======================== Check coordinates ========================
         # Check xyz :
-        self.xyz = np.array(self.xyz)
+        self.xyz = np.array(self.xyz).astype(np.float32)
         if self.xyz.ndim is not 2:
             self.xyz = self.xyz[:, np.newaxis]
         if 3 not in self.xyz.shape:
