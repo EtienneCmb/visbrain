@@ -203,8 +203,8 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
         sc.set_clim(vmax=vmax)
         sc.cmap.set_over(color=over)
     # Fix limits :
-    norm = mplcol.Normalize(vmin=clim[0], vmax=clim[1])
-    sc.set_norm(norm)
+    # norm = mplcol.Normalize(vmin=clim[0], vmax=clim[1])
+    # sc.set_norm(norm)
 
     # ================== Apply colormap ==================
     # Apply colormap to x :
