@@ -61,7 +61,7 @@ class Projections(object):
         mod[:, 1] = self.__modulation(v[:, 1, :], xyz, data)
         mod[:, 2] = self.__modulation(v[:, 2, :], xyz, data)
 
-        color = array2colormap(mod, cmap='jet', clim=(-1, 1))
+        color = array2colormap(mod, cmap='jet', clim=(0, 20))
         color[mod.mask, ...] = 1.
         self.atlas.mesh.set_color(data=color)
         print('END TIME : ', st-time())
@@ -70,23 +70,29 @@ class Projections(object):
         """Apply corticale repartition."""
         pass
 
-    def __modulation(self, v, xyz, data, kind='projection'):
+    def __modulation(self, v, xyz, data, kind='repartition'):
         """Compute data modulation by the euclidian distance."""
         # Compute euclidian distance :
         eucl = cdist(v, xyz).astype(np.float32)
         mask = eucl <= self._tradius
-        eucl *= (-1. / eucl.max())
-        np.add(eucl, 1., out=eucl)
-        eucl = np.ma.masked_array(eucl, mask=np.invert(mask), dtype=np.float32)
-        # Modulate data by euclidian distance :
-        mod = np.ma.zeros((v.shape[0],), dtype=np.float32)
-        np.ma.dot(eucl, data, strict=False, out=mod)
-        # Get the mean :
-        prop = np.sum(mask, axis=1, dtype=np.float32)
-        prop[prop == 0.] = 1.
-        np.divide(mod, prop, out=mod)
-        nnz = np.nonzero(mask.sum(0))
-        normalize(mod, data[nnz].min(), data[nnz].max())
+        if kind == 'projection':
+            eucl *= (-1. / eucl.max())
+            np.add(eucl, 1., out=eucl)
+            eucl = np.ma.masked_array(eucl, mask=np.invert(mask),
+                                      dtype=np.float32)
+            # Modulate data by euclidian distance :
+            mod = np.ma.zeros((v.shape[0],), dtype=np.float32)
+            np.ma.dot(eucl, data, strict=False, out=mod)
+            # Get the mean :
+            prop = np.sum(mask, axis=1, dtype=np.float32)
+            prop[prop == 0.] = 1.
+            np.divide(mod, prop, out=mod)
+            nnz = np.nonzero(mask.sum(0))
+            normalize(mod, data[nnz].min(), data[nnz].max())
+        elif kind == 'repartition':
+            sm = np.sum(mask, 1)
+            mod = np.ma.masked_array(sm, mask=np.invert(sm.astype(bool)),
+                                     dtype=np.float32)
 
         return mod
 
