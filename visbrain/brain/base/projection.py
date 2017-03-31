@@ -52,11 +52,11 @@ class Projections(object):
         # ============= MODULATIONS =============
 
         print('DATA : ', data.min(), data.max())
-        # mod = self.__modulation(v, xyz, data)
-        mod = self.__repartition(v, xyz, data)
+        mod = self.__modulation(v, xyz, data)
+        # mod = self.__repartition(v, xyz, data)
         print(mod.min(), mod.max())
 
-        color = array2colormap(mod, cmap='jet', clim=(1., 25.))
+        color = array2colormap(mod, cmap='Spectral_r', clim=(-1., 1.))
         color[mod.mask, ...] = 1.
         self.atlas.mesh.set_color(data=color)
         print('END TIME : ', st-time())
