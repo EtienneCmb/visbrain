@@ -51,11 +51,11 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-5 Bug dans le nombre de slow-waves détectées
 	-4 Finir detection K-complexes: mettre un seul critère de probabilité (0 à 1) pour la detection
 	-4 Améliorer les détections
 	-3 Ajout collaborateur
 	-2 Scorage automatique du sommeil
+	+5 Bug dans le nombre de slow-waves détectées
 	+5 Minimum duration sur REM
 	+3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
 	+5 Choix des couleurs de l'hypno

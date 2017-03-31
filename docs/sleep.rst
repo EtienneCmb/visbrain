@@ -48,7 +48,7 @@ Here’s the list of currently supported extensions for data files:
    Extensions above are the ones natively supported inside Sleep, but you can also directly pass numpy array or .mat file (loaded with scipy.loadmat)
 
 .. warning::
-   Sleep applies an automatic downsampling to 100 Hz upon loading. You can change this value with the “downsample” argument of Sleep (command-line only). 
+   Sleep applies an automatic downsampling to 100 Hz upon loading. You can change this value with the “downsample” argument of Sleep (command-line only) or directly in the file sleep.py. If the sampling rate is a power of 2 (e.g 256Hz), the default downsampling frequency will be 64 Hz. 
 
 Hypnogram
 ~~~~~~~~~
@@ -67,7 +67,7 @@ Here's the list of supported extensions for hypnogram files :
    * *Time* : the number of seconds represented by one value of the hypnogram (e.g. one value per 30 second, time = 30, one value per second, time = 1). 
    * *W, N1, N2, N3, REM, Art* : The value in your hypnogram that corresponds to stage Wakefulness, N1, N2, N3, REM and Art.
    
-   Please note that Sleep uses the guidelines of *Iber et al. 2007* for sleep stage nomenclature, i.e. Wake, N1, N2, N3, REM and Artefact. If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that N3 and N4 will be merged into N3 during the import to the Sleep module.
+   Please note that Sleep uses the guidelines of *Iber et al. 2007* for sleep stage nomenclature, i.e. Wake, N1, N2, N3, REM and Artefact. If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differenciation between S3 and S4 so be sure not to overwrite your original file!
 
 
 Save hypnogram
@@ -85,9 +85,9 @@ By default, Sleep will save your hypnogram with a sampling rate of 1 value per s
 Elan .hyp format
 ^^^^^^^^^^^^^^^^
 
-Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages.
+Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.
 
-.txt / .csv format
+.txt format
 ^^^^^^^^^^^^^^^^^^
 
 Sleep will automatically create a HYPNOFILENAME_description.txt with the appropriate parameters (time, sleep stages values), therefore making it easy to reload it later.
@@ -167,7 +167,8 @@ This third way is the manually one. You have to load your data before and sendin
           hypno=raw_hypno).show()
 
 .. warning::
-   The data must have the same number of points as the hypnogram and the same number of channels as in the *channels* variable.
+	Data must be an array with shape (channels, samples). The number of channels must be the same as in *channels* variable. If you load an hypnogram this way, it must have the same number of point (i.e same sampling rate) as the data. If your hypnogram comes with a different time base, the simplest way is to export it into a simple txt file and follow the procedure described above.
+	
 
 Tabs descripion
 ---------------
@@ -178,7 +179,7 @@ Sleep provide five settings tabs :
 * :ref:`toolstab` : a bundle of signal processing tools (like *filtering*)
 * :ref:`infotab` : Sleep statistics and record basic infos
 * :ref:`scoringtab` : a scoring table that can be used to edit the hypnogram
-* :ref:`detectiontab` : Automatic detection of sleep spindles, rapid eye movements (REMs) and peaks
+* :ref:`detectiontab` : Automatic detection of sleep spindles, rapid eye movements (REMs), slow waves, K-complexes (KCs) and peaks
 
 .. _paneltab:
 
@@ -192,7 +193,7 @@ Panels
 Tools
 ~~~~~
 
-The Tools panel offers several signal processing tools such as *de-meaning*, *de-trending* and *filtering* which are applied directly on the signal and spectrogram (see image below). 
+The Tools panel offers several signal processing tools such as *de-meaning*, *de-trending*, *filtering* and re-referencing which are applied directly on the signal and spectrogram (see image below). 
 
 
 Filtering
@@ -204,6 +205,12 @@ Apply either a lowpass, highpass or bandpass butterworth filter on the channel d
    :align:   center
 
    Bandpass filter applied across all channels and spectrogram.
+   
+Referencing
+^^^^^^^^^
+
+Sleep allows you to re-reference your dataset either to a specified channel or using bipolarization. Note that this could be applied only once.
+
 
 .. _infotab:
 
@@ -233,7 +240,7 @@ Sleep statistics specifications (*All values are expressed in minutes*):
 Scoring
 ~~~~~~~
 
-Sleep offer three possibilities to score the hypnogram, during the :ref:`navigation` using shortcuts, manually using the :ref:`scoretable` or in :ref:`liveedit`.
+Sleep offers three possibilities to score the hypnogram, during the :ref:`navigation` using shortcuts, manually using the :ref:`scoretable` or in :ref:`liveedit`.
 
 .. figure::  picture/Sleep_scoring.png
    :align:   center
@@ -258,7 +265,7 @@ w                       Wake stage
 r                       REM stage
 ==============          =================
 
-After pressing one of those keys, data coming from the next window will be prompted automatically so that you can continu scoring.
+After pressing one of those keys, data coming from the next window will be prompted automatically so that you can continue scoring.
 
 .. warning::
    If no canvas are selected the shortcuts might be not working. Simply click on a canvas (on a channel / spectrogram / histogam) before starting to score to avoid this issue.
@@ -305,7 +312,7 @@ Live editing consist of editing your hypnogram directly from the axis by adding 
 Detection
 ~~~~~~~~~
 
-The Detection panel offers several semi-automatic algorithms for the detection of sleep features such as sleep spindles, rapid eyes movements and peaks. All detection types shared the following parameters :
+The Detection panel offers several semi-automatic algorithms for the detection of sleep features such as sleep spindles, rapid eyes movements, slow waves, K-complexes and peaks. All detection types shared the following parameters :
 
 * *Apply on* : choose on which channel to perform the detection
 
@@ -327,7 +334,6 @@ This algorithm perform a semi-automatic detection of sleep spindles which are an
 
    Spindles detection on channel Cz and report on the hypnogram.
 
-Description de la Méthode: tu es peut être plus à l’aise que moi sur les wavelets… !
 
 **Parameters** :
 
