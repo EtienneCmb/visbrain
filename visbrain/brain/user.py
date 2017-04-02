@@ -462,7 +462,7 @@ class userfcn(object):
         # Colormap control :
         self.sources_colormap(**kwargs)
         # Run the corticale projection :
-        self._cortProj()
+        self._sourcesProjection()
 
     def cortical_repartition(self, radius=10., project_on='brain', **kwargs):
         """Get the number of contributing sources per vertex.
@@ -498,7 +498,7 @@ class userfcn(object):
         # Colormap control :
         self.sources_colormap(**kwargs)
         # Run the corticale reparition :
-        self._cortProj()
+        self._sourcesProjection()
 
     def sources_colormap(self, cmap=None, clim=None, vmin=None,
                          under=None, vmax=None, over=None):
