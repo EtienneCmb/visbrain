@@ -275,7 +275,7 @@ class SourcesBase(_colormap):
     ##########################################################################
     # PROJECTIONS
     ##########################################################################
-    def _modulation(self, v, radius):
+    def _modulation(self, v, radius, contribute=False):
         """Get data modulated by the euclidian distance.
 
         The vertices are indexed by face which means it's a (N, 3, 3).
@@ -290,6 +290,10 @@ class SourcesBase(_colormap):
             radius: float
                 The radius under which activity is projected on vertices.
 
+        Kargs:
+            contribute: bool, optional, (def: False)
+                Specify if sources contribute on both hemisphere.
+
         Return:
             modulation: masked np.ndarray, float32
                 The index faced modulations of shape (N, 3). This is a masked
@@ -300,6 +304,8 @@ class SourcesBase(_colormap):
         masked = ~self.data.mask
         xyz = self.xyz[masked]
         data = self.data.data[masked].astype(np.float32)
+        # Get sign of the x coordinate :
+        xsign = np.sign(xyz[:, 0]).reshape(1, -1)
         # Modulation / proportion / (Min, Max) :
         modulation = np.ma.zeros((v.shape[0], v.shape[1]), dtype=np.float32)
         prop = np.zeros_like(modulation.data)
@@ -312,6 +318,13 @@ class SourcesBase(_colormap):
             eucl = cdist(v[:, k, :], xyz)
             eucl = eucl.astype(np.float32, copy=False)
             mask = eucl <= radius
+            # Contribute :
+            if not contribute:
+                # Get vertices signn :
+                vsign = np.sign(v[:, k, 0]).reshape(-1, 1)
+                # Find where vsign and xsign are equals :
+                isign = np.logical_and(vsign != xsign, xsign != 0)
+                mask[isign] = False
             # Invert euclidian distance for modulation and mask it :
             np.multiply(eucl, -1. / eucl.max(), out=eucl)
             np.add(eucl, 1., out=eucl)
@@ -335,7 +348,7 @@ class SourcesBase(_colormap):
 
         return modulation
 
-    def _repartition(self, v, radius):
+    def _repartition(self, v, radius, contribute=False):
         """Get data repartition.
 
         The vertices are indexed by face which means it's a (N, 3, 3).
@@ -350,6 +363,10 @@ class SourcesBase(_colormap):
             radius: float
                 The radius under which activity is projected on vertices.
 
+        Kargs:
+            contribute: bool, optional, (def: False)
+                Specify if sources contribute on both hemisphere.
+
         Return:
             repartition: masked np.ndarray, float32
                 The index faced repartition of shape (N, 3). This is a masked
@@ -358,6 +375,8 @@ class SourcesBase(_colormap):
         # =============== PRE-ALLOCATION ===============
         # Compute on non-masked sources :
         xyz = self.xyz[~self.data.mask]
+        # Get sign of the x coordinate :
+        xsign = np.sign(xyz[:, 0]).reshape(1, -1)
         # Corticale repartition :
         repartition = np.ma.zeros((v.shape[0], v.shape[1]), dtype=np.int)
 
@@ -366,6 +385,13 @@ class SourcesBase(_colormap):
             # =============== EUCLIDIAN DISTANCE ===============
             eucl = cdist(v[:, k, :], xyz).astype(np.float32)
             mask = eucl <= radius
+            # Contribute :
+            if not contribute:
+                # Get vertices signn :
+                vsign = np.sign(v[:, k, 0]).reshape(-1, 1)
+                # Find where vsign and xsign are equals :
+                isign = np.logical_and(vsign != xsign, xsign != 0)
+                mask[isign] = False
 
             # =============== REPARTITION ===============
             # Sum over sources dimension :
