@@ -174,7 +174,7 @@ class SourcesBase(_colormap):
         # --------------------------------------------------------------------
         # Check text :
         if self.stext is not None:
-            if len(self.stext) != len(self):
+            if len(self.stext) != len(self.data):
                 raise ValueError("The length of text data must be the same "
                                  "as the number of electrodes")
 
@@ -206,7 +206,8 @@ class SourcesBase(_colormap):
         compare to loop over single sources.
         """
         # Find only unmasked data :
-        xyz, sData, sColor, _ = self._select_unmasked()
+        # xyz, sData, sColor, _ = self._select_unmasked()
+        xyz, sData, sColor = self.xyz, self.sData, self.sColor
 
         # Render as cloud points :
         self.mesh = visu.Markers(name='Sources')
