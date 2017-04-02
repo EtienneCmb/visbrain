@@ -159,11 +159,11 @@ class SourcesBase(_colormap):
         # --------------------------------------------------------------------
         # Check data :
         if self.data is None:
-            self.data = np.ones((self.nSources,), dtype=float)
-        try:
-            self.data.mask
-        except:
-            self.data = np.ma.masked_array(np.ravel(self.data), mask=False)
+            self.data = np.ones((self.nSources,), dtype=np.float32)
+        if not np.ma.isMaskedArray(self.data):
+            self.data = np.ma.masked_array(np.ravel(self.data),
+                                           mask=self.smask.copy(),
+                                           dtype=np.float32)
         if len(self.data) != self.nSources:
             raise ValueError("The length of data must be the same as the "
                              "number of electrodes")
