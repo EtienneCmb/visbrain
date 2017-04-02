@@ -52,7 +52,7 @@ class ConnectBase(_colormap):
         self.bl = c_bundling
         self.blradius = c_blradius
         self.blxyz = c_blxyz
-        self.blinterp = 10
+        self.blinterp = 100
 
         # Initialize colormap :
         _colormap.__init__(self, c_cmap, c_cmap_clim, c_cmap_vmin, c_cmap_vmax,
