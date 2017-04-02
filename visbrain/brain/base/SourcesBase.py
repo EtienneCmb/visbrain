@@ -9,6 +9,7 @@ sources objects.
 """
 
 import numpy as np
+from scipy.spatial.distance import cdist
 
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
@@ -270,6 +271,135 @@ class SourcesBase(_colormap):
                 The boolean value to use for reseting the mask.
         """
         self.data.mask = reset_to
+
+    ##########################################################################
+    # PROJECTIONS
+    ##########################################################################
+    @staticmethod
+    def _modulation(v, xyz, data, radius):
+        """Get data modulated by the euclidian distance.
+
+        The vertices are indexed by face which means it's a (N, 3, 3).
+        Depending on the number of sources, using broadcasting rules can
+        be memory consuming. For that reason, we split computation for each
+        face, using an ugly loop.
+
+        Args:
+            v: np.ndarray, float32
+                The index faced vertices of shape (nv, 3, 3)
+
+            xyz: np.ndarray, float32
+                Sources locations of shape (N, 3)
+
+            data: np.ndarray, float32
+                Data per source of shape (N,)
+
+            radius: float
+                The radius under which activity is projected on vertices.
+
+        Return:
+            modulation: masked np.ndarray, float32
+                The index faced modulations of shape (N, 3). This is a masked
+                array where the mask refer to sources that are over the radius.
+
+            fmask: np.ndarray of boolean
+                If there's masked data, return where the euclidian distance is
+                under radius.
+        """
+        # =============== PRE-ALLOCATION ===============
+        # Modulation / proportion / (Min, Max) :
+        modulation = np.ma.zeros((v.shape[0], v.shape[1]), dtype=np.float32)
+        prop = np.zeros_like(modulation.data)
+        minmax = np.zeros((3, 2), dtype=np.float32)
+        # Supplementar mask :
+        masked = np.any(data.mask)
+        sh = (v.shape[0], 3, len(data)) if masked else (1, 3, 1)
+        fmask = np.ones(sh, dtype=bool)
+
+        # For each triangle :
+        for k in range(3):
+            # =============== EUCLIDIAN DISTANCE ===============
+            # Compute euclidian distance and get sources under radius :
+            eucl = cdist(v[:, k, :], xyz)
+            eucl = eucl.astype(np.float32, copy=False)
+            mask = eucl <= radius
+            fmask[:, k, :] = mask if masked else True
+            # Invert euclidian distance for modulation and mask it :
+            np.multiply(eucl, -1. / eucl.max(), out=eucl)
+            np.add(eucl, 1., out=eucl)
+            eucl = np.ma.masked_array(eucl, mask=np.invert(mask),
+                                      dtype=np.float32)
+
+            # =============== MODULATION ===============
+            # Modulate data by distance (only for sources under radius) :
+            modulation[:, k] = np.ma.dot(eucl, data, strict=False)
+
+            # =============== PROPORTIONS ===============
+            np.sum(mask, axis=1, dtype=np.float32, out=prop[:, k])
+            nnz = np.nonzero(mask.sum(0))
+            minmax[k, :] = np.array([data[nnz].min(), data[nnz].max()])
+
+        # Divide modulations by the number of contributing sources :
+        prop[prop == 0.] = 1.
+        np.divide(modulation, prop, out=modulation)
+        # Normalize inplace modulations between under radius data :
+        normalize(modulation, minmax.min(), minmax.max())
+
+        return modulation, fmask
+
+    @staticmethod
+    def _repartition(v, xyz, data, radius):
+        """Get data repartition.
+
+        The vertices are indexed by face which means it's a (N, 3, 3).
+        Depending on the number of sources, using broadcasting rules can
+        be memory consuming. For that reason, we split computation for each
+        face, using an ugly loop.
+
+        Args:
+            v: np.ndarray, float32
+                The index faced vertices of shape (nv, 3, 3)
+
+            xyz: np.ndarray, float32
+                Sources locations of shape (N, 3)
+
+            data: np.ndarray, float32
+                Data per source of shape (N,)
+
+            radius: float
+                The radius under which activity is projected on vertices.
+
+        Return:
+            repartition: masked np.ndarray, float32
+                The index faced repartition of shape (N, 3). This is a masked
+                array where the mask refer to sources that are over the radius.
+
+            fmask: np.ndarray of boolean
+                If there's masked data, return where the euclidian distance is
+                under radius.
+        """
+        # =============== PRE-ALLOCATION ===============
+        # Corticale repartition :
+        repartition = np.ma.zeros((v.shape[0], v.shape[1]), dtype=np.int)
+        # Supplementar mask :
+        masked = np.any(data.mask)
+        sh = (v.shape[0], 3, len(data)) if masked else (1, 3, 1)
+        fmask = np.ones(sh, dtype=bool)
+
+        # For each triangle :
+        for k in range(3):
+            # =============== EUCLIDIAN DISTANCE ===============
+            eucl = cdist(v[:, k, :], xyz).astype(np.float32)
+            mask = eucl <= radius
+            fmask[:, k, :] = mask if masked else False
+
+            # =============== REPARTITION ===============
+            # Sum over sources dimension :
+            sm = np.sum(mask, 1, dtype=np.int)
+            smmask = np.invert(sm.astype(bool))
+            repartition[:, k] = np.ma.masked_array(sm, mask=smmask)
+
+        return repartition, fmask
 
     ##########################################################################
     # TEXT

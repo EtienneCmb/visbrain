@@ -1,7 +1,7 @@
 import numpy as np
 
-from ...utils import array2colormap, normalize
-from scipy.spatial.distance import cdist
+from ...utils import array2colormap
+
 
 __all__ = ['Projections']
 
@@ -13,11 +13,12 @@ class Projections(object):
     access to vertices & sources coordinates / data.
     """
 
-    def __init__(self, t_radius=10.0, t_projecton='brain', **kwargs):
+    def __init__(self, t_radius=10.0, t_projecton='brain',
+                 t_projectas='activity', **kwargs):
         """Init."""
-        print('IM IN')
         self._tradius = t_radius
         self._tprojecton = t_projecton
+        self._tprojectas = t_projectas
         self.current_mask = None
 
     # ======================================================================
@@ -25,10 +26,27 @@ class Projections(object):
     # ======================================================================
     def _projectOn(self):
         """Get the vertices to project sources activity or repartition."""
+        # =============== CHECKING ===============
+        # Check projection radius :
+        if isinstance(self._tradius, (int, float)):
+            self._tradius = float(self._tradius)
+        else:
+            raise ValueError("The radius parameter must be a integer or a "
+                             "float number.")
+
         # Check the projecton parameter :
         if self._tprojecton not in ['brain', 'roi']:
             raise ValueError("The projecton parameter must either be 'brain'"
                              " or 'roi'.")
+
+        # Check projection type :
+        if self._tprojectas not in ['activity', 'repartition']:
+            raise ValueError("The t_projectas parameter must either be "
+                             "'activity' to project source's activity or "
+                             "'repartition' to explore the number of "
+                             "contributing sources per vertex.")
+
+        # =============== VERTICES ===============
         # Project on brain surface :
         if self._tprojecton == 'brain':
             vertices = self.atlas.vert
@@ -37,130 +55,36 @@ class Projections(object):
             vertices = self.area.mesh.get_vertices
         # Sources data :
         xyz = self.sources.xyz
-        data = self.sources.data.data.astype(np.float32)
+        data = self.sources.data
 
         return vertices, self._tradius, xyz, data
 
     def _cortProj(self):
         """Apply corticale projection."""
-        from time import time
-        st = time()
         # ============= VARIABLES =============
         # Get vertices, radius, locations and data :
         v, r, xyz, data = self._projectOn()
 
         # ============= MODULATIONS =============
+        if self._tprojectas == 'activity':
+            mod, fmask = self.sources._modulation(v, xyz, data, r)
+        elif self._tprojectas == 'repartition':
+            mod, fmask = self.sources._repartition(v, xyz, data, r)
 
-        print('DATA : ', data.min(), data.max())
-        mod = self.__modulation(v, xyz, data)
-        # mod = self.__repartition(v, xyz, data)
-        print(mod.min(), mod.max())
-
-        color = array2colormap(mod, cmap='Spectral_r', clim=(-1., 1.))
+        # ============= COLOR =============
+        color = array2colormap(mod, **self.sources._cb)
         color[mod.mask, ...] = 1.
+
+        # ============= MASKED =============
+        if self.sources:
+            # Get index where vertices need to be masked :
+            m = fmask.reshape(fmask.shape[0] * 3, fmask.shape[2])
+            idx = np.dot(m, self.sources.data.mask).reshape(v.shape[0], 3)
+            # Set them color to the mask color :
+            color[idx, ...] = self.sources.smaskcolor
+
+        # ============= MESH =============
         self.atlas.mesh.set_color(data=color)
-        print('END TIME : ', st-time())
-
-    def _cortRepart(self):
-        """Apply corticale repartition."""
-        pass
-
-    def __modulation(self, v, xyz, data):
-        """Get data modulated by the euclidian distance.
-
-        The vertices are indexed by face which means it's a (N, 3, 3).
-        Depending on the number of sources, using broadcasting rules can
-        be memory consuming. For that reason, we split computation for each
-        face, using an ugly loop.
-
-        Args:
-            v: np.ndarray, float32
-                The index faced vertices of shape (nv, 3, 3)
-
-            xyz: np.ndarray, float32
-                Sources locations of shape (N, 3)
-
-            data: np.ndarray, float32
-                Data per source of shape (N,)
-
-        Return:
-            modulation: masked np.ndarray, float32
-                The index faced modulations of shape (N, 3). This is a masked
-                array where the mask refer to sources that are over the radius.
-        """
-        # =============== PRE-ALLOCATION ===============
-        modulation = np.ma.zeros((v.shape[0], v.shape[1]), dtype=np.float32)
-        prop = np.zeros_like(modulation.data)
-        minmax = np.zeros((3, 2), dtype=np.float32)
-
-        # For each triangle :
-        for k in range(3):
-            # =============== EUCLIDIAN DISTANCE ===============
-            # Compute euclidian distance and get sources under radius :
-            eucl = cdist(v[:, k, :], xyz).astype(np.float32)
-            mask = eucl <= self._tradius
-            # Invert euclidian distance for modulation and mask it :
-            np.multiply(eucl, -1. / eucl.max(), out=eucl)
-            np.add(eucl, 1., out=eucl)
-            eucl = np.ma.masked_array(eucl, mask=np.invert(mask),
-                                      dtype=np.float32)
-
-            # =============== MODULATION ===============
-            # Modulate data by distance (only for sources under radius) :
-            modulation[:, k] = np.ma.dot(eucl, data, strict=False)
-
-            # =============== PROPORTIONS ===============
-            np.sum(mask, axis=1, dtype=np.float32, out=prop[:, k])
-            nnz = np.nonzero(mask.sum(0))
-            minmax[k, :] = np.array([data[nnz].min(), data[nnz].max()])
-
-        # Divide modulations by the number of contributing sources :
-        prop[prop == 0.] = 1.
-        np.divide(modulation, prop, out=modulation)
-        # Normalize inplace modulations between under radius data :
-        normalize(modulation, minmax.min(), minmax.max())
-
-        return modulation
-
-    def __repartition(self, v, xyz, data):
-        """Get data repartition.
-
-        The vertices are indexed by face which means it's a (N, 3, 3).
-        Depending on the number of sources, using broadcasting rules can
-        be memory consuming. For that reason, we split computation for each
-        face, using an ugly loop.
-
-        Args:
-            v: np.ndarray, float32
-                The index faced vertices of shape (nv, 3, 3)
-
-            xyz: np.ndarray, float32
-                Sources locations of shape (N, 3)
-
-            data: np.ndarray, float32
-                Data per source of shape (N,)
-
-        Return:
-            repartition: masked np.ndarray, float32
-                The index faced repartition of shape (N, 3). This is a masked
-                array where the mask refer to sources that are over the radius.
-        """
-        # =============== PRE-ALLOCATION ===============
-        repartition = np.ma.zeros((v.shape[0], v.shape[1]), dtype=np.int)
-
-        # For each triangle :
-        for k in range(3):
-            # =============== EUCLIDIAN DISTANCE ===============
-            eucl = cdist(v[:, k, :], xyz).astype(np.float32)
-            mask = eucl <= self._tradius
-
-            # =============== REPARTITION ===============
-            # Sum over sources dimension :
-            sm = np.sum(mask, 1, dtype=np.int)
-            smmask = np.invert(sm.astype(bool))
-            repartition[:, k] = np.ma.masked_array(sm, mask=smmask)
-
-        return repartition
 
     # ======================================================================
     # DISPLAY
