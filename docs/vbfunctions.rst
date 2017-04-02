@@ -77,6 +77,10 @@ Opacity
 
    Example of cortical projection.
 
+Select sources
+~~~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.sources_display
+
 Add source object
 ~~~~~~~~~~~~~~~~~
 .. automethod:: visbrain.brain.user.userfcn.add_sources
