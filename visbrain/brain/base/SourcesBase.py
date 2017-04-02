@@ -82,6 +82,10 @@ class SourcesBase(_colormap):
         """Get sources coordinates matrix."""
         return self.xyz
 
+    def __bool__(self):
+        """Return if there's masked sources."""
+        return any(self.smask)
+
     ##########################################################################
     # DATA CHECKING
     ##########################################################################
