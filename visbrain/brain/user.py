@@ -422,6 +422,37 @@ class userfcn(object):
         self.sources.update()
         self.sources.mesh.visible = show
 
+    def sources_display(self, select='all'):
+        """Select sources to display.
+
+        The selected sources can be then used to project activity or
+        repartition.
+
+        Args:
+            select: string
+                The select parameter can be 'all', 'none', 'left', 'right',
+                'inside' or 'outside'.
+
+        Example:
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Set transparency :
+            >>> vb.sources_display(select='right')
+            >>> # Show the GUI :
+            >>> vb.show()
+        """
+        # Display either All / None :
+        if select in ['all', 'none', 'left', 'right']:
+            self.sources.display(select)
+
+        # Display sources that are either in the inside / outside the brain :
+        elif select in ['inside', 'outside']:
+            self.sources._isInside(self.atlas.vert, select, self.progressbar)
+
+        else:
+            raise ValueError("The select parameter must either be 'all', "
+                             "'none', 'left', 'right', 'inside' or 'outside'")
+
     def cortical_projection(self, radius=10., project_on='brain', **kwargs):
         """Project sources activity.
 
