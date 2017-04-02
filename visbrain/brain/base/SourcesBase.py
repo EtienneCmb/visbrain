@@ -239,6 +239,28 @@ class SourcesBase(_colormap):
     ##########################################################################
     # MASK
     ##########################################################################
+    def display(self, select='all'):
+        """Choose which sources to display.
+
+        Args:
+            select: string
+                Use either 'all', 'none', 'left' or 'right'.
+        """
+        if select == 'all':
+            idx = slice(0)
+        elif select == 'none':
+            idx = slice(None)
+        if select == 'left':
+            idx = self.xyz[:, 0] >= 0
+        elif select == 'right':
+            idx = self.xyz[:, 0] <= 0
+        # Hide souces :
+        self.data.mask = False
+        self.data.mask[idx] = True
+        # Update data sources and text :
+        self.update()
+        self.text_update()
+
     def _select_unmasked(self):
         """Get some attributes of non-masked sources.
 
@@ -434,6 +456,46 @@ class SourcesBase(_colormap):
         idx = np.dot(m, np.ones((len(data),), dtype=bool)).reshape(nv, 3)
 
         return idx
+
+    def _isInside(self, v, select, progress):
+        """Select sources that are either inside or outside the mesh.
+
+        This method directly hide sources.
+
+        Args:
+            v: np.ndarray, float32
+                The index faced vertices of shape (nv, 3, 3)
+
+            select: string
+                Use either 'inside' or 'outside'.
+
+            progress: pyqt progress bar
+                The progress bar.
+        """
+        # Compute on non-masked sources :
+        xyz = self.xyz
+        N = xyz.shape[0]
+        inside = np.ones((xyz.shape[0],), dtype=bool)
+        v = v.reshape(v.shape[0] * 3, 3)
+
+        # Loop over sources :
+        progress.show()
+        for k in range(N):
+            # Get the euclidian distance :
+            eucl = cdist(v, xyz[[k], :])
+            # Get the closest vertex :
+            eucl_argmin = eucl.argmin()
+            # Get distance to zero :
+            xyz_t0 = np.sqrt((xyz[k, :] ** 2).sum())
+            v_t0 = np.sqrt((v[eucl_argmin, :] ** 2).sum())
+            inside[k] = xyz_t0 <= v_t0
+            progress.setValue(100 * k / N)
+        self.data.mask = False
+        self.data.mask = inside if select != 'inside' else np.invert(inside)
+        # Finally update data sources and text :
+        self.update()
+        self.text_update()
+        progress.hide()
 
     ##########################################################################
     # TEXT
