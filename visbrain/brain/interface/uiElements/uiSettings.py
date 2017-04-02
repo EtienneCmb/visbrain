@@ -285,11 +285,11 @@ class uiSettings(object):
         """Triggered method when tab changed."""
         # Get current tab :
         currentIndex = self.QuickSettings.currentIndex()
-        if currentIndex == 2:
-            self.cmapSources.setChecked(True)
-        if currentIndex == 3:
-            self.cmapConnect.setChecked(True)
-        self._select_object_cmap()
+        # if currentIndex == 2:
+        #     self.cmapSources.setChecked(True)
+        # if currentIndex == 3:
+        #     self.cmapConnect.setChecked(True)
+        # self._select_object_cmap()
 
     def _fcn_menuProjection(self):
         """Run the cortical projection."""
