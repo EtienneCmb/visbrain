@@ -57,6 +57,7 @@ class uiAtlas(object):
                 self.uiSwitchTemplate.setCurrentIndex(int(template[-1]) - 1)
         else:
             self.atlas.template = str(self.uiSwitchTemplate.currentText())
+            self._cleanProj()
 
         # Show / hide MNI :
         self.show_MNI.setChecked(show)
@@ -80,6 +81,7 @@ class uiAtlas(object):
                 self.atlas.reload(hemisphere='left')
             elif self.Rhemi_only.isChecked():
                 self.atlas.reload(hemisphere='right')
+            self._cleanProj()
 
         # Update transformation :
         self._vbNode.transform = self.atlas.transform
