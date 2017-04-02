@@ -9,7 +9,7 @@ The following elements are initialized :
     This can be for processing (like projecting sources activity on it),
     educational or simply for visualiation purpose.
     * Colorbar : initialize the colorbar elements.
-    * Transformations : set of transformations that can be applied on several
+    * Projections : set of projections that can be applied on several
     Brain objects (like cortical_projection(), cortical_repartition(...))
     Those transformations are added here, at the top level, so that they
     can have access to the previously defined elements.
@@ -22,14 +22,13 @@ from .SourcesBase import SourcesBase
 from .ConnectBase import ConnectBase
 from .CbarBase import CbarBase
 from .AreaBase import AreaBase
-from .transformations import transformations
 from .projection import Projections
 
 
-class base(CbarBase, Projections, transformations):
+class base(CbarBase, Projections):
     """Initialize Brain objects.
 
-    Initialize sources / connectivity / areas / colorbar / transformations.
+    Initialize sources / connectivity / areas / colorbar / projections.
     Organize them at diffrent levels and make the link with the graphical
     user interface (if no object is detected, the corresponding panel in the
     GUI has to be deactivate).
@@ -55,8 +54,7 @@ class base(CbarBase, Projections, transformations):
                            cb_fontsize=self._cbfontsize,
                            cb_label=self._cblabel, **self.sources._cb)
 
-        # Add transformations :
-        # transformations.__init__(self, **kwargs)
+        # Add projections :
         Projections.__init__(self, **kwargs)
 
         # ---------- Panel management ----------
