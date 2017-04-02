@@ -65,7 +65,7 @@ class uiSources(object):
         # ====================== PROJECTION ======================
         self._uitRadius.setValue(self._tradius)
         self._uitProjectOn.model().item(1).setEnabled(False)
-        self._uitApply.clicked.connect(self._fcn_sourceProjection)
+        self._uitApply.clicked.connect(self._fcn_sourcesProjection)
 
     # =====================================================================
     # SOURCES
@@ -113,7 +113,7 @@ class uiSources(object):
     # =====================================================================
     # PROJECTION
     # =====================================================================
-    def _fcn_sourceProjection(self):
+    def _fcn_sourcesProjection(self):
         """Apply source projection."""
         # Get projection radius :
         self._tradius = self._uitRadius.value()
@@ -121,10 +121,10 @@ class uiSources(object):
         self._tprojecton = str(self._uitProjectOn.currentText()).lower()
         # Run either the activity / repartition projection :
         if self._uitActivity.isChecked():
-            self._cortProj()
-            # self._cortical_projection()
+            self._tprojectas = 'activity'
         elif self._uitRepartition.isChecked():
-            self._cortical_repartition()
+            self._tprojectas = 'repartition'
+        self._sourcesProjection()
 
     # =====================================================================
     # TEXT
