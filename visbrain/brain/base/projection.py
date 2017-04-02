@@ -81,7 +81,10 @@ class Projections(object):
             color[self._idxmasked, ...] = self.sources.smaskcolor
 
         # ============= MESH =============
-        self.atlas.mesh.set_color(data=color)
+        if self._tprojecton == 'brain':
+            self.atlas.mesh.set_color(data=color)
+        elif self._tprojecton == 'roi':
+            self.area.mesh.set_color(data=color)
 
     def _cleanProj(self):
         """Clean projection variables."""
