@@ -19,13 +19,14 @@ class Projections(object):
         self._tradius = t_radius
         self._tprojecton = t_projecton
         self._tprojectas = t_projectas
-        self.current_mask = None
+        self._idxmasked = None
+        self._modproj = None
 
     # ======================================================================
     # PROJECTIONS
     # ======================================================================
-    def _projectOn(self):
-        """Get the vertices to project sources activity or repartition."""
+    def _sourcesProjection(self):
+        """Apply corticale projection."""
         # =============== CHECKING ===============
         # Check projection radius :
         if isinstance(self._tradius, (int, float)):
@@ -49,42 +50,43 @@ class Projections(object):
         # =============== VERTICES ===============
         # Project on brain surface :
         if self._tprojecton == 'brain':
-            vertices = self.atlas.vert
+            v = self.atlas.vert
         # Project on deep areas :
         elif self._tprojecton == 'roi':
-            vertices = self.area.mesh.get_vertices
-        # Sources data :
-        xyz = self.sources.xyz
-        data = self.sources.data
-
-        return vertices, self._tradius, xyz, data
-
-    def _cortProj(self):
-        """Apply corticale projection."""
-        # ============= VARIABLES =============
-        # Get vertices, radius, locations and data :
-        v, r, xyz, data = self._projectOn()
+            v = self.area.mesh.get_vertices
+        self._vsh = v.shape
 
         # ============= MODULATIONS =============
         if self._tprojectas == 'activity':
-            mod, fmask = self.sources._modulation(v, xyz, data, r)
+            mod = self.sources._modulation(v, self._tradius)
         elif self._tprojectas == 'repartition':
-            mod, fmask = self.sources._repartition(v, xyz, data, r)
-
-        # ============= COLOR =============
-        color = array2colormap(mod, **self.sources._cb)
-        color[mod.mask, ...] = 1.
+            mod = self.sources._repartition(v, self._tradius)
+        self._modproj = mod
+        self.sources._MinMax = (mod.min(), mod.max())
 
         # ============= MASKED =============
+        if self.sources and (self._idxmasked is None):
+            self._idxmasked = self.sources._MaskedEucl(v, self._tradius)
+
+        # ============= COLOR =============
+        self._proj2Color()
+
+    def _proj2Color(self):
+        """Turn the projection into colormap."""
+        color = array2colormap(self._modproj, **self.sources._cb)
+        color[self._modproj.mask, ...] = 1.
+
         if self.sources:
-            # Get index where vertices need to be masked :
-            m = fmask.reshape(fmask.shape[0] * 3, fmask.shape[2])
-            idx = np.dot(m, self.sources.data.mask).reshape(v.shape[0], 3)
             # Set them color to the mask color :
-            color[idx, ...] = self.sources.smaskcolor
+            color[self._idxmasked, ...] = self.sources.smaskcolor
 
         # ============= MESH =============
         self.atlas.mesh.set_color(data=color)
+
+    def _cleanProj(self):
+        """Clean projection variables."""
+        self._idxmasked = None
+        self._modproj = None
 
     # ======================================================================
     # DISPLAY
