@@ -33,6 +33,7 @@ class vbShortcuts(object):
                    ('c', 'Display / hide colorbar'),
                    ('+', 'Increase brain opacity'),
                    ('-', 'Decrease brain opacity'),
+                   ('a', 'Auto-scale the colormap'),
                    ('CTRL + p', 'Run the cortical projection'),
                    ('CTRL + r', 'Run the cortical repartition'),
                    ('CTRL + d', 'Display / hide setting panel'),
@@ -74,6 +75,10 @@ class vbShortcuts(object):
                 self.OpacitySlider.setValue(sl+step)
                 self._fcn_opacity()
                 self._light_Atlas2Ui()
+
+                # Colormap :
+            elif event.text == 'a':
+                self._auto_scale()
 
             # Toggle brain visible:
             elif event.text == '4':

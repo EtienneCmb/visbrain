@@ -19,12 +19,12 @@ class uiSources(object):
         # ====================== SOURCES ======================
         # ---------- Visibility ----------
         self.show_Sources.clicked.connect(self._toggle_sources_visible)
-        self.s_uiAll.clicked.connect(self._fcn_left_right_H)
-        self.s_uiNone.clicked.connect(self._fcn_left_right_H)
-        self.s_LeftH.clicked.connect(self._fcn_left_right_H)
-        self.s_RightH.clicked.connect(self._fcn_left_right_H)
-        self.s_Inside.clicked.connect(self._fcn_inside_outside_H)
-        self.s_Outside.clicked.connect(self._fcn_inside_outside_H)
+        self.s_uiAll.clicked.connect(self._fcn_sourcesDisplay)
+        self.s_uiNone.clicked.connect(self._fcn_sourcesDisplay)
+        self.s_LeftH.clicked.connect(self._fcn_sourcesDisplay)
+        self.s_RightH.clicked.connect(self._fcn_sourcesDisplay)
+        self.s_Inside.clicked.connect(self._fcn_sourcesDisplay)
+        self.s_Outside.clicked.connect(self._fcn_sourcesDisplay)
         # ---------- Change marker look ----------
         # Symbol :
         sym = [self.s_Symbol.itemText(i) for i in range(self.s_Symbol.count())]
@@ -65,34 +65,25 @@ class uiSources(object):
         # ====================== PROJECTION ======================
         self._uitRadius.setValue(self._tradius)
         self._uitProjectOn.model().item(1).setEnabled(False)
-        self._uitApply.clicked.connect(self._fcn_sourceProjection)
+        self._uitApply.clicked.connect(self._fcn_sourcesProjection)
 
     # =====================================================================
     # SOURCES
     # =====================================================================
-    def _fcn_left_right_H(self):
-        """Display sources either in the Left or Right hemisphere.
-
-        This method call the s_display() source's transformation method.
-        """
+    def _fcn_sourcesDisplay(self):
+        """Select which part of sources to display."""
         if self.s_uiAll.isChecked():
-            self.s_display(select='all')
-        if self.s_uiNone.isChecked():
-            self.s_display(select='none')
-        if self.s_LeftH.isChecked():
-            self.s_display(select='left')
-        if self.s_RightH.isChecked():
-            self.s_display(select='right')
-
-    def _fcn_inside_outside_H(self):
-        """Display sources either inside or outside the MNI brain.
-
-        This method call the s_display() source's transformation method.
-        """
-        if self.s_Inside.isChecked():
-            self.s_display(select='inside')
+            self.sources_display(select='all')
+        elif self.s_uiNone.isChecked():
+            self.sources_display(select='none')
+        elif self.s_LeftH.isChecked():
+            self.sources_display(select='left')
+        elif self.s_RightH.isChecked():
+            self.sources_display(select='right')
+        elif self.s_Inside.isChecked():
+            self.sources_display(select='inside')
         elif self.s_Outside.isChecked():
-            self.s_display(select='outside')
+            self.sources_display(select='outside')
 
     def _fcn_MarkerLook(self):
         """Change how marker looks."""
@@ -113,7 +104,7 @@ class uiSources(object):
     # =====================================================================
     # PROJECTION
     # =====================================================================
-    def _fcn_sourceProjection(self):
+    def _fcn_sourcesProjection(self):
         """Apply source projection."""
         # Get projection radius :
         self._tradius = self._uitRadius.value()
@@ -121,9 +112,10 @@ class uiSources(object):
         self._tprojecton = str(self._uitProjectOn.currentText()).lower()
         # Run either the activity / repartition projection :
         if self._uitActivity.isChecked():
-            self._cortical_projection()
+            self._tprojectas = 'activity'
         elif self._uitRepartition.isChecked():
-            self._cortical_repartition()
+            self._tprojectas = 'repartition'
+        self._sourcesProjection()
 
     # =====================================================================
     # TEXT
