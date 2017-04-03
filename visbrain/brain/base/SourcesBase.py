@@ -223,7 +223,8 @@ class SourcesBase(_colormap):
         non-masked sources. This is faster than re-create the source object.
         """
         # Find only unmasked data :
-        xyz, sData, sColor, _ = self._select_unmasked()
+        # xyz, sData, sColor, _ = self._select_unmasked()
+        xyz, sData, sColor = self.xyz, self.sData, self.sColor
 
         # Render as cloud points :
         if xyz.size:
@@ -531,11 +532,11 @@ class SourcesBase(_colormap):
         """
         if self.stext is not None:
             # Get index of non-masked sources :
-            idx = self._select_unmasked()[-1]
+            # idx = self._select_unmasked()[-1]
 
             # Set masked-sources text to '':
             text = np.array(self.stext)
-            text[np.array(~idx, dtype=bool)] = ''
+            # text[np.array(~idx, dtype=bool)] = ''
 
             # Update elements :
             self.stextmesh.text = text
