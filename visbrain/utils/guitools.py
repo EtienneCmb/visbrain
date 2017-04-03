@@ -61,7 +61,7 @@ def textline2color(value):
     """
     # Remove ' caracter :
     try:
-        value = value.replace("'", '')
+        value = value.replace("'", '').strip()
         # Tuple/list :
         try:
             if isinstance(eval(value), (tuple, list)):
