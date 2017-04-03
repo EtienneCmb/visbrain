@@ -184,18 +184,16 @@ class uiCmap(object):
             # Update sources :
             if self.cmapSources.isChecked():
                 # If cortical projection never run :
-                if self.current_mask is None:
+                if self._modproj is None:
                     self._userMsg("To control the colormap of sources, "
                                   "run either the cortical\nprojection / "
                                   "repartition first.", 'warn', 10, 9)
-                    # self._cortical_projection()
                 # Otherwise update colormap :
                 else:
                     self.sources.cbUpdateFrom(self.cb)
-                    self._array2cmap(self.current_mask,
-                                     non_zero=self.current_non_zero)
+                    self._proj2Color()
                 # Update colorbar :
-                self.cb.cbupdate(self.current_mask, **self.cb._cb)
+                self.cb.cbupdate(self._modproj, **self.cb._cb)
 
             # Update connectivity :
             elif self.cmapConnect.isChecked():

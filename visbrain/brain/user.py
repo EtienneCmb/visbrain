@@ -422,7 +422,38 @@ class userfcn(object):
         self.sources.update()
         self.sources.mesh.visible = show
 
-    def cortical_projection(self, radius=10., project_on='brain', mask=None):
+    def sources_display(self, select='all'):
+        """Select sources to display.
+
+        The selected sources can be then used to project activity or
+        repartition.
+
+        Args:
+            select: string
+                The select parameter can be 'all', 'none', 'left', 'right',
+                'inside' or 'outside'.
+
+        Example:
+            >>> # Define a Brain instance with 10 random sources:
+            >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
+            >>> # Set transparency :
+            >>> vb.sources_display(select='right')
+            >>> # Show the GUI :
+            >>> vb.show()
+        """
+        # Display either All / None :
+        if select in ['all', 'none', 'left', 'right']:
+            self.sources.display(select)
+
+        # Display sources that are either in the inside / outside the brain :
+        elif select in ['inside', 'outside']:
+            self.sources._isInside(self.atlas.vert, select, self.progressbar)
+
+        else:
+            raise ValueError("The select parameter must either be 'all', "
+                             "'none', 'left', 'right', 'inside' or 'outside'")
+
+    def cortical_projection(self, radius=10., project_on='brain', **kwargs):
         """Project sources activity.
 
         This method can be used to project the sources activity either onto the
@@ -437,6 +468,11 @@ class userfcn(object):
                 either 'brain' for projecting the sources activity onto the
                 brain or 'roi' to project on region of interest (if defined).
 
+            kwargs: dict
+                Further arguments are passed to the sources_colormap function.
+                Those arguments can be used to control the colormap (clim,
+                vmin, under, vmax, over and cmap).
+
         Example:
             >>> # Define a Brain instance with 10 random sources:
             >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
@@ -450,24 +486,16 @@ class userfcn(object):
         See also:
             area_plot, sources_colormap
         """
-        # Check projection radius :
-        if isinstance(radius, (int, float)):
-            self._tradius = float(radius)
-        else:
-            raise ValueError("The radius parameter must be a integer or a "
-                             "float number.")
-
-        # Check project_on parameter :
-        if project_on in ['brain', 'roi']:
-            self._tprojecton = project_on
-        else:
-            raise ValueError("The project_on parameter must be either "
-                             "'brain' or 'roi'")
-
+        # Update variables :
+        self._tradius = float(radius)
+        self._tprojecton = project_on
+        self._tprojectas = 'activity'
+        # Colormap control :
+        self.sources_colormap(**kwargs)
         # Run the corticale projection :
-        self._cortical_projection()
+        self._sourcesProjection()
 
-    def cortical_repartition(self, radius=10., project_on='brain'):
+    def cortical_repartition(self, radius=10., project_on='brain', **kwargs):
         """Get the number of contributing sources per vertex.
 
         Kargs:
@@ -479,6 +507,11 @@ class userfcn(object):
                 Chose either 'brain' for projecting onto the brain or 'roi'
                 to project on region of interest (if defined).
 
+            kwargs: dict
+                Further arguments are passed to the sources_colormap function.
+                Those arguments can be used to control the colormap (clim,
+                vmin, under, vmax, over and cmap).
+
         Example:
             >>> # Define a Brain instance with 10 random sources:
             >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
@@ -489,26 +522,18 @@ class userfcn(object):
             >>> # Show the GUI :
             >>> vb.show()
         """
-        # Check projection radius :
-        if isinstance(radius, (int, float)):
-            self._tradius = float(radius)
-        else:
-            raise ValueError("The radius parameter must be a integer or a "
-                             "float number.")
-
-        # Check project_on parameter :
-        if project_on in ['brain', 'roi']:
-            self._tprojecton = project_on
-        else:
-            raise ValueError("The project_on parameter must be either "
-                             "'brain' or 'roi'")
-
-        # Run the cortical repartition :
-        self._cortical_repartition()
+        # Update variables :
+        self._tradius = float(radius)
+        self._tprojecton = project_on
+        self._tprojectas = 'repartition'
+        # Colormap control :
+        self.sources_colormap(**kwargs)
+        # Run the corticale reparition :
+        self._sourcesProjection()
 
     def sources_colormap(self, cmap=None, clim=None, vmin=None,
                          under=None, vmax=None, over=None):
-        """Change the colormap of cortical projection.
+        """Change the colormap of cortical projection / repartition.
 
         This method can be used to update paramaters of the colormap. But it's
         only going to work if the source's activity has been projected (using

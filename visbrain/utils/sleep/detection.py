@@ -26,11 +26,10 @@ __all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
 
 
 def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
-            kc_min_amp, kc_max_amp, fMin=0.5, fMax=4, delta_thr=0.75,
-            moving_s=30, spindles_thresh=1, range_spin_sec=20, kc_max_freq=5,
-            kc_peak_min_distance=100, min_distance_ms=500,
-            daub_coeff=6, daub_mult=10):
-
+             kc_min_amp, kc_max_amp, fMin=0.5, fMax=4, delta_thr=0.75,
+             moving_s=30, spindles_thresh=1, range_spin_sec=20, kc_max_freq=5,
+             kc_peak_min_distance=100, min_distance_ms=500,
+             daub_coeff=6, daub_mult=10):
     """Perform a K-complex detection.
 
     Args:
@@ -139,7 +138,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
 
     # Compute spindles detection
     spindles, _, _, _ = spindlesdetect(data, sf, spindles_thresh, hypno,
-                                                    nrem_only=False)
+                                       nrem_only=False)
 
     # MAIN DETECTION
     sig_filt = filt(sf, np.array([fMin, fMax]), data)
@@ -187,7 +186,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
             proba[np.where(hypno == -1)[0]] *= .5
 
         idx_sup_thr = np.intersect1d(idx_sup_thr, np.where(proba >= 0.3)[0],
-                                                            assume_unique=True)
+                                     assume_unique=True)
         # K-COMPLEX MORPHOLOGY
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
@@ -197,7 +196,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
         kc_amp, distance_ms = _event_amplitude(data, idx_sup_thr,
-                                            idx_start, idx_stop, sf)
+                                               idx_start, idx_stop, sf)
 
         # Warning: Mean frequency computation is time-consuming.
         # Current status: inactive (fake vector mfreq)
@@ -205,7 +204,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
         mfreq = np.ones(shape=idx_start.shape)
 
         good_dur = np.where(np.logical_and(duration_ms > tMin,
-                                                   duration_ms < tMax))[0]
+                                           duration_ms < tMax))[0]
 
         good_amp = np.where(np.logical_and(kc_amp > kc_min_amp,
                                            kc_amp < kc_max_amp))[0]
@@ -465,9 +464,8 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
 # SLOW WAVE DETECTION
 ###########################################################################
 
-
-def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
-                   moving_s=30):
+def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
+                   moving_s=30, min_duration_ms=500, max_amp=500):
     """Perform a Slow Wave detection.
 
     Args:
@@ -478,22 +476,29 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
             Downsampling frequency
 
         threshold: float
-            First threshold: number of standard deviation of delta power
-            Formula: mean + X * std(derivative)
+            First threshold: bandwise-normalized delta power
+            (power is normalized across 4 bands: delta, theta, alpha, beta)
+            Value must be between 0 and 1.
 
         amplitude: float
             Secondary threshold: minimum amplitude (mV) of the raw signal.
-            Slow waves are generally defined by amplitude > 75 mV.
+            Slow waves are generally defined by amplitude > 70 mV.
 
     Kargs:
-        fMin: float, optional (def 0.5)
+        fMin: float, optional (def 0.1)
             High-pass frequency
 
-        fMax: float, optional (def 4)
+        fMax: float, optional (def 4.5)
             Lowpass frequency
 
         moving_s: int, optional (def 30)
             Time (sec) window of the moving average
+
+        min_duration_ms: float, optional
+            Minimum duration (ms) of slow waves
+
+        max_amp: float, optional
+            Maximum amplitude of slow wave
 
     Return:
         idx_sup_thr: np.ndarray
@@ -506,6 +511,8 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
             Duration (ms) of each slow wave period detected
 
     """
+    length = max(elec.shape)
+
     # Get complex decomposition of filtered data in the main EEG freq band:
     freqs = np.array([fMin, fMax, 8., 12., 16.])
     delta_npow, _, _, _ = morlet_power(elec, freqs, sf, norm=True)
@@ -514,32 +521,32 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.5, fMax=4,
     delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
 
     # Normalized power criteria
-    thresh = np.nanmean(delta_nfpow) + threshold * np.nanstd(delta_nfpow)
-    idx_sup_thr = np.where(delta_nfpow > thresh)[0]
+    # thresh = np.nanmean(delta_nfpow) + threshold * np.nanstd(delta_nfpow)
+    idx_sup_thr = np.where(delta_nfpow > threshold)[0]
 
-    # Raw signal amplitude criteria
-    raw_thresh = amplitude / 2
-    idx_sup_raw = np.where(abs(elec) > raw_thresh)[0]
-    idx_sup_thr = np.intersect1d(idx_sup_thr, idx_sup_raw, assume_unique=True)
+    if idx_sup_thr.size:
 
-    number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-    return idx_sup_thr, number, duration_ms
+        sw_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start,
+                                                        idx_stop, sf)
 
-    # WELCH METHOD
-    # WARNING: only return one value per epoch (and not per ms)
-    # delta_spec_norm = welch_power(elec, fMin, fMax, sf,
-    #                             window_s=30, norm=True)
+        good_amp = np.where(np.logical_and(sw_amp > amplitude,
+                                           sw_amp < max_amp))[0]
 
-    # WAVELET AMPLITUDE
-    # analytic = morlet(elec, sf, np.mean([fMin, fMax]))
-    # amplitude = np.abs(analytic)
-    # # Clip extreme values
-    # amplitude = np.clip(amplitude, 0, 10 * np.std(amplitude))
-    # thresh = np.mean(amplitude) + threshold * np.std(amplitude)
-    # idx_sup_thr = np.where(amplitude > thresh)[0]
-    # number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
-    # return idx_sup_thr, number, duration_ms
+        good_dur = np.where(duration_ms > min_duration_ms)[0]
+        good_event = np.intersect1d(good_amp, good_dur, True)
+        good_idx = _events_removal(idx_start, idx_stop, good_event)
+        idx_sup_thr = idx_sup_thr[good_idx]
+
+        # Export info
+        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+        density = number / (length / sf / 60.)
+        return idx_sup_thr, number, density, duration_ms
+
+    else:
+        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+
 
 ###########################################################################
 # PEAKS DETECTION

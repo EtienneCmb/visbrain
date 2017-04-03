@@ -38,7 +38,9 @@ def normalize(x, tomin=0., tomax=1.):
         else:
             warn('Normalization has been ignored because minimum '
                  'and maximum are both equal to ' + str(xm))
-            return tomax * x / xM
+            np.multiply(x, tomax, out=x)
+            np.divide(x, xM, out=x)
+            return x
     else:
         return x
 

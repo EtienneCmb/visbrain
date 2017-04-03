@@ -37,8 +37,8 @@ class uiSettings(object):
         self.actionColormap.triggered.connect(self._fcn_panSettingsViz)
 
         # ------------- Transform -------------
-        self.actionProjection.triggered.connect(self._cortical_projection)
-        self.actionRepartition.triggered.connect(self._cortical_repartition)
+        self.actionProjection.triggered.connect(self._fcn_menuProjection)
+        self.actionRepartition.triggered.connect(self._fcn_menuRepartition)
 
         # ------------- Help -------------
         self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
@@ -137,7 +137,6 @@ class uiSettings(object):
         """Open documentation."""
         import webbrowser
         webbrowser.open('http://etiennecmb.github.io/visbrain/brain.html')
-
 
     def _fcn_panSettingsViz(self):
         """
@@ -286,11 +285,21 @@ class uiSettings(object):
         """Triggered method when tab changed."""
         # Get current tab :
         currentIndex = self.QuickSettings.currentIndex()
-        if currentIndex == 2:
-            self.cmapSources.setChecked(True)
-        if currentIndex == 3:
-            self.cmapConnect.setChecked(True)
-        self._select_object_cmap()
+        # if currentIndex == 2:
+        #     self.cmapSources.setChecked(True)
+        # if currentIndex == 3:
+        #     self.cmapConnect.setChecked(True)
+        # self._select_object_cmap()
+
+    def _fcn_menuProjection(self):
+        """Run the cortical projection."""
+        self._tprojectas = 'activity'
+        self._sourcesProjection()
+
+    def _fcn_menuRepartition(self):
+        """Run the cortical projection."""
+        self._tprojectas = 'repartition'
+        self._sourcesProjection()
 
     # =============================================================
     # ROTATION

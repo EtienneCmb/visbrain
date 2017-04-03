@@ -38,7 +38,7 @@ class uiDetection(object):
 
         # -------------------------------------------------
         # Slow Wave detection :
-        self._ToolWaveTh.setValue(1.)
+        self._ToolWaveTh.setValue(0.75)
 
         # -------------------------------------------------
         # Spindles detection :
@@ -120,19 +120,20 @@ class uiDetection(object):
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_applyDetection(self):
-        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC)"""
+        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC)."""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
         ind = np.array([], dtype=int)
 
         for i, k in enumerate(idx):
-            # Display progress bar :
-            self._ToolDetectProgress.show()
+            # Display progress bar (only if needed):
+            if len(idx) > 1:
+                self._ToolDetectProgress.show()
 
             # Get if report is enable and checked:
             toReport = self._ToolDetecReport.isEnabled(
-            ) and self._ToolDetecReport.isChecked()
+                                        ) and self._ToolDetecReport.isChecked()
 
             # Switch between detection types :
             # ------------------- REM -------------------
@@ -172,11 +173,12 @@ class uiDetection(object):
                 thr = self._ToolWaveTh.value()
                 amp = self._ToolWaveAmp.value()
                 # Get Slow Waves indices :
-                index, number, duration = slowwavedetect(self._data[k, :],
-                                                         self._sf, thr, amp)
+                index, number, density, duration = slowwavedetect(
+                                                            self._data[k, :],
+                                                            self._sf, thr, amp)
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defsw,
-                                              'o', toReport, number, 0.)
+                                              'o', toReport, number, density)
 
             # ------------------- K-COMPLEXES -------------------
             elif method == 'K-complexes':
@@ -208,6 +210,13 @@ class uiDetection(object):
                 self._peak.set_data(self._sf, self._data[k], self._time,
                                     self._chan.peak[k], disp_types[disp],
                                     look)
+
+                # Report results on table :
+                self._ToolDetectTable.setRowCount(1)
+                self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
+                    str(self._peak.number)))
+                self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
+                    str(round(self._peak.density, 2))))
                 # Get index :
                 ind = self._peak.index
                 duration = 0
@@ -256,10 +265,10 @@ class uiDetection(object):
                                      color=color, y=1.5)
 
             # Report results on table :
-            self._ToolSpinTable.setRowCount(1)
-            self._ToolSpinTable.setItem(0, 0, QtGui.QTableWidgetItem(
+            self._ToolDetectTable.setRowCount(1)
+            self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
                 str(number)))
-            self._ToolSpinTable.setItem(0, 1, QtGui.QTableWidgetItem(
+            self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
                 str(round(density, 2))))
         else:
             warn("\nNo " + name + " detected on channel " + self._channels[
@@ -307,7 +316,7 @@ class uiDetection(object):
                     str(self._time[k])))
                 # Duration :
                 self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
-                    ''))
+                    '1'))
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     ref[int(self._hypno[k])]))
@@ -351,7 +360,7 @@ class uiDetection(object):
         path = QtGui.QFileDialog.getSaveFileName(
             self, "Save File", method + "_locinfo",
             filter=selected_ext)
-        if filename:
+        if path:
             file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:
                 listToCsv(file + '.csv', zip(staInd, duration, stage))

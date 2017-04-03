@@ -1,9 +1,11 @@
 Bug
-	-5 La barre de progres sur les detections ne s'affiche qu'en cas de bug de mon côté (valeur à 24 % qui est la valeur définie dans designer)
-	-5 Peut-être il faut vider la mémoire après downsampling.
-	-5 SEGMENTATION ERROR: à l fermeture, l'interface bug (fait bugger ipython). Continuous array? Voir modifs pyqt5, dernière ligne
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
-	-5 Bug dans le reréférencement pour de larges données
+	-4 Bug que je vois passer de temps en temps mais difficile à localiser : quand on lance detection, parfois il y a un "impossible d'aller à l'emplacement... NoneType"
+	-3 Bug dans le reréférencement pour de larges données: RAM de l'ordi?
+	+5 Pour les fichiers Brainvision / EDF : downsampling lors de la lecture des données au chargment
+	+5 SEGMENTATION ERROR: à l fermeture, l'interface bug (fait bugger ipython). Continuous array? Voir modifs pyqt5, dernière ligne
+	+5 Peut-être il faut vider la mémoire après downsampling: essais avec gc collect ne change rien
+	+5 La barre de progres sur les detections ne s'affiche qu'en cas de bug de mon côté (valeur à 24 % qui est la valeur définie dans designer)
 	+5 Convertir window
 	+4 Screenshot page complète mais par PyQt (pas vispy canvas)
 	+5 Bug quand aucun spindle détecté (à reproduire sur small + th=2. + wavelet)
@@ -17,14 +19,16 @@ Bug
 	+4 Si l'hypnograme est vide, il faut le cacher + cacher onglet info
 
 Etienne
-	-5 Améliorer le départ d'un hypno vide
-	-5 Table nombre / densité sur toutes les detections
-	-5 Ajouter un bouton (radio) link qui link min/max anplitude
-	-5 Améliorer la gestion des amplitudes + bouton auto
+	-5 Améliorer gestion et méthode topoplot
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
-	-3 Grilles peu lisibles
-	-4 Hypnogramme: on pourrait faire une chekcbox "Edit mode" qui lorsqu'elle estt cochée permet d'activer les fonctions de modifications de l'hypno. Lorsque l'utilisateur la coche, il doit selectionner un nom de fichier d'hhypnogramme, puis à chaque modification ça enregistre automatiquement dans le fichier .hyp ou .txt
-	-3 Spectrogramme en ondelettes ?
+	-5 Faire une unique fonction d'exportation de table : ça évitera tout les problèmes.
+	-4 Hypnogramme: on pourrait faire une checkbox "Edit mode" qui lorsqu'elle est cochée permet d'activer les fonctions de modifications de l'hypno. Lorsque l'utilisateur la coche, il doit selectionner un nom de fichier d'hypnogramme, puis à chaque modification ça enregistre automatiquement dans le fichier .hyp ou .txt
+	+3 Spectrogramme en ondelettes ? Non car nécessiterai un fenêtrage a prosteriori
+	+5 Améliorer le départ d'un hypno vide
+	+3 Grilles peu lisibles
+	+5 Table nombre / densité sur toutes les detections
+	+5 Améliorer la gestion des amplitudes + bouton auto
+	+5 Ajouter un bouton (radio) link qui link min/max anplitude
 	+5 Faire une couleur par état d'hypno
 	+4 Tableau Locations start / duration / stage + header electrode et type
 	+5 Scoring avancer fenêtre par fenêtre + (a / w / 1 / 2 / 3 / r) et ajout de points
@@ -47,10 +51,11 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
+	-5 Comparaison des algos de detection avec un expert visuel
 	-4 Finir detection K-complexes: mettre un seul critère de probabilité (0 à 1) pour la detection
-	-4 Améliorer les détections
-	-3 Ajout collaborateur
 	-2 Scorage automatique du sommeil
+	+3 Ajout collaborateur
+	+5 Bug dans le nombre de slow-waves détectées
 	+5 Minimum duration sur REM
 	+3 Ce serait cool d'ajouter quelque fonctionnalités de Sleepviz
 	+5 Choix des couleurs de l'hypno

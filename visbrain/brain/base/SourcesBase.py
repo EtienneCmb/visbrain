@@ -9,6 +9,7 @@ sources objects.
 """
 
 import numpy as np
+from scipy.spatial.distance import cdist
 
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
@@ -82,6 +83,13 @@ class SourcesBase(_colormap):
         """Get sources coordinates matrix."""
         return self.xyz
 
+    def __bool__(self):
+        """Return if there's masked sources."""
+        return any(self.smask)
+
+    ##########################################################################
+    # DATA CHECKING
+    ##########################################################################
     def prepare2plot(self):
         """Prepare data before plotting.
 
@@ -90,7 +98,7 @@ class SourcesBase(_colormap):
         """
         # ======================== Check coordinates ========================
         # Check xyz :
-        self.xyz = np.array(self.xyz)
+        self.xyz = np.array(self.xyz).astype(np.float32)
         if self.xyz.ndim is not 2:
             self.xyz = self.xyz[:, np.newaxis]
         if 3 not in self.xyz.shape:
@@ -152,11 +160,10 @@ class SourcesBase(_colormap):
         # --------------------------------------------------------------------
         # Check data :
         if self.data is None:
-            self.data = np.ones((self.nSources,), dtype=float)
-        try:
-            self.data.mask
-        except:
-            self.data = np.ma.masked_array(np.ravel(self.data), mask=False)
+            self.data = np.ones((self.nSources,), dtype=np.float32)
+        if not np.ma.isMaskedArray(self.data):
+            self.data = np.ma.masked_array(np.ravel(self.data),
+                                           mask=self.smask.copy())
         if len(self.data) != self.nSources:
             raise ValueError("The length of data must be the same as the "
                              "number of electrodes")
@@ -166,10 +173,13 @@ class SourcesBase(_colormap):
         # --------------------------------------------------------------------
         # Check text :
         if self.stext is not None:
-            if len(self.stext) != len(self):
+            if len(self.stext) != len(self.data):
                 raise ValueError("The length of text data must be the same "
                                  "as the number of electrodes")
 
+    ##########################################################################
+    # PLOTTING
+    ##########################################################################
     def array2radius(self, factor=1.5):
         """Transform an array of data to source's radius.
 
@@ -195,7 +205,8 @@ class SourcesBase(_colormap):
         compare to loop over single sources.
         """
         # Find only unmasked data :
-        xyz, sData, sColor, _ = self._select_unmasked()
+        # xyz, sData, sColor, _ = self._select_unmasked()
+        xyz, sData, sColor = self.xyz, self.sData, self.sColor
 
         # Render as cloud points :
         self.mesh = visu.Markers(name='Sources')
@@ -212,7 +223,8 @@ class SourcesBase(_colormap):
         non-masked sources. This is faster than re-create the source object.
         """
         # Find only unmasked data :
-        xyz, sData, sColor, _ = self._select_unmasked()
+        # xyz, sData, sColor, _ = self._select_unmasked()
+        xyz, sData, sColor = self.xyz, self.sData, self.sColor
 
         # Render as cloud points :
         if xyz.size:
@@ -224,6 +236,31 @@ class SourcesBase(_colormap):
             self.mesh.update()
         else:
             self.mesh.visible = False
+
+    ##########################################################################
+    # MASK
+    ##########################################################################
+    def display(self, select='all'):
+        """Choose which sources to display.
+
+        Args:
+            select: string
+                Use either 'all', 'none', 'left' or 'right'.
+        """
+        if select == 'all':
+            idx = slice(0)
+        elif select == 'none':
+            idx = slice(None)
+        if select == 'left':
+            idx = self.xyz[:, 0] >= 0
+        elif select == 'right':
+            idx = self.xyz[:, 0] <= 0
+        # Hide souces :
+        self.data.mask = False
+        self.data.mask[idx] = True
+        # Update data sources and text :
+        self.update()
+        self.text_update()
 
     def _select_unmasked(self):
         """Get some attributes of non-masked sources.
@@ -258,6 +295,212 @@ class SourcesBase(_colormap):
         """
         self.data.mask = reset_to
 
+    ##########################################################################
+    # PROJECTIONS
+    ##########################################################################
+    def _modulation(self, v, radius, contribute=False):
+        """Get data modulated by the euclidian distance.
+
+        The vertices are indexed by face which means it's a (N, 3, 3).
+        Depending on the number of sources, using broadcasting rules can
+        be memory consuming. For that reason, we split computation for each
+        face, using an ugly loop.
+
+        Args:
+            v: np.ndarray, float32
+                The index faced vertices of shape (nv, 3, 3)
+
+            radius: float
+                The radius under which activity is projected on vertices.
+
+        Kargs:
+            contribute: bool, optional, (def: False)
+                Specify if sources contribute on both hemisphere.
+
+        Return:
+            modulation: masked np.ndarray, float32
+                The index faced modulations of shape (N, 3). This is a masked
+                array where the mask refer to sources that are over the radius.
+        """
+        # =============== PRE-ALLOCATION ===============
+        # Compute on non-masked sources :
+        masked = ~self.data.mask
+        xyz = self.xyz[masked]
+        data = self.data.data[masked].astype(np.float32)
+        # Get sign of the x coordinate :
+        xsign = np.sign(xyz[:, 0]).reshape(1, -1)
+        # Modulation / proportion / (Min, Max) :
+        modulation = np.ma.zeros((v.shape[0], v.shape[1]), dtype=np.float32)
+        prop = np.zeros_like(modulation.data)
+        minmax = np.zeros((3, 2), dtype=np.float32)
+
+        # For each triangle :
+        for k in range(3):
+            # =============== EUCLIDIAN DISTANCE ===============
+            # Compute euclidian distance and get sources under radius :
+            eucl = cdist(v[:, k, :], xyz)
+            eucl = eucl.astype(np.float32, copy=False)
+            mask = eucl <= radius
+            # Contribute :
+            if not contribute:
+                # Get vertices signn :
+                vsign = np.sign(v[:, k, 0]).reshape(-1, 1)
+                # Find where vsign and xsign are equals :
+                isign = np.logical_and(vsign != xsign, xsign != 0)
+                mask[isign] = False
+            # Invert euclidian distance for modulation and mask it :
+            np.multiply(eucl, -1. / eucl.max(), out=eucl)
+            np.add(eucl, 1., out=eucl)
+            eucl = np.ma.masked_array(eucl, mask=np.invert(mask),
+                                      dtype=np.float32)
+
+            # =============== MODULATION ===============
+            # Modulate data by distance (only for sources under radius) :
+            modulation[:, k] = np.ma.dot(eucl, data, strict=False)
+
+            # =============== PROPORTIONS ===============
+            np.sum(mask, axis=1, dtype=np.float32, out=prop[:, k])
+            nnz = np.nonzero(mask.sum(0))
+            minmax[k, :] = np.array([data[nnz].min(), data[nnz].max()])
+
+        # Divide modulations by the number of contributing sources :
+        prop[prop == 0.] = 1.
+        np.divide(modulation, prop, out=modulation)
+        # Normalize inplace modulations between under radius data :
+        normalize(modulation, minmax.min(), minmax.max())
+
+        return modulation
+
+    def _repartition(self, v, radius, contribute=False):
+        """Get data repartition.
+
+        The vertices are indexed by face which means it's a (N, 3, 3).
+        Depending on the number of sources, using broadcasting rules can
+        be memory consuming. For that reason, we split computation for each
+        face, using an ugly loop.
+
+        Args:
+            v: np.ndarray, float32
+                The index faced vertices of shape (nv, 3, 3)
+
+            radius: float
+                The radius under which activity is projected on vertices.
+
+        Kargs:
+            contribute: bool, optional, (def: False)
+                Specify if sources contribute on both hemisphere.
+
+        Return:
+            repartition: masked np.ndarray, float32
+                The index faced repartition of shape (N, 3). This is a masked
+                array where the mask refer to sources that are over the radius.
+        """
+        # =============== PRE-ALLOCATION ===============
+        # Compute on non-masked sources :
+        xyz = self.xyz[~self.data.mask]
+        # Get sign of the x coordinate :
+        xsign = np.sign(xyz[:, 0]).reshape(1, -1)
+        # Corticale repartition :
+        repartition = np.ma.zeros((v.shape[0], v.shape[1]), dtype=np.int)
+
+        # For each triangle :
+        for k in range(3):
+            # =============== EUCLIDIAN DISTANCE ===============
+            eucl = cdist(v[:, k, :], xyz).astype(np.float32)
+            mask = eucl <= radius
+            # Contribute :
+            if not contribute:
+                # Get vertices signn :
+                vsign = np.sign(v[:, k, 0]).reshape(-1, 1)
+                # Find where vsign and xsign are equals :
+                isign = np.logical_and(vsign != xsign, xsign != 0)
+                mask[isign] = False
+
+            # =============== REPARTITION ===============
+            # Sum over sources dimension :
+            sm = np.sum(mask, 1, dtype=np.int)
+            smmask = np.invert(sm.astype(bool))
+            repartition[:, k] = np.ma.masked_array(sm, mask=smmask)
+
+        return repartition
+
+    def _MaskedEucl(self, v, radius):
+        """Get the index of masked source's under radius.
+
+        Args:
+            v: np.ndarray, float32
+                The index faced vertices of shape (nv, 3, 3)
+
+            radius: float
+                The radius under which activity is projected on vertices.
+
+        Return:
+            repartition: masked np.ndarray, float32
+                The index faced repartition of shape (N, 3). This is a masked
+                array where the mask refer to sources that are over the radius.
+
+        """
+        # Select only masked xyz / data :
+        masked = self.data.mask
+        xyz, data = self.xyz[masked, :], self.data.data[masked]
+        # Predefined masked euclidian distance :
+        nv = v.shape[0]
+        fmask = np.ones((v.shape[0], 3, len(data)), dtype=bool)
+
+        # For each triangle :
+        for k in range(3):
+            # =============== EUCLIDIAN DISTANCE ===============
+            eucl = cdist(v[:, k, :], xyz).astype(np.float32)
+            fmask[:, k, :] = eucl <= radius
+        # Find where there's sources under radius and need to be masked :
+        m = fmask.reshape(fmask.shape[0] * 3, fmask.shape[2])
+        idx = np.dot(m, np.ones((len(data),), dtype=bool)).reshape(nv, 3)
+
+        return idx
+
+    def _isInside(self, v, select, progress):
+        """Select sources that are either inside or outside the mesh.
+
+        This method directly hide sources.
+
+        Args:
+            v: np.ndarray, float32
+                The index faced vertices of shape (nv, 3, 3)
+
+            select: string
+                Use either 'inside' or 'outside'.
+
+            progress: pyqt progress bar
+                The progress bar.
+        """
+        # Compute on non-masked sources :
+        xyz = self.xyz
+        N = xyz.shape[0]
+        inside = np.ones((xyz.shape[0],), dtype=bool)
+        v = v.reshape(v.shape[0] * 3, 3)
+
+        # Loop over sources :
+        progress.show()
+        for k in range(N):
+            # Get the euclidian distance :
+            eucl = cdist(v, xyz[[k], :])
+            # Get the closest vertex :
+            eucl_argmin = eucl.argmin()
+            # Get distance to zero :
+            xyz_t0 = np.sqrt((xyz[k, :] ** 2).sum())
+            v_t0 = np.sqrt((v[eucl_argmin, :] ** 2).sum())
+            inside[k] = xyz_t0 <= v_t0
+            progress.setValue(100 * k / N)
+        self.data.mask = False
+        self.data.mask = inside if select != 'inside' else np.invert(inside)
+        # Finally update data sources and text :
+        self.update()
+        self.text_update()
+        progress.hide()
+
+    ##########################################################################
+    # TEXT
+    ##########################################################################
     def text_plot(self):
         """Plot some text for each source.
 
@@ -289,11 +532,11 @@ class SourcesBase(_colormap):
         """
         if self.stext is not None:
             # Get index of non-masked sources :
-            idx = self._select_unmasked()[-1]
+            # idx = self._select_unmasked()[-1]
 
             # Set masked-sources text to '':
             text = np.array(self.stext)
-            text[np.array(~idx, dtype=bool)] = ''
+            # text[np.array(~idx, dtype=bool)] = ''
 
             # Update elements :
             self.stextmesh.text = text

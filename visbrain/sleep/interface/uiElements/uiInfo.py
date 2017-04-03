@@ -23,8 +23,9 @@ class uiInfo(object):
         """Complete the table sleep info."""
         # Get sleep info :
         win = self._infoTime.value()
-        stats = sleepstats(self._file, -self._hyp.mesh.pos[:, 1], self._sf,
-                           win)
+        stats = sleepstats(self._file, -self._hyp.mesh.pos[:, 1], self._N,
+                           sf=self._sf, sfori=self._sfori,
+                           time_window=win)
         self._keysInfo = ['Window'] + [''] * len(stats)
         self._valInfo = [str(win)] + [''] * len(stats)
         # Check line number:
@@ -49,7 +50,7 @@ class uiInfo(object):
         path = QtGui.QFileDialog.getSaveFileName(
             self, "Save File", "statsinfo",
             filter=selected_ext)
-        if filename:
+        if path:
             file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:
                 listToCsv(file + '.csv', zip(self._keysInfo, self._valInfo))

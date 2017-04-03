@@ -168,7 +168,14 @@ def ndmorlet(x, sf, f, axis=0, get=None, width=7.0):
         return y[int(np.ceil(len(m) / 2)) - 1:int(len(y) - np.floor(
                                                                 len(m) / 2))]
 
-    return np.apply_along_axis(morletFcn, axis, x)
+    xf = np.apply_along_axis(morletFcn, axis, x)
+    # Get amplitude / power / phase :
+    if get == 'amplitude':
+        return np.abs(xf)
+    elif get == 'power':
+        return np.square(np.abs(xf))
+    elif get == 'phase':
+        return np.angle(xf)
 
 
 def morlet_power(x, freqs, sf, norm=True):

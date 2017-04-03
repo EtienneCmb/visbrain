@@ -88,6 +88,9 @@ class PeakDetection(object):
         marker.visible = True
         self.index = np.round(pos[:, 0] * sf).astype(int)
         marker.update()
+        # Info :
+        self.number = len(pos)
+        self.density = self.number / (len(data) / sf / 60.)
 
 
 class MouseEmulation(object):

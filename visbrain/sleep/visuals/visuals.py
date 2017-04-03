@@ -10,7 +10,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .marker import Markers
-from ...utils import array2colormap, color2vb, filt
+from ...utils import (array2colormap, color2vb, TopoPlot, PrepareData)
 
 
 __all__ = ["visuals"]
@@ -27,63 +27,11 @@ Classes below are used to create visual objects, display on sevral canvas :
 """
 
 
-class PrepareData(object):
-    """Prepare data before plotting.
-
-    This class group a set of signal processing tools including :
-        - De-meaning
-        - De-trending
-        - Filtering
-    """
-
-    def __init__(self, axis=0, demean=False, detrend=False, filt=False,
-                 fstart=12., fend=16., forder=3, way='lfilter',
-                 filt_meth='butterworth', btype='bandpass'):
-        # Axis along which to perform preparation :
-        self.axis = axis
-        # Demean and detrend :
-        self.demean = demean
-        self.detrend = detrend
-        # Filtering :
-        self.filt = filt
-        self.fstart, self.fend = fstart, fend
-        self.forder, self.filt_meth = forder, filt_meth
-        self.way, self.btype = way, btype
-
-    def __bool__(self):
-        """Return if data have to be prepared."""
-        return any([self.demean, self.detrend, self.filt])
-
-    def _prepare_data(self, sf, data, time):
-        """Prepare data before plotting."""
-        # ============= DEMEAN =============
-        if self.demean:
-            mean = np.mean(data, axis=self.axis, keepdims=True)
-            np.subtract(data, mean, out=data)
-
-        # ============= DETREND =============
-        if self.detrend:
-            data = scpsig.detrend(data, axis=self.axis)
-
-        # ============= FILTERING =============
-        if self.filt:
-            data = filt(sf, np.array([self.fstart, self.fend]), data,
-                        btype=self.btype, order=self.forder, way=self.way,
-                        method=self.filt_meth, axis=self.axis)
-
-        return data
-
-    def update(self):
-        """Update object."""
-        if self._fcn is not None:
-            self._fcn()
-
-
 class ChannelPlot(PrepareData):
     """Plot each channel."""
 
-    def __init__(self, channels, time, color=(.2, .2, .2),
-                 color_detection='red', width=1.5, method='gl', camera=None,
+    def __init__(self, channels, time, color=(.2, .2, .2), width=1.5,
+                 color_detection='red', method='gl', camera=None,
                  parent=None, fcn=None):
         # Initialize PrepareData :
         PrepareData.__init__(self, axis=1)
@@ -381,6 +329,14 @@ class Spectrogram(PrepareData):
         freq = freq[sls]
         self._fstart, self._fend = freq[0], freq[-1]
 
+        # =================== TIME SELECTION ===================
+        t = []
+        q = 0
+        for k in range(mesh.shape[1]):
+            t.append(time[q:q+nperseg].mean())
+            q += nperseg-overlap
+        t = np.array(t)
+
         # =================== COLOR ===================
         # Get clim :
         clim = (contraste * mesh.min(), contraste * mesh.max())
@@ -618,6 +574,7 @@ class vbShortcuts(object):
         self.sh = [('n', 'Go to the next window'),
                    ('b', 'Go to the previous window'),
                    ('s', 'Display / hide spectrogram'),
+                   ('t', 'Display / hide topoplot'),
                    ('h', 'Display / hide hypnogram'),
                    ('z', 'Enable / disable zooming'),
                    ('a', 'Scoring: set current window to Art (-1)'),
@@ -658,6 +615,10 @@ class vbShortcuts(object):
             if event.text == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
+
+            if event.text == 't':   # Toggle visibility on topo
+                self._PanTopoViz.setChecked(not self._PanTopoViz.isChecked())
+                self._fcn_topoViz()
 
             if event.text == 'z':  # Enable zoom
                 viz = self._PanTimeZoom.isChecked()
@@ -735,7 +696,6 @@ class vbShortcuts(object):
                 tm, tM = (val*step, val*step+win)
                 # tm, tM = self._time.min(), self._time.max()
                 cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
-                # print(cursor, canvas.title)
                 for i, k in self._chan:
                     self._chan.node[i].transform.center = (cursor, 0.)
                     k.update()
@@ -805,6 +765,14 @@ class visuals(vbShortcuts):
                                  parent=self._hypCanvas.wc.scene)
         self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
 
+        # =================== TOPOPLOT ===================
+        self._topo = TopoPlot(chans=self._channels, camera=cameras[3],
+                              parent=self._topoCanvas.wc.scene)
+        self._topo.set_cmap(clim=(-1., 1.))
+        if not any(self._topo.keeponly):
+            self.toolBox_2.setItemEnabled(2, False)
+
+        # =================== SHORTCUTS ===================
         vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
             vbShortcuts.__init__(self, k.canvas)

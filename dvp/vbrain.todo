@@ -1,7 +1,7 @@
 Big problem
-	-5 Projection corticale peut être passée en numpy : https://www.youtube.com/watch?v=EEUXKG97YRw
 	-5 Améliorer la gestion de la mémoire + traquer les duplication de données.
 	-5 Prendre la classe colorbar de ndviz et adapter avec. Ce sera nettement plus claire.
+	+5 Projection corticale peut être passée en numpy : https://www.youtube.com/watch?v=EEUXKG97YRw
 	+5 AreaBase contient des propriétés qui load systématiquement le chargement des matrices. Donc ça ralentit considérablement le lancement de l'interface. Soit on ne charge les labels que si le panel est enable, soit je sépare les labels dans une matrices et je ne charge que les labels.
 	+5 Vérifier partout où il y a des properties
 	+5 Nouvelle fonction mpl_cmaps() donc changer là où l'on charge les cmaps.
@@ -16,10 +16,10 @@ Fichiers restants
 
 doc
 	-5 Documenter chaque fonction
-	-5 Tableau des raccourcis clavier + doc
-	-5 Améliorer setup.py (version vispy / python)
 	-4 Cleaner le self pour ne faire apparaître que ce qui est utile (arriver à virer les éléments pyqt...)
-	-2 Dans la doc, faire un exemple de script bash pour montrer que l'on peut looper
+	+2 Dans la doc, faire un exemple de script bash pour montrer que l'on peut looper
+	+5 Améliorer setup.py (version vispy / python)
+	+5 Tableau des raccourcis clavier + doc
 	+5 Sûr que visual/ doit être à ce niveau? Pourquoi pas dans base/?
 
 Colorbar
@@ -33,13 +33,14 @@ Colorbar
 	+5 Vérifier clim dans utils/color/array2colormap
 
 Sources
-	-5 Ré-arranger le SourceBase càd découper en fonction, en incluant le checking d'args. Ensuite
 	-2 Faire une classe SourceVisual car il y a un besoin d'avoir une modulation de la lumière en fonction de la distance à la caméra + lumière spéculaire pour renforcer l'effet de boule. A voir si il pourra être considéré comme un objet unique.
+	+5 Ré-arranger le SourceBase càd découper en fonction, en incluant le checking d'args. Ensuite
 
 Projection
-	-5 Vérifier les dernières modifs liées à la projection corticale / répartition
-	-2 Ajouter un paramètre de smoothing exponentiel + filtre gaussien sur le final
+	-5 Smooth projection
 	-1 Projection temporelle, en tenant compte de la fréquence d'échantillonage
+	+2 Ajouter un paramètre de smoothing exponentiel + filtre gaussien sur le final
+	+5 Vérifier les dernières modifs liées à la projection corticale / répartition
 	+4 Projection interne à peaufiner
 
 Opacité
@@ -79,12 +80,12 @@ GUI
 	+5 Ajouter la compatibilité avec du clim
 
 Colormap
-	-3 Ajouter un paramètre extend (bool) pour dire si on doit couper la colorbar à clim
-	-3 Ajouter un paramètre clip pour forcer ou non le clip
+	+3 Ajouter un paramètre clip pour forcer ou non le clip
+	+3 Ajouter un paramètre extend (bool) pour dire si on doit couper la colorbar à clim
 
 Shortcuts
 	-5 Les toggle de visiblité ne fonctionneront pas si la source n'est pas présente. S'appuyer sur le nom du noeud.
-	-1 Bouger le panel shortcuts vers une nouvelle fenêtre
+	+1 Bouger le panel shortcuts vers une nouvelle fenêtre
 	+3 Ajouter les nouveaux shortcuts à la GUI
 	+5 Add some shortcuts
 

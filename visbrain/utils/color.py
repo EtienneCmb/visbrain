@@ -15,7 +15,7 @@ from .sigproc import normalize
 
 
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           '_colormap', 'type_coloring', 'mpl_cmap'
+           '_colormap', 'type_coloring', 'mpl_cmap', 'color2tuple'
            ]
 
 
@@ -83,6 +83,17 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
                          "color. Use None, tuple or string")
 
 
+def color2tuple(color):
+    """Return a RGB tuple of the color.
+
+    Kargs:
+        color: None/tuple/string, optional, (def: None)
+            The color to use. Can either be None, or a tuple (R, G, B),
+            a matplotlib color or an hexadecimal color '#...'.
+    """
+    return tuple(color2vb(color).ravel()[0:-1])
+
+
 def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
                    vmax=None, under='dimgray', over='darkred',
                    faces_render=False):
@@ -128,46 +139,17 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     """
     # ================== Check input argument types ==================
     # Force data to be an array :
-    x = np.array(x)
+    x = np.asarray(x)
+
     # Check clim :
-    if (clim is None) or (clim is (None, None)):
-        clim = (x.min(), x.max())
+    if clim is None:
+        clim = (None, None)
     else:
         clim = list(clim)
         if len(clim) is not 2:
             raise ValueError("The length of the clim must be 2: (min, max)")
-        else:
-            if clim[0] is None:
-                clim[0] = x.min()
-            if clim[1] is None:
-                clim[1] = x.max()
-    # Check (vmin, under) / (vmax, over) :
-    if (vmin is None) or (under is None):
-        vmin, under = None, None
-    elif (vmin is not None) and (vmin < clim[0]):
-        if (vmin < clim[0]) or (vmin > clim[1]):
-            vmin, under = None, None
-            warn("vmin must be between clim[0] and clim[1]. vmin will be "
-                 "ignored")
-    else:
-        if not isinstance(under, (str, tuple)):
-            raise ValueError("The under parameter must be a string referring "
-                             "to a matplotlib color or a (R, G, B) tuple.")
-    if (vmax is None) or (over is None):
-        vmax, over = None, None
-    elif (vmax is not None) and (vmax > clim[1]):
-        if (vmax < clim[0]) or (vmax > clim[1]):
-            vmax, over = None, None
-            warn("vmax must be between clim[0] and clim[1]. vmax will be "
-                 "ignored")
-    else:
-        if not isinstance(over, (str, tuple)):
-            raise ValueError("The over parameter must be a string referring "
-                             "to a matplotlib color or a (R, G, B) tuple.")
-    if (vmin is not None) and (vmax is not None) and (vmin >= vmax):
-        vmin, vmax, under, over = None, None, None, None
-        warn("vmin > vmax : both arguments have been ignored.")
-        # vmin, vmax = vmax, vmin
+
+    # ---------------------------
     # Check alpha :
     if (alpha < 0) or (alpha > 1):
         warn("The alpha parameter must be >= 0 and <= 1.")
@@ -175,30 +157,22 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     # ================== Define colormap ==================
     sc = cm.ScalarMappable(cmap=cmap)
 
-    # ================== Clip / Peak ==================
-    # Force array to clip if x is under / over clim :
-    if clim[0] > x.min():
-        x = colorclip(x, clim[0], kind='under')
-    if clim[1] < x.max():
-        x = colorclip(x, clim[1], kind='over')
-
-    # ================== Colormap (under, over) ==================
-    # Set colormap (vmin, under) :
-    if vmin is None:
-        sc.set_clim(vmin=None)
-    else:
-        sc.set_clim(vmin=vmin)
-        sc.cmap.set_under(color=under)
-    # Set colormap (vmax, over) :
-    if vmax is None:
-        sc.set_clim(vmax=None)
-    else:
-        sc.set_clim(vmax=vmax)
-        sc.cmap.set_over(color=over)
+    # Fix limits :
+    norm = mplcol.Normalize(vmin=clim[0], vmax=clim[1])
+    sc.set_norm(norm)
 
     # ================== Apply colormap ==================
     # Apply colormap to x :
     x_cmap = np.array(sc.to_rgba(x, alpha=alpha))
+
+    # ================== Colormap (under, over) ==================
+    if (vmin is not None) and (under is not None):
+        under = color2vb(under) if isinstance(under, str) else under
+        x_cmap[x < vmin, :] = under
+    if (vmax is not None) and (over is not None):
+        over = color2vb(over) if isinstance(over, str) else over
+        x_cmap[x > vmax, :] = over
+
     # Faces render (repeat the color to other dimensions):
     if faces_render:
         x_cmap = np.transpose(np.tile(x_cmap[..., np.newaxis],

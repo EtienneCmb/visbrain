@@ -94,7 +94,7 @@
               </font>
              </property>
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page">
               <property name="geometry">
@@ -106,7 +106,7 @@
                </rect>
               </property>
               <attribute name="label">
-               <string>Rotation // Opacity</string>
+               <string>Rotation // Opacity // Slice</string>
               </attribute>
               <layout class="QVBoxLayout" name="verticalLayout_11">
                <item>
@@ -2313,8 +2313,8 @@ refllection</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>674</height>
+                <width>350</width>
+                <height>684</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -3062,7 +3062,7 @@ type</string>
                       </item>
                      </widget>
                     </item>
-                    <item row="3" column="2">
+                    <item row="4" column="2">
                      <spacer name="horizontalSpacer_11">
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
@@ -3074,6 +3074,16 @@ type</string>
                        </size>
                       </property>
                      </spacer>
+                    </item>
+                    <item row="3" column="0" colspan="3">
+                     <widget class="QCheckBox" name="_uitContribute">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If contribute is checked, the projection of a source can contribute to both hemisphere. If it's not checked, the projection is only performed on the hemisphere it belong to. If the source is perfectly centered (like Cz), the projection is forced to be on both hemisphere.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Contribute</string>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
