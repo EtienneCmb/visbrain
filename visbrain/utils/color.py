@@ -15,7 +15,7 @@ from .sigproc import normalize
 
 
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           '_colormap', 'type_coloring', 'mpl_cmap'
+           '_colormap', 'type_coloring', 'mpl_cmap', 'color2tuple'
            ]
 
 
@@ -81,6 +81,17 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
     else:
         raise ValueError(str(type(color)) + " is not a recognized type of "
                          "color. Use None, tuple or string")
+
+
+def color2tuple(color):
+    """Return a RGB tuple of the color.
+
+    Kargs:
+        color: None/tuple/string, optional, (def: None)
+            The color to use. Can either be None, or a tuple (R, G, B),
+            a matplotlib color or an hexadecimal color '#...'.
+    """
+    return tuple(color2vb(color).ravel()[0:-1])
 
 
 def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
