@@ -6,6 +6,8 @@ This script is also essential to update the text object of each source and make
 the bridge between the user and the GUI.
 """
 
+import numpy as np
+
 import vispy.visuals.transforms as vist
 
 from ....utils import textline2color
@@ -31,7 +33,8 @@ class uiSources(object):
         self.s_Symbol.setCurrentIndex(sym.index(self.sources.symbol))
         self.s_Symbol.currentIndexChanged.connect(self._fcn_MarkerLook)
         # Edge color / width :
-        self.s_EdgeColor.setText(str(self.sources.edgecolor))
+        edgcol = np.ndarray.tolist(self.sources.edgecolor.ravel())
+        self.s_EdgeColor.setText(str(tuple(edgcol)))
         self.s_EdgeColor.editingFinished.connect(self._fcn_MarkerLook)
         self.s_EdgeWidth.setValue(self.sources.edgewidth)
         self.s_EdgeWidth.valueChanged.connect(self._fcn_MarkerLook)
@@ -51,7 +54,8 @@ class uiSources(object):
         else:
             self.q_stextshow.setChecked(True)
             self.q_stextsize.setValue(self.sources.stextsize)
-            self.q_stextcolor.setText(str(self.sources.stextcolor))
+            txtcol = np.ndarray.tolist(self.sources.stextcolor.ravel())
+            self.q_stextcolor.setText(str(tuple(txtcol)))
             self.x_text.setValue(self.sources.stextshift[0])
             self.y_text.setValue(self.sources.stextshift[1])
             self.z_text.setValue(self.sources.stextshift[2])
