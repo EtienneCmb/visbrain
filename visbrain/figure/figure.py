@@ -5,6 +5,7 @@ import os
 
 from scipy.misc import imread, imsave
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 
 from ..utils import color2tuple
 
@@ -102,17 +103,23 @@ class Figure(object):
 
         save:
             Save the figure.
+
+        colorbar_to_axis:
+            Add a specific colorbar to a selected picture.
     """
 
     def __init__(self, files, path=None, grid=None, figtitle=None, y=1.02,
-                 titles=None, xlabels=None, ylabels=None,
-                 subspace={'left': 0., 'right': 1., 'bottom': 0., 'top': .9,
-                           'wspace': 0., 'hspace': 0.05}, rmax=True,
+                 titles=None, xlabels=None, ylabels=None, figsize=None,
+                 subspace={'left': 0.05, 'right': 1., 'bottom': 0.1, 'top': .9,
+                           'wspace': 0., 'hspace': 0.3}, rmax=True,
                  fig_bgcolor=None, ax_bgcolor=None, text_color='black'):
         """Init."""
         self._data = []
+        self._im = []
+        self._ax = []
         self._figure = None
         self._figtitle = figtitle
+        self._figsize = figsize
         self._subspace = subspace
         self._y = y
         self._rmax = rmax
@@ -145,6 +152,7 @@ class Figure(object):
                                      " loaded so it can not be aranged in a"
                                      " " + str(grid) + " grid.")
         self._grid = grid
+        self._index = np.arange(np.product(grid)).reshape(*grid)
 
         # Color :
         self._figcol = color2tuple(fig_bgcolor)
@@ -179,6 +187,202 @@ class Figure(object):
             yield k
 
     ##########################################################################
+    # METHODS
+    ##########################################################################
+    def show(self):
+        """Display the figure."""
+        plt.show()
+
+    def save(self, saveas, dpi=300):
+        """Save the figure.
+
+        Args:
+            saveas: string
+                Name of the saved figure.
+
+        Kargs:
+            dpi: int, optional, (def: 300)
+                The resolution of the exported figure.
+        """
+        self._fig.savefig(saveas, bbox_inches='tight', dpi=dpi,
+                          facecolor=self._figcol)
+
+    def colorbar_to_axis(self, toaxis, clim, cmap, vmin=None, under='gray',
+                         vmax=None, over='red', title=None, ycb=10.,
+                         fz_title=15, ticks='complete', fz_ticks=10,
+                         outline=False, orientation='vertical'):
+        """Add a colorbar to a particular axis.
+
+        Args:
+            toaxis: int
+                Integer to specify the axis to which add the colorbar.
+
+            clim: tuple/list
+                A tuple of float/int describing the limit of the colorbar.
+
+            cmap: str
+                The colormap to use ('viridis', 'jet', 'Spectral'...)
+
+        Kargs:
+
+            vmin: float, optional, (def: None)
+                Minimum threshold. See the under parameter for further details.
+
+            under: string/tuple/list, optional, (def: 'gray')
+                Every values bellow vmin will be set to the under color.
+
+            vmax: float, optional, (def: None)
+                Maximum threshold. See the over parameter for further details.
+
+            over: string/tuple/list, optional, (def: 'red')
+                Every values over vmax will be set to the over color.
+
+            title: string, optional, (def: None)
+                Title of the colorbar.
+
+            ycb: float, optional, (def: 10.)
+                Distance between the colorbar and it title (if defined).
+
+            fz_title: int/float, optional, (def: 15)
+                The fontsize of colorbar title.
+
+            ticks: string/int/float/np.ndarray, optional, (def: 'complete')
+                Ticks of the colorbar. This parameter is only active if clim
+                is defined. Use 'complete' to see only the minimum,
+                maximum, vmin and vmax (if defined). Use 'minmax' to only see
+                the maximum and minimum. If ticks is a float, an linear
+                interpolation between the maximum and minimum will be used.
+                Finally, if ticks is a NumPy array, it will be used as colorbar
+                ticks directly.
+
+            fz_ticks: int/float, optional, (def: 10)
+                Fontsize of tick labels.
+
+            outline: bool, optional, (def: False)
+                Specify if the box arround the colorbar have to be displayed.
+
+            orientation: string, optional, (def: 'vertical')
+                Colorbar orientation. Use either 'vertical' or 'horizontal'.
+        """
+        # ----------------- CHECKING -----------------
+        if orientation not in ['vertical', 'horizontal']:
+            raise ValueError("Colorbar orientation must either be 'vertical' "
+                             "or 'horizontal'")
+
+        # ----------------- CURRENT AXIS -----------------
+        cim = self._im[toaxis]
+        plt.sca(self._ax[toaxis])
+
+        # ----------------- COLORMAP -----------------
+        # Manually create the colormap :
+        cmap = self._customcmap(cmap, clim, vmin, under, vmax, over)
+        cim.set_cmap(cmap)
+
+        # ----------------- COLORBAR -----------------
+        cb = plt.colorbar(cim, shrink=0.7, pad=0.01, aspect=10,
+                          orientation=orientation)
+
+        # # ----------------- CLIM -----------------
+        cim.set_clim(*clim)
+        cb.set_clim(*clim)
+
+        # ----------------- CBAR -----------------
+        self._cbar(cb, cmap, clim, vmin, under, vmax, over, title, ycb,
+                   fz_title, ticks, fz_ticks, outline, orientation, self._tcol)
+
+    def shared_colorbar(self, clim, cmap, position='right', height=.5,
+                        width=.02, pltmargin=.02, figmargin=.07, vmin=None,
+                        under='gray', vmax=None, over='red', title=None,
+                        ycb=10., fz_title=15, ticks='complete', fz_ticks=10,
+                        outline=False):
+        """Add a colorbar to a particular axis.
+
+        Args:
+            toaxis: int
+                Integer to specify the axis to which add the colorbar.
+
+            clim: tuple/list
+                A tuple of float/int describing the limit of the colorbar.
+
+            cmap: str
+                The colormap to use ('viridis', 'jet', 'Spectral'...)
+
+        Kargs:
+            position: str, optional, (def: 'right')
+                Position of the shared colorbar. Use either 'left', 'right',
+                or 'bottom'.
+
+            height: float, optional, (def: .5)
+                Height of the colorbar.
+
+            width: float, optional, (def: .02)
+                Width of the colorbar.
+
+            pltmargin: float, optional, (def: .05)
+                Margin between plots and the colorbar.
+
+            figmargin: float, optional, (def: .07)
+                Margin between the edge of the figure and the colorbar.
+
+            vmin: float, optional, (def: None)
+                Minimum threshold. See the under parameter for further details.
+
+            under: string/tuple/list, optional, (def: 'gray')
+                Every values bellow vmin will be set to the under color.
+
+            vmax: float, optional, (def: None)
+                Maximum threshold. See the over parameter for further details.
+
+            over: string/tuple/list, optional, (def: 'red')
+                Every values over vmax will be set to the over color.
+
+            title: string, optional, (def: None)
+                Title of the colorbar.
+
+            ycb: float, optional, (def: 10.)
+                Distance between the colorbar and it title (if defined).
+
+            fz_title: int/float, optional, (def: 15)
+                The fontsize of colorbar title.
+
+            ticks: string/int/float/np.ndarray, optional, (def: 'complete')
+                Ticks of the colorbar. This parameter is only active if clim
+                is defined. Use 'complete' to see only the minimum,
+                maximum, vmin and vmax (if defined). Use 'minmax' to only see
+                the maximum and minimum. If ticks is a float, an linear
+                interpolation between the maximum and minimum will be used.
+                Finally, if ticks is a NumPy array, it will be used as colorbar
+                ticks directly.
+
+            fz_ticks: int/float, optional, (def: 10)
+                Fontsize of tick labels.
+
+            outline: bool, optional, (def: False)
+                Specify if the box arround the colorbar have to be displayed.
+        """
+        # ================ POSITION ================
+        if position == 'right':
+            plt.subplots_adjust(right=1. - width - figmargin - pltmargin)
+            cax = plt.axes([1. - width - figmargin, height/2, width, height])
+            orientation = 'vertical'
+        elif position == 'left':
+            plt.subplots_adjust(left=figmargin + width + pltmargin)
+            cax = plt.axes([figmargin, height/2, width, height])
+            orientation = 'vertical'
+        elif position == 'bottom':
+            plt.subplots_adjust(bottom=figmargin + width + pltmargin)
+            cax = plt.axes([height/2, figmargin, height, width])
+            orientation = 'horizontal'
+
+        cmap = self._customcmap(cmap, clim, vmin, under, vmax, over)
+        cb = mpl.colorbar.ColorbarBase(cax, cmap=cmap, orientation=orientation,
+                                       norm=mpl.colors.Normalize(*clim))
+
+        # ----------------- CBAR -----------------
+        self._cbar(cb, cmap, clim, vmin, under, vmax, over, title, ycb,
+                   fz_title, ticks, fz_ticks, outline, orientation, self._tcol)
+
+    ##########################################################################
     # SUB-METHODS
     ##########################################################################
     def _replicate(self, arg, name):
@@ -203,18 +407,21 @@ class Figure(object):
         # Figure creation :
         if self._figcol is not None:
             plt.rcParams['figure.facecolor'] = self._figcol
-        self._fig = plt.figure()
+        self._fig = plt.figure(figsize=self._figsize)
         if self._figtitle is not None:
             self._fig.suptitle(self._figtitle, fontsize=14, fontweight='bold',
                                color=self._tcol)
         if self._subspace:
             self._fig.subplots_adjust(**self._subspace)
-        # Subplots :
+
+        # ================ SUBPLOTS ================
         for num, k in enumerate(self):
             # --------- Display ---------
             plt.subplot(self._grid[0], self._grid[1], num+1)
-            plt.imshow(k)
+            im = plt.imshow(k, vmin=0.2, vmax=0.7)
+            self._im.append(im)
             ax = plt.gca()
+            self._ax.append(ax)
             # --------- Background color ---------
             if self._axcol[num] is not None:
                 ax.patch.set_facecolor(self._axcol[num])
@@ -236,22 +443,55 @@ class Figure(object):
                         spine.set_color('none')
                         ax.tick_params(**{loc: 'off'})
 
-    ##########################################################################
-    # METHODS
-    ##########################################################################
-    def show(self):
-        """Display the figure."""
-        plt.show()
+    @staticmethod
+    def _cbar(cb, cmap, clim, vmin, under, vmax, over, title, ycb, fz_title,
+              ticks, fz_ticks, outline, orientation, tcol):
+        """Colorbar creation."""
+        # ----------------- TITLE -----------------
+        if title is not None:
+            cb.set_label(title, labelpad=ycb, color=tcol,
+                         fontsize=fz_title)
 
-    def save(self, saveas, dpi=300):
-        """Save the figure.
+        # ----------------- TICKS -----------------
+        if clim is not None:
+            # Display only (min, max) :
+            if ticks == 'minmax':
+                ticks = [clim[0], clim[1]]
+            # Display (min, vmin, vmax, max) :
+            elif ticks == 'complete':
+                ticks = [clim[0]]
+                if vmin:
+                    ticks.append(vmin)
+                if vmax:
+                    ticks.append(vmax)
+                ticks.append(clim[1])
+            # Use linearly spaced ticks :
+            elif isinstance(ticks, (int, float)):
+                ticks = np.arange(clim[0], clim[1] + ticks, ticks)
+            # Set ticks and ticklabels :
+            cb.set_ticks(ticks)
+            cb.set_ticklabels(ticks)
+            cb.ax.tick_params(labelsize=fz_ticks)
+            # Change ticks color :
+            tic =  'y' if (orientation == 'vertical') else 'x'
+            cbytick_obj = plt.getp(cb.ax.axes, tic + 'ticklabels')
+            plt.setp(cbytick_obj, color=tcol)
 
-        Args:
-            saveas: string
-                Name of the saved figure.
+        # ----------------- OUTLINE -----------------
+        cb.outline.set_visible(outline)
 
-        Kargs:
-            dpi: int, optional, (def: 300)
-                The resolution of the exported figure.
-        """
-        pass
+    @staticmethod
+    def _customcmap(cmap, clim, vmin=None, under='gray', vmax=None,
+                    over='red', N=1000):
+        # Generate linearly spaced data :
+        data = np.linspace(clim[0], clim[1], N)
+        # Create the colormap and apply to data :
+        sc = mpl.cm.ScalarMappable(cmap=cmap)
+        data_sc = np.array(sc.to_rgba(data))[:, 0:-1]
+        # Vmin / Vmax :
+        if vmin is not None:
+            data_sc[data < vmin] = color2tuple(under)
+        if vmax is not None:
+            data_sc[data > vmax] = color2tuple(over)
+        # Generate the colormap :
+        return mpl.colors.ListedColormap(data_sc, N=N)
