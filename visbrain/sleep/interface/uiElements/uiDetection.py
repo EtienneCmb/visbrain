@@ -38,7 +38,7 @@ class uiDetection(object):
 
         # -------------------------------------------------
         # Slow Wave detection :
-        self._ToolWaveTh.setValue(1.)
+        self._ToolWaveTh.setValue(0.75)
 
         # -------------------------------------------------
         # Spindles detection :
@@ -173,11 +173,12 @@ class uiDetection(object):
                 thr = self._ToolWaveTh.value()
                 amp = self._ToolWaveAmp.value()
                 # Get Slow Waves indices :
-                index, number, duration = slowwavedetect(self._data[k, :],
-                                                         self._sf, thr, amp)
+                index, number, density, duration = slowwavedetect(
+                                                            self._data[k, :],
+                                                            self._sf, thr, amp)
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defsw,
-                                              'o', toReport, number, 0.)
+                                              'o', toReport, number, density)
 
             # ------------------- K-COMPLEXES -------------------
             elif method == 'K-complexes':

@@ -1,5 +1,7 @@
 """Top level Sleep class."""
 import numpy as np
+import sip
+sip.setdestroyonexit(False)
 
 from PyQt4 import QtGui
 import sys
