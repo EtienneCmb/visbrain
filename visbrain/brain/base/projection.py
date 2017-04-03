@@ -13,12 +13,13 @@ class Projections(object):
     access to vertices & sources coordinates / data.
     """
 
-    def __init__(self, t_radius=10.0, t_projecton='brain',
+    def __init__(self, t_radius=10.0, t_projecton='brain', t_contribute=False,
                  t_projectas='activity', **kwargs):
         """Init."""
         self._tradius = t_radius
         self._tprojecton = t_projecton
         self._tprojectas = t_projectas
+        self._tcontribute = t_contribute
         self._idxmasked = None
         self._modproj = None
 
@@ -57,10 +58,11 @@ class Projections(object):
         self._vsh = v.shape
 
         # ============= MODULATIONS =============
+        r, c = self._tradius, self._tcontribute
         if self._tprojectas == 'activity':
-            mod = self.sources._modulation(v, self._tradius)
+            mod = self.sources._modulation(v, r, c)
         elif self._tprojectas == 'repartition':
-            mod = self.sources._repartition(v, self._tradius)
+            mod = self.sources._repartition(v, r, c)
         self._modproj = mod
         self.sources._MinMax = (mod.min(), mod.max())
 

@@ -107,9 +107,20 @@ class uiSources(object):
     def _fcn_sourcesProjection(self):
         """Apply source projection."""
         # Get projection radius :
-        self._tradius = self._uitRadius.value()
+        new_radius = self._uitRadius.value()
+        if self._tradius != new_radius:
+            self._tradius = new_radius
+            self._cleanProj()
         # Get if activity has to be projected on surface / ROI :
-        self._tprojecton = str(self._uitProjectOn.currentText()).lower()
+        new_projecton = str(self._uitProjectOn.currentText()).lower()
+        if self._tprojecton != new_projecton:
+            self._tprojecton = new_projecton
+            self._cleanProj()
+        # Get if projection has to contribute on both hemisphere :
+        new_contribute = self._uitContribute.isChecked()
+        if self._tcontribute != new_contribute:
+            self._tcontribute = new_contribute
+            self._cleanProj()
         # Run either the activity / repartition projection :
         if self._uitActivity.isChecked():
             self._tprojectas = 'activity'
