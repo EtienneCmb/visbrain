@@ -28,6 +28,16 @@ Go to the cloned folder and run :
 What's new?
 ***********
 
+* New in version v0.1.9
+
+  * **New module** :ref:`Figure`
+  * Brain : fix color control (conflict between clim / (vmin, vmax))
+  * Brain : improve cortical projection and repartition. This new version use much more RAM but the final result is better
+  * Brain : user fonctions improved
+  * Sleep : detections and down-sampling improvements
+  * Sleep : new magnify to improve signal lisibility
+  * Sleep : topoplot and re-referencing integration
+
 * New in version v0.1.8
 
   * Brain : New density color and start bundling
@@ -37,17 +47,6 @@ What's new?
   * Sleep : REM / spindles detection improvements
   * Sleep : everything can now be exported.
   * Sleep : GUI re-organization and improvements
-
-* New in version v0.1.4
-
-  * Python 2 compatibility
-  * Sleep module and doc improvements
-
-* New in version v0.1.2
-
-  * vbrain has been renamed to Brain()
-  * exportation improvements
-  * New screenshot tutorial
 
 Contents:
 *********
