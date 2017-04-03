@@ -207,7 +207,7 @@ Apply either a lowpass, highpass or bandpass butterworth filter on the channel d
    Bandpass filter applied across all channels and spectrogram.
 
 Referencing
-^^^^^^^^^
+^^^^^^^^^^^
 
 Sleep allows you to re-reference your dataset either to a specified channel or using bipolarization. Note that this could be applied only once.
 
@@ -399,7 +399,7 @@ r                       Insert REM stage in the hypnogram
 ==============          ==================================================================================
 
 Collaborator
----------
+------------
 
 Sleep is developped in collaboration with `Raphael Vallat
 <https://raphaelvallat.github.io/>`_.

@@ -73,11 +73,12 @@ class Figure(object):
                 * 'bottom' : The bottom of the subplots of the figure
                 * 'top' : The top of the subplots of the figure
                 * 'hspace' : The amount of height reserved for white space
-                between subplots, expressed as a fraction of the average axis
-                height.
+                  between subplots, expressed as a fraction of the average axis
+                  height.
                 * 'wspace' : The amount of width reserved for blank space
-                between subplots, expressed as a fraction of the average axis
-                width.
+                  between subplots, expressed as a fraction of the average axis
+                  width.
+
             Default : {'left': 0., 'right': 1., 'bottom': 0., 'top': .9,
                        'wspace': 0., 'hspace': 0.05}
 

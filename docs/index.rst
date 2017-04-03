@@ -6,7 +6,7 @@ Visbrain is a python package in development and it's dedicated to neuroscience v
 * :ref:`brain` : plot your data onto a 3D MNI brain control it via the graphical interface
 * :ref:`Sleep` : display sleep data, perform spindles / REM / peaks / slow waves / K-complex detection and live hypnogram edition
 * :ref:`Ndviz` : inspect data your n-dimentional data.
-* :ref:`makefig` : concatenate several pictures
+* :ref:`Figure` : arange exported pictures in a grid, add colorbar and save a paper ready figure.
 
 Installation:
 *************
@@ -58,7 +58,7 @@ Contents:
    brain
    sleep
    ndviz
-   makefig
+   figure
 
 
 Indices and tables
