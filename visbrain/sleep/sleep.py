@@ -83,6 +83,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 file = QtGui.QFileDialog.getOpenFileName(
                         self, "Open dataset", "", "Elan (*.eeg);;"
                         "Brainvision (*.eeg);;Edf (*.edf);;All files (*.*)")
+                file = str(file)  # py2
                 # Get the user path :
                 upath = os.path.split(file)[0]
                 # Dialog window for hypnogram :
@@ -90,10 +91,11 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                         self, "Open hypnogram", upath, "Elan (*.hyp);;"
                         "Text file (*.txt);;""CSV file (*.csv);;All files "
                         "(*.*)")
+                hypno_file = str(hypno_file)  # py2
 
             # Load dataset :
-            sf, downsample, data, channels, N = load_sleepdataset(file,
-                                                                  downsample)
+            sf, downsample, data, channels, N = load_sleepdataset(
+                                                              file, downsample)
             npts = data.shape[1]
 
             # Build the time vector :

@@ -168,6 +168,7 @@ class uiScoring(object):
         path = QtGui.QFileDialog.getSaveFileName(
             self, "Save File", "scoring_info",
             filter=selected_ext)
+        path = str(path)  # py2
         if path:
             file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:
