@@ -95,6 +95,7 @@ class uiSettings(object):
                                                             'screenshot.jpg'),
                                                "Picture (*.jpg);;;;All files"
                                                " (*.*)")
+        filename = str(filename)  # py2
         if filename:
             file, ext = os.path.splitext(filename)
             p = QPixmap.grabWindow(self.centralwidget.winId())
@@ -109,17 +110,17 @@ class uiSettings(object):
         filename = QFileDialog.getSaveFileName(self, 'Save File', 'hypno',
                                                "Text file (*.txt);;Elan file "
                                                "(*.hyp);;All files (*.*)")
-        filename = str(filename)
+        filename = str(filename)  # py2
         if filename:
             file, ext = os.path.splitext(filename)
 
             # Switch between differents types :
             if ext == '.hyp':
                 save_hypnoToElan(filename, self._hypno, self._sf, self._sfori,
-                                                                    self._N)
+                                 self._N)
             elif ext == '.txt':
                 save_hypnoTotxt(filename, self._hypno, self._sf, self._sfori,
-                                                                    self._N, 1)
+                                self._N, 1)
             else:
                 raise ValueError("Not a valid extension")
 
