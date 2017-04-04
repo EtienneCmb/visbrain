@@ -11,3 +11,4 @@ from .sigproc import *
 from .sleep import *
 from .topo import *
 from .transform import *
+from .picture import *
