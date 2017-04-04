@@ -6,6 +6,10 @@ from numpy import arcsin, sin, cos, pi, sqrt, sum
 from numpy import atleast_2d, asarray, zeros, newaxis
 
 
+__all__ = ['project_radial_to2d', 'project_radial_to3d',
+           'array_project_radial_to2d', 'array_project_radial_to3d']
+
+
 def project_radial_to2d(point_3d):
     point_2d = point_3d.copy()
     point_2d.z = 0
