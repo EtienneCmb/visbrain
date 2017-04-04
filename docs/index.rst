@@ -28,6 +28,10 @@ Go to the cloned folder and run :
 What's new?
 ***********
 
+* New in version v0.2.0
+  * Figure : new *auto_crop* parameter for automatic size ajustments and doc update
+  * Sleep : doc updates
+
 * New in version v0.1.9
 
   * **New module** :ref:`Figure`

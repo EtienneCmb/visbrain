@@ -7,7 +7,7 @@ from scipy.misc import imread, imsave
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-from ..utils import color2tuple
+from ..utils import color2tuple, autocrop
 
 
 __all__ = ['Figure']
@@ -66,6 +66,9 @@ class Figure(object):
             the strings inside will be used to set the label of each picture
             independantly (must have the same length as files.)
 
+        figsize: tuple, optional, (def: None)
+            The size of the figure. Should be a tuple of integers.
+
         subspace: dict, optional, (def: None)
             Control margins and the distance between subplots. Use:
                 * 'left' : The left side of the subplots of the figure
@@ -82,6 +85,9 @@ class Figure(object):
             Default : {'left': 0., 'right': 1., 'bottom': 0., 'top': .9,
                        'wspace': 0., 'hspace': 0.05}
 
+        rmax: bool, optional, (def: True)
+            Remove borders of each axis.
+
         fig_bgcolor: str/tuple/list, optional, (def: None)
             Background color of the figure. By default, no background is used.
 
@@ -95,8 +101,8 @@ class Figure(object):
         text_color: str/tuple/list, optional, (def: 'black')
             Color of text elements (figure title, axes titles, x and y labels.)
 
-        rmax: bool, optional, (def: True)
-            Remove borders of each axis.
+        auto_crop: bool, optional, (def: False)
+            Specify if each picture has to be automatically cropped.
 
     Methods:
         show:
@@ -113,7 +119,8 @@ class Figure(object):
                  titles=None, xlabels=None, ylabels=None, figsize=None,
                  subspace={'left': 0.05, 'right': 1., 'bottom': 0.1, 'top': .9,
                            'wspace': 0., 'hspace': 0.3}, rmax=True,
-                 fig_bgcolor=None, ax_bgcolor=None, text_color='black'):
+                 fig_bgcolor=None, ax_bgcolor=None, text_color='black',
+                 auto_crop=False):
         """Init."""
         self._data = []
         self._im = []
@@ -124,6 +131,7 @@ class Figure(object):
         self._subspace = subspace
         self._y = y
         self._rmax = rmax
+        self._autocrop = auto_crop
 
         # ================ CHECKING ================
         # Files / path :
@@ -402,7 +410,8 @@ class Figure(object):
         """Make the figure."""
         # ================ LOAD ================
         for k in self._files:
-            self._data.append(imread(k))
+            _dat = imread(k) if not self._autocrop else autocrop(imread(k))
+            self._data.append(_dat)
 
         # ================ FIGURE ================
         # Figure creation :
