@@ -3,11 +3,11 @@
 import numpy as np
 import os
 
-from scipy.misc import imread, imsave
+from scipy.misc import imread
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-from ..utils import color2tuple, autocrop
+from ..utils import color2tuple, piccrop, picresize
 
 
 __all__ = ['Figure']
@@ -101,8 +101,16 @@ class Figure(object):
         text_color: str/tuple/list, optional, (def: 'black')
             Color of text elements (figure title, axes titles, x and y labels.)
 
-        auto_crop: bool, optional, (def: False)
+        autocrop: bool, optional, (def: False)
             Specify if each picture has to be automatically cropped.
+
+        autoresize: bool, optional, (def: False)
+            Specify if all pictures have to be resized. If True, all pictures
+            will be resized according to the minimum size along row axis. For
+            further controls, define autoresize as a dictionary. Use the
+            key 'axis' to specify if pictures have to share the same height (0)
+            or width (1). Use 'extend' if the smallest (False) or the largest
+            have to be considered as the reference.
 
     Methods:
         show:
@@ -120,7 +128,7 @@ class Figure(object):
                  subspace={'left': 0.05, 'right': 1., 'bottom': 0.1, 'top': .9,
                            'wspace': 0., 'hspace': 0.3}, rmax=True,
                  fig_bgcolor=None, ax_bgcolor=None, text_color='black',
-                 auto_crop=False):
+                 autocrop=False, autoresize=False):
         """Init."""
         self._data = []
         self._im = []
@@ -131,7 +139,8 @@ class Figure(object):
         self._subspace = subspace
         self._y = y
         self._rmax = rmax
-        self._autocrop = auto_crop
+        self._autocrop = autocrop
+        self._autoresize = autoresize
 
         # ================ CHECKING ================
         # Files / path :
@@ -408,10 +417,16 @@ class Figure(object):
 
     def _make(self):
         """Make the figure."""
-        # ================ LOAD ================
+        # ================ LOAD / RESIZE ================
+        # Load files :
         for k in self._files:
-            _dat = imread(k) if not self._autocrop else autocrop(imread(k))
+            _dat = imread(k) if not self._autocrop else piccrop(imread(k))
             self._data.append(_dat)
+        # Resize :
+        if isinstance(self._autoresize, bool) and self._autoresize:
+            self._data = picresize(self._data)
+        elif isinstance(self._autoresize, dict):
+            self._data = picresize(self._data, **self._autoresize)
 
         # ================ FIGURE ================
         # Figure creation :
