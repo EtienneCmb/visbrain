@@ -51,11 +51,11 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-5 Mettre à jour doc
 	-5 Comparaison des algos de detection avec un expert visuel: demander Tarek
 	-4 Finir detection K-complexes: mettre un seul critère de probabilité (0 à 1) pour la detection
 	-4 Implémenter méthode REMs de JB
 	-2 Scorage automatique du sommeil
+	+5 Mettre à jour doc
 	+5 Screenshots (et topoplot !): sinon je les fait mais ils seront noirs...
 	+3 Ajout collaborateur
 	+5 Bug dans le nombre de slow-waves détectées
