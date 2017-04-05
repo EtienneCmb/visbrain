@@ -94,7 +94,7 @@
               </font>
              </property>
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="page">
               <property name="geometry">
@@ -1150,21 +1150,33 @@ color</string>
                   </item>
                   <item>
                    <layout class="QGridLayout" name="gridLayout_14">
-                    <item row="3" column="2" colspan="2">
+                    <item row="3" column="0" colspan="4">
+                     <widget class="QCheckBox" name="_ssAutoCrop">
+                      <property name="font">
+                       <font>
+                        <italic>true</italic>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Auto-crop</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2" colspan="2">
                      <widget class="QDoubleSpinBox" name="_ssResolution">
                       <property name="maximum">
                        <double>999999999.000000000000000</double>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="2">
+                    <item row="0" column="2">
                      <widget class="QLineEdit" name="_ssSaveAs">
                       <property name="text">
                        <string>brain</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="0">
+                    <item row="0" column="0">
                      <widget class="QLabel" name="label_39">
                       <property name="font">
                        <font>
@@ -1176,7 +1188,7 @@ color</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="0">
+                    <item row="2" column="0">
                      <widget class="QLabel" name="label_40">
                       <property name="font">
                        <font>
@@ -1188,7 +1200,7 @@ color</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="3">
+                    <item row="0" column="3">
                      <widget class="QComboBox" name="_ssSaveAsExt">
                       <item>
                        <property name="text">
@@ -1207,7 +1219,7 @@ color</string>
                       </item>
                      </widget>
                     </item>
-                    <item row="2" column="1">
+                    <item row="1" column="1">
                      <widget class="Line" name="line_60">
                       <property name="minimumSize">
                        <size>
@@ -1232,7 +1244,7 @@ color</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="0">
+                    <item row="1" column="0">
                      <widget class="QCheckBox" name="_ssCropEnable">
                       <property name="font">
                        <font>
@@ -1247,7 +1259,7 @@ color</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="1">
+                    <item row="0" column="1">
                      <widget class="Line" name="line_59">
                       <property name="minimumSize">
                        <size>
@@ -1260,7 +1272,7 @@ color</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="1">
+                    <item row="2" column="1">
                      <widget class="Line" name="line_61">
                       <property name="minimumSize">
                        <size>
@@ -1273,7 +1285,7 @@ color</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="2" colspan="2">
+                    <item row="1" column="2" colspan="2">
                      <widget class="QWidget" name="_ssCropW" native="true">
                       <property name="enabled">
                        <bool>false</bool>
@@ -1408,8 +1420,8 @@ color</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>611</height>
+                <width>324</width>
+                <height>224</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1972,8 +1984,8 @@ color</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>674</height>
+                <width>307</width>
+                <height>177</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_48">
@@ -2313,7 +2325,7 @@ refllection</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>350</width>
+                <width>335</width>
                 <height>684</height>
                </rect>
               </property>
@@ -3219,8 +3231,8 @@ type</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>674</height>
+                <width>311</width>
+                <height>327</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_63">
@@ -3791,8 +3803,8 @@ width</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>674</height>
+                <width>303</width>
+                <height>666</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_32">

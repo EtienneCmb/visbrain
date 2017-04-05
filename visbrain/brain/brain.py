@@ -176,6 +176,9 @@ class Brain(uiInit, uiElements, base, userfcn):
             Crop the exportation of the main canvas to the region define by
             (x, y, width, height).
 
+        ui_autocrop: bool, optional, (def: False)
+            Automaticaly crop figures when saving.
+
         ui_cbregion: tuple, optional, (def: None)
             Crop the exportation of the colorbar canvas to the region define by
             (x, y, width, height).
@@ -234,6 +237,7 @@ class Brain(uiInit, uiElements, base, userfcn):
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
         self._crop = kwargs.get('ui_region', None)
+        self._autocrop = kwargs.get('ui_autocrop', False)
         self._cbcrop = kwargs.get('ui_cbregion', None)
         self._uirez = kwargs.get('ui_resolution', 3000.)
         self._xyzRange = {'turntable': {'x': (-750, 850), 'y': (-0, 0),

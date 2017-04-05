@@ -39,7 +39,7 @@ Example
     f = Figure(files, titles=titles, figtitle='My figure', xlabels=xlabels,
                ylabels=ylabels, grid=(2, 2), ax_bgcolor=ax_bgcolor, y=1.,
                fig_bgcolor=(0.098, 0.098, 0.098), figsize=(12, 12),
-               text_color='white')
+               text_color='white', auto_crop=True)
 
     # Add a colorbar only to the second axis :
     f.colorbar_to_axis(1, (0, 1), 'viridis', title='Repartition', ticks='complete',

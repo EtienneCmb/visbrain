@@ -95,17 +95,17 @@ class userfcn(object):
 
     def screenshot(self, name, region=None, zoom=None, colorbar=False,
                    cbregion=None, cbzoom=None, transparent=False,
-                   resolution=3000.):
+                   resolution=3000., autocrop=False):
         """Take a screenshot of the current scene and save it as a picture.
 
-        This method try to make a high-fidelity screenshot of your scene. There
-        might be some strange behaviors (like with connectivity line width).
+        This method try to make a high-fidelity screenshot of your scene.
         One thing to keep in mind, is that printed picture using a transparent
         compatible extension (like .png files) produces transparent pictures.
         This might be quit disturbing especially using internal light
         reflection. To solve this in your pictures, I recommand putting your
         transparent brain picture onto a dark background (like black) and see
-        the magic happend.
+        the magic happend. If you want perfectly fitting pictures, just turn
+        the autocrop parameter to True.
         This method requires imageio or PIL (pip install pillow).
 
         Args:
@@ -121,6 +121,10 @@ class userfcn(object):
                 to start along the horizontal axis and y_start where to start
                 along the vertical axis. By default, the entire canvas is
                 rendered.
+
+            autocrop: bool, optional, (def: False)
+                Automaticaly crop the figure in order to have the smallest
+                space between the brain and the border of the picture.
 
             zoom: float, optional, (def: None)
                 Define the zoom level over the main canvas.
@@ -180,6 +184,8 @@ class userfcn(object):
                 raise ValueError("The region parameter must be a tuple of four"
                                  " integers describing (x_start, y_start, "
                                  "width, height)")
+        self._autocrop = autocrop
+
         if cbregion is not None:
             if isinstance(region, (tuple, list)) and (len(region) == 4):
                 self._cbcrop = cbregion
@@ -613,6 +619,21 @@ class userfcn(object):
     #                            CONNECTIVITY
     # =========================================================================
     # =========================================================================
+    def connect_display(self, colorby=None, dynamic=None, show=True, cmap=None,
+                        clim=None, vmin=None, under=None, vmax=None,
+                        over=None):
+        """"""
+        if colorby is not None:
+            self.connect.colorby = colorby
+        if dynamic is not None:
+            self.connect.dynamic = dynamic
+        for i, k in zip(['cmap', 'clim', 'vmin', 'vmax', 'under', 'over'],
+                        [cmap, clim, vmin, vmax, under, over]):
+            if k is not None:
+                self.connect._cb[i] = k
+        self.connect.mesh.visible = show
+        self.connect.update()
+
     def add_connect(self, name, **kwargs):
         """Add a supplementar connectivity object.
 
