@@ -223,8 +223,8 @@ class SourcesBase(_colormap):
         non-masked sources. This is faster than re-create the source object.
         """
         # Find only unmasked data :
-        # xyz, sData, sColor, _ = self._select_unmasked()
-        xyz, sData, sColor = self.xyz, self.sData, self.sColor
+        xyz, sData, sColor, _ = self._select_unmasked()
+        # xyz, sData, sColor = self.xyz, self.sData, self.sColor
 
         # Render as cloud points :
         if xyz.size:

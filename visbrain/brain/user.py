@@ -619,6 +619,21 @@ class userfcn(object):
     #                            CONNECTIVITY
     # =========================================================================
     # =========================================================================
+    def connect_display(self, colorby=None, dynamic=None, show=True, cmap=None,
+                        clim=None, vmin=None, under=None, vmax=None,
+                        over=None):
+        """"""
+        if colorby is not None:
+            self.connect.colorby = colorby
+        if dynamic is not None:
+            self.connect.dynamic = dynamic
+        for i, k in zip(['cmap', 'clim', 'vmin', 'vmax', 'under', 'over'],
+                        [cmap, clim, vmin, vmax, under, over]):
+            if k is not None:
+                self.connect._cb[i] = k
+        self.connect.mesh.visible = show
+        self.connect.update()
+
     def add_connect(self, name, **kwargs):
         """Add a supplementar connectivity object.
 

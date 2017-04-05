@@ -443,7 +443,7 @@ class Figure(object):
         for num, k in enumerate(self):
             # --------- Display ---------
             plt.subplot(self._grid[0], self._grid[1], num+1)
-            im = plt.imshow(k, vmin=0.2, vmax=0.7)
+            im = plt.imshow(k)
             self._im.append(im)
             ax = plt.gca()
             self._ax.append(ax)
