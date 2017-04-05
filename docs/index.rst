@@ -29,6 +29,7 @@ What's new?
 ***********
 
 * New in version v0.2.0
+
   * Brain : new *ui_autocrop* parameter (or using the *screenshot* function)
   * Figure : new `example <https://github.com/EtienneCmb/visbrain/tree/master/examples/figure>`_
   * Figure : new *autocrop* parameter for automatic size ajustments and doc update
