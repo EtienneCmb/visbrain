@@ -1,5 +1,5 @@
-"""This script generate some figures using the Brain module. Those exported
-pictures are going to be set in a layout in the 1_Example.py script.
+"""This script illustrate how to arange pictures in a grid. Before running this
+script, make sure you generate pictures before using 0_GeneratePictures.py.
 """
 from visbrain import Figure
 
@@ -43,7 +43,8 @@ f.colorbar_to_axis(5, (.1, .5), 'inferno', title='ROI projection',
                    ticks=[.2, .3], fz_ticks=10, orientation='horizontal')
 
 
-# Finally, save the picture :
+# Save the picture :
 f.save('LayoutExample.png', dpi=600)
 
+# Finally, display the figure :
 f.show()
