@@ -75,12 +75,18 @@ Save hypnogram
 
 By default, Sleep will save your hypnogram with a sampling rate of 1 value per second, and with the following values assigned to each sleep stages:
 
-* **Wake** :   0
-* **N1** :     1
-* **N2** :     2
-* **N3** :     3
-* **REM** :    4
-* **Art** :    -1  (*optional*)
+
+==============          =================
+Stage                    Value
+==============          =================
+**Wake**                 0
+**N1**                   1
+**N2**                   2
+**N3**                   3
+**REM**                  4
+**Art**                  -1  (optional)
+==============          =================
+
 
 Elan .hyp format
 ^^^^^^^^^^^^^^^^
@@ -181,12 +187,66 @@ Sleep provide five settings tabs :
 * :ref:`scoringtab` : a scoring table that can be used to edit the hypnogram
 * :ref:`detectiontab` : Automatic detection of sleep spindles, rapid eye movements (REMs), slow waves, K-complexes (KCs) and peaks
 
+In addition, there is a ruler (bottom of the page). From this ruler :
+
+* *Go to* : go to the time location of your choice
+* *Window* : length of the displayed time window
+* *Slider step* : step between each consecutive window
+* *Rule* : display unit in second, minute or hours
+* *Grid* : display the grid on the hypnogram and channel plot
+* *Magnify* : improve plot lisibility (better for small time events). Alternatively, click on the plot of your choice for increasing lisibility directly.
+
 .. _paneltab:
 
 Panels
 ~~~~~~
 
-(TODO)
+From the **Panels** tab control displayed elements/
+
+Channels
+^^^^^^^^
+
+* Show / hide channels :
+
+  *  Select channels of your choice by clicking on the corresponding checkbox
+  * Display / hide all channels
+
+* Control the amplitude :
+
+  * Per channel
+  * By setting all amplitudes at once
+  * Use symetric amplitudes (-M, +M)
+  * Use automatic amplitude (each amplitude fit to the (minimum, maximum) of the current displayed window)
+
+Spectrogram // hypnogram // time axis
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Control spectrogram looking and properties
+
+  * the channel on whichs compute spectrogram
+  * tarting and ending frequencies
+  * time length window and overlap
+  * colormap
+
+* Show / hide spectrogram, hypnogram, time axis
+* Display / hide visual indicators refering to the current time window 
+* Zoom : when zooming, the axis will fit to the time window according to the (window, step) parameters defined in the ruler 
+
+Topoplot
+^^^^^^^^
+
+* Show / hide topoplot
+* Display several information types :
+
+  * The raw signal
+  * The filtered signal
+  * The amplitude
+  * The power
+
+Filtered, amplitude and power are computed in a specific frequency band. The topoplot display the mean across the current time window according to the (window, step) parameters defined in the ruler. 
+
+.. figure::  picture/Sleep_topo.png
+   :align:   center
 
 .. _toolstab:
 
@@ -377,25 +437,31 @@ Perform a peak detection.
 Shortcuts
 ---------
 
-Sleep comes with a bundle of shortcuts that can be used to speed up your productivity.
+Sleep comes with a bundle of shortcuts that can be used to speed up your productivity. If shortcuts don't seems to be active, simply click on a canvas before.
 
 ==============          ==================================================================================
 Keys                    Description
 ==============          ==================================================================================
-CTRL+d                  Display quick settings panel
-CTRL+n                  Screenshot window
-s                       Display / hide spectrogram
-h                       Display / hide hypnogram
-z                       Enable / disable zoom
-b                       Previous window
-n                       Next window
 mouse wheel             Move the current window
+mouse click             On a channel canvas, magnify signal under mouse location
 a                       Insert Artefact in the hypnogram
 w                       Insert Wake stage in the hypnogram
 1                       Insert N1 stage in the hypnogram
 2                       Insert N2 stage in the hypnogram
 3                       Insert N3 stage in the hypnogram
 r                       Insert REM stage in the hypnogram
+b                       Previous window
+n                       Next window
+s                       Display / hide spectrogram
+t                       Display / hide topoplot
+h                       Display / hide hypnogram
+z                       Enable / disable zoom
+CTRL + d                Display quick settings panel
+CTRL + s                Save hypnogram
+CTRL + n                Screenshot window
+CTRL + e                Display documentation
+CTRL + t                Display shortcuts window
+CTRL + q                Close the window
 ==============          ==================================================================================
 
 Collaborator
