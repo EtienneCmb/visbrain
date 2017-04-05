@@ -10,7 +10,7 @@ from PyQt4 import QtCore
 from vispy import io
 import vispy.scene.cameras as viscam
 
-from ....utils import uiSpinValue
+from ....utils import uiSpinValue, piccrop
 
 __all__ = ['uiSettings']
 
@@ -63,6 +63,7 @@ class uiSettings(object):
         self._ssCbEnable.clicked.connect(self._screenshotSettings)
         self._ssRun.clicked.connect(self._fcn_runScreenshot)
         self._ssGuide.clicked.connect(self._screenshotSettings)
+        self._ssAutoCrop.clicked.connect(self._screenshotSettings)
         self._ssCropXs.valueChanged.connect(self._screenshotSettings)
         self._ssCropYs.valueChanged.connect(self._screenshotSettings)
         self._ssCropXe.valueChanged.connect(self._screenshotSettings)
@@ -181,11 +182,14 @@ class uiSettings(object):
         ext = str(self._ssSaveAsExt.currentText())
         self._savename = file + ext
         # Cropping :
+        self._autocrop = self._ssAutoCrop.isChecked()
+        self._ssCropEnable.setEnabled(not self._autocrop)
+
         viz = self._ssCropEnable.isChecked()
         crop = (self._ssCropXs.value(), self._ssCropYs.value(),
                 self._ssCropXe.value(), self._ssCropYe.value())
         self._crop = crop if viz else None
-        self._ssCropW.setEnabled(viz)
+        self._ssCropW.setEnabled((not self._autocrop) and viz)
         # self.guide.mesh.visible = self._ssGuide.isChecked()
         # if self._ssGuide.isChecked() and self._ssCropW.isEnabled():
         #     print(self.view.wc.camera.center)
@@ -244,6 +248,8 @@ class uiSettings(object):
         else:
             kwargs = {'size': new_size}
         img = self.view.canvas.render(**kwargs)
+        if self._autocrop:
+            img = piccrop(img)
         io.imsave(saveas, img)
 
         # Set to the canvas it's previous size :
@@ -262,6 +268,8 @@ class uiSettings(object):
             else:
                 kwargs = {'size': new_size}
             cbimg = self.view.cbcanvas.render(**kwargs)
+            if self._autocrop:
+                cbimg = piccrop(cbimg)
             # Colorbar file name : filename_colorbar.extension
             filename = saveas.replace('.', '_colorbar.')
             io.imsave(filename, cbimg)
