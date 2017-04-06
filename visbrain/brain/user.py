@@ -7,8 +7,10 @@ Brain instance.
 """
 
 import numpy as np
+from scipy.spatial import ConvexHull
 import os
 
+from .base.visuals import BrainMesh
 from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
 from ..utils import color2vb
@@ -224,7 +226,7 @@ class userfcn(object):
 
     # =========================================================================
     # =========================================================================
-    #                           BRAIN CONTROL
+    #                                  MESH
     # =========================================================================
     # =========================================================================
     def brain_control(self, template=None, show=True, hemisphere=None):
@@ -312,6 +314,14 @@ class userfcn(object):
             else:
                 eval('self.q_' + reflect_on + '.setChecked(True)')
         self._light_reflection()
+
+    def add_mesh(self, name, vertices, faces, **kwargs):
+        """"""
+        print('ADD MESH : ', vertices.shape, faces.shape)
+        self._userobj[name] = BrainMesh(vertices=vertices, faces=faces, name=name,
+                                        **kwargs)
+        self._userobj[name].set_camera(self.view.wc.camera)
+        self._userobj[name].parent = self._vbNode
 
     # =========================================================================
     # =========================================================================
@@ -595,6 +605,22 @@ class userfcn(object):
                         [cmap, clim, vmin, vmax, under, over]):
             if k is not None:
                 self.sources._cb[i] = k
+
+    def sources_to_mesh(self, xyz, smooth=None):
+        """Convert a set of sources into a mesh.
+
+        Args:
+            xyz: np.ndarray
+                Array of sources coordinates of shape (N, 3)
+
+        Kargs:
+            smooth: float, optional, (def: None)
+                Smoothing amount.
+        """
+        # Triangulation :
+        tri = ConvexHull(xyz, incremental=True)
+
+        return tri.simplices
 
     def add_sources(self, name, **kwargs):
         """Add a supplementar source's object.
