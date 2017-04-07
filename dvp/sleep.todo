@@ -51,12 +51,13 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-5 Bug brainvision header?
 	-5 Comparaison des algos de detection avec JBE
+	-4 Import fichier micromed (*.trc)
 	-4 Finir detection K-complexes: mettre un seul critère de probabilité (0 à 1) pour la detection
 	-4 Améliorer detection spindles
 	-4 Implémenter méthode REMs de JB
 	-2 Scorage automatique du sommeil
+	+5 Bug brainvision header version
 	+5 Mettre à jour doc
 	+5 Screenshots (et topoplot !): sinon je les fait mais ils seront noirs...
 	+3 Ajout collaborateur
