@@ -509,10 +509,22 @@ def brainvision2array(path, downsample=100.):
 
     ent = np.char.decode(ent)
 
-    # Channels info
-    n_chan = int(re.findall('\d+', ent[10])[0])
-    # n_samples = int(re.findall('\d+', ent[11])[0])
-    sf = float(re.findall('\d+', ent[14])[0])
+    # Check header version
+    h_vers = int(re.findall('\d+', ent[0])[0])
+
+    if h_vers == 2:
+        n_chan = int(re.findall('\d+', ent[10])[0])
+        # n_samples = int(re.findall('\d+', ent[11])[0])
+        si = float(re.findall('\d+', ent[14])[0])
+        sf = 1 / (si * 0.000001)
+        assert "INT_16" in ent[22]
+
+    elif h_vers == 1:
+        n_chan = int(re.findall('\d+', ent[9])[0])
+        si = float(re.findall('\d+', ent[11])[0])
+        sf = 1 / (si * 0.000001)
+        assert "INT_16" in ent[13]
+
 
     # Extract channel labels and resolution
     start_label = np.array(np.where(np.char.find(ent, 'Ch1=') == 0)).min()
@@ -529,7 +541,7 @@ def brainvision2array(path, downsample=100.):
     # Check binary format
     assert "MULTIPLEXED" in ent[8]
     assert "BINARY" in ent[6]
-    assert "INT_16" in ent[22]
+
 
     with open(path, 'rb') as f:
         raw = f.read()
