@@ -525,7 +525,6 @@ def brainvision2array(path, downsample=100.):
         sf = 1 / (si * 0.000001)
         assert "INT_16" in ent[13]
 
-
     # Extract channel labels and resolution
     start_label = np.array(np.where(np.char.find(ent, 'Ch1=') == 0)).min()
 

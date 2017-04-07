@@ -1,7 +1,7 @@
 Bug
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
-	-4 Bug que je vois passer de temps en temps mais difficile à localiser : quand on lance detection, parfois il y a un "impossible d'aller à l'emplacement... NoneType"
-	-3 Bug dans le reréférencement pour de larges données: RAM de l'ordi?
+	+4 Bug que je vois passer de temps en temps mais difficile à localiser : quand on lance detection, parfois il y a un "impossible d'aller à l'emplacement... NoneType"
+	+3 Bug dans le reréférencement pour de larges données: RAM de l'ordi?
 	+5 Pour les fichiers Brainvision / EDF : downsampling lors de la lecture des données au chargment
 	+5 SEGMENTATION ERROR: à l fermeture, l'interface bug (fait bugger ipython). Continuous array? Voir modifs pyqt5, dernière ligne
 	+5 Peut-être il faut vider la mémoire après downsampling: essais avec gc collect ne change rien
@@ -23,7 +23,7 @@ Etienne
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-5 Faire une unique fonction d'exportation de table : ça évitera tout les problèmes.
 	-4 Hypnogramme: on pourrait faire une checkbox "Edit mode" qui lorsqu'elle est cochée permet d'activer les fonctions de modifications de l'hypno. Lorsque l'utilisateur la coche, il doit selectionner un nom de fichier d'hypnogramme, puis à chaque modification ça enregistre automatiquement dans le fichier .hyp ou .txt
-	+3 Spectrogramme en ondelettes ? Non car nécessiterai un fenêtrage a prosteriori
+	+3 Spectrogramme en ondelettes ? Non car nécessiterai un fenêtrage a posteriori
 	+5 Améliorer le départ d'un hypno vide
 	+3 Grilles peu lisibles
 	+5 Table nombre / densité sur toutes les detections

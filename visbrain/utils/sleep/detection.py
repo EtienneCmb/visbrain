@@ -167,7 +167,6 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
             is_spin = np.in1d(np.arange(j - step, j + step, 1),
                               spindles, assume_unique=True)
             spin_bool = np.append(spin_bool, any(is_spin))
-
         kc_spin = np.where(spin_bool)[0]
         idx_spin = _events_removal(idx_start, idx_stop, kc_spin)
 

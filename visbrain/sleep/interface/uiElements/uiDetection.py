@@ -198,7 +198,8 @@ class uiDetection(object):
                                                             max_amp)
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defkc,
-                                              'diamond', toReport, number, 0.)
+                                              'diamond', toReport, number,
+                                              density)
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
@@ -244,9 +245,9 @@ class uiDetection(object):
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
 
-        # Force to be on locatoin table :
-        self._DetectionTab.setCurrentIndex(1)
-        self._DetectLocations.selectRow(0)
+        # Force to be on location table :
+        # self._DetectionTab.setCurrentIndex(1)
+        # self._DetectLocations.selectRow(0)
 
     def _get_startingIndex(self, name, k, index, color, symbol, toReport,
                            number, density):
@@ -329,17 +330,18 @@ class uiDetection(object):
         # Get selected row and channel :
         row = self._DetectLocations.currentRow()
         idx = self._ToolDetectChan.currentIndex()
-        # Get starting and ending point :
-        sta = float(str(self._DetectLocations.item(row, 0).text()))
-        end = sta + float(str(self._DetectLocations.item(row, 1).text())) / \
-            1000.
-        # Get best looking location :
-        goto = ((sta + end) / 2.) - (self._SigWin.value() / 2.)
-        # Go to :
-        self._SigSlStep.setValue(1)
-        self._SlGoto.setValue(goto)
-        # Set vertical lines to the location :
-        self._chan.set_location(self._sf, self._data[idx, :], idx, sta, end)
+        if row >= 0:
+            # Get starting and ending point :
+            sta = float(str(self._DetectLocations.item(row, 0).text()))
+            end = sta + float(str(self._DetectLocations.item(row, 1).text())) \
+                / 1000.
+            # Get best looking location :
+            goto = ((sta + end) / 2.) - (self._SigWin.value() / 2.)
+            # Go to :
+            self._SigSlStep.setValue(1)
+            self._SlGoto.setValue(goto)
+            # Set vertical lines to the location :
+            self._chan.set_location(self._sf, self._data[idx, :], idx, sta, end)
 
     # =====================================================================
     # EXPORT TABLE
