@@ -51,8 +51,6 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-5 Comparaison des algos de detection avec JBE
-	-4 Finir detection K-complexes: mettre un seul critère de probabilité (0 à 1) pour la detection
 	-4 Améliorer detection spindles
 	-4 Implémenter méthode REMs de JB
 	-2 Scorage automatique du sommeil

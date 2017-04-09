@@ -296,6 +296,17 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
         data = elec
         length = max(data.shape)
 
+    # Pre-detection
+    # Compute relative sigma power
+    sigma_thr = 0.2
+    if sigma_thr > 0:
+        freqs = np.array([0.5, 4., 8., 12., 14.])
+        _, _, _, sigma_npow = morlet_power(data, freqs, sf, norm=True)
+        sigma_nfpow = movingaverage(sigma_npow, sf, sf)
+        idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
+    else:
+        idx_sigma = np.arange(0, data.size)
+
     # Get complex decomposition of filtered data :
     if method == 'hilbert':
         # Bandpass filter
@@ -322,9 +333,13 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
         idx_sup_thr = np.where(amplitude > thresh)[0]
 
     if idx_sup_thr.size > 0:
+
+        idx_sup_thr = np.intersect1d(idx_sup_thr, idx_sigma, True)
+
         # Get where spindles start / end and duration :
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
                                                                sf)
+
         # Get where min_dur < spindles duration < max_dur :
         good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
                                            duration_ms < max_dur_ms))[0]
