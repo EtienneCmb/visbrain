@@ -14,7 +14,7 @@ __all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
            'save_hypnoTotxt']
 
 
-def load_sleepdataset(path, downsample=100.):
+def load_sleepdataset(path, downsample=None):
     """Load a sleep dataset (elan, edf, brainvision).
 
     Args:
@@ -43,6 +43,7 @@ def load_sleepdataset(path, downsample=100.):
 
     # Extract file extension :
     file, ext = os.path.splitext(path)
+    ext = ext.lower()
 
     # Switch between differents types :
     if ext == '.eeg':
@@ -64,6 +65,9 @@ def load_sleepdataset(path, downsample=100.):
     # EDF :
     elif ext == '.edf':
         return edf2array(path, downsample)
+
+    elif ext == '.trc':
+        return micromed2array(path, downsample)
 
     # None :
     else:
@@ -243,12 +247,6 @@ def swap_hyp_values(hypno, desc):
         N3      1           3
         REM     0           4
     """
-    # assert os.path.isfile(desc)
-
-    # labels = np.genfromtxt(desc, dtype=str, delimiter=" ", usecols=0)
-    # values = np.genfromtxt(desc, dtype=int, delimiter=" ", usecols=1)
-    # hyp = {label: row for label, row in zip(labels, values)}
-
     # Swap values
     hypno_s = -1 * np.ones(shape=(hypno.shape), dtype=int)
 
@@ -282,7 +280,7 @@ def swap_hyp_values(hypno, desc):
     return hypno_s
 
 
-def elan2array(path, downsample=100.):
+def elan2array(path, downsample=None):
     """Read Elan eeg file into NumPy.
 
     Elan format specs: http: // elan.lyon.inserm.fr/
@@ -296,8 +294,8 @@ def elan2array(path, downsample=100.):
             Filename(with full path) to Elan .eeg file
 
     Kargs
-        downsample: float, optional, (def: 100.)
-            The downsampling frequncy.
+        downsample: float, optional
+            The downsampling frequency.
 
     Return:
         sf: int
@@ -309,8 +307,8 @@ def elan2array(path, downsample=100.):
         chan: list
             The list of channel's names.
 
-        time: np.ndarray
-            The down-sampled time vector.
+        N: int
+            Number of points in the original data
 
     Example:
         >> > import os
@@ -393,7 +391,7 @@ def elan2array(path, downsample=100.):
     return sf, downsample, data, list(chan), N
 
 
-def edf2array(path, downsample=100.):
+def edf2array(path, downsample=None):
     """Read European Data Format (EDF) file into NumPy.
 
     Use phypno class for reading EDF files:
@@ -404,7 +402,7 @@ def edf2array(path, downsample=100.):
             Filename(with full path) to EDF file
 
     Kargs:
-        downsample: float, optional, (def: 100.)
+        downsample: float, optional
             The downsampling frequency.
 
     Return:
@@ -416,6 +414,9 @@ def edf2array(path, downsample=100.):
 
         chan: list
             The list of channel's names.
+
+        N: int
+            Number of points in the original data
 
     Example:
         >> > import os
@@ -459,7 +460,7 @@ def edf2array(path, downsample=100.):
     return float(sf), downsample, data[:, ::ds], list(chan), N
 
 
-def brainvision2array(path, downsample=100.):
+def brainvision2array(path, downsample=None):
     """Read BrainVision file.
 
     Poor man's version of https: // gist.github.com / breuderink / 6266871
@@ -474,7 +475,7 @@ def brainvision2array(path, downsample=100.):
             Filename(with full path) to .eeg file
 
     Kargs:
-        downsample: float, optional, (def: 100.)
+        downsample: float, optional
             The downsampling frequency.
 
     Return:
@@ -486,6 +487,9 @@ def brainvision2array(path, downsample=100.):
 
         chan: list
             The list of channel's names.
+
+        N: int
+            Number of points in the original data
 
     Example:
         >> > import os
@@ -549,6 +553,106 @@ def brainvision2array(path, downsample=100.):
                           dtype='<i2', order='F', buffer=raw)
 
         data = np.float32(np.diag(resolution)).dot(ints)
+
+    # Get original signal length :
+    N = data.shape[1]
+
+    # Get downsample factor :
+    if downsample is not None:
+        # Check down-sampling :
+        downsample = check_downsampling(sf, downsample)
+        ds = int(np.round(sf / downsample))
+    else:
+        ds = 1
+
+    return sf, downsample, data[:, ::ds], list(chan), N
+
+def micromed2array(path, downsample=None):
+    """Read Micromed (*.trc) file version 4.
+
+    Poor man's version of micromedio.py from Neo package
+    (https://pythonhosted.org/neo/)
+
+    Args:
+        path: str
+            Filename(with full path) to .trc file
+
+    Kargs:
+        downsample: float, optional
+            The downsampling frequency.
+
+    Return:
+        sf: float
+            The sampling frequency.
+
+        downsample: float
+            The downsampling frequency
+
+        data: np.ndarray
+            The data organised as well(n_channels, n_points)
+
+        chan: list
+            The list of channel's names.
+    """
+    import datetime
+    import struct
+
+    def read_f(f, fmt):
+        return struct.unpack(fmt, f.read(struct.calcsize(fmt)))
+
+    with open(path, 'rb') as f:
+        # Read header
+        f.seek(175,0)
+        header_version, = read_f(f, 'b')
+        assert header_version == 4
+
+        f.seek(138,0)
+        data_start_offset , n_chan , _, sf, nbytes = read_f(f, 'IHHHH')
+
+        f.seek(128,0)
+        day, month, year, hour, minute, sec = read_f(f, 'bbbbbb')
+        rec_datetime = datetime.datetime(year+1900 , month , day, hour,
+                                                                minute, sec)
+
+        # Raw data
+        f.seek(data_start_offset, 0)
+        m_raw = np.fromstring(f.read() , dtype = 'u'+str(nbytes))
+        m_raw = m_raw.reshape(( int(m_raw.size/n_chan) , n_chan)).transpose()
+
+        # Read label / gain
+        gain = []
+        chan = []
+        logical_ground = []
+        data = np.empty(shape=m_raw.shape, dtype=np.float32)
+
+        f.seek(176,0)
+        zone_names = ['ORDER', 'LABCOD']
+        zones = { }
+        for zname in zone_names:
+            zname2, pos, length = read_f(f, '8sII')
+            zones[zname] = zname2, pos, length
+
+        zname2, pos, length = zones['ORDER']
+        f.seek(pos, 0)
+        code = np.fromfile(f, dtype='u2', count=n_chan)
+
+        for c in range(n_chan):
+            zname2, pos, length = zones['LABCOD']
+            f.seek(pos + code[c] * 128 + 2, 0)
+
+            chan = np.append(chan, f.read(6).decode('utf-8').strip())
+            ground = f.read(6).decode('utf-8').strip()
+            logical_min , logical_max, logic_ground_chan, physical_min, \
+                                        physical_max = read_f(f, 'iiiii')
+
+            logical_ground = np.append(logical_ground, logic_ground_chan)
+
+            gain = np.append(gain , float(physical_max - physical_min) / \
+                                        float(logical_max-logical_min+1))
+
+    # Multiply by gain
+    m_raw = m_raw - logical_ground[:, np.newaxis]
+    data = m_raw * gain[:, np.newaxis].astype(np.float32)
 
     # Get original signal length :
     N = data.shape[1]
