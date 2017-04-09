@@ -33,7 +33,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
     Kargs:
         file: string, optional, (def: None)
-            Path to the data file (.eeg or .edf).
+            Path to the data file (.eeg, .trc or .edf).
 
         hypno_file: string, optional, (def: None)
             Path to the hypnogram file (.hyp, .txt or .csv)
@@ -82,7 +82,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 # Dialog window for the main dataset :
                 file = QtGui.QFileDialog.getOpenFileName(
                         self, "Open dataset", "", "Elan (*.eeg);;"
-                        "Brainvision (*.eeg);;Edf (*.edf);;All files (*.*)")
+                        "Brainvision (*.eeg);;Edf (*.edf);;Micromed (*.trc)")
                 file = str(file)  # py2
                 # Get the user path :
                 upath = os.path.split(file)[0]

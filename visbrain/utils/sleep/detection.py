@@ -233,7 +233,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
 ###########################################################################
 
 def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
-                   max_freq=14., min_dur_ms=500, max_dur_ms=1500,
+                   max_freq=14., min_dur_ms=500, max_dur_ms=2000,
                    method='wavelet', min_distance_ms=1000):
     """Perform a sleep spindles detection.
 
@@ -310,7 +310,6 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
     elif method == 'wavelet':
         analytic = morlet(data, sf, np.mean([min_freq, max_freq]))
 
-    # Get amplitude and phase :
     amplitude = np.abs(analytic)
 
     if hypLoaded:
@@ -323,7 +322,6 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
         idx_sup_thr = np.where(amplitude > thresh)[0]
 
     if idx_sup_thr.size > 0:
-
         # Get where spindles start / end and duration :
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
                                                                sf)

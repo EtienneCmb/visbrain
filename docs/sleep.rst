@@ -40,8 +40,9 @@ Data files
 
 Here’s the list of currently supported extensions for data files:
 
-* BrainVision (**.eeg**)
+* BrainVision (**.eeg**) version 1 and 2
 * `ELAN <http://elan.lyon.inserm.fr>`_ (**.eeg**)
+* Micromed (**.trc**) version 4
 * European Data Format (**.edf**)
 
 .. note::
@@ -229,8 +230,8 @@ Spectrogram // hypnogram // time axis
   * colormap
 
 * Show / hide spectrogram, hypnogram, time axis
-* Display / hide visual indicators refering to the current time window 
-* Zoom : when zooming, the axis will fit to the time window according to the (window, step) parameters defined in the ruler 
+* Display / hide visual indicators refering to the current time window
+* Zoom : when zooming, the axis will fit to the time window according to the (window, step) parameters defined in the ruler
 
 Topoplot
 ^^^^^^^^
@@ -243,7 +244,7 @@ Topoplot
   * The amplitude
   * The power
 
-Filtered, amplitude and power are computed in a specific frequency band. The topoplot display the mean across the current time window according to the (window, step) parameters defined in the ruler. 
+Filtered, amplitude and power are computed in a specific frequency band. The topoplot display the mean across the current time window according to the (window, step) parameters defined in the ruler.
 
 .. figure::  picture/Sleep_topo.png
    :align:   center
