@@ -94,10 +94,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 hypno_file = str(hypno_file)  # py2
 
             # Load dataset :
-            sf, downsample, data, channels, N = load_sleepdataset(
+            sf, downsample, data, channels, N, start_time = load_sleepdataset(
                                                               file, downsample)
             npts = data.shape[1]
-
             # Build the time vector :
             time = np.arange(N) / sf
             self._N = N
