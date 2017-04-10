@@ -68,7 +68,6 @@ class uiSources(object):
 
         # ====================== PROJECTION ======================
         self._uitRadius.setValue(self._tradius)
-        self._uitProjectOn.model().item(1).setEnabled(False)
         self._uitApply.clicked.connect(self._fcn_sourcesProjection)
 
     # =====================================================================
@@ -108,6 +107,11 @@ class uiSources(object):
     # =====================================================================
     # PROJECTION
     # =====================================================================
+    def _fcn_updateProjList(self):
+        """Update the avaible projction list objects."""
+        self._uitProjectOn.clear()
+        self._uitProjectOn.addItems(list(self._tobj.keys()))
+
     def _fcn_sourcesProjection(self):
         """Apply source projection."""
         # Get projection radius :

@@ -53,5 +53,6 @@ kwargs['s_textshift'] = (1.5, 1.5, 0)   # To avoid a superposition between the t
 
 # Pass all arguments in the dictionnary :
 vb = Brain(**kwargs)
-vb.sources_fit('brain')
+
+# vb.sources_fit('brain')
 vb.show()
