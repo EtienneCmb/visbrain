@@ -148,7 +148,7 @@ class Brain(uiInit, uiElements, base, userfcn):
         cmap: string, (def: 'inferno')
             Matplotlib colormap name.
 
-        cmap_lim: tuple/list, (def: None)
+        cmap_clim: tuple/list, (def: None)
             Define the limit of the colorbar. This parameter must be a list or
             tuple containing two float (like (3, 5)...). If cmap_lim stay to
             None, the minimum and maximum of projected values are going to be
