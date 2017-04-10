@@ -102,6 +102,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             time = np.arange(N) / sf
             self._N = N
             self._sfori = sf
+            self._toffset = start_time.hour * 3600 + \
+                start_time.minute * 60 + start_time.second
 
             # Load hypnogram :
             if hypno_file:
@@ -120,6 +122,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             downsample = check_downsampling(sf, downsample)
             self._N = data.shape[1]
             self._sfori = sf
+            self._toffset = 0
             time = np.arange(self._N) / sf
 
         # ====================== VARIABLES ======================
