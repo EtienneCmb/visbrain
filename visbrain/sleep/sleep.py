@@ -1,7 +1,7 @@
 """Top level Sleep class."""
 import numpy as np
 import sip
-sip.setdestroyonexit(False)
+import datetime
 
 from PyQt4 import QtGui
 import sys
@@ -17,7 +17,8 @@ from .tools import Tools
 from ..utils import (FixedCam, load_sleepdataset, load_hypno, color2vb,
                      ShortcutPopup, check_downsampling)
 # from ...utils import id
-# from .user import userfcn
+
+sip.setdestroyonexit(False)
 
 
 class Sleep(uiInit, visuals, uiElements, Tools):
