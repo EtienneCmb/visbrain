@@ -301,7 +301,7 @@ def elan2array(path, downsample=None):
             Filename(with full path) to Elan .eeg file
 
     Kargs
-        downsample: float, optional
+        downsample: float, optional, (def: None)
             The downsampling frequency.
 
     Return:
@@ -418,7 +418,7 @@ def edf2array(path, downsample=None):
             Filename(with full path) to EDF file
 
     Kargs:
-        downsample: float, optional
+        downsample: float, optional, (def: None)
             The downsampling frequency.
 
     Return:
@@ -488,7 +488,7 @@ def brainvision2array(path, downsample=None):
             Filename(with full path) to .eeg file
 
     Kargs:
-        downsample: float, optional
+        downsample: float, optional, (def: None)
             The downsampling frequency.
 
     Return:
@@ -512,7 +512,7 @@ def brainvision2array(path, downsample=None):
         >> >  # Define path where the file is located
         >> > pathfile = 'mypath/'
         >> > path = os.path.join(pathfile, 'myfile.eeg')
-        >> > sf, downsample, data, chan, N, start_time = brainvision2array(path)
+        >> > sf, ds, data, chan, N, start_time = brainvision2array(path)
     """
     import re
 
@@ -549,7 +549,7 @@ def brainvision2array(path, downsample=None):
     # Read marker file (if present) to extract recording time
     if os.path.isfile(marker):
         vmrk = np.genfromtxt(marker, delimiter='\n', usecols=[0],
-                        dtype=None, skip_header=0)
+                             dtype=None, skip_header=0)
 
         vmrk = np.char.decode(vmrk)
         line_time = np.array(np.where(np.char.find(vmrk, 'Mk1=') == 0)).min()
@@ -611,7 +611,7 @@ def micromed2array(path, downsample=None):
             Filename(with full path) to .trc file
 
     Kargs:
-        downsample: float, optional
+        downsample: float, optional, (def: None)
             The downsampling frequency.
 
     Return:
@@ -640,22 +640,22 @@ def micromed2array(path, downsample=None):
 
     with open(path, 'rb') as f:
         # Read header
-        f.seek(175,0)
+        f.seek(175, 0)
         header_version, = read_f(f, 'b')
         assert header_version == 4
 
-        f.seek(138,0)
-        data_start_offset , n_chan , _, sf, nbytes = read_f(f, 'IHHHH')
+        f.seek(138, 0)
+        data_start_offset, n_chan, _, sf, nbytes = read_f(f, 'IHHHH')
 
-        f.seek(128,0)
+        f.seek(128, 0)
         day, month, year, hour, minute, sec = read_f(f, 'bbbbbb')
         start_date = datetime.date(year + 1900, month, day)
         start_time = datetime.time(hour, minute, sec)
 
         # Raw data
         f.seek(data_start_offset, 0)
-        m_raw = np.fromstring(f.read() , dtype = 'u'+str(nbytes))
-        m_raw = m_raw.reshape(( int(m_raw.size/n_chan) , n_chan)).transpose()
+        m_raw = np.fromstring(f.read(), dtype='u'+str(nbytes))
+        m_raw = m_raw.reshape((int(m_raw.size/n_chan), n_chan)).transpose()
 
         # Read label / gain
         gain = []
@@ -663,9 +663,9 @@ def micromed2array(path, downsample=None):
         logical_ground = []
         data = np.empty(shape=m_raw.shape, dtype=np.float32)
 
-        f.seek(176,0)
+        f.seek(176, 0)
         zone_names = ['ORDER', 'LABCOD']
-        zones = { }
+        zones = {}
         for zname in zone_names:
             zname2, pos, length = read_f(f, '8sII')
             zones[zname] = zname2, pos, length
@@ -680,12 +680,12 @@ def micromed2array(path, downsample=None):
 
             chan = np.append(chan, f.read(6).decode('utf-8').strip())
             ground = f.read(6).decode('utf-8').strip()
-            logical_min , logical_max, logic_ground_chan, physical_min, \
-                                        physical_max = read_f(f, 'iiiii')
+            logical_min, logical_max, logic_ground_chan, physical_min, \
+                                physical_max = read_f(f, 'iiiii')
 
             logical_ground = np.append(logical_ground, logic_ground_chan)
 
-            gain = np.append(gain , float(physical_max - physical_min) / \
+            gain = np.append(gain, float(physical_max - physical_min) / \
                                         float(logical_max-logical_min+1))
 
     # Multiply by gain
