@@ -211,6 +211,8 @@ class uiSettings(object):
         # Set text :
         self._SlText.setText(txt)
         self._SlText.setFont(self._font)
+        self._SlText.setStyleSheet("QLabel {color: " +
+                                   self._hypcolor[hypref] + ";}")
 
         # ================= HYPNO LABELS =================
         ref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
