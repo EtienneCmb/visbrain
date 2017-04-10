@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1242</width>
-    <height>1017</height>
+    <height>1020</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -116,15 +116,15 @@ spectrogram, hypnogram and the time axis</string>
            <item>
             <widget class="QToolBox" name="toolBox_2">
              <property name="currentIndex">
-              <number>2</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page_3">
               <property name="geometry">
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>295</width>
-                <height>283</height>
+                <width>360</width>
+                <height>764</height>
                </rect>
               </property>
               <attribute name="label">
@@ -181,8 +181,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>98</width>
-                       <height>28</height>
+                       <width>332</width>
+                       <height>518</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -403,8 +403,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>314</width>
-                <height>413</height>
+                <width>367</width>
+                <height>753</height>
                </rect>
               </property>
               <attribute name="label">
@@ -931,8 +931,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>322</width>
-                <height>793</height>
+                <width>360</width>
+                <height>764</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1323,7 +1323,7 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>287</width>
+                <width>316</width>
                 <height>54</height>
                </rect>
               </property>
@@ -1661,8 +1661,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>292</width>
-                <height>341</height>
+                <width>360</width>
+                <height>795</height>
                </rect>
               </property>
               <attribute name="label">
@@ -3793,10 +3793,23 @@ waves</string>
              <property name="topMargin">
               <number>0</number>
              </property>
-             <item row="2" column="10">
-              <widget class="QLabel" name="label_6">
+             <item row="2" column="2">
+              <widget class="QLabel" name="label_12">
                <property name="text">
                 <string>sec</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="18">
+              <widget class="QSlider" name="_SlVal">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::NoTicks</enum>
+               </property>
+               <property name="tickInterval">
+                <number>10</number>
                </property>
               </widget>
              </item>
@@ -3815,6 +3828,13 @@ waves</string>
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="2" column="10">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>sec</string>
+               </property>
+              </widget>
              </item>
              <item row="2" column="5">
               <widget class="QDoubleSpinBox" name="_SigWin">
@@ -3846,6 +3866,19 @@ waves</string>
                </property>
               </widget>
              </item>
+             <item row="2" column="11">
+              <spacer name="horizontalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
              <item row="2" column="13">
               <widget class="QComboBox" name="_slRules">
                <property name="currentIndex">
@@ -3866,26 +3899,6 @@ waves</string>
                  <string>hours</string>
                 </property>
                </item>
-              </widget>
-             </item>
-             <item row="2" column="11">
-              <spacer name="horizontalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>sec</string>
-               </property>
               </widget>
              </item>
              <item row="2" column="0">
@@ -3965,27 +3978,14 @@ waves</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="16">
+             <item row="2" column="17">
               <widget class="QCheckBox" name="_slMagnify">
                <property name="text">
                 <string>Magnify</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="0" colspan="17">
-              <widget class="QSlider" name="_SlVal">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>10</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0" colspan="17">
+             <item row="0" column="0" colspan="18">
               <widget class="QLabel" name="_SlText">
                <property name="text">
                 <string>TextLabel</string>
@@ -3995,6 +3995,13 @@ waves</string>
                </property>
                <property name="margin">
                 <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="16">
+              <widget class="QCheckBox" name="_slAbsTime">
+               <property name="text">
+                <string>Absolute time</string>
                </property>
               </widget>
              </item>
@@ -4028,7 +4035,7 @@ waves</string>
      <x>0</x>
      <y>0</y>
      <width>1242</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">
