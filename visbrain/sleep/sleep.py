@@ -82,21 +82,21 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             if (file is None) or not isinstance(file, str):
                 # Dialog window for the main dataset :
                 file = QtGui.QFileDialog.getOpenFileName(
-                        self, "Open dataset", "", "Elan (*.eeg);;"
-                        "Brainvision (*.eeg);;Edf (*.edf);;Micromed (*.trc)")
+                    self, "Open dataset", "", "Elan (*.eeg);;"
+                    "Brainvision (*.eeg);;Edf (*.edf);;Micromed (*.trc)")
                 file = str(file)  # py2
                 # Get the user path :
                 upath = os.path.split(file)[0]
                 # Dialog window for hypnogram :
                 hypno_file = QtGui.QFileDialog.getOpenFileName(
-                        self, "Open hypnogram", upath, "Elan (*.hyp);;"
-                        "Text file (*.txt);;""CSV file (*.csv);;All files "
-                        "(*.*)")
+                    self, "Open hypnogram", upath, "Elan (*.hyp);;"
+                    "Text file (*.txt);;""CSV file (*.csv);;All files "
+                    "(*.*)")
                 hypno_file = str(hypno_file)  # py2
 
             # Load dataset :
             sf, downsample, data, channels, N, start_time = load_sleepdataset(
-                                                              file, downsample)
+                file, downsample)
             npts = data.shape[1]
             # Build the time vector :
             time = np.arange(N) / sf
@@ -128,7 +128,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._sf, self._data, self._hypno, self._time = self._check_data(
             sf, data, channels, hypno, downsample, time)
         self._channels = [k.strip().replace(' ', '').split('.')[
-                                                        0] for k in channels]
+            0] for k in channels]
         self._ax = axis
         # ---------- Default line width ----------
         self._linemeth = line
