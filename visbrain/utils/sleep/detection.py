@@ -234,7 +234,7 @@ def kcdetect(elec, sf, threshold, hypno, nrem_only, tMin, tMax,
 
 def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
                    max_freq=14., min_dur_ms=500, max_dur_ms=2000,
-                   method='wavelet', min_distance_ms=1000):
+                   method='wavelet', min_distance_ms=500, sigma_thr=0.25):
     """Perform a sleep spindles detection.
 
     Args:
@@ -266,9 +266,12 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
             Method to extract complex decomposition. Use either 'hilbert' or
             'wavelet'.
 
-        min_distance_ms: int, optional (def 1000)
+        min_distance_ms: int, optional (def 500)
             Minimum distance (in ms) between two spindles to consider them as
             two distinct spindles
+
+        sigma_thr: float, optional (def 0.25)
+            Sigma band-wise normalized power threshold (between 0 and 1)
 
     Return:
         idx_spindles: np.ndarray
@@ -298,14 +301,10 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 
     # Pre-detection
     # Compute relative sigma power
-    sigma_thr = 0.2
-    if sigma_thr > 0:
-        freqs = np.array([0.5, 4., 8., 12., 14.])
-        _, _, _, sigma_npow = morlet_power(data, freqs, sf, norm=True)
-        sigma_nfpow = movingaverage(sigma_npow, sf, sf)
-        idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
-    else:
-        idx_sigma = np.arange(0, data.size)
+    freqs = np.array([0.5, 4., 8., min_freq, max_freq])
+    _, _, _, sigma_npow = morlet_power(data, freqs, sf, norm=True)
+    sigma_nfpow = movingaverage(sigma_npow, sf, sf)
+    idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
 
     # Get complex decomposition of filtered data :
     if method == 'hilbert':
@@ -326,15 +325,16 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
     if hypLoaded:
         amplitude[idx_zero] = np.nan
 
+    # Define threshold
     thresh = np.nanmean(amplitude) + threshold * np.nanstd(amplitude)
 
-    # Amplitude criteria
     with np.errstate(divide='ignore', invalid='ignore'):
         idx_sup_thr = np.where(amplitude > thresh)[0]
 
     if idx_sup_thr.size > 0:
 
         idx_sup_thr = np.intersect1d(idx_sup_thr, idx_sigma, True)
+        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
 
         # Get where spindles start / end and duration :
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
@@ -347,9 +347,6 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
 
         idx_sup_thr = idx_sup_thr[good_idx]
-
-        # Fill gap between spindles separated by less than min_distance_ms
-        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
 
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
