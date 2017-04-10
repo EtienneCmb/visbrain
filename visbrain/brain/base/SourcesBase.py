@@ -498,6 +498,37 @@ class SourcesBase(_colormap):
         self.text_update()
         progress.hide()
 
+    def _fit(self, v, progress):
+        """Move sources to the closest vertex.
+
+        This method directly hide sources.
+
+        Args:
+            v: np.ndarray, float32
+                The index faced vertices of shape (nv, 3, 3)
+
+            progress: pyqt progress bar
+                The progress bar.
+        """
+        # Compute on non-masked sources :
+        xyz = self.xyz
+        N = xyz.shape[0]
+        v = v.reshape(v.shape[0] * 3, 3)
+
+        # Loop over sources :
+        progress.show()
+        for k in range(N):
+            # Get the euclidian distance :
+            eucl = cdist(v, xyz[[k], :])
+            # Get the closest vertex :
+            eucl_argmin = eucl.argmin()
+            # Set new coordinate :
+            self.xyz[k, :] = v[eucl_argmin, :]
+        # Finally update data sources and text :
+        self.update()
+        self.text_update()
+        progress.hide()
+
     ##########################################################################
     # TEXT
     ##########################################################################

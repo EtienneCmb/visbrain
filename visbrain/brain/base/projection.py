@@ -14,18 +14,28 @@ class Projections(object):
     """
 
     def __init__(self, t_radius=10.0, t_projecton='brain', t_contribute=False,
-                 t_projectas='activity', **kwargs):
+                 t_projectas='activity', t_fitto='brain', **kwargs):
         """Init."""
         self._tradius = t_radius
         self._tprojecton = t_projecton
         self._tprojectas = t_projectas
         self._tcontribute = t_contribute
+        self._tfitto = 'brain'
         self._idxmasked = None
         self._modproj = None
 
     # ======================================================================
     # PROJECTIONS
     # ======================================================================
+    def _findVertices(self, obj):
+        """Find the vertices from the object."""
+        # Project on brain surface :
+        if obj == 'brain':
+            return self.atlas.vert
+        # Project on deep areas :
+        elif obj == 'roi':
+            return self.area.mesh.get_vertices
+
     def _sourcesProjection(self):
         """Apply corticale projection."""
         # =============== CHECKING ===============
@@ -49,12 +59,7 @@ class Projections(object):
                              "contributing sources per vertex.")
 
         # =============== VERTICES ===============
-        # Project on brain surface :
-        if self._tprojecton == 'brain':
-            v = self.atlas.vert
-        # Project on deep areas :
-        elif self._tprojecton == 'roi':
-            v = self.area.mesh.get_vertices
+        v = self._findVertices(self._tprojecton)
         self._vsh = v.shape
 
         # ============= MODULATIONS =============

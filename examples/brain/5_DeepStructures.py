@@ -22,9 +22,10 @@ vb.rotate(fixed='axial_0')
 # don't know what is the index of your ROI, open the GUI and look at the
 # number in front of the name. Otherwise, use print(vb.get_ROI_list()) to print
 # the list of suported ROI.
-vb.roi_plot(selection=[77, 78], subdivision='aal', smooth=5)
+vb.roi_plot(selection=[77, 78], subdivision='aal', smooth=3)
 # Project the source's activity onto ROI directly :
-vb.cortical_projection(project_on='roi')
+vb.sources_fit('roi')
+# vb.cortical_projection(project_on='roi')
 # Eventualy, take a screenshot :
 # vb.screenshot('thalamus.png', region=(1000, 300, 570, 550), colorbar=False)
 # Show the interface :

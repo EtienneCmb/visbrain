@@ -544,7 +544,7 @@ class userfcn(object):
         self._tprojectas = 'repartition'
         # Colormap control :
         self.sources_colormap(**kwargs)
-        # Run the corticale reparition :
+        # Run the corticale repartition :
         self._sourcesProjection()
 
     def sources_colormap(self, cmap=None, clim=None, vmin=None,
@@ -606,21 +606,30 @@ class userfcn(object):
             if k is not None:
                 self.sources._cb[i] = k
 
-    def sources_to_mesh(self, xyz, smooth=None):
-        """Convert a set of sources into a mesh.
+    def sources_fit(self, obj='brain'):
+        """Force sources coordinates to fit to a selected object.
+
+        Kargs:
+            obj: string, optional, (def: 'brain')
+                The object name to fit. Use 'brain' or 'roi'.
+        """
+        # Get vertices of the selected object :
+        v = self._findVertices(obj)
+        # fit sources to the selected vertices :
+        self.sources._fit(v, self.progressbar)
+
+    def sources_to_convexHull(self, xyz):
+        """Convert a set of sources into a convex hull.
 
         Args:
             xyz: np.ndarray
                 Array of sources coordinates of shape (N, 3)
 
-        Kargs:
-            smooth: float, optional, (def: None)
-                Smoothing amount.
+        Returns:
+            faces: np.ndarray
+                A set of faces than can be then passed to the add_mesh method.
         """
-        # Triangulation :
-        tri = ConvexHull(xyz, incremental=True)
-
-        return tri.simplices
+        return ConvexHull(xyz).simplices
 
     def add_sources(self, name, **kwargs):
         """Add a supplementar source's object.
@@ -648,7 +657,34 @@ class userfcn(object):
     def connect_display(self, colorby=None, dynamic=None, show=True, cmap=None,
                         clim=None, vmin=None, under=None, vmax=None,
                         over=None):
-        """"""
+        """Update connectivity object.
+
+        Kargs:
+            colorby: string, optional, (def: 'strength')
+                Define how to color connexions. Use 'strength' if the color has
+                to be modulate by the connectivity strength. Use 'count' if the
+                color depends on the number of connexions per node. Use
+                'density'to define colors according to the number of line in a
+                sphere of radius c_dradius.
+
+            dynamic: tuple, optional, (def: None)
+                Control the dynamic opacity. For example, if c_dynamic=(0, 1),
+                strong connections will be more opaque than weak connections.
+
+            cmap: string, (def: 'inferno')
+                Matplotlib colormap name.
+
+            clim: tuple/list, (def: None)
+                Define the limit of the colorbar. This parameter must be a list
+                or tuple containing two float (like (3, 5)...).
+
+            vmin/vmax: int/float, (def: None/None)
+                Define a threshold to change colors that are under vmin or
+                over vmax. See under/over to change those colors.
+
+            under/over: string/tuple, (def: None/None)
+                The color to use for values under vmin and values over vmax.
+        """
         if colorby is not None:
             self.connect.colorby = colorby
         if dynamic is not None:
