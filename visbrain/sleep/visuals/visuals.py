@@ -114,6 +114,18 @@ class Detection(object):
             # Save segments :
             self.seg[chan] = {'connect': connect, 'seg': seg, 'color': col}
 
+    def nonzero(self):
+        """Return the list of channels with non-empty detections."""
+        chans = {}
+        for k in self.chans:
+            types = []
+            for i in self.items:
+                if self[(k, i)]['index'].size:
+                    types.append(i)
+            if types:
+                chans[k] = types
+        return chans
+
 
 class ChannelPlot(PrepareData):
     """Plot each channel."""

@@ -5,6 +5,7 @@ from warnings import warn
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        listToCsv, listToTxt)
+from ....utils.sleep.event import _events_duration
 
 from PyQt4 import QtGui
 
@@ -45,11 +46,16 @@ class uiDetection(object):
         self._ToolSpinTh.setValue(2.)
         self._ToolSpinFmax.setValue(14.)
 
+        # -------------------------------------------------
+        # KC detection :
         self._ToolKCProbTh.setValue(0.8)
+
         # -------------------------------------------------
         # Location table :
         self._DetectLocations.itemSelectionChanged.connect(
             self._fcn_gotoLocation)
+        self._DetectChans.currentIndexChanged.connect(self._fcn_switchLocation)
+        self._DetectTypes.currentIndexChanged.connect(self._fcn_switchLocation)
 
         # Export file :
         self._DetectLocExport.clicked.connect(self._fcn_exportLocation)
@@ -64,7 +70,7 @@ class uiDetection(object):
         self._ToolDetectChan.setEnabled(viz)
         self.q_DetectLoc.setEnabled(viz)
         self._DetectionTab.setTabEnabled(1, viz)
-        self._hyp.report.visible = viz
+        # self._hyp.report.visible = viz
 
     # =====================================================================
     # ENABLE / DISABLE DETECTION
@@ -196,17 +202,15 @@ class uiDetection(object):
                 max_amp = self._ToolKCMaxAmp.value()
                 nrem_only = self._ToolKCNremOnly.isChecked()
                 # Get Slow Waves indices :
-                index, number, density, duration = kcdetect(self._data[k, :],
-                                                            self._sf, proba_thr,
-                                                            amp_thr,
-                                                            self._hypno,
-                                                            nrem_only, tmin,
-                                                            tmax, min_amp,
-                                                            max_amp)
+                index, nb, dty, dur = kcdetect(self._data[k, :], self._sf,
+                                               proba_thr, amp_thr, self._hypno,
+                                               nrem_only, tmin, tmax, min_amp,
+                                               max_amp)
+                # Update index for this channel and detection :
+                self._detect.dict[(self._channels[k], 'kc')]['index'] = index
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defkc,
-                                              'diamond', toReport, nb,
-                                              dty)
+                                              'diamond', toReport, nb, dty)
 
             # ====================== PEAKS ======================
             elif method == 'Peaks':
@@ -245,9 +249,12 @@ class uiDetection(object):
             # Update progress bar :
             self._ToolDetectProgress.setValue(100. * (i + 1) / len(self))
 
-        # Fill the location table (only if selected):
-        if self._ToolRdSelected.isChecked() and ind.size:
-            self._fcn_fillLocations(self._channels[k], method, ind, dur)
+        #######################################################
+        chans = self._detect.nonzero()
+        print('CHANS : ', list(chans.keys()))
+        self._DetectChans.clear()
+        self._DetectChans.addItems(list(chans.keys()))
+        # self._fcn_switchLocation()
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
@@ -284,6 +291,25 @@ class uiDetection(object):
     # =====================================================================
     # FILL LOCATION TABLE
     # =====================================================================
+    def _fcn_switchLocation(self):
+        """Switch location channel and type."""
+        # Get selected channel :
+        chan = str(self._DetectChans.currentText())
+        nnz = self._detect.nonzero()
+        # Update list of types :
+        self._DetectTypes.clear()
+        self._DetectTypes.addItems(nnz[list(nnz.keys())[0]])
+        # Get selected detection type :
+        types = str(self._DetectTypes.currentText())
+        if chan and types:
+            # Find index and durations :
+            index = self._detect[(chan, types)]['index']
+            # Get durations :
+            _, dur, index, _ = _events_duration(index, self._sf)
+            # Fill location table :
+            self._fcn_fillLocations(chan, types, index, dur)
+
+
     def _fcn_fillLocations(self, channel, kind, index, duration):
         """Fill the location table."""
         ref = ['Wake', 'N1', 'N2', 'N3', 'REM', 'ART']
