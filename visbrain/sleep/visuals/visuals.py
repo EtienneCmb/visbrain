@@ -315,7 +315,7 @@ class Spectrogram(PrepareData):
 
         # =================== COMPUTE ===================
         # Compute the spectrogram :
-        freq, t, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
+        freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
                                            noverlap=overlap, window='hamming')
         mesh = 20 * np.log10(mesh)
 
@@ -329,32 +329,23 @@ class Spectrogram(PrepareData):
         freq = freq[sls]
         self._fstart, self._fend = freq[0], freq[-1]
 
-        # =================== TIME SELECTION ===================
-        t = []
-        q = 0
-        for k in range(mesh.shape[1]):
-            t.append(time[q:q+nperseg].mean())
-            q += nperseg-overlap
-        t = np.array(t)
-
         # =================== COLOR ===================
         # Get clim :
         clim = (contraste * mesh.min(), contraste * mesh.max())
         # Turn mesh into color array for selected frequencies:
-        self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap,
-                                          clim=clim))
+        self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap, clim=clim))
 
         # =================== TRANSFORM ===================
+        tm, tM = time.min(), time.max()
         # Re-scale the mesh for fitting in time / frequency :
-        fact = (freq.max()-freq.min())/len(freq)
-        sc = (t.max()/mesh.shape[1], fact, 1)
-        tr = [t[0], freq.min(), 0]
+        fact = (freq.max() - freq.min()) / len(freq)
+        sc = (tM / mesh.shape[1], fact, 1)
+        tr = [0., freq.min(), 0.]
         self.mesh.transform = vist.STTransform(scale=sc, translate=tr)
         # Update object :
         self.mesh.update()
         # Get camera rectangle :
-        self.rect = (time.min(), freq.min(), time.max()-time.min(),
-                     freq.max()-freq.min())
+        self.rect = (tm, freq.min(), tM-tm, freq.max() - freq.min())
         self.freq = freq
 
     def clean(self):
