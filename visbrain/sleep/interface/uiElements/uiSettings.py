@@ -258,7 +258,6 @@ class uiSettings(object):
                 self._hyp.set_grid(self._time, step)
             else:
                 self._hyp.set_grid(self._time, win)
-            self._chan.set_grid(self._time, step)
         else:
             self._slOnStart = True
 

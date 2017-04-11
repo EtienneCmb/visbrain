@@ -92,7 +92,7 @@ class ChannelPlot(PrepareData):
             # ----------------------------------------------
             # Create a grid :
             grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
-                                           scale=(30.*time[-1]/len(time), .1),
+                                           scale=(1., .1),
                                            parent=parent[i].wc.scene)
             grid.set_gl_state('translucent')
             self.grid.append(grid)
@@ -179,15 +179,6 @@ class ChannelPlot(PrepareData):
             self._camera[i].rect = rect
             k.update()
             self.rect.append(rect)
-
-    def set_grid(self, time, length=30., y=1.):
-        """Set grid lentgh."""
-        # Get scaling factor :
-        sc = (length * time[-1] / len(time), y)
-        # Set to the grid :
-        for k in self.grid:
-            k._grid_color_fn['scale'].value = sc
-            k.update()
 
     def set_location(self, sf, data, channel, start, end, factor=100.):
         """Set vertical lines for detections."""
