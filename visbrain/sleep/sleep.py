@@ -157,6 +157,12 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._defkc = color2vb('#b45a3c')
         self._defrem = color2vb('#6684e1')
         self._defpeaks = '#b854d4'
+        # ---------- Symbol ----------
+        self._spinsym = 'x'
+        self._swsym = 'o'
+        self._kcsym = 'diamond'
+        self._remsym = 'triangle_down'
+        self._peaksym = 'disc'
         # Get some data info (min / max / std / mean)
         self._get_dataInfo()
 
