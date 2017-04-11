@@ -38,8 +38,7 @@ class Detection(object):
         self.chans = channels
         self.dict = {}
         self.seg = {}
-        col = {'spin': spincol[:, 0:-1], 'rem': remcol[:, 0:-1],
-               'kc': kccol[:, 0:-1], 'sw': swcol[:, 0:-1]}
+        col = {'spin': spincol, 'rem': remcol, 'kc': kccol, 'sw': swcol}
         self.time = time
         for k in self:
             self[k] = {'index': np.array([]), 'color': col[k[1]], 'use': True,
@@ -92,9 +91,7 @@ class Detection(object):
             seg = np.vstack((self.time[seg], data[seg],
                              np.full_like(seg, 2.))).T
             # Update line report :
-            print('COlOR : ', col.shape, 'DATA : ', seg.shape, connect.shape)
             line.set_data(pos=seg, color=col, connect=connect, width=4)
-            line.update()
             # Save segments :
             self.seg[chan] = {'connect': connect, 'seg': seg, 'color': col}
 
@@ -120,6 +117,7 @@ class ChannelPlot(PrepareData):
         # Get color :
         self.color = color2vb(color)
         self.color_detection = color2vb(color_detection)
+        print(self.color_detection.shape)
 
         # Create one line per channel :
         pos = np.zeros((1, 3), dtype=np.float32)
@@ -138,6 +136,7 @@ class ChannelPlot(PrepareData):
                                       method=method, parent=node)
             mesh.set_gl_state('translucent')
             self.mesh.append(mesh)
+
             # ----------------------------------------------
             # Create marker peaks :
             mark = Markers(pos=np.zeros((1, 3), dtype=np.float32),
@@ -145,12 +144,14 @@ class ChannelPlot(PrepareData):
             mark.set_gl_state('translucent')
             mark.visible = False
             self.peak.append(mark)
+
             # ----------------------------------------------
             # Report line :
-            rep = scene.visuals.Line(pos, name=k+'report', method=method,
-                                     color=self.color_detection, parent=node)
+            rep = scene.visuals.Line(name=k+'report', method=method,
+                                     parent=node)
             rep.set_gl_state('translucent')
             self.report.append(rep)
+
             # ----------------------------------------------
             # Locations :
             loc = scene.visuals.Line(pos, name=k+'location', method=method,
@@ -158,6 +159,7 @@ class ChannelPlot(PrepareData):
                                      connect='segments')
             loc.set_gl_state('translucent')
             self.loc.append(loc)
+
             # ----------------------------------------------
             # Create a grid :
             grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
@@ -219,7 +221,7 @@ class ChannelPlot(PrepareData):
             dat = np.vstack((timeSl, datchan, z)).T
 
             # Set main ligne :
-            k.set_data(dat, color=self.color, width=self.width)
+            k.set_data(dat, width=self.width)
 
             # ________ CAMERA ________
             # Use either auto / fixed adaptative camera :
