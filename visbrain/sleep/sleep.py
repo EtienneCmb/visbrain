@@ -3,7 +3,7 @@ import numpy as np
 import sip
 import datetime
 
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 import sys
 import os
 from warnings import warn
@@ -74,6 +74,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         # Shortcuts popup window :
         self._shpopup = ShortcutPopup()
+
+        # Set default GUI state :
+        self.setDefaultState()
 
         # ====================== LOAD FILE ======================
         # Load file and convert if needed :
@@ -284,13 +287,28 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         return sf, data, hypno, time
 
     ###########################################################################
-    # SUB-FoNCTIONS
+    # SUB-FONCTIONS
     ###########################################################################
     def _get_dataInfo(self):
         """Get some info about data (min, max, std, mean, dist)."""
         self._datainfo = {'min': self._data.min(1), 'max': self._data.max(1),
                           'std': self._data.std(1), 'mean': self._data.mean(1),
                           'dist': self._data.max(1) - self._data.min(1)}
+
+    def setDefaultState(self):
+        """Set the default window state."""
+        # ================= TAB =================
+        self.QuickSettings.setCurrentIndex(0)
+        self.toolBox.setCurrentIndex(1)
+        self.toolBox_2.setCurrentIndex(0)
+        self._DetectionTab.setCurrentIndex(0)
+
+        # ================= ICON =================
+        pathfile = sys.modules[__name__].__file__.split('sleep.py')[0]
+        app_icon = QtGui.QIcon()
+        app_icon.addFile(os.path.join(pathfile, 'ico/256x256.png'),
+                         QtCore.QSize(256, 256))
+        self.setWindowIcon(app_icon)
 
     def _camCreation(self):
         """Create a set of cameras."""

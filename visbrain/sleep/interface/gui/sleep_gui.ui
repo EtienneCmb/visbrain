@@ -13,6 +13,12 @@
     <height>1047</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <stylestrategy>PreferDefault</stylestrategy>
+    <kerning>true</kerning>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Sleep</string>
   </property>
@@ -69,7 +75,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -116,7 +122,7 @@ spectrogram, hypnogram and the time axis</string>
            <item>
             <widget class="QToolBox" name="toolBox_2">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page_3">
               <property name="geometry">
@@ -931,8 +937,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>300</width>
-                <height>265</height>
+                <width>360</width>
+                <height>791</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1661,8 +1667,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>337</width>
-                <height>396</height>
+                <width>360</width>
+                <height>822</height>
                </rect>
               </property>
               <attribute name="label">
