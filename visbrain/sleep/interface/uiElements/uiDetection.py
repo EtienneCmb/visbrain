@@ -248,19 +248,12 @@ class uiDetection(object):
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
 
-        # Force to be on location table :
-        # self._DetectionTab.setCurrentIndex(1)
-        # self._DetectLocations.selectRow(0)
-
     def _get_startingIndex(self, name, k, index, color, symbol, toReport,
                            number, density):
         """Get starting / ending index."""
         if index.size:
-            self._detect.build(self._data, k, self._chan.report[k])
-            
-            # Set them + color to ChannelPlot object :
-            # self._chan.colidx[k]['color'] = color
-            # self._chan.colidx[k]['idx'] = index
+            # Update detection object for this specific channel :
+            self._detect.build(self._data[k, :], k, self._chan.report[k])
 
             # Find only where index start / finish :
             ind = np.where(np.gradient(index) != 1.)[0]
