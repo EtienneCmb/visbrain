@@ -20,6 +20,7 @@ Bug
 
 Etienne
 	-5 Améliorer gestion et méthode topoplot
+	-5 Permettre à l'utilisateur d'enregistrer ses propres settings et de les charger
 	-5 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-5 Faire une unique fonction d'exportation de table : ça évitera tout les problèmes.
 	-4 Hypnogramme: on pourrait faire une checkbox "Edit mode" qui lorsqu'elle est cochée permet d'activer les fonctions de modifications de l'hypno. Lorsque l'utilisateur la coche, il doit selectionner un nom de fichier d'hypnogramme, puis à chaque modification ça enregistre automatiquement dans le fichier .hyp ou .txt
