@@ -89,12 +89,14 @@ class Detection(object):
             # Find connections :
             connect = np.gradient(seg) == 1.
             connect[0], connect[-1] = True, False
-            seg = np.vstack((self.time[seg], data[num, seg],
+            seg = np.vstack((self.time[seg], data[seg],
                              np.full_like(seg, 2.))).T
+            # Update line report :
+            print('COlOR : ', col.shape, 'DATA : ', seg.shape, connect.shape)
+            line.set_data(pos=seg, color=col, connect=connect, width=4)
+            line.update()
             # Save segments :
             self.seg[chan] = {'connect': connect, 'seg': seg, 'color': col}
-            # Update line report :
-            line.set_data(pos=seg, color=col, connect=connect, width=4)
 
 
 class ChannelPlot(PrepareData):
