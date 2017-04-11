@@ -31,18 +31,20 @@ Classes below are used to create visual objects, display on sevral canvas :
 class Detection(object):
     """Create a detection object."""
 
-    def __init__(self, channels, time, spincol='red', remcol='red',
-                 kccol='red', swcol='red'):
+    def __init__(self, channels, time, spincol=None, remcol=None,
+                 kccol=None, swcol=None, spinsym=None, remsym=None, kcsym=None,
+                 swsym=None):
         """Init."""
         self.items = ['spin', 'rem', 'kc', 'sw']
         self.chans = channels
         self.dict = {}
         self.seg = {}
         col = {'spin': spincol, 'rem': remcol, 'kc': kccol, 'sw': swcol}
+        sym = {'spin': spinsym, 'rem': remsym, 'kc': kcsym, 'sw': swsym}
         self.time = time
         for k in self:
-            self[k] = {'index': np.array([]), 'color': col[k[1]], 'use': True,
-                       'connect': np.array([])}
+            self[k] = {'index': np.array([]), 'color': col[k[1]],
+                       'connect': np.array([]), 'sym': sym[k[1]]}
 
     def __iter__(self):
         it = itertools.product(self.chans, self.items)
@@ -54,12 +56,11 @@ class Detection(object):
 
     def __setitem__(self, key, value):
         self.dict[key] = value
-        self.dict[key]['use'] = True
 
     def __getitem__(self, key):
         return self.dict[key]
 
-    def build(self, data, num, line):
+    def build(self, data, num, line, report):
         """Build detections reports.
 
         Args:
@@ -72,18 +73,36 @@ class Detection(object):
             line: vispy.Line
                 Line object of the specific channel.
 
-            hyp: vispy.Line
+            report: dict
                 Line object of the hypnogram report.
         """
+        # Get the channel name :
         chan = self.chans[num]
+        # Clean hypnogram reports :
+        pos = np.full((1, 3), -10.)
+        for k in report.values():
+            k.set_data(pos=pos)
+
+        # Build line segments :
         seg, col = np.array([]), np.array([])
         for i in self.items:
-            if self[(chan, i)]['index'].size and self[(chan, i)]['use']:
+            if self[(chan, i)]['index'].size:
+                # ----------- Segment, color and symbol -----------
                 v = self[(chan, i)]['index']
-                color = np.tile(self[(chan, i)]['color'], (len(v), 1))
-                # Add to segment and color :
+                co = self[(chan, i)]['color']
+                color = np.tile(co, (len(v), 1))
+                sym = self[(chan, i)]['sym']
+
+                # ----------- Build -----------
                 seg = np.hstack((seg, v)) if seg.size else v
                 col = np.vstack((col, color)) if col.size else color
+
+                # ----------- Hypnogram -----------
+                start = v[np.hstack((np.gradient(v[0:-1]) != 1, [True]))][::2]
+                z = np.full_like(start, 1.5, dtype=float)
+                pos = np.vstack((self.time[start], z)).T
+                report[i].set_data(pos=pos, symbol=sym, face_color=co,
+                                   edge_width=0.)
         if seg.size:
             # Find connections :
             connect = np.gradient(seg) == 1.
@@ -434,7 +453,9 @@ class Hypnogram(object):
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
         # Create a reported marker (for detection):
-        self.report = Markers(parent=parent)
+        self.report = {}
+        for k in ['spin', 'rem', 'sw', 'kc', 'peaks']:
+            self.report[k] = Markers(parent=parent, name=k)
         # self.mesh.set_gl_state('translucent', depth_test=True)
         self.mesh.set_gl_state('translucent', depth_test=False,
                                cull_face=True, blend=True, blend_func=(
