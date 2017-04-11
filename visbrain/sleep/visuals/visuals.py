@@ -61,7 +61,21 @@ class Detection(object):
         return self.dict[key]
 
     def build(self, data, num, line):
-        """"""
+        """Build detections reports.
+
+        Args:
+            data: np.ndarray
+                Data vector for a spcific channel.
+
+            num: int
+                Index of the channel to build.
+
+            line: vispy.Line
+                Line object of the specific channel.
+
+            hyp: vispy.Line
+                Line object of the hypnogram report.
+        """
         chan = self.chans[num]
         seg, col = np.array([]), np.array([])
         for i in self.items:
