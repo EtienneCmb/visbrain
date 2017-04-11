@@ -136,7 +136,7 @@ class uiDetection(object):
                                         ) and self._ToolDetecReport.isChecked()
 
             # Switch between detection types :
-            # ------------------- REM -------------------
+            # ====================== REM ======================
             if method == 'REM':
                 # Get variables :
                 thr = self._ToolRemTh.value()
@@ -151,7 +151,7 @@ class uiDetection(object):
                                               'triangle_down', toReport,
                                               nb, dty)
 
-            # ------------------- SPINDLES -------------------
+            # ====================== SPINDLES ======================
             elif method == 'Spindles':
                 # Get variables :
                 thr = self._ToolSpinTh.value()
@@ -170,7 +170,7 @@ class uiDetection(object):
                 ind = self._get_startingIndex(method, k, index, self._defspin,
                                               'x', toReport, nb, dty)
 
-            # ------------------- SLOW WAVES -------------------
+            # ====================== SLOW WAVES ======================
             elif method == 'Slow waves':
                 # Get variables :
                 thr = self._ToolWaveTh.value()
@@ -184,7 +184,7 @@ class uiDetection(object):
                 ind = self._get_startingIndex(method, k, index, self._defsw,
                                               'o', toReport, nb, dty)
 
-            # ------------------- K-COMPLEXES -------------------
+            # ====================== K-COMPLEXES ======================
             elif method == 'K-complexes':
                 # Get variables :
                 thr = self._ToolKCTh.value()
@@ -204,7 +204,7 @@ class uiDetection(object):
                                               'diamond', toReport, nb,
                                               dty)
 
-            # ------------------- PEAKS -------------------
+            # ====================== PEAKS ======================
             elif method == 'Peaks':
                 # Get variables :
                 look = self._ToolPeakLook.value() * self._sf
