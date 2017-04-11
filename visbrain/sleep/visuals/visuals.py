@@ -627,6 +627,8 @@ class vbShortcuts(object):
         """Init."""
         self.sh = [('n', 'Go to the next window'),
                    ('b', 'Go to the previous window'),
+                   ('-', 'Decrease amplitude'),
+                   ('+', 'Increase amplitude'),
                    ('s', 'Display / hide spectrogram'),
                    ('t', 'Display / hide topoplot'),
                    ('h', 'Display / hide hypnogram'),
@@ -831,7 +833,9 @@ class visuals(vbShortcuts):
 
         # =================== DETECTIONS ===================
         self._detect = Detection(self._channels, self._time, self._defspin,
-                                 self._defrem, self._defkc, self._defsw)
+                                 self._defrem, self._defkc, self._defsw,
+                                 self._spinsym, self._swsym, self._kcsym,
+                                 self._remsym)
 
         # =================== TOPOPLOT ===================
         self._topo = TopoPlot(chans=self._channels, camera=cameras[3],
