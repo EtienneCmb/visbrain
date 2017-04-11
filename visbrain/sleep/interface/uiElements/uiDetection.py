@@ -45,6 +45,7 @@ class uiDetection(object):
         self._ToolSpinTh.setValue(2.)
         self._ToolSpinFmax.setValue(14.)
 
+        self._ToolKCProbTh.setValue(0.8)
         # -------------------------------------------------
         # Location table :
         self._DetectLocations.itemSelectionChanged.connect(
@@ -183,7 +184,8 @@ class uiDetection(object):
             # ------------------- K-COMPLEXES -------------------
             elif method == 'K-complexes':
                 # Get variables :
-                thr = self._ToolKCTh.value()
+                proba_thr = self._ToolKCProbTh.value()
+                amp_thr = self._ToolKCAmpTh.value()
                 tmin = self._ToolKCMinDur.value()
                 tmax = self._ToolKCMaxDur.value()
                 min_amp = self._ToolKCMinAmp.value()
@@ -191,7 +193,8 @@ class uiDetection(object):
                 nrem_only = self._ToolKCNremOnly.isChecked()
                 # Get Slow Waves indices :
                 index, number, density, duration = kcdetect(self._data[k, :],
-                                                            self._sf, thr,
+                                                            self._sf, proba_thr,
+                                                            amp_thr,
                                                             self._hypno,
                                                             nrem_only, tmin,
                                                             tmax, min_amp,

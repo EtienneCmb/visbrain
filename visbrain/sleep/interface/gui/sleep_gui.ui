@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -123,8 +123,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>764</height>
+                <width>322</width>
+                <height>796</height>
                </rect>
               </property>
               <attribute name="label">
@@ -181,8 +181,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>332</width>
-                       <height>518</height>
+                       <width>300</width>
+                       <height>571</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -403,8 +403,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>367</width>
-                <height>753</height>
+                <width>314</width>
+                <height>413</height>
                </rect>
               </property>
               <attribute name="label">
@@ -931,8 +931,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>764</height>
+                <width>260</width>
+                <height>231</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1323,7 +1323,7 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>316</width>
+                <width>287</width>
                 <height>54</height>
                </rect>
               </property>
@@ -1661,8 +1661,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>795</height>
+                <width>322</width>
+                <height>823</height>
                </rect>
               </property>
               <attribute name="label">
@@ -3259,7 +3259,7 @@ waves</string>
                        <property name="topMargin">
                         <number>0</number>
                        </property>
-                       <item row="3" column="2" colspan="4">
+                       <item row="4" column="2" colspan="4">
                         <widget class="QWidget" name="widget_8" native="true">
                          <property name="minimumSize">
                           <size>
@@ -3282,6 +3282,28 @@ waves</string>
                            </widget>
                           </item>
                           <item>
+                           <widget class="QDoubleSpinBox" name="_ToolKCMinAmp">
+                            <property name="toolTip">
+                             <string>Min amplitude of KC</string>
+                            </property>
+                            <property name="decimals">
+                             <number>1</number>
+                            </property>
+                            <property name="minimum">
+                             <double>1.000000000000000</double>
+                            </property>
+                            <property name="maximum">
+                             <double>2000.000000000000000</double>
+                            </property>
+                            <property name="singleStep">
+                             <double>10.000000000000000</double>
+                            </property>
+                            <property name="value">
+                             <double>100.000000000000000</double>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
                            <widget class="QDoubleSpinBox" name="_ToolKCMaxAmp">
                             <property name="toolTip">
                              <string>Max amplitude of KC</string>
@@ -3290,26 +3312,7 @@ waves</string>
                              <number>1</number>
                             </property>
                             <property name="minimum">
-                             <double>75.000000000000000</double>
-                            </property>
-                            <property name="maximum">
-                             <double>2000.000000000000000</double>
-                            </property>
-                            <property name="singleStep">
-                             <double>5.000000000000000</double>
-                            </property>
-                            <property name="value">
-                             <double>500.000000000000000</double>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QDoubleSpinBox" name="_ToolKCMinAmp">
-                            <property name="toolTip">
-                             <string>Min amplitude of KC</string>
-                            </property>
-                            <property name="decimals">
-                             <number>1</number>
+                             <double>101.000000000000000</double>
                             </property>
                             <property name="maximum">
                              <double>1000.000000000000000</double>
@@ -3318,7 +3321,7 @@ waves</string>
                              <double>5.000000000000000</double>
                             </property>
                             <property name="value">
-                             <double>70.000000000000000</double>
+                             <double>600.000000000000000</double>
                             </property>
                            </widget>
                           </item>
@@ -3334,11 +3337,11 @@ waves</string>
                           </sizepolicy>
                          </property>
                          <property name="text">
-                          <string>Threshold (std)</string>
+                          <string>Proba threshold (0-1)</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="0" rowspan="5">
+                       <item row="0" column="0" rowspan="6">
                         <widget class="QLabel" name="kc_label">
                          <property name="font">
                           <font>
@@ -3350,7 +3353,7 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="2" colspan="4">
+                       <item row="5" column="2" colspan="4">
                         <widget class="QCheckBox" name="_ToolKCNremOnly">
                          <property name="text">
                           <string>Use hypnogram to improve detection</string>
@@ -3358,7 +3361,7 @@ waves</string>
                         </widget>
                        </item>
                        <item row="0" column="4" rowspan="2" colspan="2">
-                        <widget class="QDoubleSpinBox" name="_ToolKCTh">
+                        <widget class="QDoubleSpinBox" name="_ToolKCProbTh">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                            <horstretch>0</horstretch>
@@ -3369,17 +3372,17 @@ waves</string>
                           <string>Number of standard deviations of the wavelet envelope</string>
                          </property>
                          <property name="maximum">
-                          <double>100.000000000000000</double>
+                          <double>1.000000000000000</double>
                          </property>
                          <property name="singleStep">
-                          <double>0.500000000000000</double>
+                          <double>0.100000000000000</double>
                          </property>
                          <property name="value">
-                          <double>2.000000000000000</double>
+                          <double>0.500000000000000</double>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="1" rowspan="5">
+                       <item row="0" column="1" rowspan="6">
                         <widget class="Line" name="line_19">
                          <property name="minimumSize">
                           <size>
@@ -3392,7 +3395,7 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="2" column="2" colspan="4">
+                       <item row="3" column="2" colspan="4">
                         <widget class="QWidget" name="widget_7" native="true">
                          <property name="minimumSize">
                           <size>
@@ -3432,7 +3435,7 @@ waves</string>
                              <double>50.000000000000000</double>
                             </property>
                             <property name="value">
-                             <double>500.000000000000000</double>
+                             <double>400.000000000000000</double>
                             </property>
                            </widget>
                           </item>
@@ -3459,6 +3462,26 @@ waves</string>
                            </widget>
                           </item>
                          </layout>
+                        </widget>
+                       </item>
+                       <item row="2" column="4" colspan="2">
+                        <widget class="QDoubleSpinBox" name="_ToolKCAmpTh">
+                         <property name="maximum">
+                          <double>10.000000000000000</double>
+                         </property>
+                         <property name="singleStep">
+                          <double>0.500000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>1.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="2" colspan="2">
+                        <widget class="QLabel" name="label_71">
+                         <property name="text">
+                          <string>Amp threshold (std)</string>
+                         </property>
                         </widget>
                        </item>
                       </layout>
@@ -4035,7 +4058,7 @@ waves</string>
      <x>0</x>
      <y>0</y>
      <width>1242</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">

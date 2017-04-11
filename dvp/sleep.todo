@@ -51,7 +51,7 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-4 Améliorer detection spindles
+	-4 Rajouter puissance muscle (30-40Hz) dans detection KC
 	-4 Implémenter méthode REMs de JB
 	-2 Scorage automatique du sommeil
 	+4 Import fichier micromed (*.trc)
