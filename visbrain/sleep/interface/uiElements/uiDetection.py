@@ -143,13 +143,14 @@ class uiDetection(object):
                 thr = self._ToolRemTh.value()
                 rem_only = self._ToolRemOnly.isChecked()
                 # Get REM indices :
-                index, number, density, duration = remdetect(
-                    self._data[k, :],
-                    self._sf, self._hypno, rem_only, thr)
+                index, nb, dty, dur = remdetect(self._data[k, :], self._sf,
+                                                self._hypno, rem_only, thr)
+                # Update index for this channel and detection :
+                self._detect.dict[(self._channels[k], 'rem')]['index'] = index
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defrem,
                                               'triangle_down', toReport,
-                                              number, density)
+                                              nb, dty)
 
             # ------------------- SPINDLES -------------------
             elif method == 'Spindles':
@@ -161,12 +162,14 @@ class uiDetection(object):
                 tMax = self._ToolSpinTmax.value()
                 nrem_only = self._ToolSpinRemOnly.isChecked()
                 # Get Spindles indices :
-                index, number, density, duration = spindlesdetect(
+                index, nb, dty, dur = spindlesdetect(
                     self._data[k, :], self._sf, thr, self._hypno, nrem_only,
                     fMin, fMax, tMin, tMax)
+                # Update index for this channel and detection :
+                self._detect.dict[(self._channels[k], 'spin')]['index'] = index
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defspin,
-                                              'x', toReport, number, density)
+                                              'x', toReport, nb, dty)
 
             # ------------------- SLOW WAVES -------------------
             elif method == 'Slow waves':
@@ -174,12 +177,13 @@ class uiDetection(object):
                 thr = self._ToolWaveTh.value()
                 amp = self._ToolWaveAmp.value()
                 # Get Slow Waves indices :
-                index, number, density, duration = slowwavedetect(
-                                                            self._data[k, :],
-                                                            self._sf, thr, amp)
+                index, nb, dty, dur = slowwavedetect(self._data[k, :],
+                                                     self._sf, thr, amp)
+                # Update index for this channel and detection :
+                self._detect.dict[(self._channels[k], 'sw')]['index'] = index
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defsw,
-                                              'o', toReport, number, density)
+                                              'o', toReport, nb, dty)
 
             # ------------------- K-COMPLEXES -------------------
             elif method == 'K-complexes':
@@ -201,8 +205,8 @@ class uiDetection(object):
                                                             max_amp)
                 # Get starting index :
                 ind = self._get_startingIndex(method, k, index, self._defkc,
-                                              'diamond', toReport, number,
-                                              density)
+                                              'diamond', toReport, nb,
+                                              dty)
 
             # ------------------- PEAKS -------------------
             elif method == 'Peaks':
@@ -223,7 +227,7 @@ class uiDetection(object):
                     str(round(self._peak.density, 2))))
                 # Get index :
                 ind = self._peak.index
-                duration = 0
+                dur = 0
                 # Report index on hypnogram :
                 if toReport:
                     self._hyp.set_report(self._time, self._peak.index,
@@ -243,7 +247,7 @@ class uiDetection(object):
 
         # Fill the location table (only if selected):
         if self._ToolRdSelected.isChecked() and ind.size:
-            self._fcn_fillLocations(self._channels[k], method, ind, duration)
+            self._fcn_fillLocations(self._channels[k], method, ind, dur)
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
@@ -256,9 +260,11 @@ class uiDetection(object):
                            number, density):
         """Get starting / ending index."""
         if index.size:
+            self._detect.build(self._data, k, self._chan.report[k])
+            
             # Set them + color to ChannelPlot object :
-            self._chan.colidx[k]['color'] = color
-            self._chan.colidx[k]['idx'] = index
+            # self._chan.colidx[k]['color'] = color
+            # self._chan.colidx[k]['idx'] = index
 
             # Find only where index start / finish :
             ind = np.where(np.gradient(index) != 1.)[0]

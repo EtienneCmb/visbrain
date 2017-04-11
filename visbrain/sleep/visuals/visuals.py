@@ -5,6 +5,7 @@ hypnogram, indicator, shortcuts)
 """
 import numpy as np
 import scipy.signal as scpsig
+import itertools
 
 from vispy import scene
 import vispy.visuals.transforms as vist
@@ -25,6 +26,61 @@ Classes below are used to create visual objects, display on sevral canvas :
 - Spectrogram : on a specific channel
 - Hypnogram : sleep stages (can be optional)
 """
+
+
+class Detection(object):
+    """Create a detection object."""
+
+    def __init__(self, channels, time, spincol='red', remcol='red',
+                 kccol='red', swcol='red'):
+        """Init."""
+        self.items = ['spin', 'rem', 'kc', 'sw']
+        self.chans = channels
+        self.dict = {}
+        self.seg = {}
+        col = {'spin': spincol.reshape(1, -1), 'rem': remcol.reshape(1, -1),
+               'kc': kccol.reshape(1, -1), 'sw': swcol.reshape(1, -1)}
+        self.time = time
+        for k in self:
+            self[k] = {'index': np.array([]), 'color': col[k[1]], 'use': True,
+                       'connect': np.array([])}
+
+    def __iter__(self):
+        it = itertools.product(self.chans, self.items)
+        for k in it:
+            yield k
+
+    def __bool__(self):
+        pass
+
+    def __setitem__(self, key, value):
+        self.dict[key] = value
+        self.dict[key]['use'] = True
+
+    def __getitem__(self, key):
+        return self.dict[key]
+
+    def build(self, data, num, line):
+        """"""
+        chan = self.chans[num]
+        seg, col = np.array([]), np.array([])
+        for i in self.items:
+            if self[(chan, i)]['index'].size and self[(chan, i)]['use']:
+                v = self[(chan, i)]['index']
+                color = np.tile(self[(chan, i)]['color'], (len(v), 1))
+                # Add to segment and color :
+                seg = np.hstack((seg, v)) if seg.size else v
+                col = np.vstack((col, color)) if col.size else color
+        if seg.size:
+            # Find connections :
+            connect = np.gradient(seg) == 1.
+            connect[0], connect[-1] = True, False
+            seg = np.vstack((self.time[seg], data[num, seg],
+                             np.full_like(seg, 2.))).T
+            # Save segments :
+            self.seg[chan] = {'connect': connect, 'seg': seg, 'color': col}
+            # Update line report :
+            line.set_data(pos=seg, color=col, connect=connect, width=4)
 
 
 class ChannelPlot(PrepareData):
@@ -52,7 +108,7 @@ class ChannelPlot(PrepareData):
         self.color = color2vb(color)
         self.color_detection = color2vb(color_detection)
 
-        # Create one line pear channel :
+        # Create one line per channel :
         pos = np.zeros((1, 3), dtype=np.float32)
         self.mesh, self.report, self.grid, self.peak = [], [], [], []
         self.loc, self.node = [], []
@@ -746,6 +802,10 @@ class visuals(vbShortcuts):
         self._hypInd = Indicator(name='hypno_indic', visible=True, alpha=.3,
                                  parent=self._hypCanvas.wc.scene)
         self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
+
+        # =================== DETECTIONS ===================
+        self._detect = Detection(self._channels, self._time, self._defspin,
+                                 self._defrem, self._defkc, self._defsw)
 
         # =================== TOPOPLOT ===================
         self._topo = TopoPlot(chans=self._channels, camera=cameras[3],
