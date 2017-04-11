@@ -253,15 +253,16 @@ class uiDetection(object):
         """Get starting / ending index."""
         if index.size:
             # Update detection object for this specific channel :
-            self._detect.build(self._data[k, :], k, self._chan.report[k])
+            self._detect.build(self._data[k, :], k, self._chan.report[k],
+                               self._hyp.report)
 
             # Find only where index start / finish :
             ind = np.where(np.gradient(index) != 1.)[0]
             ind = index[np.hstack(([0], ind, [len(index) - 1]))]
             # Report index on hypnogram :
-            if toReport:
-                self._hyp.set_report(self._time, ind, symbol=symbol,
-                                     color=color, y=1.5)
+            # if toReport:
+            #     self._hyp.set_report(self._time, ind, symbol=symbol,
+            #                          color=color, y=1.5)
 
             # Report results on table :
             self._ToolDetectTable.setRowCount(1)
