@@ -637,59 +637,69 @@ class vbShortcuts(object):
             if event.text == ' ':
                 pass
             # ------------ SLIDER ------------
-            if event.text == 'n':  # Next (slider)
+            elif event.text == 'n':  # Next (slider)
                 self._SlGoto.setValue(
                                 self._SlGoto.value() + self._SigSlStep.value())
-            if event.text == 'b':  # Before (slider)
+            elif event.text == 'b':  # Before (slider)
                 self._SlGoto.setValue(
                                 self._SlGoto.value() - self._SigSlStep.value())
+
+            # ------------ AMPLITUDE ------------
+            elif event.text == '-':  # Decrease amplitude
+                self._PanAmpSym.setChecked(True)
+                self._PanAllAmpMax.setValue(self._PanAllAmpMax.value() + 5.)
+
+            elif event.text == '+':  # Decrease amplitude
+                self._PanAmpSym.setChecked(True)
+                self._PanAllAmpMax.setValue(self._PanAllAmpMax.value() - 5.)
+
             # ------------  VISIBILITY ------------
-            if event.text == 's':  # Toggle visibility on spec
+            elif event.text == 's':  # Toggle visibility on spec
                 self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
                 self._fcn_specViz()
 
-            if event.text == 'h':  # Toggle visibility on hypno
+            elif event.text == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
 
-            if event.text == 't':   # Toggle visibility on topo
+            elif event.text == 't':   # Toggle visibility on topo
                 self._PanTopoViz.setChecked(not self._PanTopoViz.isChecked())
                 self._fcn_topoViz()
 
-            if event.text == 'z':  # Enable zoom
+            elif event.text == 'z':  # Enable zoom
                 viz = self._PanTimeZoom.isChecked()
                 self._PanTimeZoom.setChecked(not viz)
                 self._PanHypZoom.setChecked(not viz)
                 self._PanSpecZoom.setChecked(not viz)
                 self._fcn_Zooming()
 
-            if event.text == 'm':
+            elif event.text == 'm':
                 viz = self._slMagnify.isChecked()
                 self._slMagnify.setChecked(not viz)
                 self._fcn_sliderMagnify()
 
             # ------------ SCORING ------------
-            if event.text == 'a':
+            elif event.text == 'a':
                 self._add_stage_on_win(-1)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
-            if event.text == 'w':
+            elif event.text == 'w':
                 self._add_stage_on_win(0)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
-            if event.text == '1':
+            elif event.text == '1':
                 self._add_stage_on_win(1)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
-            if event.text == '2':
+            elif event.text == '2':
                 self._add_stage_on_win(2)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
-            if event.text == '3':
+            elif event.text == '3':
                 self._add_stage_on_win(3)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
-            if event.text == 'r':
+            elif event.text == 'r':
                 self._add_stage_on_win(4)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
