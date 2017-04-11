@@ -111,9 +111,6 @@ class ChannelPlot(PrepareData):
         self.rect = []
         self.width = width
         self.autoamp = False
-        # Don't use self.colidx = [{...}] * len(channels)
-        self.colidx = [{'color': color_detection, 'idx': np.array([
-                                            ])} for _ in range(len(channels))]
         self._fcn = fcn
         self.visible = np.array([True] + [False] * (len(channels) - 1))
         self.consider = np.ones((len(channels),), dtype=bool)
@@ -210,9 +207,6 @@ class ChannelPlot(PrepareData):
         if self:
             dataSl = self._prepare_data(sf, dataSl.copy(), timeSl)
 
-        # Build a index vector:
-        idx = np.arange(sl.start, sl.stop)
-
         # Set data to each plot :
         for l, (i, k) in enumerate(self):
             # ________ MAIN DATA ________
@@ -224,20 +218,6 @@ class ChannelPlot(PrepareData):
 
             # Set main ligne :
             k.set_data(dat, color=self.color, width=self.width)
-
-            # ________ COLOR ________
-            # Indicator line :
-            if self.colidx[i]['idx'].size:
-                # Find index that are both in idx and in indicator :
-                inter = np.intersect1d(idx, self.colidx[i]['idx']) - sl.start
-                # Build a array for connecting only consecutive segments :
-                index = np.zeros((len(idx)), dtype=bool)
-                index[inter] = True
-                index[-1] = False
-                dat[:, 2] = -2.
-                # Send data to report :
-                self.report[i].set_data(pos=dat, connect=index, width=4.,
-                                        color=self.colidx[i]['color'])
 
             # ________ CAMERA ________
             # Use either auto / fixed adaptative camera :
