@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1242</width>
-    <height>1020</height>
+    <width>1307</width>
+    <height>1047</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,7 +69,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -116,15 +116,15 @@ spectrogram, hypnogram and the time axis</string>
            <item>
             <widget class="QToolBox" name="toolBox_2">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="page_3">
               <property name="geometry">
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>322</width>
-                <height>796</height>
+                <width>360</width>
+                <height>791</height>
                </rect>
               </property>
               <attribute name="label">
@@ -181,8 +181,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>300</width>
-                       <height>571</height>
+                       <width>332</width>
+                       <height>545</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -403,8 +403,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>314</width>
-                <height>413</height>
+                <width>367</width>
+                <height>780</height>
                </rect>
               </property>
               <attribute name="label">
@@ -550,7 +550,7 @@ spectrogram, hypnogram and the time axis</string>
                           <number>1</number>
                          </property>
                          <property name="value">
-                          <double>0.500000000000000</double>
+                          <double>0.000000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -931,8 +931,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>260</width>
-                <height>231</height>
+                <width>300</width>
+                <height>265</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1323,7 +1323,7 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>287</width>
+                <width>316</width>
                 <height>54</height>
                </rect>
               </property>
@@ -1661,8 +1661,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>322</width>
-                <height>823</height>
+                <width>337</width>
+                <height>396</height>
                </rect>
               </property>
               <attribute name="label">
@@ -4057,8 +4057,8 @@ waves</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1242</width>
-     <height>21</height>
+     <width>1307</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">

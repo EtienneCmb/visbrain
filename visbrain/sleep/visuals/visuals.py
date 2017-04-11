@@ -268,7 +268,7 @@ class Spectrogram(PrepareData):
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram',
                                         parent=parent)
 
-    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=.5,
+    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.,
                  fstart=.5, fend=20., contraste=.5):
         """Set data to the spectrogram.
 
