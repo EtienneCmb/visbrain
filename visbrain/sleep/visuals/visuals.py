@@ -38,8 +38,8 @@ class Detection(object):
         self.chans = channels
         self.dict = {}
         self.seg = {}
-        col = {'spin': spincol.reshape(1, -1), 'rem': remcol.reshape(1, -1),
-               'kc': kccol.reshape(1, -1), 'sw': swcol.reshape(1, -1)}
+        col = {'spin': spincol[:, 0:-1], 'rem': remcol[:, 0:-1],
+               'kc': kccol[:, 0:-1], 'sw': swcol[:, 0:-1]}
         self.time = time
         for k in self:
             self[k] = {'index': np.array([]), 'color': col[k[1]], 'use': True,
