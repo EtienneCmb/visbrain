@@ -21,7 +21,6 @@ class uiDetection(object):
         # REM / SPINDLES / DETECTION
         # =====================================================================
         # Commonth elements :
-        self._ToolDetecVisible.clicked.connect(self._fcn_detectViz)
         self._ToolDetectChan.addItems(self._channels)
         self._ToolDetectType.currentIndexChanged.connect(
             self._fcn_switchDetection)
@@ -36,8 +35,10 @@ class uiDetection(object):
         # -------------------------------------------------
         # Location table :
         self._DetectChans.currentIndexChanged.connect(self._fcn_switchLocation)
+        self._DetectTypes.currentIndexChanged.connect(self.__getVisibleLoc)
         self._DetectSelect.clicked.connect(self._fcn_runSwitchLocation)
         self._DetectRm.clicked.connect(self._fcn_rmLocation)
+        self._DetectViz.clicked.connect(self._fcn_vizLocation)
         self._DetectLocations.itemSelectionChanged.connect(
             self._fcn_gotoLocation)
 
@@ -51,22 +52,6 @@ class uiDetection(object):
         """Be sure to apply hypnogram report only on selected channel."""
         viz = self._ToolRdSelected.isChecked()
         self._ToolDetectChan.setEnabled(viz)
-
-    # =====================================================================
-    # ENABLE / DISABLE DETECTION
-    # =====================================================================
-    def _fcn_detectViz(self):
-        """Toggle vivibility of detections."""
-        # Get button state :
-        viz = self._ToolDetecVisible.isChecked()
-        # Turn all detected lines / markers to viz :
-        for k in range(len(self)):
-            # Toggle lines (for REM and spindles) :
-            self._chan.report[k].visible = viz
-            # Toggle markers (for peaks) :
-            self._chan.peak[k].visible = viz
-        # Hypnogram :
-        self._hyp.report.visible = viz
 
     # =====================================================================
     # SWITCH DETECTION TYPE
@@ -112,6 +97,9 @@ class uiDetection(object):
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
 
+        ############################################################
+        # RUN DETECTION
+        ############################################################
         for i, k in enumerate(idx):
             # Display progress bar (only if needed):
             if len(idx) > 1:
@@ -128,9 +116,6 @@ class uiDetection(object):
                                                 self._hypno, rem_only, thr)
                 # Update index for this channel and detection :
                 self._detect.dict[(self._channels[k], 'REM')]['index'] = index
-                # Get starting index :
-                self._get_startingIndex(method, k, index, self._defrem,
-                                        'triangle_down', nb, dty)
 
             # ====================== SPINDLES ======================
             elif method == 'Spindles':
@@ -148,9 +133,6 @@ class uiDetection(object):
                 # Update index for this channel and detection :
                 self._detect.dict[(self._channels[k], 'Spindles')][
                                                             'index'] = index
-                # Get starting index :
-                self._get_startingIndex(method, k, index, self._defspin,
-                                        'x', nb, dty)
 
             # ====================== SLOW WAVES ======================
             elif method == 'Slow waves':
@@ -163,9 +145,6 @@ class uiDetection(object):
                 # Update index for this channel and detection :
                 self._detect.dict[(self._channels[k], 'Slow waves')][
                                                             'index'] = index
-                # Get starting index :
-                self._get_startingIndex(method, k, index, self._defsw, 'o', nb,
-                                        dty)
 
             # ====================== K-COMPLEXES ======================
             elif method == 'K-complexes':
@@ -185,9 +164,6 @@ class uiDetection(object):
                 # Update index for this channel and detection :
                 self._detect.dict[(self._channels[k], 'K-complexes')][
                                                             'index'] = index
-                # Get starting index :
-                self._get_startingIndex(method, k, index, self._defkc,
-                                        'diamond', nb, dty)
 
             # ====================== PEAKS ======================
             elif method == 'Peaks':
@@ -207,18 +183,36 @@ class uiDetection(object):
                 self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
                     str(round(self._peak.density, 2))))
 
-            # Be sure panel is displayed :
-            if not self.canvas_isVisible(k):
-                self.canvas_setVisible(k, True)
-                self._chan.visible[k] = True
-
-            # Update plot :
-            self._fcn_sliderMove()
+            if index.size:
+                # Be sure panel is displayed :
+                if not self.canvas_isVisible(k):
+                    self.canvas_setVisible(k, True)
+                    self._chan.visible[k] = True
+                # Update plot :
+                self._fcn_sliderMove()
 
             # Update progress bar :
             self._ToolDetectProgress.setValue(100. * (i + 1) / len(self))
 
-        #######################################################
+        ############################################################
+        # NUMBER // DENSITY
+        ############################################################
+        if index.size:
+            # Report results on table :
+            self._ToolDetectTable.setRowCount(1)
+            self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
+                str(nb)))
+            self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
+                str(round(dty, 2))))
+        else:
+            warn("\nNo " + method + " detected on channel " + self._channels[
+                 k] + ". Try to decrease the threshold")
+
+        ############################################################
+        # LINE REPORT :
+        ############################################################
+        # Build line reports :
+        self._detect.build_line(self._data)
         chans = self._detect.nonzero()
         self._DetectChans.clear()
         self._DetectChans.addItems(list(chans.keys()))
@@ -226,24 +220,6 @@ class uiDetection(object):
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
-
-    def _get_startingIndex(self, name, k, index, color, symbol, number,
-                           density):
-        """Get starting / ending index."""
-        if index.size:
-            # Update detection object for this specific channel :
-            self._detect.build(self._data[k, :], k, self._chan.report[k],
-                               self._hyp.report)
-
-            # Report results on table :
-            self._ToolDetectTable.setRowCount(1)
-            self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
-                str(number)))
-            self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
-                str(round(density, 2))))
-        else:
-            warn("\nNo " + name + " detected on channel " + self._channels[
-                 k] + ". Try to decrease the threshold")
 
     # =====================================================================
     # FILL LOCATION TABLE
@@ -256,7 +232,16 @@ class uiDetection(object):
         # Update list of types :
         self._DetectTypes.clear()
         if chan:
+            # Set avaibles detection types :
             self._DetectTypes.addItems(nnz[chan])
+            # Set visibility :
+            self.__getVisibleLoc()
+
+    def __getVisibleLoc(self):
+        chan = str(self._DetectChans.currentText())
+        tps = str(self._DetectTypes.currentText())
+        if chan and tps:
+            self._DetectViz.setChecked(self._detect.line[(chan, tps)].visible)
 
     def _fcn_rmLocation(self):
         """Demove a detection."""
@@ -268,6 +253,15 @@ class uiDetection(object):
         self._detect[(chan, types)]['index'] = np.array([])
         # Update GUI :
         self._fcn_switchLocation()
+
+    def _fcn_vizLocation(self):
+        """"""
+        # Get selected channel :
+        chan = str(self._DetectChans.currentText())
+        # Get selected detection type :
+        types = str(self._DetectTypes.currentText())
+        # Set visibility :
+        self._detect.visible(self._DetectViz.isChecked(), chan, types)
 
     def _fcn_runSwitchLocation(self):
         """Run switch location channel and type."""
@@ -283,14 +277,14 @@ class uiDetection(object):
             # Find only where index start / finish :
             ind = np.where(np.gradient(index) != 1.)[0]
             ind = index[np.hstack(([0], ind, [len(index) - 1]))]
+            # Set hypnogram data :
+            self._detect.build_hyp(chan, types)
             # Fill location table :
             self._fcn_fillLocations(chan, types, ind, dur)
 
     def _fcn_fillLocations(self, channel, kind, index, duration):
         """Fill the location table."""
         ref = ['Wake', 'N1', 'N2', 'N3', 'REM', 'ART']
-        # Set header label :
-        self._DetectLocHead.setText(kind + ' detection on channel ' + channel)
         # Clean table :
         self._DetectLocations.setRowCount(0)
         # Get kind :
@@ -326,6 +320,7 @@ class uiDetection(object):
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     ref[int(self._hypno[k])]))
+        self._DetectLocations.selectRow(0) 
 
     # =====================================================================
     # GO TO THE LOCATION
@@ -334,7 +329,7 @@ class uiDetection(object):
         """Go to the selected row REM / spindles / peak."""
         # Get selected row and channel :
         row = self._DetectLocations.currentRow()
-        idx = self._channels.index(str(self._DetectChans.currentText()))
+        ix = self._channels.index(str(self._DetectChans.currentText()))
         if row >= 0:
             # Get starting and ending point :
             sta = float(str(self._DetectLocations.item(row, 0).text()))
@@ -346,7 +341,7 @@ class uiDetection(object):
             self._SigSlStep.setValue(1)
             self._SlGoto.setValue(goto)
             # Set vertical lines to the location :
-            self._chan.set_location(self._sf, self._data[idx, :], idx, sta, end)
+            self._chan.set_location(self._sf, self._data[ix, :], ix, sta, end)
 
     # =====================================================================
     # EXPORT TABLE

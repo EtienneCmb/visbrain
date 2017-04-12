@@ -33,20 +33,27 @@ class Detection(object):
 
     def __init__(self, channels, time, spincol=None, remcol=None,
                  kccol=None, swcol=None, spinsym=None, remsym=None, kcsym=None,
-                 swsym=None):
+                 swsym=None, parent=None, parent_hyp=None):
         """Init."""
         self.items = ['Spindles', 'REM', 'K-complexes', 'Slow waves']
         self.chans = channels
         self.dict = {}
+        self.line = {}
         self.seg = {}
         col = {'Spindles': spincol, 'REM': remcol, 'K-complexes': kccol,
                'Slow waves': swcol}
         sym = {'Spindles': spinsym, 'REM': remsym, 'K-complexes': kcsym,
                'Slow waves': swsym}
         self.time = time
-        for k in self:
+        self.hyp = scene.visuals.Markers(parent=parent_hyp)
+        self.hyp.set_gl_state('translucent')
+        for num, k in enumerate(self):
             self[k] = {'index': np.array([]), 'color': col[k[1]],
                        'connect': np.array([]), 'sym': sym[k[1]]}
+            par = parent[self.chans.index(k[0])]
+            self.line[k] = scene.visuals.Line(method='gl', parent=par,
+                                              color=col[k[1]])
+            self.line[k].set_gl_state('translucent')
 
     def __iter__(self):
         it = itertools.product(self.chans, self.items)
@@ -62,59 +69,53 @@ class Detection(object):
     def __getitem__(self, key):
         return self.dict[key]
 
-    def build(self, data, num, line, report):
+    def build_line(self, data):
         """Build detections reports.
 
         Args:
             data: np.ndarray
                 Data vector for a spcific channel.
-
-            num: int
-                Index of the channel to build.
-
-            line: vispy.Line
-                Line object of the specific channel.
-
-            report: dict
-                Line object of the hypnogram report.
         """
-        # Get the channel name :
-        chan = self.chans[num]
-        # Clean hypnogram reports :
-        pos = np.full((1, 3), -10.)
-        for k in report.values():
-            k.set_data(pos=pos)
+        for num, k in enumerate(self):
+            if self[k]['index'].size:
+                # Get index and channel number :
+                index = self[k]['index']
+                nb = self.chans.index(k[0])
+                # Build position vector :
+                z = np.full(index.shape, 2., dtype=np.float32)
+                pos = np.vstack((self.time[index], data[nb, index], z)).T
+                # Build connections :
+                connect = np.gradient(index) == 1.
+                connect[0], connect[-1] = True, False
+                # Send data :
+                self.line[k].set_data(pos=pos, width=4., connect=connect, )
 
-        # Build line segments :
-        seg, col = np.array([]), np.array([])
-        for i in self.items:
-            if self[(chan, i)]['index'].size:
-                # ----------- Segment, color and symbol -----------
-                v = self[(chan, i)]['index']
-                co = self[(chan, i)]['color']
-                color = np.tile(co, (len(v), 1))
-                sym = self[(chan, i)]['sym']
+    def build_hyp(self, chan, types):
+        """Build hypnogram report.
 
-                # ----------- Build -----------
-                seg = np.hstack((seg, v)) if seg.size else v
-                col = np.vstack((col, color)) if col.size else color
+        Args:
+            chan: str
+                String name of the channel.
 
-                # ----------- Hypnogram -----------
-                start = v[np.hstack((np.gradient(v[0:-1]) != 1, [True]))][::2]
-                z = np.full_like(start, 1.5, dtype=float)
-                pos = np.vstack((self.time[start], z)).T
-                report[i].set_data(pos=pos, symbol=sym, face_color=co,
-                                   edge_width=0.)
-        if seg.size:
-            # Find connections :
-            connect = np.gradient(seg) == 1.
-            connect[0], connect[-1] = True, False
-            seg = np.vstack((self.time[seg], data[seg],
-                             np.full_like(seg, 2.))).T
-            # Update line report :
-            line.set_data(pos=seg, color=col, connect=connect, width=4)
-            # Save segments :
-            self.seg[chan] = {'connect': connect, 'seg': seg, 'color': col}
+            types: str
+                String name of the detection type.
+        """
+        # Get index :
+        index = self[(chan, types)]['index']
+        # Get only starting ponts :
+        start = index[np.hstack((np.gradient(index[0:-1]) != 1, [True]))][::2]
+        y = np.full_like(start, 1.5, dtype=float)
+        z = np.full_like(start, -2., dtype=float)
+        pos = np.vstack((self.time[start], y, z)).T
+        # Set hypnogram data :
+        self.hyp.set_data(pos=pos, symbol=self[(chan, types)]['sym'],
+                          face_color=self[(chan, types)]['color'],
+                          edge_width=0.)
+
+    def visible(self, viz, chan, types):
+        """"""
+        self.hyp.visible = viz
+        self.line[(chan, types)].visible = viz
 
     def nonzero(self):
         """Return the list of channels with non-empty detections."""
@@ -176,13 +177,6 @@ class ChannelPlot(PrepareData):
             mark.set_gl_state('translucent')
             mark.visible = False
             self.peak.append(mark)
-
-            # ----------------------------------------------
-            # Report line :
-            rep = scene.visuals.Line(name=k+'report', method=method,
-                                     parent=node)
-            rep.set_gl_state('translucent')
-            self.report.append(rep)
 
             # ----------------------------------------------
             # Locations :
@@ -462,17 +456,11 @@ class Hypnogram(object):
         pos = np.array([[0, 0], [0, 100]])
         self.mesh = scene.visuals.Line(pos, name='hypnogram', method='gl',
                                        parent=parent)
-        self.mesh.set_gl_state('translucent', depth_test=True)
+        self.mesh.set_gl_state('translucent')
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
-        # Create a reported marker (for detection):
-        self.report = {}
-        for k in ['Spindles', 'REM', 'Slow waves', 'K-complexes', 'peaks']:
-            self.report[k] = Markers(parent=parent, name=k)
         # self.mesh.set_gl_state('translucent', depth_test=True)
-        self.mesh.set_gl_state('translucent', depth_test=False,
-                               cull_face=True, blend=True, blend_func=(
-                                          'src_alpha', 'one_minus_src_alpha'))
+        self.mesh.set_gl_state('translucent')
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.1, .1, .1, 1.),
                                             scale=(30.*time[-1]/len(time), 1.),
@@ -504,41 +492,6 @@ class Hypnogram(object):
         self.mesh.set_data(pos=np.vstack((time, -data)).T, width=self.width,
                            color=color)
         self.mesh.update()
-
-    def set_report(self, time, index, symbol='triangle_down', y=1., size=13.,
-                   color='red'):
-        """Report additional markers to the hypnogram.
-
-        Args:
-            time: np.ndarray
-                The time vector.
-
-            index: np.ndarray
-                Marker index (in sample unit).
-
-            symbol: string
-                The marker symbol to use (see vispy.scene.visuals.Markers.
-                set_data description).
-
-            y: float or np.ndarray
-                The y axis position. If y is a float, all markers will be at
-                the same level. Otherwise, use an array with same size as index
-
-            size: float
-                Marker size.
-
-            color: tuple/string/np.ndarray
-                The color to use.
-        """
-        # Get reduced version of time :
-        timeSl = time[index]
-        # Build y-position :
-        y = np.full_like(timeSl, y) if isinstance(y, (int, float)) else y
-        # Build data array :
-        pos = np.vstack((timeSl, y)).T
-        # Set data to report :
-        self.report.set_data(pos=pos, face_color=color2vb(color, alpha=.9),
-                             size=size, symbol=symbol, edge_width=0.)
 
     def set_grid(self, time, length=30., y=1.):
         """Set grid lentgh."""
@@ -851,7 +804,8 @@ class visuals(vbShortcuts):
         self._detect = Detection(self._channels, self._time, self._defspin,
                                  self._defrem, self._defkc, self._defsw,
                                  self._spinsym, self._swsym, self._kcsym,
-                                 self._remsym)
+                                 self._remsym, self._chan.node,
+                                 self._hypCanvas.wc.scene)
 
         # =================== TOPOPLOT ===================
         self._topo = TopoPlot(chans=self._channels, camera=cameras[3],
