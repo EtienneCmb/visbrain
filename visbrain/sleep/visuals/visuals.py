@@ -35,12 +35,14 @@ class Detection(object):
                  kccol=None, swcol=None, spinsym=None, remsym=None, kcsym=None,
                  swsym=None):
         """Init."""
-        self.items = ['spin', 'rem', 'kc', 'sw']
+        self.items = ['Spindles', 'REM', 'K-complexes', 'Slow waves']
         self.chans = channels
         self.dict = {}
         self.seg = {}
-        col = {'spin': spincol, 'rem': remcol, 'kc': kccol, 'sw': swcol}
-        sym = {'spin': spinsym, 'rem': remsym, 'kc': kcsym, 'sw': swsym}
+        col = {'Spindles': spincol, 'REM': remcol, 'K-complexes': kccol,
+               'Slow waves': swcol}
+        sym = {'Spindles': spinsym, 'REM': remsym, 'K-complexes': kcsym,
+               'Slow waves': swsym}
         self.time = time
         for k in self:
             self[k] = {'index': np.array([]), 'color': col[k[1]],
@@ -148,7 +150,6 @@ class ChannelPlot(PrepareData):
         # Get color :
         self.color = color2vb(color)
         self.color_detection = color2vb(color_detection)
-        print(self.color_detection.shape)
 
         # Create one line per channel :
         pos = np.zeros((1, 3), dtype=np.float32)
@@ -466,7 +467,7 @@ class Hypnogram(object):
         self.edit = Markers(parent=parent)
         # Create a reported marker (for detection):
         self.report = {}
-        for k in ['spin', 'rem', 'sw', 'kc', 'peaks']:
+        for k in ['Spindles', 'REM', 'Slow waves', 'K-complexes', 'peaks']:
             self.report[k] = Markers(parent=parent, name=k)
         # self.mesh.set_gl_state('translucent', depth_test=True)
         self.mesh.set_gl_state('translucent', depth_test=False,

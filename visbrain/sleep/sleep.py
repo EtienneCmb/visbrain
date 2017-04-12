@@ -1,9 +1,8 @@
 """Top level Sleep class."""
 import numpy as np
 import sip
-import datetime
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui
 import sys
 import os
 from warnings import warn
@@ -16,7 +15,6 @@ from .visuals import visuals
 from .tools import Tools
 from ..utils import (FixedCam, load_sleepdataset, load_hypno, color2vb,
                      ShortcutPopup, check_downsampling)
-# from ...utils import id
 
 sip.setdestroyonexit(False)
 
@@ -312,8 +310,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ================= ICON =================
         pathfile = sys.modules[__name__].__file__.split('sleep.py')[0]
         app_icon = QtGui.QIcon()
-        app_icon.addFile(os.path.join(pathfile, 'ico/256x256.png'),
-                         QtCore.QSize(256, 256))
+        app_icon.addFile(os.path.join(pathfile, 'ico/sleep.svg'))
         self.setWindowIcon(app_icon)
 
     def _camCreation(self):

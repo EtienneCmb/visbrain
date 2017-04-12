@@ -2581,19 +2581,6 @@ selected, visible or all channels.</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="3" colspan="3">
-                     <widget class="QCheckBox" name="_ToolDetecReport">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Report the detection on the hypnogram. Only avaible for selected channel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="text">
-                       <string>Report detection on hypnogram</string>
-                      </property>
-                      <property name="checked">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="0" column="3" colspan="3">
                      <widget class="QComboBox" name="_ToolDetectType">
                       <property name="toolTip">
@@ -2871,8 +2858,11 @@ on</string>
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of standard deviation of the derivative signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
                          <property name="value">
-                          <double>2.000000000000000</double>
+                          <double>3.000000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -3052,7 +3042,7 @@ on</string>
                           <double>200.000000000000000</double>
                          </property>
                          <property name="value">
-                          <double>16.000000000000000</double>
+                          <double>14.000000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -3105,6 +3095,9 @@ on</string>
                         <widget class="QDoubleSpinBox" name="_ToolSpinTh">
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Look for signals having an amplitude 'Threshold' times superior to the deviation of the filtered signal amplitude&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="decimals">
+                          <number>1</number>
                          </property>
                          <property name="value">
                           <double>2.000000000000000</double>
@@ -3187,7 +3180,7 @@ waves</string>
                           <double>0.050000000000000</double>
                          </property>
                          <property name="value">
-                          <double>0.800000000000000</double>
+                          <double>0.750000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -3262,6 +3255,9 @@ waves</string>
                      </property>
                      <item>
                       <layout class="QGridLayout" name="gridLayout_8">
+                       <property name="verticalSpacing">
+                        <number>9</number>
+                       </property>
                        <property name="topMargin">
                         <number>0</number>
                        </property>
@@ -3343,7 +3339,7 @@ waves</string>
                           </sizepolicy>
                          </property>
                          <property name="text">
-                          <string>Proba threshold (0-1)</string>
+                          <string>Proba threshold</string>
                          </property>
                         </widget>
                        </item>
@@ -3384,7 +3380,7 @@ waves</string>
                           <double>0.100000000000000</double>
                          </property>
                          <property name="value">
-                          <double>0.500000000000000</double>
+                          <double>0.800000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -3486,7 +3482,7 @@ waves</string>
                        <item row="2" column="2" colspan="2">
                         <widget class="QLabel" name="label_71">
                          <property name="text">
-                          <string>Amp threshold (std)</string>
+                          <string>Amp threshold</string>
                          </property>
                         </widget>
                        </item>
@@ -3599,38 +3595,85 @@ waves</string>
                  <property name="topMargin">
                   <number>0</number>
                  </property>
-                 <item row="0" column="3">
-                  <widget class="QLabel" name="label_73">
-                   <property name="text">
-                    <string>Detection type</string>
+                 <item row="0" column="2">
+                  <widget class="QComboBox" name="_DetectTypes">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the detection type on this channel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                   </widget>
-                 </item>
-                 <item row="0" column="2">
-                  <spacer name="horizontalSpacer_40">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
                  </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_72">
                    <property name="text">
-                    <string>Channels</string>
+                    <string>Selection</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QComboBox" name="_DetectChans"/>
+                  <widget class="QComboBox" name="_DetectChans">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the channel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
                  </item>
-                 <item row="0" column="4">
-                  <widget class="QComboBox" name="_DetectTypes"/>
+                 <item row="1" column="0" colspan="3">
+                  <widget class="QWidget" name="widget_11" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_19">
+                    <item>
+                     <spacer name="horizontalSpacer_40">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="_DetectSelect">
+                      <property name="text">
+                       <string>Select</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_42">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="_DetectRm">
+                      <property name="text">
+                       <string>Remove</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_41">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </widget>
                  </item>
                 </layout>
                </item>
