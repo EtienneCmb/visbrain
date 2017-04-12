@@ -255,7 +255,7 @@ class uiDetection(object):
         self._fcn_switchLocation()
 
     def _fcn_vizLocation(self):
-        """"""
+        """Set visible detection."""
         # Get selected channel :
         chan = str(self._DetectChans.currentText())
         # Get selected detection type :
@@ -320,7 +320,8 @@ class uiDetection(object):
                 # Type :
                 self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
                     ref[int(self._hypno[k])]))
-        self._DetectLocations.selectRow(0) 
+
+        self._DetectLocations.selectRow(0)
 
     # =====================================================================
     # GO TO THE LOCATION
