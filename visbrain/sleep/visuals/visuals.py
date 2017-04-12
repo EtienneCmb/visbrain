@@ -92,7 +92,7 @@ class ChannelPlot(PrepareData):
             # ----------------------------------------------
             # Create a grid :
             grid = scene.visuals.GridLines(color=(.1, .1, .1, .5),
-                                           scale=(30.*time[-1]/len(time), .1),
+                                           scale=(1., .1),
                                            parent=parent[i].wc.scene)
             grid.set_gl_state('translucent')
             self.grid.append(grid)
@@ -180,15 +180,6 @@ class ChannelPlot(PrepareData):
             k.update()
             self.rect.append(rect)
 
-    def set_grid(self, time, length=30., y=1.):
-        """Set grid lentgh."""
-        # Get scaling factor :
-        sc = (length * time[-1] / len(time), y)
-        # Set to the grid :
-        for k in self.grid:
-            k._grid_color_fn['scale'].value = sc
-            k.update()
-
     def set_location(self, sf, data, channel, start, end, factor=100.):
         """Set vertical lines for detections."""
         # Get data limits :
@@ -268,7 +259,7 @@ class Spectrogram(PrepareData):
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram',
                                         parent=parent)
 
-    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=.5,
+    def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.,
                  fstart=.5, fend=20., contraste=.5):
         """Set data to the spectrogram.
 
@@ -315,7 +306,7 @@ class Spectrogram(PrepareData):
 
         # =================== COMPUTE ===================
         # Compute the spectrogram :
-        freq, t, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
+        freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
                                            noverlap=overlap, window='hamming')
         mesh = 20 * np.log10(mesh)
 
@@ -329,32 +320,23 @@ class Spectrogram(PrepareData):
         freq = freq[sls]
         self._fstart, self._fend = freq[0], freq[-1]
 
-        # =================== TIME SELECTION ===================
-        t = []
-        q = 0
-        for k in range(mesh.shape[1]):
-            t.append(time[q:q+nperseg].mean())
-            q += nperseg-overlap
-        t = np.array(t)
-
         # =================== COLOR ===================
         # Get clim :
         clim = (contraste * mesh.min(), contraste * mesh.max())
         # Turn mesh into color array for selected frequencies:
-        self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap,
-                                          clim=clim))
+        self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap, clim=clim))
 
         # =================== TRANSFORM ===================
+        tm, tM = time.min(), time.max()
         # Re-scale the mesh for fitting in time / frequency :
-        fact = (freq.max()-freq.min())/len(freq)
-        sc = (t.max()/mesh.shape[1], fact, 1)
-        tr = [t[0], freq.min(), 0]
+        fact = (freq.max() - freq.min()) / len(freq)
+        sc = (tM / mesh.shape[1], fact, 1)
+        tr = [0., freq.min(), 0.]
         self.mesh.transform = vist.STTransform(scale=sc, translate=tr)
         # Update object :
         self.mesh.update()
         # Get camera rectangle :
-        self.rect = (time.min(), freq.min(), time.max()-time.min(),
-                     freq.max()-freq.min())
+        self.rect = (tm, freq.min(), tM-tm, freq.max() - freq.min())
         self.freq = freq
 
     def clean(self):
