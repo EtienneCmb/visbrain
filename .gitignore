@@ -67,7 +67,7 @@ debugging/
 logo/
 svg/
 #*.ui
-*.svg
+#*.svg
 debuging.py
 *.sublime*
 *.sublime-workspace
