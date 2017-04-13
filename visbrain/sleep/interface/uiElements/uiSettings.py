@@ -361,6 +361,8 @@ class uiSettings(object):
         # Set the stage :
         self._hypno[t[0]:t[1]] = stage
         self._hyp.set_data(self._sf, self._hypno, self._time)
+        # Update info table :
+        self._fcn_infoUpdate()
         # Update scoring table :
         self._fcn_Hypno2Score()
         self._fcn_Score2Hypno()
