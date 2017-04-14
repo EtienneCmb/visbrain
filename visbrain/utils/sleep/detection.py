@@ -10,7 +10,7 @@ Perform:
 - Peak detection
 """
 import numpy as np
-from scipy.signal import hilbert, daub
+from scipy.signal import hilbert, daub, detrend
 
 from ..filtering import filt, morlet, morlet_power
 from ..sigproc import movingaverage, derivative, tkeo, soft_thresh
@@ -537,7 +537,8 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
 ###########################################################################
 
 
-def peakdetect(y_axis, x_axis=None, lookahead=200, delta=0):
+def peakdetect(y_axis, x_axis=None, lookahead=200, delta=1., get='max',
+               threshold='auto'):
     """Perform a peak detection.
 
     Converted from/based on a MATLAB script at:
@@ -576,28 +577,49 @@ def peakdetect(y_axis, x_axis=None, lookahead=200, delta=0):
         results to unpack one of the lists into x, y coordinates do:
         x, y = zip(*max_peaks)
     """
-    max_peaks = []
-    min_peaks = []
-    dump = []   # Used to pop the first hit which almost always is false
+    # ============== CHECK DATA ==============
+    if x_axis is None:
+        x_axis = range(len(y_axis))
+    # Check length :
+    if len(y_axis) != len(x_axis):
+        raise ValueError("Input vectors y_axis and x_axis must have same "
+                         "length")
+    # Needs to be a numpy array
+    y_axis, x_axis = np.asarray(y_axis), np.asarray(x_axis)
 
-    # check input data
-    x_axis, y_axis = _datacheck(x_axis, y_axis)
     # store data length for later use
     length = len(y_axis)
 
-    # perform some checks
+    # Lookahead  & delta checking :
     if lookahead < 1:
         raise ValueError("Lookahead must be '1' or above in value")
     if not (np.isscalar(delta) and delta >= 0):
         raise ValueError("delta must be a positive number")
 
+    # ============== PRE-ALLOCATION ==============
+    max_peaks, min_peaks = [], []
+    dump = []   # Used to pop the first hit which almost always is false
+
     # maxima and minima candidates are temporarily stored in
     # mx and mn respectively
     mn, mx = np.Inf, -np.Inf
 
+    if threshold is not None:
+        if threshold is 'auto':
+            threshold = np.std(y_axis)
+        # Detrend / demean y-axis :
+        y_axisp = detrend(y_axis)
+        y_axisp -= y_axisp.mean()
+        # Find values above threshold :
+        above = np.abs(y_axisp) >= threshold
+        zp = zip(np.arange(length)[above], x_axis[above], y_axis[above])
+    else:
+        zp = zip(np.arange(length)[:-lookahead], x_axis[:-lookahead],
+                 y_axis[:-lookahead])
+
     # Only detect peak if there is 'lookahead' amount of points after it
-    for index, (x, y) in enumerate(zip(x_axis[:-lookahead],
-                                       y_axis[:-lookahead])):
+    for index, x, y in zp:
+        # print(index, x, y)
         if y > mx:
             mx = y
             mxpos = x
@@ -642,11 +664,12 @@ def peakdetect(y_axis, x_axis=None, lookahead=200, delta=0):
 
     # Remove the false hit on the first value of the y_axis
     try:
-        if dump[0]:
-            max_peaks.pop(0)
-        else:
-            min_peaks.pop(0)
-        del dump
+        if threshold is None:
+            if dump[0]:
+                max_peaks.pop(0)
+            else:
+                min_peaks.pop(0)
+            del dump
     except IndexError:
         # no peaks were found, should the function return empty lists?
         pass
