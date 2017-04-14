@@ -129,6 +129,33 @@ class Detection(object):
                 chans[k] = types
         return chans
 
+    def update_keys(self, newkeys):
+        """Update the keys of dictionaries."""
+        # Get old keys :
+        oldkeys = list(self.dict.keys())
+        # Check that new keys lentgh has the same size as old keys :
+        if len(newkeys) != len(self.chans):
+            raise ValueError("The length of new keys must be the same as old"
+                             "keys")
+        for k in oldkeys:
+            # Find index of channel :
+            idx = self.chans.index(k[0])
+            # Build new key :
+            nkey = (newkeys[idx], k[1])
+            # Update keys (if needed):
+            if nkey not in oldkeys:
+                # Update dict and line :
+                self.dict[nkey] = self.dict[k]
+                self.line[nkey] = self.line[k]
+                # Remove old key :
+                del self.dict[k], self.line[k]
+        self.chans = newkeys
+
+    def reset(self):
+        """Reset all detections."""
+        for k in self:
+            self[k]['index'] = np.array([])
+
 
 class ChannelPlot(PrepareData):
     """Plot each channel."""
@@ -801,10 +828,10 @@ class visuals(vbShortcuts):
         self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
 
         # =================== DETECTIONS ===================
-        self._detect = Detection(self._channels, self._time, self._defspin,
-                                 self._defrem, self._defkc, self._defsw,
-                                 self._spinsym, self._swsym, self._kcsym,
-                                 self._remsym, self._chan.node,
+        self._detect = Detection(self._channels.copy(), self._time,
+                                 self._defspin, self._defrem, self._defkc,
+                                 self._defsw, self._spinsym, self._swsym,
+                                 self._kcsym, self._remsym, self._chan.node,
                                  self._hypCanvas.wc.scene)
 
         # =================== TOPOPLOT ===================
