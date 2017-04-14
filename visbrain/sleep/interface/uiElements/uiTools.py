@@ -104,7 +104,6 @@ class uiTools(object):
         # Reconnect :
         self._PanSpecChan.setCurrentIndex(aM)
         self._ToolDetectChan.setCurrentIndex(aM)
-        self._ToolDetectChan.model().item(idx).setEnabled(False)
 
         # Update channel names :
         for num, k in enumerate(self._channels):
