@@ -4,7 +4,8 @@ import numpy as np
 from warnings import warn
 
 
-__all__ = ['normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh']
+__all__ = ['normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh',
+            'zerocrossing']
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -141,3 +142,10 @@ def soft_thresh(x, thresh):
     k = np.where(x < -th)
     x_thresh[k] = x[k] + th
     return x_thresh
+
+
+def zerocrossing(data):
+    """Function to find zero-crossings of a signal"""
+    pos = data > 0
+    npos = ~pos
+    return ((pos[:-1] & npos[1:]) | (npos[:-1] & pos[1:])).nonzero()[0] + 1

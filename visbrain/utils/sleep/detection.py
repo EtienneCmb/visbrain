@@ -13,7 +13,7 @@ import numpy as np
 from scipy.signal import hilbert, daub, detrend
 
 from ..filtering import filt, morlet, morlet_power
-from ..sigproc import movingaverage, derivative, tkeo, soft_thresh
+from ..sigproc import movingaverage, derivative, tkeo, zerocrossing
 from .event import (_events_duration, _events_removal, _events_distance_fill,
                     _events_mean_freq, _event_amplitude)
 
@@ -337,7 +337,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 ###########################################################################
 
 
-def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
+def remdetect(eog, sf, hypno, rem_only, threshold, method='Vallat', min_dur_ms=50,
               max_dur_ms=500, min_distance_ms=200, moving_ms=100, deriv_ms=40):
     """Perform a rapid eye movement (REM) detection.
 
@@ -361,6 +361,9 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
         threshold: float
             Number of standard deviation of the derivative signal
             Threshold is defined as: mean + X * std(derivative)
+
+        method: string, optional (def Vallat)
+            Method used for the detection of REM. Either Vallat or Eichenlaub.
 
         min_dur_ms: int, optional (def 30)
             Minimum duration (ms) of rapid eye movement
@@ -402,24 +405,53 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
     else:
         length = max(eog.shape)
 
-    # Smooth signal with moving average
-    sm_sig = movingaverage(eog, moving_ms, sf)
+    if method == 'Vallat':
+        # Smooth signal with moving average
+        sm_sig = movingaverage(eog, moving_ms, sf)
+        # Compute first derivative
+        deriv = derivative(sm_sig, deriv_ms, sf)
+        # Smooth derivative
+        deriv = movingaverage(deriv, moving_ms, sf)
+        # Define threshold
+        if rem_only and 4 in hypno:
+            deriv[idx_zero] = np.nan
 
-    # Compute first derivative
-    deriv = derivative(sm_sig, deriv_ms, sf)
+        thresh = np.nanmean(deriv) + threshold * np.nanstd(deriv)
 
-    # Smooth derivative
-    deriv = movingaverage(deriv, moving_ms, sf)
+        # Find supra-threshold values
+        with np.errstate(divide='ignore', invalid='ignore'):
+            idx_sup_thr = np.where(deriv > thresh)[0]
 
-    # Define threshold
-    if rem_only and 4 in hypno:
-        deriv[idx_zero] = np.nan
+    elif method == 'Eichenlaub':
+        # Currently under progress !
+        # Bandpass filtering
+        sm_sig = filt(sf, [0.5, 3], data, order=4)
 
-    thresh = np.nanmean(deriv) + threshold * np.nanstd(deriv)
+        # Bipolarization EOG2-EOG1
+        # ...to be done
 
-    # Find supra-threshold values
-    with np.errstate(divide='ignore', invalid='ignore'):
-        idx_sup_thr = np.where(deriv > thresh)[0]
+        # Find zerocrossing
+        zX = zerocrossing(sm_sig)
+
+        # Define threshold
+        if rem_only and 4 in hypno:
+            sm_sig[idx_zero] = np.nan
+        thresh = np.nanmean(sm_sig) + threshold * np.nanstd(sm_sig)
+
+        # Find supra-threshold values
+        with np.errstate(divide='ignore', invalid='ignore'):
+            idx_sup_thr = np.where(sm_sig > thresh)[0]
+            idxGap = np.where(np.diff(threshX) != 1)[0];
+            idx_start = [idx_sup_thr[0], idx_sup_thr[idxGap+1]];
+            idx_stop = [idx_sup_thr(idxGap), idx_sup_thr[-1]];
+
+        idx_zc_s = np.array([])
+        idx_zc_e = np.array([])
+        for ev in np.arange(0, idx_start.size):
+            a = np.where(zX - idx_start[ev] < 0)
+            if a.size > 0 or zX[a[-1]] != zX[-1]:
+                idx_zc_s = np.append(idx_zc_s, zX[a[-1]])
+                idx_zc_e = np.append(idx_zc_s, zX[a[-1]+1])
 
     if idx_sup_thr.size:
 
