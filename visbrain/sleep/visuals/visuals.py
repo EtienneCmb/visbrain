@@ -32,28 +32,36 @@ class Detection(object):
     """Create a detection object."""
 
     def __init__(self, channels, time, spincol=None, remcol=None,
-                 kccol=None, swcol=None, spinsym=None, remsym=None, kcsym=None,
-                 swsym=None, parent=None, parent_hyp=None):
+                 kccol=None, swcol=None, peakcol=None, spinsym=None,
+                 remsym=None, kcsym=None, swsym=None, peaksym=None,
+                 parent=None, parent_hyp=None):
         """Init."""
-        self.items = ['Spindles', 'REM', 'K-complexes', 'Slow waves']
+        self.items = ['Spindles', 'REM', 'K-complexes', 'Slow waves', 'Peaks']
         self.chans = channels
         self.dict = {}
         self.line = {}
+        self.peaks = {}
         self.seg = {}
         col = {'Spindles': spincol, 'REM': remcol, 'K-complexes': kccol,
-               'Slow waves': swcol}
+               'Slow waves': swcol, 'Peaks': peakcol}
         sym = {'Spindles': spinsym, 'REM': remsym, 'K-complexes': kcsym,
-               'Slow waves': swsym}
+               'Slow waves': swsym, 'Peaks': peaksym}
         self.time = time
-        self.hyp = scene.visuals.Markers(parent=parent_hyp)
+        self.hyp = Markers(parent=parent_hyp)
         self.hyp.set_gl_state('translucent')
         for num, k in enumerate(self):
             self[k] = {'index': np.array([]), 'color': col[k[1]],
                        'connect': np.array([]), 'sym': sym[k[1]]}
             par = parent[self.chans.index(k[0])]
-            self.line[k] = scene.visuals.Line(method='gl', parent=par,
-                                              color=col[k[1]])
-            self.line[k].set_gl_state('translucent')
+            if k[1] is not 'Peaks':
+                self.line[k] = scene.visuals.Line(method='gl', parent=par,
+                                                  color=col[k[1]])
+                self.line[k].set_gl_state('translucent')
+            else:
+                pos = np.zeros((1, 3), dtype=np.float32)
+                self.peaks[k] = Markers(pos=pos, parent=par,
+                                        face_color=col[k[1]])
+                self.peaks[k].set_gl_state('translucent')
 
     def __iter__(self):
         it = itertools.product(self.chans, self.items)
@@ -88,7 +96,11 @@ class Detection(object):
                 connect = np.gradient(index) == 1.
                 connect[0], connect[-1] = True, False
                 # Send data :
-                self.line[k].set_data(pos=pos, width=4., connect=connect, )
+                if k[1] is 'Peaks':
+                    self.peaks[k].set_data(pos=pos, edge_width=0.,
+                                           face_color=self[k]['color'])
+                else:
+                    self.line[k].set_data(pos=pos, width=4., connect=connect)
 
     def build_hyp(self, chan, types):
         """Build hypnogram report.
@@ -102,8 +114,12 @@ class Detection(object):
         """
         # Get index :
         index = self[(chan, types)]['index']
-        # Get only starting ponts :
-        start = index[np.hstack((np.gradient(index[0:-1]) != 1, [True]))][::2]
+        # Get only starting points :
+        if types == 'Peaks':
+            start = index
+        else:
+            start = index[np.hstack((np.gradient(index[0:-1]) != 1,
+                                     [True]))][::2]
         y = np.full_like(start, 1.5, dtype=float)
         z = np.full_like(start, -2., dtype=float)
         pos = np.vstack((self.time[start], y, z)).T
@@ -115,7 +131,10 @@ class Detection(object):
     def visible(self, viz, chan, types):
         """"""
         self.hyp.visible = viz
-        self.line[(chan, types)].visible = viz
+        if types is 'Peaks':
+            self.peaks[(chan, types)].visible = viz
+        else:
+            self.line[(chan, types)].visible = viz
 
     def nonzero(self):
         """Return the list of channels with non-empty detections."""
@@ -147,8 +166,9 @@ class Detection(object):
                 # Update dict and line :
                 self.dict[nkey] = self.dict[k]
                 self.line[nkey] = self.line[k]
+                self.peaks[nkey] = self.peaks[k]
                 # Remove old key :
-                del self.dict[k], self.line[k]
+                del self.dict[k], self.line[k], self.peaks[k]
         self.chans = newkeys
 
     def reset(self):
@@ -830,8 +850,9 @@ class visuals(vbShortcuts):
         # =================== DETECTIONS ===================
         self._detect = Detection(self._channels.copy(), self._time,
                                  self._defspin, self._defrem, self._defkc,
-                                 self._defsw, self._spinsym, self._swsym,
-                                 self._kcsym, self._remsym, self._chan.node,
+                                 self._defsw, self._defpeaks, self._spinsym,
+                                 self._remsym, self._kcsym, self._swsym,
+                                 self._peaksym, self._chan.node,
                                  self._hypCanvas.wc.scene)
 
         # =================== TOPOPLOT ===================
