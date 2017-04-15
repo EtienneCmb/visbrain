@@ -44,6 +44,8 @@ class uiDetection(object):
 
         # Export file :
         self._DetectLocExport.clicked.connect(self._fcn_exportLocation)
+        self._DetectExportAll.clicked.connect(self._fcn_exportAllDetections)
+        self._DetectImportAll.clicked.connect(self._fcn_importAllDetections)
 
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
@@ -370,3 +372,34 @@ class uiDetection(object):
                 listToCsv(file + '.csv', zip(staInd, duration, stage))
             elif selected_ext.find('txt') + 1:
                 listToTxt(file + '.txt', zip(staInd, duration, stage))
+
+    def _fcn_exportAllDetections(self):
+        """Export all locations."""
+        # Get file name :
+        path = QtGui.QFileDialog.getSaveFileName(
+            self, "Save all detections", filter='.npy')
+        path = str(path)  # py2
+        if path:
+            file = os.path.splitext(str(path))[0]
+            np.save(file + '.npy', self._detect.dict)
+
+    def _fcn_importAllDetections(self):
+        """Import detections."""
+        # Dialog window for detection file :
+        file = QtGui.QFileDialog.getOpenFileName(
+            self, "Import detections", "", "NumPy (*.npy)")
+        self._detect.dict = np.ndarray.tolist(np.load(file))
+        # Made canvas visbles :
+        for k in self._detect:
+            if self._detect[k]['index'].size:
+                # Get channel number :
+                idx = self._channels.index(k[0])
+                self.canvas_setVisible(idx, True)
+                self._chan.visible[idx] = True
+        self._fcn_sliderMove()
+        # Build line reports :
+        self._detect.build_line(self._data)
+        chans = self._detect.nonzero()
+        self._DetectChans.clear()
+        self._DetectChans.addItems(list(chans.keys()))
+        self._fcn_runSwitchLocation()
