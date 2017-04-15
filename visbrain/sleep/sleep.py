@@ -83,8 +83,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             if (file is None) or not isinstance(file, str):
                 # Dialog window for the main dataset :
                 file = QtGui.QFileDialog.getOpenFileName(
-                    self, "Open dataset", "", "Elan (*.eeg);;"
-                    "Brainvision (*.eeg);;Edf (*.edf);;Micromed (*.trc)")
+                    self, "Open dataset", "", "BrainVision /Elan (*.eeg);;"
+                    "Edf (*.edf);;Micromed (*.trc)")
                 file = str(file)  # py2
                 # Get the user path :
                 upath = os.path.split(file)[0]
