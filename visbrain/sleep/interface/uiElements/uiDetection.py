@@ -185,6 +185,7 @@ class uiDetection(object):
                 if not self.canvas_isVisible(k):
                     self.canvas_setVisible(k, True)
                     self._chan.visible[k] = True
+                self._chan.loc[k].visible = True
                 # Update plot :
                 self._fcn_sliderMove()
 
@@ -269,7 +270,9 @@ class uiDetection(object):
         # Get selected detection type :
         types = str(self._DetectTypes.currentText())
         # Set visibility :
-        self._detect.visible(self._DetectViz.isChecked(), chan, types)
+        viz = self._DetectViz.isChecked()
+        self._detect.visible(viz, chan, types)
+        self._chan.loc[self._channels.index(chan)].visible = viz
 
     def _fcn_runSwitchLocation(self):
         """Run switch location channel and type."""
