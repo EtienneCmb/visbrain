@@ -3,6 +3,9 @@
 Sleep
 =====
 
+.. figure::  picture/sleep.png
+   :align:   center
+
 Description
 -----------
 
@@ -13,10 +16,10 @@ Description
 
 Sleep is a graphical user interface dedicated to visualization and scoring of sleep data. Sleep runs on Vispy excellent package and benefits thus from the high-performance of this latter (GPU-based computation). Some of the most relevant features of Sleep include:
 
-* Dynamic display of polysomnographic data, spectrogram and hypnogram, with individual real-time adjustment of channel amplitude and visibility.
+* Dynamic display of polysomnographic data, spectrogram, hypnogram and topoplot, with individual real-time adjustment of channel amplitude and visibility.
 * Spectrogram display with several controllable parameters (e.g. frequency, channel, colormap)
 * Hypnogram editing and saving functions, as well as real-time computation of the main sleep parameters (see Hypnogram section).
-* Implementation of several semi-automatic detection method such as sleep spindles, rapid eye movements, slow waves, K-complex or peak detection. These can be performed either on single or multiple channels and report where each one of them on the hypnogram or inside a table. Each detection comes with several parameters that the user can adjust to find the optimal detection.
+* Implementation of several semi-automatic detection method such as sleep spindles, K-complexes, slow waves, rapid eye movements, muscle twitches or peak detection. These can be performed either on single or multiple channels and report where each one of them on the hypnogram or inside a table. Each detection comes with several parameters that the user can adjust to find the optimal detection.
 * Several others signal processing tools such as de-mean, de-trend and filtering. Those tools are directly applied to each channel and to the spectrogram
 * Nice and intuitive interface to help you scroll and explore your data.
 
@@ -40,24 +43,25 @@ Data files
 
 Here’s the list of currently supported extensions for data files:
 
-* BrainVision (**.eeg**)
-* `ELAN <http://elan.lyon.inserm.fr>`_ (**.eeg**)
+* BrainVision (**.eeg**) version 1 and 2
+* Micromed (**.trc**) version 4
 * European Data Format (**.edf**)
+* `ELAN <http://elan.lyon.inserm.fr>`_ (**.eeg**)
 
 .. note::
    Extensions above are the ones natively supported inside Sleep, but you can also directly pass numpy array or .mat file (loaded with scipy.loadmat)
 
 .. warning::
-   Sleep applies an automatic downsampling to 100 Hz upon loading. You can change this value with the “downsample” argument of Sleep (command-line only) or directly in the file sleep.py. If the sampling rate is a power of 2 (e.g 256Hz), the default downsampling frequency will be 64 Hz.
+   Sleep applies an automatic downsampling to 100 Hz upon loading. You can change this value with the “downsample” argument of Sleep (command-line only) or directly in the file sleep.py.
 
 Hypnogram
 ~~~~~~~~~
 
 Here's the list of supported extensions for hypnogram files :
 
-* **.hyp** (`ELAN <http://elan.lyon.inserm.fr>`_)
 * **.txt**
 * **.csv**
+* **.hyp** (`ELAN <http://elan.lyon.inserm.fr>`_)
 
 .. warning::
    There is no international gold standard for the hypnogram format yet and each lab can have its own format. To overcome problems caused by different sampling rate of hypnogram files and/or different values assigned to each sleep stages, Sleep requires that you specify these parameters in a .txt file. This text file should be in the same directory as the original hypnogram file and be named: *HYPNOFILENAME_description.txt*. Checkout this `example <https://github.com/EtienneCmb/visbrain/tree/master/docs/Hypnogram_excerpt2_description.txt>`_.
@@ -229,8 +233,8 @@ Spectrogram // hypnogram // time axis
   * colormap
 
 * Show / hide spectrogram, hypnogram, time axis
-* Display / hide visual indicators refering to the current time window 
-* Zoom : when zooming, the axis will fit to the time window according to the (window, step) parameters defined in the ruler 
+* Display / hide visual indicators refering to the current time window
+* Zoom : when zooming, the axis will fit to the time window according to the (window, step) parameters defined in the ruler
 
 Topoplot
 ^^^^^^^^
@@ -243,7 +247,7 @@ Topoplot
   * The amplitude
   * The power
 
-Filtered, amplitude and power are computed in a specific frequency band. The topoplot display the mean across the current time window according to the (window, step) parameters defined in the ruler. 
+Filtered, amplitude and power are computed in a specific frequency band. The topoplot display the mean across the current time window according to the (window, step) parameters defined in the ruler.
 
 .. figure::  picture/Sleep_topo.png
    :align:   center
@@ -372,7 +376,7 @@ Live editing consist of editing your hypnogram directly from the axis by adding 
 Detection
 ~~~~~~~~~
 
-The Detection panel offers several semi-automatic algorithms for the detection of sleep features such as sleep spindles, rapid eyes movements, slow waves, K-complexes and peaks. All detection types shared the following parameters :
+The Detection panel offers several semi-automatic algorithms for the detection of sleep features such as sleep spindles, K-complexes, rapid eyes movements, slow waves, muscle twitches and peaks. All detection types shared the following parameters :
 
 * *Apply on* : choose on which channel to perform the detection
 
@@ -444,6 +448,8 @@ Keys                    Description
 ==============          ==================================================================================
 mouse wheel             Move the current window
 mouse click             On a channel canvas, magnify signal under mouse location
+-                       Decrease amplitude
++                       Increase amplitude
 a                       Insert Artefact in the hypnogram
 w                       Insert Wake stage in the hypnogram
 1                       Insert N1 stage in the hypnogram

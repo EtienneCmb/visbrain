@@ -1,5 +1,8 @@
 # visbrain
 
+![Visbrain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain.png "Visbrain")
+
+
 Visbrain is a python package dedicated (mainly) to the visualization of neuroscientist data. Check the [documentation](http://etiennecmb.github.io/visbrain/) for further details
 
 ## Installation
@@ -34,7 +37,7 @@ The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard
 - Display connectivity link between sources
 	- Color connexions either by their strength or by the number of connexions per node
 	- Use a dynamic control of transparency to make stronger connexions more visible
-	- A lot of other color controls (colormap / limits / threshold...) 
+	- A lot of other color controls (colormap / limits / threshold...)
 - Deep structures (like brodmann areas, AAL...). Source's activity can be projected on deep sources.
 - Use either the graphical inteface to interact or use the [user functions](http://etiennecmb.github.io/visbrain/brain.html#user-functions) to run every commands without opening the interface. This tricks can be really usefull to produce a large number of figures.
 - Finally, export figures in high-definition.
@@ -45,17 +48,17 @@ The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard
 
 [Sleep](http://etiennecmb.github.io/visbrain/sleep.html) is a sleep data dedicated interface for visualization, processing and edition.
 
-- Load .eeg (Brainvision and ELAN), .edf or directly pass raw data
-- Visualize channels / spectrogram / hypnogram, time window control and fast plot update
+- Load .eeg (Brainvision and ELAN), .edf, .trc (Micromed) or directly pass raw data
+- Visualize channels / spectrogram / hypnogram / topoplot, time window control and fast plot update
 - Hypnogram edition (either by manually adding where stages start / finish or interactively by adding / dragging and moving points) and save the edited hypnogram (.txt, .csv and .hyp)
-- Spindles / REM / Peaks / Slow waves / K-complex detection and report results on each channel and hypnogram
+- Spindles / REM / Peaks / Slow waves / K-complex / Muscle twiches detection and report results on each channel and hypnogram
 - Signal processing tools (filtering...)
 
 ![sleep](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_main.png "Sleep : load, visualize and edit sleep data")
 
 ### Ndviz
 
-The [Ndviz](http://etiennecmb.github.io/visbrain/ndviz.html) module help you to visualize multi-dimentional data in a memory efficient way. 
+The [Ndviz](http://etiennecmb.github.io/visbrain/ndviz.html) module help you to visualize multi-dimentional data in a memory efficient way.
 
 - Nd-plot: visualize all of your signals in one grid
 - 1d-plot: visualize each signal individually in one of the several forms below

@@ -7,11 +7,13 @@ Brain instance.
 """
 
 import numpy as np
+from scipy.spatial import ConvexHull
 import os
 
+from .base.visuals import BrainMesh
 from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
-from ..utils import color2vb
+from ..utils import color2vb, AddMesh
 
 __all__ = ['userfcn']
 
@@ -224,7 +226,7 @@ class userfcn(object):
 
     # =========================================================================
     # =========================================================================
-    #                           BRAIN CONTROL
+    #                                  MESH
     # =========================================================================
     # =========================================================================
     def brain_control(self, template=None, show=True, hemisphere=None):
@@ -312,6 +314,31 @@ class userfcn(object):
             else:
                 eval('self.q_' + reflect_on + '.setChecked(True)')
         self._light_reflection()
+
+    def add_mesh(self, name, vertices, faces, **kwargs):
+        """Add a mesh to the scene.
+
+        Args:
+            name: string
+                Name of the object to add.
+
+            vertices: np.ndarray
+                Vertices of the mesh.
+
+            faces: np.ndarray
+                Faces of the mesh.
+
+        Kargs:
+            kargs: dict, optional, (def: {})
+                Supplementar arguments pass to the BrainMesh class.
+        """
+        # Add mesh to user objects :
+        self._userobj[name] = BrainMesh(vertices=vertices, faces=faces,
+                                        name=name, **kwargs)
+        self._userobj[name].set_camera(self.view.wc.camera)
+        self._userobj[name].parent = self._vbNode
+        # Add mesh for projection :
+        self._tobj[name] = AddMesh(self._userobj[name])
 
     # =========================================================================
     # =========================================================================
@@ -534,7 +561,7 @@ class userfcn(object):
         self._tprojectas = 'repartition'
         # Colormap control :
         self.sources_colormap(**kwargs)
-        # Run the corticale reparition :
+        # Run the corticale repartition :
         self._sourcesProjection()
 
     def sources_colormap(self, cmap=None, clim=None, vmin=None,
@@ -596,6 +623,31 @@ class userfcn(object):
             if k is not None:
                 self.sources._cb[i] = k
 
+    def sources_fit(self, obj='brain'):
+        """Force sources coordinates to fit to a selected object.
+
+        Kargs:
+            obj: string, optional, (def: 'brain')
+                The object name to fit. Use 'brain' or 'roi'.
+        """
+        # Get vertices of the selected object :
+        v = self._findVertices(obj)
+        # fit sources to the selected vertices :
+        self.sources._fit(v, self.progressbar)
+
+    def sources_to_convexHull(self, xyz):
+        """Convert a set of sources into a convex hull.
+
+        Args:
+            xyz: np.ndarray
+                Array of sources coordinates of shape (N, 3)
+
+        Returns:
+            faces: np.ndarray
+                A set of faces than can be then passed to the add_mesh method.
+        """
+        return ConvexHull(xyz).simplices
+
     def add_sources(self, name, **kwargs):
         """Add a supplementar source's object.
 
@@ -622,7 +674,34 @@ class userfcn(object):
     def connect_display(self, colorby=None, dynamic=None, show=True, cmap=None,
                         clim=None, vmin=None, under=None, vmax=None,
                         over=None):
-        """"""
+        """Update connectivity object.
+
+        Kargs:
+            colorby: string, optional, (def: 'strength')
+                Define how to color connexions. Use 'strength' if the color has
+                to be modulate by the connectivity strength. Use 'count' if the
+                color depends on the number of connexions per node. Use
+                'density'to define colors according to the number of line in a
+                sphere of radius c_dradius.
+
+            dynamic: tuple, optional, (def: None)
+                Control the dynamic opacity. For example, if c_dynamic=(0, 1),
+                strong connections will be more opaque than weak connections.
+
+            cmap: string, (def: 'inferno')
+                Matplotlib colormap name.
+
+            clim: tuple/list, (def: None)
+                Define the limit of the colorbar. This parameter must be a list
+                or tuple containing two float (like (3, 5)...).
+
+            vmin/vmax: int/float, (def: None/None)
+                Define a threshold to change colors that are under vmin or
+                over vmax. See under/over to change those colors.
+
+            under/over: string/tuple, (def: None/None)
+                The color to use for values under vmin and values over vmax.
+        """
         if colorby is not None:
             self.connect.colorby = colorby
         if dynamic is not None:
@@ -657,7 +736,7 @@ class userfcn(object):
     #                                 ROI
     # =========================================================================
     # =========================================================================
-    def roi_plot(self, selection=[], subdivision='brod', smooth=3):
+    def roi_plot(self, selection=[], subdivision='brod', smooth=3, name='roi'):
         """Select some roi to plot.
 
         Kargs:
@@ -672,6 +751,9 @@ class userfcn(object):
 
             smoth: int, optional, (def: 3)
                 Define smooth proportion.
+
+            name: string, optional, (def: 'ro')
+                Name of the displayed ROI.
 
         Example:
             >>> # Define a Brain instance :
@@ -701,6 +783,9 @@ class userfcn(object):
             self._roiSmooth.setValue(smooth)
             # Plot ROI :
             self._area_plot()
+            # Add roi to current objects and update list :
+            self._tobj[name] = self.area
+            self._fcn_updateProjList()
             # --------------- GUI ---------------
             # Set check the corresponding subdivision :
             if subdivision == 'brod':
@@ -710,7 +795,6 @@ class userfcn(object):
                 self.Sub_aal.setChecked(True)
                 idx = np.add(selection, -1)
             # Add selected items to the GUI :
-
             self.struct2add.addItems(self.area._label[idx])
             self.struct2select.clear()
             self.struct2select.addItems(self.area._label)

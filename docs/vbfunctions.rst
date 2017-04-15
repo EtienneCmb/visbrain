@@ -85,6 +85,14 @@ Add source object
 ~~~~~~~~~~~~~~~~~
 .. automethod:: visbrain.brain.user.userfcn.add_sources
 
+Fit to an object
+~~~~~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.sources_fit
+
+Convert into convex hull
+~~~~~~~~~~~~~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.sources_to_convexHull
+
 Cortical projection
 ~~~~~~~~~~~~~~~~~~~
 .. automethod:: visbrain.brain.user.userfcn.cortical_projection
@@ -106,6 +114,10 @@ Set of functions for an iteractive control of connectivity object. Use the metho
    :align:   center
 
    Example of connectivity setup.
+
+Connectivity settings
+~~~~~~~~~~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.connect_display
 
 Add connectivity object
 ~~~~~~~~~~~~~~~~~~~~~~~

@@ -9,9 +9,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1242</width>
-    <height>1017</height>
+    <width>1344</width>
+    <height>1039</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <stylestrategy>PreferDefault</stylestrategy>
+    <kerning>true</kerning>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Sleep</string>
@@ -43,7 +49,7 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>400</width>
+        <width>450</width>
         <height>16777215</height>
        </size>
       </property>
@@ -69,7 +75,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -116,15 +122,15 @@ spectrogram, hypnogram and the time axis</string>
            <item>
             <widget class="QToolBox" name="toolBox_2">
              <property name="currentIndex">
-              <number>2</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page_3">
               <property name="geometry">
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>761</height>
+                <width>410</width>
+                <height>783</height>
                </rect>
               </property>
               <attribute name="label">
@@ -181,8 +187,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>332</width>
-                       <height>515</height>
+                       <width>382</width>
+                       <height>537</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -404,7 +410,7 @@ spectrogram, hypnogram and the time axis</string>
                 <x>0</x>
                 <y>0</y>
                 <width>367</width>
-                <height>750</height>
+                <height>462</height>
                </rect>
               </property>
               <attribute name="label">
@@ -550,7 +556,7 @@ spectrogram, hypnogram and the time axis</string>
                           <number>1</number>
                          </property>
                          <property name="value">
-                          <double>0.500000000000000</double>
+                          <double>0.000000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -927,6 +933,14 @@ on</string>
               </layout>
              </widget>
              <widget class="QWidget" name="page_5">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>300</width>
+                <height>265</height>
+               </rect>
+              </property>
               <attribute name="label">
                <string>Topoplot</string>
               </attribute>
@@ -1653,8 +1667,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>360</width>
-                <height>792</height>
+                <width>410</width>
+                <height>814</height>
                </rect>
               </property>
               <attribute name="label">
@@ -2460,7 +2474,7 @@ hypnogram. Those informations change while editing it.</string>
                  </font>
                 </property>
                 <property name="text">
-                 <string>Perform a REM, spindles or peak detection either on
+                 <string>Perform automatic detection of several sleep microstructural features either on
 selected, visible or all channels.</string>
                 </property>
                 <property name="alignment">
@@ -2474,59 +2488,13 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
                <string>Settings</string>
               </attribute>
               <layout class="QVBoxLayout" name="verticalLayout_38">
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_10">
-                 <property name="spacing">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <spacer name="horizontalSpacer_34">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="_ToolDetecVisible">
-                   <property name="text">
-                    <string>Display detection</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_29">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
                <item>
                 <widget class="QGroupBox" name="groupBox_3">
                  <property name="title">
@@ -2567,19 +2535,6 @@ selected, visible or all channels.</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="3" colspan="3">
-                     <widget class="QCheckBox" name="_ToolDetecReport">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Report the detection on the hypnogram. Only avaible for selected channel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="text">
-                       <string>Report detection on hypnogram</string>
-                      </property>
-                      <property name="checked">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="0" column="3" colspan="3">
                      <widget class="QComboBox" name="_ToolDetectType">
                       <property name="toolTip">
@@ -2608,6 +2563,11 @@ selected, visible or all channels.</string>
                       <item>
                        <property name="text">
                         <string>K-complexes</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Muscle twitches</string>
                        </property>
                       </item>
                      </widget>
@@ -2857,8 +2817,11 @@ on</string>
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of standard deviation of the derivative signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
                          <property name="value">
-                          <double>2.000000000000000</double>
+                          <double>3.000000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -3092,6 +3055,9 @@ on</string>
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Look for signals having an amplitude 'Threshold' times superior to the deviation of the filtered signal amplitude&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
                          <property name="value">
                           <double>2.000000000000000</double>
                          </property>
@@ -3127,41 +3093,11 @@ on</string>
                           </font>
                          </property>
                          <property name="text">
-                          <string>Slow
-waves</string>
+                          <string>Slow waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="5">
-                        <spacer name="horizontalSpacer_8">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="1" column="4">
-                        <widget class="QDoubleSpinBox" name="_ToolWaveAmp">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum amplitude (mV) of Slow Wave (0 for no amplitude criteria)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                         <property name="minimum">
-                          <double>0.000000000000000</double>
-                         </property>
-                         <property name="maximum">
-                          <double>200.000000000000000</double>
-                         </property>
-                         <property name="value">
-                          <double>70.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="4">
+                       <item row="0" column="3" rowspan="2">
                         <widget class="QDoubleSpinBox" name="_ToolWaveTh">
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Normalized Delta power threshold (between 0 and 1) &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -3173,14 +3109,7 @@ waves</string>
                           <double>0.050000000000000</double>
                          </property>
                          <property name="value">
-                          <double>0.800000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="2">
-                        <widget class="QLabel" name="label_46">
-                         <property name="text">
-                          <string>Delta power (norm.)</string>
+                          <double>0.750000000000000</double>
                          </property>
                         </widget>
                        </item>
@@ -3197,24 +3126,21 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="2">
-                        <widget class="QLabel" name="label_47">
+                       <item row="0" column="2" rowspan="2">
+                        <widget class="QLabel" name="label_46">
                          <property name="text">
-                          <string>Amplitude (mV)</string>
+                          <string>Delta power (norm.)</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="3">
-                        <spacer name="horizontalSpacer_18">
+                       <item row="0" column="4" rowspan="2">
+                        <spacer name="horizontalSpacer_8">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
                          </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Minimum</enum>
-                         </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>20</width>
+                           <width>40</width>
                            <height>20</height>
                           </size>
                          </property>
@@ -3248,10 +3174,13 @@ waves</string>
                      </property>
                      <item>
                       <layout class="QGridLayout" name="gridLayout_8">
+                       <property name="verticalSpacing">
+                        <number>9</number>
+                       </property>
                        <property name="topMargin">
                         <number>0</number>
                        </property>
-                       <item row="3" column="2" colspan="4">
+                       <item row="4" column="2" colspan="4">
                         <widget class="QWidget" name="widget_8" native="true">
                          <property name="minimumSize">
                           <size>
@@ -3274,6 +3203,28 @@ waves</string>
                            </widget>
                           </item>
                           <item>
+                           <widget class="QDoubleSpinBox" name="_ToolKCMinAmp">
+                            <property name="toolTip">
+                             <string>Min amplitude of KC</string>
+                            </property>
+                            <property name="decimals">
+                             <number>1</number>
+                            </property>
+                            <property name="minimum">
+                             <double>1.000000000000000</double>
+                            </property>
+                            <property name="maximum">
+                             <double>2000.000000000000000</double>
+                            </property>
+                            <property name="singleStep">
+                             <double>10.000000000000000</double>
+                            </property>
+                            <property name="value">
+                             <double>100.000000000000000</double>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
                            <widget class="QDoubleSpinBox" name="_ToolKCMaxAmp">
                             <property name="toolTip">
                              <string>Max amplitude of KC</string>
@@ -3282,26 +3233,7 @@ waves</string>
                              <number>1</number>
                             </property>
                             <property name="minimum">
-                             <double>75.000000000000000</double>
-                            </property>
-                            <property name="maximum">
-                             <double>2000.000000000000000</double>
-                            </property>
-                            <property name="singleStep">
-                             <double>5.000000000000000</double>
-                            </property>
-                            <property name="value">
-                             <double>500.000000000000000</double>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QDoubleSpinBox" name="_ToolKCMinAmp">
-                            <property name="toolTip">
-                             <string>Min amplitude of KC</string>
-                            </property>
-                            <property name="decimals">
-                             <number>1</number>
+                             <double>101.000000000000000</double>
                             </property>
                             <property name="maximum">
                              <double>1000.000000000000000</double>
@@ -3310,7 +3242,7 @@ waves</string>
                              <double>5.000000000000000</double>
                             </property>
                             <property name="value">
-                             <double>75.000000000000000</double>
+                             <double>600.000000000000000</double>
                             </property>
                            </widget>
                           </item>
@@ -3326,11 +3258,11 @@ waves</string>
                           </sizepolicy>
                          </property>
                          <property name="text">
-                          <string>Threshold (std)</string>
+                          <string>Proba threshold</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="0" rowspan="5">
+                       <item row="0" column="0" rowspan="6">
                         <widget class="QLabel" name="kc_label">
                          <property name="font">
                           <font>
@@ -3342,7 +3274,7 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="2" colspan="4">
+                       <item row="5" column="2" colspan="4">
                         <widget class="QCheckBox" name="_ToolKCNremOnly">
                          <property name="text">
                           <string>Use hypnogram to improve detection</string>
@@ -3350,7 +3282,7 @@ waves</string>
                         </widget>
                        </item>
                        <item row="0" column="4" rowspan="2" colspan="2">
-                        <widget class="QDoubleSpinBox" name="_ToolKCTh">
+                        <widget class="QDoubleSpinBox" name="_ToolKCProbTh">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                            <horstretch>0</horstretch>
@@ -3361,17 +3293,17 @@ waves</string>
                           <string>Number of standard deviations of the wavelet envelope</string>
                          </property>
                          <property name="maximum">
-                          <double>100.000000000000000</double>
+                          <double>1.000000000000000</double>
                          </property>
                          <property name="singleStep">
-                          <double>0.500000000000000</double>
+                          <double>0.100000000000000</double>
                          </property>
                          <property name="value">
-                          <double>2.000000000000000</double>
+                          <double>0.800000000000000</double>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="1" rowspan="5">
+                       <item row="0" column="1" rowspan="6">
                         <widget class="Line" name="line_19">
                          <property name="minimumSize">
                           <size>
@@ -3384,7 +3316,7 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="2" column="2" colspan="4">
+                       <item row="3" column="2" colspan="4">
                         <widget class="QWidget" name="widget_7" native="true">
                          <property name="minimumSize">
                           <size>
@@ -3424,7 +3356,7 @@ waves</string>
                              <double>50.000000000000000</double>
                             </property>
                             <property name="value">
-                             <double>500.000000000000000</double>
+                             <double>400.000000000000000</double>
                             </property>
                            </widget>
                           </item>
@@ -3446,12 +3378,123 @@ waves</string>
                              <double>50.000000000000000</double>
                             </property>
                             <property name="value">
-                             <double>1500.000000000000000</double>
+                             <double>4000.000000000000000</double>
                             </property>
                            </widget>
                           </item>
                          </layout>
                         </widget>
+                       </item>
+                       <item row="2" column="4" colspan="2">
+                        <widget class="QDoubleSpinBox" name="_ToolKCAmpTh">
+                         <property name="maximum">
+                          <double>10.000000000000000</double>
+                         </property>
+                         <property name="singleStep">
+                          <double>0.500000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>1.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="2" colspan="2">
+                        <widget class="QLabel" name="label_71">
+                         <property name="text">
+                          <string>Amp threshold</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="_ToolMTPanel" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_47">
+                     <property name="margin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <layout class="QGridLayout" name="gridLayout_29">
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <item row="0" column="3">
+                        <widget class="QDoubleSpinBox" name="_ToolMTTh">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of standard deviation of the derivative signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
+                         <property name="maximum">
+                          <double>20.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>3.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2">
+                        <widget class="QLabel" name="label_93">
+                         <property name="text">
+                          <string>Threshold</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="2" colspan="4">
+                        <widget class="QCheckBox" name="_ToolMTOnly">
+                         <property name="text">
+                          <string>Perform detection only for REM sleep</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1" rowspan="2">
+                        <widget class="Line" name="line_37">
+                         <property name="minimumSize">
+                          <size>
+                           <width>10</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0" rowspan="2">
+                        <widget class="QLabel" name="label_94">
+                         <property name="font">
+                          <font>
+                           <italic>true</italic>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Muscle
+Twitches</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="4">
+                        <spacer name="horizontalSpacer_42">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
                        </item>
                       </layout>
                      </item>
@@ -3558,20 +3601,161 @@ waves</string>
               </attribute>
               <layout class="QVBoxLayout" name="verticalLayout_39">
                <item>
-                <widget class="QLabel" name="_DetectLocHead">
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
+                <layout class="QGridLayout" name="gridLayout_23">
+                 <property name="leftMargin">
+                  <number>9</number>
                  </property>
-                 <property name="text">
-                  <string>HEADER_chan</string>
+                 <property name="topMargin">
+                  <number>0</number>
                  </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
+                 <property name="bottomMargin">
+                  <number>0</number>
                  </property>
-                </widget>
+                 <property name="spacing">
+                  <number>3</number>
+                 </property>
+                 <item row="1" column="2" colspan="2">
+                  <widget class="QWidget" name="widget_11" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_19">
+                    <property name="topMargin">
+                     <number>3</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>3</number>
+                    </property>
+                    <item>
+                     <widget class="QPushButton" name="_DetectSelect">
+                      <property name="text">
+                       <string>Select</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="_DetectRm">
+                      <property name="text">
+                       <string>Remove</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="_DetectViz">
+                      <property name="text">
+                       <string>Visible</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                      <property name="tristate">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="3">
+                  <widget class="QComboBox" name="_DetectTypes">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the detection type on this channel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QComboBox" name="_DetectChans">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the channel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1" rowspan="2">
+                  <widget class="Line" name="line_28">
+                   <property name="minimumSize">
+                    <size>
+                     <width>10</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0" rowspan="2">
+                  <widget class="QLabel" name="label_72">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Selection</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2" colspan="2">
+                  <widget class="QWidget" name="widget_12" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_10">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QPushButton" name="_DetectExportAll">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Export all detections in a NumPy compatible format (.npy)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Export all</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="_DetectImportAll">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Import all detections in a NumPy compatible format (.npy)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Import all</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="Line" name="line_30">
+                   <property name="minimumSize">
+                    <size>
+                     <width>10</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_73">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Export / import</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
                <item>
                 <widget class="QTableWidget" name="_DetectLocations">
@@ -3609,6 +3793,19 @@ waves</string>
                  <property name="topMargin">
                   <number>0</number>
                  </property>
+                 <item row="0" column="1">
+                  <widget class="Line" name="line_29">
+                   <property name="minimumSize">
+                    <size>
+                     <width>10</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_48">
                    <property name="sizePolicy">
@@ -3617,8 +3814,13 @@ waves</string>
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
                    <property name="text">
-                    <string>Export as</string>
+                    <string>Export table</string>
                    </property>
                   </widget>
                  </item>
@@ -3629,7 +3831,7 @@ waves</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="1">
+                 <item row="0" column="2">
                   <widget class="QComboBox" name="_DetectLocExportAs">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -3649,18 +3851,12 @@ waves</string>
                    </item>
                   </widget>
                  </item>
-                 <item row="0" column="2">
-                  <spacer name="horizontalSpacer">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                 <item row="0" column="4">
+                  <widget class="QPushButton" name="_DetectLocImport">
+                   <property name="text">
+                    <string>Import</string>
                    </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
+                  </widget>
                  </item>
                 </layout>
                </item>
@@ -3683,19 +3879,6 @@ waves</string>
       <property name="rightMargin">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <spacer name="horizontalSpacer_13">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="0" column="1">
        <widget class="QWidget" name="_topoW" native="true">
         <property name="minimumSize">
@@ -3722,6 +3905,19 @@ waves</string>
          </item>
         </layout>
        </widget>
+      </item>
+      <item row="0" column="0">
+       <spacer name="horizontalSpacer_13">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item row="1" column="0" colspan="2">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -3785,10 +3981,23 @@ waves</string>
              <property name="topMargin">
               <number>0</number>
              </property>
-             <item row="2" column="10">
-              <widget class="QLabel" name="label_6">
+             <item row="2" column="2">
+              <widget class="QLabel" name="label_12">
                <property name="text">
                 <string>sec</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="18">
+              <widget class="QSlider" name="_SlVal">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::NoTicks</enum>
+               </property>
+               <property name="tickInterval">
+                <number>10</number>
                </property>
               </widget>
              </item>
@@ -3807,6 +4016,13 @@ waves</string>
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="2" column="10">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>sec</string>
+               </property>
+              </widget>
              </item>
              <item row="2" column="5">
               <widget class="QDoubleSpinBox" name="_SigWin">
@@ -3838,6 +4054,19 @@ waves</string>
                </property>
               </widget>
              </item>
+             <item row="2" column="11">
+              <spacer name="horizontalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
              <item row="2" column="13">
               <widget class="QComboBox" name="_slRules">
                <property name="currentIndex">
@@ -3858,26 +4087,6 @@ waves</string>
                  <string>hours</string>
                 </property>
                </item>
-              </widget>
-             </item>
-             <item row="2" column="11">
-              <spacer name="horizontalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>sec</string>
-               </property>
               </widget>
              </item>
              <item row="2" column="0">
@@ -3957,27 +4166,14 @@ waves</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="16">
+             <item row="2" column="17">
               <widget class="QCheckBox" name="_slMagnify">
                <property name="text">
                 <string>Magnify</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="0" colspan="17">
-              <widget class="QSlider" name="_SlVal">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>10</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0" colspan="17">
+             <item row="0" column="0" colspan="18">
               <widget class="QLabel" name="_SlText">
                <property name="text">
                 <string>TextLabel</string>
@@ -3987,6 +4183,13 @@ waves</string>
                </property>
                <property name="margin">
                 <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="16">
+              <widget class="QCheckBox" name="_slAbsTime">
+               <property name="text">
+                <string>Absolute time</string>
                </property>
               </widget>
              </item>
@@ -4019,7 +4222,7 @@ waves</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1242</width>
+     <width>1344</width>
      <height>25</height>
     </rect>
    </property>

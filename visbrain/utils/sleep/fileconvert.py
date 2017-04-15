@@ -6,6 +6,7 @@ specific files including *.eeg, *.edf...
 
 import numpy as np
 import os
+import datetime
 from warnings import warn
 
 from ..others import check_downsampling
@@ -14,7 +15,7 @@ __all__ = ['load_sleepdataset', 'load_hypno', 'save_hypnoToElan',
            'save_hypnoTotxt']
 
 
-def load_sleepdataset(path, downsample=100.):
+def load_sleepdataset(path, downsample=None):
     """Load a sleep dataset (elan, edf, brainvision).
 
     Args:
@@ -35,14 +36,25 @@ def load_sleepdataset(path, downsample=100.):
         chan: list
             The list of channel's names.
 
-        resampling: bool
-            A boolean value if data need a resampling after loading.
+        N: int
+            Number of samples in the original data
+
+        start_time: time(hh:mm:ss)
+            Starting time of the recording
+
+        Example:
+            >> > import os
+            >> >  # Define path where the file is located
+            >> > pathfile = 'mypath/'
+            >> > path = os.path.join(pathfile, 'myfile.*')
+            >> > sf, data, chan, N, start_time = load_sleepdataset(path, 100.)
     """
     # Test if file exist :
     assert os.path.isfile(path)
 
     # Extract file extension :
     file, ext = os.path.splitext(path)
+    ext = ext.lower()
 
     # Switch between differents types :
     if ext == '.eeg':
@@ -64,6 +76,9 @@ def load_sleepdataset(path, downsample=100.):
     # EDF :
     elif ext == '.edf':
         return edf2array(path, downsample)
+
+    elif ext == '.trc':
+        return micromed2array(path, downsample)
 
     # None :
     else:
@@ -243,12 +258,6 @@ def swap_hyp_values(hypno, desc):
         N3      1           3
         REM     0           4
     """
-    # assert os.path.isfile(desc)
-
-    # labels = np.genfromtxt(desc, dtype=str, delimiter=" ", usecols=0)
-    # values = np.genfromtxt(desc, dtype=int, delimiter=" ", usecols=1)
-    # hyp = {label: row for label, row in zip(labels, values)}
-
     # Swap values
     hypno_s = -1 * np.ones(shape=(hypno.shape), dtype=int)
 
@@ -282,22 +291,18 @@ def swap_hyp_values(hypno, desc):
     return hypno_s
 
 
-def elan2array(path, downsample=100.):
+def elan2array(path, downsample=None):
     """Read Elan eeg file into NumPy.
 
     Elan format specs: http: // elan.lyon.inserm.fr/
-    An Elan dataset is separated into 3 files:
-    - .eeg          raw data file
-    - .eeg.ent      hearder file
-    - .pos          events file
 
     Args:
         path: str
             Filename(with full path) to Elan .eeg file
 
     Kargs
-        downsample: float, optional, (def: 100.)
-            The downsampling frequncy.
+        downsample: float, optional, (def: None)
+            The downsampling frequency.
 
     Return:
         sf: int
@@ -309,15 +314,11 @@ def elan2array(path, downsample=100.):
         chan: list
             The list of channel's names.
 
-        time: np.ndarray
-            The down-sampled time vector.
+        N: int
+            Number of samples in the original data
 
-    Example:
-        >> > import os
-        >> >  # Define path where the file is located
-        >> > pathfile = 'mypath/'
-        >> > path = os.path.join(pathfile, 'myfile.eeg')
-        >> > sf, data, chan, = elan2array(path)
+        start_time: time(hh:mm:ss)
+            Starting time of the recording
     """
     header = path + '.ent'
 
@@ -342,6 +343,19 @@ def elan2array(path, downsample=100.):
 
     # Sampling rate
     sf = 1. / float(ent[8])
+
+    # Record starting time
+    if ent[4] != "No time":
+        rec_time = ent[4]
+        hour, minutes, sec = ent[4].split(':')
+        start_time = datetime.time(int(hour), int(minutes), int(sec))
+
+        rec_date = ent[3]
+        day, month, year = ent[3].split(':')
+        start_date = datetime.date(int(year) + 1900, int(month), int(day))
+    else:
+        start_time = datetime.time(0, 0, 0)
+        start_date = datetime.date(1900, 1, 1)
 
     # Channels
     nb_chan = np.int(ent[9])
@@ -390,10 +404,10 @@ def elan2array(path, downsample=100.):
     data = m_raw[chan_list, ::ds] * \
         Gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return sf, downsample, data, list(chan), N
+    return sf, downsample, data, list(chan), N, start_time
 
 
-def edf2array(path, downsample=100.):
+def edf2array(path, downsample=None):
     """Read European Data Format (EDF) file into NumPy.
 
     Use phypno class for reading EDF files:
@@ -404,7 +418,7 @@ def edf2array(path, downsample=100.):
             Filename(with full path) to EDF file
 
     Kargs:
-        downsample: float, optional, (def: 100.)
+        downsample: float, optional, (def: None)
             The downsampling frequency.
 
     Return:
@@ -417,12 +431,11 @@ def edf2array(path, downsample=100.):
         chan: list
             The list of channel's names.
 
-    Example:
-        >> > import os
-        >> >  # Define path where the file is located
-        >> > pathfile = 'mypath/'
-        >> > path = os.path.join(pathfile, 'myfile.edf')
-        >> > sf, data, chan, = edf2array(path)
+        N: int
+            Number of points in the original data
+
+        start_time: time(hh:mm:ss)
+            Starting time of the recording
     """
     assert os.path.isfile(path)
 
@@ -431,7 +444,8 @@ def edf2array(path, downsample=100.):
     edf = Edf(path)
 
     # Return header informations
-    _, _, sf, chan, n_samples, _ = edf.return_hdr()
+    _, start_time, sf, chan, n_samples, _ = edf.return_hdr()
+    start_time = start_time.time()
 
     # Keep only data channels (e.g excludes marker chan)
     freqs = np.unique(edf.hdr['n_samples_per_record'])
@@ -456,10 +470,10 @@ def edf2array(path, downsample=100.):
     else:
         ds = 1
 
-    return float(sf), downsample, data[:, ::ds], list(chan), N
+    return float(sf), downsample, data[:, ::ds], list(chan), N, start_time
 
 
-def brainvision2array(path, downsample=100.):
+def brainvision2array(path, downsample=None):
     """Read BrainVision file.
 
     Poor man's version of https: // gist.github.com / breuderink / 6266871
@@ -474,7 +488,7 @@ def brainvision2array(path, downsample=100.):
             Filename(with full path) to .eeg file
 
     Kargs:
-        downsample: float, optional, (def: 100.)
+        downsample: float, optional, (def: None)
             The downsampling frequency.
 
     Return:
@@ -487,18 +501,25 @@ def brainvision2array(path, downsample=100.):
         chan: list
             The list of channel's names.
 
+        N: int
+            Number of points in the original data
+
+        start_time: time(hh:mm:ss)
+            Starting time of the recording
+
     Example:
         >> > import os
         >> >  # Define path where the file is located
         >> > pathfile = 'mypath/'
         >> > path = os.path.join(pathfile, 'myfile.eeg')
-        >> > sf, data, chan, = brainvision2array(path)
+        >> > sf, ds, data, chan, N, start_time = brainvision2array(path)
     """
     import re
 
     assert os.path.splitext(path)[1] == '.eeg'
 
     header = os.path.splitext(path)[0] + '.vhdr'
+    marker = os.path.splitext(path)[0] + '.vmrk'
 
     assert os.path.isfile(path)
     assert os.path.isfile(header)
@@ -509,10 +530,37 @@ def brainvision2array(path, downsample=100.):
 
     ent = np.char.decode(ent)
 
-    # Channels info
-    n_chan = int(re.findall('\d+', ent[10])[0])
-    # n_samples = int(re.findall('\d+', ent[11])[0])
-    sf = float(re.findall('\d+', ent[14])[0])
+    # Check header version
+    h_vers = int(re.findall('\d+', ent[0])[0])
+
+    if h_vers == 2:
+        n_chan = int(re.findall('\d+', ent[10])[0])
+        # n_samples = int(re.findall('\d+', ent[11])[0])
+        si = float(re.findall('\d+', ent[14])[0])
+        sf = 1 / (si * 0.000001)
+        assert "INT_16" in ent[22]
+
+    elif h_vers == 1:
+        n_chan = int(re.findall('\d+', ent[9])[0])
+        si = float(re.findall('\d+', ent[11])[0])
+        sf = 1 / (si * 0.000001)
+        assert "INT_16" in ent[13]
+
+    # Read marker file (if present) to extract recording time
+    if os.path.isfile(marker):
+        vmrk = np.genfromtxt(marker, delimiter='\n', usecols=[0],
+                             dtype=None, skip_header=0)
+
+        vmrk = np.char.decode(vmrk)
+        line_time = np.array(np.where(np.char.find(vmrk, 'Mk1=') == 0)).min()
+
+        st = re.split('\W+', vmrk[line_time])[-1]
+        start_date = datetime.date(int(st[0:4]), int(st[4:6]), int(st[6:8]))
+        start_time = datetime.time(int(st[8:10]), int(st[10:12]), \
+                                                                int(st[12:14]))
+    else:
+        start_date = datetime.date(1900, 1, 1)
+        start_time = datetime.time(0, 0, 0)
 
     # Extract channel labels and resolution
     start_label = np.array(np.where(np.char.find(ent, 'Ch1=') == 0)).min()
@@ -529,7 +577,6 @@ def brainvision2array(path, downsample=100.):
     # Check binary format
     assert "MULTIPLEXED" in ent[8]
     assert "BINARY" in ent[6]
-    assert "INT_16" in ent[22]
 
     with open(path, 'rb') as f:
         raw = f.read()
@@ -550,7 +597,113 @@ def brainvision2array(path, downsample=100.):
     else:
         ds = 1
 
-    return sf, downsample, data[:, ::ds], list(chan), N
+    return sf, downsample, data[:, ::ds], list(chan), N, start_time
+
+
+def micromed2array(path, downsample=None):
+    """Read Micromed (*.trc) file version 4.
+
+    Poor man's version of micromedio.py from Neo package
+    (https://pythonhosted.org/neo/)
+
+    Args:
+        path: str
+            Filename(with full path) to .trc file
+
+    Kargs:
+        downsample: float, optional, (def: None)
+            The downsampling frequency.
+
+    Return:
+        sf: float
+            The sampling frequency.
+
+        downsample: float
+            The downsampling frequency
+
+        data: np.ndarray
+            The data organised as well(n_channels, n_points)
+
+        chan: list
+            The list of channel's names.
+
+        N: int
+            Number of samples in the original signal
+
+        start_time: time(hh:mm:ss)
+            Starting time of the recording
+    """
+    import struct
+
+    def read_f(f, fmt):
+        return struct.unpack(fmt, f.read(struct.calcsize(fmt)))
+
+    with open(path, 'rb') as f:
+        # Read header
+        f.seek(175, 0)
+        header_version, = read_f(f, 'b')
+        assert header_version == 4
+
+        f.seek(138, 0)
+        data_start_offset, n_chan, _, sf, nbytes = read_f(f, 'IHHHH')
+
+        f.seek(128, 0)
+        day, month, year, hour, minute, sec = read_f(f, 'bbbbbb')
+        start_date = datetime.date(year + 1900, month, day)
+        start_time = datetime.time(hour, minute, sec)
+
+        # Raw data
+        f.seek(data_start_offset, 0)
+        m_raw = np.fromstring(f.read(), dtype='u'+str(nbytes))
+        m_raw = m_raw.reshape((int(m_raw.size/n_chan), n_chan)).transpose()
+
+        # Read label / gain
+        gain = []
+        chan = []
+        logical_ground = []
+        data = np.empty(shape=m_raw.shape, dtype=np.float32)
+
+        f.seek(176, 0)
+        zone_names = ['ORDER', 'LABCOD']
+        zones = {}
+        for zname in zone_names:
+            zname2, pos, length = read_f(f, '8sII')
+            zones[zname] = zname2, pos, length
+
+        zname2, pos, length = zones['ORDER']
+        f.seek(pos, 0)
+        code = np.fromfile(f, dtype='u2', count=n_chan)
+
+        for c in range(n_chan):
+            zname2, pos, length = zones['LABCOD']
+            f.seek(pos + code[c] * 128 + 2, 0)
+
+            chan = np.append(chan, f.read(6).decode('utf-8').strip())
+            ground = f.read(6).decode('utf-8').strip()
+            logical_min, logical_max, logic_ground_chan, physical_min, \
+                                physical_max = read_f(f, 'iiiii')
+
+            logical_ground = np.append(logical_ground, logic_ground_chan)
+
+            gain = np.append(gain, float(physical_max - physical_min) / \
+                                        float(logical_max-logical_min+1))
+
+    # Multiply by gain
+    m_raw = m_raw - logical_ground[:, np.newaxis]
+    data = m_raw * gain[:, np.newaxis].astype(np.float32)
+
+    # Get original signal length :
+    N = data.shape[1]
+
+    # Get downsample factor :
+    if downsample is not None:
+        # Check down-sampling :
+        downsample = check_downsampling(sf, downsample)
+        ds = int(np.round(sf / downsample))
+    else:
+        ds = 1
+
+    return sf, downsample, data[:, ::ds], list(chan), N, start_time
 
 
 def save_hypnoToElan(filename, hypno, sf, sfori, N):

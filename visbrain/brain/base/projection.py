@@ -14,18 +14,28 @@ class Projections(object):
     """
 
     def __init__(self, t_radius=10.0, t_projecton='brain', t_contribute=False,
-                 t_projectas='activity', **kwargs):
+                 t_projectas='activity', t_fitto='brain', **kwargs):
         """Init."""
+        self._tobj = {}
         self._tradius = t_radius
         self._tprojecton = t_projecton
         self._tprojectas = t_projectas
         self._tcontribute = t_contribute
+        self._tfitto = 'brain'
         self._idxmasked = None
         self._modproj = None
 
     # ======================================================================
     # PROJECTIONS
     # ======================================================================
+    def _findVertices(self, obj):
+        """Find the vertices from the object."""
+        if obj in self._tobj.keys():
+            return self._tobj[obj].mesh.get_vertices
+        else:
+            raise ValueError(obj + " not found. USe : " +
+                             list(self._tobj.keys))
+
     def _sourcesProjection(self):
         """Apply corticale projection."""
         # =============== CHECKING ===============
@@ -36,11 +46,6 @@ class Projections(object):
             raise ValueError("The radius parameter must be a integer or a "
                              "float number.")
 
-        # Check the projecton parameter :
-        if self._tprojecton not in ['brain', 'roi']:
-            raise ValueError("The projecton parameter must either be 'brain'"
-                             " or 'roi'.")
-
         # Check projection type :
         if self._tprojectas not in ['activity', 'repartition']:
             raise ValueError("The t_projectas parameter must either be "
@@ -49,12 +54,7 @@ class Projections(object):
                              "contributing sources per vertex.")
 
         # =============== VERTICES ===============
-        # Project on brain surface :
-        if self._tprojecton == 'brain':
-            v = self.atlas.vert
-        # Project on deep areas :
-        elif self._tprojecton == 'roi':
-            v = self.area.mesh.get_vertices
+        v = self._findVertices(self._tprojecton)
         self._vsh = v.shape
 
         # ============= MODULATIONS =============
@@ -83,10 +83,7 @@ class Projections(object):
             color[self._idxmasked, ...] = self.sources.smaskcolor
 
         # ============= MESH =============
-        if self._tprojecton == 'brain':
-            self.atlas.mesh.set_color(data=color)
-        elif self._tprojecton == 'roi':
-            self.area.mesh.set_color(data=color)
+        self._tobj[self._tprojecton].mesh.set_color(data=color)
 
     def _cleanProj(self):
         """Clean projection variables."""

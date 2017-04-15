@@ -16,7 +16,7 @@ from vispy.visuals import Visual
 from vispy.geometry import MeshData
 import vispy.visuals.transforms as vist
 
-from ....utils import array2colormap, color2vb, normalize, vpnormalize
+from ....utils import array2colormap, color2vb, vpnormalize
 
 __all__ = ['BrainVisual']
 

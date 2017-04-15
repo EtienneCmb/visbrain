@@ -1,6 +1,7 @@
 """Main class for settings managment."""
 import numpy as np
 import os
+import datetime
 
 from PyQt4.QtGui import *
 from PyQt4.QtCore import QObjectCleanupHandler
@@ -63,8 +64,10 @@ class uiSettings(object):
         # Grid toggle :
         self._slGrid.clicked.connect(self._fcn_gridToggle)
         # Text format :
-        self._slTxtFormat = "Window: [ {start} ; {end} ] {unit} || " + \
-                            "Sleep stage: {conv}"
+        self._slTxtFormat = "Window : [ {start} ; {end} ] {unit} || " + \
+                            "Sleep stage : {conv}"
+        # Absolute time :
+        self._slAbsTime.clicked.connect(self._fcn_sliderMove)
         # Magnify :
         self._slMagnify.clicked.connect(self._fcn_sliderMagnify)
 
@@ -93,7 +96,7 @@ class uiSettings(object):
         filename = QFileDialog.getSaveFileName(self, 'Screenshot',
                                                os.path.join(os.getenv('HOME'),
                                                             'screenshot.jpg'),
-                                               "Picture (*.jpg);;;;All files"
+                                               "Picture (*.jpg);;All files"
                                                " (*.*)")
         filename = str(filename)  # py2
         if filename:
@@ -194,23 +197,35 @@ class uiSettings(object):
             self._timecam.rect = (xlim[0], 0., win, 1.)
 
         # ================= TEXT INFO =================
-        # Get unit and convert:
-        unit = self._slRules.currentText()
-        if unit == 'seconds':
-            fact = 1.
-        elif unit == 'minutes':
-            fact = 60.
-        elif unit == 'hours':
-            fact = 3600.
-        xconv = np.round((1000*xlim[0]/fact, 1000*xlim[1]/fact))/1000
-        # Format string :
         hypref = int(self._hypno[t[0]])
         items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
-        txt = self._slTxtFormat.format(start=str(xconv[0]), end=str(xconv[1]),
-                                       unit=unit, conv=items[hypref])
+        # Get unit and convert:
+        if self._slAbsTime.isChecked():
+            xlim = np.asarray(xlim) + self._toffset
+            start = str(datetime.datetime.utcfromtimestamp(
+                                                       xlim[0])).split(' ')[1]
+            stend = str(datetime.datetime.utcfromtimestamp(
+                                                       xlim[1])).split(' ')[1]
+            txt = "Window : [ " + start + " ; " + stend + " ] || Sleep " + \
+                "stage : " + str(items[hypref])
+        else:
+            unit = self._slRules.currentText()
+            if unit == 'seconds':
+                fact = 1.
+            elif unit == 'minutes':
+                fact = 60.
+            elif unit == 'hours':
+                fact = 3600.
+            xconv = np.round((1000*xlim[0]/fact, 1000*xlim[1]/fact))/1000
+            # Format string :
+            txt = self._slTxtFormat.format(start=str(xconv[0]),
+                                           end=str(xconv[1]), unit=unit,
+                                           conv=items[hypref])
         # Set text :
         self._SlText.setText(txt)
         self._SlText.setFont(self._font)
+        self._SlText.setStyleSheet("QLabel {color: " +
+                                   self._hypcolor[hypref] + ";}")
 
         # ================= HYPNO LABELS =================
         ref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
@@ -243,7 +258,6 @@ class uiSettings(object):
                 self._hyp.set_grid(self._time, step)
             else:
                 self._hyp.set_grid(self._time, win)
-            self._chan.set_grid(self._time, step)
         else:
             self._slOnStart = True
 
@@ -347,6 +361,8 @@ class uiSettings(object):
         # Set the stage :
         self._hypno[t[0]:t[1]] = stage
         self._hyp.set_data(self._sf, self._hypno, self._time)
+        # Update info table :
+        self._fcn_infoUpdate()
         # Update scoring table :
         self._fcn_Hypno2Score()
         self._fcn_Score2Hypno()

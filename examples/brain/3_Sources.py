@@ -26,8 +26,8 @@ kwargs['s_edgewidth'] = .5              # Width of the edges
 kwargs['s_symbol'] = 'square'           # Source's symbol
 
 # Next, we will mask data between [-20, 20]:
-kwargs['s_mask'] = np.logical_and(kwargs['s_data'] >= -20, kwargs['s_data'] <= 20)
-kwargs['s_maskcolor'] = 'gray'
+# kwargs['s_mask'] = np.logical_and(kwargs['s_data'] >= -20, kwargs['s_data'] <= 20)
+# kwargs['s_maskcolor'] = 'gray'
 
 
 # Cortical projection/repartition :

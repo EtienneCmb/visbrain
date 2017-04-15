@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from ...utils import peakdetect, color2vb, transient
+from ...utils import color2vb, transient
 
 __all__ = ["Tools"]
 
@@ -12,85 +12,12 @@ class Tools(object):
 
     def __init__(self):
         """Init."""
-        # =========== PEAK DETECTION ===========
-        self._peak = PeakDetection(color=self._defpeaks)
-
         # =========== HYPNOGRAM EDITION ===========
         yaxis = (self._hypcam.rect.bottom, self._hypcam.rect.top)
         self._hypedit = HypnoEdition(self._sf, self._hyp, -self._hypno,
                                      self._time, self._hypCanvas.canvas, yaxis,
                                      enable=True, fcn=[self._fcn_infoUpdate,
                                                        self._fcn_Hypno2Score])
-
-
-class PeakDetection(object):
-    """Perform a peak detection on a selected channel.
-
-    Kargs:
-        color: string/tuple, optional, (def: 'red')
-            Marker's color.
-
-        size: float, optional, (def: 7.)
-            Marker's size.
-
-        edge_width: float, optional, (def: 0.)
-            Marker's edge width.
-    """
-
-    def __init__(self, color='red', size=7., edge_width=0.):
-        """Init."""
-        self._color = color2vb(color, alpha=.8)
-        self._edgewidth = edge_width
-        self._size = size
-
-    def set_data(self, sf, data, time, marker, display='max', lookahead=10.):
-        """Find peaks according to data.
-
-        Args:
-            sf: float
-                The sampling frequency.
-
-            data: np.ndarray
-                The data to find peaks. Must be a row vector.
-
-            time: np.ndarray
-                The time vector.
-
-            marker: vispy.scene.visuals.Markers
-                The marker object to set data.
-
-        Kargs:
-            display: string, optional, (def: 'max')
-                Display either max peaks ('max'), min peaks ('min') or min and
-                max 'minmax'.
-
-            lookahead: float, optional, (def: 10.)
-                Distance to look ahead from a peak candidate to determine if
-                it is the actual peaks
-        """
-        # Find peaks (Max, Min) :
-        M, m = peakdetect(data, time, int(lookahead))
-        # Extract (x, y) coordinates for (Max, Min) peaks :
-        xM, yM = zip(*M)
-        xm, ym = zip(*m)
-        # Array conversion :
-        tM, yM, tm, ym = np.array(xM), np.array(yM), np.array(xm), np.array(ym)
-        # Set data to markers :
-        z = np.full_like(tM, -0.5)
-        if display == 'max':
-            pos = np.vstack((tM, yM, z)).T
-        elif display == 'min':
-            pos = np.vstack((tm, ym)).T
-        elif display == 'minmax':
-            pos = np.vstack((np.hstack((tm, tM)), np.hstack((ym, yM)))).T
-        marker.set_data(pos, size=self._size, face_color=self._color,
-                        edge_width=self._edgewidth, scaling=False)
-        marker.visible = True
-        self.index = np.round(pos[:, 0] * sf).astype(int)
-        marker.update()
-        # Info :
-        self.number = len(pos)
-        self.density = self.number / (len(data) / sf / 60.)
 
 
 class MouseEmulation(object):

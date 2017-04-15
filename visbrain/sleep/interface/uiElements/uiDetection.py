@@ -4,7 +4,8 @@ import os
 from warnings import warn
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
-                       listToCsv, listToTxt)
+                       peakdetect, mtdetect, listToCsv, listToTxt)
+from ....utils.sleep.event import _events_duration
 
 from PyQt4 import QtGui
 
@@ -17,10 +18,9 @@ class uiDetection(object):
     def __init__(self):
         """Init."""
         # =====================================================================
-        # REM / SPINDLES / DETECTION
+        # REM / SPINDLES / KC / SW / MT DETECTION
         # =====================================================================
         # Commonth elements :
-        self._ToolDetecVisible.clicked.connect(self._fcn_detectViz)
         self._ToolDetectChan.addItems(self._channels)
         self._ToolDetectType.currentIndexChanged.connect(
             self._fcn_switchDetection)
@@ -33,25 +33,20 @@ class uiDetection(object):
         self._fcn_switchDetection()
 
         # -------------------------------------------------
-        # REM detection :
-        self._ToolRemTh.setValue(3.)
-
-        # -------------------------------------------------
-        # Slow Wave detection :
-        self._ToolWaveTh.setValue(0.75)
-
-        # -------------------------------------------------
-        # Spindles detection :
-        self._ToolSpinTh.setValue(2.)
-        self._ToolSpinFmax.setValue(14.)
-
-        # -------------------------------------------------
         # Location table :
+        self._DetectChans.currentIndexChanged.connect(self._fcn_switchLocation)
+        self._DetectTypes.currentIndexChanged.connect(self.__getVisibleLoc)
+        self._DetectSelect.clicked.connect(self._fcn_runSwitchLocation)
+        self._DetectRm.clicked.connect(self._fcn_rmLocation)
+        self._DetectViz.clicked.connect(self._fcn_vizLocation)
         self._DetectLocations.itemSelectionChanged.connect(
             self._fcn_gotoLocation)
 
         # Export file :
         self._DetectLocExport.clicked.connect(self._fcn_exportLocation)
+        self._DetectLocImport.clicked.connect(self._fcn_importLocation)
+        self._DetectExportAll.clicked.connect(self._fcn_exportAllDetections)
+        self._DetectImportAll.clicked.connect(self._fcn_importAllDetections)
 
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
@@ -59,27 +54,7 @@ class uiDetection(object):
     def _fcn_applyMethod(self):
         """Be sure to apply hypnogram report only on selected channel."""
         viz = self._ToolRdSelected.isChecked()
-        self._ToolDetecReport.setEnabled(viz)
         self._ToolDetectChan.setEnabled(viz)
-        self.q_DetectLoc.setEnabled(viz)
-        self._DetectionTab.setTabEnabled(1, viz)
-        self._hyp.report.visible = viz
-
-    # =====================================================================
-    # ENABLE / DISABLE DETECTION
-    # =====================================================================
-    def _fcn_detectViz(self):
-        """Toggle vivibility of detections."""
-        # Get button state :
-        viz = self._ToolDetecVisible.isChecked()
-        # Turn all detected lines / markers to viz :
-        for k in range(len(self)):
-            # Toggle lines (for REM and spindles) :
-            self._chan.report[k].visible = viz
-            # Toggle markers (for peaks) :
-            self._chan.peak[k].visible = viz
-        # Hypnogram :
-        self._hyp.report.visible = viz
 
     # =====================================================================
     # SWITCH DETECTION TYPE
@@ -87,7 +62,8 @@ class uiDetection(object):
     def _fcn_switchDetection(self):
         """Switch between detection types (show / hide panels)."""
         # Define ref :
-        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves', 'K-complexes']
+        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves', 'K-complexes',
+               'Muscle twitches']
         # Get current selected text :
         viz = [str(self._ToolDetectType.currentText()) == k for k in ref]
         # Set widget visibility :
@@ -95,7 +71,8 @@ class uiDetection(object):
                                               self._ToolSpinPanel,
                                               self._ToolPeakPanel,
                                               self._ToolWavePanel,
-                                              self._ToolKCPanel], viz)]
+                                              self._ToolKCPanel,
+                                              self._ToolMTPanel], viz)]
 
     # =====================================================================
     # RUN DETECTION
@@ -120,37 +97,30 @@ class uiDetection(object):
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_applyDetection(self):
-        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC)."""
+        """Apply detection (either REM/Spindles/Peaks/SlowWave/KC/MT)."""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
-        ind = np.array([], dtype=int)
 
+        ############################################################
+        # RUN DETECTION
+        ############################################################
         for i, k in enumerate(idx):
             # Display progress bar (only if needed):
             if len(idx) > 1:
                 self._ToolDetectProgress.show()
 
-            # Get if report is enable and checked:
-            toReport = self._ToolDetecReport.isEnabled(
-                                        ) and self._ToolDetecReport.isChecked()
-
             # Switch between detection types :
-            # ------------------- REM -------------------
+            # ====================== REM ======================
             if method == 'REM':
                 # Get variables :
                 thr = self._ToolRemTh.value()
                 rem_only = self._ToolRemOnly.isChecked()
                 # Get REM indices :
-                index, number, density, duration = remdetect(
-                    self._data[k, :],
-                    self._sf, self._hypno, rem_only, thr)
-                # Get starting index :
-                ind = self._get_startingIndex(method, k, index, self._defrem,
-                                              'triangle_down', toReport,
-                                              number, density)
+                index, nb, dty, dur = remdetect(self._data[k, :], self._sf,
+                                                self._hypno, rem_only, thr)
 
-            # ------------------- SPINDLES -------------------
+            # ====================== SPINDLES ======================
             elif method == 'Spindles':
                 # Get variables :
                 thr = self._ToolSpinTh.value()
@@ -160,166 +130,196 @@ class uiDetection(object):
                 tMax = self._ToolSpinTmax.value()
                 nrem_only = self._ToolSpinRemOnly.isChecked()
                 # Get Spindles indices :
-                index, number, density, duration = spindlesdetect(
+                index, nb, dty, dur = spindlesdetect(
                     self._data[k, :], self._sf, thr, self._hypno, nrem_only,
                     fMin, fMax, tMin, tMax)
-                # Get starting index :
-                ind = self._get_startingIndex(method, k, index, self._defspin,
-                                              'x', toReport, number, density)
 
-            # ------------------- SLOW WAVES -------------------
+            # ====================== SLOW WAVES ======================
             elif method == 'Slow waves':
                 # Get variables :
                 thr = self._ToolWaveTh.value()
-                amp = self._ToolWaveAmp.value()
                 # Get Slow Waves indices :
-                index, number, density, duration = slowwavedetect(
-                                                            self._data[k, :],
-                                                            self._sf, thr, amp)
-                # Get starting index :
-                ind = self._get_startingIndex(method, k, index, self._defsw,
-                                              'o', toReport, number, density)
+                index, nb, dty, dur = slowwavedetect(self._data[k, :],
+                                                     self._sf, thr)
 
-            # ------------------- K-COMPLEXES -------------------
+            # ====================== K-COMPLEXES ======================
             elif method == 'K-complexes':
                 # Get variables :
-                thr = self._ToolKCTh.value()
+                proba_thr = self._ToolKCProbTh.value()
+                amp_thr = self._ToolKCAmpTh.value()
                 tmin = self._ToolKCMinDur.value()
                 tmax = self._ToolKCMaxDur.value()
                 min_amp = self._ToolKCMinAmp.value()
                 max_amp = self._ToolKCMaxAmp.value()
                 nrem_only = self._ToolKCNremOnly.isChecked()
                 # Get Slow Waves indices :
-                index, number, density, duration = kcdetect(self._data[k, :],
-                                                            self._sf, thr,
-                                                            self._hypno,
-                                                            nrem_only, tmin,
-                                                            tmax, min_amp,
-                                                            max_amp)
-                # Get starting index :
-                ind = self._get_startingIndex(method, k, index, self._defkc,
-                                              'diamond', toReport, number, 0.)
+                index, nb, dty, dur = kcdetect(self._data[k, :], self._sf,
+                                               proba_thr, amp_thr, self._hypno,
+                                               nrem_only, tmin, tmax, min_amp,
+                                               max_amp)
 
-            # ------------------- PEAKS -------------------
+            # ====================== PEAKS ======================
             elif method == 'Peaks':
                 # Get variables :
-                look = self._ToolPeakLook.value() * self._sf
+                look = int(self._ToolPeakLook.value() * self._sf)
                 disp = self._ToolPeakMinMax.currentIndex()
                 disp_types = ['max', 'min', 'minmax']
-                # Set data :
-                self._peak.set_data(self._sf, self._data[k], self._time,
-                                    self._chan.peak[k], disp_types[disp],
-                                    look)
+                index, nb, dty = peakdetect(self._sf, self._data[k, :],
+                                            self._time, lookahead=look,
+                                            delta=1., threshold='auto',
+                                            get=disp_types[disp])
 
-                # Report results on table :
-                self._ToolDetectTable.setRowCount(1)
-                self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
-                    str(self._peak.number)))
-                self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
-                    str(round(self._peak.density, 2))))
-                # Get index :
-                ind = self._peak.index
-                duration = 0
-                # Report index on hypnogram :
-                if toReport:
-                    self._hyp.set_report(self._time, self._peak.index,
-                                         color=self._defpeaks, symbol='vbar',
-                                         y=1.5)
+            # ====================== MUSCLE TWITCHES ======================
+            elif method == 'Muscle twitches':
+                # Get variables :
+                th = self._ToolMTTh.value()
+                rem_only = self._ToolMTOnly.isChecked()
+                index, nb, dty, dur = mtdetect(self._data[k, :], self._sf, th,
+                                               self._hypno, rem_only)
 
-            # Be sure panel is displayed :
-            if not self.canvas_isVisible(k):
-                self.canvas_setVisible(k, True)
-                self._chan.visible[k] = True
+            # Update index for this channel and detection :
+            self._detect.dict[(self._channels[k], method)]['index'] = index
 
-            # Update plot :
-            self._fcn_sliderMove()
+            if index.size:
+                # Be sure panel is displayed :
+                if not self.canvas_isVisible(k):
+                    self.canvas_setVisible(k, True)
+                    self._chan.visible[k] = True
+                self._chan.loc[k].visible = True
+                # Update plot :
+                self._fcn_sliderMove()
 
             # Update progress bar :
             self._ToolDetectProgress.setValue(100. * (i + 1) / len(self))
 
-        # Fill the location table (only if selected):
-        if self._ToolRdSelected.isChecked() and ind.size:
-            self._fcn_fillLocations(self._channels[k], method, ind, duration)
+        ############################################################
+        # NUMBER // DENSITY
+        ############################################################
+        if index.size:
+            # Report results on table :
+            self._ToolDetectTable.setRowCount(1)
+            self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
+                str(nb)))
+            self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
+                str(round(dty, 2))))
+        else:
+            warn("\nNo " + method + " detected on channel " + self._channels[
+                 k] + ". Try to decrease the threshold")
+
+        ############################################################
+        # LINE REPORT :
+        ############################################################
+        self._locLineReport()
 
         # Finally, hide progress bar :
         self._ToolDetectProgress.hide()
 
-        # Force to be on locatoin table :
-        self._DetectionTab.setCurrentIndex(1)
-        self._DetectLocations.selectRow(0)
-
-    def _get_startingIndex(self, name, k, index, color, symbol, toReport,
-                           number, density):
-        """Get starting / ending index."""
-        if index.size:
-            # Set them + color to ChannelPlot object :
-            self._chan.colidx[k]['color'] = color
-            self._chan.colidx[k]['idx'] = index
-
-            # Find only where index start / finish :
-            ind = np.where(np.gradient(index) != 1.)[0]
-            ind = index[np.hstack(([0], ind, [len(index) - 1]))]
-            # Report index on hypnogram :
-            if toReport:
-                self._hyp.set_report(self._time, ind, symbol=symbol,
-                                     color=color, y=1.5)
-
-            # Report results on table :
-            self._ToolDetectTable.setRowCount(1)
-            self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
-                str(number)))
-            self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
-                str(round(density, 2))))
-        else:
-            warn("\nNo " + name + " detected on channel " + self._channels[
-                 k] + ". Try to decrease the threshold")
-            ind = np.array([])
-
-        return ind
+    def _locLineReport(self):
+        """Update line report."""
+        self._detect.build_line(self._data)
+        chans = self._detect.nonzero()
+        self._DetectChans.clear()
+        self._DetectChans.addItems(list(chans.keys()))
+        self._fcn_runSwitchLocation()
 
     # =====================================================================
     # FILL LOCATION TABLE
     # =====================================================================
+    def _fcn_switchLocation(self):
+        """Switch location channel and type."""
+        # Get selected channel :
+        chan = str(self._DetectChans.currentText())
+        nnz = self._detect.nonzero()
+        # Update list of types :
+        self._DetectTypes.clear()
+        if chan:
+            # Set avaibles detection types :
+            self._DetectTypes.addItems(nnz[chan])
+            # Set visibility :
+            self.__getVisibleLoc()
+
+    def __getVisibleLoc(self):
+        chan = str(self._DetectChans.currentText())
+        tps = str(self._DetectTypes.currentText())
+        if chan and tps:
+            if tps == 'Peaks':
+                self._DetectViz.setChecked(self._detect.peaks[(chan,
+                                                              tps)].visible)
+            else:
+                self._DetectViz.setChecked(self._detect.line[(chan,
+                                                              tps)].visible)
+
+    def _fcn_rmLocation(self):
+        """Demove a detection."""
+        # Get selected channel :
+        chan = str(self._DetectChans.currentText())
+        # Get selected detection type :
+        types = str(self._DetectTypes.currentText())
+        # Remove detection :
+        self._detect.delete(chan, types)
+        # Remove vertical indicators :
+        pos = np.full((1, 3), -10., dtype=np.float32)
+        self._chan.loc[self._channels.index(chan)].set_data(pos=pos)
+        # Update GUI :
+        self._locLineReport()
+
+    def _fcn_vizLocation(self):
+        """Set visible detection."""
+        # Get selected channel :
+        chan = str(self._DetectChans.currentText())
+        # Get selected detection type :
+        types = str(self._DetectTypes.currentText())
+        # Set visibility :
+        viz = self._DetectViz.isChecked()
+        self._detect.visible(viz, chan, types)
+        self._chan.loc[self._channels.index(chan)].visible = viz
+
+    def _fcn_runSwitchLocation(self):
+        """Run switch location channel and type."""
+        # Get selected channel :
+        chan = str(self._DetectChans.currentText())
+        # Get selected detection type :
+        types = str(self._DetectTypes.currentText())
+        if chan and types:
+            # Find index and durations :
+            index = self._detect[(chan, types)]['index']
+            # Get durations :
+            _, dur, _, _ = _events_duration(index, self._sf)
+            # Find only where index start / finish :
+            ind = np.where(np.gradient(index) != 1.)[0]
+            ind = index[np.hstack(([0], ind, [len(index) - 1]))]
+            # Set hypnogram data :
+            self._detect.build_hyp(chan, types)
+            # Fill location table :
+            self._fcn_fillLocations(chan, types, ind, dur)
+
     def _fcn_fillLocations(self, channel, kind, index, duration):
         """Fill the location table."""
         ref = ['Wake', 'N1', 'N2', 'N3', 'REM', 'ART']
-        # Set header label :
-        self._DetectLocHead.setText(kind + ' detection on channel ' + channel)
+        self._currentLoc = (channel, kind)
         # Clean table :
         self._DetectLocations.setRowCount(0)
-        # Get kind :
-        kindIn = kind in ['REM', 'Spindles', 'Slow waves', 'K-complexes']
-        if kindIn and self._ToolRdSelected.isChecked():
-            # Get starting index:
+        # Get starting index:
+        if kind == 'Peaks':
+            staInd = index[1::]
+            duration = np.zeros_like(staInd)
+        else:
             staInd = index[0::2]
-            # Define the length of the table:
-            self._DetectLocations.setRowCount(min(len(staInd), len(duration)))
-            # Fill the table :
-            for num, (k, i) in enumerate(zip(staInd, duration)):
-                # Starting :
-                self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
-                    str(self._time[k])))
-                # Duration :
-                self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
-                    str(i)))
-                # Type :
-                self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
-                    ref[int(self._hypno[k])]))
+        # Define the length of the table:
+        self._DetectLocations.setRowCount(min(len(staInd), len(duration)))
+        # Fill the table :
+        for num, (k, i) in enumerate(zip(staInd, duration)):
+            # Starting :
+            self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
+                str(self._time[k])))
+            # Duration :
+            self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
+                str(i)))
+            # Type :
+            self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
+                ref[int(self._hypno[k])]))
 
-        elif kind == 'Peaks':
-            # Define the length of the table :
-            self._DetectLocations.setRowCount(len(index))
-            # Fill the table :
-            for num, k in enumerate(index):
-                # Starting :
-                self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
-                    str(self._time[k])))
-                # Duration :
-                self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
-                    '1'))
-                # Type :
-                self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
-                    ref[int(self._hypno[k])]))
+        self._DetectLocations.selectRow(0)
 
     # =====================================================================
     # GO TO THE LOCATION
@@ -328,28 +328,32 @@ class uiDetection(object):
         """Go to the selected row REM / spindles / peak."""
         # Get selected row and channel :
         row = self._DetectLocations.currentRow()
-        idx = self._ToolDetectChan.currentIndex()
-        # Get starting and ending point :
-        sta = float(str(self._DetectLocations.item(row, 0).text()))
-        end = sta + float(str(self._DetectLocations.item(row, 1).text())) / \
-            1000.
-        # Get best looking location :
-        goto = ((sta + end) / 2.) - (self._SigWin.value() / 2.)
-        # Go to :
-        self._SigSlStep.setValue(1)
-        self._SlGoto.setValue(goto)
-        # Set vertical lines to the location :
-        self._chan.set_location(self._sf, self._data[idx, :], idx, sta, end)
+        ix = self._channels.index(str(self._DetectChans.currentText()))
+        if row >= 0:
+            # Get starting and ending point :
+            sta = float(str(self._DetectLocations.item(row, 0).text()))
+            end = sta + float(str(self._DetectLocations.item(row, 1).text())) \
+                / 1000.
+            # Get best looking location :
+            goto = ((sta + end) / 2.) - (self._SigWin.value() / 2.)
+            # Go to :
+            self._SigSlStep.setValue(1)
+            self._SlGoto.setValue(goto)
+            # Set vertical lines to the location :
+            self._chan.set_location(self._sf, self._data[ix, :], ix, sta, end)
 
     # =====================================================================
-    # EXPORT TABLE
+    # EXPORT IMPORT TABLE
     # =====================================================================
     def _fcn_exportLocation(self):
         """Export locations info."""
-        method = str(self._ToolDetectType.currentText())
+        channel = self._currentLoc[0]
+        method = self._currentLoc[1]
         # Read Table
         rowCount = self._DetectLocations.rowCount()
-        staInd, duration, stage = [], [], []
+        staInd = [channel, '', 'Time index (s)']
+        duration = [method, '', 'Duration (s)']
+        stage = ['', '', 'Sleep stage']
         for row in np.arange(rowCount):
             staInd.append(str(self._DetectLocations.item(row, 0).text()))
             duration.append(str(self._DetectLocations.item(row, 1).text()))
@@ -363,7 +367,63 @@ class uiDetection(object):
         path = str(path)  # py2
         if path:
             file = os.path.splitext(str(path))[0]
+            file += '_' + channel + '-' + method
             if selected_ext.find('csv') + 1:
                 listToCsv(file + '.csv', zip(staInd, duration, stage))
             elif selected_ext.find('txt') + 1:
                 listToTxt(file + '.txt', zip(staInd, duration, stage))
+
+    def _fcn_importLocation(self):
+        """Import location table."""
+        # Get file name :
+        file = QtGui.QFileDialog.getOpenFileName(
+            self, "Import table", "", "CSV file (*.csv);;Text file (*.txt);;"
+            "All files (*.*)")
+        file = str(file)
+        # Get channel / method from file name :
+        (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
+        # Load the file :
+        (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
+        # Sort by starting index :
+        idxsort = np.argsort(st)
+        st, dur = st[idxsort], dur[idxsort]
+        # Convert into index :
+        stInd = np.round(st * self._sf).astype(int)
+        durInd = np.round(dur * self._sf / 1000.).astype(int)
+        # Build the index array :
+        index = np.array([])
+        for k, i in zip(stInd, durInd):
+            index = np.append(index, np.arange(k, k+i))
+        index = index.astype(np.int, copy=False)
+        # Set index :
+        self._detect[(chan, meth)]['index'] = index
+        # Plot update :
+        self._fcn_sliderMove()
+        self._locLineReport()
+
+    def _fcn_exportAllDetections(self):
+        """Export all locations."""
+        # Get file name :
+        path = QtGui.QFileDialog.getSaveFileName(
+            self, "Save all detections", filter='.npy')
+        path = str(path)  # py2
+        if path:
+            file = os.path.splitext(str(path))[0]
+            np.save(file + '.npy', self._detect.dict)
+
+    def _fcn_importAllDetections(self):
+        """Import detections."""
+        # Dialog window for detection file :
+        file = QtGui.QFileDialog.getOpenFileName(
+            self, "Import detections", "", "NumPy (*.npy)")
+        self._detect.dict = np.ndarray.tolist(np.load(file))
+        # Made canvas visbles :
+        for k in self._detect:
+            if self._detect[k]['index'].size:
+                # Get channel number :
+                idx = self._channels.index(k[0])
+                self.canvas_setVisible(idx, True)
+                self._chan.visible[idx] = True
+        # Plot update :
+        self._fcn_sliderMove()
+        self._locLineReport()

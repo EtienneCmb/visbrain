@@ -4,7 +4,8 @@ import numpy as np
 from warnings import warn
 
 
-__all__ = ['normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh']
+__all__ = ['normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh',
+            'zerocrossing']
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -48,6 +49,10 @@ def normalize(x, tomin=0., tomax=1.):
 def movingaverage(x, window, sf):
     """Perform a moving average.
 
+    Equivalent to a lowpass filter where lowpass frequency is defined by:
+        LowpassFreq = (1 / window) * 1000
+        e.g. if window = 100, LowpassFreq = 10 Hz
+
     Args:
         x: np.ndarray
             Signal
@@ -84,10 +89,13 @@ def derivative(x, window, sf):
     length = x.size
     step = int(window / (1000 / sf))
     tail = np.zeros(shape=(int(step / 2),))
-
-    deriv = np.hstack((tail, x[step:length] - x[0:length - step], tail))
-
+    deriv = np.r_[tail, x[step:length] - x[0:length - step], tail]
     deriv = np.abs(deriv)
+    # Check size
+    if deriv.size < length:
+        missing_pts = length - deriv.size
+        tail = np.zeros(missing_pts)
+        deriv = np.r_[deriv, tail]
 
     return deriv
 
@@ -141,3 +149,10 @@ def soft_thresh(x, thresh):
     k = np.where(x < -th)
     x_thresh[k] = x[k] + th
     return x_thresh
+
+
+def zerocrossing(data):
+    """Function to find zero-crossings of a signal"""
+    pos = data > 0
+    npos = ~pos
+    return ((pos[:-1] & npos[1:]) | (npos[:-1] & pos[1:])).nonzero()[0] + 1

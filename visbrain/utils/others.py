@@ -56,7 +56,7 @@ def check_downsampling(sf, ds):
             ds -= 1
         # ds = sf / round(sf / ds)
         warn("Using a down-sampling frequency ("+str(dsbck)+"hz) that is not a"
-             " multiple of the sampling frequency ("+str(sf)+"hz) , might "
-             "occurred time decimals approximations for hypnogram exportation."
+             " multiple of the sampling frequency ("+str(sf)+"hz) is not "
+             "recommanded."
              " A "+str(ds)+"hz will be used instead.")
     return ds
