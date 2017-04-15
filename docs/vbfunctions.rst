@@ -91,7 +91,7 @@ Fit to an object
 
 Convert into convex hull
 ~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.brain.user.sources_to_convexHull
+.. automethod:: visbrain.brain.user.userfcn.sources_to_convexHull
 
 Cortical projection
 ~~~~~~~~~~~~~~~~~~~

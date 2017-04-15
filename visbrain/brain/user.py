@@ -13,7 +13,7 @@ import os
 from .base.visuals import BrainMesh
 from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
-from ..utils import color2vb
+from ..utils import color2vb, AddMesh
 
 __all__ = ['userfcn']
 
@@ -316,12 +316,29 @@ class userfcn(object):
         self._light_reflection()
 
     def add_mesh(self, name, vertices, faces, **kwargs):
-        """"""
-        print('ADD MESH : ', vertices.shape, faces.shape)
-        self._userobj[name] = BrainMesh(vertices=vertices, faces=faces, name=name,
-                                        **kwargs)
+        """Add a mesh to the scene.
+
+        Args:
+            name: string
+                Name of the object to add.
+
+            vertices: np.ndarray
+                Vertices of the mesh.
+
+            faces: np.ndarray
+                Faces of the mesh.
+
+        Kargs:
+            kargs: dict, optional, (def: {})
+                Supplementar arguments pass to the BrainMesh class.
+        """
+        # Add mesh to user objects :
+        self._userobj[name] = BrainMesh(vertices=vertices, faces=faces,
+                                        name=name, **kwargs)
         self._userobj[name].set_camera(self.view.wc.camera)
         self._userobj[name].parent = self._vbNode
+        # Add mesh for projection :
+        self._tobj[name] = AddMesh(self._userobj[name])
 
     # =========================================================================
     # =========================================================================
@@ -719,7 +736,7 @@ class userfcn(object):
     #                                 ROI
     # =========================================================================
     # =========================================================================
-    def roi_plot(self, selection=[], subdivision='brod', smooth=3):
+    def roi_plot(self, selection=[], subdivision='brod', smooth=3, name='roi'):
         """Select some roi to plot.
 
         Kargs:
@@ -734,6 +751,9 @@ class userfcn(object):
 
             smoth: int, optional, (def: 3)
                 Define smooth proportion.
+
+            name: string, optional, (def: 'ro')
+                Name of the displayed ROI.
 
         Example:
             >>> # Define a Brain instance :
@@ -763,6 +783,9 @@ class userfcn(object):
             self._roiSmooth.setValue(smooth)
             # Plot ROI :
             self._area_plot()
+            # Add roi to current objects and update list :
+            self._tobj[name] = self.area
+            self._fcn_updateProjList()
             # --------------- GUI ---------------
             # Set check the corresponding subdivision :
             if subdivision == 'brod':
@@ -772,7 +795,6 @@ class userfcn(object):
                 self.Sub_aal.setChecked(True)
                 idx = np.add(selection, -1)
             # Add selected items to the GUI :
-
             self.struct2add.addItems(self.area._label[idx])
             self.struct2select.clear()
             self.struct2select.addItems(self.area._label)

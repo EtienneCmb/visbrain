@@ -56,6 +56,7 @@ class base(CbarBase, Projections):
 
         # Add projections :
         Projections.__init__(self, **kwargs)
+        self._tobj['brain'] = self.atlas
 
         # ---------- Panel management ----------
         # Some GUI panels are systematically deactivate if there's no

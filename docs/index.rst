@@ -28,6 +28,22 @@ Go to the cloned folder and run :
 What's new?
 ***********
 
+* New in version v0.2.1
+
+  * Brain
+
+    * New *add_mesh*, *sources_fit* and *sources_to_convexHull* methods
+    * Improve projection on selected objects
+
+  * Sleep
+
+    * Load .trc files (Micromed)
+    * New *Muscle twiches* detection
+    * Dections improvements and better GUI integrations
+    * Import / export all detections for latter use
+    * Fix detections after bipolarization
+    * New shortcuts
+
 * New in version v0.2.0
 
   * Brain : new *ui_autocrop* parameter (or using the *screenshot* function)
@@ -35,32 +51,12 @@ What's new?
   * Figure : new *autocrop* parameter for automatic size ajustments and doc update
   * Sleep : doc updates and python 2 bug fixing.
 
-* New in version v0.1.9
-
-  * **New module** :ref:`Figure`
-  * Brain : fix color control (conflict between clim / (vmin, vmax))
-  * Brain : improve cortical projection and repartition. This new version use much more RAM but the final result is better
-  * Brain : user fonctions improved
-  * Sleep : detections and down-sampling improvements
-  * Sleep : new magnify to improve signal lisibility
-  * Sleep : topoplot and re-referencing integration
-
-* New in version v0.1.8
-
-  * Brain : New density color and start bundling
-  * Brain : possibility to add multiple source / connectivity objects
-  * Brain : screenshot improvements and GUI integration
-  * Sleep : new slow wave / K-complex detection
-  * Sleep : REM / spindles detection improvements
-  * Sleep : everything can now be exported.
-  * Sleep : GUI re-organization and improvements
-
 Contents:
 *********
 
 .. toctree::
    :maxdepth: 3
-   
+
    brain
    sleep
    ndviz
