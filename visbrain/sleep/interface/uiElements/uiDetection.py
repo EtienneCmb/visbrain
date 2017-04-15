@@ -256,6 +256,9 @@ class uiDetection(object):
         types = str(self._DetectTypes.currentText())
         # Remove detection :
         self._detect.delete(chan, types)
+        # Remove vertical indicators :
+        pos = np.full((1, 3), -10., dtype=np.float32)
+        self._chan.loc[self._channels.index(chan)].set_data(pos=pos)
         # Update GUI :
         self._locLineReport()
 
