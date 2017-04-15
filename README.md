@@ -1,5 +1,8 @@
 # visbrain
 
+![Visbrain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain.png "Visbrain")
+
+
 Visbrain is a python package dedicated (mainly) to the visualization of neuroscientist data. Check the [documentation](http://etiennecmb.github.io/visbrain/) for further details
 
 ## Installation
@@ -46,9 +49,9 @@ The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard
 [Sleep](http://etiennecmb.github.io/visbrain/sleep.html) is a sleep data dedicated interface for visualization, processing and edition.
 
 - Load .eeg (Brainvision and ELAN), .edf or directly pass raw data
-- Visualize channels / spectrogram / hypnogram, time window control and fast plot update
+- Visualize channels / spectrogram / hypnogram / topoplot, time window control and fast plot update
 - Hypnogram edition (either by manually adding where stages start / finish or interactively by adding / dragging and moving points) and save the edited hypnogram (.txt, .csv and .hyp)
-- Spindles / REM / Peaks / Slow waves / K-complex detection and report results on each channel and hypnogram
+- Spindles / REM / Peaks / Slow waves / K-complex / Muscle twiches detection and report results on each channel and hypnogram
 - Signal processing tools (filtering...)
 
 ![sleep](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_main.png "Sleep : load, visualize and edit sleep data")

@@ -38,6 +38,7 @@ What's new?
   * Sleep
 
     * Load .trc files (Micromed)
+    * New *Muscle twiches* detection
     * Dections improvements and better GUI integrations
     * Import / export all detections for latter use
     * Fix detections after bipolarization
