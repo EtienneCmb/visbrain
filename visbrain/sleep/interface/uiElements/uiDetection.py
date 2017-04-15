@@ -113,8 +113,7 @@ class uiDetection(object):
                 rem_only = self._ToolRemOnly.isChecked()
                 # Get REM indices :
                 index, nb, dty, dur = remdetect(self._data[k, :], self._sf,
-                                                self._hypno, rem_only, thr,
-                                                method='Vallat')
+                                                self._hypno, rem_only, thr)
                 # Update index for this channel and detection :
                 self._detect.dict[(self._channels[k], 'REM')]['index'] = index
 

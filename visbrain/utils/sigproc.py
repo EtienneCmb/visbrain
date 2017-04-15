@@ -49,6 +49,10 @@ def normalize(x, tomin=0., tomax=1.):
 def movingaverage(x, window, sf):
     """Perform a moving average.
 
+    Equivalent to a lowpass filter where lowpass frequency is defined by:
+        LowpassFreq = (1 / window) * 1000
+        e.g. if window = 100, LowpassFreq = 10 Hz
+
     Args:
         x: np.ndarray
             Signal
@@ -85,10 +89,13 @@ def derivative(x, window, sf):
     length = x.size
     step = int(window / (1000 / sf))
     tail = np.zeros(shape=(int(step / 2),))
-
-    deriv = np.hstack((tail, x[step:length] - x[0:length - step], tail))
-
+    deriv = np.r_[tail, x[step:length] - x[0:length - step], tail]
     deriv = np.abs(deriv)
+    # Check size
+    if deriv.size < length:
+        missing_pts = length - deriv.size
+        tail = np.zeros(missing_pts)
+        deriv = np.r_[deriv, tail]
 
     return deriv
 

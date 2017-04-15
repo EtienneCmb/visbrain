@@ -13,7 +13,7 @@ import numpy as np
 from scipy.signal import hilbert, daub, detrend
 
 from ..filtering import filt, morlet, morlet_power
-from ..sigproc import movingaverage, derivative, tkeo, zerocrossing
+from ..sigproc import movingaverage, derivative, tkeo
 from .event import (_events_duration, _events_removal, _events_distance_fill,
                     _events_mean_freq, _event_amplitude)
 
@@ -337,8 +337,9 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 ###########################################################################
 
 
-def remdetect(eog, sf, hypno, rem_only, threshold, method='Vallat', min_dur_ms=50,
-              max_dur_ms=500, min_distance_ms=200, moving_ms=100, deriv_ms=40):
+def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=200,
+              max_dur_ms=4000, min_distance_ms=200, moving_ms=200, deriv_ms=30,
+              amplitude_art=400):
     """Perform a rapid eye movement (REM) detection.
 
     Function to perform a semi-automatic detection of rapid eye movements
@@ -362,25 +363,21 @@ def remdetect(eog, sf, hypno, rem_only, threshold, method='Vallat', min_dur_ms=5
             Number of standard deviation of the derivative signal
             Threshold is defined as: mean + X * std(derivative)
 
-        method: string, optional (def Vallat)
-            Method used for the detection of REM. Either Vallat or Eichenlaub.
-
-        min_dur_ms: int, optional (def 30)
+        min_dur_ms: int, optional (def 200)
             Minimum duration (ms) of rapid eye movement
 
-        min_distance_ms: int, optional (def 50)
+        min_distance_ms: int, optional (def 200)
             Minimum distance (ms) between two saccades to consider them as two
-            distinct events
+            distinct events.
 
-        moving_ms: int, optional (def 100)
-            Time (ms) window of the moving average
+        moving_ms: int, optional (def 200)
+            Time (ms) window of the moving average.
 
-        deriv_ms: int, optional (def 40)
+        deriv_ms: int, optional (def 30)
             Time (ms) window of derivative computation
-            Default is 40 ms step  since most of naturally occurring human
-            saccades have magnitudes of 15 degrees or less and last thus
-            no more than 30 - 40 ms (the maximum velocity of a saccade is
-            above 500 degrees/sec, see Bahill et al., 1975)
+
+        amplitude_art: int, optional (def 400 µV)
+            Remove extreme values from the signal
 
     Return:
         idx_sup_thr: np.ndarray
@@ -405,68 +402,37 @@ def remdetect(eog, sf, hypno, rem_only, threshold, method='Vallat', min_dur_ms=5
     else:
         length = max(eog.shape)
 
-    if method == 'Vallat':
-        # Smooth signal with moving average
-        sm_sig = movingaverage(eog, moving_ms, sf)
-        # Compute first derivative
-        deriv = derivative(sm_sig, deriv_ms, sf)
-        # Smooth derivative
-        deriv = movingaverage(deriv, moving_ms, sf)
-        # Define threshold
-        if rem_only and 4 in hypno:
-            deriv[idx_zero] = np.nan
-
-        thresh = np.nanmean(deriv) + threshold * np.nanstd(deriv)
-
-        # Find supra-threshold values
-        with np.errstate(divide='ignore', invalid='ignore'):
-            idx_sup_thr = np.where(deriv > thresh)[0]
-
-    elif method == 'Eichenlaub':
-        # Currently under progress !
-        # Bandpass filtering
-        sm_sig = filt(sf, [0.5, 3], data, order=4)
-
-        # Bipolarization EOG2-EOG1
-        # ...to be done
-
-        # Find zerocrossing
-        zX = zerocrossing(sm_sig)
-
-        # Define threshold
-        if rem_only and 4 in hypno:
-            sm_sig[idx_zero] = np.nan
-        thresh = np.nanmean(sm_sig) + threshold * np.nanstd(sm_sig)
-
-        # Find supra-threshold values
-        with np.errstate(divide='ignore', invalid='ignore'):
-            idx_sup_thr = np.where(sm_sig > thresh)[0]
-            idxGap = np.where(np.diff(threshX) != 1)[0];
-            idx_start = [idx_sup_thr[0], idx_sup_thr[idxGap+1]];
-            idx_stop = [idx_sup_thr(idxGap), idx_sup_thr[-1]];
-
-        idx_zc_s = np.array([])
-        idx_zc_e = np.array([])
-        for ev in np.arange(0, idx_start.size):
-            a = np.where(zX - idx_start[ev] < 0)
-            if a.size > 0 or zX[a[-1]] != zX[-1]:
-                idx_zc_s = np.append(idx_zc_s, zX[a[-1]])
-                idx_zc_e = np.append(idx_zc_s, zX[a[-1]+1])
+    # Smooth signal with moving average
+    sm_sig = movingaverage(eog, moving_ms, sf)
+    # Compute first derivative
+    deriv = derivative(sm_sig, deriv_ms, sf)
+    # Smooth derivative
+    deriv = movingaverage(deriv, moving_ms, sf)
+    # Define threshold
+    if rem_only and 4 in hypno:
+        idThresh = np.setdiff1d(np.arange(eog.size), idx_zero)
+    else:
+        idThresh = np.arange(eog.size)
+    # Remove extreme values
+    idThresh = np.setdiff1d(idThresh, np.where(
+                                            np.abs(sm_sig) > amplitude_art)[0])
+    # Find supra-threshold values
+    thresh = np.mean(deriv[idThresh]) + threshold * np.std(deriv[idThresh])
+    idx_sup_thr = np.where(deriv > thresh)[0]
 
     if idx_sup_thr.size:
 
-        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
-                                                               sf)
+        # Find REMs separated by less than min_distance_ms
+        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
 
-        # Get where min_dur < REM duration
+        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+
+        # Get where min_dur < REM duration < max_dur_ms
         good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
                                            duration_ms < max_dur_ms))[0]
         good_dur = np.append(good_dur, len(good_dur))
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
         idx_sup_thr = idx_sup_thr[good_idx]
-
-        # Find REMs separated by less than min_distance_ms
-        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
 
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
