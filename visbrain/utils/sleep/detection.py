@@ -648,16 +648,13 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
         mt_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start, idx_stop, sf)
         good_amp = np.where(np.logical_and(mt_amp > min_amp,
                                            mt_amp < max_amp))[0]
-        good_amp = np.append(good_amp, len(good_amp))
         good_idx = _events_removal(idx_start, idx_stop, good_amp)
 
         # Duration criteria
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
         good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
                                            duration_ms < max_dur_ms))[0]
-        good_dur = np.append(good_dur, len(good_dur))
-        good_event = np.intersect1d(good_amp, good_dur, True)
-        good_idx = _events_removal(idx_start, idx_stop, good_event)
+        good_idx = _events_removal(idx_start, idx_stop, good_dur)
 
         # Keep only good events
         idx_sup_thr = idx_sup_thr[good_idx]
