@@ -18,7 +18,7 @@ from .event import (_events_duration, _events_removal, _events_distance_fill,
                     _events_mean_freq, _event_amplitude)
 
 __all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
-           'kcdetect']
+           'kcdetect', 'mtdetect']
 
 ###########################################################################
 # K-COMPLEX DETECTION
@@ -524,6 +524,118 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
         # Export info
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
+        return idx_sup_thr, number, density, duration_ms
+
+    else:
+        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+
+###########################################################################
+# MUSCLE TWITCHES DETECTION
+###########################################################################
+
+def mtdetect(elec, sf, threshold, hypno, rem_only, min_freq=30, max_freq=40,
+        min_dur_ms=500, max_dur_ms=4000, min_distance_ms=500,moving_ms=500):
+    """Perform a detection of muscle twicthes (MT).
+
+    Sampling frequency must be at least 1000 Hz.
+
+    Args:
+        elec: np.ndarray
+            EMG signal
+
+        sf: float
+            Downsampling frequency
+
+        threshold: float
+            Number of standard deviation to use as threshold
+            Threshold is defined as: mean + X * std(hilbert envelope)
+
+        hypno: np.ndarray
+            Hypnogram vector, same length as elec
+            Vector with only 0 if no hypnogram is loaded
+
+        rem_only: boolean
+            Perfom detection only on NREM sleep period
+
+    Kargs:
+        min_freq: float, optional (def 30)
+            Lower bandpass frequency
+
+        max_freq: float, optional (def 40)
+            Higher bandpass frequency
+
+        min_dur_ms: int, optional (def 500)
+            Minimum duration (ms) of MT
+
+        min_dur_ms: int, optional (def 4000)
+            Maximum duration (ms) of MT
+
+        min_distance_ms: int, optional (def 500)
+            Minimum distance (in ms) between 2 MTs to consider them as
+            two distinct events
+
+    Return:
+        idx_sup_thr: np.ndarray
+            Array of supra-threshold indices
+
+        number: int
+            Number of detected MTs
+
+        density: float
+            Number of MTs per minutes of data
+
+        duration_ms: float
+            Duration (ms) of each MT detected
+
+    """
+    if rem_only and 4 in hypno:
+        elec[(np.where(hypno < 4))] = 0
+        length = np.count_nonzero(elec)
+        idx_zero = np.where(elec == 0)
+    else:
+        length = max(elec.shape)
+
+    # Bandpass filter
+    data_filt = filt(sf, [min_freq, max_freq], elec, order=4)
+    # Hilbert Transform
+    if data.size % 2:
+        analytic = hilbert(data_filt)
+    else:
+        analytic = hilbert(data_filt[:-1], len(data_filt))
+
+    amplitude = np.abs(analytic)
+
+    # Smooth envelope
+    amplitude = movingaverage(amplitude, moving_ms, sf)
+
+    # Define threshold
+    if rem_only and 4 in hypno:
+        idTh = np.setdiff1d(np.arange(elec.size), idx_zero)
+    else:
+        idTh = np.arange(elec.size)
+    # Remove extreme values
+    idTh = np.setdiff1d(idTh, np.where(abs(elec) > 400)[0])
+    # Find supra-threshold values
+    thresh = np.mean(amplitude[idTh]) + threshold * np.std(amplitude[idTh])
+    idx_sup_thr = np.where(deriv > thresh)[0]
+
+    if idx_sup_thr.size:
+
+        # Find MTs separated by less than min_distance_ms
+        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
+
+        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+
+        # Get where min_dur < MT duration < max_dur_ms
+        good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
+                                           duration_ms < max_dur_ms))[0]
+        good_dur = np.append(good_dur, len(good_dur))
+        good_idx = _events_removal(idx_start, idx_stop, good_dur)
+        idx_sup_thr = idx_sup_thr[good_idx]
+
+        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+        density = number / (length / sf / 60.)
+
         return idx_sup_thr, number, density, duration_ms
 
     else:
