@@ -4,6 +4,7 @@
 
 Perform:
 - REM detection
+- Muscle Twitches detection
 - Spindles detection
 - Slow wave detection
 - KCs detection
@@ -52,10 +53,10 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
             Perfom detection only on NREM sleep period
 
         tMin: float
-            Minimum duration of K-complexes
+            Minimum duration (ms) of K-complexes
 
         tMax: float
-            Maximum duration of K-complexes
+            Maximum duration (ms) of K-complexes
 
         kc_min_amp: float
             Minimum amplitude of K-complexes
@@ -84,9 +85,6 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
             Duration of lookahead window for spindles detection (sec)
             Check for spindles that are comprised within -range_spin_sec/2 <
             KC < range_spin_sec/2
-
-        kc_max_freq: int
-            Maximum frequency of K-complexes
 
         kc_peak_min_distance: float
             Minimum distance (ms) between the minimum and maxima of a KC
@@ -208,8 +206,8 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
 # SPINDLES DETECTION
 ###########################################################################
 
-def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
-                   max_freq=14., min_dur_ms=500, max_dur_ms=2000,
+def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fMin=12.,
+                   fMax=14., tMin=500, tMax=2000,
                    method='wavelet', min_distance_ms=500, sigma_thr=0.25):
     """Perform a sleep spindles detection.
 
@@ -232,10 +230,10 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
             Perfom detection only on NREM sleep period
 
     Kargs:
-        min_freq: float, optional (def 12)
+        fMin: float, optional (def 12)
             Lower bandpass frequency
 
-        max_freq: float, optional (def 14)
+        fMax: float, optional (def 14)
             Higher bandpass frequency
 
         method: string
@@ -277,7 +275,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 
     # Pre-detection
     # Compute relative sigma power
-    freqs = np.array([0.5, 4., 8., min_freq, max_freq])
+    freqs = np.array([0.5, 4., 8., fMin, fMax])
     _, _, _, sigma_npow = morlet_power(data, freqs, sf, norm=True)
     sigma_nfpow = movingaverage(sigma_npow, sf, sf)
     idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
@@ -285,7 +283,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
     # Get complex decomposition of filtered data :
     if method == 'hilbert':
         # Bandpass filter
-        data_filt = filt(sf, [min_freq, max_freq], data, order=4)
+        data_filt = filt(sf, [fMin, fMax], data, order=4)
         # Hilbert transform on odd-length signals is twice longer. To avoid
         # this extra time, simply set to zero padding.
         # See https://github.com/scipy/scipy/issues/6324
@@ -294,7 +292,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
         else:
             analytic = hilbert(data_filt[:-1], len(data_filt))
     elif method == 'wavelet':
-        analytic = morlet(data, sf, np.mean([min_freq, max_freq]))
+        analytic = morlet(data, sf, np.mean([fMin, fMax]))
 
     amplitude = np.abs(analytic)
 
@@ -317,8 +315,8 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
                                                                sf)
 
         # Get where min_dur < spindles duration < max_dur :
-        good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
-                                           duration_ms < max_dur_ms))[0]
+        good_dur = np.where(np.logical_and(duration_ms > tMin,
+                                           duration_ms < tMax))[0]
 
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
 
@@ -338,8 +336,8 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 ###########################################################################
 
 
-def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=200,
-              max_dur_ms=4000, min_distance_ms=200, moving_ms=200, deriv_ms=30,
+def remdetect(elec, sf, hypno, rem_only, threshold, tMin=200,
+              tMax=1500, min_distance_ms=200, moving_ms=200, deriv_ms=30,
               amplitude_art=400):
     """Perform a rapid eye movement (REM) detection.
 
@@ -347,7 +345,7 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=200,
     (REM) during REM sleep.
 
     Args:
-        eog: np.ndarray
+        elec: np.ndarray
             EOG signal (preferably after artefact rejection using ICA)
 
         sf: int
@@ -364,8 +362,11 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=200,
             Number of standard deviation of the derivative signal
             Threshold is defined as: mean + X * std(derivative)
 
-        min_dur_ms: int, optional (def 200)
+        tMin: int, optional (def 200)
             Minimum duration (ms) of rapid eye movement
+
+        tMax: int, optional (def 1500)
+            Maximum duration (ms) of rapid eye movement
 
         min_distance_ms: int, optional (def 200)
             Minimum distance (ms) between two saccades to consider them as two
@@ -394,26 +395,24 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=200,
             Duration (ms) of each REM detected
 
     """
-    eog = np.array(eog)
-
     if rem_only and 4 in hypno:
-        eog[(np.where(hypno < 4))] = 0
-        length = np.count_nonzero(eog)
-        idx_zero = np.where(eog == 0)
+        elec[(np.where(hypno < 4))] = 0
+        length = np.count_nonzero(elec)
+        idx_zero = np.where(elec == 0)
     else:
-        length = max(eog.shape)
+        length = max(elec.shape)
 
     # Smooth signal with moving average
-    sm_sig = movingaverage(eog, moving_ms, sf)
+    sm_sig = movingaverage(elec, moving_ms, sf)
     # Compute first derivative
     deriv = derivative(sm_sig, deriv_ms, sf)
     # Smooth derivative
     deriv = movingaverage(deriv, moving_ms, sf)
     # Define threshold
     if rem_only and 4 in hypno:
-        idThr = np.setdiff1d(np.arange(eog.size), idx_zero)
+        idThr = np.setdiff1d(np.arange(elec.size), idx_zero)
     else:
-        idThr = np.arange(eog.size)
+        idThr = np.arange(elec.size)
     # Remove extreme values
     idThr = np.setdiff1d(idThr, np.where(np.abs(sm_sig) > amplitude_art)[0])
     # Find supra-threshold values
@@ -427,10 +426,9 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=200,
 
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-        # Get where min_dur < REM duration < max_dur_ms
-        good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
-                                           duration_ms < max_dur_ms))[0]
-        good_dur = np.append(good_dur, len(good_dur))
+        # Get where min_dur < REM duration < tMax
+        good_dur = np.where(np.logical_and(duration_ms > tMin,
+                                           duration_ms < tMax))[0]
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
         idx_sup_thr = idx_sup_thr[good_idx]
 
@@ -542,7 +540,7 @@ def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
 
 
 def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
-             min_dur_ms=800, max_dur_ms=2500, min_distance_ms=1000,
+             tMin=800, tMax=2500, min_distance_ms=1000,
              welch_win_s=15, delta_thr=0.5, min_amp=10, max_amp=400):
     """Perform a detection of muscle twicthes (MT).
 
@@ -573,10 +571,10 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
         fMax: float, optional (def 40)
             Higher bandpass frequency
 
-        min_dur_ms: int, optional (def 500)
+        tMin: int, optional (def 500)
             Minimum duration (ms) of MT
 
-        min_dur_ms: int, optional (def 3000)
+        tMax: int, optional (def 3000)
             Maximum duration (ms) of MT
 
         min_distance_ms: int, optional (def 1000)
@@ -652,8 +650,8 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
 
         # Duration criteria
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
-        good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
-                                           duration_ms < max_dur_ms))[0]
+        good_dur = np.where(np.logical_and(duration_ms > tMin,
+                                           duration_ms < tMax))[0]
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
 
         # Keep only good events
