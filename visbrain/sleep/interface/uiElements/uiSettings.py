@@ -96,7 +96,7 @@ class uiSettings(object):
         filename = QFileDialog.getSaveFileName(self, 'Screenshot',
                                                os.path.join(os.getenv('HOME'),
                                                             'screenshot.jpg'),
-                                               "Picture (*.jpg);;;;All files"
+                                               "Picture (*.jpg);;All files"
                                                " (*.*)")
         filename = str(filename)  # py2
         if filename:

@@ -2488,7 +2488,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -3820,7 +3820,7 @@ Twitches</string>
                     </font>
                    </property>
                    <property name="text">
-                    <string>Export table only</string>
+                    <string>Export table</string>
                    </property>
                   </widget>
                  </item>

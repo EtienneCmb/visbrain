@@ -16,8 +16,7 @@ def listToCsv(file, data):
             List of data to save to the csv file.
     """
     with open(file, 'w') as csvfile:
-        writer = csv.writer(csvfile, dialect='excel',
-                            quoting=csv.QUOTE_NONNUMERIC)
+        writer = csv.writer(csvfile, dialect='excel', delimiter=',')
         for k in data:
             writer.writerow(k)
     return

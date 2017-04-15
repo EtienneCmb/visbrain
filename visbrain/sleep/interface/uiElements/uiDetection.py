@@ -44,6 +44,7 @@ class uiDetection(object):
 
         # Export file :
         self._DetectLocExport.clicked.connect(self._fcn_exportLocation)
+        self._DetectLocImport.clicked.connect(self._fcn_importLocation)
         self._DetectExportAll.clicked.connect(self._fcn_exportAllDetections)
         self._DetectImportAll.clicked.connect(self._fcn_importAllDetections)
 
@@ -208,15 +209,18 @@ class uiDetection(object):
         ############################################################
         # LINE REPORT :
         ############################################################
-        # Build line reports :
+        self._locLineReport()
+
+        # Finally, hide progress bar :
+        self._ToolDetectProgress.hide()
+
+    def _locLineReport(self):
+        """Update line report."""
         self._detect.build_line(self._data)
         chans = self._detect.nonzero()
         self._DetectChans.clear()
         self._DetectChans.addItems(list(chans.keys()))
         self._fcn_runSwitchLocation()
-
-        # Finally, hide progress bar :
-        self._ToolDetectProgress.hide()
 
     # =====================================================================
     # FILL LOCATION TABLE
@@ -287,42 +291,28 @@ class uiDetection(object):
     def _fcn_fillLocations(self, channel, kind, index, duration):
         """Fill the location table."""
         ref = ['Wake', 'N1', 'N2', 'N3', 'REM', 'ART']
+        self._currentLoc = (channel, kind)
         # Clean table :
         self._DetectLocations.setRowCount(0)
-        # Get kind :
-        kindIn = kind in ['REM', 'Spindles', 'Slow waves', 'K-complexes',
-        'Muscle twitches']
-        if kindIn:
-            # Get starting index:
+        # Get starting index:
+        if kind == 'Peaks':
+            staInd = index[1::]
+            duration = np.zeros_like(staInd)
+        else:
             staInd = index[0::2]
-            # Define the length of the table:
-            self._DetectLocations.setRowCount(min(len(staInd), len(duration)))
-            # Fill the table :
-            for num, (k, i) in enumerate(zip(staInd, duration)):
-                # Starting :
-                self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
-                    str(self._time[k])))
-                # Duration :
-                self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
-                    str(i)))
-                # Type :
-                self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
-                    ref[int(self._hypno[k])]))
-
-        elif kind == 'Peaks':
-            # Define the length of the table :
-            self._DetectLocations.setRowCount(len(index))
-            # Fill the table :
-            for num, k in enumerate(index):
-                # Starting :
-                self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
-                    str(self._time[k])))
-                # Duration :
-                self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
-                    '1'))
-                # Type :
-                self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
-                    ref[int(self._hypno[k])]))
+        # Define the length of the table:
+        self._DetectLocations.setRowCount(min(len(staInd), len(duration)))
+        # Fill the table :
+        for num, (k, i) in enumerate(zip(staInd, duration)):
+            # Starting :
+            self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
+                str(self._time[k])))
+            # Duration :
+            self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
+                str(i)))
+            # Type :
+            self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
+                ref[int(self._hypno[k])]))
 
         self._DetectLocations.selectRow(0)
 
@@ -348,14 +338,17 @@ class uiDetection(object):
             self._chan.set_location(self._sf, self._data[ix, :], ix, sta, end)
 
     # =====================================================================
-    # EXPORT TABLE
+    # EXPORT IMPORT TABLE
     # =====================================================================
     def _fcn_exportLocation(self):
         """Export locations info."""
-        method = str(self._ToolDetectType.currentText())
+        channel = self._currentLoc[0]
+        method = self._currentLoc[1]
         # Read Table
         rowCount = self._DetectLocations.rowCount()
-        staInd, duration, stage = [], [], []
+        staInd = [channel, '', 'Time index (s)']
+        duration = [method, '', 'Duration (s)']
+        stage = ['', '', 'Sleep stage']
         for row in np.arange(rowCount):
             staInd.append(str(self._DetectLocations.item(row, 0).text()))
             duration.append(str(self._DetectLocations.item(row, 1).text()))
@@ -369,10 +362,40 @@ class uiDetection(object):
         path = str(path)  # py2
         if path:
             file = os.path.splitext(str(path))[0]
+            file += '_' + channel + '-' + method
             if selected_ext.find('csv') + 1:
                 listToCsv(file + '.csv', zip(staInd, duration, stage))
             elif selected_ext.find('txt') + 1:
                 listToTxt(file + '.txt', zip(staInd, duration, stage))
+
+    def _fcn_importLocation(self):
+        """Import location table."""
+        # Get file name :
+        file = QtGui.QFileDialog.getOpenFileName(
+            self, "Import table", "", "CSV file (*.csv);;Text file (*.txt);;"
+            "All files (*.*)")
+        file = str(file)
+        # Get channel / method from file name :
+        (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
+        # Load the file :
+        (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
+        # Sort by starting index :
+        idxsort = np.argsort(st)
+        st, dur = st[idxsort], dur[idxsort]
+        # Convert into index :
+        stInd = np.round(st * self._sf).astype(int)
+        durInd = np.round(dur * self._sf / 1000.).astype(int)
+        # Build the index array :
+        index = np.array([])
+        for k, i in zip(stInd, durInd):
+            print(k, i, k+i)
+            index = np.append(index, np.arange(k, k+i))
+        index = index.astype(np.int, copy=False)
+        # Set index :
+        self._detect[(chan, meth)]['index'] = index
+        # Plot update :
+        self._fcn_sliderMove()
+        self._locLineReport()
 
     def _fcn_exportAllDetections(self):
         """Export all locations."""
@@ -397,10 +420,6 @@ class uiDetection(object):
                 idx = self._channels.index(k[0])
                 self.canvas_setVisible(idx, True)
                 self._chan.visible[idx] = True
+        # Plot update :
         self._fcn_sliderMove()
-        # Build line reports :
-        self._detect.build_line(self._data)
-        chans = self._detect.nonzero()
-        self._DetectChans.clear()
-        self._DetectChans.addItems(list(chans.keys()))
-        self._fcn_runSwitchLocation()
+        self._locLineReport()

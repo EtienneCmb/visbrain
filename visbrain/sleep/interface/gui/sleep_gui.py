@@ -1819,7 +1819,7 @@ class Ui_MainWindow(object):
         self.QuickSettings.setCurrentIndex(4)
         self.toolBox_2.setCurrentIndex(0)
         self.toolBox.setCurrentIndex(1)
-        self._DetectionTab.setCurrentIndex(0)
+        self._DetectionTab.setCurrentIndex(1)
         self._slRules.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -2067,7 +2067,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Duration (ms)", None))
         item = self._DetectLocations.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Stage", None))
-        self.label_48.setText(_translate("MainWindow", "Export table only", None))
+        self.label_48.setText(_translate("MainWindow", "Export table", None))
         self._DetectLocExport.setText(_translate("MainWindow", "Export", None))
         self._DetectLocExportAs.setItemText(0, _translate("MainWindow", "CSV file (*.csv)", None))
         self._DetectLocExportAs.setItemText(1, _translate("MainWindow", "TXT file (*.txt)", None))
