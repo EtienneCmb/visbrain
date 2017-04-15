@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1307</width>
+    <width>1344</width>
     <height>1039</height>
    </rect>
   </property>
@@ -129,7 +129,7 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>377</width>
+                <width>410</width>
                 <height>783</height>
                </rect>
               </property>
@@ -187,7 +187,7 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>349</width>
+                       <width>382</width>
                        <height>537</height>
                       </rect>
                      </property>
@@ -1579,7 +1579,7 @@ re-referenced</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>98</width>
+                       <width>296</width>
                        <height>998</height>
                       </rect>
                      </property>
@@ -1667,7 +1667,7 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>377</width>
+                <width>410</width>
                 <height>814</height>
                </rect>
               </property>
@@ -2474,7 +2474,7 @@ hypnogram. Those informations change while editing it.</string>
                  </font>
                 </property>
                 <property name="text">
-                 <string>Perform a REM, spindles or peak detection either on
+                 <string>Perform automatic detection of several sleep microstructural features either on
 selected, visible or all channels.</string>
                 </property>
                 <property name="alignment">
@@ -2488,7 +2488,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -2563,6 +2563,11 @@ selected, visible or all channels.</string>
                       <item>
                        <property name="text">
                         <string>K-complexes</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Muscle twitches</string>
                        </property>
                       </item>
                      </widget>
@@ -3088,41 +3093,11 @@ on</string>
                           </font>
                          </property>
                          <property name="text">
-                          <string>Slow
-waves</string>
+                          <string>Slow waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="5">
-                        <spacer name="horizontalSpacer_8">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="1" column="4">
-                        <widget class="QDoubleSpinBox" name="_ToolWaveAmp">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum amplitude (mV) of Slow Wave (0 for no amplitude criteria)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                         <property name="minimum">
-                          <double>0.000000000000000</double>
-                         </property>
-                         <property name="maximum">
-                          <double>200.000000000000000</double>
-                         </property>
-                         <property name="value">
-                          <double>70.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="4">
+                       <item row="0" column="3" rowspan="2">
                         <widget class="QDoubleSpinBox" name="_ToolWaveTh">
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Normalized Delta power threshold (between 0 and 1) &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -3135,13 +3110,6 @@ waves</string>
                          </property>
                          <property name="value">
                           <double>0.750000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="2">
-                        <widget class="QLabel" name="label_46">
-                         <property name="text">
-                          <string>Delta power (norm.)</string>
                          </property>
                         </widget>
                        </item>
@@ -3158,24 +3126,21 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="1" column="2">
-                        <widget class="QLabel" name="label_47">
+                       <item row="0" column="2" rowspan="2">
+                        <widget class="QLabel" name="label_46">
                          <property name="text">
-                          <string>Amplitude (mV)</string>
+                          <string>Delta power (norm.)</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="3">
-                        <spacer name="horizontalSpacer_18">
+                       <item row="0" column="4" rowspan="2">
+                        <spacer name="horizontalSpacer_8">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
                          </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Minimum</enum>
-                         </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>20</width>
+                           <width>40</width>
                            <height>20</height>
                           </size>
                          </property>
@@ -3445,6 +3410,97 @@ waves</string>
                     </layout>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QWidget" name="_ToolMTPanel" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_47">
+                     <property name="margin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <layout class="QGridLayout" name="gridLayout_29">
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <item row="0" column="3">
+                        <widget class="QDoubleSpinBox" name="_ToolMTTh">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Number of standard deviation of the derivative signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
+                         <property name="maximum">
+                          <double>20.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>3.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2">
+                        <widget class="QLabel" name="label_93">
+                         <property name="text">
+                          <string>Threshold</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="2" colspan="4">
+                        <widget class="QCheckBox" name="_ToolMTOnly">
+                         <property name="text">
+                          <string>Perform detection only for REM sleep</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1" rowspan="2">
+                        <widget class="Line" name="line_37">
+                         <property name="minimumSize">
+                          <size>
+                           <width>10</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0" rowspan="2">
+                        <widget class="QLabel" name="label_94">
+                         <property name="font">
+                          <font>
+                           <italic>true</italic>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Muscle
+Twitches</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="4">
+                        <spacer name="horizontalSpacer_42">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
                  </layout>
                 </widget>
                </item>
@@ -3546,47 +3602,33 @@ waves</string>
               <layout class="QVBoxLayout" name="verticalLayout_39">
                <item>
                 <layout class="QGridLayout" name="gridLayout_23">
+                 <property name="leftMargin">
+                  <number>9</number>
+                 </property>
                  <property name="topMargin">
                   <number>0</number>
                  </property>
-                 <item row="1" column="0" colspan="5">
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="spacing">
+                  <number>3</number>
+                 </property>
+                 <item row="1" column="2" colspan="2">
                   <widget class="QWidget" name="widget_11" native="true">
                    <layout class="QHBoxLayout" name="horizontalLayout_19">
-                    <item>
-                     <spacer name="horizontalSpacer_40">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
+                    <property name="topMargin">
+                     <number>3</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>3</number>
+                    </property>
                     <item>
                      <widget class="QPushButton" name="_DetectSelect">
                       <property name="text">
                        <string>Select</string>
                       </property>
                      </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_42">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeType">
-                       <enum>QSizePolicy::Fixed</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>10</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
                     </item>
                     <item>
                      <widget class="QPushButton" name="_DetectRm">
@@ -3596,17 +3638,17 @@ waves</string>
                      </widget>
                     </item>
                     <item>
-                     <spacer name="horizontalSpacer_41">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
+                     <widget class="QCheckBox" name="_DetectViz">
+                      <property name="text">
+                       <string>Visible</string>
                       </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
+                      <property name="checked">
+                       <bool>true</bool>
                       </property>
-                     </spacer>
+                      <property name="tristate">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </widget>
@@ -3618,7 +3660,27 @@ waves</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="0">
+                 <item row="0" column="2">
+                  <widget class="QComboBox" name="_DetectChans">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the channel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1" rowspan="2">
+                  <widget class="Line" name="line_28">
+                   <property name="minimumSize">
+                    <size>
+                     <width>10</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0" rowspan="2">
                   <widget class="QLabel" name="label_72">
                    <property name="font">
                     <font>
@@ -3630,28 +3692,46 @@ waves</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="2">
-                  <widget class="QComboBox" name="_DetectChans">
-                   <property name="toolTip">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select the channel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <item row="2" column="2" colspan="2">
+                  <widget class="QWidget" name="widget_12" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
                    </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_10">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QPushButton" name="_DetectExportAll">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Export all detections in a NumPy compatible format (.npy)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Export all</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="_DetectImportAll">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Import all detections in a NumPy compatible format (.npy)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Import all</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
-                 <item row="0" column="4">
-                  <widget class="QCheckBox" name="_DetectViz">
-                   <property name="text">
-                    <string>Visible</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                   <property name="tristate">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="Line" name="line_28">
+                 <item row="2" column="1">
+                  <widget class="Line" name="line_30">
                    <property name="minimumSize">
                     <size>
                      <width>10</width>
@@ -3660,6 +3740,18 @@ waves</string>
                    </property>
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_73">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Export / import</string>
                    </property>
                   </widget>
                  </item>
@@ -3701,6 +3793,19 @@ waves</string>
                  <property name="topMargin">
                   <number>0</number>
                  </property>
+                 <item row="0" column="1">
+                  <widget class="Line" name="line_29">
+                   <property name="minimumSize">
+                    <size>
+                     <width>10</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_48">
                    <property name="sizePolicy">
@@ -3709,8 +3814,13 @@ waves</string>
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
                    <property name="text">
-                    <string>Export as</string>
+                    <string>Export table</string>
                    </property>
                   </widget>
                  </item>
@@ -3721,7 +3831,7 @@ waves</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="1">
+                 <item row="0" column="2">
                   <widget class="QComboBox" name="_DetectLocExportAs">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -3741,18 +3851,12 @@ waves</string>
                    </item>
                   </widget>
                  </item>
-                 <item row="0" column="2">
-                  <spacer name="horizontalSpacer">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                 <item row="0" column="4">
+                  <widget class="QPushButton" name="_DetectLocImport">
+                   <property name="text">
+                    <string>Import</string>
                    </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
+                  </widget>
                  </item>
                 </layout>
                </item>
@@ -3775,19 +3879,6 @@ waves</string>
       <property name="rightMargin">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <spacer name="horizontalSpacer_13">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="0" column="1">
        <widget class="QWidget" name="_topoW" native="true">
         <property name="minimumSize">
@@ -3814,6 +3905,19 @@ waves</string>
          </item>
         </layout>
        </widget>
+      </item>
+      <item row="0" column="0">
+       <spacer name="horizontalSpacer_13">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item row="1" column="0" colspan="2">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -4118,7 +4222,7 @@ waves</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1307</width>
+     <width>1344</width>
      <height>25</height>
     </rect>
    </property>

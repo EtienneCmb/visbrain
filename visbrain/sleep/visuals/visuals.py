@@ -32,28 +32,37 @@ class Detection(object):
     """Create a detection object."""
 
     def __init__(self, channels, time, spincol=None, remcol=None,
-                 kccol=None, swcol=None, spinsym=None, remsym=None, kcsym=None,
-                 swsym=None, parent=None, parent_hyp=None):
+                 kccol=None, swcol=None, peakcol=None, mtcol=None,
+                 spinsym=None, remsym=None, kcsym=None, swsym=None,
+                 peaksym=None, mtsym=None, parent=None, parent_hyp=None):
         """Init."""
-        self.items = ['Spindles', 'REM', 'K-complexes', 'Slow waves']
+        self.items = ['Spindles', 'REM', 'K-complexes', 'Slow waves', 'Peaks',
+                      'Muscle twitches']
         self.chans = channels
         self.dict = {}
         self.line = {}
+        self.peaks = {}
         self.seg = {}
         col = {'Spindles': spincol, 'REM': remcol, 'K-complexes': kccol,
-               'Slow waves': swcol}
+               'Slow waves': swcol, 'Peaks': peakcol, 'Muscle twitches': mtcol}
         sym = {'Spindles': spinsym, 'REM': remsym, 'K-complexes': kcsym,
-               'Slow waves': swsym}
+               'Slow waves': swsym, 'Peaks': peaksym, 'Muscle twitches': mtsym}
         self.time = time
-        self.hyp = scene.visuals.Markers(parent=parent_hyp)
+        self.hyp = Markers(parent=parent_hyp)
         self.hyp.set_gl_state('translucent')
         for num, k in enumerate(self):
             self[k] = {'index': np.array([]), 'color': col[k[1]],
                        'connect': np.array([]), 'sym': sym[k[1]]}
             par = parent[self.chans.index(k[0])]
-            self.line[k] = scene.visuals.Line(method='gl', parent=par,
-                                              color=col[k[1]])
-            self.line[k].set_gl_state('translucent')
+            if k[1] is not 'Peaks':
+                self.line[k] = scene.visuals.Line(method='gl', parent=par,
+                                                  color=col[k[1]])
+                self.line[k].set_gl_state('translucent')
+            else:
+                pos = np.full((1, 3), -10., dtype=np.float32)
+                self.peaks[k] = Markers(pos=pos, parent=par,
+                                        face_color=col[k[1]])
+                self.peaks[k].set_gl_state('translucent')
 
     def __iter__(self):
         it = itertools.product(self.chans, self.items)
@@ -88,7 +97,11 @@ class Detection(object):
                 connect = np.gradient(index) == 1.
                 connect[0], connect[-1] = True, False
                 # Send data :
-                self.line[k].set_data(pos=pos, width=4., connect=connect, )
+                if k[1] is 'Peaks':
+                    self.peaks[k].set_data(pos=pos, edge_width=0.,
+                                           face_color=self[k]['color'])
+                else:
+                    self.line[k].set_data(pos=pos, width=4., connect=connect)
 
     def build_hyp(self, chan, types):
         """Build hypnogram report.
@@ -102,20 +115,51 @@ class Detection(object):
         """
         # Get index :
         index = self[(chan, types)]['index']
-        # Get only starting ponts :
-        start = index[np.hstack((np.gradient(index[0:-1]) != 1, [True]))][::2]
+        # Get only starting points :
+        if types == 'Peaks':
+            start = index
+        else:
+            start = index[np.hstack((np.gradient(index[0:-1]) != 1,
+                                     [True]))][::2]
         y = np.full_like(start, 1.5, dtype=float)
         z = np.full_like(start, -2., dtype=float)
         pos = np.vstack((self.time[start], y, z)).T
         # Set hypnogram data :
         self.hyp.set_data(pos=pos, symbol=self[(chan, types)]['sym'],
                           face_color=self[(chan, types)]['color'],
-                          edge_width=0.)
+                          edge_width=1.,
+                          edge_color=self[(chan, types)]['color'])
 
     def visible(self, viz, chan, types):
-        """"""
+        """Set channel visibility.
+
+        Args:
+            viz: bool
+                Boolean value indicating if the plot have to be displayed.
+
+            chan: str
+                Channel name.
+
+            types: str
+                Detection type name.
+        """
         self.hyp.visible = viz
-        self.line[(chan, types)].visible = viz
+        if types is 'Peaks':
+            self.peaks[(chan, types)].visible = viz
+        else:
+            self.line[(chan, types)].visible = viz
+
+    def delete(self, chan, types):
+        """Delete data of a channel."""
+        # Remove data from dict :
+        self[(chan, types)]['index'] = np.array([])
+        # Remove data from plot :
+        pos = np.full((1, 3), -10., dtype=np.float32)
+        if types is 'Peaks':
+            self.peaks[(chan, types)].set_data(pos=pos)
+        else:
+            self.line[(chan, types)].set_data(pos=pos,
+                                              connect=np.array([False]))
 
     def nonzero(self):
         """Return the list of channels with non-empty detections."""
@@ -128,6 +172,38 @@ class Detection(object):
             if types:
                 chans[k] = types
         return chans
+
+    def update_keys(self, newkeys):
+        """Update the keys of dictionaries."""
+        # Get old keys :
+        oldkeys = list(self.dict.keys())
+        # Check that new keys lentgh has the same size as old keys :
+        if len(newkeys) != len(self.chans):
+            raise ValueError("The length of new keys must be the same as old"
+                             "keys")
+        for k in oldkeys:
+            # Find index of channel :
+            idx = self.chans.index(k[0])
+            # Build new key :
+            nkey = (newkeys[idx], k[1])
+            # Update keys (if needed):
+            if nkey not in oldkeys:
+                # Update dict and line :
+                self.dict[nkey] = self.dict[k]
+                if k[1] is 'Peaks':
+                    self.peaks[nkey] = self.peaks[k]
+                    del self.peaks[k]
+                else:
+                    self.line[nkey] = self.line[k]
+                    del self.line[k]
+                # Remove old key :
+                del self.dict[k]
+        self.chans = newkeys
+
+    def reset(self):
+        """Reset all detections."""
+        for k in self:
+            self[k]['index'] = np.array([])
 
 
 class ChannelPlot(PrepareData):
@@ -626,10 +702,10 @@ class vbShortcuts(object):
             if event.text == ' ':
                 pass
             # ------------ SLIDER ------------
-            elif event.text == 'n':  # Next (slider)
+            elif event.text.lower() == 'n':  # Next (slider)
                 self._SlGoto.setValue(
                                 self._SlGoto.value() + self._SigSlStep.value())
-            elif event.text == 'b':  # Before (slider)
+            elif event.text.lower() == 'b':  # Before (slider)
                 self._SlGoto.setValue(
                                 self._SlGoto.value() - self._SigSlStep.value())
 
@@ -643,36 +719,36 @@ class vbShortcuts(object):
                 self._PanAllAmpMax.setValue(self._PanAllAmpMax.value() - 5.)
 
             # ------------  VISIBILITY ------------
-            elif event.text == 's':  # Toggle visibility on spec
+            elif event.text.lower() == 's':  # Toggle visibility on spec
                 self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
                 self._fcn_specViz()
 
-            elif event.text == 'h':  # Toggle visibility on hypno
+            elif event.text.lower() == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
 
-            elif event.text == 't':   # Toggle visibility on topo
+            elif event.text.lower() == 't':   # Toggle visibility on topo
                 self._PanTopoViz.setChecked(not self._PanTopoViz.isChecked())
                 self._fcn_topoViz()
 
-            elif event.text == 'z':  # Enable zoom
+            elif event.text.lower() == 'z':  # Enable zoom
                 viz = self._PanTimeZoom.isChecked()
                 self._PanTimeZoom.setChecked(not viz)
                 self._PanHypZoom.setChecked(not viz)
                 self._PanSpecZoom.setChecked(not viz)
                 self._fcn_Zooming()
 
-            elif event.text == 'm':
+            elif event.text.lower() == 'm':
                 viz = self._slMagnify.isChecked()
                 self._slMagnify.setChecked(not viz)
                 self._fcn_sliderMagnify()
 
             # ------------ SCORING ------------
-            elif event.text == 'a':
+            elif event.text.lower() == 'a':
                 self._add_stage_on_win(-1)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
-            elif event.text == 'w':
+            elif event.text.lower() == 'w':
                 self._add_stage_on_win(0)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
@@ -688,7 +764,7 @@ class vbShortcuts(object):
                 self._add_stage_on_win(3)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
-            elif event.text == 'r':
+            elif event.text.lower() == 'r':
                 self._add_stage_on_win(4)
                 self._SlGoto.setValue(self._SlGoto.value(
                                                  ) + self._SigSlStep.value())
@@ -801,11 +877,12 @@ class visuals(vbShortcuts):
         self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
 
         # =================== DETECTIONS ===================
-        self._detect = Detection(self._channels, self._time, self._defspin,
-                                 self._defrem, self._defkc, self._defsw,
-                                 self._spinsym, self._swsym, self._kcsym,
-                                 self._remsym, self._chan.node,
-                                 self._hypCanvas.wc.scene)
+        self._detect = Detection(self._channels.copy(), self._time,
+                                 self._defspin, self._defrem, self._defkc,
+                                 self._defsw, self._defpeaks, self._defmt,
+                                 self._spinsym, self._remsym, self._kcsym,
+                                 self._swsym, self._peaksym, self._mtsym,
+                                 self._chan.node, self._hypCanvas.wc.scene)
 
         # =================== TOPOPLOT ===================
         self._topo = TopoPlot(chans=self._channels, camera=cameras[3],

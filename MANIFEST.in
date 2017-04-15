@@ -1,2 +1,3 @@
 include runner README.md
 recursive-include visbrain/brain/base/templates *
+recursive-include visbrain/visbrain/utils/topo *

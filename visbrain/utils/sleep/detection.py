@@ -4,21 +4,22 @@
 
 Perform:
 - REM detection
+- Muscle Twitches detection
 - Spindles detection
 - Slow wave detection
 - KCs detection
 - Peak detection
 """
 import numpy as np
-from scipy.signal import hilbert, daub
+from scipy.signal import hilbert, daub, detrend
 
-from ..filtering import filt, morlet, morlet_power
-from ..sigproc import movingaverage, derivative, tkeo, soft_thresh
+from ..filtering import filt, morlet, morlet_power, welch_power
+from ..sigproc import movingaverage, derivative, tkeo
 from .event import (_events_duration, _events_removal, _events_distance_fill,
                     _events_mean_freq, _event_amplitude)
 
 __all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
-           'kcdetect']
+           'kcdetect', 'mtdetect']
 
 ###########################################################################
 # K-COMPLEX DETECTION
@@ -52,10 +53,10 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
             Perfom detection only on NREM sleep period
 
         tMin: float
-            Minimum duration of K-complexes
+            Minimum duration (ms) of K-complexes
 
         tMax: float
-            Maximum duration of K-complexes
+            Maximum duration (ms) of K-complexes
 
         kc_min_amp: float
             Minimum amplitude of K-complexes
@@ -85,9 +86,6 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
             Check for spindles that are comprised within -range_spin_sec/2 <
             KC < range_spin_sec/2
 
-        kc_max_freq: int
-            Maximum frequency of K-complexes
-
         kc_peak_min_distance: float
             Minimum distance (ms) between the minimum and maxima of a KC
 
@@ -115,6 +113,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
 
     # PRE DETECTION
     # Compute delta band power
+    # Morlet's wavelet
     freqs = np.array([0.5, 4., 8., 12., 16.])
     delta_npow, _, _, _ = morlet_power(data, freqs, sf, norm=True)
     delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
@@ -207,8 +206,8 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
 # SPINDLES DETECTION
 ###########################################################################
 
-def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
-                   max_freq=14., min_dur_ms=500, max_dur_ms=2000,
+def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fMin=12.,
+                   fMax=14., tMin=500, tMax=2000,
                    method='wavelet', min_distance_ms=500, sigma_thr=0.25):
     """Perform a sleep spindles detection.
 
@@ -231,10 +230,10 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
             Perfom detection only on NREM sleep period
 
     Kargs:
-        min_freq: float, optional (def 12)
+        fMin: float, optional (def 12)
             Lower bandpass frequency
 
-        max_freq: float, optional (def 14)
+        fMax: float, optional (def 14)
             Higher bandpass frequency
 
         method: string
@@ -276,7 +275,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 
     # Pre-detection
     # Compute relative sigma power
-    freqs = np.array([0.5, 4., 8., min_freq, max_freq])
+    freqs = np.array([0.5, 4., 8., fMin, fMax])
     _, _, _, sigma_npow = morlet_power(data, freqs, sf, norm=True)
     sigma_nfpow = movingaverage(sigma_npow, sf, sf)
     idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
@@ -284,7 +283,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
     # Get complex decomposition of filtered data :
     if method == 'hilbert':
         # Bandpass filter
-        data_filt = filt(sf, [min_freq, max_freq], data, order=4)
+        data_filt = filt(sf, [fMin, fMax], data, order=4)
         # Hilbert transform on odd-length signals is twice longer. To avoid
         # this extra time, simply set to zero padding.
         # See https://github.com/scipy/scipy/issues/6324
@@ -293,7 +292,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
         else:
             analytic = hilbert(data_filt[:-1], len(data_filt))
     elif method == 'wavelet':
-        analytic = morlet(data, sf, np.mean([min_freq, max_freq]))
+        analytic = morlet(data, sf, np.mean([fMin, fMax]))
 
     amplitude = np.abs(analytic)
 
@@ -316,8 +315,8 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
                                                                sf)
 
         # Get where min_dur < spindles duration < max_dur :
-        good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
-                                           duration_ms < max_dur_ms))[0]
+        good_dur = np.where(np.logical_and(duration_ms > tMin,
+                                           duration_ms < tMax))[0]
 
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
 
@@ -337,15 +336,16 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, min_freq=12.,
 ###########################################################################
 
 
-def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
-              max_dur_ms=500, min_distance_ms=200, moving_ms=100, deriv_ms=40):
+def remdetect(elec, sf, hypno, rem_only, threshold, tMin=200,
+              tMax=1500, min_distance_ms=200, moving_ms=200, deriv_ms=30,
+              amplitude_art=400):
     """Perform a rapid eye movement (REM) detection.
 
     Function to perform a semi-automatic detection of rapid eye movements
     (REM) during REM sleep.
 
     Args:
-        eog: np.ndarray
+        elec: np.ndarray
             EOG signal (preferably after artefact rejection using ICA)
 
         sf: int
@@ -362,22 +362,24 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
             Number of standard deviation of the derivative signal
             Threshold is defined as: mean + X * std(derivative)
 
-        min_dur_ms: int, optional (def 30)
+        tMin: int, optional (def 200)
             Minimum duration (ms) of rapid eye movement
 
-        min_distance_ms: int, optional (def 50)
+        tMax: int, optional (def 1500)
+            Maximum duration (ms) of rapid eye movement
+
+        min_distance_ms: int, optional (def 200)
             Minimum distance (ms) between two saccades to consider them as two
-            distinct events
+            distinct events.
 
-        moving_ms: int, optional (def 100)
-            Time (ms) window of the moving average
+        moving_ms: int, optional (def 200)
+            Time (ms) window of the moving average.
 
-        deriv_ms: int, optional (def 40)
+        deriv_ms: int, optional (def 30)
             Time (ms) window of derivative computation
-            Default is 40 ms step  since most of naturally occurring human
-            saccades have magnitudes of 15 degrees or less and last thus
-            no more than 30 - 40 ms (the maximum velocity of a saccade is
-            above 500 degrees/sec, see Bahill et al., 1975)
+
+        amplitude_art: int, optional (def 400 µV)
+            Remove extreme values from the signal
 
     Return:
         idx_sup_thr: np.ndarray
@@ -393,48 +395,42 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
             Duration (ms) of each REM detected
 
     """
-    eog = np.array(eog)
-
     if rem_only and 4 in hypno:
-        eog[(np.where(hypno < 4))] = 0
-        length = np.count_nonzero(eog)
-        idx_zero = np.where(eog == 0)
+        elec[(np.where(hypno < 4))] = 0
+        length = np.count_nonzero(elec)
+        idx_zero = np.where(elec == 0)
     else:
-        length = max(eog.shape)
+        length = max(elec.shape)
 
     # Smooth signal with moving average
-    sm_sig = movingaverage(eog, moving_ms, sf)
-
+    sm_sig = movingaverage(elec, moving_ms, sf)
     # Compute first derivative
     deriv = derivative(sm_sig, deriv_ms, sf)
-
     # Smooth derivative
     deriv = movingaverage(deriv, moving_ms, sf)
-
     # Define threshold
     if rem_only and 4 in hypno:
-        deriv[idx_zero] = np.nan
-
-    thresh = np.nanmean(deriv) + threshold * np.nanstd(deriv)
-
+        idThr = np.setdiff1d(np.arange(elec.size), idx_zero)
+    else:
+        idThr = np.arange(elec.size)
+    # Remove extreme values
+    idThr = np.setdiff1d(idThr, np.where(np.abs(sm_sig) > amplitude_art)[0])
     # Find supra-threshold values
-    with np.errstate(divide='ignore', invalid='ignore'):
-        idx_sup_thr = np.where(deriv > thresh)[0]
+    thresh = np.mean(deriv[idThr]) + threshold * np.std(deriv[idThr])
+    idx_sup_thr = np.where(deriv > thresh)[0]
 
     if idx_sup_thr.size:
 
-        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
-                                                               sf)
-
-        # Get where min_dur < REM duration
-        good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
-                                           duration_ms < max_dur_ms))[0]
-        good_dur = np.append(good_dur, len(good_dur))
-        good_idx = _events_removal(idx_start, idx_stop, good_dur)
-        idx_sup_thr = idx_sup_thr[good_idx]
-
         # Find REMs separated by less than min_distance_ms
         idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
+
+        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+
+        # Get where min_dur < REM duration < tMax
+        good_dur = np.where(np.logical_and(duration_ms > tMin,
+                                           duration_ms < tMax))[0]
+        good_idx = _events_removal(idx_start, idx_stop, good_dur)
+        idx_sup_thr = idx_sup_thr[good_idx]
 
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
@@ -448,8 +444,9 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=50,
 # SLOW WAVE DETECTION
 ###########################################################################
 
-def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
-                   moving_s=30, min_duration_ms=500, max_amp=500):
+def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
+                    fMin=0.5, fMax=2, welch_win_s=12, moving_s=30,
+                    min_duration_ms=500):
     """Perform a Slow Wave detection.
 
     Args:
@@ -461,28 +458,31 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
 
         threshold: float
             First threshold: bandwise-normalized delta power
-            (power is normalized across 4 bands: delta, theta, alpha, beta)
             Value must be between 0 and 1.
 
-        amplitude: float
-            Secondary threshold: minimum amplitude (mV) of the raw signal.
-            Slow waves are generally defined by amplitude > 70 mV.
-
     Kargs:
+        min_amp: float
+            Secondary threshold: minimum amplitude (µV) of the raw signal.
+            Slow waves are generally defined by amplitude > 70 µV.
+
+        max_amp: float, optional
+            Maximum amplitude of slow wave
+
         fMin: float, optional (def 0.1)
             High-pass frequency
 
         fMax: float, optional (def 4.5)
             Lowpass frequency
 
-        moving_s: int, optional (def 30)
-            Time (sec) window of the moving average
+        welch_win_s: int, optional (def 10)
+            Time (sec) window for computation of normalized bandpower with
+            Welch's method
+
+        moving_s: int, optional (30)
+            Time (sec) window of moving average to be applied on delta power
 
         min_duration_ms: float, optional
             Minimum duration (ms) of slow waves
-
-        max_amp: float, optional
-            Maximum amplitude of slow wave
 
     Return:
         idx_sup_thr: np.ndarray
@@ -498,14 +498,17 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
     length = max(elec.shape)
 
     # Get complex decomposition of filtered data in the main EEG freq band:
-    freqs = np.array([fMin, fMax, 8., 12., 16.])
-    delta_npow, _, _, _ = morlet_power(elec, freqs, sf, norm=True)
+    # Using Morlet's wavelet - a bit longer
+    # freqs = np.array([fMin, fMax, 8., 12., 16.])
+    # delta_npow, _, _, _ = morlet_power(elec, freqs, sf, norm=True)
+    # delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
 
-    # Smooth
-    delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
+    # Using Welch's method
+    delta_nfpow = welch_power(elec, fMin, fMax, sf, welch_win_s, norm=True)
+    delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
+    delta_nfpow = movingaverage(delta_nfpow, 3 * welch_win_s * sf, sf)
 
     # Normalized power criteria
-    # thresh = np.nanmean(delta_nfpow) + threshold * np.nanstd(delta_nfpow)
     idx_sup_thr = np.where(delta_nfpow > threshold)[0]
 
     if idx_sup_thr.size:
@@ -515,7 +518,7 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
         sw_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start,
                                                         idx_stop, sf)
 
-        good_amp = np.where(np.logical_and(sw_amp > amplitude,
+        good_amp = np.where(np.logical_and(sw_amp > min_amp,
                                            sw_amp < max_amp))[0]
 
         good_dur = np.where(duration_ms > min_duration_ms)[0]
@@ -531,86 +534,263 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
+###########################################################################
+# MUSCLE TWITCHES DETECTION
+###########################################################################
+
+
+def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
+             tMin=800, tMax=2500, min_distance_ms=1000,
+             welch_win_s=15, delta_thr=0.5, min_amp=10, max_amp=400):
+    """Perform a detection of muscle twicthes (MT).
+
+    Sampling frequency must be at least 1000 Hz.
+
+    Args:
+        elec: np.ndarray
+            EMG signal
+
+        sf: float
+            Downsampling frequency
+
+        threshold: float
+            Number of standard deviation to use as threshold
+            Threshold is defined as: mean + X * std(hilbert envelope)
+
+        hypno: np.ndarray
+            Hypnogram vector, same length as elec
+            Vector with only 0 if no hypnogram is loaded
+
+        rem_only: boolean
+            Perfom detection only on NREM sleep period
+
+    Kargs:
+        fMin: float, optional (def 30)
+            Lower bandpass frequency
+
+        fMax: float, optional (def 40)
+            Higher bandpass frequency
+
+        tMin: int, optional (def 500)
+            Minimum duration (ms) of MT
+
+        tMax: int, optional (def 3000)
+            Maximum duration (ms) of MT
+
+        min_distance_ms: int, optional (def 1000)
+            Minimum distance (in ms) between 2 MTs to consider them as
+            two distinct events
+
+        welch_win_s: int, optional (def 15)
+            Time window (s) of Welch spectrum
+
+        delta_thr: float, optional (def 0.5)
+            Threshold of delta normalized bandpower, above which detected
+            events are probably artefacts.
+
+        max_amp: int, optional (def 400)
+            Maximum amplitude of Muscle Twitches. Above this threshold,
+            detected events are probably artefacts.
+
+    Return:
+        idx_sup_thr: np.ndarray
+            Array of supra-threshold indices
+
+        number: int
+            Number of detected MTs
+
+        density: float
+            Number of MTs per minutes of data
+
+        duration_ms: float
+            Duration (ms) of each MT detected
+
+    """
+    if rem_only and 4 in hypno:
+        elec[(np.where(hypno < 4))] = 0
+        length = np.count_nonzero(elec)
+        idx_zero = np.where(elec == 0)
+    else:
+        length = max(elec.shape)
+
+    # Morlet's envelope
+    analytic = morlet(elec, sf, np.mean([fMin, fMax]))
+    amplitude = np.abs(analytic)
+    amplitude = movingaverage(amplitude, sf, sf)
+
+    # Define threshold
+    if rem_only and 4 in hypno:
+        idTh = np.setdiff1d(np.arange(elec.size), idx_zero)
+    else:
+        # Remove period with too much delta power (N2 - N3)
+        delta_nfpow = welch_power(elec, 0.5, 2, sf, welch_win_s, norm=True)
+        delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
+        idTh = np.setdiff1d(np.arange(elec.size), np.where(
+                                                delta_nfpow > delta_thr)[0])
+
+    # Remove extreme values
+    idTh = np.setdiff1d(idTh, np.where(abs(elec) > 400)[0])
+
+    # Find supra-threshold values
+    thresh = np.mean(amplitude[idTh]) + threshold * np.std(amplitude[idTh])
+    idx_sup_thr = np.where(amplitude > thresh)[0]
+
+    if idx_sup_thr.size:
+
+        # Find MTs separated by less than min_distance_ms
+        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
+
+        _, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+
+        # Amplitude criteria
+        mt_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start, idx_stop, sf)
+        good_amp = np.where(np.logical_and(mt_amp > min_amp,
+                                           mt_amp < max_amp))[0]
+        good_idx = _events_removal(idx_start, idx_stop, good_amp)
+
+        # Duration criteria
+        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+        good_dur = np.where(np.logical_and(duration_ms > tMin,
+                                           duration_ms < tMax))[0]
+        good_idx = _events_removal(idx_start, idx_stop, good_dur)
+
+        # Keep only good events
+        idx_sup_thr = idx_sup_thr[good_idx]
+        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+        density = number / (length / sf / 60.)
+
+        return idx_sup_thr, number, density, duration_ms
+
+    else:
+        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+
 
 ###########################################################################
 # PEAKS DETECTION
 ###########################################################################
 
 
-def peakdetect(y_axis, x_axis=None, lookahead=200, delta=0):
+def peakdetect(sf, y_axis, x_axis=None, lookahead=200, delta=1., get='max',
+               threshold='auto'):
     """Perform a peak detection.
 
     Converted from/based on a MATLAB script at:
     http://billauer.co.il/peakdet.html
+    Original script :
+    https://github.com/DiamondLightSource/auto_tomo_calibration-experimental/
+    blob/master/old_code_scripts/peak_detect.py
 
     function for detecting local maxima and minima in a signal.
     Discovers peaks by searching for values which are surrounded by lower
     or larger values for maxima and minima respectively
 
-    keyword arguments:
-    y_axis -- A list containing the signal over which to find peaks
+    Args:
+        sf: float
+            The sampling frequency.
 
-    x_axis -- A x-axis whose values correspond to the y_axis list and is used
-        in the return to specify the position of the peaks. If omitted an
-        index of the y_axis is used.
-        (default: None)
+        y_axis: np.ndarray
+            Row vector containing the data.
 
-    lookahead -- distance to look ahead from a peak candidate to determine if
-        it is the actual peak
-        (default: 200)
-        '(samples / period) / f' where '4 >= f >= 1.25' might be a good value
+        x_axis: np.ndarray
+            Row vector for the time axis. If omitted an index of the y_axis is
+            used.
 
-    delta -- this specifies a minimum difference between a peak and
-        the following points, before a peak may be considered a peak. Useful
-        to hinder the function from picking up false peaks towards to end of
-        the signal. To work well delta should be set to delta >= RMSnoise * 5.
-        (default: 0)
+    Kargs:
+        lookahead: int, optional, (def: 200)
+            Distance to look ahead from a peak candidate to determine if
+            it is the actual peak.
+            '(samples / period) / f' where '4 >= f >= 1.25' might be a good
+            value
+
+        delta: float, optional, (def: 1.)
+            This specifies a minimum difference between a peak and the
+            following points, before a peak may be considered a peak. Useful
+            to hinder the function from picking up false peaks towards to end
+            of the signal. To work well delta should be set to
+            delta >= RMSnoise * 5.
             When omitted delta function causes a 20% decrease in speed.
             When used Correctly it can double the speed of the function
 
+        get: string, optional, (def: 'max')
+            Get either minimum values ('min'), maximum ('max') or min and max
+            ('minmax').
 
-    return: two lists [max_peaks, min_peaks] containing the positive and
-        negative peaks respectively. Each cell of the lists contains a tuple
-        of: (position, peak_value)
-        to get the average peak value do: np.mean(max_peaks, 0)[1] on the
-        results to unpack one of the lists into x, y coordinates do:
-        x, y = zip(*max_peaks)
+        threshold: string/float, optional, (def: None)
+            Use a threshold to ignore values. Use None for no threshold, 'auto'
+            to use the signal deviation or a float number for specific
+            threshold.
+
+    Return:
+        index: np.ndarray
+            A row vector containing the index of maximum / minimum.
+
+        number: int
+            Number of peaks.
+
+        density: float
+            Density of peaks.
     """
-    max_peaks = []
-    min_peaks = []
-    dump = []   # Used to pop the first hit which almost always is false
+    # ============== CHECK DATA ==============
+    if x_axis is None:
+        x_axis = range(len(y_axis))
+    # Check length :
+    if len(y_axis) != len(x_axis):
+        raise ValueError("Input vectors y_axis and x_axis must have same "
+                         "length")
+    # Needs to be a numpy array
+    y_axis, x_axis = np.asarray(y_axis), np.asarray(x_axis)
 
-    # check input data
-    x_axis, y_axis = _datacheck(x_axis, y_axis)
     # store data length for later use
     length = len(y_axis)
 
-    # perform some checks
+    # Lookahead  & delta checking :
     if lookahead < 1:
         raise ValueError("Lookahead must be '1' or above in value")
     if not (np.isscalar(delta) and delta >= 0):
         raise ValueError("delta must be a positive number")
 
+    # Check get :
+    if get not in ['min', 'max', 'minmax']:
+        raise ValueError("The get parameter must either be 'min', 'max' or"
+                         " 'minmax'")
+
+    # ============== PRE-ALLOCATION ==============
+    max_peaks, min_peaks = [], []
+    dump = []   # Used to pop the first hit which almost always is false
+
     # maxima and minima candidates are temporarily stored in
     # mx and mn respectively
     mn, mx = np.Inf, -np.Inf
 
+    # ============== THRESHOLD ==============
+    if threshold is not None:
+        if threshold is 'auto':
+            threshold = np.std(y_axis)
+        # Detrend / demean y-axis :
+        y_axisp = detrend(y_axis)
+        y_axisp -= y_axisp.mean()
+        # Find values above threshold :
+        above = np.abs(y_axisp) >= threshold
+        zp = zip(np.arange(length)[above], x_axis[above], y_axis[above])
+    else:
+        zp = zip(np.arange(length)[:-lookahead], x_axis[:-lookahead],
+                 y_axis[:-lookahead])
+
+    # ============== FIND MIN / MAX PEAKS ==============
     # Only detect peak if there is 'lookahead' amount of points after it
-    for index, (x, y) in enumerate(zip(x_axis[:-lookahead],
-                                       y_axis[:-lookahead])):
+    for index, x, y in zp:
+        # print(index, x, y)
         if y > mx:
             mx = y
-            mxpos = x
         if y < mn:
             mn = y
-            mnpos = x
 
         # ==== Look for max ====
         if y < mx - delta and mx != np.Inf:
             # Maxima peak candidate found
             # look ahead in signal to ensure that this is a peak and not jitter
             if y_axis[index:index + lookahead].max() < mx:
-                max_peaks.append([mxpos, mx])
+                max_peaks.append(index)
                 dump.append(True)
                 # set algorithm to only find minima now
                 mx = np.Inf
@@ -619,16 +799,13 @@ def peakdetect(y_axis, x_axis=None, lookahead=200, delta=0):
                     # end is within lookahead no more peaks can be found
                     break
                 continue
-            # else:  #slows shit down this does
-            #    mx = ahead
-            #    mxpos = x_axis[np.where(y_axis[index:index+lookahead]==mx)]
 
         # ==== Look for max ====
         if y > mn + delta and mn != -np.Inf:
             # Minima peak candidate found
             # look ahead in signal to ensure that this is a peak and not jitter
             if y_axis[index:index + lookahead].min() > mn:
-                min_peaks.append([mnpos, mn])
+                min_peaks.append(index)
                 dump.append(False)
                 # set algorithm to only find maxima now
                 mn = -np.Inf
@@ -636,34 +813,27 @@ def peakdetect(y_axis, x_axis=None, lookahead=200, delta=0):
                 if index + lookahead >= length:
                     # end is within lookahead no more peaks can be found
                     break
-            # else:  #slows shit down this does
-            #    mn = ahead
-            #    mnpos = x_axis[np.where(y_axis[index:index+lookahead]==mn)]
 
-    # Remove the false hit on the first value of the y_axis
-    try:
-        if dump[0]:
-            max_peaks.pop(0)
-        else:
-            min_peaks.pop(0)
-        del dump
-    except IndexError:
-        # no peaks were found, should the function return empty lists?
-        pass
+    if min_peaks and max_peaks:
+        # ============== CLEAN ==============
+        # Remove the false hit on the first value of the y_axis
+        if threshold is None:
+            if dump[0]:
+                max_peaks.pop(0)
+            else:
+                min_peaks.pop(0)
+            del dump
 
-    return [max_peaks, min_peaks]
+        # ============== MIN / MAX / MINMAX ==============
+        if get == 'max':
+            index = np.array(max_peaks)
+        elif get == 'min':
+            index = np.array(min_peaks)
+        elif get == 'minmax':
+            index = np.vstack((min_peaks, max_peaks))
+        number = len(index)
+        density = number / (len(y_axis) / sf / 60.)
 
-
-def _datacheck(x_axis, y_axis):
-    """Check inputs for peak detection."""
-    if x_axis is None:
-        x_axis = range(len(y_axis))
-
-    if len(y_axis) != len(x_axis):
-        raise ValueError("Input vectors y_axis and x_axis must have same "
-                         "length")
-
-    # Needs to be a numpy array
-    y_axis = np.array(y_axis)
-    x_axis = np.array(x_axis)
-    return x_axis, y_axis
+        return index, number, density
+    else:
+        return np.array([]), 0., 0.

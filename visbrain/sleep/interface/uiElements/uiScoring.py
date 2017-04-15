@@ -22,6 +22,7 @@ class uiScoring(object):
 
         # Table edited :
         self._scoreTable.cellChanged.connect(self._fcn_Score2Hypno)
+        self._scoreTable.cellChanged.connect(self._fcn_infoUpdate)
 
         # Export file :
         self._scoreExport.clicked.connect(self._fcn_exportScore)

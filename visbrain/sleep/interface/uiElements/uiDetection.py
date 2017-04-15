@@ -4,7 +4,7 @@ import os
 from warnings import warn
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
-                       listToCsv, listToTxt)
+                       peakdetect, mtdetect, listToCsv, listToTxt)
 from ....utils.sleep.event import _events_duration
 
 from PyQt4 import QtGui
@@ -18,7 +18,7 @@ class uiDetection(object):
     def __init__(self):
         """Init."""
         # =====================================================================
-        # REM / SPINDLES / DETECTION
+        # REM / SPINDLES / KC / SW / MT DETECTION
         # =====================================================================
         # Commonth elements :
         self._ToolDetectChan.addItems(self._channels)
@@ -44,6 +44,9 @@ class uiDetection(object):
 
         # Export file :
         self._DetectLocExport.clicked.connect(self._fcn_exportLocation)
+        self._DetectLocImport.clicked.connect(self._fcn_importLocation)
+        self._DetectExportAll.clicked.connect(self._fcn_exportAllDetections)
+        self._DetectImportAll.clicked.connect(self._fcn_importAllDetections)
 
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
@@ -59,7 +62,8 @@ class uiDetection(object):
     def _fcn_switchDetection(self):
         """Switch between detection types (show / hide panels)."""
         # Define ref :
-        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves', 'K-complexes']
+        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves', 'K-complexes',
+               'Muscle twitches']
         # Get current selected text :
         viz = [str(self._ToolDetectType.currentText()) == k for k in ref]
         # Set widget visibility :
@@ -67,7 +71,8 @@ class uiDetection(object):
                                               self._ToolSpinPanel,
                                               self._ToolPeakPanel,
                                               self._ToolWavePanel,
-                                              self._ToolKCPanel], viz)]
+                                              self._ToolKCPanel,
+                                              self._ToolMTPanel], viz)]
 
     # =====================================================================
     # RUN DETECTION
@@ -92,7 +97,7 @@ class uiDetection(object):
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_applyDetection(self):
-        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC)."""
+        """Apply detection (either REM/Spindles/Peaks/SlowWave/KC/MT)."""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
@@ -114,8 +119,6 @@ class uiDetection(object):
                 # Get REM indices :
                 index, nb, dty, dur = remdetect(self._data[k, :], self._sf,
                                                 self._hypno, rem_only, thr)
-                # Update index for this channel and detection :
-                self._detect.dict[(self._channels[k], 'REM')]['index'] = index
 
             # ====================== SPINDLES ======================
             elif method == 'Spindles':
@@ -130,21 +133,14 @@ class uiDetection(object):
                 index, nb, dty, dur = spindlesdetect(
                     self._data[k, :], self._sf, thr, self._hypno, nrem_only,
                     fMin, fMax, tMin, tMax)
-                # Update index for this channel and detection :
-                self._detect.dict[(self._channels[k], 'Spindles')][
-                                                            'index'] = index
 
             # ====================== SLOW WAVES ======================
             elif method == 'Slow waves':
                 # Get variables :
                 thr = self._ToolWaveTh.value()
-                amp = self._ToolWaveAmp.value()
                 # Get Slow Waves indices :
                 index, nb, dty, dur = slowwavedetect(self._data[k, :],
-                                                     self._sf, thr, amp)
-                # Update index for this channel and detection :
-                self._detect.dict[(self._channels[k], 'Slow waves')][
-                                                            'index'] = index
+                                                     self._sf, thr)
 
             # ====================== K-COMPLEXES ======================
             elif method == 'K-complexes':
@@ -161,33 +157,35 @@ class uiDetection(object):
                                                proba_thr, amp_thr, self._hypno,
                                                nrem_only, tmin, tmax, min_amp,
                                                max_amp)
-                # Update index for this channel and detection :
-                self._detect.dict[(self._channels[k], 'K-complexes')][
-                                                            'index'] = index
 
             # ====================== PEAKS ======================
             elif method == 'Peaks':
                 # Get variables :
-                look = self._ToolPeakLook.value() * self._sf
+                look = int(self._ToolPeakLook.value() * self._sf)
                 disp = self._ToolPeakMinMax.currentIndex()
                 disp_types = ['max', 'min', 'minmax']
-                # Set data :
-                self._peak.set_data(self._sf, self._data[k], self._time,
-                                    self._chan.peak[k], disp_types[disp],
-                                    look)
+                index, nb, dty = peakdetect(self._sf, self._data[k, :],
+                                            self._time, lookahead=look,
+                                            delta=1., threshold='auto',
+                                            get=disp_types[disp])
 
-                # Report results on table :
-                self._ToolDetectTable.setRowCount(1)
-                self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
-                    str(self._peak.number)))
-                self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
-                    str(round(self._peak.density, 2))))
+            # ====================== MUSCLE TWITCHES ======================
+            elif method == 'Muscle twitches':
+                # Get variables :
+                th = self._ToolMTTh.value()
+                rem_only = self._ToolMTOnly.isChecked()
+                index, nb, dty, dur = mtdetect(self._data[k, :], self._sf, th,
+                                               self._hypno, rem_only)
+
+            # Update index for this channel and detection :
+            self._detect.dict[(self._channels[k], method)]['index'] = index
 
             if index.size:
                 # Be sure panel is displayed :
                 if not self.canvas_isVisible(k):
                     self.canvas_setVisible(k, True)
                     self._chan.visible[k] = True
+                self._chan.loc[k].visible = True
                 # Update plot :
                 self._fcn_sliderMove()
 
@@ -211,15 +209,18 @@ class uiDetection(object):
         ############################################################
         # LINE REPORT :
         ############################################################
-        # Build line reports :
+        self._locLineReport()
+
+        # Finally, hide progress bar :
+        self._ToolDetectProgress.hide()
+
+    def _locLineReport(self):
+        """Update line report."""
         self._detect.build_line(self._data)
         chans = self._detect.nonzero()
         self._DetectChans.clear()
         self._DetectChans.addItems(list(chans.keys()))
         self._fcn_runSwitchLocation()
-
-        # Finally, hide progress bar :
-        self._ToolDetectProgress.hide()
 
     # =====================================================================
     # FILL LOCATION TABLE
@@ -241,7 +242,12 @@ class uiDetection(object):
         chan = str(self._DetectChans.currentText())
         tps = str(self._DetectTypes.currentText())
         if chan and tps:
-            self._DetectViz.setChecked(self._detect.line[(chan, tps)].visible)
+            if tps == 'Peaks':
+                self._DetectViz.setChecked(self._detect.peaks[(chan,
+                                                              tps)].visible)
+            else:
+                self._DetectViz.setChecked(self._detect.line[(chan,
+                                                              tps)].visible)
 
     def _fcn_rmLocation(self):
         """Demove a detection."""
@@ -250,9 +256,12 @@ class uiDetection(object):
         # Get selected detection type :
         types = str(self._DetectTypes.currentText())
         # Remove detection :
-        self._detect[(chan, types)]['index'] = np.array([])
+        self._detect.delete(chan, types)
+        # Remove vertical indicators :
+        pos = np.full((1, 3), -10., dtype=np.float32)
+        self._chan.loc[self._channels.index(chan)].set_data(pos=pos)
         # Update GUI :
-        self._fcn_switchLocation()
+        self._locLineReport()
 
     def _fcn_vizLocation(self):
         """Set visible detection."""
@@ -261,7 +270,9 @@ class uiDetection(object):
         # Get selected detection type :
         types = str(self._DetectTypes.currentText())
         # Set visibility :
-        self._detect.visible(self._DetectViz.isChecked(), chan, types)
+        viz = self._DetectViz.isChecked()
+        self._detect.visible(viz, chan, types)
+        self._chan.loc[self._channels.index(chan)].visible = viz
 
     def _fcn_runSwitchLocation(self):
         """Run switch location channel and type."""
@@ -285,41 +296,28 @@ class uiDetection(object):
     def _fcn_fillLocations(self, channel, kind, index, duration):
         """Fill the location table."""
         ref = ['Wake', 'N1', 'N2', 'N3', 'REM', 'ART']
+        self._currentLoc = (channel, kind)
         # Clean table :
         self._DetectLocations.setRowCount(0)
-        # Get kind :
-        kindIn = kind in ['REM', 'Spindles', 'Slow waves', 'K-complexes']
-        if kindIn:
-            # Get starting index:
+        # Get starting index:
+        if kind == 'Peaks':
+            staInd = index[1::]
+            duration = np.zeros_like(staInd)
+        else:
             staInd = index[0::2]
-            # Define the length of the table:
-            self._DetectLocations.setRowCount(min(len(staInd), len(duration)))
-            # Fill the table :
-            for num, (k, i) in enumerate(zip(staInd, duration)):
-                # Starting :
-                self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
-                    str(self._time[k])))
-                # Duration :
-                self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
-                    str(i)))
-                # Type :
-                self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
-                    ref[int(self._hypno[k])]))
-
-        elif kind == 'Peaks':
-            # Define the length of the table :
-            self._DetectLocations.setRowCount(len(index))
-            # Fill the table :
-            for num, k in enumerate(index):
-                # Starting :
-                self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
-                    str(self._time[k])))
-                # Duration :
-                self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
-                    '1'))
-                # Type :
-                self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
-                    ref[int(self._hypno[k])]))
+        # Define the length of the table:
+        self._DetectLocations.setRowCount(min(len(staInd), len(duration)))
+        # Fill the table :
+        for num, (k, i) in enumerate(zip(staInd, duration)):
+            # Starting :
+            self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
+                str(self._time[k])))
+            # Duration :
+            self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
+                str(i)))
+            # Type :
+            self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
+                ref[int(self._hypno[k])]))
 
         self._DetectLocations.selectRow(0)
 
@@ -345,14 +343,17 @@ class uiDetection(object):
             self._chan.set_location(self._sf, self._data[ix, :], ix, sta, end)
 
     # =====================================================================
-    # EXPORT TABLE
+    # EXPORT IMPORT TABLE
     # =====================================================================
     def _fcn_exportLocation(self):
         """Export locations info."""
-        method = str(self._ToolDetectType.currentText())
+        channel = self._currentLoc[0]
+        method = self._currentLoc[1]
         # Read Table
         rowCount = self._DetectLocations.rowCount()
-        staInd, duration, stage = [], [], []
+        staInd = [channel, '', 'Time index (s)']
+        duration = [method, '', 'Duration (s)']
+        stage = ['', '', 'Sleep stage']
         for row in np.arange(rowCount):
             staInd.append(str(self._DetectLocations.item(row, 0).text()))
             duration.append(str(self._DetectLocations.item(row, 1).text()))
@@ -366,7 +367,63 @@ class uiDetection(object):
         path = str(path)  # py2
         if path:
             file = os.path.splitext(str(path))[0]
+            file += '_' + channel + '-' + method
             if selected_ext.find('csv') + 1:
                 listToCsv(file + '.csv', zip(staInd, duration, stage))
             elif selected_ext.find('txt') + 1:
                 listToTxt(file + '.txt', zip(staInd, duration, stage))
+
+    def _fcn_importLocation(self):
+        """Import location table."""
+        # Get file name :
+        file = QtGui.QFileDialog.getOpenFileName(
+            self, "Import table", "", "CSV file (*.csv);;Text file (*.txt);;"
+            "All files (*.*)")
+        file = str(file)
+        # Get channel / method from file name :
+        (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
+        # Load the file :
+        (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
+        # Sort by starting index :
+        idxsort = np.argsort(st)
+        st, dur = st[idxsort], dur[idxsort]
+        # Convert into index :
+        stInd = np.round(st * self._sf).astype(int)
+        durInd = np.round(dur * self._sf / 1000.).astype(int)
+        # Build the index array :
+        index = np.array([])
+        for k, i in zip(stInd, durInd):
+            index = np.append(index, np.arange(k, k+i))
+        index = index.astype(np.int, copy=False)
+        # Set index :
+        self._detect[(chan, meth)]['index'] = index
+        # Plot update :
+        self._fcn_sliderMove()
+        self._locLineReport()
+
+    def _fcn_exportAllDetections(self):
+        """Export all locations."""
+        # Get file name :
+        path = QtGui.QFileDialog.getSaveFileName(
+            self, "Save all detections", filter='.npy')
+        path = str(path)  # py2
+        if path:
+            file = os.path.splitext(str(path))[0]
+            np.save(file + '.npy', self._detect.dict)
+
+    def _fcn_importAllDetections(self):
+        """Import detections."""
+        # Dialog window for detection file :
+        file = QtGui.QFileDialog.getOpenFileName(
+            self, "Import detections", "", "NumPy (*.npy)")
+        self._detect.dict = np.ndarray.tolist(np.load(file))
+        # Made canvas visbles :
+        for k in self._detect:
+            if self._detect[k]['index'].size:
+                # Get channel number :
+                idx = self._channels.index(k[0])
+                self.canvas_setVisible(idx, True)
+                self._chan.visible[idx] = True
+        # Plot update :
+        self._fcn_sliderMove()
+        self._locLineReport()

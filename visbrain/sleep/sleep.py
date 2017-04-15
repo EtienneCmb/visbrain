@@ -83,8 +83,8 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             if (file is None) or not isinstance(file, str):
                 # Dialog window for the main dataset :
                 file = QtGui.QFileDialog.getOpenFileName(
-                    self, "Open dataset", "", "Elan (*.eeg);;"
-                    "Brainvision (*.eeg);;Edf (*.edf);;Micromed (*.trc)")
+                    self, "Open dataset", "", "BrainVision /Elan (*.eeg);;"
+                    "Edf (*.edf);;Micromed (*.trc)")
                 file = str(file)  # py2
                 # Get the user path :
                 upath = os.path.split(file)[0]
@@ -154,12 +154,14 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._defsw = color2vb('#56bf8b')
         self._defkc = color2vb('#b45a3c')
         self._defrem = color2vb('#6684e1')
+        self._defmt = color2vb('#FE8625')
         self._defpeaks = '#b854d4'
         # ---------- Symbol ----------
         self._spinsym = 'x'
         self._swsym = 'o'
         self._kcsym = 'diamond'
         self._remsym = 'triangle_down'
+        self._mtsym = 'star'
         self._peaksym = 'disc'
         # Get some data info (min / max / std / mean)
         self._get_dataInfo()

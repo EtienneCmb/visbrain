@@ -88,6 +88,13 @@ class uiTools(object):
         # Update data info :
         self._get_dataInfo()
 
+        # Update and clear detections :
+        self._DetectLocations.setRowCount(0)
+        self._DetectChans.clear()
+        self._DetectTypes.clear()
+        self._detect.update_keys(self._channels)
+        self._detect.reset()
+
         # Disconnect and clear listbox :
         self._PanSpecChan.currentIndexChanged.disconnect()
         self._PanSpecChan.clear()
@@ -97,7 +104,6 @@ class uiTools(object):
         # Reconnect :
         self._PanSpecChan.setCurrentIndex(aM)
         self._ToolDetectChan.setCurrentIndex(aM)
-        self._ToolDetectChan.model().item(idx).setEnabled(False)
 
         # Update channel names :
         for num, k in enumerate(self._channels):

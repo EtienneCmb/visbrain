@@ -65,9 +65,6 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
         chans: list
             List of channel names of length nchan.
 
-        reference: int
-            The index of the channel to consider as a reference.
-
     Kargs:
         to_ignore: list, optional, (def: None)
             List of channels to ignore in the re-referencing.
