@@ -411,14 +411,13 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=200,
     deriv = movingaverage(deriv, moving_ms, sf)
     # Define threshold
     if rem_only and 4 in hypno:
-        idThresh = np.setdiff1d(np.arange(eog.size), idx_zero)
+        idThr = np.setdiff1d(np.arange(eog.size), idx_zero)
     else:
-        idThresh = np.arange(eog.size)
+        idThr = np.arange(eog.size)
     # Remove extreme values
-    idThresh = np.setdiff1d(idThresh, np.where(
-                                            np.abs(sm_sig) > amplitude_art)[0])
+    idThr = np.setdiff1d(idThr, np.where(np.abs(sm_sig) > amplitude_art)[0])
     # Find supra-threshold values
-    thresh = np.mean(deriv[idThresh]) + threshold * np.std(deriv[idThresh])
+    thresh = np.mean(deriv[idThr]) + threshold * np.std(deriv[idThr])
     idx_sup_thr = np.where(deriv > thresh)[0]
 
     if idx_sup_thr.size:
@@ -542,9 +541,9 @@ def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
 ###########################################################################
 
 
-def mtdetect(elec, sf, threshold, hypno, rem_only, min_freq=30, max_freq=40,
-             min_dur_ms=500, max_dur_ms=4000, min_distance_ms=500,
-             moving_ms=500):
+def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
+             min_dur_ms=800, max_dur_ms=2500, min_distance_ms=1000,
+             welch_win_s=15, delta_thr=0.5, min_amp=10, max_amp=400):
     """Perform a detection of muscle twicthes (MT).
 
     Sampling frequency must be at least 1000 Hz.
@@ -568,21 +567,32 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, min_freq=30, max_freq=40,
             Perfom detection only on NREM sleep period
 
     Kargs:
-        min_freq: float, optional (def 30)
+        fMin: float, optional (def 30)
             Lower bandpass frequency
 
-        max_freq: float, optional (def 40)
+        fMax: float, optional (def 40)
             Higher bandpass frequency
 
         min_dur_ms: int, optional (def 500)
             Minimum duration (ms) of MT
 
-        min_dur_ms: int, optional (def 4000)
+        min_dur_ms: int, optional (def 3000)
             Maximum duration (ms) of MT
 
-        min_distance_ms: int, optional (def 500)
+        min_distance_ms: int, optional (def 1000)
             Minimum distance (in ms) between 2 MTs to consider them as
             two distinct events
+
+        welch_win_s: int, optional (def 15)
+            Time window (s) of Welch spectrum
+
+        delta_thr: float, optional (def 0.5)
+            Threshold of delta normalized bandpower, above which detected
+            events are probably artefacts.
+
+        max_amp: int, optional (def 400)
+            Maximum amplitude of Muscle Twitches. Above this threshold,
+            detected events are probably artefacts.
 
     Return:
         idx_sup_thr: np.ndarray
@@ -605,44 +615,52 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, min_freq=30, max_freq=40,
     else:
         length = max(elec.shape)
 
-    # Bandpass filter
-    data_filt = filt(sf, [min_freq, max_freq], elec, order=4)
-    # Hilbert Transform
-    if data.size % 2:
-        analytic = hilbert(data_filt)
-    else:
-        analytic = hilbert(data_filt[:-1], len(data_filt))
-
+    # Morlet's envelope
+    analytic = morlet(elec, sf, np.mean([fMin, fMax]))
     amplitude = np.abs(analytic)
-
-    # Smooth envelope
-    amplitude = movingaverage(amplitude, moving_ms, sf)
+    amplitude = movingaverage(amplitude, sf, sf)
 
     # Define threshold
     if rem_only and 4 in hypno:
         idTh = np.setdiff1d(np.arange(elec.size), idx_zero)
     else:
-        idTh = np.arange(elec.size)
+        # Remove period with too much delta power (N2 - N3)
+        delta_nfpow = welch_power(elec, 0.5, 2, sf, welch_win_s, norm=True)
+        delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
+        idTh = np.setdiff1d(np.arange(elec.size), np.where(
+                                                delta_nfpow > delta_thr)[0])
+
     # Remove extreme values
     idTh = np.setdiff1d(idTh, np.where(abs(elec) > 400)[0])
+
     # Find supra-threshold values
     thresh = np.mean(amplitude[idTh]) + threshold * np.std(amplitude[idTh])
-    idx_sup_thr = np.where(deriv > thresh)[0]
+    idx_sup_thr = np.where(amplitude > thresh)[0]
 
     if idx_sup_thr.size:
 
         # Find MTs separated by less than min_distance_ms
         idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
 
-        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+        _, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-        # Get where min_dur < MT duration < max_dur_ms
+        # Amplitude criteria
+        mt_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start, idx_stop, sf)
+        good_amp = np.where(np.logical_and(mt_amp > min_amp,
+                                           mt_amp < max_amp))[0]
+        good_amp = np.append(good_amp, len(good_amp))
+        good_idx = _events_removal(idx_start, idx_stop, good_amp)
+
+        # Duration criteria
+        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
         good_dur = np.where(np.logical_and(duration_ms > min_dur_ms,
                                            duration_ms < max_dur_ms))[0]
         good_dur = np.append(good_dur, len(good_dur))
-        good_idx = _events_removal(idx_start, idx_stop, good_dur)
-        idx_sup_thr = idx_sup_thr[good_idx]
+        good_event = np.intersect1d(good_amp, good_dur, True)
+        good_idx = _events_removal(idx_start, idx_stop, good_event)
 
+        # Keep only good events
+        idx_sup_thr = idx_sup_thr[good_idx]
         number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
         density = number / (length / sf / 60.)
 

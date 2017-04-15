@@ -37,16 +37,16 @@ class Detection(object):
                  peaksym=None, mtsym=None, parent=None, parent_hyp=None):
         """Init."""
         self.items = ['Spindles', 'REM', 'K-complexes', 'Slow waves', 'Peaks',
-                      'Muscle twiches']
+                      'Muscle twitches']
         self.chans = channels
         self.dict = {}
         self.line = {}
         self.peaks = {}
         self.seg = {}
         col = {'Spindles': spincol, 'REM': remcol, 'K-complexes': kccol,
-               'Slow waves': swcol, 'Peaks': peakcol, 'Muscle twiches': mtcol}
+               'Slow waves': swcol, 'Peaks': peakcol, 'Muscle twitches': mtcol}
         sym = {'Spindles': spinsym, 'REM': remsym, 'K-complexes': kcsym,
-               'Slow waves': swsym, 'Peaks': peaksym, 'Muscle twiches': mtsym}
+               'Slow waves': swsym, 'Peaks': peaksym, 'Muscle twitches': mtsym}
         self.time = time
         self.hyp = Markers(parent=parent_hyp)
         self.hyp.set_gl_state('translucent')

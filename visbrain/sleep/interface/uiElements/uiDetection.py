@@ -18,7 +18,7 @@ class uiDetection(object):
     def __init__(self):
         """Init."""
         # =====================================================================
-        # REM / SPINDLES / DETECTION
+        # REM / SPINDLES / KC / SW / MT DETECTION
         # =====================================================================
         # Commonth elements :
         self._ToolDetectChan.addItems(self._channels)
@@ -62,7 +62,7 @@ class uiDetection(object):
         """Switch between detection types (show / hide panels)."""
         # Define ref :
         ref = ['REM', 'Spindles', 'Peaks', 'Slow waves', 'K-complexes',
-               'Muscle twiches']
+               'Muscle twitches']
         # Get current selected text :
         viz = [str(self._ToolDetectType.currentText()) == k for k in ref]
         # Set widget visibility :
@@ -96,7 +96,8 @@ class uiDetection(object):
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_applyDetection(self):
-        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC)."""
+        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC / MT)
+        """
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
@@ -168,8 +169,8 @@ class uiDetection(object):
                                             delta=1., threshold='auto',
                                             get=disp_types[disp])
 
-            # ====================== MUSCLE TWICHES ======================
-            elif method == 'Muscle twiches':
+            # ====================== MUSCLE TWITCHES ======================
+            elif method == 'Muscle twitches':
                 # Get variables :
                 th = self._ToolMTTh.value()
                 rem_only = self._ToolMTOnly.isChecked()
@@ -289,7 +290,8 @@ class uiDetection(object):
         # Clean table :
         self._DetectLocations.setRowCount(0)
         # Get kind :
-        kindIn = kind in ['REM', 'Spindles', 'Slow waves', 'K-complexes']
+        kindIn = kind in ['REM', 'Spindles', 'Slow waves', 'K-complexes',
+        'Muscle twitches']
         if kindIn:
             # Get starting index:
             staInd = index[0::2]

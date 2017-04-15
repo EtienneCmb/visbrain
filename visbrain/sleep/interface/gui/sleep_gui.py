@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/sleep/interface/gui/sleep_gui.ui'
+# Form implementation generated from reading ui file 'sleep_gui.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -1401,6 +1401,7 @@ class Ui_MainWindow(object):
         self.gridLayout_29.setObjectName(_fromUtf8("gridLayout_29"))
         self._ToolMTTh = QtGui.QDoubleSpinBox(self._ToolMTPanel)
         self._ToolMTTh.setDecimals(1)
+        self._ToolMTTh.setMaximum(20.0)
         self._ToolMTTh.setProperty("value", 3.0)
         self._ToolMTTh.setObjectName(_fromUtf8("_ToolMTTh"))
         self.gridLayout_29.addWidget(self._ToolMTTh, 0, 3, 1, 1)
@@ -1976,7 +1977,7 @@ class Ui_MainWindow(object):
         self.label_36.setText(_translate("MainWindow", "Export as: ", None))
         self._scoreExport.setText(_translate("MainWindow", "Export", None))
         self.QuickSettings.setTabText(self.QuickSettings.indexOf(self.q_Score), _translate("MainWindow", "Scoring", None))
-        self.label_45.setText(_translate("MainWindow", "Perform a REM, spindles or peak detection either on\n"
+        self.label_45.setText(_translate("MainWindow", "Perform automatic detection of several sleep microstructural features either on\n"
 "selected, visible or all channels.", None))
         self.groupBox_3.setTitle(_translate("MainWindow", "Detection type", None))
         self.label_39.setText(_translate("MainWindow", "Type", None))
@@ -1987,7 +1988,7 @@ class Ui_MainWindow(object):
         self._ToolDetectType.setItemText(2, _translate("MainWindow", "Peaks", None))
         self._ToolDetectType.setItemText(3, _translate("MainWindow", "Slow waves", None))
         self._ToolDetectType.setItemText(4, _translate("MainWindow", "K-complexes", None))
-        self._ToolDetectType.setItemText(5, _translate("MainWindow", "Muscle twiches", None))
+        self._ToolDetectType.setItemText(5, _translate("MainWindow", "Muscle twitches", None))
         self._ToolRdViz.setText(_translate("MainWindow", "Visible", None))
         self.label_49.setText(_translate("MainWindow", "Apply\n"
 "on", None))
@@ -2040,7 +2041,7 @@ class Ui_MainWindow(object):
         self.label_93.setText(_translate("MainWindow", "Threshold", None))
         self._ToolMTOnly.setText(_translate("MainWindow", "Perform detection only for REM sleep", None))
         self.label_94.setText(_translate("MainWindow", "Muscle\n"
-"Twiches", None))
+"Twitches", None))
         item = self._ToolDetectTable.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Number", None))
         item = self._ToolDetectTable.horizontalHeaderItem(1)

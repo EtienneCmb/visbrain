@@ -2474,7 +2474,7 @@ hypnogram. Those informations change while editing it.</string>
                  </font>
                 </property>
                 <property name="text">
-                 <string>Perform a REM, spindles or peak detection either on
+                 <string>Perform automatic detection of several sleep microstructural features either on
 selected, visible or all channels.</string>
                 </property>
                 <property name="alignment">
@@ -2567,7 +2567,7 @@ selected, visible or all channels.</string>
                       </item>
                       <item>
                        <property name="text">
-                        <string>Muscle twiches</string>
+                        <string>Muscle twitches</string>
                        </property>
                       </item>
                      </widget>
@@ -3479,7 +3479,7 @@ on</string>
                          </property>
                          <property name="text">
                           <string>Muscle
-Twiches</string>
+Twitches</string>
                          </property>
                         </widget>
                        </item>
