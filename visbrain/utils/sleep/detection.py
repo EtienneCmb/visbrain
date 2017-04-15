@@ -12,7 +12,7 @@ Perform:
 import numpy as np
 from scipy.signal import hilbert, daub, detrend
 
-from ..filtering import filt, morlet, morlet_power
+from ..filtering import filt, morlet, morlet_power, welch_power
 from ..sigproc import movingaverage, derivative, tkeo
 from .event import (_events_duration, _events_removal, _events_distance_fill,
                     _events_mean_freq, _event_amplitude)
@@ -115,6 +115,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
 
     # PRE DETECTION
     # Compute delta band power
+    # Morlet's wavelet
     freqs = np.array([0.5, 4., 8., 12., 16.])
     delta_npow, _, _, _ = morlet_power(data, freqs, sf, norm=True)
     delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
@@ -446,8 +447,9 @@ def remdetect(eog, sf, hypno, rem_only, threshold, min_dur_ms=200,
 # SLOW WAVE DETECTION
 ###########################################################################
 
-def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
-                   moving_s=30, min_duration_ms=500, max_amp=500):
+def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
+                    fMin=0.5, fMax=2, welch_win_s=12, moving_s=30,
+                    min_duration_ms=500):
     """Perform a Slow Wave detection.
 
     Args:
@@ -459,28 +461,31 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
 
         threshold: float
             First threshold: bandwise-normalized delta power
-            (power is normalized across 4 bands: delta, theta, alpha, beta)
             Value must be between 0 and 1.
 
-        amplitude: float
-            Secondary threshold: minimum amplitude (mV) of the raw signal.
-            Slow waves are generally defined by amplitude > 70 mV.
-
     Kargs:
+        min_amp: float
+            Secondary threshold: minimum amplitude (µV) of the raw signal.
+            Slow waves are generally defined by amplitude > 70 µV.
+
+        max_amp: float, optional
+            Maximum amplitude of slow wave
+
         fMin: float, optional (def 0.1)
             High-pass frequency
 
         fMax: float, optional (def 4.5)
             Lowpass frequency
 
-        moving_s: int, optional (def 30)
-            Time (sec) window of the moving average
+        welch_win_s: int, optional (def 10)
+            Time (sec) window for computation of normalized bandpower with
+            Welch's method
+
+        moving_s: int, optional (30)
+            Time (sec) window of moving average to be applied on delta power
 
         min_duration_ms: float, optional
             Minimum duration (ms) of slow waves
-
-        max_amp: float, optional
-            Maximum amplitude of slow wave
 
     Return:
         idx_sup_thr: np.ndarray
@@ -496,14 +501,17 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
     length = max(elec.shape)
 
     # Get complex decomposition of filtered data in the main EEG freq band:
-    freqs = np.array([fMin, fMax, 8., 12., 16.])
-    delta_npow, _, _, _ = morlet_power(elec, freqs, sf, norm=True)
+    # Using Morlet's wavelet - a bit longer
+    # freqs = np.array([fMin, fMax, 8., 12., 16.])
+    # delta_npow, _, _, _ = morlet_power(elec, freqs, sf, norm=True)
+    # delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
 
-    # Smooth
-    delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
+    # Using Welch's method
+    delta_nfpow = welch_power(elec, fMin, fMax, sf, welch_win_s, norm=True)
+    delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
+    delta_nfpow = movingaverage(delta_nfpow, 3 * welch_win_s * sf, sf)
 
     # Normalized power criteria
-    # thresh = np.nanmean(delta_nfpow) + threshold * np.nanstd(delta_nfpow)
     idx_sup_thr = np.where(delta_nfpow > threshold)[0]
 
     if idx_sup_thr.size:
@@ -513,7 +521,7 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
         sw_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start,
                                                         idx_stop, sf)
 
-        good_amp = np.where(np.logical_and(sw_amp > amplitude,
+        good_amp = np.where(np.logical_and(sw_amp > min_amp,
                                            sw_amp < max_amp))[0]
 
         good_dur = np.where(duration_ms > min_duration_ms)[0]
