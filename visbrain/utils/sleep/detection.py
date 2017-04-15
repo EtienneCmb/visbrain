@@ -541,8 +541,10 @@ def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
 # MUSCLE TWITCHES DETECTION
 ###########################################################################
 
+
 def mtdetect(elec, sf, threshold, hypno, rem_only, min_freq=30, max_freq=40,
-        min_dur_ms=500, max_dur_ms=4000, min_distance_ms=500,moving_ms=500):
+             min_dur_ms=500, max_dur_ms=4000, min_distance_ms=500,
+             moving_ms=500):
     """Perform a detection of muscle twicthes (MT).
 
     Sampling frequency must be at least 1000 Hz.

@@ -4,7 +4,7 @@ import os
 from warnings import warn
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
-                       peakdetect, listToCsv, listToTxt)
+                       peakdetect, mtdetect, listToCsv, listToTxt)
 from ....utils.sleep.event import _events_duration
 
 from PyQt4 import QtGui
@@ -61,7 +61,8 @@ class uiDetection(object):
     def _fcn_switchDetection(self):
         """Switch between detection types (show / hide panels)."""
         # Define ref :
-        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves', 'K-complexes']
+        ref = ['REM', 'Spindles', 'Peaks', 'Slow waves', 'K-complexes',
+               'Muscle twiches']
         # Get current selected text :
         viz = [str(self._ToolDetectType.currentText()) == k for k in ref]
         # Set widget visibility :
@@ -69,7 +70,8 @@ class uiDetection(object):
                                               self._ToolSpinPanel,
                                               self._ToolPeakPanel,
                                               self._ToolWavePanel,
-                                              self._ToolKCPanel], viz)]
+                                              self._ToolKCPanel,
+                                              self._ToolMTPanel], viz)]
 
     # =====================================================================
     # RUN DETECTION
@@ -116,8 +118,6 @@ class uiDetection(object):
                 # Get REM indices :
                 index, nb, dty, dur = remdetect(self._data[k, :], self._sf,
                                                 self._hypno, rem_only, thr)
-                # Update index for this channel and detection :
-                self._detect.dict[(self._channels[k], 'REM')]['index'] = index
 
             # ====================== SPINDLES ======================
             elif method == 'Spindles':
@@ -132,9 +132,6 @@ class uiDetection(object):
                 index, nb, dty, dur = spindlesdetect(
                     self._data[k, :], self._sf, thr, self._hypno, nrem_only,
                     fMin, fMax, tMin, tMax)
-                # Update index for this channel and detection :
-                self._detect.dict[(self._channels[k], 'Spindles')][
-                                                            'index'] = index
 
             # ====================== SLOW WAVES ======================
             elif method == 'Slow waves':
@@ -143,9 +140,6 @@ class uiDetection(object):
                 # Get Slow Waves indices :
                 index, nb, dty, dur = slowwavedetect(self._data[k, :],
                                                      self._sf, thr)
-                # Update index for this channel and detection :
-                self._detect.dict[(self._channels[k], 'Slow waves')][
-                                                            'index'] = index
 
             # ====================== K-COMPLEXES ======================
             elif method == 'K-complexes':
@@ -162,9 +156,6 @@ class uiDetection(object):
                                                proba_thr, amp_thr, self._hypno,
                                                nrem_only, tmin, tmax, min_amp,
                                                max_amp)
-                # Update index for this channel and detection :
-                self._detect.dict[(self._channels[k], 'K-complexes')][
-                                                            'index'] = index
 
             # ====================== PEAKS ======================
             elif method == 'Peaks':
@@ -176,8 +167,17 @@ class uiDetection(object):
                                             self._time, lookahead=look,
                                             delta=1., threshold='auto',
                                             get=disp_types[disp])
-                self._detect.dict[(self._channels[k], 'Peaks')][
-                                                            'index'] = index
+
+            # ====================== MUSCLE TWICHES ======================
+            elif method == 'Muscle twiches':
+                # Get variables :
+                th = self._ToolMTTh.value()
+                rem_only = self._ToolMTOnly.isChecked()
+                index, nb, dty, dur = mtdetect(self._data[k, :], self._sf, th,
+                                               self._hypno, rem_only)
+
+            # Update index for this channel and detection :
+            self._detect.dict[(self._channels[k], method)]['index'] = index
 
             if index.size:
                 # Be sure panel is displayed :

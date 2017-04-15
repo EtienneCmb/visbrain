@@ -32,20 +32,21 @@ class Detection(object):
     """Create a detection object."""
 
     def __init__(self, channels, time, spincol=None, remcol=None,
-                 kccol=None, swcol=None, peakcol=None, spinsym=None,
-                 remsym=None, kcsym=None, swsym=None, peaksym=None,
-                 parent=None, parent_hyp=None):
+                 kccol=None, swcol=None, peakcol=None, mtcol=None,
+                 spinsym=None, remsym=None, kcsym=None, swsym=None,
+                 peaksym=None, mtsym=None, parent=None, parent_hyp=None):
         """Init."""
-        self.items = ['Spindles', 'REM', 'K-complexes', 'Slow waves', 'Peaks']
+        self.items = ['Spindles', 'REM', 'K-complexes', 'Slow waves', 'Peaks',
+                      'Muscle twiches']
         self.chans = channels
         self.dict = {}
         self.line = {}
         self.peaks = {}
         self.seg = {}
         col = {'Spindles': spincol, 'REM': remcol, 'K-complexes': kccol,
-               'Slow waves': swcol, 'Peaks': peakcol}
+               'Slow waves': swcol, 'Peaks': peakcol, 'Muscle twiches': mtcol}
         sym = {'Spindles': spinsym, 'REM': remsym, 'K-complexes': kcsym,
-               'Slow waves': swsym, 'Peaks': peaksym}
+               'Slow waves': swsym, 'Peaks': peaksym, 'Muscle twiches': mtsym}
         self.time = time
         self.hyp = Markers(parent=parent_hyp)
         self.hyp.set_gl_state('translucent')
@@ -126,7 +127,8 @@ class Detection(object):
         # Set hypnogram data :
         self.hyp.set_data(pos=pos, symbol=self[(chan, types)]['sym'],
                           face_color=self[(chan, types)]['color'],
-                          edge_width=0.)
+                          edge_width=1.,
+                          edge_color=self[(chan, types)]['color'])
 
     def visible(self, viz, chan, types):
         """"""
@@ -854,10 +856,10 @@ class visuals(vbShortcuts):
         # =================== DETECTIONS ===================
         self._detect = Detection(self._channels.copy(), self._time,
                                  self._defspin, self._defrem, self._defkc,
-                                 self._defsw, self._defpeaks, self._spinsym,
-                                 self._remsym, self._kcsym, self._swsym,
-                                 self._peaksym, self._chan.node,
-                                 self._hypCanvas.wc.scene)
+                                 self._defsw, self._defpeaks, self._defmt,
+                                 self._spinsym, self._remsym, self._kcsym,
+                                 self._swsym, self._peaksym, self._mtsym,
+                                 self._chan.node, self._hypCanvas.wc.scene)
 
         # =================== TOPOPLOT ===================
         self._topo = TopoPlot(chans=self._channels, camera=cameras[3],
