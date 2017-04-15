@@ -535,45 +535,65 @@ def slowwavedetect(elec, sf, threshold, amplitude, fMin=0.1, fMax=4.5,
 ###########################################################################
 
 
-def peakdetect(y_axis, x_axis=None, lookahead=200, delta=1., get='max',
+def peakdetect(sf, y_axis, x_axis=None, lookahead=200, delta=1., get='max',
                threshold='auto'):
     """Perform a peak detection.
 
     Converted from/based on a MATLAB script at:
     http://billauer.co.il/peakdet.html
+    Original script :
+    https://github.com/DiamondLightSource/auto_tomo_calibration-experimental/
+    blob/master/old_code_scripts/peak_detect.py
 
     function for detecting local maxima and minima in a signal.
     Discovers peaks by searching for values which are surrounded by lower
     or larger values for maxima and minima respectively
 
-    keyword arguments:
-    y_axis -- A list containing the signal over which to find peaks
+    Args:
+        sf: float
+            The sampling frequency.
 
-    x_axis -- A x-axis whose values correspond to the y_axis list and is used
-        in the return to specify the position of the peaks. If omitted an
-        index of the y_axis is used.
-        (default: None)
+        y_axis: np.ndarray
+            Row vector containing the data.
 
-    lookahead -- distance to look ahead from a peak candidate to determine if
-        it is the actual peak
-        (default: 200)
-        '(samples / period) / f' where '4 >= f >= 1.25' might be a good value
+        x_axis: np.ndarray
+            Row vector for the time axis. If omitted an index of the y_axis is
+            used.
 
-    delta -- this specifies a minimum difference between a peak and
-        the following points, before a peak may be considered a peak. Useful
-        to hinder the function from picking up false peaks towards to end of
-        the signal. To work well delta should be set to delta >= RMSnoise * 5.
-        (default: 0)
+    Kargs:
+        lookahead: int, optional, (def: 200)
+            Distance to look ahead from a peak candidate to determine if
+            it is the actual peak.
+            '(samples / period) / f' where '4 >= f >= 1.25' might be a good
+            value
+
+        delta: float, optional, (def: 1.)
+            This specifies a minimum difference between a peak and the
+            following points, before a peak may be considered a peak. Useful
+            to hinder the function from picking up false peaks towards to end
+            of the signal. To work well delta should be set to
+            delta >= RMSnoise * 5.
             When omitted delta function causes a 20% decrease in speed.
             When used Correctly it can double the speed of the function
 
+        get: string, optional, (def: 'max')
+            Get either minimum values ('min'), maximum ('max') or min and max
+            ('minmax').
 
-    return: two lists [max_peaks, min_peaks] containing the positive and
-        negative peaks respectively. Each cell of the lists contains a tuple
-        of: (position, peak_value)
-        to get the average peak value do: np.mean(max_peaks, 0)[1] on the
-        results to unpack one of the lists into x, y coordinates do:
-        x, y = zip(*max_peaks)
+        threshold: string/float, optional, (def: None)
+            Use a threshold to ignore values. Use None for no threshold, 'auto'
+            to use the signal deviation or a float number for specific
+            threshold.
+
+    Return:
+        index: np.ndarray
+            A row vector containing the index of maximum / minimum.
+
+        number: int
+            Number of peaks.
+
+        density: float
+            Density of peaks.
     """
     # ============== CHECK DATA ==============
     if x_axis is None:
@@ -594,6 +614,11 @@ def peakdetect(y_axis, x_axis=None, lookahead=200, delta=1., get='max',
     if not (np.isscalar(delta) and delta >= 0):
         raise ValueError("delta must be a positive number")
 
+    # Check get :
+    if get not in ['min', 'max', 'minmax']:
+        raise ValueError("The get parameter must either be 'min', 'max' or"
+                         " 'minmax'")
+
     # ============== PRE-ALLOCATION ==============
     max_peaks, min_peaks = [], []
     dump = []   # Used to pop the first hit which almost always is false
@@ -602,6 +627,7 @@ def peakdetect(y_axis, x_axis=None, lookahead=200, delta=1., get='max',
     # mx and mn respectively
     mn, mx = np.Inf, -np.Inf
 
+    # ============== THRESHOLD ==============
     if threshold is not None:
         if threshold is 'auto':
             threshold = np.std(y_axis)
@@ -615,22 +641,21 @@ def peakdetect(y_axis, x_axis=None, lookahead=200, delta=1., get='max',
         zp = zip(np.arange(length)[:-lookahead], x_axis[:-lookahead],
                  y_axis[:-lookahead])
 
+    # ============== FIND MIN / MAX PEAKS ==============
     # Only detect peak if there is 'lookahead' amount of points after it
     for index, x, y in zp:
         # print(index, x, y)
         if y > mx:
             mx = y
-            mxpos = x
         if y < mn:
             mn = y
-            mnpos = x
 
         # ==== Look for max ====
         if y < mx - delta and mx != np.Inf:
             # Maxima peak candidate found
             # look ahead in signal to ensure that this is a peak and not jitter
             if y_axis[index:index + lookahead].max() < mx:
-                max_peaks.append([mxpos, mx])
+                max_peaks.append(index)
                 dump.append(True)
                 # set algorithm to only find minima now
                 mx = np.Inf
@@ -639,16 +664,13 @@ def peakdetect(y_axis, x_axis=None, lookahead=200, delta=1., get='max',
                     # end is within lookahead no more peaks can be found
                     break
                 continue
-            # else:  #slows shit down this does
-            #    mx = ahead
-            #    mxpos = x_axis[np.where(y_axis[index:index+lookahead]==mx)]
 
         # ==== Look for max ====
         if y > mn + delta and mn != -np.Inf:
             # Minima peak candidate found
             # look ahead in signal to ensure that this is a peak and not jitter
             if y_axis[index:index + lookahead].min() > mn:
-                min_peaks.append([mnpos, mn])
+                min_peaks.append(index)
                 dump.append(False)
                 # set algorithm to only find maxima now
                 mn = -np.Inf
@@ -656,35 +678,27 @@ def peakdetect(y_axis, x_axis=None, lookahead=200, delta=1., get='max',
                 if index + lookahead >= length:
                     # end is within lookahead no more peaks can be found
                     break
-            # else:  #slows shit down this does
-            #    mn = ahead
-            #    mnpos = x_axis[np.where(y_axis[index:index+lookahead]==mn)]
 
-    # Remove the false hit on the first value of the y_axis
-    try:
+    if min_peaks and max_peaks:
+        # ============== CLEAN ==============
+        # Remove the false hit on the first value of the y_axis
         if threshold is None:
             if dump[0]:
                 max_peaks.pop(0)
             else:
                 min_peaks.pop(0)
             del dump
-    except IndexError:
-        # no peaks were found, should the function return empty lists?
-        pass
 
-    return [max_peaks, min_peaks]
+        # ============== MIN / MAX / MINMAX ==============
+        if get == 'max':
+            index = np.array(max_peaks)
+        elif get == 'min':
+            index = np.array(min_peaks)
+        elif get == 'minmax':
+            index = np.vstack((min_peaks, max_peaks))
+        number = len(index)
+        density = number / (len(y_axis) / sf / 60.)
 
-
-def _datacheck(x_axis, y_axis):
-    """Check inputs for peak detection."""
-    if x_axis is None:
-        x_axis = range(len(y_axis))
-
-    if len(y_axis) != len(x_axis):
-        raise ValueError("Input vectors y_axis and x_axis must have same "
-                         "length")
-
-    # Needs to be a numpy array
-    y_axis = np.array(y_axis)
-    x_axis = np.array(x_axis)
-    return x_axis, y_axis
+        return index, number, density
+    else:
+        return np.array([]), 0., 0.
