@@ -1,10 +1,6 @@
 Visbrain documentation
 ######################
 
-
-.. figure::  picture/visbrain.png
-   :align:   center
-
 Visbrain is a python package in development and it's dedicated to neuroscience visualization tools. Here is the list of the current modules :
 
 * :ref:`brain` : plot your data onto a 3D MNI brain control it via the graphical interface

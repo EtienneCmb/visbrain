@@ -3,6 +3,9 @@
 Sleep
 =====
 
+.. figure::  picture/sleep.png
+   :align:   center
+
 Description
 -----------
 
