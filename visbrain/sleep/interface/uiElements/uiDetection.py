@@ -4,7 +4,7 @@ import os
 from warnings import warn
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
-                       listToCsv, listToTxt)
+                       peakdetect, listToCsv, listToTxt)
 from ....utils.sleep.event import _events_duration
 
 from PyQt4 import QtGui
@@ -168,20 +168,15 @@ class uiDetection(object):
             # ====================== PEAKS ======================
             elif method == 'Peaks':
                 # Get variables :
-                look = self._ToolPeakLook.value() * self._sf
+                look = int(self._ToolPeakLook.value() * self._sf)
                 disp = self._ToolPeakMinMax.currentIndex()
                 disp_types = ['max', 'min', 'minmax']
-                # Set data :
-                self._peak.set_data(self._sf, self._data[k], self._time,
-                                    self._chan.peak[k], disp_types[disp],
-                                    look)
-
-                # Report results on table :
-                self._ToolDetectTable.setRowCount(1)
-                self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
-                    str(self._peak.number)))
-                self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
-                    str(round(self._peak.density, 2))))
+                index, nb, dty = peakdetect(self._sf, self._data[k, :],
+                                            self._time, lookahead=look,
+                                            delta=1., threshold='auto',
+                                            get=disp_types[disp])
+                self._detect.dict[(self._channels[k], 'Peaks')][
+                                                            'index'] = index
 
             if index.size:
                 # Be sure panel is displayed :
@@ -241,7 +236,12 @@ class uiDetection(object):
         chan = str(self._DetectChans.currentText())
         tps = str(self._DetectTypes.currentText())
         if chan and tps:
-            self._DetectViz.setChecked(self._detect.line[(chan, tps)].visible)
+            if tps == 'Peaks':
+                self._DetectViz.setChecked(self._detect.peaks[(chan,
+                                                              tps)].visible)
+            else:
+                self._DetectViz.setChecked(self._detect.line[(chan,
+                                                              tps)].visible)
 
     def _fcn_rmLocation(self):
         """Demove a detection."""
