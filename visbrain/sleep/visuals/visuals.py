@@ -58,7 +58,7 @@ class Detection(object):
                                                   color=col[k[1]])
                 self.line[k].set_gl_state('translucent')
             else:
-                pos = np.zeros((1, 3), dtype=np.float32)
+                pos = np.full((1, 3), -10., dtype=np.float32)
                 self.peaks[k] = Markers(pos=pos, parent=par,
                                         face_color=col[k[1]])
                 self.peaks[k].set_gl_state('translucent')
@@ -165,10 +165,14 @@ class Detection(object):
             if nkey not in oldkeys:
                 # Update dict and line :
                 self.dict[nkey] = self.dict[k]
-                self.line[nkey] = self.line[k]
-                self.peaks[nkey] = self.peaks[k]
+                if k[1] is 'Peaks':
+                    self.peaks[nkey] = self.peaks[k]
+                    del self.peaks[k]
+                else:
+                    self.line[nkey] = self.line[k]
+                    del self.line[k]
                 # Remove old key :
-                del self.dict[k], self.line[k], self.peaks[k]
+                del self.dict[k]
         self.chans = newkeys
 
     def reset(self):
