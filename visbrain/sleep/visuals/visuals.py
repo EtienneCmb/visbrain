@@ -131,12 +131,35 @@ class Detection(object):
                           edge_color=self[(chan, types)]['color'])
 
     def visible(self, viz, chan, types):
-        """"""
+        """Set channel visibility.
+
+        Args:
+            viz: bool
+                Boolean value indicating if the plot have to be displayed.
+
+            chan: str
+                Channel name.
+
+            types: str
+                Detection type name.
+        """
         self.hyp.visible = viz
         if types is 'Peaks':
             self.peaks[(chan, types)].visible = viz
         else:
             self.line[(chan, types)].visible = viz
+
+    def delete(self, chan, types):
+        """Delete data of a channel."""
+        # Remove data from dict :
+        self[(chan, types)]['index'] = np.array([])
+        # Remove data from plot :
+        pos = np.full((1, 3), -10., dtype=np.float32)
+        if types is 'Peaks':
+            self.peaks[(chan, types)].set_data(pos=pos)
+        else:
+            self.line[(chan, types)].set_data(pos=pos,
+                                              connect=np.array([False]))
 
     def nonzero(self):
         """Return the list of channels with non-empty detections."""

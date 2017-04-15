@@ -97,8 +97,7 @@ class uiDetection(object):
 
     # -------------- Run detection (only on selected channels) --------------
     def _fcn_applyDetection(self):
-        """Apply detection (either REM / Spindles / Peaks / Slow Wave / KC / MT)
-        """
+        """Apply detection (either REM/Spindles/Peaks/SlowWave/KC/MT)."""
         # Get channels to apply detection and the detection method :
         idx = self._fcn_getChanDetection()
         method = str(self._ToolDetectType.currentText())
@@ -256,9 +255,9 @@ class uiDetection(object):
         # Get selected detection type :
         types = str(self._DetectTypes.currentText())
         # Remove detection :
-        self._detect[(chan, types)]['index'] = np.array([])
+        self._detect.delete(chan, types)
         # Update GUI :
-        self._fcn_switchLocation()
+        self._locLineReport()
 
     def _fcn_vizLocation(self):
         """Set visible detection."""
@@ -388,7 +387,6 @@ class uiDetection(object):
         # Build the index array :
         index = np.array([])
         for k, i in zip(stInd, durInd):
-            print(k, i, k+i)
             index = np.append(index, np.arange(k, k+i))
         index = index.astype(np.int, copy=False)
         # Set index :
