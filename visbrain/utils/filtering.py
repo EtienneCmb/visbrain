@@ -240,12 +240,11 @@ def welch_power(x, fMin, fMax, sf, window_s=30, norm=True):
     f_vector = np.arange(0, sf / 2 + freq_spacing, freq_spacing)
     idx_fMin = np.where(f_vector == fMin)[0][0]
     idx_fMax = np.where(f_vector == fMax)[0][0] + 1
-
     delta_spec = np.array([], dtype=float)
     delta_spec_norm = np.array([], dtype=float)
 
     for i in np.arange(0, len(x), window_s * sf):
-        f, Pxx_spec = welch(x[i:i + window_s * sf], sf, 'flattop',
+        f, Pxx_spec = welch(x[i:i + window_s * sf], sf, 'hanning',
                             nperseg=sf * (1 / freq_spacing),
                             scaling='spectrum')
         mean_delta = np.mean(Pxx_spec[idx_fMin:idx_fMax, ])

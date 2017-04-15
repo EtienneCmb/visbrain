@@ -140,10 +140,9 @@ class uiDetection(object):
             elif method == 'Slow waves':
                 # Get variables :
                 thr = self._ToolWaveTh.value()
-                amp = self._ToolWaveAmp.value()
                 # Get Slow Waves indices :
                 index, nb, dty, dur = slowwavedetect(self._data[k, :],
-                                                     self._sf, thr, amp)
+                                                     self._sf, thr)
                 # Update index for this channel and detection :
                 self._detect.dict[(self._channels[k], 'Slow waves')][
                                                             'index'] = index

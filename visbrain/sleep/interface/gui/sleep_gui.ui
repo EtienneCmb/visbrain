@@ -129,8 +129,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>397</width>
-                <height>783</height>
+                <width>355</width>
+                <height>815</height>
                </rect>
               </property>
               <attribute name="label">
@@ -187,8 +187,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>369</width>
-                       <height>537</height>
+                       <width>333</width>
+                       <height>590</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -409,8 +409,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>367</width>
-                <height>462</height>
+                <width>314</width>
+                <height>413</height>
                </rect>
               </property>
               <attribute name="label">
@@ -937,8 +937,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>300</width>
-                <height>265</height>
+                <width>260</width>
+                <height>231</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1329,7 +1329,7 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>316</width>
+                <width>287</width>
                 <height>54</height>
                </rect>
               </property>
@@ -1579,7 +1579,7 @@ re-referenced</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>296</width>
+                       <width>267</width>
                        <height>998</height>
                       </rect>
                      </property>
@@ -1667,8 +1667,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>397</width>
-                <height>814</height>
+                <width>355</width>
+                <height>842</height>
                </rect>
               </property>
               <attribute name="label">
@@ -2488,7 +2488,7 @@ selected, visible or all channels.</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -3093,36 +3093,43 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="5">
-                        <spacer name="horizontalSpacer_8">
+                       <item row="0" column="1" rowspan="2">
+                        <widget class="Line" name="line_7">
+                         <property name="minimumSize">
+                          <size>
+                           <width>10</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2" rowspan="2">
+                        <widget class="QLabel" name="label_46">
+                         <property name="text">
+                          <string>Delta power (norm.)</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="3" rowspan="2">
+                        <spacer name="horizontalSpacer_18">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
                          </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Minimum</enum>
+                         </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>40</width>
+                           <width>20</width>
                            <height>20</height>
                           </size>
                          </property>
                         </spacer>
                        </item>
-                       <item row="1" column="4">
-                        <widget class="QDoubleSpinBox" name="_ToolWaveAmp">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Minimum amplitude (mV) of Slow Wave (0 for no amplitude criteria)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                         <property name="minimum">
-                          <double>0.000000000000000</double>
-                         </property>
-                         <property name="maximum">
-                          <double>200.000000000000000</double>
-                         </property>
-                         <property name="value">
-                          <double>70.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="4">
+                       <item row="0" column="4" rowspan="2">
                         <widget class="QDoubleSpinBox" name="_ToolWaveTh">
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Normalized Delta power threshold (between 0 and 1) &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -3138,44 +3145,14 @@ waves</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="0" column="2">
-                        <widget class="QLabel" name="label_46">
-                         <property name="text">
-                          <string>Delta power (norm.)</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="1" rowspan="2">
-                        <widget class="Line" name="line_7">
-                         <property name="minimumSize">
-                          <size>
-                           <width>10</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="orientation">
-                          <enum>Qt::Vertical</enum>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="2">
-                        <widget class="QLabel" name="label_47">
-                         <property name="text">
-                          <string>Amplitude (mV)</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="3">
-                        <spacer name="horizontalSpacer_18">
+                       <item row="0" column="5" rowspan="2">
+                        <spacer name="horizontalSpacer_8">
                          <property name="orientation">
                           <enum>Qt::Horizontal</enum>
                          </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Minimum</enum>
-                         </property>
                          <property name="sizeHint" stdset="0">
                           <size>
-                           <width>20</width>
+                           <width>40</width>
                            <height>20</height>
                           </size>
                          </property>
@@ -3672,9 +3649,6 @@ waves</string>
                      </widget>
                     </item>
                    </layout>
-                   <zorder>_DetectExportAll</zorder>
-                   <zorder>_DetectExportAll</zorder>
-                   <zorder>_DetectImportAll</zorder>
                   </widget>
                  </item>
                  <item row="2" column="1">
@@ -4176,7 +4150,7 @@ waves</string>
      <x>0</x>
      <y>0</y>
      <width>1324</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">
