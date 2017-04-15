@@ -448,6 +448,8 @@ Keys                    Description
 ==============          ==================================================================================
 mouse wheel             Move the current window
 mouse click             On a channel canvas, magnify signal under mouse location
+-                       Decrease amplitude
++                       Increase amplitude
 a                       Insert Artefact in the hypnogram
 w                       Insert Wake stage in the hypnogram
 1                       Insert N1 stage in the hypnogram
