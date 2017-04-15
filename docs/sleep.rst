@@ -44,24 +44,24 @@ Data files
 Here’s the list of currently supported extensions for data files:
 
 * BrainVision (**.eeg**) version 1 and 2
-* `ELAN <http://elan.lyon.inserm.fr>`_ (**.eeg**)
 * Micromed (**.trc**) version 4
 * European Data Format (**.edf**)
+* `ELAN <http://elan.lyon.inserm.fr>`_ (**.eeg**)
 
 .. note::
    Extensions above are the ones natively supported inside Sleep, but you can also directly pass numpy array or .mat file (loaded with scipy.loadmat)
 
 .. warning::
-   Sleep applies an automatic downsampling to 100 Hz upon loading. You can change this value with the “downsample” argument of Sleep (command-line only) or directly in the file sleep.py. If the sampling rate is a power of 2 (e.g 256Hz), the default downsampling frequency will be 64 Hz.
+   Sleep applies an automatic downsampling to 100 Hz upon loading. You can change this value with the “downsample” argument of Sleep (command-line only) or directly in the file sleep.py.
 
 Hypnogram
 ~~~~~~~~~
 
 Here's the list of supported extensions for hypnogram files :
 
-* **.hyp** (`ELAN <http://elan.lyon.inserm.fr>`_)
 * **.txt**
 * **.csv**
+* **.hyp** (`ELAN <http://elan.lyon.inserm.fr>`_)
 
 .. warning::
    There is no international gold standard for the hypnogram format yet and each lab can have its own format. To overcome problems caused by different sampling rate of hypnogram files and/or different values assigned to each sleep stages, Sleep requires that you specify these parameters in a .txt file. This text file should be in the same directory as the original hypnogram file and be named: *HYPNOFILENAME_description.txt*. Checkout this `example <https://github.com/EtienneCmb/visbrain/tree/master/docs/Hypnogram_excerpt2_description.txt>`_.
