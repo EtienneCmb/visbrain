@@ -11,12 +11,12 @@ Perform:
 - Peak detection
 """
 import numpy as np
-from scipy.signal import hilbert, daub, detrend
+from scipy.signal import hilbert, detrend
 
 from ..filtering import filt, morlet, morlet_power, welch_power
 from ..sigproc import movingaverage, derivative, tkeo
 from .event import (_events_duration, _events_removal, _events_distance_fill,
-                    _events_mean_freq, _event_amplitude)
+                    _event_amplitude)
 
 __all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
            'kcdetect', 'mtdetect']
@@ -117,7 +117,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
     freqs = np.array([0.5, 4., 8., 12., 16.])
     delta_npow, _, _, _ = morlet_power(data, freqs, sf, norm=True)
     delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
-    local_delta_nfpow = movingaverage(delta_npow, sf, sf)
+    # local_delta_nfpow = movingaverage(delta_npow, sf, sf)
     idx_no_delta = np.where(delta_nfpow < delta_thr)[0]
     idx_loc_delta = np.where(delta_npow > np.mean(delta_npow))[0]
 
@@ -145,7 +145,8 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
                               idx_spin, assume_unique=True)
             spin_bool = np.append(spin_bool, any(is_spin))
         kc_spin = np.where(spin_bool)[0]
-        idx_kc_spin = idx_sup_thr[_events_removal(idx_start, idx_stop, kc_spin)]
+        idx_kc_spin = idx_sup_thr[_events_removal(idx_start, idx_stop,
+                                                  kc_spin)]
 
         # Compute probability
         proba = np.zeros(shape=data.shape)
@@ -444,9 +445,10 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tMin=200,
 # SLOW WAVE DETECTION
 ###########################################################################
 
+
 def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
-                    fMin=0.5, fMax=2, welch_win_s=12, moving_s=30,
-                    min_duration_ms=500):
+                   fMin=0.5, fMax=2, welch_win_s=12, moving_s=30,
+                   min_duration_ms=500):
     """Perform a Slow Wave detection.
 
     Args:
@@ -516,7 +518,7 @@ def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
         sw_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start,
-                                                        idx_stop, sf)
+                                     idx_stop, sf)
 
         good_amp = np.where(np.logical_and(sw_amp > min_amp,
                                            sw_amp < max_amp))[0]
@@ -643,7 +645,8 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
         _, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
         # Amplitude criteria
-        mt_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start, idx_stop, sf)
+        mt_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start, idx_stop,
+                                     sf)
         good_amp = np.where(np.logical_and(mt_amp > min_amp,
                                            mt_amp < max_amp))[0]
         good_idx = _events_removal(idx_start, idx_stop, good_amp)
