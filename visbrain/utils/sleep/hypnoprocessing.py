@@ -160,7 +160,7 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
 
     return stats
 
-def save_hypnoToFig(file, hypno, sf):
+def save_hypnoToFig(file, hypno, sf, tstartsec):
     """Export hypnogram to a 600 dpi .png figure
 
     Args:
@@ -173,8 +173,13 @@ def save_hypnoToFig(file, hypno, sf):
         sf: float, optional, (def: 100.)
             The sampling frequency of displayed elements (could be the
             down-sampling frequency)
-    """
+
+        tstartsec: int
+            Record starting time given in seconds.
+        """
     import matplotlib.pyplot as plt
+    import datetime
+
     # Downsample to get one value per second
     sf = int(sf)
     hypno = hypno[::sf]
@@ -188,18 +193,25 @@ def save_hypnoToFig(file, hypno, sf):
     valREM[idxREM] = 1
 
     # Start plotting
-    plt.figure(num=None, figsize=(10, 4), facecolor='w', edgecolor='k')
-
-    if len(hypno) / 60 < 60:
+    fig, ax = plt.subplots(figsize=(10, 4), facecolor='w', edgecolor='k')
+    lhyp = len(hypno) / 60
+    if lhyp < 60:
         xticks = np.arange(0, len(hypno), 10 * 60)
         lw=2
-    else:
+    elif lhyp < 180 and lhyp > 60:
         xticks = np.arange(0, len(hypno), 30 * 60)
+        lw=1.5
+    else:
+        xticks = np.arange(0, len(hypno), 60 * 60)
         lw=1.25
 
-    np.put(xticks, 0, 1)
-    plt.xticks(xticks, (xticks / 60).astype(int))
-    plt.xlim(1, len(hypno))
+    xticks = np.append(xticks, len(hypno))
+    xlabels = (xticks + tstartsec).astype(int)
+    xlabels_str = [ str(datetime.timedelta(seconds=int(j)))[:-3] for i, j
+                                                    in enumerate(xlabels) ]
+    xlabels_str = [s.replace('1 day, ' , '') for s in xlabels_str]
+    plt.xlim(0, len(hypno))
+    plt.xticks(xticks, xlabels_str)
     plt.plot(hypno, 'k', ls='steps', linewidth=lw)
 
     # Plot REM epochs
@@ -211,19 +223,18 @@ def save_hypnoToFig(file, hypno, sf):
     plt.yticks([-1,0,1,2,3,4,5], ylabels)
 
     # X-Ticks and Labels
-    plt.xlabel("Time [minutes]")
+    plt.xlabel("Time")
     plt.ylabel("Sleep Stage")
 
     # Grid
-    # plt.gca().xaxis.grid(True, linestyle=':', linewidth=0.05)
-    # plt.gca().yaxis.grid(True, linestyle=':', linewidth=0.1)
-    # plt.gca().get_xaxis().tick_bottom()
-    # plt.gca().get_yaxis().tick_left()
+    # plt.grid(True, 'major', ls=':', lw=.2, c='k', alpha=.3)
+    plt.tick_params(axis='both', which='both', bottom='off', top='off',
+                labelbottom='on', left='off', right='off', labelleft='on')
 
     # Invert Y axis and despine
-    plt.gca().invert_yaxis()
-    plt.gca().spines['right'].set_visible(False)
-    plt.gca().spines['top'].set_visible(False)
+    ax.invert_yaxis()
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
 
     # Save as 600 dpi .png
     plt.tight_layout()

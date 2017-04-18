@@ -136,7 +136,7 @@ class uiSettings(object):
                                                 fname, "PNG (*.png)")
         filename = str(filename)  # py2
         if filename:
-            save_hypnoToFig(filename, self._hypno, self._sf)
+            save_hypnoToFig(filename, self._hypno, self._sf, self._toffset)
 
 
     # =====================================================================

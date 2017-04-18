@@ -61,9 +61,9 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
-	-4 Afficher la vraie heure dans figure save_hypnoToFig
 	-4 Faire une figure qui détaille les étapes pour chaque detection les étapes + l'inclure dans la doc
 	-2 Scorage automatique du sommeil
+	+4 Afficher la vraie heure dans figure save_hypnoToFig
 	+4 Test méthode REMs de JB
 	+4 Import fichier micromed (*.trc)
 	+5 Bug brainvision header version
