@@ -160,6 +160,7 @@ class uiArea(object):
         # Plot areas and set parent :
         self.area.plot()
         self.area.mesh.parent = self._vbNode
+        self._tobj['roi'] = self.area
         self.area.set_camera(self.view.wc.camera)
         # Enable projection on ROI and related buttons :
         self._uitProjectOn.model().item(1).setEnabled(True)
