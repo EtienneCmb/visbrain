@@ -159,3 +159,68 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
     # stats['%REM_23'] = stats['REM_9'] / stats['TDT_3'] * 100.
 
     return stats
+
+def hypnoplot(file, hypno, sf):
+    """Compute sleep stats from an hypnogram vector.
+
+    Args:
+        file: str
+            Filename (with full path) to sleep dataset.
+
+        hypno: np.ndarray
+            Hypnogram vector
+
+        sf: float, optional, (def: 100.)
+            The sampling frequency of displayed elements (could be the
+            down-sampling frequency)
+    """
+    # Downsample to get one value per second
+    hypno = hypno[::sf]
+
+    # Put REM between Wake and N1 sleep
+    hypno[hypno >= 1] += 1
+    hypno[hypno == 5] = 1
+    idxREM  = np.where(hypno == 1)[0]
+    valREM = np.zeros(hypno.size)
+    valREM[:] = np.nan
+    valREM[idxREM] = 1
+
+    # Start plotting
+    plt.figure(num=None, figsize=(10, 4), facecolor='w', edgecolor='k')
+
+    if len(hypno) / 60 < 60:
+        xticks = np.arange(0, len(hypno), 10 * 60)
+        lw=2
+    else:
+        xticks = np.arange(0, len(hypno), 30 * 60)
+        lw=1.25
+
+    np.put(xticks, 0, 1)
+    plt.xticks(xticks, (xticks / 60).astype(int))
+    plt.xlim(1, len(hypno))
+    plt.plot(hypno, 'k', ls='steps', linewidth=lw)
+
+    # Plot REM epochs
+    for i in np.arange(0.6, 1, 0.001):
+        plt.plot(np.arange(len(hypno)), i * valREM, 'k', linewidth=0.2)
+
+    # Y-Ticks and Labels
+    ylabels = ['Art', 'Wake', 'REM', 'N1', 'N2', 'N3', '']
+    plt.yticks([-1,0,1,2,3,4,5], ylabels)
+
+    # X-Ticks and Labels
+    plt.xlabel("Time [minutes]")
+    plt.ylabel("Sleep Stage")
+
+    # Grid
+    plt.gca().yaxis.grid(True,linewidth=0.15)
+    plt.gca().xaxis.grid(True, linewidth=0.1)
+
+    # Invert Y axis and despine
+    plt.gca().invert_yaxis()
+    plt.gca().spines['right'].set_color('none')
+    plt.gca().spines['top'].set_color('none')
+
+    # Save as 600 dpi .png
+    plt.tight_layout()
+    plt.savefig(file, format='png', dpi=600)
