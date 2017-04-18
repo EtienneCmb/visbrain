@@ -1,6 +1,6 @@
 Bug
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
-	-5 Doc: 
+	-5 Doc:
 		- Fqe échantillonage pas puissance de puissance de 2
 		- Changer importance de ELAN
 		- Symbol -1 (Artefact) + symbol +/- dans les shortcuts
@@ -61,6 +61,7 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
+	-4 Afficher la vraie heure dans figure save_hypnoToFig
 	-4 Faire une figure qui détaille les étapes pour chaque detection les étapes + l'inclure dans la doc
 	-2 Scorage automatique du sommeil
 	+4 Test méthode REMs de JB

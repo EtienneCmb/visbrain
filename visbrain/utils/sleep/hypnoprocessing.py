@@ -215,10 +215,10 @@ def save_hypnoToFig(file, hypno, sf):
     plt.ylabel("Sleep Stage")
 
     # Grid
-    plt.gca().xaxis.grid(True, linestyle=':', linewidth=0.05)
-    plt.gca().yaxis.grid(True, linestyle=':', linewidth=0.1)
-    plt.gca().get_xaxis().tick_bottom()
-    plt.gca().get_yaxis().tick_left()
+    # plt.gca().xaxis.grid(True, linestyle=':', linewidth=0.05)
+    # plt.gca().yaxis.grid(True, linestyle=':', linewidth=0.1)
+    # plt.gca().get_xaxis().tick_bottom()
+    # plt.gca().get_yaxis().tick_left()
 
     # Invert Y axis and despine
     plt.gca().invert_yaxis()
