@@ -34,7 +34,7 @@ class Projections(object):
             return self._tobj[obj].mesh.get_vertices
         else:
             raise ValueError(obj + " not found. USe : " +
-                             list(self._tobj.keys))
+                             list(self._tobj.keys()))
 
     def _sourcesProjection(self):
         """Apply corticale projection."""
