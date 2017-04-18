@@ -3,7 +3,7 @@
 import numpy as np
 from os import path
 
-__all__ = ['sleepstats', 'transient']
+__all__ = ['sleepstats', 'transient', 'save_hypnoToFig']
 
 
 def transient(data, xvec=None):
@@ -160,8 +160,8 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
 
     return stats
 
-def hypnoplot(file, hypno, sf):
-    """Compute sleep stats from an hypnogram vector.
+def save_hypnoToFig(file, hypno, sf):
+    """Export hypnogram to a 600 dpi .png figure
 
     Args:
         file: str
@@ -174,7 +174,9 @@ def hypnoplot(file, hypno, sf):
             The sampling frequency of displayed elements (could be the
             down-sampling frequency)
     """
+    import matplotlib.pyplot as plt
     # Downsample to get one value per second
+    sf = int(sf)
     hypno = hypno[::sf]
 
     # Put REM between Wake and N1 sleep
@@ -213,13 +215,15 @@ def hypnoplot(file, hypno, sf):
     plt.ylabel("Sleep Stage")
 
     # Grid
-    plt.gca().yaxis.grid(True,linewidth=0.15)
-    plt.gca().xaxis.grid(True, linewidth=0.1)
+    plt.gca().xaxis.grid(True, linestyle=':', linewidth=0.05)
+    plt.gca().yaxis.grid(True, linestyle=':', linewidth=0.1)
+    plt.gca().get_xaxis().tick_bottom()
+    plt.gca().get_yaxis().tick_left()
 
     # Invert Y axis and despine
     plt.gca().invert_yaxis()
-    plt.gca().spines['right'].set_color('none')
-    plt.gca().spines['top'].set_color('none')
+    plt.gca().spines['right'].set_visible(False)
+    plt.gca().spines['top'].set_visible(False)
 
     # Save as 600 dpi .png
     plt.tight_layout()

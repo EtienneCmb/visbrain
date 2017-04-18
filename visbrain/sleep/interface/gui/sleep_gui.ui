@@ -129,8 +129,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>410</width>
-                <height>783</height>
+                <width>382</width>
+                <height>815</height>
                </rect>
               </property>
               <attribute name="label">
@@ -187,8 +187,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>382</width>
-                       <height>537</height>
+                       <width>360</width>
+                       <height>590</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -409,8 +409,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>367</width>
-                <height>462</height>
+                <width>314</width>
+                <height>413</height>
                </rect>
               </property>
               <attribute name="label">
@@ -937,8 +937,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>300</width>
-                <height>265</height>
+                <width>260</width>
+                <height>231</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1329,7 +1329,7 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>316</width>
+                <width>287</width>
                 <height>54</height>
                </rect>
               </property>
@@ -1579,7 +1579,7 @@ re-referenced</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>296</width>
+                       <width>98</width>
                        <height>998</height>
                       </rect>
                      </property>
@@ -1667,8 +1667,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>410</width>
-                <height>814</height>
+                <width>382</width>
+                <height>842</height>
                </rect>
               </property>
               <attribute name="label">
@@ -4223,7 +4223,7 @@ Twitches</string>
      <x>0</x>
      <y>0</y>
      <width>1344</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">
@@ -4235,6 +4235,7 @@ Twitches</string>
       <string>Save</string>
      </property>
      <addaction name="actionHypnogram_data"/>
+     <addaction name="actionHypnogram_figure"/>
      <addaction name="actionInfo_table"/>
      <addaction name="actionScoring_table"/>
      <addaction name="actionDetection_table"/>
@@ -4512,6 +4513,11 @@ Twitches</string>
   <action name="actionData">
    <property name="text">
     <string>Data</string>
+   </property>
+  </action>
+  <action name="actionHypnogram_figure">
+   <property name="text">
+    <string>Hypnogram figure</string>
    </property>
   </action>
  </widget>

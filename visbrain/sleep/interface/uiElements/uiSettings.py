@@ -8,7 +8,7 @@ from PyQt4.QtCore import QObjectCleanupHandler
 
 import vispy.visuals.transforms as vist
 
-from ....utils import save_hypnoTotxt, save_hypnoToElan
+from ....utils import save_hypnoTotxt, save_hypnoToElan, save_hypnoToFig
 
 
 __all__ = ['uiSettings']
@@ -28,6 +28,7 @@ class uiSettings(object):
 
         # ---------------------- Save ----------------------
         self.actionHypnogram_data.triggered.connect(self.saveFile)
+        self.actionHypnogram_figure.triggered.connect(self.saveHypFig)
         self.actionInfo_table.triggered.connect(self._fcn_exportInfos)
         self.actionScoring_table.triggered.connect(self._fcn_exportScore)
         self.actionDetection_table.triggered.connect(self._fcn_exportLocation)
@@ -126,6 +127,17 @@ class uiSettings(object):
                                 self._N, 1)
             else:
                 raise ValueError("Not a valid extension")
+
+    def saveHypFig(self):
+        """Save a 600 dpi .png figure of the hypnogram
+        """
+        fname = os.path.basename(self._file).split('.')[0]
+        filename = QFileDialog.getSaveFileName(self, 'Save Hypnogram figure',
+                                                fname, "PNG (*.png)")
+        filename = str(filename)  # py2
+        if filename:
+            save_hypnoToFig(filename, self._hypno, self._sf)
+
 
     # =====================================================================
     # SLIDER
