@@ -79,8 +79,10 @@ class Projections(object):
         color[self._modproj.mask, ...] = 1.
 
         if self.sources:
+            # Find only non-colored vertex :
+            idxcol = np.logical_and(self._idxmasked, self._modproj.mask)
             # Set them color to the mask color :
-            color[self._idxmasked, ...] = self.sources.smaskcolor
+            color[idxcol, ...] = self.sources.smaskcolor
 
         # ============= MESH =============
         self._tobj[self._tprojecton].mesh.set_color(data=color)
