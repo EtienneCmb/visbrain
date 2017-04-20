@@ -160,7 +160,7 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
 
     return stats
 
-def save_hypnoToFig(file, hypno, sf, tstartsec):
+def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
     """Export hypnogram to a 600 dpi .png figure
 
     Args:
@@ -176,6 +176,10 @@ def save_hypnoToFig(file, hypno, sf, tstartsec):
 
         tstartsec: int
             Record starting time given in seconds.
+
+    Kargs:
+        grid: boolean, optional (def False)
+            Plot X and Y grid.
         """
     import matplotlib.pyplot as plt
     import datetime
@@ -192,8 +196,11 @@ def save_hypnoToFig(file, hypno, sf, tstartsec):
     valREM[:] = np.nan
     valREM[idxREM] = 1
 
+    # Find if artefacts are present in hypno
+    art = True if -1 in hypno else False
+
     # Start plotting
-    fig, ax = plt.subplots(figsize=(10, 4), facecolor='w', edgecolor='k')
+    fig, ax = plt.subplots(figsize=(10, 4), edgecolor='k')
     lhyp = len(hypno) / 60
     if lhyp < 60:
         xticks = np.arange(0, len(hypno), 10 * 60)
@@ -215,26 +222,39 @@ def save_hypnoToFig(file, hypno, sf, tstartsec):
     plt.plot(hypno, 'k', ls='steps', linewidth=lw)
 
     # Plot REM epochs
-    for i in np.arange(0.6, 1, 0.001):
-        plt.plot(np.arange(len(hypno)), i * valREM, 'k', linewidth=0.2)
+    for i in np.arange(0.6, 1, 0.01):
+        plt.plot(np.arange(len(hypno)), i * valREM, 'k', linewidth=lw)
 
     # Y-Ticks and Labels
-    ylabels = ['Art', 'Wake', 'REM', 'N1', 'N2', 'N3', '']
-    plt.yticks([-1,0,1,2,3,4,5], ylabels)
+    if art:
+        ylabels = ['Art', 'Wake', 'REM', 'N1', 'N2', 'N3', '']
+        plt.yticks([-1,0,1,2,3,4,5], ylabels)
+    else:
+        ylabels = ['', 'Wake', 'REM', 'N1', 'N2', 'N3', '']
+        plt.yticks([-0.5,0,1,2,3,4,4.5], ylabels)
 
     # X-Ticks and Labels
     plt.xlabel("Time")
     plt.ylabel("Sleep Stage")
 
     # Grid
-    # plt.grid(True, 'major', ls=':', lw=.2, c='k', alpha=.3)
-    plt.tick_params(axis='both', which='both', bottom='off', top='off',
-                labelbottom='on', left='off', right='off', labelleft='on')
+    if grid:
+        plt.grid(True, 'major', ls=':', lw=.2, c='k', alpha=.3)
+
+    plt.tick_params(axis='both', which='both', bottom='on', top='off',
+                labelbottom='on', left='on', right='off', labelleft='on',
+                labelcolor='k', direction='out')
 
     # Invert Y axis and despine
     ax.invert_yaxis()
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
+    ax.spines['left'].set_visible(True)
+    ax.spines['bottom'].set_visible(True)
+
+    ax.spines['left'].set_position(('outward', 5))
+    ax.spines['left'].set_smart_bounds(True)
+    ax.spines['bottom'].set_smart_bounds(True)
 
     # Save as 600 dpi .png
     plt.tight_layout()
