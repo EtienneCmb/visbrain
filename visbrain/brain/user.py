@@ -486,7 +486,8 @@ class userfcn(object):
             raise ValueError("The select parameter must either be 'all', "
                              "'none', 'left', 'right', 'inside' or 'outside'")
 
-    def cortical_projection(self, radius=10., project_on='brain', **kwargs):
+    def cortical_projection(self, radius=10., project_on='brain',
+                            contribute=False, **kwargs):
         """Project sources activity.
 
         This method can be used to project the sources activity either onto the
@@ -500,6 +501,9 @@ class userfcn(object):
                 Define on which object to project the sources activity. Chose
                 either 'brain' for projecting the sources activity onto the
                 brain or 'roi' to project on region of interest (if defined).
+
+            contribute: bool, optional, (def: False)
+                Specify if sources contribute on both hemisphere.
 
             kwargs: dict
                 Further arguments are passed to the sources_colormap function.
@@ -522,13 +526,15 @@ class userfcn(object):
         # Update variables :
         self._tradius = float(radius)
         self._tprojecton = project_on
+        self._tcontribute = contribute
         self._tprojectas = 'activity'
         # Colormap control :
         self.sources_colormap(**kwargs)
         # Run the corticale projection :
         self._sourcesProjection()
 
-    def cortical_repartition(self, radius=10., project_on='brain', **kwargs):
+    def cortical_repartition(self, radius=10., project_on='brain',
+                             contribute=False, **kwargs):
         """Get the number of contributing sources per vertex.
 
         Kargs:
@@ -539,6 +545,9 @@ class userfcn(object):
                 Define on which object to project the sources repartition.
                 Chose either 'brain' for projecting onto the brain or 'roi'
                 to project on region of interest (if defined).
+
+            contribute: bool, optional, (def: False)
+                Specify if sources contribute on both hemisphere.
 
             kwargs: dict
                 Further arguments are passed to the sources_colormap function.
@@ -558,6 +567,7 @@ class userfcn(object):
         # Update variables :
         self._tradius = float(radius)
         self._tprojecton = project_on
+        self._tcontribute = contribute
         self._tprojectas = 'repartition'
         # Colormap control :
         self.sources_colormap(**kwargs)
