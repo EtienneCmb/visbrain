@@ -424,7 +424,7 @@ class SourcesBase(_colormap):
 
         return repartition
 
-    def _MaskedEucl(self, v, radius):
+    def _MaskedEucl(self, v, radius, contribute=False):
         """Get the index of masked source's under radius.
 
         Args:
@@ -433,6 +433,10 @@ class SourcesBase(_colormap):
 
             radius: float
                 The radius under which activity is projected on vertices.
+
+        Kargs:
+            contribute: bool, optional, (def: False)
+                Specify if sources contribute on both hemisphere.
 
         Return:
             repartition: masked np.ndarray, float32
@@ -443,6 +447,8 @@ class SourcesBase(_colormap):
         # Select only masked xyz / data :
         masked = self.data.mask
         xyz, data = self.xyz[masked, :], self.data.data[masked]
+        # Get sign of the x coordinate :
+        xsign = np.sign(xyz[:, 0]).reshape(1, -1)
         # Predefined masked euclidian distance :
         nv = v.shape[0]
         fmask = np.ones((v.shape[0], 3, len(data)), dtype=bool)
@@ -452,6 +458,13 @@ class SourcesBase(_colormap):
             # =============== EUCLIDIAN DISTANCE ===============
             eucl = cdist(v[:, k, :], xyz).astype(np.float32)
             fmask[:, k, :] = eucl <= radius
+            # Contribute :
+            if not contribute:
+                # Get vertices signn :
+                vsign = np.sign(v[:, k, 0]).reshape(-1, 1)
+                # Find where vsign and xsign are equals :
+                isign = np.logical_and(vsign != xsign, xsign != 0)
+                fmask[:, k, :][isign] = False
         # Find where there's sources under radius and need to be masked :
         m = fmask.reshape(fmask.shape[0] * 3, fmask.shape[2])
         idx = np.dot(m, np.ones((len(data),), dtype=bool)).reshape(nv, 3)
