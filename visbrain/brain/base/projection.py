@@ -68,7 +68,7 @@ class Projections(object):
 
         # ============= MASKED =============
         if self.sources and (self._idxmasked is None):
-            self._idxmasked = self.sources._MaskedEucl(v, self._tradius)
+            self._idxmasked = self.sources._MaskedEucl(v, self._tradius, c)
 
         # ============= COLOR =============
         self._proj2Color()
