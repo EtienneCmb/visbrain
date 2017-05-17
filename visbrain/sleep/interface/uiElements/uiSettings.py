@@ -32,6 +32,10 @@ class uiSettings(object):
         self.actionInfo_table.triggered.connect(self._fcn_exportInfos)
         self.actionScoring_table.triggered.connect(self._fcn_exportScore)
         self.actionDetection_table.triggered.connect(self._fcn_exportLocation)
+        self.actionSaveConfig.triggered.connect(self.saveConfig)
+
+        # ---------------------- Load ----------------------
+        self.actionLoadConfig.triggered.connect(self.loadConfig)
 
         # ---------------------- Shortcut & Doc ----------------------
         self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
@@ -138,6 +142,75 @@ class uiSettings(object):
         if filename:
             save_hypnoToFig(filename, self._hypno, self._sf, self._toffset)
 
+    def saveConfig(self):
+        """Save a config file (*.txt) containing several display parameters
+        """
+        import json
+        upath = os.path.split(self._file)[0]
+        filename = QFileDialog.getSaveFileName(self, 'Save config file',
+                                                upath, "Text file (*.txt)")
+        filename = str(filename)  # py2
+        if filename:
+            with open(filename, 'w') as f:
+                config = {}
+                viz = []
+                amp = []
+                for i, k in enumerate(self._chanChecks):
+                    viz.append(k.isChecked())
+                    amp.append(self._ymaxSpin[i].value())
+
+                config['Channel_Names'] = self._channels
+                config['Channel_Visible'] = viz
+                config['Channel_Amplitude'] = amp
+                config['Spec_Visible'] = self._PanSpecViz.isChecked()
+                config['Spec_Length'] = self._PanSpecNfft.value()
+                config['Spec_Overlap'] = self._PanSpecStep.value()
+                config['Spec_Cmap'] = self._PanSpecCmap.currentIndex()
+                config['Spec_Chan'] = self._PanSpecChan.currentIndex()
+                config['Spec_Fstart'] = self._PanSpecFstart.value()
+                config['Spec_Fend'] = self._PanSpecFend.value()
+                config['Spec_Con'] = self._PanSpecCon.value()
+                config['Hyp_Visible'] = self._PanHypViz.isChecked()
+                config['Time_Visible'] = self._PanTimeViz.isChecked()
+                json.dump(config, f)
+
+    def loadConfig(self):
+        """Load a config file (*.txt) containing several display parameters
+        """
+        import json
+        upath = os.path.split(self._file)[0]
+        filename = QFileDialog.getOpenFileName(
+            self, "Open config file", upath, "Text file (*.txt)")
+        filename = str(filename)  # py2
+
+        with open(filename) as f:
+            config = json.load(f)
+            # Channels
+            for i, k in enumerate(self._chanChecks):
+                self._chanChecks[i].setChecked(config['Channel_Visible'][i])
+                self._ymaxSpin[i].setValue(config['Channel_Amplitude'][i])
+
+            # Spectrogram
+            self._PanSpecViz.setChecked(config['Spec_Visible'])
+            self._PanSpecNfft.setValue(config['Spec_Length'])
+            self._PanSpecStep.setValue(config['Spec_Overlap'])
+            self._PanSpecCmap.setCurrentIndex(config['Spec_Cmap'])
+            self._PanSpecChan.setCurrentIndex(config['Spec_Chan'])
+            self._PanSpecFstart.setValue(config['Spec_Fstart'])
+            self._PanSpecFend.setValue(config['Spec_Fend'])
+            self._PanSpecCon.setValue(config['Spec_Con'])
+
+            # Hypnogram & Time axis
+            self._PanHypViz.setChecked(config['Hyp_Visible'])
+            self._PanTimeViz.setChecked(config['Time_Visible'])
+
+            # Update display
+            self._fcn_chanViz()
+            self._fcn_chanAmplitude()
+            self._fcn_specViz()
+            self._fcn_specSetData()
+            self._fcn_hypViz()
+            self._fcn_timeViz()
 
     # =====================================================================
     # SLIDER

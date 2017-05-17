@@ -75,7 +75,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -122,7 +122,7 @@ spectrogram, hypnogram and the time axis</string>
            <item>
             <widget class="QToolBox" name="toolBox_2">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="page_3">
               <property name="geometry">
@@ -409,8 +409,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>314</width>
-                <height>413</height>
+                <width>382</width>
+                <height>815</height>
                </rect>
               </property>
               <attribute name="label">
@@ -937,8 +937,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>260</width>
-                <height>231</height>
+                <width>382</width>
+                <height>815</height>
                </rect>
               </property>
               <attribute name="label">
@@ -4239,6 +4239,7 @@ Twitches</string>
      <addaction name="actionInfo_table"/>
      <addaction name="actionScoring_table"/>
      <addaction name="actionDetection_table"/>
+     <addaction name="actionSaveConfig"/>
     </widget>
     <widget class="QMenu" name="menuLoad">
      <property name="title">
@@ -4246,6 +4247,7 @@ Twitches</string>
      </property>
      <addaction name="actionData"/>
      <addaction name="actionHypnogram"/>
+     <addaction name="actionLoadConfig"/>
     </widget>
     <addaction name="actionScreenshot"/>
     <addaction name="separator"/>
@@ -4518,6 +4520,16 @@ Twitches</string>
   <action name="actionHypnogram_figure">
    <property name="text">
     <string>Hypnogram figure</string>
+   </property>
+  </action>
+  <action name="actionLoadConfig">
+   <property name="text">
+    <string>Config file</string>
+   </property>
+  </action>
+  <action name="actionSaveConfig">
+   <property name="text">
+    <string>Config file</string>
    </property>
   </action>
  </widget>
