@@ -188,10 +188,13 @@ class uiSettings(object):
     def loadConfig(self):
         """Load a config file (*.txt) containing several display parameters."""
         import json
-        upath = os.path.split(self._file)[0]
-        filename = QFileDialog.getOpenFileName(
-            self, "Open config file", upath, "Text file (*.txt)")
-        filename = str(filename)  # py2
+        if hasattr(self, '_config_file'):
+            filename = str(self._config_file)
+        else:
+            upath = os.path.split(self._file)[0]
+            filename = QFileDialog.getOpenFileName(
+                self, "Open config file", upath, "Text file (*.txt)")
+            filename = str(filename)  # py2
 
         with open(filename) as f:
             config = json.load(f)

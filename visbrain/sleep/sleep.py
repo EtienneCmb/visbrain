@@ -37,6 +37,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         hypno_file: string, optional, (def: None)
             Path to the hypnogram file (.hyp, .txt or .csv)
 
+        config_file: string, optional, (def: None)
+            Path to the configuration file (.txt)
+
         data: np.ndarray, optional, (def: None)
             Array of data of shape (n_channels, n_pts)
 
@@ -62,8 +65,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             plateforms.
     """
 
-    def __init__(self, file=None, hypno_file=None, data=None, channels=None,
-                 sf=None, hypno=None, downsample=100., axis=False, line='gl'):
+    def __init__(self, file=None, hypno_file=None, config_file=None,
+                 data=None, channels=None, sf=None, hypno=None,
+                 downsample=100., axis=False, line='gl'):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
@@ -181,6 +185,11 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         # ====================== FUNCTIONS ON LOAD ======================
         self._fcnsOnCreation()
+
+        # Load config file
+        if config_file:
+            self._config_file = config_file
+            self.loadConfig()
 
     def __len__(self):
         """Return the number of channels."""
