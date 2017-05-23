@@ -4,7 +4,7 @@ import os
 import datetime
 
 from PyQt4.QtGui import *
-from PyQt4.QtCore import QObjectCleanupHandler
+from PyQt4.QtCore import QObjectCleanupHandler, QTimer
 
 import vispy.visuals.transforms as vist
 
@@ -95,19 +95,32 @@ class uiSettings(object):
         import webbrowser
         webbrowser.open('http://etiennecmb.github.io/visbrain/sleep.html')
 
+    # =====================================================================
+    # SCREENSHOT
+    # =====================================================================
     def _screenshot(self):
         """Screenshot using the GUI."""
         # Get filename :
         filename = QFileDialog.getSaveFileName(self, 'Screenshot',
                                                os.path.join(os.getenv('HOME'),
                                                             'screenshot.jpg'),
-                                               "Picture (*.jpg);;All files"
+                                               "JPG (*.jpg);;PNG (*.PNG);;All files"
                                                " (*.*)")
         filename = str(filename)  # py2
-        if filename:
+        # Screnshot function :
+        def _takeScreenShot():
+            """Take the screenshot."""
             file, ext = os.path.splitext(filename)
             p = QPixmap.grabWindow(self.centralwidget.winId())
-            p.save(filename + '.jpg')
+            p.save(filename + '.tiff')
+        # Take screenshot if filename :
+        if filename:
+            # Timer (avoid shooting the saving window)
+            self.timerScreen = QTimer()
+            # self.timerScreen.setInterval(100)
+            self.timerScreen.setSingleShot(True)
+            self.timerScreen.timeout.connect(_takeScreenShot)
+            self.timerScreen.start(1000)
 
     def _toggle_settings(self):
         """Toggle method for display / hide the settings panel."""
@@ -133,22 +146,20 @@ class uiSettings(object):
                 raise ValueError("Not a valid extension")
 
     def saveHypFig(self):
-        """Save a 600 dpi .png figure of the hypnogram
-        """
+        """Save a 600 dpi .png figure of the hypnogram."""
         fname = os.path.basename(self._file).split('.')[0]
         filename = QFileDialog.getSaveFileName(self, 'Save Hypnogram figure',
-                                                fname, "PNG (*.png)")
+                                               fname, "PNG (*.png)")
         filename = str(filename)  # py2
         if filename:
             save_hypnoToFig(filename, self._hypno, self._sf, self._toffset)
 
     def saveConfig(self):
-        """Save a config file (*.txt) containing several display parameters
-        """
+        """Save a config file (*.txt) containing several display parameters."""
         import json
         upath = os.path.split(self._file)[0]
         filename = QFileDialog.getSaveFileName(self, 'Save config file',
-                                                upath, "Text file (*.txt)")
+                                               upath, "Text file (*.txt)")
         filename = str(filename)  # py2
         if filename:
             with open(filename, 'w') as f:
@@ -175,8 +186,7 @@ class uiSettings(object):
                 json.dump(config, f)
 
     def loadConfig(self):
-        """Load a config file (*.txt) containing several display parameters
-        """
+        """Load a config file (*.txt) containing several display parameters."""
         import json
         upath = os.path.split(self._file)[0]
         filename = QFileDialog.getOpenFileName(
