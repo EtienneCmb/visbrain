@@ -160,6 +160,7 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
 
     return stats
 
+
 def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
     """Export hypnogram to a 600 dpi .png figure
 
@@ -191,7 +192,7 @@ def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
     # Put REM between Wake and N1 sleep
     hypno[hypno >= 1] += 1
     hypno[hypno == 5] = 1
-    idxREM  = np.where(hypno == 1)[0]
+    idxREM = np.where(hypno == 1)[0]
     valREM = np.zeros(hypno.size)
     valREM[:] = np.nan
     valREM[idxREM] = 1
@@ -204,19 +205,19 @@ def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
     lhyp = len(hypno) / 60
     if lhyp < 60:
         xticks = np.arange(0, len(hypno), 10 * 60)
-        lw=2
+        lw = 2
     elif lhyp < 180 and lhyp > 60:
         xticks = np.arange(0, len(hypno), 30 * 60)
-        lw=1.5
+        lw = 1.5
     else:
         xticks = np.arange(0, len(hypno), 60 * 60)
-        lw=1.25
+        lw = 1.25
 
     xticks = np.append(xticks, len(hypno))
     xlabels = (xticks + tstartsec).astype(int)
-    xlabels_str = [ str(datetime.timedelta(seconds=int(j)))[:-3] for i, j
-                                                    in enumerate(xlabels) ]
-    xlabels_str = [s.replace('1 day, ' , '') for s in xlabels_str]
+    xlabels_str = [str(datetime.timedelta(seconds=int(j)))[:-3]
+                   for i, j in enumerate(xlabels)]
+    xlabels_str = [s.replace('1 day, ', '') for s in xlabels_str]
     plt.xlim(0, len(hypno))
     plt.xticks(xticks, xlabels_str)
     plt.plot(hypno, 'k', ls='steps', linewidth=lw)
@@ -244,8 +245,8 @@ def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
         plt.grid(True, 'major', ls=':', lw=.2, c='k', alpha=.3)
 
     plt.tick_params(axis='both', which='both', bottom='on', top='off',
-                labelbottom='on', left='on', right='off', labelleft='on',
-                labelcolor='k', direction='out')
+                    labelbottom='on', left='on', right='off', labelleft='on',
+                    labelcolor='k', direction='out')
 
     # Invert Y axis and despine
     ax.invert_yaxis()
@@ -259,5 +260,4 @@ def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
     ax.spines['bottom'].set_smart_bounds(True)
 
     # Save as 600 dpi .png
-    plt.tight_layout()
-    plt.savefig(file, format='png', dpi=600)
+    plt.savefig(file, format='png', dpi=600, bbox_inches='tight')
