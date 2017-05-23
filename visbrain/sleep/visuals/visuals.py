@@ -677,6 +677,7 @@ class vbShortcuts(object):
                    ('s', 'Display / hide spectrogram'),
                    ('t', 'Display / hide topoplot'),
                    ('h', 'Display / hide hypnogram'),
+                   ('p', 'Display / disable time bar'),
                    ('z', 'Enable / disable zooming'),
                    ('a', 'Scoring: set current window to Art (-1)'),
                    ('w', 'Scoring: set current window to Wake (0)'),
@@ -726,6 +727,9 @@ class vbShortcuts(object):
             elif event.text.lower() == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
+
+            elif event.text.lower() == 'p':  # Toggle visibility time bar
+                self._slFrame.hide() if self._slFrame.isVisible() else self._slFrame.show()
 
             elif event.text.lower() == 't':   # Toggle visibility on topo
                 self._PanTopoViz.setChecked(not self._PanTopoViz.isChecked())
