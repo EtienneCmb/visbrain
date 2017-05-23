@@ -148,9 +148,8 @@ class uiSettings(object):
 
     def saveHypFig(self):
         """Save a 600 dpi .png figure of the hypnogram."""
-        fname = os.path.basename(self._file).split('.')[0]
         filename = QFileDialog.getSaveFileName(self, 'Save Hypnogram figure',
-                                               fname, "PNG (*.png)")
+                                               'hypno.png', "PNG (*.png)")
         filename = str(filename)  # py2
         if filename:
             save_hypnoToFig(filename, self._hypno, self._sf, self._toffset)
