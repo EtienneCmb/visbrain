@@ -100,19 +100,20 @@ class uiSettings(object):
     # =====================================================================
     def _screenshot(self):
         """Screenshot using the GUI."""
+        # self.setFixedSize(100, 100)
         # Get filename :
         filename = QFileDialog.getSaveFileName(self, 'Screenshot',
-                                               os.path.join(os.getenv('HOME'),
-                                                            'screenshot.jpg'),
-                                               "JPG (*.jpg);;PNG (*.PNG);;All files"
-                                               " (*.*)")
+                                               'screenshot', "PNG (*.PNG);;"
+                                               "TIFF (*.tiff);;JPG (*.jpg);;"
+                                               "All files (*.*)")
         filename = str(filename)  # py2
         # Screnshot function :
         def _takeScreenShot():
             """Take the screenshot."""
             file, ext = os.path.splitext(filename)
+            # p = QPixmap.grabWidget(self.centralwidget)
             p = QPixmap.grabWindow(self.centralwidget.winId())
-            p.save(filename + '.tiff')
+            p.save(file + '.png')
         # Take screenshot if filename :
         if filename:
             # Timer (avoid shooting the saving window)
@@ -120,7 +121,7 @@ class uiSettings(object):
             # self.timerScreen.setInterval(100)
             self.timerScreen.setSingleShot(True)
             self.timerScreen.timeout.connect(_takeScreenShot)
-            self.timerScreen.start(1000)
+            self.timerScreen.start(500)
 
     def _toggle_settings(self):
         """Toggle method for display / hide the settings panel."""
