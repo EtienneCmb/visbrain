@@ -227,11 +227,13 @@ def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
 
     # Y-Ticks and Labels
     if art:
-        ylabels = ['Art', 'Wake', 'REM', 'N1', 'N2', 'N3', '']
-        plt.yticks([-1,0,1,2,3,4,5], ylabels)
+        ylabels = ['Art', 'Wake', 'REM', 'N1', 'N2', 'N3']
+        plt.yticks([-1, 0, 1, 2, 3, 4], ylabels)
+        plt.ylim(-1, 4)
     else:
-        ylabels = ['', 'Wake', 'REM', 'N1', 'N2', 'N3', '']
-        plt.yticks([-0.5,0,1,2,3,4,4.5], ylabels)
+        ylabels = ['', 'Wake', 'REM', 'N1', 'N2', 'N3']
+        plt.yticks([-0.5, 0, 1, 2, 3, 4], ylabels)
+        plt.ylim(-.5, 4)
 
     # X-Ticks and Labels
     plt.xlabel("Time")
@@ -252,8 +254,8 @@ def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
     ax.spines['left'].set_visible(True)
     ax.spines['bottom'].set_visible(True)
 
-    ax.spines['left'].set_position(('outward', 5))
-    ax.spines['left'].set_smart_bounds(True)
+    ax.spines['left'].set_position(('outward', 10))
+    ax.spines['bottom'].set_position(('outward', 10))
     ax.spines['bottom'].set_smart_bounds(True)
 
     # Save as 600 dpi .png
