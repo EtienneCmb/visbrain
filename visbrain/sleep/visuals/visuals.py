@@ -568,7 +568,7 @@ class Hypnogram(object):
                 Specify if hypnogram data have to be converted.
         """
         # Hypno conversion :
-        if (self._hconv is not None) and convert:
+        if (self._hconv != self._hconvinv) and convert:
             data = self.hyp2GUI(data)
         # Build color array :
         color = np.zeros((len(data), 4), dtype=np.float32)
