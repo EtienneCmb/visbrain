@@ -305,7 +305,7 @@ class uiSettings(object):
             stend = str(datetime.datetime.utcfromtimestamp(
                                                        xlim[1])).split(' ')[1]
             txt = "Window : [ " + start + " ; " + stend + " ] || Sleep " + \
-                "stage : " + str(items[hypref])
+                "stage : " + str(items[self._hconvinv[hypref]])
         else:
             unit = self._slRules.currentText()
             if unit == 'seconds':
@@ -318,7 +318,7 @@ class uiSettings(object):
             # Format string :
             txt = self._slTxtFormat.format(start=str(xconv[0]),
                                            end=str(xconv[1]), unit=unit,
-                                           conv=items[hypref])
+                                           conv=items[self._hconvinv[hypref]])
         # Set text :
         self._SlText.setText(txt)
         self._SlText.setFont(self._font)
@@ -326,8 +326,7 @@ class uiSettings(object):
                                    self._hypcolor[hypref] + ";}")
 
         # ================= HYPNO LABELS =================
-        ref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
-        for k, i in zip(self._hypYLabels, ref):
+        for k in self._hypYLabels:
             k.setStyleSheet("QLabel")
         self._hypYLabels[hypref + 1].setStyleSheet("QLabel {color: " +
                                                    self._hypcolor[hypref]+";}")
