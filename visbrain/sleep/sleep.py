@@ -63,11 +63,16 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             Specify the line rendering. Use 'gl' for the default line (fast) or
             'agg' for smooth lines. This option might not works on some
             plateforms.
+
+        href: list, optional, (def: ['art', 'wake', 'n1', 'n2', 'n3', 'rem'])
+            List of sleep stages. This list can be used to changed the display
+            order into the GUI.
     """
 
     def __init__(self, file=None, hypno_file=None, config_file=None,
                  data=None, channels=None, sf=None, hypno=None,
-                 downsample=100., axis=False, line='gl'):
+                 downsample=100., axis=False, line='gl',
+                 href=['art', 'wake', 'n1', 'n2', 'n3', 'rem']):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
@@ -133,8 +138,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
-        self._sf, self._data, self._hypno, self._time = self._check_data(
-            sf, data, channels, hypno, downsample, time)
+        (self._sf, self._data, self._hypno,
+         self._time, self._href) = self._check_data(sf, data, channels, hypno,
+                                                    downsample, time, href)
         self._channels = [k.strip().replace(' ', '').split('.')[
             0] for k in channels]
         self._ax = axis
@@ -203,7 +209,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     # CHECKING
     ###########################################################################
     def _check_data(self, sf, data, channels, hypno=None, downsample=None,
-                    time=None):
+                    time=None, href=None):
         """Check data, hypnogram, channels and sample frequency after loading.
 
         Args:
@@ -227,6 +233,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 The time vector to use. If the time vector is None, it will be
                 inferred from data length (be carefull to time consistency).
 
+            href: list, optional, (def: None)
+                List of sleep stages. This list can be used to changed the
+                display order into the GUI.
+
         Returns:
             sf: float
                 The sampling frequency
@@ -239,6 +249,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
             time: np.ndarray
                 The time vector with a shape of (npts,).
+
+            href: list, optional, (def: default)
+                List of checked hypno reference.
         """
         # ========================== CHECKING ==========================
         nchan = len(channels)
@@ -276,6 +289,23 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Define time vector if needed :
         if time is None:
             time = np.arange(npts, dtype=np.float32) / sf
+        # href checking :
+        if href is None:
+            href = ['art', 'wake', 'n1', 'n2', 'n3', 'rem']
+        elif (href is not None) and isinstance(href, list):
+            # Force lower case :
+            href = [k.lower() for k in href]
+            # Check that all stage are present :
+            for k in ['art', 'wake', 'n1', 'n2', 'n3', 'rem']:
+                if k not in href:
+                    raise ValueError(k+" not found in href.")
+            # Force capitalize :
+            href = [k.capitalize() for k in href]
+            href[href.index('Rem')] = 'REM'
+        else:
+            raise ValueError("The href parameter must be a list of string and"
+                             " must contain 'art', 'wake', 'n1', 'n2', 'n3' "
+                             "and 'rem'")
 
         # ========================== DOWN-SAMPLING ==========================
         if isinstance(downsample, (int, float)):
@@ -299,7 +329,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if hypno.dtype != np.float32:
             hypno = hypno.astype(np.float32, copy=False)
 
-        return sf, data, hypno, time
+        return sf, data, hypno, time, href
 
     ###########################################################################
     # SUB-FONCTIONS
