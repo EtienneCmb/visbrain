@@ -110,7 +110,7 @@ class uiPanels(object):
         layout.setMargin(0)
         layout.setSpacing(0)
         self._hypYLabels = []
-        for k in ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM', '']:
+        for k in self._href+['']:
             label = QtGui.QLabel()
             label.setText(k)
             label.setFont(self._font)
