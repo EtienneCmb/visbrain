@@ -141,6 +141,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         (self._sf, self._data, self._hypno, self._time,
          self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
                                                      downsample, time, href)
+        self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._channels = [k.strip().replace(' ', '').split('.')[
             0] for k in channels]
         self._ax = axis
