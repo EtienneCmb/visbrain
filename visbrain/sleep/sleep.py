@@ -138,9 +138,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
-        (self._sf, self._data, self._hypno,
-         self._time, self._href) = self._check_data(sf, data, channels, hypno,
-                                                    downsample, time, href)
+        (self._sf, self._data, self._hypno, self._time,
+         self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
+                                                     downsample, time, href)
         self._channels = [k.strip().replace(' ', '').split('.')[
             0] for k in channels]
         self._ax = axis
@@ -274,6 +274,28 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if nchan not in data.shape:
             raise ValueError("Incorrect data shape. The number of channels "
                              "("+str(nchan)+') can not be found.')
+        # href checking :
+        absref = ['art', 'wake', 'n1', 'n2', 'n3', 'rem']
+        absint = [-1, 0, 1, 2, 3, 4]
+        if href is None:
+            href = absref
+        elif (href is not None) and isinstance(href, list):
+            # Force lower case :
+            href = [k.lower() for k in href]
+            # Check that all stage are present :
+            for k in absref:
+                if k not in href:
+                    raise ValueError(k+" not found in href.")
+            # Force capitalize :
+            href = [k.capitalize() for k in href]
+            href[href.index('Rem')] = 'REM'
+        else:
+            raise ValueError("The href parameter must be a list of string and"
+                             " must contain 'art', 'wake', 'n1', 'n2', 'n3' "
+                             "and 'rem'")
+        # Conversion variable :
+        absref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
+        conv = {absint[absref.index(k)]: absint[i] for i, k in enumerate(href)}
         # Check hypnogram and format to float32 :
         if hypno is None:
             hypno = np.zeros((npts,), dtype=np.float32)
@@ -289,23 +311,6 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Define time vector if needed :
         if time is None:
             time = np.arange(npts, dtype=np.float32) / sf
-        # href checking :
-        if href is None:
-            href = ['art', 'wake', 'n1', 'n2', 'n3', 'rem']
-        elif (href is not None) and isinstance(href, list):
-            # Force lower case :
-            href = [k.lower() for k in href]
-            # Check that all stage are present :
-            for k in ['art', 'wake', 'n1', 'n2', 'n3', 'rem']:
-                if k not in href:
-                    raise ValueError(k+" not found in href.")
-            # Force capitalize :
-            href = [k.capitalize() for k in href]
-            href[href.index('Rem')] = 'REM'
-        else:
-            raise ValueError("The href parameter must be a list of string and"
-                             " must contain 'art', 'wake', 'n1', 'n2', 'n3' "
-                             "and 'rem'")
 
         # ========================== DOWN-SAMPLING ==========================
         if isinstance(downsample, (int, float)):
@@ -329,7 +334,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if hypno.dtype != np.float32:
             hypno = hypno.astype(np.float32, copy=False)
 
-        return sf, data, hypno, time, href
+        return sf, data, hypno, time, href, conv
 
     ###########################################################################
     # SUB-FONCTIONS
