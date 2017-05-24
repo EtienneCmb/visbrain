@@ -705,10 +705,10 @@ class vbShortcuts(object):
             # ------------ SLIDER ------------
             elif event.text.lower() == 'n':  # Next (slider)
                 self._SlGoto.setValue(
-                                self._SlGoto.value() + self._SigSlStep.value())
+                    self._SlGoto.value() + self._SigSlStep.value())
             elif event.text.lower() == 'b':  # Before (slider)
                 self._SlGoto.setValue(
-                                self._SlGoto.value() - self._SigSlStep.value())
+                    self._SlGoto.value() - self._SigSlStep.value())
 
             # ------------ AMPLITUDE ------------
             elif event.text == '-':  # Decrease amplitude
@@ -729,7 +729,8 @@ class vbShortcuts(object):
                 self._fcn_hypViz()
 
             elif event.text.lower() == 'p':  # Toggle visibility time bar
-                self._slFrame.hide() if self._slFrame.isVisible() else self._slFrame.show()
+                self._slFrame.hide() if self._slFrame.isVisible(
+                                                    ) else self._slFrame.show()
 
             elif event.text.lower() == 't':   # Toggle visibility on topo
                 self._PanTopoViz.setChecked(not self._PanTopoViz.isChecked())
@@ -751,27 +752,27 @@ class vbShortcuts(object):
             elif event.text.lower() == 'a':
                 self._add_stage_on_win(-1)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text.lower() == 'w':
                 self._add_stage_on_win(0)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text == '1':
                 self._add_stage_on_win(1)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text == '2':
                 self._add_stage_on_win(2)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text == '3':
                 self._add_stage_on_win(3)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text.lower() == 'r':
                 self._add_stage_on_win(4)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
