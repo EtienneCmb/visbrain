@@ -550,6 +550,9 @@ class Hypnogram(object):
         """Return the time length."""
         return self.n
 
+    # -------------------------------------------------------------------------
+    # SETTING METHODS
+    # -------------------------------------------------------------------------
     def set_data(self, sf, data, time, convert=True):
         """Set data to the hypnogram.
 
@@ -587,6 +590,9 @@ class Hypnogram(object):
         self.grid._grid_color_fn['scale'].value = sc
         self.grid.update()
 
+    # -------------------------------------------------------------------------
+    # CONVERSION METHODS
+    # -------------------------------------------------------------------------
     def hyp2GUI(self, data):
         """Convert hypnogram data to the GUI.
 
@@ -620,6 +626,24 @@ class Hypnogram(object):
         for k in self._hconvinv.keys():
             data[datac == k] = self._hconvinv[k]
         return data
+
+    def pos2GUI(self, pos):
+        """Convert a position array.
+
+        Args:
+            pos: np.ndarray
+                Array of positions of shape (n_pos, 3) where the three
+                components are (time, y, z).
+
+        Returns:
+            pos: np.ndarray
+                The converted position array.
+        """
+        y = pos[:, 1]
+        # Convert each y-value :
+        for k in range(len(y)):
+            y[k] = -self._hconv[-int(y[k])]
+        return pos.astype(np.float32)
 
     def clean(self):
         """Clean indicators."""
