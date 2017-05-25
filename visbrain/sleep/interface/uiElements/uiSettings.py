@@ -296,7 +296,9 @@ class uiSettings(object):
 
         # ================= TEXT INFO =================
         hypref = int(self._hypno[t[0]])
-        items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
+        hypconv = self._hconv[hypref]
+        hypcol = self._hypcolor[hypconv]
+        stage = str(self._hypYLabels[hypconv + 1].text())
         # Get unit and convert:
         if self._slAbsTime.isChecked():
             xlim = np.asarray(xlim) + self._toffset
@@ -305,7 +307,7 @@ class uiSettings(object):
             stend = str(datetime.datetime.utcfromtimestamp(
                                                        xlim[1])).split(' ')[1]
             txt = "Window : [ " + start + " ; " + stend + " ] || Sleep " + \
-                "stage : " + str(items[self._hconvinv[hypref]])
+                "stage : " + stage
         else:
             unit = self._slRules.currentText()
             if unit == 'seconds':
@@ -318,18 +320,18 @@ class uiSettings(object):
             # Format string :
             txt = self._slTxtFormat.format(start=str(xconv[0]),
                                            end=str(xconv[1]), unit=unit,
-                                           conv=items[self._hconvinv[hypref]])
+                                           conv=stage)
         # Set text :
         self._SlText.setText(txt)
         self._SlText.setFont(self._font)
         self._SlText.setStyleSheet("QLabel {color: " +
-                                   self._hypcolor[hypref] + ";}")
+                                   hypcol + ";}")
 
         # ================= HYPNO LABELS =================
         for k in self._hypYLabels:
             k.setStyleSheet("QLabel")
-        self._hypYLabels[hypref + 1].setStyleSheet("QLabel {color: " +
-                                                   self._hypcolor[hypref]+";}")
+        self._hypYLabels[hypconv + 1].setStyleSheet("QLabel {color: " +
+                                                    hypcol+";}")
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
