@@ -64,6 +64,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             'agg' for smooth lines. This option might not works on some
             plateforms.
 
+        hypedit: bool, optional, (def: False)
+            Enable the drag and drop hypnogram edition.
+
         href: list, optional, (def: ['art', 'wake', 'n1', 'n2', 'n3', 'rem'])
             List of sleep stages. This list can be used to changed the display
             order into the GUI.
@@ -71,7 +74,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
     def __init__(self, file=None, hypno_file=None, config_file=None,
                  data=None, channels=None, sf=None, hypno=None,
-                 downsample=100., axis=False, line='gl',
+                 downsample=100., axis=False, line='gl', hypedit=False,
                  href=['art', 'wake', 'n1', 'n2', 'n3', 'rem']):
         """Init."""
         # ====================== APP CREATION ======================
@@ -145,6 +148,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._channels = [k.strip().replace(' ', '').split('.')[
             0] for k in channels]
         self._ax = axis
+        self._enabhypedit = hypedit
         # ---------- Default line width ----------
         self._linemeth = line
         self._lw = 1.

@@ -61,8 +61,6 @@ class uiScoring(object):
             self._hypno = np.zeros((len(self._time)), dtype=np.float32)
             # Get the current number of rows :
             l = self._scoreTable.rowCount()
-            # Reset markers points position and color :
-            self._hypedit.pos = np.array([])
             # Loop over table row :
             for k in range(l):
                 # Get tstart / tend / stage :
@@ -70,13 +68,16 @@ class uiScoring(object):
                 # Update pos if not None :
                 if tstart is not None:
                     self._hypno[tstart:tend] = stage
-            # Update hypnogram :
-            self._hypedit._transient(-self._hypno, self._time)
-            self._hypedit.color = np.tile(self._hypedit.color_static,
-                                          (self._hypedit.pos.shape[0], 1))
-            self._hyp.edit.set_data(pos=self._hypedit.pos,
-                                    face_color=self._hypedit.color,
-                                    size=self._hypedit.size, edge_width=0.)
+            if self._enabhypedit:
+                # Reset markers points position and color :
+                self._hypedit.pos = np.array([])
+                # Update hypnogram :
+                self._hypedit._transient(-self._hypno, self._time)
+                self._hypedit.color = np.tile(self._hypedit.color_static,
+                                              (self._hypedit.pos.shape[0], 1))
+                self._hyp.edit.set_data(pos=self._hypedit.pos,
+                                        face_color=self._hypedit.color,
+                                        size=self._hypedit.size, edge_width=0.)
             self._hyp.set_data(self._sf, self._hypno, self._time)
             self._hyp.edit.update()
             # Update sleep info :
