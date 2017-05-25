@@ -598,7 +598,6 @@ class Hypnogram(object):
             datac: np.ndarray
                 Converted data
         """
-        print('CONVERSION')
         # Backup copy :
         datac = data.copy()
         data = np.zeros_like(datac)
@@ -615,7 +614,7 @@ class Hypnogram(object):
                 The converted data.
         """
         # Get latest data version :
-        datac = -self._hyp.mesh.pos[:, 1]
+        datac = -self.mesh.pos[:, 1]
         data = np.zeros_like(datac)
         # Fill new data :
         for k in self._hconvinv.keys():
