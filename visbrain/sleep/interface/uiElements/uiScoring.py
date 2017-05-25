@@ -14,15 +14,12 @@ class uiScoring(object):
 
     def __init__(self):
         """Init."""
-        # Fill table on start :
-        # self._fcn_Hypno2Score()
         # Add / remove line :
         self._scoreAdd.clicked.connect(self._fcn_addScoreRow)
         self._scoreRm.clicked.connect(self._fcn_rmScoreRow)
 
         # Table edited :
         self._scoreTable.cellChanged.connect(self._fcn_Score2Hypno)
-        self._scoreTable.cellChanged.connect(self._fcn_infoUpdate)
 
         # Export file :
         self._scoreExport.clicked.connect(self._fcn_exportScore)
@@ -82,6 +79,8 @@ class uiScoring(object):
                                     size=self._hypedit.size, edge_width=0.)
             self._hyp.set_data(self._sf, self._hypno, self._time)
             self._hyp.edit.update()
+            # Update sleep info :
+            self._fcn_infoUpdate()
 
     def _get_scoreMarker(self, idx):
         """Get a specific row dat.
