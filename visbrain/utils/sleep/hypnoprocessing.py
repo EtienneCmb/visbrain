@@ -203,15 +203,14 @@ def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
     # Start plotting
     fig, ax = plt.subplots(figsize=(10, 4), edgecolor='k')
     lhyp = len(hypno) / 60
+    lw = 1.5
     if lhyp < 60:
         xticks = np.arange(0, len(hypno), 10 * 60)
         lw = 2
     elif lhyp < 180 and lhyp > 60:
         xticks = np.arange(0, len(hypno), 30 * 60)
-        lw = 1.5
     else:
         xticks = np.arange(0, len(hypno), 60 * 60)
-        lw = 1.25
 
     xticks = np.append(xticks, len(hypno))
     xlabels = (xticks + tstartsec).astype(int)
@@ -230,11 +229,11 @@ def save_hypnoToFig(file, hypno, sf, tstartsec, grid=False):
     if art:
         ylabels = ['Art', 'Wake', 'REM', 'N1', 'N2', 'N3']
         plt.yticks([-1, 0, 1, 2, 3, 4], ylabels)
-        plt.ylim(-1, 4)
+        plt.ylim(-1.5, 4.5)
     else:
         ylabels = ['', 'Wake', 'REM', 'N1', 'N2', 'N3']
         plt.yticks([-0.5, 0, 1, 2, 3, 4], ylabels)
-        plt.ylim(-.5, 4)
+        plt.ylim(-.5, 4.5)
 
     # X-Ticks and Labels
     plt.xlabel("Time")
