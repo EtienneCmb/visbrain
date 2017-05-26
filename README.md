@@ -8,17 +8,6 @@ Visbrain is a python package dedicated (mainly) to the visualization of neurosci
 ## Installation
 
 To see the installation requirements, check the [documentation](http://etiennecmb.github.io/visbrain/).
-Clone the repository :
-
-```{r, engine='bash', count_lines}
-    git clone https://github.com/EtienneCmb/visbrain.git
-```
-
-Install the package :
-
-```{r, engine='bash', count_lines}
-    pip install .
-```
 
 ## Modules
 
