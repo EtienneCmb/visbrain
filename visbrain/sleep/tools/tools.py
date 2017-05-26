@@ -112,7 +112,7 @@ class HypnoEdition(object):
             # Get latest data version :
             data = -hypno_obj.GUI2hyp()
             # Get cursor position :
-            cpos = self.convert(_get_cursor(event.pos, not self.keep))
+            cpos = _get_cursor(event.pos, not self.keep)
             # Get closest marker :
             color, idx = _get_close_marker(event)
             # On marker moving :
@@ -137,18 +137,21 @@ class HypnoEdition(object):
                     cpos[0, 1] = float(round(cpos[0, 1]))
                     # Update position :
                     self.pos[self.keep_idx, 1] = cpos[0, 1]
-                    # Stream hypno data :
-                    xtpos = np.abs(time-self.pos[self.keep_idx, 0]).argmin()
+                    # Send data non-converted marker :
+                    hypno_obj.edit.set_data(pos=self.pos, edge_width=1.,
+                                            face_color=cbackup, size=size,
+                                            edge_color='white')
+                    # Stream inv-converted hypno data :
+                    posh = self.pos.copy()
+                    posh[self.keep_idx, 1] = hypno_obj.pos2GUIinv(cpos)[0, 1]
+                    xtpos = np.abs(time-posh[self.keep_idx, 0]).argmin()
                     data[xtpos:xtnext+1] = cpos[0, 1]
                     hypno_obj.set_data(sf, -data, time)
                     # Temporaly turn dragged point to color_dragge :
                     cbackup[self.keep_idx, :] = self.color_dragge
-                    # Send data marker :
-                    tosend = hypno_obj.hyp2GUI(self.pos)
-                    hypno_obj.edit.set_data(pos=self.pos, edge_width=1.,
-                                            face_color=cbackup, size=size,
-                                            edge_color='white')
+                    self.pos[self.keep_idx, 1] = hypno_obj.pos2GUI(cpos)[0, 1]
             else:
+                cpos = self.convert(cpos)
                 # Display moving point :
                 if idx is None:
                     # Stack all pos and color :
