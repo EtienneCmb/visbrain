@@ -649,6 +649,28 @@ class Hypnogram(object):
         elif isinstance(pos, (int, float)):
             return -self._hconv[-int(pos)]
 
+    def pos2GUIinv(self, pos):
+        """Convert a position array.
+
+        Args:
+            pos: np.ndarray, int
+                Array of positions of shape (n_pos, 3) where the three
+                components are (time, y, z). Pos will also be converted if it's
+                a integer or float.
+
+        Returns:
+            pos: np.ndarray, int
+                The converted position array/integer.
+        """
+        if isinstance(pos, np.ndarray):
+            y = pos[:, 1]
+            # Convert each y-value :
+            for k in range(len(y)):
+                y[k] = -self._hconvinv[-int(y[k])]
+            return pos.astype(np.float32)
+        elif isinstance(pos, (int, float)):
+            return -self._hconvinv[-int(pos)]
+
     def clean(self):
         """Clean indicators."""
         pos = np.zeros((1, 3), dtype=np.float32)
