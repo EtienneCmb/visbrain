@@ -1,6 +1,5 @@
 Bug
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
-	-5 Doc:
 	+5 Fqe échantillonage pas puissance de puissance de 2
 	+5 Changer importance de ELAN
 	+5Symbol -1 (Artefact) + symbol +/- dans les shortcuts

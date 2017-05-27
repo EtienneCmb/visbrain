@@ -476,6 +476,13 @@ CTRL + t                Display shortcuts window
 CTRL + q                Close the window
 ==============          ==================================================================================
 
+Sleep inputs
+------------
+
+Here is the list of default Sleep inputs :
+
+.. autoclass:: visbrain.sleep.sleep.Sleep
+
 Collaborator
 ------------
 
