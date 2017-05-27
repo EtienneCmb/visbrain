@@ -1,9 +1,9 @@
 Bug
 	-5 Affichage du spectrograme en entier si zooming + changement de paramètre, à cause du vecteur fréquence
 	-5 Doc:
-		- Fqe échantillonage pas puissance de puissance de 2
-		- Changer importance de ELAN
-		- Symbol -1 (Artefact) + symbol +/- dans les shortcuts
+	+5 Fqe échantillonage pas puissance de puissance de 2
+	+5 Changer importance de ELAN
+	+5Symbol -1 (Artefact) + symbol +/- dans les shortcuts
 	+5 Bug dans re-referencement : les keys changent donc détection bug
 	+4 Bug que je vois passer de temps en temps mais difficile à localiser : quand on lance detection, parfois il y a un "impossible d'aller à l'emplacement... NoneType"
 	+3 Bug dans le reréférencement pour de larges données: RAM de l'ordi?
