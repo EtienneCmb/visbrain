@@ -14,15 +14,12 @@ class uiScoring(object):
 
     def __init__(self):
         """Init."""
-        # Fill table on start :
-        # self._fcn_Hypno2Score()
         # Add / remove line :
         self._scoreAdd.clicked.connect(self._fcn_addScoreRow)
         self._scoreRm.clicked.connect(self._fcn_rmScoreRow)
 
         # Table edited :
         self._scoreTable.cellChanged.connect(self._fcn_Score2Hypno)
-        self._scoreTable.cellChanged.connect(self._fcn_infoUpdate)
 
         # Export file :
         self._scoreExport.clicked.connect(self._fcn_exportScore)
@@ -32,7 +29,7 @@ class uiScoring(object):
     ##########################################################################
     def _fcn_Hypno2Score(self):
         """Update hypno table from hypno data."""
-        self._hypno = -self._hyp.mesh.pos[:, 1]
+        self._hypno = self._hyp.GUI2hyp()
         # Avoid updating data while setting cell :
         self._scoreSet = False
         items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
@@ -64,8 +61,6 @@ class uiScoring(object):
             self._hypno = np.zeros((len(self._time)), dtype=np.float32)
             # Get the current number of rows :
             l = self._scoreTable.rowCount()
-            # Reset markers points position and color :
-            self._hypedit.pos = np.array([])
             # Loop over table row :
             for k in range(l):
                 # Get tstart / tend / stage :
@@ -73,15 +68,20 @@ class uiScoring(object):
                 # Update pos if not None :
                 if tstart is not None:
                     self._hypno[tstart:tend] = stage
-            # Update hypnogram :
-            self._hypedit._transient(-self._hypno, self._time)
-            self._hypedit.color = np.tile(self._hypedit.color_static,
-                                          (self._hypedit.pos.shape[0], 1))
-            self._hyp.edit.set_data(pos=self._hypedit.pos,
-                                    face_color=self._hypedit.color,
-                                    size=self._hypedit.size, edge_width=0.)
+            if self._enabhypedit:
+                # Reset markers points position and color :
+                self._hypedit.pos = np.array([])
+                # Update hypnogram :
+                self._hypedit._transient(-self._hypno, self._time)
+                self._hypedit.color = np.tile(self._hypedit.color_static,
+                                              (self._hypedit.pos.shape[0], 1))
+                self._hyp.edit.set_data(pos=self._hypedit.pos,
+                                        face_color=self._hypedit.color,
+                                        size=self._hypedit.size, edge_width=0.)
             self._hyp.set_data(self._sf, self._hypno, self._time)
             self._hyp.edit.update()
+            # Update sleep info :
+            self._fcn_infoUpdate()
 
     def _get_scoreMarker(self, idx):
         """Get a specific row dat.

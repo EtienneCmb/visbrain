@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1344</width>
+    <width>1357</width>
     <height>1039</height>
    </rect>
   </property>
@@ -75,7 +75,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -122,7 +122,7 @@ spectrogram, hypnogram and the time axis</string>
            <item>
             <widget class="QToolBox" name="toolBox_2">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="page_3">
               <property name="geometry">
@@ -409,8 +409,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>367</width>
-                <height>462</height>
+                <width>410</width>
+                <height>783</height>
                </rect>
               </property>
               <attribute name="label">
@@ -937,8 +937,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>300</width>
-                <height>265</height>
+                <width>410</width>
+                <height>783</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1579,7 +1579,7 @@ re-referenced</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>296</width>
+                       <width>98</width>
                        <height>998</height>
                       </rect>
                      </property>
@@ -3883,13 +3883,13 @@ Twitches</string>
        <widget class="QWidget" name="_topoW" native="true">
         <property name="minimumSize">
          <size>
-          <width>200</width>
+          <width>150</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>400</width>
+          <width>300</width>
           <height>16777215</height>
          </size>
         </property>
@@ -4222,7 +4222,7 @@ Twitches</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1344</width>
+     <width>1357</width>
      <height>25</height>
     </rect>
    </property>
@@ -4235,9 +4235,11 @@ Twitches</string>
       <string>Save</string>
      </property>
      <addaction name="actionHypnogram_data"/>
+     <addaction name="actionHypnogram_figure"/>
      <addaction name="actionInfo_table"/>
      <addaction name="actionScoring_table"/>
      <addaction name="actionDetection_table"/>
+     <addaction name="actionSaveConfig"/>
     </widget>
     <widget class="QMenu" name="menuLoad">
      <property name="title">
@@ -4245,6 +4247,7 @@ Twitches</string>
      </property>
      <addaction name="actionData"/>
      <addaction name="actionHypnogram"/>
+     <addaction name="actionLoadConfig"/>
     </widget>
     <addaction name="actionScreenshot"/>
     <addaction name="separator"/>
@@ -4512,6 +4515,21 @@ Twitches</string>
   <action name="actionData">
    <property name="text">
     <string>Data</string>
+   </property>
+  </action>
+  <action name="actionHypnogram_figure">
+   <property name="text">
+    <string>Hypnogram figure</string>
+   </property>
+  </action>
+  <action name="actionLoadConfig">
+   <property name="text">
+    <string>Config file</string>
+   </property>
+  </action>
+  <action name="actionSaveConfig">
+   <property name="text">
+    <string>Config file</string>
    </property>
   </action>
  </widget>

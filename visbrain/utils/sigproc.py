@@ -5,7 +5,7 @@ from warnings import warn
 
 
 __all__ = ['normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh',
-            'zerocrossing']
+           'zerocrossing']
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -106,12 +106,12 @@ def tkeo(x):
     github.com/lvanderlinden/OnsetDetective/blob/master/OnsetDetective/tkeo.py
 
     Args:
-       x: 1d np.array
-        Data
+        x: np.ndarray
+            Row vector of data.
 
     Returns:
-        aTkeo: 1d np.array
-           1D numpy array containing the tkeo per sample
+        aTkeo: np.ndarray
+            Row vector containing the tkeo per sample.
     """
     # Create two temporary arrays of equal length, shifted 1 sample to the
     # right and left and squared:
@@ -124,19 +124,22 @@ def tkeo(x):
 
 
 def soft_thresh(x, thresh):
-    """Function to solve soft thresholding problem
-     arg min_{x} ||x - b||_{2}^{2} + lambda*||x||_{1}
+    """Function to solve soft thresholding problem.
+
+    Written by Simon Lucey 2012 to solve the problem :
+    arg min_{x} ||x - b||_{2}^{2} + lambda*||x||_{1}
 
     Args:
-        x: 1d np.array
+        x: np.ndarray
             Data
+
         thresh: float
-            weighting on the l1 penalty
+            Weighting on the l1 penalty
+
     Returns:
-        x_thresh: 1d np.array
+        x_thresh: np.ndarray
             Solution to the problem (vector with same size as x vector)
-     Written by Simon Lucey 2012
-     """
+    """
     th = thresh / 2
     k = np.where(x > th)[0]
     # First find elements that are larger than the threshold
@@ -152,7 +155,16 @@ def soft_thresh(x, thresh):
 
 
 def zerocrossing(data):
-    """Function to find zero-crossings of a signal"""
+    """Find zero-crossings index of a signal.
+
+    Args:
+        x: np.ndarray
+            Data
+
+    Returns:
+        index: np.ndarray
+            Row vector containing zero-crossing index.
+    """
     pos = data > 0
     npos = ~pos
     return ((pos[:-1] & npos[1:]) | (npos[:-1] & pos[1:])).nonzero()[0] + 1

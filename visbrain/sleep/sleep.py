@@ -37,6 +37,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         hypno_file: string, optional, (def: None)
             Path to the hypnogram file (.hyp, .txt or .csv)
 
+        config_file: string, optional, (def: None)
+            Path to the configuration file (.txt)
+
         data: np.ndarray, optional, (def: None)
             Array of data of shape (n_channels, n_pts)
 
@@ -60,10 +63,19 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             Specify the line rendering. Use 'gl' for the default line (fast) or
             'agg' for smooth lines. This option might not works on some
             plateforms.
+
+        hypedit: bool, optional, (def: False)
+            Enable the drag and drop hypnogram edition.
+
+        href: list, optional, (def: ['art', 'wake', 'n1', 'n2', 'n3', 'rem'])
+            List of sleep stages. This list can be used to changed the display
+            order into the GUI.
     """
 
-    def __init__(self, file=None, hypno_file=None, data=None, channels=None,
-                 sf=None, hypno=None, downsample=100., axis=False, line='gl'):
+    def __init__(self, file=None, hypno_file=None, config_file=None,
+                 data=None, channels=None, sf=None, hypno=None,
+                 downsample=100., axis=False, line='gl', hypedit=False,
+                 href=['art', 'wake', 'n1', 'n2', 'n3', 'rem']):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
@@ -129,11 +141,14 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
-        self._sf, self._data, self._hypno, self._time = self._check_data(
-            sf, data, channels, hypno, downsample, time)
+        (self._sf, self._data, self._hypno, self._time,
+         self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
+                                                     downsample, time, href)
+        self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._channels = [k.strip().replace(' ', '').split('.')[
             0] for k in channels]
         self._ax = axis
+        self._enabhypedit = hypedit
         # ---------- Default line width ----------
         self._linemeth = line
         self._lw = 1.
@@ -146,6 +161,11 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Hypnogram color :
         self._hypcolor = {-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
                           2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}
+        # Convert color :
+        if self._hconv != self._hconvinv:
+            hypc = self._hypcolor.copy()
+            for k in self._hconv.keys():
+                self._hypcolor[k] = hypc[self._hconvinv[k]]
         self._indicol = '#e74c3c'
         # Default spectrogram colormap :
         self._defcmap = 'viridis'
@@ -182,6 +202,11 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ====================== FUNCTIONS ON LOAD ======================
         self._fcnsOnCreation()
 
+        # Load config file
+        if config_file:
+            self._config_file = config_file
+            self.loadConfig()
+
     def __len__(self):
         """Return the number of channels."""
         return len(self._channels)
@@ -194,7 +219,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     # CHECKING
     ###########################################################################
     def _check_data(self, sf, data, channels, hypno=None, downsample=None,
-                    time=None):
+                    time=None, href=None):
         """Check data, hypnogram, channels and sample frequency after loading.
 
         Args:
@@ -218,6 +243,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                 The time vector to use. If the time vector is None, it will be
                 inferred from data length (be carefull to time consistency).
 
+            href: list, optional, (def: None)
+                List of sleep stages. This list can be used to changed the
+                display order into the GUI.
+
         Returns:
             sf: float
                 The sampling frequency
@@ -230,6 +259,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
             time: np.ndarray
                 The time vector with a shape of (npts,).
+
+            href: list, optional, (def: default)
+                List of checked hypno reference.
         """
         # ========================== CHECKING ==========================
         nchan = len(channels)
@@ -252,6 +284,28 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if nchan not in data.shape:
             raise ValueError("Incorrect data shape. The number of channels "
                              "("+str(nchan)+') can not be found.')
+        # href checking :
+        absref = ['art', 'wake', 'n1', 'n2', 'n3', 'rem']
+        absint = [-1, 0, 1, 2, 3, 4]
+        if href is None:
+            href = absref
+        elif (href is not None) and isinstance(href, list):
+            # Force lower case :
+            href = [k.lower() for k in href]
+            # Check that all stage are present :
+            for k in absref:
+                if k not in href:
+                    raise ValueError(k+" not found in href.")
+            # Force capitalize :
+            href = [k.capitalize() for k in href]
+            href[href.index('Rem')] = 'REM'
+        else:
+            raise ValueError("The href parameter must be a list of string and"
+                             " must contain 'art', 'wake', 'n1', 'n2', 'n3' "
+                             "and 'rem'")
+        # Conversion variable :
+        absref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
+        conv = {absint[absref.index(k)]: absint[i] for i, k in enumerate(href)}
         # Check hypnogram and format to float32 :
         if hypno is None:
             hypno = np.zeros((npts,), dtype=np.float32)
@@ -290,7 +344,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if hypno.dtype != np.float32:
             hypno = hypno.astype(np.float32, copy=False)
 
-        return sf, data, hypno, time
+        return sf, data, hypno, time, href, conv
 
     ###########################################################################
     # SUB-FONCTIONS

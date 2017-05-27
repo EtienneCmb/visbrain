@@ -518,13 +518,16 @@ class Spectrogram(PrepareData):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, time, camera, color='darkblue', width=2., parent=None):
+    def __init__(self, time, camera, color='darkblue', width=2., parent=None,
+                 hconv=None):
         # Keep camera :
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
         self.rect = (time.min(), -5., time.max() - time.min(), 7.)
         self.width = width
         self.n = len(time)
+        self._hconv = hconv
+        self._hconvinv = {v: k for k, v in self._hconv.items()}
         # Get color :
         self.color = {k: color2vb(color=i) for k, i in zip(color.keys(),
                                                            color.values())}
@@ -547,7 +550,10 @@ class Hypnogram(object):
         """Return the time length."""
         return self.n
 
-    def set_data(self, sf, data, time):
+    # -------------------------------------------------------------------------
+    # SETTING METHODS
+    # -------------------------------------------------------------------------
+    def set_data(self, sf, data, time, convert=True):
         """Set data to the hypnogram.
 
         Args:
@@ -559,7 +565,14 @@ class Hypnogram(object):
 
             time: np.ndarray
                 The time vector
+
+        Kargs:
+            convert: bool, optional, (def: True)
+                Specify if hypnogram data have to be converted.
         """
+        # Hypno conversion :
+        if (self._hconv != self._hconvinv) and convert:
+            data = self.hyp2GUI(data)
         # Build color array :
         color = np.zeros((len(data), 4), dtype=np.float32)
         for k, v in zip(self.color.keys(), self.color.values()):
@@ -576,6 +589,87 @@ class Hypnogram(object):
         # Set to the grid :
         self.grid._grid_color_fn['scale'].value = sc
         self.grid.update()
+
+    # -------------------------------------------------------------------------
+    # CONVERSION METHODS
+    # -------------------------------------------------------------------------
+    def hyp2GUI(self, data):
+        """Convert hypnogram data to the GUI.
+
+        Args:
+            data: np.ndarray
+                The data to send. Must be a row vector.
+
+        Return:
+            datac: np.ndarray
+                Converted data
+        """
+        # Backup copy :
+        datac = data.copy()
+        data = np.zeros_like(datac)
+        # Fill new data :
+        for k in self._hconv.keys():
+            data[datac == k] = self._hconv[k]
+        return data
+
+    def GUI2hyp(self):
+        """Convert GUI hypnogram into data.
+
+        Return:
+            data: np.ndarray
+                The converted data.
+        """
+        # Get latest data version :
+        datac = -self.mesh.pos[:, 1]
+        data = np.zeros_like(datac)
+        # Fill new data :
+        for k in self._hconvinv.keys():
+            data[datac == k] = self._hconvinv[k]
+        return data
+
+    def pos2GUI(self, pos):
+        """Convert a position array.
+
+        Args:
+            pos: np.ndarray, int
+                Array of positions of shape (n_pos, 3) where the three
+                components are (time, y, z). Pos will also be converted if it's
+                a integer or float.
+
+        Returns:
+            pos: np.ndarray, int
+                The converted position array/integer.
+        """
+        if isinstance(pos, np.ndarray):
+            y = pos[:, 1]
+            # Convert each y-value :
+            for k in range(len(y)):
+                y[k] = -self._hconv[-int(y[k])]
+            return pos.astype(np.float32)
+        elif isinstance(pos, (int, float)):
+            return -self._hconv[-int(pos)]
+
+    def pos2GUIinv(self, pos):
+        """Convert a position array.
+
+        Args:
+            pos: np.ndarray, int
+                Array of positions of shape (n_pos, 3) where the three
+                components are (time, y, z). Pos will also be converted if it's
+                a integer or float.
+
+        Returns:
+            pos: np.ndarray, int
+                The converted position array/integer.
+        """
+        if isinstance(pos, np.ndarray):
+            y = pos[:, 1]
+            # Convert each y-value :
+            for k in range(len(y)):
+                y[k] = -self._hconvinv[-int(y[k])]
+            return pos.astype(np.float32)
+        elif isinstance(pos, (int, float)):
+            return -self._hconvinv[-int(pos)]
 
     def clean(self):
         """Clean indicators."""
@@ -677,6 +771,7 @@ class vbShortcuts(object):
                    ('s', 'Display / hide spectrogram'),
                    ('t', 'Display / hide topoplot'),
                    ('h', 'Display / hide hypnogram'),
+                   ('p', 'Display / disable time bar'),
                    ('z', 'Enable / disable zooming'),
                    ('a', 'Scoring: set current window to Art (-1)'),
                    ('w', 'Scoring: set current window to Wake (0)'),
@@ -704,10 +799,10 @@ class vbShortcuts(object):
             # ------------ SLIDER ------------
             elif event.text.lower() == 'n':  # Next (slider)
                 self._SlGoto.setValue(
-                                self._SlGoto.value() + self._SigSlStep.value())
+                    self._SlGoto.value() + self._SigSlStep.value())
             elif event.text.lower() == 'b':  # Before (slider)
                 self._SlGoto.setValue(
-                                self._SlGoto.value() - self._SigSlStep.value())
+                    self._SlGoto.value() - self._SigSlStep.value())
 
             # ------------ AMPLITUDE ------------
             elif event.text == '-':  # Decrease amplitude
@@ -726,6 +821,10 @@ class vbShortcuts(object):
             elif event.text.lower() == 'h':  # Toggle visibility on hypno
                 self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
                 self._fcn_hypViz()
+
+            elif event.text.lower() == 'p':  # Toggle visibility time bar
+                self._slFrame.hide() if self._slFrame.isVisible(
+                                                    ) else self._slFrame.show()
 
             elif event.text.lower() == 't':   # Toggle visibility on topo
                 self._PanTopoViz.setChecked(not self._PanTopoViz.isChecked())
@@ -747,27 +846,27 @@ class vbShortcuts(object):
             elif event.text.lower() == 'a':
                 self._add_stage_on_win(-1)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text.lower() == 'w':
                 self._add_stage_on_win(0)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text == '1':
                 self._add_stage_on_win(1)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text == '2':
                 self._add_stage_on_win(2)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text == '3':
                 self._add_stage_on_win(3)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
             elif event.text.lower() == 'r':
                 self._add_stage_on_win(4)
                 self._SlGoto.setValue(self._SlGoto.value(
-                                                 ) + self._SigSlStep.value())
+                ) + self._SigSlStep.value())
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
@@ -868,7 +967,7 @@ class visuals(vbShortcuts):
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
         self._hyp = Hypnogram(time, camera=cameras[2], color=self._hypcolor,
-                              width=self._lwhyp,
+                              width=self._lwhyp, hconv=self._hconv,
                               parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
         # Create a visual indicator for hypnogram :

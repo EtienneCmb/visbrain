@@ -4,11 +4,11 @@ import os
 import datetime
 
 from PyQt4.QtGui import *
-from PyQt4.QtCore import QObjectCleanupHandler
+from PyQt4.QtCore import QObjectCleanupHandler, QTimer
 
 import vispy.visuals.transforms as vist
 
-from ....utils import save_hypnoTotxt, save_hypnoToElan
+from ....utils import save_hypnoTotxt, save_hypnoToElan, save_hypnoToFig
 
 
 __all__ = ['uiSettings']
@@ -28,9 +28,14 @@ class uiSettings(object):
 
         # ---------------------- Save ----------------------
         self.actionHypnogram_data.triggered.connect(self.saveFile)
+        self.actionHypnogram_figure.triggered.connect(self.saveHypFig)
         self.actionInfo_table.triggered.connect(self._fcn_exportInfos)
         self.actionScoring_table.triggered.connect(self._fcn_exportScore)
         self.actionDetection_table.triggered.connect(self._fcn_exportLocation)
+        self.actionSaveConfig.triggered.connect(self.saveConfig)
+
+        # ---------------------- Load ----------------------
+        self.actionLoadConfig.triggered.connect(self.loadConfig)
 
         # ---------------------- Shortcut & Doc ----------------------
         self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
@@ -90,19 +95,33 @@ class uiSettings(object):
         import webbrowser
         webbrowser.open('http://etiennecmb.github.io/visbrain/sleep.html')
 
+    # =====================================================================
+    # SCREENSHOT
+    # =====================================================================
     def _screenshot(self):
         """Screenshot using the GUI."""
+        # self.setFixedSize(100, 100)
         # Get filename :
         filename = QFileDialog.getSaveFileName(self, 'Screenshot',
-                                               os.path.join(os.getenv('HOME'),
-                                                            'screenshot.jpg'),
-                                               "Picture (*.jpg);;All files"
-                                               " (*.*)")
+                                               'screenshot', "PNG (*.PNG);;"
+                                               "TIFF (*.tiff);;JPG (*.jpg);;"
+                                               "All files (*.*)")
         filename = str(filename)  # py2
-        if filename:
+        # Screnshot function :
+        def _takeScreenShot():
+            """Take the screenshot."""
             file, ext = os.path.splitext(filename)
+            # p = QPixmap.grabWidget(self.centralwidget)
             p = QPixmap.grabWindow(self.centralwidget.winId())
-            p.save(filename + '.jpg')
+            p.save(file + '.png')
+        # Take screenshot if filename :
+        if filename:
+            # Timer (avoid shooting the saving window)
+            self.timerScreen = QTimer()
+            # self.timerScreen.setInterval(100)
+            self.timerScreen.setSingleShot(True)
+            self.timerScreen.timeout.connect(_takeScreenShot)
+            self.timerScreen.start(500)
 
     def _toggle_settings(self):
         """Toggle method for display / hide the settings panel."""
@@ -126,6 +145,85 @@ class uiSettings(object):
                                 self._N, 1)
             else:
                 raise ValueError("Not a valid extension")
+
+    def saveHypFig(self):
+        """Save a 600 dpi .png figure of the hypnogram."""
+        filename = QFileDialog.getSaveFileName(self, 'Save Hypnogram figure',
+                                               'hypno.png', "PNG (*.png)")
+        filename = str(filename)  # py2
+        if filename:
+            save_hypnoToFig(filename, self._hypno, self._sf, self._toffset)
+
+    def saveConfig(self):
+        """Save a config file (*.txt) containing several display parameters."""
+        import json
+        upath = os.path.split(self._file)[0]
+        filename = QFileDialog.getSaveFileName(self, 'Save config file',
+                                               upath, "Text file (*.txt)")
+        filename = str(filename)  # py2
+        if filename:
+            with open(filename, 'w') as f:
+                config = {}
+                viz = []
+                amp = []
+                for i, k in enumerate(self._chanChecks):
+                    viz.append(k.isChecked())
+                    amp.append(self._ymaxSpin[i].value())
+
+                config['Channel_Names'] = self._channels
+                config['Channel_Visible'] = viz
+                config['Channel_Amplitude'] = amp
+                config['Spec_Visible'] = self._PanSpecViz.isChecked()
+                config['Spec_Length'] = self._PanSpecNfft.value()
+                config['Spec_Overlap'] = self._PanSpecStep.value()
+                config['Spec_Cmap'] = self._PanSpecCmap.currentIndex()
+                config['Spec_Chan'] = self._PanSpecChan.currentIndex()
+                config['Spec_Fstart'] = self._PanSpecFstart.value()
+                config['Spec_Fend'] = self._PanSpecFend.value()
+                config['Spec_Con'] = self._PanSpecCon.value()
+                config['Hyp_Visible'] = self._PanHypViz.isChecked()
+                config['Time_Visible'] = self._PanTimeViz.isChecked()
+                json.dump(config, f)
+
+    def loadConfig(self):
+        """Load a config file (*.txt) containing several display parameters."""
+        import json
+        if hasattr(self, '_config_file'):
+            filename = str(self._config_file)
+        else:
+            upath = os.path.split(self._file)[0]
+            filename = QFileDialog.getOpenFileName(
+                self, "Open config file", upath, "Text file (*.txt)")
+            filename = str(filename)  # py2
+
+        with open(filename) as f:
+            config = json.load(f)
+            # Channels
+            for i, k in enumerate(self._chanChecks):
+                self._chanChecks[i].setChecked(config['Channel_Visible'][i])
+                self._ymaxSpin[i].setValue(config['Channel_Amplitude'][i])
+
+            # Spectrogram
+            self._PanSpecViz.setChecked(config['Spec_Visible'])
+            self._PanSpecNfft.setValue(config['Spec_Length'])
+            self._PanSpecStep.setValue(config['Spec_Overlap'])
+            self._PanSpecCmap.setCurrentIndex(config['Spec_Cmap'])
+            self._PanSpecChan.setCurrentIndex(config['Spec_Chan'])
+            self._PanSpecFstart.setValue(config['Spec_Fstart'])
+            self._PanSpecFend.setValue(config['Spec_Fend'])
+            self._PanSpecCon.setValue(config['Spec_Con'])
+
+            # Hypnogram & Time axis
+            self._PanHypViz.setChecked(config['Hyp_Visible'])
+            self._PanTimeViz.setChecked(config['Time_Visible'])
+
+            # Update display
+            self._fcn_chanViz()
+            self._fcn_chanAmplitude()
+            self._fcn_specViz()
+            self._fcn_specSetData()
+            self._fcn_hypViz()
+            self._fcn_timeViz()
 
     # =====================================================================
     # SLIDER
@@ -198,7 +296,9 @@ class uiSettings(object):
 
         # ================= TEXT INFO =================
         hypref = int(self._hypno[t[0]])
-        items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']
+        hypconv = self._hconv[hypref]
+        hypcol = self._hypcolor[hypconv]
+        stage = str(self._hypYLabels[hypconv + 1].text())
         # Get unit and convert:
         if self._slAbsTime.isChecked():
             xlim = np.asarray(xlim) + self._toffset
@@ -207,7 +307,7 @@ class uiSettings(object):
             stend = str(datetime.datetime.utcfromtimestamp(
                                                        xlim[1])).split(' ')[1]
             txt = "Window : [ " + start + " ; " + stend + " ] || Sleep " + \
-                "stage : " + str(items[hypref])
+                "stage : " + stage
         else:
             unit = self._slRules.currentText()
             if unit == 'seconds':
@@ -220,19 +320,18 @@ class uiSettings(object):
             # Format string :
             txt = self._slTxtFormat.format(start=str(xconv[0]),
                                            end=str(xconv[1]), unit=unit,
-                                           conv=items[hypref])
+                                           conv=stage)
         # Set text :
         self._SlText.setText(txt)
         self._SlText.setFont(self._font)
         self._SlText.setStyleSheet("QLabel {color: " +
-                                   self._hypcolor[hypref] + ";}")
+                                   hypcol + ";}")
 
         # ================= HYPNO LABELS =================
-        ref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
-        for k, i in zip(self._hypYLabels, ref):
+        for k in self._hypYLabels:
             k.setStyleSheet("QLabel")
-        self._hypYLabels[hypref + 1].setStyleSheet("QLabel {color: " +
-                                                   self._hypcolor[hypref]+";}")
+        self._hypYLabels[hypconv + 1].setStyleSheet("QLabel {color: " +
+                                                    hypcol+";}")
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
