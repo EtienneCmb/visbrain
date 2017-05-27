@@ -528,7 +528,6 @@ def brainvision2array(path, downsample=None):
     ent = np.genfromtxt(header, delimiter='\n', usecols=[0],
                         dtype=None, skip_header=0)
 
-    ent = np.char.decode(ent)
 
     # Check header version
     h_vers = int(re.findall('\d+', ent[0])[0])
