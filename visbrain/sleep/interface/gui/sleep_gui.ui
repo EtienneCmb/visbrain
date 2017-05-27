@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1344</width>
+    <width>1357</width>
     <height>1039</height>
    </rect>
   </property>
@@ -129,8 +129,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>382</width>
-                <height>815</height>
+                <width>410</width>
+                <height>783</height>
                </rect>
               </property>
               <attribute name="label">
@@ -187,8 +187,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>360</width>
-                       <height>590</height>
+                       <width>382</width>
+                       <height>537</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -409,8 +409,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>382</width>
-                <height>815</height>
+                <width>410</width>
+                <height>783</height>
                </rect>
               </property>
               <attribute name="label">
@@ -937,8 +937,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>382</width>
-                <height>815</height>
+                <width>410</width>
+                <height>783</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1329,7 +1329,7 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>287</width>
+                <width>316</width>
                 <height>54</height>
                </rect>
               </property>
@@ -1667,8 +1667,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>382</width>
-                <height>842</height>
+                <width>410</width>
+                <height>814</height>
                </rect>
               </property>
               <attribute name="label">
@@ -3883,13 +3883,13 @@ Twitches</string>
        <widget class="QWidget" name="_topoW" native="true">
         <property name="minimumSize">
          <size>
-          <width>200</width>
+          <width>150</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>400</width>
+          <width>300</width>
           <height>16777215</height>
          </size>
         </property>
@@ -4222,8 +4222,8 @@ Twitches</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1344</width>
-     <height>21</height>
+     <width>1357</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">

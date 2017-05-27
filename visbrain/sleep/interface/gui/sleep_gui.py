@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'sleep_gui.ui'
+# Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/sleep/interface/gui/sleep_gui.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.setEnabled(True)
-        MainWindow.resize(1344, 1039)
+        MainWindow.resize(1357, 1039)
         font = QtGui.QFont()
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferDefault)
@@ -78,7 +78,7 @@ class Ui_MainWindow(object):
         self.toolBox_2 = QtGui.QToolBox(self.q_Panels)
         self.toolBox_2.setObjectName(_fromUtf8("toolBox_2"))
         self.page_3 = QtGui.QWidget()
-        self.page_3.setGeometry(QtCore.QRect(0, 0, 382, 815))
+        self.page_3.setGeometry(QtCore.QRect(0, 0, 410, 783))
         self.page_3.setObjectName(_fromUtf8("page_3"))
         self.verticalLayout_21 = QtGui.QVBoxLayout(self.page_3)
         self.verticalLayout_21.setObjectName(_fromUtf8("verticalLayout_21"))
@@ -100,7 +100,7 @@ class Ui_MainWindow(object):
         self._PanScrollChan.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self._PanScrollChan.setObjectName(_fromUtf8("_PanScrollChan"))
         self.scrollAreaWidgetContents_3 = QtGui.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 360, 590))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 382, 537))
         self.scrollAreaWidgetContents_3.setObjectName(_fromUtf8("scrollAreaWidgetContents_3"))
         self.verticalLayout_14 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents_3)
         self.verticalLayout_14.setObjectName(_fromUtf8("verticalLayout_14"))
@@ -184,7 +184,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_21.addWidget(self.groupBox)
         self.toolBox_2.addItem(self.page_3, _fromUtf8(""))
         self.page_4 = QtGui.QWidget()
-        self.page_4.setGeometry(QtCore.QRect(0, 0, 382, 815))
+        self.page_4.setGeometry(QtCore.QRect(0, 0, 410, 783))
         self.page_4.setObjectName(_fromUtf8("page_4"))
         self.verticalLayout_25 = QtGui.QVBoxLayout(self.page_4)
         self.verticalLayout_25.setObjectName(_fromUtf8("verticalLayout_25"))
@@ -392,7 +392,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_25.addWidget(self.groupBox_10)
         self.toolBox_2.addItem(self.page_4, _fromUtf8(""))
         self.page_5 = QtGui.QWidget()
-        self.page_5.setGeometry(QtCore.QRect(0, 0, 382, 815))
+        self.page_5.setGeometry(QtCore.QRect(0, 0, 410, 783))
         self.page_5.setObjectName(_fromUtf8("page_5"))
         self.verticalLayout_30 = QtGui.QVBoxLayout(self.page_5)
         self.verticalLayout_30.setObjectName(_fromUtf8("verticalLayout_30"))
@@ -555,7 +555,7 @@ class Ui_MainWindow(object):
         self.toolBox.setFrameShape(QtGui.QFrame.NoFrame)
         self.toolBox.setObjectName(_fromUtf8("toolBox"))
         self.page = QtGui.QWidget()
-        self.page.setGeometry(QtCore.QRect(0, 0, 287, 54))
+        self.page.setGeometry(QtCore.QRect(0, 0, 316, 54))
         self.page.setObjectName(_fromUtf8("page"))
         self.verticalLayout_16 = QtGui.QVBoxLayout(self.page)
         self.verticalLayout_16.setObjectName(_fromUtf8("verticalLayout_16"))
@@ -675,7 +675,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_16.addItem(spacerItem17)
         self.toolBox.addItem(self.page, _fromUtf8(""))
         self.page_2 = QtGui.QWidget()
-        self.page_2.setGeometry(QtCore.QRect(0, 0, 382, 842))
+        self.page_2.setGeometry(QtCore.QRect(0, 0, 410, 814))
         self.page_2.setObjectName(_fromUtf8("page_2"))
         self.verticalLayout_17 = QtGui.QVBoxLayout(self.page_2)
         self.verticalLayout_17.setObjectName(_fromUtf8("verticalLayout_17"))
@@ -1587,8 +1587,8 @@ class Ui_MainWindow(object):
         self.gridLayout_21.setContentsMargins(-1, 0, 0, -1)
         self.gridLayout_21.setObjectName(_fromUtf8("gridLayout_21"))
         self._topoW = QtGui.QWidget(self.centralwidget)
-        self._topoW.setMinimumSize(QtCore.QSize(200, 0))
-        self._topoW.setMaximumSize(QtCore.QSize(400, 16777215))
+        self._topoW.setMinimumSize(QtCore.QSize(150, 0))
+        self._topoW.setMaximumSize(QtCore.QSize(300, 16777215))
         self._topoW.setObjectName(_fromUtf8("_topoW"))
         self.verticalLayout_31 = QtGui.QVBoxLayout(self._topoW)
         self.verticalLayout_31.setMargin(0)
@@ -1699,7 +1699,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addLayout(self.gridLayout_21)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1344, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1357, 25))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFiles = QtGui.QMenu(self.menubar)
         self.menuFiles.setObjectName(_fromUtf8("menuFiles"))
