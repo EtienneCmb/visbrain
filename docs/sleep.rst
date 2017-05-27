@@ -466,6 +466,7 @@ n                       Next window
 s                       Display / hide spectrogram
 t                       Display / hide topoplot
 h                       Display / hide hypnogram
+p                       Display / hide navigation bar
 z                       Enable / disable zoom
 CTRL + d                Display quick settings panel
 CTRL + s                Save hypnogram
