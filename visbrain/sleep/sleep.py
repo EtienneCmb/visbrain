@@ -24,10 +24,11 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
     Use this module to :
         - Load .eeg (Brainvision and ELAN), .edf or directly raw data.
-        - Visualize data channels, spectrogram and hypnogram
-        - Edit hypnogram from the interface
-        - Perform a spindle / REM / Peak detection
+        - Visualize polysomnographic data, spectrogram
+        - Load, edit and save hypnogram from the interface
+        - Perform several events detection
         - Further signal processing tools (de-mean, de-trend and filtering)
+        - Topographic data visualization
     Sleep has been developped in collaboration with Raphael Vallat.
 
     Kargs:
@@ -67,7 +68,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         hypedit: bool, optional, (def: False)
             Enable the drag and drop hypnogram edition.
 
-        href: list, optional, (def: ['art', 'wake', 'n1', 'n2', 'n3', 'rem'])
+        href: list, optional, (def: ['art', 'wake', 'rem', 'n1', 'n2', 'n3'])
             List of sleep stages. This list can be used to changed the display
             order into the GUI.
     """
@@ -75,7 +76,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     def __init__(self, file=None, hypno_file=None, config_file=None,
                  data=None, channels=None, sf=None, hypno=None,
                  downsample=100., axis=False, line='gl', hypedit=False,
-                 href=['art', 'wake', 'n1', 'n2', 'n3', 'rem']):
+                 href=['art', 'wake', 'rem', 'n1', 'n2', 'n3']):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
