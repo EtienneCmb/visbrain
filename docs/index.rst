@@ -32,11 +32,17 @@ What's new?
 
 * New in version v0.2.2
 
+  * Brain
+
+    * Bug fixing
+
   * Sleep
 
+    * Bug fixing
+    * Save and load GUI configuration
     * Control the sleep stage order using the href input parameter
     * Enable/disable the drag and drop on load
-    * Better Black and white hypnogram eportation
+    * Better Black and white hypnogram exportation
     * New shortcuts
 
 * New in version v0.2.1
