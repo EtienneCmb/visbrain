@@ -75,7 +75,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     def __init__(self, file=None, hypno_file=None, config_file=None,
                  data=None, channels=None, sf=None, hypno=None,
                  downsample=100., axis=False, line='gl', hypedit=False,
-                 href=['art', 'wake', 'n1', 'n2', 'n3', 'rem']):
+                 href=['art', 'wake', 'rem', 'n1', 'n2', 'n3']):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
