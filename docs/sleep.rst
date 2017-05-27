@@ -479,5 +479,4 @@ CTRL + q                Close the window
 Collaborator
 ------------
 
-Sleep is developped in collaboration with `Raphael Vallat
-<https://raphaelvallat.github.io/>`_.
+Sleep is developped in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_.
