@@ -33,6 +33,11 @@ The Sleep module can be imported as follow :
 
     from visbrain import Sleep
 
+
+Examples and datasets
+---------------------
+To try out in the absence of sleep data, please check out some example scripts and datasets on `Google drive <https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing>`_
+
 Supported files and format
 --------------------------
 
@@ -88,7 +93,7 @@ Stage                    Value
 **N2**                   2
 **N3**                   3
 **REM**                  4
-**Art**                  -1  (optional)
+**Art**                  \-1  (optional)
 ==============          =================
 
 
@@ -448,8 +453,8 @@ Keys                    Description
 ==============          ==================================================================================
 mouse wheel             Move the current window
 mouse click             On a channel canvas, magnify signal under mouse location
--                       Decrease amplitude
-+                       Increase amplitude
+\-                      Decrease amplitude
+\+                      Increase amplitude
 a                       Insert Artefact in the hypnogram
 w                       Insert Wake stage in the hypnogram
 1                       Insert N1 stage in the hypnogram
@@ -461,6 +466,7 @@ n                       Next window
 s                       Display / hide spectrogram
 t                       Display / hide topoplot
 h                       Display / hide hypnogram
+p                       Display / hide navigation bar
 z                       Enable / disable zoom
 CTRL + d                Display quick settings panel
 CTRL + s                Save hypnogram
@@ -473,5 +479,4 @@ CTRL + q                Close the window
 Collaborator
 ------------
 
-Sleep is developped in collaboration with `Raphael Vallat
-<https://raphaelvallat.github.io/>`_.
+Sleep is developped in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_.
