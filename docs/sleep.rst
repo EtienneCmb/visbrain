@@ -33,6 +33,11 @@ The Sleep module can be imported as follow :
 
     from visbrain import Sleep
 
+
+Examples and datasets
+---------------------
+To try out in the absence of sleep data, please check out some example scripts and datasets on `Google drive <https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing>`_
+
 Supported files and format
 --------------------------
 
