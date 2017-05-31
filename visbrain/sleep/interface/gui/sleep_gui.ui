@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1357</width>
-    <height>1039</height>
+    <width>1359</width>
+    <height>1116</height>
    </rect>
   </property>
   <property name="font">
@@ -129,8 +129,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>410</width>
-                <height>783</height>
+                <width>351</width>
+                <height>312</height>
                </rect>
               </property>
               <attribute name="label">
@@ -187,8 +187,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>382</width>
-                       <height>537</height>
+                       <width>98</width>
+                       <height>28</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -410,7 +410,7 @@ spectrogram, hypnogram and the time axis</string>
                 <x>0</x>
                 <y>0</y>
                 <width>410</width>
-                <height>783</height>
+                <height>860</height>
                </rect>
               </property>
               <attribute name="label">
@@ -937,8 +937,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>410</width>
-                <height>783</height>
+                <width>302</width>
+                <height>273</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1329,7 +1329,7 @@ trend, filtering)</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>316</width>
+                <width>318</width>
                 <height>54</height>
                </rect>
               </property>
@@ -1667,8 +1667,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>410</width>
-                <height>814</height>
+                <width>339</width>
+                <height>400</height>
                </rect>
               </property>
               <attribute name="label">
@@ -4222,7 +4222,7 @@ Twitches</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1357</width>
+     <width>1359</width>
      <height>25</height>
     </rect>
    </property>
@@ -4268,6 +4268,7 @@ Twitches</string>
     </property>
     <addaction name="actionShortcut"/>
     <addaction name="actionDocumentation"/>
+    <addaction name="actionDownload_pdf_doc"/>
    </widget>
    <addaction name="menuFiles"/>
    <addaction name="menuDisplay"/>
@@ -4530,6 +4531,11 @@ Twitches</string>
   <action name="actionSaveConfig">
    <property name="text">
     <string>Config file</string>
+   </property>
+  </action>
+  <action name="actionDownload_pdf_doc">
+   <property name="text">
+    <string>Download pdf doc</string>
    </property>
   </action>
  </widget>

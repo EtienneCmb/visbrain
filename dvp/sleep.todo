@@ -83,10 +83,10 @@ Raph
 	+4 Calcul statistiques de sommeil
 
 Commun
-	-5 Téléchargement de la doc en pdf via la GUI
 	-5 What's new popup window avec les nouveautés de la release
 	-4 Denoising wavelet thresholding (inspiration PyWavelets)
 	-4 uiTools: implémentation ICA + reconstruction du signal après selection des composantes artefactuelles. Denoising intéressant pour nos detections ?
+	+-5 Téléchargement de la doc en pdf via la GUI
 	+5 Ajouter collaborateurs: ça c'est plus pour toi, c'est si tu veux que ton nom apparaisse dans la GUI. Moi je suis pas friant de voir le miens, notemment parce que sinon je vais devoir le mettre partout ! Mais on peut faire une simple popup window avec ton nom, je n'y vois aucun inconvénient. Visbrain est déjà hébergé sur mon profil, donc moi j'ai ma pub mais je laisse cette partie à ta discrétion (PS: j'ai ausi mis ton nom dans mon site web).
 	+4 Ajout option de bipolarisation / re-referencement dans un menu ou panel Tools
 	+5 Indicateur temporel + stage
