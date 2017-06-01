@@ -490,6 +490,25 @@ spectrogram, hypnogram and the time axis</string>
                        <property name="spacing">
                         <number>9</number>
                        </property>
+                       <item row="3" column="5">
+                        <widget class="QDoubleSpinBox" name="_PanSpecFend">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ending frequency for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
+                         <property name="minimum">
+                          <double>0.100000000000000</double>
+                         </property>
+                         <property name="maximum">
+                          <double>200.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>20.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
                        <item row="3" column="4">
                         <widget class="QLabel" name="label_17">
                          <property name="text">
@@ -595,25 +614,6 @@ spectrogram, hypnogram and the time axis</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="3" column="5">
-                        <widget class="QDoubleSpinBox" name="_PanSpecFend">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ending frequency for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                         <property name="decimals">
-                          <number>1</number>
-                         </property>
-                         <property name="minimum">
-                          <double>0.100000000000000</double>
-                         </property>
-                         <property name="maximum">
-                          <double>200.000000000000000</double>
-                         </property>
-                         <property name="value">
-                          <double>20.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
                        <item row="1" column="2">
                         <widget class="QLabel" name="label_14">
                          <property name="text">
@@ -680,19 +680,6 @@ on</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="1">
-                        <widget class="Line" name="line_18">
-                         <property name="minimumSize">
-                          <size>
-                           <width>10</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="orientation">
-                          <enum>Qt::Vertical</enum>
-                         </property>
-                        </widget>
-                       </item>
                        <item row="0" column="1">
                         <widget class="Line" name="line_8">
                          <property name="minimumSize">
@@ -706,19 +693,7 @@ on</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="0">
-                        <widget class="QLabel" name="label_29">
-                         <property name="font">
-                          <font>
-                           <italic>true</italic>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Colormap</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="5" column="0" colspan="6">
+                       <item row="6" column="0" colspan="6">
                         <widget class="QWidget" name="widget_2" native="true">
                          <property name="minimumSize">
                           <size>
@@ -779,6 +754,38 @@ on</string>
                         <widget class="QComboBox" name="_PanSpecChan">
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select to channel used for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="5" column="2" colspan="2">
+                        <widget class="QCheckBox" name="_PanSpecCmapInv">
+                         <property name="text">
+                          <string>Reversed</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="1" rowspan="2">
+                        <widget class="Line" name="line_18">
+                         <property name="minimumSize">
+                          <size>
+                           <width>10</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="0" rowspan="2">
+                        <widget class="QLabel" name="label_29">
+                         <property name="font">
+                          <font>
+                           <italic>true</italic>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Colormap</string>
                          </property>
                         </widget>
                        </item>

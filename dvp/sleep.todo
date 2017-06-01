@@ -30,6 +30,7 @@ Etienne
 	-4 Hypnogramme: on pourrait faire une checkbox "Edit mode" qui lorsqu'elle est cochée permet d'activer les fonctions de modifications de l'hypno. Lorsque l'utilisateur la coche, il doit selectionner un nom de fichier d'hypnogramme, puis à chaque modification ça enregistre automatiquement dans le fichier .hyp ou .txt
 	-3 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-2 Découper les objets visuals
+	+5 Ajouter une reversed checkbox sur le spectrogramme pour inverser Spectral et refaire la figure de filtrage du papier.
 	+5 Permettre de changer l'ordre des états de sommeil
 	+5 Permettre à l'utilisateur d'enregistrer ses propres settings et de les charger
 	+5 Faire une méthode delete() pour détection
