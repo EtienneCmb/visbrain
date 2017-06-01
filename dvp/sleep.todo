@@ -23,6 +23,7 @@ Bug
 	+4 Si l'hypnograme est vide, il faut le cacher + cacher onglet info
 
 Etienne
+	-5 Voir si je pourrai pas implémenter ma propre class GridLines qui serait peut-être plus facile à paramétrer + transformation non-linéaires
 	-5 Clean des fillLocationTable pour peaks
 	-5 Faire une unique fonction d'exportation de table : ça évitera tout les problèmes.
 	-4 Améliorer gestion et méthode topoplot
