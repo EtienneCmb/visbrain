@@ -26,6 +26,7 @@ Etienne
 	-5 Voir si je pourrai pas implémenter ma propre class GridLines qui serait peut-être plus facile à paramétrer + transformation non-linéaires
 	-5 Clean des fillLocationTable pour peaks
 	-5 Faire une unique fonction d'exportation de table : ça évitera tout les problèmes.
+	-4 Référencement "Common average reference" + "Zero reference"
 	-4 Améliorer gestion et méthode topoplot
 	-4 Hypnogramme: on pourrait faire une checkbox "Edit mode" qui lorsqu'elle est cochée permet d'activer les fonctions de modifications de l'hypno. Lorsque l'utilisateur la coche, il doit selectionner un nom de fichier d'hypnogramme, puis à chaque modification ça enregistre automatiquement dans le fichier .hyp ou .txt
 	-3 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
@@ -66,6 +67,7 @@ Raph
 	-5 Bug header file BrainVision marker file et sampling rate (if power of 2)
 	-4 Faire une figure qui détaille les étapes pour chaque detection les étapes + l'inclure dans la doc
 	-3 Lecture fichier .cnt (ANT ASA)
+	-3 Lecture fichier .egi?
 	-2 Scorage automatique du sommeil
 	+5 Possibilite de loader un fichier de config qui contient tout un set de paramètres de display pre-enregistrés
 	+4 Afficher la vraie heure dans figure save_hypnoToFig
