@@ -2,7 +2,7 @@
 import numpy as np
 from re import findall
 
-__all__ = ['find_nonEEG', 'rereferencing', 'bipolarization']
+__all__ = ['find_nonEEG', 'rereferencing', 'bipolarization', 'commonaverage']
 
 
 def find_nonEEG(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
@@ -154,4 +154,45 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
         else:
             consider[num] = False
 
+    return data, chans, consider
+
+
+def commonaverage(data, chans, to_ignore=None):
+    """Re-referencement using common average.
+
+    Args:
+        data: np.ndarray
+            The array of data of shape (nchan, npts).
+
+        chans: list
+            List of channel names of length nchan.
+
+    Kargs:
+        to_ignore: list, optional, (def: None)
+            List of channels to ignore in the re-referencing.
+
+    Returns:
+        datar: np.ndarray
+            The re-referenced data.
+
+        channelsr: list
+            List of re-referenced channel names.
+
+        consider: list
+            List of boolean values of channels that have to be considered
+            during the ploting processus.
+    """
+    # Variables :
+    nchan, npts = data.shape
+    consider = np.ones((nchan,), dtype=bool)
+    # Find if some channels have to be ignored :
+    if to_ignore is not None:
+        consider[to_ignore] = False
+    # Get the mean across  EEG channels :
+    eegmean = data[consider].mean(0, keepdims=True)
+    # Remove the mean on EEG channels :
+    data[consider, :] -= eegmean
+    # Update channel name :
+    for k in range(len(chans)):
+        chans[k] = chans[k] + '-m' if consider[k] else chans[k]
     return data, chans, consider
