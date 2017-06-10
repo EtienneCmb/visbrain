@@ -2,7 +2,7 @@
 
 import numpy as np
 from PyQt4 import QtGui
-from ....utils import rereferencing, bipolarization, id
+from ....utils import rereferencing, bipolarization, find_nonEEG, id
 
 __all__ = ['uiTools']
 
@@ -12,6 +12,8 @@ class uiTools(object):
 
     def __init__(self):
         """Init."""
+        # Find non-eeg channels :
+        self._noneeg = find_nonEEG(self._channels)
         # =====================================================================
         # RE-REFERENCING
         # =====================================================================
@@ -19,19 +21,19 @@ class uiTools(object):
         self._ToolsRefIgnArea.setVisible(False)
         self._reChecks = [0] * len(self._channels)
         for i, k in enumerate(self._channels):
-            # Add a checkbox to the scrolling panel :
-            self._reChecks[i] = QtGui.QCheckBox(self._PanScrollChan)
-            # Name checkbox with channel name :
-            self._reChecks[i].setText(k)
-            # Add checkbox to the grid :
-            self._ToolsRefIgnGrd.addWidget(self._reChecks[i], i, 0, 1, 1)
+            if not self._noneeg[i]:
+                # Add a checkbox to the scrolling panel :
+                self._reChecks[i] = QtGui.QCheckBox(self._PanScrollChan)
+                # Name checkbox with channel name :
+                self._reChecks[i].setText(k)
+                # Add checkbox to the grid :
+                self._ToolsRefIgnGrd.addWidget(self._reChecks[i], i, 0, 1, 1)
         # Connections :
         self._ToolsRefIgn.clicked.connect(self._fcn_refChanIgnore)
         self._ToolsRefLst.addItems(self._channels)
-        self._ToolsRefSingle.clicked.connect(self._fcn_refPanelDisp)
-        self._ToolsRefBipo.clicked.connect(self._fcn_refPanelDisp)
+        self._ToolsRefMeth.currentIndexChanged.connect(self._fcn_refSwitch)
         self._ToolsRefApply.clicked.connect(self._fcn_refApply)
-        self._fcn_refPanelDisp()
+        self._fcn_refSwitch()
 
         # =====================================================================
         # MEAN / TREND
@@ -50,15 +52,20 @@ class uiTools(object):
     # =====================================================================
     # RE-REFERENCING
     # =====================================================================
+    def _fcn_refSwitch(self):
+        """Switch between re-referencing methods."""
+        idx = int(self._ToolsRefMeth.currentIndex())
+        # Single channel :
+        if idx == 0:  # Single channel
+            self._ToolsRefSingleW.setVisible(True)
+        elif idx == 1:  # Common average
+            self._ToolsRefSingleW.setVisible(False)
+        elif idx == 2:  # Bipolarization
+            self._ToolsRefSingleW.setVisible(False)
+
     def _fcn_refChanIgnore(self):
         """Display / hide list of channels to ignore."""
         self._ToolsRefIgnArea.setVisible(self._ToolsRefIgn.isChecked())
-
-    def _fcn_refPanelDisp(self):
-        """Display / Hide the reference panel."""
-        viz = self._ToolsRefSingle.isChecked()
-        self._ToolsRefSingleW.setVisible(viz)
-        # self._ToolsRefBipoW.setVisible(not viz)
 
     def _fcn_refApply(self):
         """Apply re-referencing."""
@@ -70,15 +77,17 @@ class uiTools(object):
         else:
             to_ignore = None
 
-        # ____________________ Re-reference ____________________
-        if self._ToolsRefSingle.isChecked():
+        # Get the current selected method :
+        idx = int(self._ToolsRefMeth.currentIndex())
+        # Single channel :
+        if idx == 0:  # Single channel
             self._data, self._channels, consider = rereferencing(
                                             self._data, self._channels, idx,
                                             to_ignore)
             self._chanChecks[idx].setChecked(False)
-
-        # ____________________ Bipolarization ____________________
-        else:
+        elif idx == 1:  # Common average
+            raise(NotImplementedError)
+        elif idx == 2:  # Bipolarization
             self._data, self._channels, consider = bipolarization(
                                                   self._data, self._channels,
                                                   to_ignore)
