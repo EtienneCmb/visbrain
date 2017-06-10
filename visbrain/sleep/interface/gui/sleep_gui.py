@@ -1917,7 +1917,7 @@ class Ui_MainWindow(object):
 "trend, filtering)", None))
         self.label_59.setText(_translate("MainWindow", "Warning : re-referencing can only be achieved once", None))
         self._ToolsRefIgnore.setToolTip(_translate("MainWindow", "<html><head/><body><p>When this option is checked, channels that are not re-referenced are going to be ignored in the interface  (Ex : if channels is [ O1, O2, O3, Cz, Pz ]  the bipolarized channels will be [ O1, O2-O1, O3-O2, Cz, Pz ] but if this checkbox is activated you will only see the clean version [ O2-O1, 03-O2 ] )</p></body></html>", None))
-        self._ToolsRefIgnore.setText(_translate("MainWindow", "Ignore non-referenced channels", None))
+        self._ToolsRefIgnore.setText(_translate("MainWindow", "Remove non-referenced channels", None))
         self.label_56.setText(_translate("MainWindow", "Use as  reference", None))
         self._ToolsRefLst.setToolTip(_translate("MainWindow", "<html><head/><body><p>Channel to use as the reference</p></body></html>", None))
         self.label_60.setText(_translate("MainWindow", "Type", None))

@@ -1403,7 +1403,7 @@ trend, filtering)</string>
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When this option is checked, channels that are not re-referenced are going to be ignored in the interface  (Ex : if channels is [ O1, O2, O3, Cz, Pz ]  the bipolarized channels will be [ O1, O2-O1, O3-O2, Cz, Pz ] but if this checkbox is activated you will only see the clean version [ O2-O1, 03-O2 ] )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
                       <property name="text">
-                       <string>Ignore non-referenced channels</string>
+                       <string>Remove non-referenced channels</string>
                       </property>
                       <property name="checked">
                        <bool>true</bool>
