@@ -70,7 +70,7 @@ def rereferencing(data, chans, reference, to_ignore=None):
     if to_ignore is None:
         sl = slice(nchan)
     else:
-        sl = np.setdiff1d(np.arange(nchan), to_ignore)
+        sl = np.arange(nchan)[~to_ignore]
         consider[to_ignore] = False
     # Re-reference data :
     data[sl, :] -= ref
@@ -132,11 +132,10 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
     if to_ignore is None:
         sl = range(nchan)
     else:
-        sl = np.setdiff1d(np.arange(nchan), to_ignore)
+        sl = np.arange(nchan)[~to_ignore]
         consider[to_ignore] = False
 
     # Bipolarize :
-    # databck = data.copy()
     for num in reversed(range(nchan)):
         # If there's a number :
         if chnums[num] and (num in sl):
