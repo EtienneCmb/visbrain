@@ -2,7 +2,32 @@
 import numpy as np
 from re import findall
 
-__all__ = ['rereferencing', 'bipolarization']
+__all__ = ['find_nonEEG', 'rereferencing', 'bipolarization']
+
+
+def find_nonEEG(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
+    """Find non-EEG channels.
+
+    Args:
+        channels: list
+            List of channel names.
+
+    Kargs:
+        pattern: list, optional, (def: ['eog', 'emg', 'ecg', 'abd'])
+            List of patterns for non-EEG channels.
+
+    Returns:
+        iseeg: np.ndarray
+            NumPy vector of boolean values.
+    """
+    # Set channels in lower case :
+    channels = np.char.lower(np.asarray(channels))
+    # Pre-allocation :
+    iseeg = np.zeros((len(channels),), dtype=bool)
+    # Search patterns :
+    for k in pattern:
+        iseeg += np.invert(np.char.find(channels, k).astype(bool))
+    return iseeg
 
 
 def rereferencing(data, chans, reference, to_ignore=None):
