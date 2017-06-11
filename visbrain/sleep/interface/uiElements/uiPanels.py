@@ -90,6 +90,7 @@ class uiPanels(object):
         self._PanSpecCon.valueChanged.connect(self._fcn_specSetData)
         self._PanSpecCmap.currentIndexChanged.connect(self._fcn_specSetData)
         self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
+        self._PanSpecCmapInv.clicked.connect(self._fcn_specSetData)
 
         # =====================================================================
         # HYPNOGRAM
@@ -426,6 +427,9 @@ class uiPanels(object):
         cmap = str(self._PanSpecCmap.currentText())
         # Get channel to get spectrogram :
         chan = self._PanSpecChan.currentIndex()
+        # Get reversed colormap :
+        if self._PanSpecCmapInv.isChecked():
+            cmap += '_r'
         self._specLabel.setText(self._channels[chan])
         # Set data :
         self._spec.set_data(self._sf, self._data[chan, ...], self._time,

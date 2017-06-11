@@ -73,4 +73,4 @@ The [Ndviz](http://etiennecmb.github.io/visbrain/ndviz.html) module help you to 
 - [Karim Jerbi](www.karimjerbi.com)
 
 ### Thx to...
-*Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian...*
+*Christian O'Reilly, Perrine Ruby, JB Einchenlaub, kevroy314, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian...*
