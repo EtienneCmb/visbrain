@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1357</width>
-    <height>1039</height>
+    <width>1359</width>
+    <height>1116</height>
    </rect>
   </property>
   <property name="font">
@@ -75,7 +75,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -129,8 +129,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>410</width>
-                <height>783</height>
+                <width>349</width>
+                <height>301</height>
                </rect>
               </property>
               <attribute name="label">
@@ -187,8 +187,8 @@ spectrogram, hypnogram and the time axis</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>382</width>
-                       <height>537</height>
+                       <width>321</width>
+                       <height>70</height>
                       </rect>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_14">
@@ -410,7 +410,7 @@ spectrogram, hypnogram and the time axis</string>
                 <x>0</x>
                 <y>0</y>
                 <width>410</width>
-                <height>783</height>
+                <height>860</height>
                </rect>
               </property>
               <attribute name="label">
@@ -490,6 +490,25 @@ spectrogram, hypnogram and the time axis</string>
                        <property name="spacing">
                         <number>9</number>
                        </property>
+                       <item row="3" column="5">
+                        <widget class="QDoubleSpinBox" name="_PanSpecFend">
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ending frequency for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="decimals">
+                          <number>1</number>
+                         </property>
+                         <property name="minimum">
+                          <double>0.100000000000000</double>
+                         </property>
+                         <property name="maximum">
+                          <double>200.000000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>20.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
                        <item row="3" column="4">
                         <widget class="QLabel" name="label_17">
                          <property name="text">
@@ -595,25 +614,6 @@ spectrogram, hypnogram and the time axis</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="3" column="5">
-                        <widget class="QDoubleSpinBox" name="_PanSpecFend">
-                         <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ending frequency for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                         </property>
-                         <property name="decimals">
-                          <number>1</number>
-                         </property>
-                         <property name="minimum">
-                          <double>0.100000000000000</double>
-                         </property>
-                         <property name="maximum">
-                          <double>200.000000000000000</double>
-                         </property>
-                         <property name="value">
-                          <double>20.000000000000000</double>
-                         </property>
-                        </widget>
-                       </item>
                        <item row="1" column="2">
                         <widget class="QLabel" name="label_14">
                          <property name="text">
@@ -680,19 +680,6 @@ on</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="1">
-                        <widget class="Line" name="line_18">
-                         <property name="minimumSize">
-                          <size>
-                           <width>10</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="orientation">
-                          <enum>Qt::Vertical</enum>
-                         </property>
-                        </widget>
-                       </item>
                        <item row="0" column="1">
                         <widget class="Line" name="line_8">
                          <property name="minimumSize">
@@ -706,19 +693,7 @@ on</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="0">
-                        <widget class="QLabel" name="label_29">
-                         <property name="font">
-                          <font>
-                           <italic>true</italic>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Colormap</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="5" column="0" colspan="6">
+                       <item row="6" column="0" colspan="6">
                         <widget class="QWidget" name="widget_2" native="true">
                          <property name="minimumSize">
                           <size>
@@ -779,6 +754,38 @@ on</string>
                         <widget class="QComboBox" name="_PanSpecChan">
                          <property name="toolTip">
                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select to channel used for the spectrogram&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="5" column="2" colspan="2">
+                        <widget class="QCheckBox" name="_PanSpecCmapInv">
+                         <property name="text">
+                          <string>Reversed</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="1" rowspan="2">
+                        <widget class="Line" name="line_18">
+                         <property name="minimumSize">
+                          <size>
+                           <width>10</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="0" rowspan="2">
+                        <widget class="QLabel" name="label_29">
+                         <property name="font">
+                          <font>
+                           <italic>true</italic>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Colormap</string>
                          </property>
                         </widget>
                        </item>
@@ -937,8 +944,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>410</width>
-                <height>783</height>
+                <width>300</width>
+                <height>265</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1322,15 +1329,15 @@ trend, filtering)</string>
               <enum>QFrame::NoFrame</enum>
              </property>
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page">
               <property name="geometry">
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>316</width>
-                <height>54</height>
+                <width>410</width>
+                <height>891</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1390,17 +1397,20 @@ trend, filtering)</string>
                     <property name="topMargin">
                      <number>0</number>
                     </property>
-                    <item row="0" column="3">
-                     <widget class="QRadioButton" name="_ToolsRefBipo">
+                    <item row="2" column="3" colspan="2">
+                     <widget class="QCheckBox" name="_ToolsRefIgnore">
                       <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Data bipolarization : every consecutive channels are subtracted (Ex : if channels is [ O1, O2, O3, Cz, Pz ]  the bipolarized channels will be [ O1, O2-O1, O3-O2, Cz, Pz ])&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When this option is checked, channels that are not re-referenced are going to be ignored in the interface  (Ex : if channels is [ O1, O2, O3, Cz, Pz ]  the bipolarized channels will be [ O1, O2-O1, O3-O2, Cz, Pz ] but if this checkbox is activated you will only see the clean version [ O2-O1, 03-O2 ] )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
                       <property name="text">
-                       <string>Bipolarization</string>
+                       <string>Remove non-referenced channels</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="2" colspan="3">
+                    <item row="1" column="3" colspan="2">
                      <widget class="QWidget" name="_ToolsRefSingleW" native="true">
                       <property name="minimumSize">
                        <size>
@@ -1461,32 +1471,6 @@ trend, filtering)</string>
                       </layout>
                      </widget>
                     </item>
-                    <item row="2" column="2" colspan="3">
-                     <widget class="QCheckBox" name="_ToolsRefIgnore">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When this option is checked, channels that are not re-referenced are going to be ignored in the interface  (Ex : if channels is [ O1, O2, O3, Cz, Pz ]  the bipolarized channels will be [ O1, O2-O1, O3-O2, Cz, Pz ] but if this checkbox is activated you will only see the clean version [ O2-O1, 03-O2 ] )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="text">
-                       <string>Ignore non-referenced channels</string>
-                      </property>
-                      <property name="checked">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="2">
-                     <widget class="QRadioButton" name="_ToolsRefSingle">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use a single channel as reference. The activity of this channel will be subtract to other channels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="text">
-                       <string>Single channel</string>
-                      </property>
-                      <property name="checked">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="0" column="1">
                      <widget class="Line" name="line_6">
                       <property name="minimumSize">
@@ -1509,30 +1493,6 @@ trend, filtering)</string>
                       </property>
                       <property name="text">
                        <string>Type</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="4">
-                     <spacer name="horizontalSpacer_37">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item row="3" column="2" colspan="3">
-                     <widget class="QCheckBox" name="_ToolsRefIgn">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If some channels doesn't need to be re-referenced, and if you want to visualize them, be sure to deactivate &amp;quot;Ignore non-referenced channels&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="text">
-                       <string>Add channels that don't need to be
-re-referenced</string>
                       </property>
                      </widget>
                     </item>
@@ -1561,6 +1521,36 @@ re-referenced</string>
                       </property>
                      </widget>
                     </item>
+                    <item row="3" column="3" colspan="2">
+                     <widget class="QCheckBox" name="_ToolsRefIgn">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If some channels doesn't need to be re-referenced, and if you want to visualize them, be sure to deactivate &amp;quot;Ignore non-referenced channels&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string>Add channels that don't need to be
+re-referenced</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2" colspan="3">
+                     <widget class="QComboBox" name="_ToolsRefMeth">
+                      <item>
+                       <property name="text">
+                        <string>Use one channel as reference</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Common average</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Bipolarization</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
                    </layout>
                   </item>
                   <item>
@@ -1579,7 +1569,7 @@ re-referenced</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>98</width>
+                       <width>390</width>
                        <height>998</height>
                       </rect>
                      </property>
@@ -1668,7 +1658,7 @@ re-referenced</string>
                 <x>0</x>
                 <y>0</y>
                 <width>410</width>
-                <height>814</height>
+                <height>891</height>
                </rect>
               </property>
               <attribute name="label">
@@ -4222,7 +4212,7 @@ Twitches</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1357</width>
+     <width>1359</width>
      <height>25</height>
     </rect>
    </property>
@@ -4268,6 +4258,7 @@ Twitches</string>
     </property>
     <addaction name="actionShortcut"/>
     <addaction name="actionDocumentation"/>
+    <addaction name="actionDownload_pdf_doc"/>
    </widget>
    <addaction name="menuFiles"/>
    <addaction name="menuDisplay"/>
@@ -4530,6 +4521,11 @@ Twitches</string>
   <action name="actionSaveConfig">
    <property name="text">
     <string>Config file</string>
+   </property>
+  </action>
+  <action name="actionDownload_pdf_doc">
+   <property name="text">
+    <string>Download pdf doc</string>
    </property>
   </action>
  </widget>

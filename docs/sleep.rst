@@ -278,7 +278,7 @@ Apply either a lowpass, highpass or bandpass butterworth filter on the channel d
 Referencing
 ^^^^^^^^^^^
 
-Sleep allows you to re-reference your dataset either to a specified channel or using bipolarization. Note that this could be applied only once.
+Sleep allows you to re-reference your dataset either to a specified channel, to a common-average or using bipolarization. Note that this is not a reversive operation and could be applied only once.
 
 
 .. _infotab:

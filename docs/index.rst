@@ -30,8 +30,16 @@ Environnement configuration and visbrain installation on windows and python 3 :
 What's new?
 ***********
 
-* New in version v0.2.2
+* New in version v0.2.3
 
+  * Sleep
+
+    * New re-referencing method (common average)
+    * Detection improvements
+    * Add link to script and datasets to the doc
+
+* New in version v0.2.2
+  
   * Brain
 
     * Bug fixing
@@ -43,22 +51,6 @@ What's new?
     * Control the sleep stage order using the href input parameter
     * Enable/disable the drag and drop on load
     * Better Black and white hypnogram exportation
-    * New shortcuts
-
-* New in version v0.2.1
-
-  * Brain
-
-    * New *add_mesh*, *sources_fit* and *sources_to_convexHull* methods
-    * Improve projection on selected objects
-
-  * Sleep
-
-    * Load .trc files (Micromed)
-    * New *Muscle twiches* detection
-    * Dections improvements and better GUI integrations
-    * Import / export all detections for latter use
-    * Fix detections after bipolarization
     * New shortcuts
 
 Contents:

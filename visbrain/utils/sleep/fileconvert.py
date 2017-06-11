@@ -533,38 +533,26 @@ def brainvision2array(path, downsample=None):
     # Check header version
     h_vers = int(re.findall('\d+', ent[0])[0])
 
-    if h_vers == 2:
-        n_chan = int(re.findall('\d+', ent[10])[0])
-        # n_samples = int(re.findall('\d+', ent[11])[0])
-        si = float(re.findall('\d+', ent[14])[0])
-        sf = 1 / (si * 0.000001)
-        assert "INT_16" in ent[22]
+    for item in ent:
+        if 'NumberOfChannels=' in item:
+            n_chan = int(re.findall('\d+', item)[0])
+        elif 'SamplingInterval=' in item:
+            si = float(re.findall("[-+]?\d*\.\d+|\d+", item)[0])
+            sf = 1 / (si * 0.000001)
+        elif 'DataFormat' in item:
+            data_format = item.split('=')[1]
+        elif 'BinaryFormat' in item:
+            binary_format = item.split('=')[1]
+        elif 'DataOrientation' in item:
+            data_orient = item.split('=')[1]
 
-    elif h_vers == 1:
-        n_chan = int(re.findall('\d+', ent[9])[0])
-        si = float(re.findall('\d+', ent[11])[0])
-        sf = 1 / (si * 0.000001)
-        assert "INT_16" in ent[13]
-
-    # Read marker file (if present) to extract recording time
-    if os.path.isfile(marker):
-        vmrk = np.genfromtxt(marker, delimiter='\n', usecols=[0],
-                             dtype=None, skip_header=0)
-
-        vmrk = np.char.decode(vmrk)
-        line_time = np.array(np.where(np.char.find(vmrk, 'Mk1=') == 0)).min()
-
-        st = re.split('\W+', vmrk[line_time])[-1]
-        start_date = datetime.date(int(st[0:4]), int(st[4:6]), int(st[6:8]))
-        start_time = datetime.time(int(st[8:10]), int(st[10:12]), \
-                                                                int(st[12:14]))
-    else:
-        start_date = datetime.date(1900, 1, 1)
-        start_time = datetime.time(0, 0, 0)
+    # Check binary format
+    assert "BINARY" in data_format
+    assert "INT_16" in binary_format
+    assert "MULTIPLEXED" in data_orient
 
     # Extract channel labels and resolution
     start_label = np.array(np.where(np.char.find(ent, 'Ch1=') == 0)).min()
-
     chan = {}
     resolution = np.empty(shape=n_chan)
 
@@ -574,13 +562,27 @@ def brainvision2array(path, downsample=None):
 
     chan = np.array(list(chan.values())).flatten()
 
-    # Check binary format
-    assert "MULTIPLEXED" in ent[8]
-    assert "BINARY" in ent[6]
+    # Read marker file (if present) to extract recording time
+    if os.path.isfile(marker):
+        vmrk = np.genfromtxt(marker, delimiter='\n', usecols=[0],
+                             dtype=None, skip_header=0)
+
+        vmrk = np.char.decode(vmrk)
+        for item in vmrk:
+            if 'New Segment' in item:
+                 st = re.split('\W+', item)[-1]
+
+        start_date = datetime.date(int(st[0:4]), int(st[4:6]), int(st[6:8]))
+        start_time = datetime.time(int(st[8:10]), int(st[10:12]), \
+                                                                int(st[12:14]))
+    else:
+        start_date = datetime.date(1900, 1, 1)
+        start_time = datetime.time(0, 0, 0)
 
     with open(path, 'rb') as f:
         raw = f.read()
         size = int(len(raw) / 2)
+
         ints = np.ndarray((n_chan, int(size / n_chan)),
                           dtype='<i2', order='F', buffer=raw)
 

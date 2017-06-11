@@ -40,6 +40,7 @@ class uiSettings(object):
         # ---------------------- Shortcut & Doc ----------------------
         self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
         self.actionDocumentation.triggered.connect(self._fcn_openDoc)
+        self.actionDownload_pdf_doc.triggered.connect(self._fcn_downloadDoc)
 
         # =====================================================================
         # SETTINGS PANEL
@@ -94,6 +95,12 @@ class uiSettings(object):
         """Open documentation."""
         import webbrowser
         webbrowser.open('http://etiennecmb.github.io/visbrain/sleep.html')
+
+    def _fcn_downloadDoc(self):
+        """Open documentation."""
+        import webbrowser
+        webbrowser.open("https://drive.google.com/file/d/"
+                        "0B6vtJiCQZUBvNFJMTER3SERGUW8/view?usp=sharing")
 
     # =====================================================================
     # SCREENSHOT

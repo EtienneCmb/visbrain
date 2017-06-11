@@ -2,7 +2,8 @@
 
 import numpy as np
 from PyQt4 import QtGui
-from ....utils import rereferencing, bipolarization, id
+from ....utils import (rereferencing, bipolarization, find_nonEEG,
+                       commonaverage, id)
 
 __all__ = ['uiTools']
 
@@ -12,26 +13,30 @@ class uiTools(object):
 
     def __init__(self):
         """Init."""
+        # Find non-eeg channels :
+        self._noneeg = find_nonEEG(self._channels)
         # =====================================================================
         # RE-REFERENCING
         # =====================================================================
         # Add channels to scrolling area :
         self._ToolsRefIgnArea.setVisible(False)
-        self._reChecks = [0] * len(self._channels)
+        self._reChecks = []
         for i, k in enumerate(self._channels):
-            # Add a checkbox to the scrolling panel :
-            self._reChecks[i] = QtGui.QCheckBox(self._PanScrollChan)
-            # Name checkbox with channel name :
-            self._reChecks[i].setText(k)
-            # Add checkbox to the grid :
-            self._ToolsRefIgnGrd.addWidget(self._reChecks[i], i, 0, 1, 1)
+            if not self._noneeg[i]:
+                # Add a checkbox to the scrolling panel :
+                box = QtGui.QCheckBox(self._PanScrollChan)
+                # Name checkbox with channel name :
+                box.setText(k)
+                # Get it :
+                self._reChecks.append(box)
+                # Add checkbox to the grid :
+                self._ToolsRefIgnGrd.addWidget(self._reChecks[i], i, 0, 1, 1)
         # Connections :
         self._ToolsRefIgn.clicked.connect(self._fcn_refChanIgnore)
-        self._ToolsRefLst.addItems(self._channels)
-        self._ToolsRefSingle.clicked.connect(self._fcn_refPanelDisp)
-        self._ToolsRefBipo.clicked.connect(self._fcn_refPanelDisp)
+        self._ToolsRefLst.addItems(np.array(self._channels)[~self._noneeg])
+        self._ToolsRefMeth.currentIndexChanged.connect(self._fcn_refSwitch)
         self._ToolsRefApply.clicked.connect(self._fcn_refApply)
-        self._fcn_refPanelDisp()
+        self._fcn_refSwitch()
 
         # =====================================================================
         # MEAN / TREND
@@ -50,35 +55,47 @@ class uiTools(object):
     # =====================================================================
     # RE-REFERENCING
     # =====================================================================
+    def _fcn_refSwitch(self):
+        """Switch between re-referencing methods."""
+        idx = int(self._ToolsRefMeth.currentIndex())
+        # Single channel :
+        if idx == 0:  # Single channel
+            self._ToolsRefSingleW.setVisible(True)
+        elif idx == 1:  # Common average
+            self._ToolsRefSingleW.setVisible(False)
+        elif idx == 2:  # Bipolarization
+            self._ToolsRefSingleW.setVisible(False)
+
     def _fcn_refChanIgnore(self):
         """Display / hide list of channels to ignore."""
         self._ToolsRefIgnArea.setVisible(self._ToolsRefIgn.isChecked())
 
-    def _fcn_refPanelDisp(self):
-        """Display / Hide the reference panel."""
-        viz = self._ToolsRefSingle.isChecked()
-        self._ToolsRefSingleW.setVisible(viz)
-        # self._ToolsRefBipoW.setVisible(not viz)
-
     def _fcn_refApply(self):
         """Apply re-referencing."""
-        # Get selected channel :
-        idx = self._ToolsRefLst.currentIndex()
+        # By default, ingore non-eeg channel :
+        to_ignore = self._noneeg
         if self._ToolsRefIgn.isChecked():
-            to_ignore = [num for num, k in enumerate(
-                                             self._reChecks) if k.isChecked()]
-        else:
-            to_ignore = None
+            for num, k in enumerate(self._reChecks):
+                # Get the position of this channel :
+                idinlst = self._channels.index(str(k.text()))
+                # Set to ignore :
+                to_ignore[idinlst] = k.isChecked()
 
-        # ____________________ Re-reference ____________________
-        if self._ToolsRefSingle.isChecked():
+        # Get the current selected method :
+        idx = int(self._ToolsRefMeth.currentIndex())
+        # Single channel :
+        if idx == 0:  # Single channel
+            # Get selected channel :
+            idchan = idx = self._ToolsRefLst.currentIndex()
+            # Re-referencing :
             self._data, self._channels, consider = rereferencing(
-                                            self._data, self._channels, idx,
+                                            self._data, self._channels, idchan,
                                             to_ignore)
             self._chanChecks[idx].setChecked(False)
-
-        # ____________________ Bipolarization ____________________
-        else:
+        elif idx == 1:  # Common average
+            self._data, self._channels, consider = commonaverage(
+                                     self._data, self._channels, to_ignore)
+        elif idx == 2:  # Bipolarization
             self._data, self._channels, consider = bipolarization(
                                                   self._data, self._channels,
                                                   to_ignore)
