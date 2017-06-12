@@ -1,4 +1,8 @@
+
+[![Build Status](https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master)](https://travis-ci.org/EtienneCmb/visbrain)
+
 # visbrain
+
 
 ![Visbrain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain.png "Visbrain")
 

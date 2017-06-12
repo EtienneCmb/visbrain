@@ -2,10 +2,30 @@
 # -*- coding: utf-8 -*-
 import os
 from setuptools import setup, find_packages
+import pip
+from pip.req import parse_requirements
+from optparse import Option
 
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+options = Option('--workaround')
+options.skip_requirements_regex = None
+REQ_FILE = './requirements.txt'
+# Hack for old pip versions: Versions greater than 1.x
+# have a required parameter "sessions" in parse_requierements
+if pip.__version__.startswith('1.'):
+    install_reqs = parse_requirements(REQ_FILE, options=options)
+else:
+    from pip.download import PipSession  # pylint:disable=E0611
+    options.isolated_mode = False
+    install_reqs = parse_requirements(REQ_FILE,  # pylint:disable=E1123
+                                      options=options,
+                                      session=PipSession)
+
+REQS = [str(ir.req) for ir in install_reqs]
+
 
 setup(
     name='visbrain',
@@ -13,14 +33,9 @@ setup(
     packages=find_packages(),
     description='Hardware-accelerated data visualization for neuroscientific data in Python',
     long_description=read('README.md'),
-    install_requires=[
-        'numpy',
-        'scipy',
-        'pillow',
-        'matplotlib<=1.5.1',
-        'pyopengl',
-        'vispy==0.5.0',
-    ],
+    platforms='any',
+    setup_requires=['numpy'],
+    install_requires=REQS,
     dependency_links=[],
     author='Etienne Combrisson',
     maintainer='Etienne Combrisson',

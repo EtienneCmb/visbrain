@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
+    :target: https://travis-ci.org/EtienneCmb/visbrain
+
 Visbrain documentation
 ######################
 
