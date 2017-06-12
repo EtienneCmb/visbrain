@@ -1,6 +1,6 @@
 
 
-def import_numpy():
+def test_import_numpy():
     """Import NumPy"""
     import numpy
 

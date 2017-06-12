@@ -29,6 +29,8 @@ install:
  - conda create --yes -n testenv python=$TRAVIS_PYTHON_VERSION
  - source activate testenv
  - conda install --yes --quiet numpy scipy matplotlib=1.5.1 pip
+ # PyQt4 :
+ - sudo apt-get -y install python-qt4
  - conda install --yes pyqt=4
  - pip install setuptools
  # - [ ... some other packages to install ... ]
