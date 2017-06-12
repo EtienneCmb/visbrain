@@ -23,7 +23,7 @@ install:
   - conda create -q -n testenv python=3.5 numpy scipy matplotlib=1.5.1 pip
   - pip install setuptools
   - source activate testenv
-  - pip install -r requirements.txt
+  - python setup.py install
 
 script: bash build_install.sh
 
