@@ -26,6 +26,7 @@ else:
 
 REQS = [str(ir.req) for ir in install_reqs]
 
+
 setup(
     name='visbrain',
     version='0.1.8',
@@ -40,6 +41,7 @@ setup(
     maintainer='Etienne Combrisson',
     author_email='e.combrisson@gmail.com',
     url='https://github.com/EtienneCmb/visbrain',
+    dependency_links = ['https://github.com/vispy/vispy.git'],
     license=read('LICENSE'),
     include_package_data=True,
     keywords='brain MNI GPU visualization data OpenGL vispy neuroscience',
