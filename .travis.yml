@@ -29,10 +29,15 @@ install:
  - conda create --yes -n testenv python=$TRAVIS_PYTHON_VERSION
  - source activate testenv
  - conda install --yes --quiet numpy scipy matplotlib=1.5.1 pip
- # PyQt4 :
- - sudo apt-get -y install python-qt4
- - conda install --yes pyqt=4
  - pip install setuptools
+ # PyQt4 :
+ - cd /tmp/
+ - wget http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.3/PyQt-x11-gpl-4.11.3.tar.gz
+ - tar xvzf PyQt-x11-gpl-4.11.3.tar.gz
+ - cd PyQt-x11-gpl-4.11.3
+ - python configure.py; make; sudo make install
+ # - sudo apt-get -y install python-qt4
+ # - conda install --yes pyqt=4
  # - [ ... some other packages to install ... ]
  - pip install -r requirements.txt
 
