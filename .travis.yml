@@ -20,12 +20,11 @@ install:
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n testenv python=3.5 numpy scipy matplotlib=1.5.1 pip
+  - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib=1.5.1 pip
   - pip install setuptools
   - source activate testenv
-  - python setup.py install
 
-script: bash build_install.sh
+script: "python setup.py develop && nosetests -w test/"
 
 # language: python
 
