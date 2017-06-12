@@ -1,32 +1,60 @@
 language: python
-notifications:
-  email: false
 python:
-  # We don't actually use the Travis Python, but this keeps it organized.
-  - "3.4"
-install:
-  # - sudo apt-get update
-  # We do this conditionally because it saves us some downloading if the
-  # version is the same.
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
-    else
-      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-    fi
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  # Useful for debugging any issues with conda
-  - conda info -a
+  - "3.3"
+install: 
+  - pip install --use-mirrors pyparsing
+  - pip install --use-mirrors matplotlib
+  - pip install vispy
+script: nosetests
+virtualenv:
+  system_site_packages: true
+before_install:
+  - pip install numpy
+  - pip install python-dateutil
+  - pip install pytz
+  - pip install scipy
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libatlas-dev libatlas-base-dev liblapack-dev gfortran
+notifications: 
+  email: false
 
-  # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib=1.5.1 pip
-  - pip install setuptools
-  - source activate testenv
 
-script: "pip install -r requirements.txt && nosetests -v test/"
+
+
+# language: python
+# notifications:
+#   email: false
+# python:
+#   # We don't actually use the Travis Python, but this keeps it organized.
+#   - "3.4"
+# install:
+#   # - sudo apt-get update
+#   # We do this conditionally because it saves us some downloading if the
+#   # version is the same.
+#   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+#       wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+#     else
+#       wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+#     fi
+#   - bash miniconda.sh -b -p $HOME/miniconda
+#   - export PATH="$HOME/miniconda/bin:$PATH"
+#   - hash -r
+#   - conda config --set always_yes yes --set changeps1 no
+#   - conda update -q conda
+#   # Useful for debugging any issues with conda
+#   - conda info -a
+
+#   # Replace dep1 dep2 ... with your dependencies
+#   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib=1.5.1 pip
+#   - pip install setuptools
+#   - source activate testenv
+
+# script: "pip install -r requirements.txt && nosetests -v test/"
+
+
+
+
+
 
 # language: python
 
