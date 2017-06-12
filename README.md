@@ -1,5 +1,7 @@
 # visbrain
 
+![alt tag](https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master)
+
 ![Visbrain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain.png "Visbrain")
 
 
