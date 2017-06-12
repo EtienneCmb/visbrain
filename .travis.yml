@@ -3,7 +3,7 @@ language: python
 matrix:
   include:
     - python: 3.4
-      env: NUMPY=1.11 SCIPY=0.18
+      env: MATPLOTLIB=1.5.1
 
 notifications:
   email: false
@@ -18,7 +18,10 @@ before_install:
 install:
  - conda create --yes -n test python=$TRAVIS_PYTHON_VERSION
  - source activate test
- - conda install --yes numpy=$NUMPY scipy=$SCIPY matplotlib pip
+ - conda install --yes numpy scipy matplotlib=$MATPLOTLIB pip
  - pip install setuptools
  # - [ ... some other packages to install ... ]
  - pip install -r requirements.txt
+
+ script:
+  - python test.py

@@ -1,12 +1,9 @@
 .. -*- mode: rst -*-
-<!-- |AppVeyor|_ |Codecov|_ |CircleCI|_ |Python27|_ |Python35|_ |PyPi|_ |DOI|_ -->
 
 |Travis|_ 
 
 .. |Travis| image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
 .. _Travis: https://travis-ci.org/EtienneCmb/visbrain
-
-![alt tag]()
 
 # visbrain
 
