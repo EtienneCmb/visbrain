@@ -24,8 +24,9 @@ install:
 
   # Replace dep1 dep2 ... with your dependencies
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib=1.5.1 pip
-  - pip install setuptools
   - source activate testenv
+  - pip install setuptools
+  - pip install nose
   - pip install -r requirements.txt
 
 script: bash build_install.sh
