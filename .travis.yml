@@ -18,7 +18,8 @@ before_install:
 install:
  - conda create --yes -n test python=$TRAVIS_PYTHON_VERSION
  - source activate test
- - conda install --yes numpy scipy matplotlib=$MATPLOTLIB pip
+ - conda install --yes --quiet numpy scipy matplotlib=$MATPLOTLIB pip
+ - conda install --yes pyqt=4
  - pip install setuptools
  # - [ ... some other packages to install ... ]
  - pip install -r requirements.txt
