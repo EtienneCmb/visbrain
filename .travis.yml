@@ -26,7 +26,7 @@ install:
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib=1.5.1 pip
   - pip install setuptools
   - source activate testenv
- - pip install -r requirements.txt
+  - pip install -r requirements.txt
 
 script: bash build_install.sh
 
