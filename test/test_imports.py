@@ -1,5 +1,9 @@
 
 
+def import_numpy():
+    """Import NumPy"""
+    import numpy
+
 def test_import_Brain():
     """Import the Brain module."""
     from visbrain import Brain
