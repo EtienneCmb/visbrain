@@ -23,7 +23,7 @@ install:
  # - [ ... some other packages to install ... ]
  - pip install -r requirements.txt
 
-script: pytest
+script: bash build_install.sh
 
 after_success:
   - pip install coverage codecov
