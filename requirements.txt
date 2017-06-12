@@ -2,4 +2,4 @@ numpy
 scipy
 matplotlib<=1.5.1
 setuptools
-vispy
+vispy>=0.5.0.dev0
