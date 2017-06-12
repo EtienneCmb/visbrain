@@ -1,4 +1,6 @@
 language: python
+notifications:
+  email: false
 python:
   # We don't actually use the Travis Python, but this keeps it organized.
   - "3.5"
@@ -24,7 +26,7 @@ install:
   - pip install setuptools
   - source activate testenv
 
-script: "python setup.py develop && nosetests -w test/"
+script: "pip install -r requirements.txt && nosetests -w test/"
 
 # language: python
 
