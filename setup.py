@@ -33,7 +33,7 @@ setup(
     description='Hardware-accelerated data visualization for neuroscientific data in Python',
     long_description=read('README.md'),
     platforms='any',
-    setup_requires=['numpy'],
+    setup_requires=['numpy', 'matplotlib'],
     install_requires=REQS,
     dependency_links=[],
     author='Etienne Combrisson',
