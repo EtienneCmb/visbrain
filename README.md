@@ -1,9 +1,5 @@
-.. -*- mode: rst -*-
 
-|Travis|_ 
-
-.. |Travis| image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
-.. _Travis: https://travis-ci.org/EtienneCmb/visbrain
+[![Build Status](https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master)](https://travis-ci.org/EtienneCmb/visbrain)
 
 # visbrain
 
