@@ -31,8 +31,12 @@ REQS = [str(ir.req) for ir in install_reqs]
 
 setup(
     name='visbrain',
-    version='0.1.8',
+    version=__version__,
     packages=find_packages(),
+    package_dir={'visbrain': 'visbrain'},
+    package_data={'visbrain': ['brain/base/templates/*.npz',
+                               'sleep/ico/sleep.svg',
+                               'utils/topo/eegref.npz']},
     description='Hardware-accelerated data visualization for neuroscientific data in Python',
     long_description=read('README.md'),
     platforms='any',
@@ -44,7 +48,6 @@ setup(
     author_email='e.combrisson@gmail.com',
     url='https://github.com/EtienneCmb/visbrain',
     license=read('LICENSE'),
-    include_package_data=True,
     keywords='brain MNI GPU visualization data OpenGL vispy neuroscience',
     classifiers=["Development Status :: 3 - Alpha",
                  'Intended Audience :: Science/Research',
