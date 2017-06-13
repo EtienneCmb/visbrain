@@ -8,19 +8,25 @@ from optparse import Option
 from distutils.sysconfig import get_python_lib
 
 __version__ = "0.2.3"
+NAME = 'visbrain'
+AUTHOR = "Visbrain developpers"
+MAINTAINER = "Etienne Combrisson"
+EMAIL = 'e.combrisson@gmail.com'
+KEYWORDS = "brain MNI GPU visualization data OpenGL vispy neuroscience " + \
+           "sleep data-mining"
+DESCRIPTION = "Hardware-accelerated data visualization for neuroscientific data in Python"
+URL = 'https://github.com/EtienneCmb/visbrain'
 # Data path :
-DATA_PATH = get_python_lib() + 'visbrain'
-TEMPLATES = DATA_PATH + "/brain/base/templates/"
-DATA_FILES = [("visbrain",  [os.path.join(TEMPLATES, 'B1.npz'),
-                             os.path.join(TEMPLATES, 'B2.npz'),
-                             os.path.join(TEMPLATES, 'B3.npz'),
-                             ]
-               )
-              ]
+PACKAGE_DATA = {'visbrain.brain.base.template': ['*.npz'],
+                'visbrain.sleep.ico': ['*.svg'],
+                'visbrain.utils.topo': ['*.npz']
+                }
 
 
 def read(fname):
+    """Read README and LICENSE."""
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 
 options = Option('--workaround')
 options.skip_requirements_regex = None
@@ -40,26 +46,24 @@ REQS = [str(ir.req) for ir in install_reqs]
 
 
 setup(
-    name='visbrain',
+    name=NAME,
     version=__version__,
     packages=find_packages(),
     package_dir={'visbrain': 'visbrain'},
-    package_data={'visbrain.brain.base.template': ['*.npz'],
-                  'visbrain.sleep.ico': ['*.svg'],
-                  'visbrain.utils.topo': ['*.npz']},
+    package_data=PACKAGE_DATA,
     include_package_data=True,
-    description='Hardware-accelerated data visualization for neuroscientific data in Python',
+    description=DESCRIPTION,
     long_description=read('README.md'),
     platforms='any',
     setup_requires=['numpy'],
     install_requires=REQS,
     dependency_links=[],
-    author='Etienne Combrisson',
-    maintainer='Etienne Combrisson',
-    author_email='e.combrisson@gmail.com',
-    url='https://github.com/EtienneCmb/visbrain',
+    author=AUTHOR,
+    maintainer=MAINTAINER,
+    author_email=EMAIL,
+    url=URL,
     license=read('LICENSE'),
-    keywords='brain MNI GPU visualization data OpenGL vispy neuroscience',
+    keywords=KEYWORDS,
     classifiers=["Development Status :: 3 - Alpha",
                  'Intended Audience :: Science/Research',
                  'Intended Audience :: Education',
