@@ -1,6 +1,7 @@
 .. image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
     :target: https://travis-ci.org/EtienneCmb/visbrain
 
+
 Visbrain documentation
 ######################
 
@@ -11,24 +12,42 @@ Visbrain is a python package in development and it's dedicated to neuroscience v
 * :ref:`Ndviz` : inspect data your n-dimentional data.
 * :ref:`Figure` : arange exported pictures in a grid, add colorbar and save a paper ready figure.
 
-Installation:
-*************
+Installation
+************
 
-First, visbrain use PyQt4 which means that you need to use a python version under 3.5.2. The same for the matplotlib version (<= 1.5.1). Then you need to install VisPy, which is a Python library for interactive scientific visualization. In order to install this package's dependencies (OpenGL), checkout this `installation guide <http://vispy.org/installation.html>`_. You'll need to install the developper version of VisPy.
+Here's the list of visbrain's dependancies :
 
-Environnement configuration and visbrain installation on windows and python 3 :
+* Numpy
+* Scipy
+* Vispy : fast graphics rendering
+* Matplotlib : mainly for colors and colormaps integration
+* PyQt4 : Graphical User Interface components
+* Pillow : for screenshots and image file format support.
 
-.. code-block:: bash
+New Python versions (>= 3.6) and Matplotlib comes by default with PyQt5 and this a limitation because Visbrain use the GUI backends PyQt4. We are working to port Visbrain to PyQt5 but right now, you'll have to use a Python version under 3.6 and define an isolated environnement (ex : python=3.5). In addition, Visbrain use new VisPy functionalities and the most up-to-date VisPy version on PyPi is obsolete so you will have to install VisPy from Github.
 
-    conda create --yes -n visbrain python=3.5 anaconda
+First, in a terminal, create and activate a 3.5 Python environnement with the correct PyQt4 version :
+
+.. code-block:: shell
+
+    conda create --yes  -n visbrain python=3.5 numpy scipy pillow matplotlib=1.5.1 pip
     activate visbrain
-    git clone https://github.com/EtienneCmb/visbrain.git visbrain
+
+Then you'll need to install the latest VisPy version from github :
+
+.. code-block:: shell
+
     git clone https://github.com/vispy/vispy vispy
     cd vispy
     python setup.py install
-    cd ..\visbrain
+
+Finally, install Visbrain :
+
+.. code-block:: shell
+
+    git clone https://github.com/EtienneCmb/visbrain.git visbrain
+    cd visbrain
     pip install . --no-deps
-    conda install --yes pyqt=4
 
 What's new?
 ***********
@@ -55,6 +74,32 @@ What's new?
     * Enable/disable the drag and drop on load
     * Better Black and white hypnogram exportation
     * New shortcuts
+
+
+Future plans
+************
+
+.. todo::
+  
+  * Visbrain
+
+    * PyQt5 migration
+    * pip and conda installation
+  
+  * Brain
+
+    * Compatibility with other brain templates
+    * Display brain signals/2D maps attached to sources
+    * Better integration of ROI + possibility to the user to use other volume templates
+
+  * Sleep
+
+    * Improve detections GUI integration
+    * Add default supported files integration
+    * Color screenshot
+    * Command line control
+    * Automatic scoring
+
 
 Contents:
 *********
