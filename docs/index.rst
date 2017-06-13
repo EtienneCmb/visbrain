@@ -37,17 +37,13 @@ Then you'll need to install the latest VisPy version from github :
 
 .. code-block:: shell
 
-    git clone https://github.com/vispy/vispy vispy
-    cd vispy
-    python setup.py install
+    pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
 
 Finally, install Visbrain :
 
 .. code-block:: shell
 
-    git clone https://github.com/EtienneCmb/visbrain.git visbrain
-    cd visbrain
-    pip install . --no-deps
+    pip install visbain
 
 What's new?
 ***********
