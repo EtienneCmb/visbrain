@@ -1,3 +1,4 @@
+from __future__ import print_function
 from visbrain import Sleep
 import os
 from distutils.sysconfig import get_python_lib
@@ -12,10 +13,14 @@ def test_instance_sleep():
 def test_topo_file():
     """Test if the topo reference file is installed."""
     vbpath = get_python_lib() + '/visbrain/utils/topo/'
-    assert os.path.isfile(os.path.join(vbpath, 'eegref.npz'))
+    file = os.path.join(vbpath, 'eegref.npz')
+    print(file)
+    assert os.path.isfile(file)
 
 
 def test_ico_file():
     """Test if Sleep icon is installed."""
     vbpath = get_python_lib() + '/visbrain/sleep/ico/'
-    assert os.path.isfile(os.path.join(vbpath, 'sleep.svg'))
+    file = os.path.join(vbpath, 'sleep.svg')
+    print(file)
+    assert os.path.isfile(file)

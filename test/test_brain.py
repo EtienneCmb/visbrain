@@ -1,3 +1,4 @@
+from __future__ import print_function
 from visbrain import Brain
 import os
 from distutils.sysconfig import get_python_lib
