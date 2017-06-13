@@ -30,7 +30,7 @@ First, in a terminal, create and activate a 3.5 Python environnement with the co
 
 .. code-block:: shell
 
-    conda create --yes  -n visbrain python=3.5 numpy scipy pillow matplotlib=1.5.3 pip
+    conda create --yes  -n visbrain python=3.5 numpy scipy pillow matplotlib=1.5.1 pip
     activate visbrain
 
 Then you'll need to install the latest VisPy version from github :
