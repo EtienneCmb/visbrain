@@ -1,4 +1,4 @@
-include runner README.md
-recursive-include visbrain/brain/base/templates *
-recursive-include visbrain/visbrain/utils/topo *
-recursive-include visbrain/visbrain/sleep/ico *
+include *.md
+recursive-include visbrain/brain/base/templates *.npz
+recursive-include visbrain/utils/topo *.npz
+recursive-include visbrain/sleep/ico *.svg
