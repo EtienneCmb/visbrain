@@ -28,6 +28,7 @@ install:
   - source activate testenv
   - pip install setuptools
   - pip install nose
+  - pip install codecov
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
   - pip install .
   # - pip install -r requirements.txt
