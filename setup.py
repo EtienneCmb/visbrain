@@ -15,7 +15,7 @@ EMAIL = 'e.combrisson@gmail.com'
 KEYWORDS = "brain MNI GPU visualization data OpenGL vispy neuroscience " + \
            "sleep data-mining"
 DESCRIPTION = "Hardware-accelerated data visualization for neuroscientific data in Python"
-URL = 'https://github.com/EtienneCmb/visbrain'
+URL = 'http://etiennecmb.github.io/visbrain/'
 # Data path :
 PACKAGE_DATA = {'visbrain.brain.base.template': ['*.npz'],
                 'visbrain.sleep.ico': ['*.svg'],
