@@ -334,7 +334,12 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             # Replace sampling frequency :
             sf = float(downsample)
 
-        # ========================== CONVERSION ==========================
+        # =========================== SCALING =============================
+        # Check amplitude of the data and if necessary apply re-scaling
+        if np.abs(np.ptp(data).mean()) < 0.001:
+            data *= 1e6
+
+        # ========================== CONVERSION ===========================
         # Convert data and hypno to be contiguous and float 32 (for vispy):
         if not data.flags['C_CONTIGUOUS']:
             data = np.ascontiguousarray(data, dtype=np.float32)
