@@ -70,7 +70,7 @@ The `Brain <http://etiennecmb.github.io/visbrain/brain.html>`_ module is primari
 * An extended control of colours. 
 * Export in HD pictures with auto-cropping functionalities.
 * GUI or command line control.
-* `Examples and datasets <https://github.com/EtienneCmb/visbrain/tree/master/examples>`_.
+* `Examples and datasets <https://github.com/EtienneCmb/visbrain/tree/master/examples/brain>`_.
 
 .. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png
    :align:   center
@@ -116,20 +116,16 @@ Figure
 * `Examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/figure>`_.
 
 
-Contributors
+Contribution
 ============
 
-Main contributors
------------------
+Main developers
+---------------
 
 * `Etienne Combrisson <http://etiennecmb.github.io>`_
 * `Raphael Vallat <https://raphaelvallat.github.io>`_
-* `Dmitri Altukchov <https://github.com/dmalt>`_
-* `David Meunier <https://github.com/davidmeunier79>`_
-* `Tarek Lajnef <https://github.com/TarekLaj>`_
-* `Karim Jerbi <www.karimjerbi.com>`_
 
-Thx to...
----------
+With the help of
+----------------
 
-Christian O'Reilly, Perrine Ruby, JB Einchenlaub, kevroy314, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian
+Karim Jerbi, Christian O'Reilly, David Meunier, Dmitri Altukchov, Tarek Lajnef, Perrine Ruby, JB Einchenlaub, kevroy314, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian
