@@ -5,8 +5,18 @@ from setuptools import setup, find_packages
 import pip
 from pip.req import parse_requirements
 from optparse import Option
+from distutils.sysconfig import get_python_lib
 
 __version__ = "0.2.3"
+# Data path :
+DATA_PATH = get_python_lib() + 'visbrain'
+TEMPLATES = DATA_PATH + "/brain/base/templates/"
+DATA_FILES = [("visbrain",  [os.path.join(TEMPLATES, 'B1.npz'),
+                             os.path.join(TEMPLATES, 'B2.npz'),
+                             os.path.join(TEMPLATES, 'B3.npz'),
+                             ]
+               )
+              ]
 
 
 def read(fname):
@@ -37,6 +47,7 @@ setup(
     package_data={'visbrain.brain.base.template': ['*.npz'],
                   'visbrain.sleep.ico': ['*.svg'],
                   'visbrain.utils.topo': ['*.npz']},
+    include_package_data=True,
     description='Hardware-accelerated data visualization for neuroscientific data in Python',
     long_description=read('README.md'),
     platforms='any',
