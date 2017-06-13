@@ -12,6 +12,8 @@ def test_instance_brain():
 
 def test_brain_templates():
     """Test if templates are installed."""
-    vbpath = os.path.join(get_python_lib(), '/visbrain/brain/base/templates/')
+    vbpath = get_python_lib()
+    brainpath = vbpath + ",visbrain,brain,base,templates"
     for k in ['B1.npz', 'B2.npz', 'B3.npz', 'roi.npz']:
-        assert os.path.isfile(os.path.join(vbpath, k))
+        s = brainpath + ',' + k
+        assert os.path.isfile(os.path.join(*s.split(",")))
