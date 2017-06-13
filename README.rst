@@ -56,6 +56,12 @@ Finally, install Visbrain :
 
     pip install visbain
 
+We also recommand to install pyopengl :
+
+.. code-block:: shell
+
+    pip install pyopengl
+
 Modules
 =======
 
