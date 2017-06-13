@@ -1,3 +1,3 @@
 #!/bin/bash
 source activate testenv
-nosetests -v --nocapture test/
+nosetests -v --nocapture --with-coverage test/
