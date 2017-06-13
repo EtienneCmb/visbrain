@@ -336,7 +336,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         # =========================== SCALING =============================
         # Check amplitude of the data and if necessary apply re-scaling
-        if np.abs(np.ptp(data).mean()) < 0.001:
+        if np.abs(np.ptp(data, 0).mean()) < 0.001:
             data *= 1e6
 
         # ========================== CONVERSION ===========================
