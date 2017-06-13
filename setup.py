@@ -6,6 +6,8 @@ import pip
 from pip.req import parse_requirements
 from optparse import Option
 
+__version__ = "0.2.3"
+
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
