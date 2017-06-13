@@ -6,7 +6,7 @@ import pip
 from pip.req import parse_requirements
 from optparse import Option
 
-__version__ = "0.2.4"
+__version__ = "0.2.5"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
 MAINTAINER = "Etienne Combrisson"
@@ -15,7 +15,7 @@ KEYWORDS = "brain MNI GPU visualization data OpenGL vispy neuroscience " + \
            "sleep data-mining"
 DESCRIPTION = "Hardware-accelerated visualization suite for neuroscientific data in Python"
 URL = 'http://etiennecmb.github.io/visbrain/'
-DOWNLOAD_URL = 'https://github.com/EtienneCmb/visbrain/archive/0.2.4.tar.gz'
+DOWNLOAD_URL = 'https://github.com/EtienneCmb/visbrain/archive/v0.2.5.tar.gz'
 # Data path :
 PACKAGE_DATA = {'visbrain.brain.base.template': ['*.npz'],
                 'visbrain.sleep.ico': ['*.svg'],
