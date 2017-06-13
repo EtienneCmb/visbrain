@@ -1,4 +1,4 @@
-include *.md
+include README.rst
 include requirements.txt
 recursive-include visbrain/brain/base/templates *.npz
 recursive-include visbrain/utils/topo *.npz
