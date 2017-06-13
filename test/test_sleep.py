@@ -13,7 +13,7 @@ def test_instance_sleep():
 def test_topo_file():
     """Test if the topo reference file is installed."""
     vbpath = get_python_lib()
-    topopath = vbpath + ",utils,topo,eegref.npz"
+    topopath = vbpath + ",visbrain,utils,topo,eegref.npz"
     file = os.path.join(*topopath.split(","))
     print(file)
     assert os.path.isfile(file)
@@ -22,7 +22,7 @@ def test_topo_file():
 def test_ico_file():
     """Test if Sleep icon is installed."""
     vbpath = get_python_lib()
-    topopath = vbpath + ",sleep,ico,sleep.svg"
+    topopath = vbpath + ",visbrain,sleep,ico,sleep.svg"
     file = os.path.join(*topopath.split(","))
     print(file)
     assert os.path.isfile(file)
