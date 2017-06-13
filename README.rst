@@ -9,54 +9,97 @@ Visbrain
 .. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain.png
    :align:   center
 
-![Visbrain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain.png "Visbrain")
 
+**Visbrain** is an open-source python package and provides hardware accelerated visualizations mainly for neuroscientific data. It is based on top `VisPy <http://vispy.org/>`_ and PyQt and distributed under the 3-Clause BSD license. We also provide an online `documentation <http://vispy.org/>`_, `examples <https://github.com/EtienneCmb/visbrain/tree/master/examples>`_ with datasets.
 
-Visbrain is a python package dedicated (mainly) to the visualization of neuroscientist data. Check the [documentation](http://etiennecmb.github.io/visbrain/) for further details
+Right now, four modules are implemented, with the first three coming with a modular graphical interface :
+
+* :ref:`brainmod` : visualize EEG/MEG/Intracranial data and connectivity in a standard MNI 3D brain
+* :ref:`sleepmod` : visualize polysomnographic data and hypnogram edition
+* :ref:`ndvizmod` : visualize multidimensional data and basic plotting forms
+* :ref:`figmod` : figure-layout for high-quality figures
 
 Installation
 ============
 
-To see the installation requirements, check the [documentation](http://etiennecmb.github.io/visbrain/).
+Dependencies
+------------
+
+Visbrain requires :
+
+* Numpy
+* Scipy
+* Vispy (*development version*)
+* Matplotlib <= 1.5.1
+* PyQt4
+* Pillow
+
+User installation
+-----------------
+
+In a terminal, create and activate a 3.5 Python environment with the correct PyQt4 version :
+
+.. code-block:: shell
+
+    conda create --yes  -n visbrain python=3.5 numpy scipy pillow matplotlib=1.5.1 pip
+    activate visbrain
+
+Install the latest VisPy version from Github :
+
+.. code-block:: shell
+
+    pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
+
+Finally, install Visbrain :
+
+.. code-block:: shell
+
+    pip install visbain
 
 Modules
 =======
 
+.. _brainmod:
+
 Brain
 -----
 
-The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard MNI brain inside a graphical user interface (using PyQt4 for instance). This module can be used for:
+The `Brain <http://etiennecmb.github.io/visbrain/brain.html>`_ module is primarily designed for visualizations within a 3D opaque/transparent brain and can be used for :
 
-- Display one of the 3 included standard MNI brain or your own template (using vertices and faces)
-- Interactions (rotation / translation / transformations / slices)
-- Display sources, materialized by small balls (like deep sources or captors...)
-	- Add activity to each sources
-	- Color each sources as you want (like one color per subject, per area...)
-	- Project sources acitivity on the surface
-	- Project the cortical repartion of those sources
-	- A lot of control on color (use any matplotlib colormaps, specify color threshold and colors for under/over those threshold, mask some sources...)
-- Display connectivity link between sources
-	- Color connexions either by their strength or by the number of connexions per node
-	- Use a dynamic control of transparency to make stronger connexions more visible
-	- A lot of other color controls (colormap / limits / threshold...)
-- Deep structures (like brodmann areas, AAL...). Source's activity can be projected on deep sources.
-- Use either the graphical inteface to interact or use the [user functions](http://etiennecmb.github.io/visbrain/brain.html#user-functions) to run every commands without opening the interface. This tricks can be really usefull to produce a large number of figures.
-- Finally, export figures in high-definition.
+* Integrate EEG/MEG/Intracranial sources/electrodes and connectivity
+* Display Regions of Interest (ROI) based on Brodmann or AAL atlases.
+* Project source's activity onto the brain/ROI surface
+* Export in HD pictures with auto-cropping functionalities
+* GUI or command line control
 
-![Brain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png "Brain : visualize your data into a transparent MNI brain")
+.. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png
+   :align:   center
+
+   `Examples and datasets <https://github.com/EtienneCmb/visbrain/tree/master/examples>`_
+
+
+.. _sleepmod:
 
 Sleep
 -----
 
-[Sleep](http://etiennecmb.github.io/visbrain/sleep.html) is a sleep data dedicated interface for visualization, processing and edition.
+`Sleep <http://etiennecmb.github.io/visbrain/sleep.html>`_ 
 
-- Load .eeg (Brainvision and ELAN), .edf, .trc (Micromed) or directly pass raw data
-- Visualize channels / spectrogram / hypnogram / topoplot, time window control and fast plot update
-- Hypnogram edition (either by manually adding where stages start / finish or interactively by adding / dragging and moving points) and save the edited hypnogram (.txt, .csv and .hyp)
-- Spindles / REM / Peaks / Slow waves / K-complex / Muscle twiches detection and report results on each channel and hypnogram
-- Signal processing tools (filtering...)
+Sleep's main functionalities are :
 
-![sleep](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_main.png "Sleep : load, visualize and edit sleep data")
+* Load BrainVision, Micromed or European Data Format. All other files can be loaded using `MNE Python <http://mne-tools.github.io/stable/python_reference.html?highlight=io#module-mne.io>`_ and pass as raw data
+* Visualize polysomnographic data / spectrogram / topographic maps
+* Load, edit and save hypnogram
+* Performs automatic event detections (Spindles / REM / Peaks / Slow waves / K-complex / Muscle twiches)
+* Signal processing tools (filtering / wavelets / power...) and re-referencing (either to a single channel or common average or bipolarization)
+
+
+.. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png
+   :align:   center
+
+   `Examples and datasets <https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing>`_
+
+.. _ndvizmod:
 
 Ndviz
 -----
@@ -74,6 +117,14 @@ The [Ndviz](http://etiennecmb.github.io/visbrain/ndviz.html) module help you to 
 	Each object inherit from a large number of color control or different settings.
 
 ![ndviz](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/ndviz_example.png "Ndviz : data mining")
+
+
+.. _figuremod:
+
+Figure
+------
+
+
 
 Contributors
 ============
