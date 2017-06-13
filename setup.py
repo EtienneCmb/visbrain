@@ -16,6 +16,7 @@ KEYWORDS = "brain MNI GPU visualization data OpenGL vispy neuroscience " + \
            "sleep data-mining"
 DESCRIPTION = "Hardware-accelerated data visualization for neuroscientific data in Python"
 URL = 'http://etiennecmb.github.io/visbrain/'
+DOWNLOAD_URL = 'https://github.com/EtienneCmb/visbrain/archive/v0.2.3.tar.gz'
 # Data path :
 PACKAGE_DATA = {'visbrain.brain.base.template': ['*.npz'],
                 'visbrain.sleep.ico': ['*.svg'],
@@ -69,6 +70,7 @@ setup(
     maintainer=MAINTAINER,
     author_email=EMAIL,
     url=URL,
+    download_url = DOWNLOAD_URL,
     license=read('LICENSE'),
     keywords=KEYWORDS,
     classifiers=["Development Status :: 3 - Alpha",
