@@ -1,4 +1,4 @@
-time 2.5
+time 5
 W 5
 N1 3
 N2 2

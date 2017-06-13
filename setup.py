@@ -5,17 +5,17 @@ from setuptools import setup, find_packages
 import pip
 from pip.req import parse_requirements
 from optparse import Option
-from distutils.sysconfig import get_python_lib
 
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
 MAINTAINER = "Etienne Combrisson"
 EMAIL = 'e.combrisson@gmail.com'
 KEYWORDS = "brain MNI GPU visualization data OpenGL vispy neuroscience " + \
            "sleep data-mining"
-DESCRIPTION = "Hardware-accelerated data visualization for neuroscientific data in Python"
+DESCRIPTION = "Hardware-accelerated visualization suite for neuroscientific data in Python"
 URL = 'http://etiennecmb.github.io/visbrain/'
+DOWNLOAD_URL = 'https://github.com/EtienneCmb/visbrain/archive/v0.2.3.tar.gz'
 # Data path :
 PACKAGE_DATA = {'visbrain.brain.base.template': ['*.npz'],
                 'visbrain.sleep.ico': ['*.svg'],
@@ -44,6 +44,13 @@ else:
 
 REQS = [str(ir.req) for ir in install_reqs]
 
+# Try to import vispy :
+try:
+    from vispy.scene.visuals import ColorBar
+except:
+    raise ValueError("You should install the right vispy version. In a "
+                     "terminal, run : pip install -e git+https://github.com"
+                     "/vispy/vispy#egg=vispy-dev")
 
 setup(
     name=NAME,
@@ -62,6 +69,7 @@ setup(
     maintainer=MAINTAINER,
     author_email=EMAIL,
     url=URL,
+    download_url=DOWNLOAD_URL,
     license=read('LICENSE'),
     keywords=KEYWORDS,
     classifiers=["Development Status :: 3 - Alpha",

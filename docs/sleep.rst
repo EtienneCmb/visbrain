@@ -41,7 +41,7 @@ To try out in the absence of sleep data, please check out some example scripts a
 Supported files and format
 --------------------------
 
-Sleep support by default several data format for both electrophysiological and hypnogram data.
+Sleep support by default several data formats for both electrophysiological and hypnogram data.
 
 Data files
 ~~~~~~~~~~
@@ -54,7 +54,7 @@ Here’s the list of currently supported extensions for data files:
 * `ELAN <http://elan.lyon.inserm.fr>`_ (**.eeg**)
 
 .. note::
-   Extensions above are the ones natively supported inside Sleep, but you can also directly pass numpy array or .mat file (loaded with scipy.loadmat)
+   File formats above are the ones natively supported by Sleep, but you can also use `MNE Python package <http://martinos.org/mne/stable/>`_ to load several other file formats or directly pass raw data (NumPy array).
 
 .. warning::
    Sleep applies an automatic downsampling to 100 Hz upon loading. You can change this value with the “downsample” argument of Sleep (command-line only) or directly in the file sleep.py.
@@ -110,11 +110,12 @@ Sleep will automatically create a HYPNOFILENAME_description.txt with the appropr
 Load your files
 ---------------
 
-There is three way for loading your files :
+There are four ways to load datasets into Sleep:
 
 * :ref:`loadfromgui`
 * :ref:`loadfrompath`
 * :ref:`loadfromraw`
+* :ref:`loadfrommne`
 
 .. _loadfromgui:
 
@@ -160,29 +161,50 @@ Instead of leaving inputs arguments empty, send the path to the data :
 Raw data
 ~~~~~~~~
 
-This third way is the manually one. You have to load your data before and sending it to the sleep module. For example if you want to import Matlab .mat file:
+It is possible to manually load raw data and pass them as inputs arguments Sleep. The code below show how to extract raw data from a Matlab .mat file (using SciPy):
 
 .. code-block:: python
 
 	from scipy.io import loadmat
-    # Import the Sleep module from visbrain :
+    # Import the Sleep module from visbrain:
     from visbrain import Sleep
     # Load your dataset :
     mat = loadmat('testing_database.mat')
-    # Get the data, sampling frequency and channel names :
-    raw_data = mat['data']
-    raw_sf = mat['sf']
-    raw_channels = mat['channels']
+    # Get the data, sampling frequency and channel names:
+    raw_data, raw_sf, raw_channels = mat['data'], mat['sf'], mat['channels']
     # For the hypnogram :
     raw_hypno = mat['hypno']
-    # As before, if you prefer to start from a fresh empty one, use :
+    # As before, if you prefer to start from a fresh empty one, use:
     # raw_hypno = None or ignore passing this argument.
-    # Now, pass all the arguments to the Sleep module :
+    # Now, pass all the arguments to the Sleep module:
     Sleep(data=raw_data, sf=raw_sf, channels=raw_channels,
           hypno=raw_hypno).show()
 
 .. warning::
 	Data must be an array with shape (channels, samples). The number of channels must be the same as in *channels* variable. If you load an hypnogram this way, it must have the same number of point (i.e same sampling rate) as the data. If your hypnogram comes with a different time base, the simplest way is to export it into a simple txt file and follow the procedure described above.
+
+.. _loadfrommne:
+
+Using MNE-Python
+~~~~~~~~~~~~~~~~
+
+Finally, it is possible to load several other file formats using `MNE Python package <http://martinos.org/mne/stable/>`_. The code below shows how to load either BDF, EGI or EEGLab files and pass them to Sleep.
+
+.. code-block:: python
+
+	from mne import io
+	# Import the Sleep module:
+	from visbrain import Sleep
+	# - Biosemi Data Format (BDF)
+	raw = io.read_raw_edf('mybdffile.bdf', preload=True, verbose=False)
+	# - EGI format
+	# raw = io.read_raw_egi('myegifile.egi', preload=True, verbose=False)
+	# - EEGLab
+	# raw = io.read_raw_eeglab('myeeglabfile.set', preload=True, verbose=False)
+	# Extract data, sampling frequency and channels names
+	data, sf, chan = raw._data, raw.info['sfreq'], raw.info['ch_names']
+	# Now, pass all the arguments to the Sleep module :
+	Sleep(data=data, sf=sf, channels=chan, hypno=hypno).show()
 
 
 Tabs descripion
