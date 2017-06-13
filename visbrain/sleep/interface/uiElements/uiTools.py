@@ -30,7 +30,7 @@ class uiTools(object):
                 # Get it :
                 self._reChecks.append(box)
                 # Add checkbox to the grid :
-                self._ToolsRefIgnGrd.addWidget(self._reChecks[i], i, 0, 1, 1)
+                self._ToolsRefIgnGrd.addWidget(box, i, 0, 1, 1)
         # Connections :
         self._ToolsRefIgn.clicked.connect(self._fcn_refChanIgnore)
         self._ToolsRefLst.addItems(np.array(self._channels)[~self._noneeg])
