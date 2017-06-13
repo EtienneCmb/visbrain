@@ -1,21 +1,29 @@
+.. -*- mode: rst -*-
 
-[![Build Status](https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master)](https://travis-ci.org/EtienneCmb/visbrain)
+.. image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
+    :target: https://travis-ci.org/EtienneCmb/visbrain
 
-# visbrain
+Visbrain
+########
 
+.. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain.png
+   :align:   center
 
 ![Visbrain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain.png "Visbrain")
 
 
 Visbrain is a python package dedicated (mainly) to the visualization of neuroscientist data. Check the [documentation](http://etiennecmb.github.io/visbrain/) for further details
 
-## Installation
+Installation
+============
 
 To see the installation requirements, check the [documentation](http://etiennecmb.github.io/visbrain/).
 
-## Modules
+Modules
+=======
 
-### Brain
+Brain
+-----
 
 The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard MNI brain inside a graphical user interface (using PyQt4 for instance). This module can be used for:
 
@@ -37,7 +45,8 @@ The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard
 
 ![Brain](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png "Brain : visualize your data into a transparent MNI brain")
 
-### Sleep
+Sleep
+-----
 
 [Sleep](http://etiennecmb.github.io/visbrain/sleep.html) is a sleep data dedicated interface for visualization, processing and edition.
 
@@ -49,7 +58,8 @@ The [Brain](http://etiennecmb.github.io/visbrain/brain.html#) Display a standard
 
 ![sleep](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_main.png "Sleep : load, visualize and edit sleep data")
 
-### Ndviz
+Ndviz
+-----
 
 The [Ndviz](http://etiennecmb.github.io/visbrain/ndviz.html) module help you to visualize multi-dimentional data in a memory efficient way.
 
@@ -65,16 +75,20 @@ The [Ndviz](http://etiennecmb.github.io/visbrain/ndviz.html) module help you to 
 
 ![ndviz](https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/ndviz_example.png "Ndviz : data mining")
 
-## Contributors
+Contributors
+============
 
-### Main contributors
+Main contributors
+-----------------
 
-- [Etienne Combrisson](http://etiennecmb.github.io)
-- [Raphael Vallat](https://raphaelvallat.github.io/)
-- [Dmitri Altukchov](https://github.com/dmalt)
-- [David Meunier](https://github.com/davidmeunier79)
-- [Tarek Lajnef](https://github.com/TarekLaj)
-- [Karim Jerbi](www.karimjerbi.com)
+* [Etienne Combrisson](http://etiennecmb.github.io)
+* [Raphael Vallat](https://raphaelvallat.github.io/)
+* [Dmitri Altukchov](https://github.com/dmalt)
+* [David Meunier](https://github.com/davidmeunier79)
+* [Tarek Lajnef](https://github.com/TarekLaj)
+* [Karim Jerbi](www.karimjerbi.com)
 
-### Thx to...
+Thx to...
+---------
+
 *Christian O'Reilly, Perrine Ruby, JB Einchenlaub, kevroy314, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian...*
