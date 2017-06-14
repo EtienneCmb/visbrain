@@ -7,3 +7,4 @@ from .write_data import *
 from .rw_utils import *
 from .rw_config import *
 from .mneio import *
+from .dialog import *

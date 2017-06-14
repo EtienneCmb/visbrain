@@ -1,0 +1,70 @@
+"""Dialog window for saving and loading files.
+
+ - dialogSave : Open a window to save a file
+ - dialogLoad : Open a window to load a file
+"""
+from PyQt5.QtWidgets import QFileDialog
+import os
+from .rw_utils import safety_save
+
+__all__ = ['dialogSave', 'dialogLoad']
+
+
+def dialogSave(self, name='Save file', default='file',
+               allext=['All files (*.*)']):
+    """Open a window to save a file.
+
+    Args:
+        self: class
+            Class containing PyQt5 elemnets.
+
+    Kargs:
+        name: string, optional, (def: 'Save file')
+            Name of the saving window.
+
+        default: string, optional, (def: 'file')
+            Default name of the saved file.
+
+        allext: list, optional, (def: ['All files (*.*)'])
+            String containing all the extensions. Must be a list where each
+            element is a string of type 'Ext (*.ext)'
+
+    Returns:
+        filename: string
+            Filename for saving.
+    """
+    # Build all extensions :
+    if isinstance(allext, (list, tuple)):
+        allext = ';;'.join(allext)
+    # Open the window :
+    file, ext = QFileDialog.getSaveFileName(self, name, default, allext)
+    file, ext = str(file), os.path.splitext(str(ext))[1][0:-1].lower()
+    return safety_save(file + ext)
+
+
+def dialogLoad(self, name='Open file', default='file',
+               allext=['All files (*.*)']):
+    """Open a window to load a file.
+
+    Args:
+        self: class
+            Class containing PyQt5 elemnets.
+
+    Kargs:
+        name: string, optional, (def: 'Save file')
+            Name of the opening window.
+
+        default: string, optional, (def: 'file')
+            Default name of the opened file.
+
+        allext: list, optional, (def: ['All files (*.*)'])
+            String containing all the extensions. Must be a list where each
+            element is a string of type 'Ext (*.ext)'
+
+    Returns:
+        filename: string
+            Filename for opening.
+    """
+    # Open the window :
+    file, _ = QFileDialog.getOpenFileName(self, name, default, allext)
+    return str(file)
