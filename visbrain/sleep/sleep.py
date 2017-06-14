@@ -15,6 +15,7 @@ from .visuals import visuals
 from .tools import Tools
 from ..utils import (FixedCam, load_sleepdataset, load_hypno, color2vb,
                      ShortcutPopup, check_downsampling)
+from ..io import dialogLoad
 
 sip.setdestroyonexit(False)
 
@@ -95,18 +96,15 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             # --------------- Qt Dialog ---------------
             if (file is None) or not isinstance(file, str):
                 # Dialog window for the main dataset :
-                file = QtWidgets.QFileDialog.getOpenFileName(
-                    self, "Open dataset", "", "BrainVision /Elan (*.eeg);;"
-                    "Edf (*.edf);;Micromed (*.trc)")
-                file = str(file)  # py2
+                file = dialogLoad(self, "Open dataset", '',
+                                  "BrainVision/Elan (*.eeg);;Edf (*.edf);;"
+                                  "Micromed (*.trc);;All files (*.*)")
                 # Get the user path :
                 upath = os.path.split(file)[0]
                 # Dialog window for hypnogram :
-                hypno_file = QtWidgets.QFileDialog.getOpenFileName(
-                    self, "Open hypnogram", upath, "Elan (*.hyp);;"
-                    "Text file (*.txt);;""CSV file (*.csv);;All files "
-                    "(*.*)")
-                hypno_file = str(hypno_file)  # py2
+                hypno_file = dialogLoad(self, "Open hypnogram", upath,
+                                        "Elan (*.hyp);;Text file (*.txt);;"
+                                        "CSV file (*.csv);;All files (*.*)")
 
             # Load dataset :
             sf, downsample, data, channels, N, start_time = load_sleepdataset(

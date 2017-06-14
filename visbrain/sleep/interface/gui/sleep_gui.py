@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/sleep/interface/gui/sleep_gui.ui'
 #
-# Created by: PyQt5 UI code generator 5.6
+# Created by: PyQt5 UI code generator 5.7.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -11,6 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
+        MainWindow.setWindowModality(QtCore.Qt.NonModal)
         MainWindow.setEnabled(True)
         MainWindow.resize(1359, 1116)
         font = QtGui.QFont()
@@ -89,7 +90,7 @@ class Ui_MainWindow(object):
         self._PanScrollChan.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self._PanScrollChan.setObjectName("_PanScrollChan")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 321, 70))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 98, 28))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.verticalLayout_14 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_3)
         self.verticalLayout_14.setContentsMargins(0, 0, 0, 0)
@@ -672,7 +673,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_16.addItem(spacerItem16)
         self.toolBox.addItem(self.page, "")
         self.page_2 = QtWidgets.QWidget()
-        self.page_2.setGeometry(QtCore.QRect(0, 0, 410, 891))
+        self.page_2.setGeometry(QtCore.QRect(0, 0, 337, 396))
         self.page_2.setObjectName("page_2")
         self.verticalLayout_17 = QtWidgets.QVBoxLayout(self.page_2)
         self.verticalLayout_17.setContentsMargins(0, 0, 0, 0)

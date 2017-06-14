@@ -10,6 +10,7 @@ from PyQt5.QtCore import QTimer
 import vispy.visuals.transforms as vist
 
 from ....utils import save_hypnoTotxt, save_hypnoToElan, save_hypnoToFig
+from ....io import dialogSave, dialogLoad
 
 
 __all__ = ['uiSettings']
@@ -110,17 +111,14 @@ class uiSettings(object):
         """Screenshot using the GUI."""
         # self.setFixedSize(100, 100)
         # Get filename :
-        filename = QtWidgets.QFileDialog.getSaveFileName(
-                             self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
-                             "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
-        filename = str(filename)  # py2
+        filename = dialogSave(self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
+                              "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
         # Screnshot function :
         def _takeScreenShot():
             """Take the screenshot."""
-            file, ext = os.path.splitext(filename)
-            # p = QPixmap.grabWidget(self.centralwidget)
-            p = QPixmap.grabWindow(self.centralwidget.winId())
-            p.save(file + '.png')
+            screen = QtWidgets.QApplication.primaryScreen()
+            p = screen.grabWindow(0)
+            p.save(filename)
         # Take screenshot if filename :
         if filename:
             # Timer (avoid shooting the saving window)
@@ -136,10 +134,8 @@ class uiSettings(object):
 
     def saveFile(self):
         """Save the hypnogram."""
-        filename = QtWidgets.QFileDialog.getSaveFileName(
-                 self, 'Save File', 'hypno', "Text file (*.txt);;Elan file "
-                 "(*.hyp);;All files (*.*)")
-        filename = str(filename)  # py2
+        filename = dialogSave(self, 'Save File', 'hypno', "Text file (*.txt);;"
+                              "Elan file (*.hyp);;All files (*.*)")
         if filename:
             file, ext = os.path.splitext(filename)
 
@@ -155,19 +151,16 @@ class uiSettings(object):
 
     def saveHypFig(self):
         """Save a 600 dpi .png figure of the hypnogram."""
-        filename = QtWidgets.QFileDialog.getSaveFileName(
-                     self, 'Save Hypnogram figure', 'hypno.png', "PNG (*.png)")
-        filename = str(filename)  # py2
+        filename = dialogSave(self, 'Save Hypnogram figure', 'hypno',
+                              "PNG (*.png);;All files (*.*)")
         if filename:
             save_hypnoToFig(filename, self._hypno, self._sf, self._toffset)
 
     def saveConfig(self):
         """Save a config file (*.txt) containing several display parameters."""
         import json
-        upath = os.path.split(self._file)[0]
-        filename = QtWidgets.QFileDialog.getSaveFileName(
-                     self, 'Save config file', upath, "Text file (*.txt)")
-        filename = str(filename)  # py2
+        filename = dialogSave(self, 'Save config File', 'config',
+                              "Text file (*.txt);;All files (*.*)")
         if filename:
             with open(filename, 'w') as f:
                 config = {}
@@ -195,13 +188,8 @@ class uiSettings(object):
     def loadConfig(self):
         """Load a config file (*.txt) containing several display parameters."""
         import json
-        if hasattr(self, '_config_file'):
-            filename = str(self._config_file)
-        else:
-            upath = os.path.split(self._file)[0]
-            filename = QtWidgets.QFileDialog.getOpenFileName(
-                self, "Open config file", upath, "Text file (*.txt)")
-            filename = str(filename)  # py2
+        filename = dialogLoad(self, 'Save config File', 'config',
+                              "Text file (*.txt);;All files (*.*)")
 
         with open(filename) as f:
             config = json.load(f)

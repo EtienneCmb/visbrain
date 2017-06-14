@@ -2,12 +2,12 @@
 import numpy as np
 import os
 from warnings import warn
+from PyQt5 import QtWidgets
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect, listToCsv, listToTxt)
 from ....utils.sleep.event import _events_duration
-
-from PyQt5 import QtWidgets
+from ....io import dialogLoad, dialogSave
 
 __all__ = ['uiDetection']
 
@@ -361,10 +361,9 @@ class uiDetection(object):
         # Find extension :
         selected_ext = str(self._DetectLocExportAs.currentText())
         # Get file name :
-        path = QtWidgets.QFileDialog.getSaveFileName(
-            self, "Save File", method + "_locinfo",
-            filter=selected_ext)
-        path = str(path)  # py2
+        saveas = "locinfo" + '_' + channel + '-' + method
+        path = dialogSave(self, 'Save ' + method + ' detection', saveas,
+                          selected_ext + ";;All files (*.*)")
         if path:
             file = os.path.splitext(str(path))[0]
             file += '_' + channel + '-' + method
@@ -376,10 +375,9 @@ class uiDetection(object):
     def _fcn_importLocation(self):
         """Import location table."""
         # Get file name :
-        file = QtWidgets.QFileDialog.getOpenFileName(
-            self, "Import table", "", "CSV file (*.csv);;Text file (*.txt);;"
-            "All files (*.*)")
-        file = str(file)
+        file = dialogLoad(self, "Import table", '',
+                          "CSV file (*.csv);;Text file (*.txt);;"
+                          "All files (*.*)")
         # Get channel / method from file name :
         (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
         # Load the file :
@@ -404,9 +402,8 @@ class uiDetection(object):
     def _fcn_exportAllDetections(self):
         """Export all locations."""
         # Get file name :
-        path = QtWidgets.QFileDialog.getSaveFileName(
-            self, "Save all detections", filter='.npy')
-        path = str(path)  # py2
+        path = dialogSave(self, 'Save all detections', 'detections',
+                          "NumPy (*.npy);;All files (*.*)")
         if path:
             file = os.path.splitext(str(path))[0]
             np.save(file + '.npy', self._detect.dict)
@@ -414,8 +411,8 @@ class uiDetection(object):
     def _fcn_importAllDetections(self):
         """Import detections."""
         # Dialog window for detection file :
-        file = QtWidgets.QFileDialog.getOpenFileName(
-            self, "Import detections", "", "NumPy (*.npy)")
+        file = dialogLoad(self, "Import detections", '',
+                          "NumPy (*.npy);;All files (*.*)")
         self._detect.dict = np.ndarray.tolist(np.load(file))
         # Made canvas visbles :
         for k in self._detect:

@@ -3,8 +3,8 @@ import numpy as np
 import os
 from PyQt5 import QtWidgets
 
-from ....utils import transient
-from ....utils import listToCsv, listToTxt
+from ....utils import transient, listToCsv, listToTxt
+from ....io import dialogSave
 
 __all__ = ['uiScoring']
 
@@ -166,10 +166,8 @@ class uiScoring(object):
         # Find extension :
         selected_ext = str(self._scoreExportAs.currentText())
         # Get file name :
-        path = QtWidgets.QFileDialog.getSaveFileName(
-            self, "Save File", "scoring_info",
-            filter=selected_ext)
-        path = str(path)  # py2
+        path = dialogSave(self, 'Save file', 'scoring_info',
+                          selected_ext + ";;All files (*.*)")
         if path:
             file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:

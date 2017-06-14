@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets
 import os
 
 from ....utils import sleepstats, listToCsv, listToTxt
+from ....io import dialogSave
 
 __all__ = ['uiInfo']
 
@@ -47,10 +48,8 @@ class uiInfo(object):
         # Find extension :
         selected_ext = str(self._infoExportAs.currentText())
         # Get file name :
-        path = QtWidgets.QFileDialog.getSaveFileName(
-            self, "Save File", "statsinfo",
-            filter=selected_ext)
-        path = str(path)  # py2
+        path = dialogSave(self, 'Save file', 'statsinfo',
+                          selected_ext + ";;All files (*.*)")
         if path:
             file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:
