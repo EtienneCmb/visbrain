@@ -24,6 +24,8 @@ doc
 
 Colorbar
 	-5 Exportation de la colorbar ne marche pas bien (si GUI reste fermée). Il faudrait faire une petite opération sur le canvas pour le mettre à jour avant le screenshot
+	-5 Screenshot via commandline bug (choisir entre connectivité / projection)
+	-5 Colorbar screenshot 
 	-3 Ajouter un paramètre label pour chaque objet.
 	+4 Ajouter dans color.py une fonction mpl_colormap(name, invert=False, mymap=None) qui retourne la liste de colorbar et qui teste si mymap est bien dans la liste.
 	+5 La couleur du texte de la colorbar devrait pouvoir être fixé ou auto (en fonction de la couleur de fond)
