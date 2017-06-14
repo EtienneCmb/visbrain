@@ -3,7 +3,7 @@ notifications:
   email: false
 python:
   # We don't actually use the Travis Python, but this keeps it organized.
-  - "3.5"
+  - "3.6"
 install:
   # - sudo apt-get update
   # Deactivate travis environnement :
@@ -24,8 +24,9 @@ install:
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib=1.5.1 pip
+  - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
   - source activate testenv
+  - pip install pyqt5
   - pip install setuptools
   - pip install nose
   - pip install codecov
