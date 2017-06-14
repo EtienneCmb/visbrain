@@ -8,7 +8,7 @@ provides graphic renderings offloaded to the GPU.
 
 Right now, visbrain contains four modules :
 * Brain : visualize EEG/MEG/Intracranial data and connectivity in a standard
-MNI 3D brain.
+  MNI 3D brain.
 * Sleep : visualize polysomnographic data and hypnogram edition.
 * Ndviz : visualize multidimensional data and basic plotting forms.
 * Figure : figure-layout for high-quality publication-like figures.
