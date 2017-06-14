@@ -1,6 +1,6 @@
 """Main class for info managment."""
 
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtWidgets
 import os
 
 from ....utils import sleepstats, listToCsv, listToTxt
