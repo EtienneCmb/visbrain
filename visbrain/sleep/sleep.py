@@ -80,7 +80,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
-        self._app = QtGui.QApplication(sys.argv)
+        self._app = QtWidgets.QApplication(sys.argv)
         uiInit.__init__(self)
 
         # Shortcuts popup window :
@@ -95,14 +95,14 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             # --------------- Qt Dialog ---------------
             if (file is None) or not isinstance(file, str):
                 # Dialog window for the main dataset :
-                file = QtGui.QFileDialog.getOpenFileName(
+                file = QtWidgets.QFileDialog.getOpenFileName(
                     self, "Open dataset", "", "BrainVision /Elan (*.eeg);;"
                     "Edf (*.edf);;Micromed (*.trc)")
                 file = str(file)  # py2
                 # Get the user path :
                 upath = os.path.split(file)[0]
                 # Dialog window for hypnogram :
-                hypno_file = QtGui.QFileDialog.getOpenFileName(
+                hypno_file = QtWidgets.QFileDialog.getOpenFileName(
                     self, "Open hypnogram", upath, "Elan (*.hyp);;"
                     "Text file (*.txt);;""CSV file (*.csv);;All files "
                     "(*.*)")

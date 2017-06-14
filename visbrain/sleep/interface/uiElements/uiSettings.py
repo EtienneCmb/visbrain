@@ -3,6 +3,7 @@ import numpy as np
 import os
 import datetime
 
+from PyQt5 import QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QTimer
 
@@ -24,7 +25,7 @@ class uiSettings(object):
         # =====================================================================
         # ---------------------- Screenshot ----------------------
         self.actionScreenshot.triggered.connect(self._screenshot)
-        self.actionExit.triggered.connect(qApp.quit)
+        self.actionExit.triggered.connect(QtWidgets.qApp.quit)
 
         # ---------------------- Save ----------------------
         self.actionHypnogram_data.triggered.connect(self.saveFile)
@@ -109,10 +110,9 @@ class uiSettings(object):
         """Screenshot using the GUI."""
         # self.setFixedSize(100, 100)
         # Get filename :
-        filename = QFileDialog.getSaveFileName(self, 'Screenshot',
-                                               'screenshot', "PNG (*.PNG);;"
-                                               "TIFF (*.tiff);;JPG (*.jpg);;"
-                                               "All files (*.*)")
+        filename = QtWidgets.QFileDialog.getSaveFileName(
+                             self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
+                             "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
         filename = str(filename)  # py2
         # Screnshot function :
         def _takeScreenShot():
@@ -136,9 +136,9 @@ class uiSettings(object):
 
     def saveFile(self):
         """Save the hypnogram."""
-        filename = QFileDialog.getSaveFileName(self, 'Save File', 'hypno',
-                                               "Text file (*.txt);;Elan file "
-                                               "(*.hyp);;All files (*.*)")
+        filename = QtWidgets.QFileDialog.getSaveFileName(
+                 self, 'Save File', 'hypno', "Text file (*.txt);;Elan file "
+                 "(*.hyp);;All files (*.*)")
         filename = str(filename)  # py2
         if filename:
             file, ext = os.path.splitext(filename)
@@ -155,8 +155,8 @@ class uiSettings(object):
 
     def saveHypFig(self):
         """Save a 600 dpi .png figure of the hypnogram."""
-        filename = QFileDialog.getSaveFileName(self, 'Save Hypnogram figure',
-                                               'hypno.png', "PNG (*.png)")
+        filename = QtWidgets.QFileDialog.getSaveFileName(
+                     self, 'Save Hypnogram figure', 'hypno.png', "PNG (*.png)")
         filename = str(filename)  # py2
         if filename:
             save_hypnoToFig(filename, self._hypno, self._sf, self._toffset)
@@ -165,8 +165,8 @@ class uiSettings(object):
         """Save a config file (*.txt) containing several display parameters."""
         import json
         upath = os.path.split(self._file)[0]
-        filename = QFileDialog.getSaveFileName(self, 'Save config file',
-                                               upath, "Text file (*.txt)")
+        filename = QtWidgets.QFileDialog.getSaveFileName(
+                     self, 'Save config file', upath, "Text file (*.txt)")
         filename = str(filename)  # py2
         if filename:
             with open(filename, 'w') as f:
@@ -199,7 +199,7 @@ class uiSettings(object):
             filename = str(self._config_file)
         else:
             upath = os.path.split(self._file)[0]
-            filename = QFileDialog.getOpenFileName(
+            filename = QtWidgets.QFileDialog.getOpenFileName(
                 self, "Open config file", upath, "Text file (*.txt)")
             filename = str(filename)  # py2
 

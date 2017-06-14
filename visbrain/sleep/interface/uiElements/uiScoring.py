@@ -1,7 +1,7 @@
 """Main class for settings managment."""
 import numpy as np
 import os
-from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 from ....utils import transient
 from ....utils import listToCsv, listToTxt
@@ -45,12 +45,12 @@ class uiScoring(object):
         # Fill the table :
         for k in range(len(stages)):
             # Add stage start / end :
-            self._scoreTable.setItem(k, 0, QtGui.QTableWidgetItem(
+            self._scoreTable.setItem(k, 0, QtWidgets.QTableWidgetItem(
                 str(idx[k, 0])))
-            self._scoreTable.setItem(k, 1, QtGui.QTableWidgetItem(
+            self._scoreTable.setItem(k, 1, QtWidgets.QTableWidgetItem(
                 str(idx[k, 1])))
             # Add stage :
-            self._scoreTable.setItem(k, 2, QtGui.QTableWidgetItem(
+            self._scoreTable.setItem(k, 2, QtWidgets.QTableWidgetItem(
                 items[stages[k]]))
         self._scoreSet = True
 
@@ -166,7 +166,7 @@ class uiScoring(object):
         # Find extension :
         selected_ext = str(self._scoreExportAs.currentText())
         # Get file name :
-        path = QtGui.QFileDialog.getSaveFileName(
+        path = QtWidgets.QFileDialog.getSaveFileName(
             self, "Save File", "scoring_info",
             filter=selected_ext)
         path = str(path)  # py2

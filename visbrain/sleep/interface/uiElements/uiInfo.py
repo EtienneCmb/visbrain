@@ -1,6 +1,6 @@
 """Main class for info managment."""
 
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtWidgets
 import os
 
 from ....utils import sleepstats, listToCsv, listToTxt
@@ -35,9 +35,9 @@ class uiInfo(object):
             # Get keys and row :
             key, r = k.split('_')
             # Add keys :
-            self._infoTable.setItem(int(r), 0, QtGui.QTableWidgetItem(key))
+            self._infoTable.setItem(int(r), 0, QtWidgets.QTableWidgetItem(key))
             # Add values :
-            self._infoTable.setItem(int(r), 1, QtGui.QTableWidgetItem(str(v)))
+            self._infoTable.setItem(int(r), 1, QtWidgets.QTableWidgetItem(str(v)))
             # Remember variables :
             self._keysInfo[int(r) + 1] = key
             self._valInfo[int(r) + 1] = str(v)
@@ -47,7 +47,7 @@ class uiInfo(object):
         # Find extension :
         selected_ext = str(self._infoExportAs.currentText())
         # Get file name :
-        path = QtGui.QFileDialog.getSaveFileName(
+        path = QtWidgets.QFileDialog.getSaveFileName(
             self, "Save File", "statsinfo",
             filter=selected_ext)
         path = str(path)  # py2

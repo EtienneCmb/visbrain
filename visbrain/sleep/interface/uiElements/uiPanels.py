@@ -1,5 +1,5 @@
 """Main class for settings managment."""
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 import numpy as np
 
@@ -28,7 +28,7 @@ class uiPanels(object):
         # =====================================================================
         # MAIN GRID :
         # =====================================================================
-        self._chanGrid = QtGui.QGridLayout()
+        self._chanGrid = QtWidgets.QGridLayout()
         self._chanGrid.setContentsMargins(-1, -1, -1, 6)
         self._chanGrid.setSpacing(3)
         self._chanGrid.setObjectName(_fromUtf8("_chanGrid"))
@@ -69,7 +69,7 @@ class uiPanels(object):
         self._SpecLayout.addWidget(self._specCanvas.canvas.native)
         self._chanGrid.addWidget(self._SpecW, len(self) + 1, 1, 1, 1)
         # Add label :
-        self._specLabel = QtGui.QLabel(self.centralwidget)
+        self._specLabel = QtWidgets.QLabel(self.centralwidget)
         self._specLabel.setText(self._channels[0])
         self._specLabel.setFont(self._font)
         self._chanGrid.addWidget(self._specLabel, len(self) + 1, 0, 1, 1)
@@ -106,13 +106,13 @@ class uiPanels(object):
         self._HypLayout.addWidget(self._hypCanvas.canvas.native)
         self._chanGrid.addWidget(self._HypW, len(self) + 2, 1, 1, 1)
         # Add label :
-        self._hypLabel = QtGui.QWidget()
-        layout = QtGui.QVBoxLayout(self._hypLabel)
-        layout.setMargin(0)
-        layout.setSpacing(0)
+        self._hypLabel = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(self._hypLabel)
+        layout.setContentsMargins(0, 0, 0, 0)#.setMargin(0)
+        # layout.setSpacing(0)
         self._hypYLabels = []
         for k in self._href+['']:
-            label = QtGui.QLabel()
+            label = QtWidgets.QLabel()
             label.setText(k)
             label.setFont(self._font)
             layout.addWidget(label)
@@ -164,7 +164,7 @@ class uiPanels(object):
         self._TimeAxisW.setMinimumHeight(50)
         self._chanGrid.addWidget(self._TimeAxisW, len(self) + 3, 1, 1, 1)
         # Add label :
-        self._timeLabel = QtGui.QLabel(self.centralwidget)
+        self._timeLabel = QtWidgets.QLabel(self.centralwidget)
         self._timeLabel.setText('Time')
         self._timeLabel.setFont(self._font)
         self._chanGrid.addWidget(self._timeLabel, len(self) + 3, 0, 1, 1)
@@ -181,16 +181,16 @@ class uiPanels(object):
     # =====================================================================
     def _createCompatibleW(self, nameWiget, nameLayout, visible=False):
         """This function create a widget and a layout."""
-        Widget = QtGui.QWidget(self.centralwidget)
+        Widget = QtWidgets.QWidget(self.centralwidget)
         Widget.setMinimumSize(QtCore.QSize(0, 0))
         Widget.setObjectName(_fromUtf8(nameWiget))
         Widget.setVisible(visible)
-        vlay = QtGui.QVBoxLayout(Widget)
+        vlay = QtWidgets.QVBoxLayout(Widget)
         vlay.setContentsMargins(9, 0, 9, 0)
         vlay.setSpacing(0)
         vlay.setObjectName(_fromUtf8("vlay"))
         # Create layout :
-        Layout = QtGui.QVBoxLayout()
+        Layout = QtWidgets.QVBoxLayout()
         Layout.setSpacing(0)
         Layout.setObjectName(_fromUtf8(nameLayout))
         vlay.addLayout(Layout)
@@ -209,17 +209,19 @@ class uiPanels(object):
         self._amplitudeTxt = []
 
         # Define a vertical and horizontal spacers :
-        vspacer = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Expanding,
-                                    QtGui.QSizePolicy.Minimum)
-        hspacer = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding,
-                                    QtGui.QSizePolicy.Minimum)
+        vspacer = QtWidgets.QSpacerItem(20, 40,
+                                        QtWidgets.QSizePolicy.Expanding,
+                                        QtWidgets.QSizePolicy.Minimum)
+        hspacer = QtWidgets.QSpacerItem(40, 20,
+                                        QtWidgets.QSizePolicy.Expanding,
+                                        QtWidgets.QSizePolicy.Minimum)
 
         # Loop over channels :
         for i, k in enumerate(self._channels):
             # ============ CHECKBOX ============
             # ----- MAIN CHECKBOX -----
             # Add a checkbox to the scrolling panel :
-            self._chanChecks[i] = QtGui.QCheckBox(self._PanScrollChan)
+            self._chanChecks[i] = QtWidgets.QCheckBox(self._PanScrollChan)
             # Name checkbox with channel name :
             self._chanChecks[i].setObjectName(_fromUtf8("_CheckChan"+k))
             self._chanChecks[i].setText(k)
@@ -231,12 +233,12 @@ class uiPanels(object):
             # ----- LABEL/ Y-MIN / Y-MAX -----
             fact = 5.
             # Add amplitude label :
-            amplitude = QtGui.QLabel(self._PanScrollChan)
+            amplitude = QtWidgets.QLabel(self._PanScrollChan)
             amplitude.setText('Amp')
             self._amplitudeTxt.append(amplitude)
             self._PanChanLay.addWidget(amplitude, i, 2, 1, 1)
             # Add ymin spinbox :
-            self._yminSpin[i] = QtGui.QDoubleSpinBox(self._PanScrollChan)
+            self._yminSpin[i] = QtWidgets.QDoubleSpinBox(self._PanScrollChan)
             self._yminSpin[i].setDecimals(1)
             self._yminSpin[i].setMinimum(self['min'][i])
             self._yminSpin[i].setMaximum(self['max'][i])
@@ -244,7 +246,7 @@ class uiPanels(object):
             self._yminSpin[i].setSingleStep(1.)
             self._PanChanLay.addWidget(self._yminSpin[i], i, 3, 1, 1)
             # Add ymax spinbox :
-            self._ymaxSpin[i] = QtGui.QDoubleSpinBox(self._PanScrollChan)
+            self._ymaxSpin[i] = QtWidgets.QDoubleSpinBox(self._PanScrollChan)
             self._ymaxSpin[i].setDecimals(1)
             self._ymaxSpin[i].setMinimum(self['min'][i])
             self._ymaxSpin[i].setMaximum(self['max'][i])
@@ -261,7 +263,7 @@ class uiPanels(object):
                 i] = self._createCompatibleW("_widgetChan"+k, "_LayoutChan"+k)
             self._chanGrid.addWidget(self._chanWidget[i], i, 1, 1, 1)
             # Add channel label :
-            self._chanLabels.append(QtGui.QLabel(self.centralwidget))
+            self._chanLabels.append(QtWidgets.QLabel(self.centralwidget))
             self._chanLabels[i].setText(k)
             self._chanLabels[i].setFont(self._font)
             self._chanLabels[i].setVisible(False)

@@ -7,7 +7,7 @@ from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect, listToCsv, listToTxt)
 from ....utils.sleep.event import _events_duration
 
-from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 __all__ = ['uiDetection']
 
@@ -198,9 +198,9 @@ class uiDetection(object):
         if index.size:
             # Report results on table :
             self._ToolDetectTable.setRowCount(1)
-            self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
+            self._ToolDetectTable.setItem(0, 0, QtWidgets.QTableWidgetItem(
                 str(nb)))
-            self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
+            self._ToolDetectTable.setItem(0, 1, QtWidgets.QTableWidgetItem(
                 str(round(dty, 2))))
         else:
             warn("\nNo " + method + " detected on channel " + self._channels[
@@ -310,13 +310,13 @@ class uiDetection(object):
         # Fill the table :
         for num, (k, i) in enumerate(zip(staInd, duration)):
             # Starting :
-            self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
+            self._DetectLocations.setItem(num, 0, QtWidgets.QTableWidgetItem(
                 str(self._time[k])))
             # Duration :
-            self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
+            self._DetectLocations.setItem(num, 1, QtWidgets.QTableWidgetItem(
                 str(i)))
             # Type :
-            self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
+            self._DetectLocations.setItem(num, 2, QtWidgets.QTableWidgetItem(
                 ref[int(self._hypno[k])]))
 
         self._DetectLocations.selectRow(0)
@@ -361,7 +361,7 @@ class uiDetection(object):
         # Find extension :
         selected_ext = str(self._DetectLocExportAs.currentText())
         # Get file name :
-        path = QtGui.QFileDialog.getSaveFileName(
+        path = QtWidgets.QFileDialog.getSaveFileName(
             self, "Save File", method + "_locinfo",
             filter=selected_ext)
         path = str(path)  # py2
@@ -376,7 +376,7 @@ class uiDetection(object):
     def _fcn_importLocation(self):
         """Import location table."""
         # Get file name :
-        file = QtGui.QFileDialog.getOpenFileName(
+        file = QtWidgets.QFileDialog.getOpenFileName(
             self, "Import table", "", "CSV file (*.csv);;Text file (*.txt);;"
             "All files (*.*)")
         file = str(file)
@@ -404,7 +404,7 @@ class uiDetection(object):
     def _fcn_exportAllDetections(self):
         """Export all locations."""
         # Get file name :
-        path = QtGui.QFileDialog.getSaveFileName(
+        path = QtWidgets.QFileDialog.getSaveFileName(
             self, "Save all detections", filter='.npy')
         path = str(path)  # py2
         if path:
@@ -414,7 +414,7 @@ class uiDetection(object):
     def _fcn_importAllDetections(self):
         """Import detections."""
         # Dialog window for detection file :
-        file = QtGui.QFileDialog.getOpenFileName(
+        file = QtWidgets.QFileDialog.getOpenFileName(
             self, "Import detections", "", "NumPy (*.npy)")
         self._detect.dict = np.ndarray.tolist(np.load(file))
         # Made canvas visbles :
