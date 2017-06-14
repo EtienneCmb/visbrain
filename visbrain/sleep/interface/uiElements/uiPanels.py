@@ -1,5 +1,5 @@
 """Main class for settings managment."""
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui
 
 import numpy as np
 

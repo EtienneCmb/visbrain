@@ -1,7 +1,7 @@
 """Main class for settings managment."""
 
 import os
-from PyQt4.QtGui import *
+from PyQt5.QtGui import *
 from vispy import io
 
 

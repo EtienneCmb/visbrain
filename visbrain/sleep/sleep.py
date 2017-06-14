@@ -2,7 +2,7 @@
 import numpy as np
 import sip
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 import sys
 import os
 from warnings import warn

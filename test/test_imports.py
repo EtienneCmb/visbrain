@@ -13,7 +13,7 @@ def test_import_scipy():
 
 def test_import_pyqt():
     """Import PyQt"""
-    import PyQt4
+    import PyQt5
 
 def test_import_Brain():
     """Import the Brain module."""

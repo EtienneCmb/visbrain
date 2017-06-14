@@ -1,7 +1,7 @@
 """Main class for sleep tools managment."""
 
 import numpy as np
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 from ....utils import (rereferencing, bipolarization, find_nonEEG,
                        commonaverage, id)
 

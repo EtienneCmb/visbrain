@@ -6,7 +6,7 @@ Grouped components :
     * User shortcuts
 """
 
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 from vispy import app, scene
 
 from .gui import Ui_MainWindow
@@ -228,7 +228,7 @@ class vbShortcuts(object):
             pass
 
 
-class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
+class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
     """Group and initialize the graphical elements and interactions.
 
     Kargs:

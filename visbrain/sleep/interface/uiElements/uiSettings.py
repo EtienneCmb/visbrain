@@ -3,8 +3,8 @@ import numpy as np
 import os
 import datetime
 
-from PyQt4.QtGui import *
-from PyQt4.QtCore import QObjectCleanupHandler, QTimer
+from PyQt5.QtGui import *
+from PyQt5.QtCore import QTimer
 
 import vispy.visuals.transforms as vist
 

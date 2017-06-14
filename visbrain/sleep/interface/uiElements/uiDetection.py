@@ -7,7 +7,7 @@ from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect, listToCsv, listToTxt)
 from ....utils.sleep.event import _events_duration
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 
 __all__ = ['uiDetection']
 

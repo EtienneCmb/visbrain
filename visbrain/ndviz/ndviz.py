@@ -1,7 +1,7 @@
 """Top level Ndviz class."""
 import numpy as np
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 import sys
 
 import vispy.app as visapp

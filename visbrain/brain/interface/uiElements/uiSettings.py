@@ -3,8 +3,8 @@
 """Main class for settings managment (save / load / light / cameras...)."""
 import os
 import numpy as np
-from PyQt4.QtGui import *
-from PyQt4 import QtCore
+from PyQt5.QtGui import *
+from PyQt5 import QtCore, QtWidgets
 
 
 from vispy import io
@@ -27,7 +27,7 @@ class uiSettings(object):
 
         # ------------- Screenshot / Exit -------------
         self.actionScreenshot.triggered.connect(self._screenshot)
-        self.actionExit.triggered.connect(qApp.quit)
+        self.actionExit.triggered.connect(QtWidgets.qApp.quit)
 
         # ------------- Display -------------
         self.actionUi_settings.triggered.connect(self._fcn_panSettingsViz)

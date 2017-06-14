@@ -1,13 +1,13 @@
 """Create basic popup."""
 
-from PyQt4.Qt import *
-from PyQt4 import QtGui
+from PyQt5.Qt import *
+from PyQt5 import QtWidgets
 
 __all__ = ['ShortcutPopup']
 
 
 def _translate(context, text, disambig):
-    return QtGui.QApplication.translate(context, text, disambig, _encoding)
+    return QtWidgets.QApplication.translate(context, text, disambig, _encoding)
 
 
 class ShortcutPopup(QWidget):
@@ -17,14 +17,14 @@ class ShortcutPopup(QWidget):
         """Init."""
         QWidget.__init__(self)
         self.setGeometry(QRect(400, 200, 700, 600))
-        layout = QtGui.QGridLayout(self)
-        self.table = QtGui.QTableWidget()
+        layout = QtWidgets.QGridLayout(self)
+        self.table = QtWidgets.QTableWidget()
         self.table.setColumnCount(2)
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.verticalHeader().setStretchLastSection(False)
         layout.addWidget(self.table)
         # Add column names :
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         self.table.setHorizontalHeaderItem(0, item)
         item = self.table.horizontalHeaderItem(0)
         item.setText("Keys")
@@ -36,5 +36,5 @@ class ShortcutPopup(QWidget):
         """Fill table."""
         self.table.setRowCount(len(shdic))
         for num, k in enumerate(shdic):
-            self.table.setItem(num, 0, QtGui.QTableWidgetItem(k[0]))
-            self.table.setItem(num, 1, QtGui.QTableWidgetItem(k[1]))
+            self.table.setItem(num, 0, QtWidgets.QTableWidgetItem(k[0]))
+            self.table.setItem(num, 1, QtWidgets.QTableWidgetItem(k[1]))

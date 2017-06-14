@@ -1,7 +1,7 @@
 """Main class for settings managment."""
 import numpy as np
 import os
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 
 from ....utils import transient
 from ....utils import listToCsv, listToTxt

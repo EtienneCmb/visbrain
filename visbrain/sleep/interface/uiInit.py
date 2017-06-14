@@ -7,7 +7,7 @@ Grouped components :
 """
 import numpy as np
 
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 from vispy import app, scene
 import vispy.visuals.transforms as vist
 
@@ -17,7 +17,7 @@ from ...utils import color2vb
 __all__ = ['uiInit']
 
 
-class uiInit(QtGui.QMainWindow, Ui_MainWindow, app.Canvas):
+class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
     """Group and initialize the graphical elements and interactions."""
 
     def __init__(self):
