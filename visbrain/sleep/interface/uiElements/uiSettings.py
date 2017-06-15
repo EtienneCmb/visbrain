@@ -188,8 +188,11 @@ class uiSettings(object):
     def loadConfig(self):
         """Load a config file (*.txt) containing several display parameters."""
         import json
-        filename = dialogLoad(self, 'Save config File', 'config',
-                              "Text file (*.txt);;All files (*.*)")
+        if self._config_file is None:
+            filename = dialogLoad(self, 'Load config File', 'config',
+                                  "Text file (*.txt);;All files (*.*)")
+        else:
+            filename = self._config_file
 
         with open(filename) as f:
             config = json.load(f)
