@@ -188,40 +188,40 @@ class uiSettings(object):
     def loadConfig(self):
         """Load a config file (*.txt) containing several display parameters."""
         import json
-        if self._config_file is None:
+        if self._config_file is not None:
+            filename = self._config_file
+        else:
             filename = dialogLoad(self, 'Load config File', 'config',
                                   "Text file (*.txt);;All files (*.*)")
-        else:
-            filename = self._config_file
+        if filename:
+            with open(filename) as f:
+                config = json.load(f)
+                # Channels
+                for i, k in enumerate(self._chanChecks):
+                    self._chanChecks[i].setChecked(config['Channel_Visible'][i])
+                    self._ymaxSpin[i].setValue(config['Channel_Amplitude'][i])
 
-        with open(filename) as f:
-            config = json.load(f)
-            # Channels
-            for i, k in enumerate(self._chanChecks):
-                self._chanChecks[i].setChecked(config['Channel_Visible'][i])
-                self._ymaxSpin[i].setValue(config['Channel_Amplitude'][i])
+                # Spectrogram
+                self._PanSpecViz.setChecked(config['Spec_Visible'])
+                self._PanSpecNfft.setValue(config['Spec_Length'])
+                self._PanSpecStep.setValue(config['Spec_Overlap'])
+                self._PanSpecCmap.setCurrentIndex(config['Spec_Cmap'])
+                self._PanSpecChan.setCurrentIndex(config['Spec_Chan'])
+                self._PanSpecFstart.setValue(config['Spec_Fstart'])
+                self._PanSpecFend.setValue(config['Spec_Fend'])
+                self._PanSpecCon.setValue(config['Spec_Con'])
 
-            # Spectrogram
-            self._PanSpecViz.setChecked(config['Spec_Visible'])
-            self._PanSpecNfft.setValue(config['Spec_Length'])
-            self._PanSpecStep.setValue(config['Spec_Overlap'])
-            self._PanSpecCmap.setCurrentIndex(config['Spec_Cmap'])
-            self._PanSpecChan.setCurrentIndex(config['Spec_Chan'])
-            self._PanSpecFstart.setValue(config['Spec_Fstart'])
-            self._PanSpecFend.setValue(config['Spec_Fend'])
-            self._PanSpecCon.setValue(config['Spec_Con'])
+                # Hypnogram & Time axis
+                self._PanHypViz.setChecked(config['Hyp_Visible'])
+                self._PanTimeViz.setChecked(config['Time_Visible'])
 
-            # Hypnogram & Time axis
-            self._PanHypViz.setChecked(config['Hyp_Visible'])
-            self._PanTimeViz.setChecked(config['Time_Visible'])
-
-            # Update display
-            self._fcn_chanViz()
-            self._fcn_chanAmplitude()
-            self._fcn_specViz()
-            self._fcn_specSetData()
-            self._fcn_hypViz()
-            self._fcn_timeViz()
+                # Update display
+                self._fcn_chanViz()
+                self._fcn_chanAmplitude()
+                self._fcn_specViz()
+                self._fcn_specSetData()
+                self._fcn_hypViz()
+                self._fcn_timeViz()
 
     # =====================================================================
     # SLIDER

@@ -140,6 +140,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
+        self._config_file = config_file
         (self._sf, self._data, self._hypno, self._time,
          self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
                                                      downsample, time, href)
@@ -202,8 +203,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._fcnsOnCreation()
 
         # Load config file
-        if config_file:
-            self._config_file = config_file
+        if self._config_file is not None:
             self.loadConfig()
 
     def __len__(self):
