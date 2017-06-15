@@ -38,7 +38,9 @@ def dialogSave(self, name='Save file', default='file',
         allext = ';;'.join(allext)
     # Open the window :
     file, ext = QFileDialog.getSaveFileName(self, name, default, allext)
-    file, ext = str(file), os.path.splitext(str(ext))[1][0:-1].lower()
+    # By default, use the extension in the ruler :
+    file = os.path.splitext(str(file))[0]
+    ext = os.path.splitext(str(ext))[1][0:-1].lower()
     return safety_save(file + ext)
 
 
