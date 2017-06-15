@@ -132,8 +132,8 @@ spectrogram, hypnogram and the time axis</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>349</width>
-                <height>301</height>
+                <width>351</width>
+                <height>312</height>
                </rect>
               </property>
               <attribute name="label">
@@ -947,8 +947,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>300</width>
-                <height>265</height>
+                <width>302</width>
+                <height>273</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1660,8 +1660,8 @@ re-referenced</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>337</width>
-                <height>396</height>
+                <width>339</width>
+                <height>400</height>
                </rect>
               </property>
               <attribute name="label">

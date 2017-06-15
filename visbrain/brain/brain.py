@@ -18,6 +18,8 @@ from .interface import uiInit, uiElements
 from .base import base
 from .user import userfcn
 from ..utils import GuideLines, ShortcutPopup
+import sip
+sip.setdestroyonexit(False)
 
 
 class Brain(uiInit, uiElements, base, userfcn):

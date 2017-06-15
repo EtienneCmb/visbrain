@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/brain/interface/gui/brain_gui.ui'
 #
-# Created by: PyQt5 UI code generator 5.6
+# Created by: PyQt5 UI code generator 5.8.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -46,7 +46,6 @@ class Ui_MainWindow(object):
         self.q_UI = QtWidgets.QWidget()
         self.q_UI.setObjectName("q_UI")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.q_UI)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.toolBox_3 = QtWidgets.QToolBox(self.q_UI)
         font = QtGui.QFont()
@@ -773,7 +772,6 @@ class Ui_MainWindow(object):
         self.q_MNI = QtWidgets.QWidget()
         self.q_MNI.setObjectName("q_MNI")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.q_MNI)
-        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_9.setContentsMargins(-1, 0, -1, -1)
@@ -902,7 +900,6 @@ class Ui_MainWindow(object):
         self.q_SOURCES = QtWidgets.QWidget()
         self.q_SOURCES.setObjectName("q_SOURCES")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.q_SOURCES)
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.horizontalLayout_16 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_16.setContentsMargins(0, 0, -1, 0)
@@ -1249,7 +1246,6 @@ class Ui_MainWindow(object):
         self.q_CONNECT = QtWidgets.QWidget()
         self.q_CONNECT.setObjectName("q_CONNECT")
         self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.q_CONNECT)
-        self.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_13.setObjectName("verticalLayout_13")
         self.horizontalLayout_17 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_17.setObjectName("horizontalLayout_17")
@@ -1462,7 +1458,6 @@ class Ui_MainWindow(object):
         self.q_AREA = QtWidgets.QWidget()
         self.q_AREA.setObjectName("q_AREA")
         self.verticalLayout_27 = QtWidgets.QVBoxLayout(self.q_AREA)
-        self.verticalLayout_27.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_27.setObjectName("verticalLayout_27")
         self.horizontalLayout_43 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_43.setObjectName("horizontalLayout_43")
@@ -1710,7 +1705,6 @@ class Ui_MainWindow(object):
         self.q_TRANS = QtWidgets.QWidget()
         self.q_TRANS.setObjectName("q_TRANS")
         self.verticalLayout_23 = QtWidgets.QVBoxLayout(self.q_TRANS)
-        self.verticalLayout_23.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_23.setObjectName("verticalLayout_23")
         self.horizontalLayout_40 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_40.setContentsMargins(-1, 0, -1, -1)
@@ -2326,4 +2320,14 @@ class Ui_MainWindow(object):
         self.actionDocumentation.setShortcut(_translate("MainWindow", "Ctrl+E"))
         self.actionScreenshot.setText(_translate("MainWindow", "Screenshot"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
 

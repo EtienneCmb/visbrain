@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/ndviz/interface/gui/ndviz_gui.ui'
 #
-# Created by: PyQt5 UI code generator 5.6
+# Created by: PyQt5 UI code generator 5.8.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -41,7 +41,6 @@ class Ui_MainWindow(object):
         self.q_UI = QtWidgets.QWidget()
         self.q_UI.setObjectName("q_UI")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.q_UI)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.scrollArea_2 = QtWidgets.QScrollArea(self.q_UI)
         self.scrollArea_2.setWidgetResizable(True)
@@ -111,7 +110,6 @@ class Ui_MainWindow(object):
         self.q_Ndplt = QtWidgets.QWidget()
         self.q_Ndplt.setObjectName("q_Ndplt")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.q_Ndplt)
-        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.scrollArea = QtWidgets.QScrollArea(self.q_Ndplt)
         self.scrollArea.setWidgetResizable(True)
@@ -477,14 +475,12 @@ class Ui_MainWindow(object):
         self.q_1dPlt = QtWidgets.QWidget()
         self.q_1dPlt.setObjectName("q_1dPlt")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.q_1dPlt)
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self._1dPltTab = QtWidgets.QTabWidget(self.q_1dPlt)
         self._1dPltTab.setObjectName("_1dPltTab")
         self._1dSigTab = QtWidgets.QWidget()
         self._1dSigTab.setObjectName("_1dSigTab")
         self.verticalLayout_69 = QtWidgets.QVBoxLayout(self._1dSigTab)
-        self.verticalLayout_69.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_69.setObjectName("verticalLayout_69")
         self.scrollArea_8 = QtWidgets.QScrollArea(self._1dSigTab)
         self.scrollArea_8.setWidgetResizable(True)
@@ -870,7 +866,6 @@ class Ui_MainWindow(object):
         self._2dSigTab = QtWidgets.QWidget()
         self._2dSigTab.setObjectName("_2dSigTab")
         self.verticalLayout_70 = QtWidgets.QVBoxLayout(self._2dSigTab)
-        self.verticalLayout_70.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_70.setObjectName("verticalLayout_70")
         self.scrollArea_7 = QtWidgets.QScrollArea(self._2dSigTab)
         self.scrollArea_7.setWidgetResizable(True)
@@ -951,7 +946,6 @@ class Ui_MainWindow(object):
         self.q_Cmap = QtWidgets.QWidget()
         self.q_Cmap.setObjectName("q_Cmap")
         self.verticalLayout_23 = QtWidgets.QVBoxLayout(self.q_Cmap)
-        self.verticalLayout_23.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_23.setObjectName("verticalLayout_23")
         self.scrollArea_3 = QtWidgets.QScrollArea(self.q_Cmap)
         self.scrollArea_3.setWidgetResizable(True)

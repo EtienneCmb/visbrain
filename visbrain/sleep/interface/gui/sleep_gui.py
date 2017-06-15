@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/sleep/interface/gui/sleep_gui.ui'
 #
-# Created by: PyQt5 UI code generator 5.7.1
+# Created by: PyQt5 UI code generator 5.8.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -47,7 +47,6 @@ class Ui_MainWindow(object):
         self.q_Panels = QtWidgets.QWidget()
         self.q_Panels.setObjectName("q_Panels")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.q_Panels)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frame = QtWidgets.QFrame(self.q_Panels)
         self.frame.setFrameShape(QtWidgets.QFrame.Panel)
@@ -67,7 +66,7 @@ class Ui_MainWindow(object):
         self.toolBox_2 = QtWidgets.QToolBox(self.q_Panels)
         self.toolBox_2.setObjectName("toolBox_2")
         self.page_3 = QtWidgets.QWidget()
-        self.page_3.setGeometry(QtCore.QRect(0, 0, 349, 301))
+        self.page_3.setGeometry(QtCore.QRect(0, 0, 351, 312))
         self.page_3.setObjectName("page_3")
         self.verticalLayout_21 = QtWidgets.QVBoxLayout(self.page_3)
         self.verticalLayout_21.setContentsMargins(0, 0, 0, 0)
@@ -388,7 +387,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_25.addWidget(self.groupBox_10)
         self.toolBox_2.addItem(self.page_4, "")
         self.page_5 = QtWidgets.QWidget()
-        self.page_5.setGeometry(QtCore.QRect(0, 0, 300, 265))
+        self.page_5.setGeometry(QtCore.QRect(0, 0, 302, 273))
         self.page_5.setObjectName("page_5")
         self.verticalLayout_30 = QtWidgets.QVBoxLayout(self.page_5)
         self.verticalLayout_30.setContentsMargins(0, 0, 0, 0)
@@ -533,7 +532,6 @@ class Ui_MainWindow(object):
         self.q_Tools = QtWidgets.QWidget()
         self.q_Tools.setObjectName("q_Tools")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.q_Tools)
-        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.frame_2 = QtWidgets.QFrame(self.q_Tools)
         self.frame_2.setFrameShape(QtWidgets.QFrame.Panel)
@@ -673,7 +671,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_16.addItem(spacerItem16)
         self.toolBox.addItem(self.page, "")
         self.page_2 = QtWidgets.QWidget()
-        self.page_2.setGeometry(QtCore.QRect(0, 0, 337, 396))
+        self.page_2.setGeometry(QtCore.QRect(0, 0, 339, 400))
         self.page_2.setObjectName("page_2")
         self.verticalLayout_17 = QtWidgets.QVBoxLayout(self.page_2)
         self.verticalLayout_17.setContentsMargins(0, 0, 0, 0)
@@ -853,7 +851,6 @@ class Ui_MainWindow(object):
         self.q_Info = QtWidgets.QWidget()
         self.q_Info.setObjectName("q_Info")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.q_Info)
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.frame_4 = QtWidgets.QFrame(self.q_Info)
         self.frame_4.setFrameShape(QtWidgets.QFrame.Panel)
@@ -916,7 +913,6 @@ class Ui_MainWindow(object):
         self.q_Score = QtWidgets.QWidget()
         self.q_Score.setObjectName("q_Score")
         self.verticalLayout_29 = QtWidgets.QVBoxLayout(self.q_Score)
-        self.verticalLayout_29.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_29.setObjectName("verticalLayout_29")
         self.frame_3 = QtWidgets.QFrame(self.q_Score)
         self.frame_3.setFrameShape(QtWidgets.QFrame.Panel)
@@ -987,7 +983,6 @@ class Ui_MainWindow(object):
         self.q_Detection = QtWidgets.QWidget()
         self.q_Detection.setObjectName("q_Detection")
         self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.q_Detection)
-        self.verticalLayout_22.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_22.setObjectName("verticalLayout_22")
         self.frame_5 = QtWidgets.QFrame(self.q_Detection)
         self.frame_5.setFrameShape(QtWidgets.QFrame.Panel)
@@ -1010,7 +1005,6 @@ class Ui_MainWindow(object):
         self.q_DetectSettings = QtWidgets.QWidget()
         self.q_DetectSettings.setObjectName("q_DetectSettings")
         self.verticalLayout_38 = QtWidgets.QVBoxLayout(self.q_DetectSettings)
-        self.verticalLayout_38.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_38.setObjectName("verticalLayout_38")
         self.groupBox_3 = QtWidgets.QGroupBox(self.q_DetectSettings)
         self.groupBox_3.setObjectName("groupBox_3")
@@ -1464,7 +1458,6 @@ class Ui_MainWindow(object):
         self.q_DetectLoc = QtWidgets.QWidget()
         self.q_DetectLoc.setObjectName("q_DetectLoc")
         self.verticalLayout_39 = QtWidgets.QVBoxLayout(self.q_DetectLoc)
-        self.verticalLayout_39.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_39.setObjectName("verticalLayout_39")
         self.gridLayout_23 = QtWidgets.QGridLayout()
         self.gridLayout_23.setContentsMargins(9, 0, -1, 0)
