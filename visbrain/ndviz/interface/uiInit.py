@@ -32,7 +32,7 @@ class AxisCanvas(object):
 
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
-                                        show=True, title=name, **cargs)
+                                        show=False, title=name, **cargs)
 
         # Add axis :
         if axis:

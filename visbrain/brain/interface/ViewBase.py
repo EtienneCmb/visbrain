@@ -152,7 +152,7 @@ class vbCanvas(object):
     def __init__(self, bgcolor=(0, 0, 0)):
         """Init."""
         # Initialize main canvas:
-        self.canvas = scene.SceneCanvas(keys='interactive', show=True, dpi=600,
+        self.canvas = scene.SceneCanvas(keys='interactive', show=False, dpi=600,
                                         bgcolor=bgcolor, fullscreen=True,
                                         resizable=True, position=(0, 250))
         self.wc = self.canvas.central_widget.add_view()
