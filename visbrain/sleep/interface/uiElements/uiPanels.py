@@ -24,6 +24,7 @@ class uiPanels(object):
         # Bold font :
         self._font = QtGui.QFont()
         self._font.setBold(True)
+        self._addspace = '   '
 
         # =====================================================================
         # MAIN GRID :
@@ -70,7 +71,7 @@ class uiPanels(object):
         self._chanGrid.addWidget(self._SpecW, len(self) + 1, 1, 1, 1)
         # Add label :
         self._specLabel = QtWidgets.QLabel(self.centralwidget)
-        self._specLabel.setText(self._channels[0])
+        self._specLabel.setText(self._addspace + self._channels[0])
         self._specLabel.setFont(self._font)
         self._chanGrid.addWidget(self._specLabel, len(self) + 1, 0, 1, 1)
         # Add list of colormaps :
@@ -113,7 +114,7 @@ class uiPanels(object):
         self._hypYLabels = []
         for k in self._href+['']:
             label = QtWidgets.QLabel()
-            label.setText(k)
+            label.setText(self._addspace + k)
             label.setFont(self._font)
             layout.addWidget(label)
             self._hypYLabels.append(label)
@@ -165,7 +166,7 @@ class uiPanels(object):
         self._chanGrid.addWidget(self._TimeAxisW, len(self) + 3, 1, 1, 1)
         # Add label :
         self._timeLabel = QtWidgets.QLabel(self.centralwidget)
-        self._timeLabel.setText('Time')
+        self._timeLabel.setText(self._addspace + 'Time')
         self._timeLabel.setFont(self._font)
         self._chanGrid.addWidget(self._timeLabel, len(self) + 3, 0, 1, 1)
 
@@ -264,7 +265,7 @@ class uiPanels(object):
             self._chanGrid.addWidget(self._chanWidget[i], i, 1, 1, 1)
             # Add channel label :
             self._chanLabels.append(QtWidgets.QLabel(self.centralwidget))
-            self._chanLabels[i].setText(k)
+            self._chanLabels[i].setText(self._addspace + k)
             self._chanLabels[i].setFont(self._font)
             self._chanLabels[i].setVisible(False)
             self._chanGrid.addWidget(self._chanLabels[i], i, 0, 1, 1)
