@@ -433,7 +433,7 @@ class uiPanels(object):
         # Get reversed colormap :
         if self._PanSpecCmapInv.isChecked():
             cmap += '_r'
-        self._specLabel.setText(self._channels[chan])
+        self._specLabel.setText(self._addspace + self._channels[chan])
         # Set data :
         self._spec.set_data(self._sf, self._data[chan, ...], self._time,
                             nfft=nfft, overlap=over, fstart=fstart, fend=fend,
