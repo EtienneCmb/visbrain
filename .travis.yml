@@ -32,6 +32,8 @@ install:
   - pip install codecov
   - pip install pytest pytest-cov
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
+  - mkdir vbinstall
+  - cd vbinstall
   - pip install .
   # - pip install -r requirements.txt
 
