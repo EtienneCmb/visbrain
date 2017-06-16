@@ -5,9 +5,9 @@ from warnings import warn
 from PyQt5 import QtWidgets
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
-                       peakdetect, mtdetect, listToCsv, listToTxt)
+                       peakdetect, mtdetect)
 from ....utils.sleep.event import _events_duration
-from ....io import dialogLoad, dialogSave
+from ....io import dialogLoad, dialogSave, write_csv, write_txt
 
 __all__ = ['uiDetection']
 
@@ -368,9 +368,9 @@ class uiDetection(object):
             file = os.path.splitext(str(path))[0]
             file += '_' + channel + '-' + method
             if selected_ext.find('csv') + 1:
-                listToCsv(file + '.csv', zip(staInd, duration, stage))
+                write_csv(file + '.csv', zip(staInd, duration, stage))
             elif selected_ext.find('txt') + 1:
-                listToTxt(file + '.txt', zip(staInd, duration, stage))
+                write_txt(file + '.txt', zip(staInd, duration, stage))
 
     def _fcn_importLocation(self):
         """Import location table."""

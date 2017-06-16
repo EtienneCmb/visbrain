@@ -3,8 +3,8 @@ import numpy as np
 import os
 from PyQt5 import QtWidgets
 
-from ....utils import transient, listToCsv, listToTxt
-from ....io import dialogSave
+from ....utils import transient
+from ....io import dialogSave, write_csv, write_txt
 
 __all__ = ['uiScoring']
 
@@ -171,6 +171,6 @@ class uiScoring(object):
         if path:
             file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:
-                listToCsv(file + '.csv', zip(staInd, endInd, stage))
+                write_csv(file + '.csv', zip(staInd, endInd, stage))
             elif selected_ext.find('txt') + 1:
-                listToTxt(file + '.txt', zip(staInd, endInd, stage))
+                write_txt(file + '.txt', zip(staInd, endInd, stage))

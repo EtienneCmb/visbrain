@@ -3,8 +3,8 @@
 from PyQt5 import QtWidgets
 import os
 
-from ....utils import sleepstats, listToCsv, listToTxt
-from ....io import dialogSave
+from ....utils import sleepstats
+from ....io import dialogSave, write_csv, write_txt
 
 __all__ = ['uiInfo']
 
@@ -53,6 +53,6 @@ class uiInfo(object):
         if path:
             file = os.path.splitext(str(path))[0]
             if selected_ext.find('csv') + 1:
-                listToCsv(file + '.csv', zip(self._keysInfo, self._valInfo))
+                write_csv(file + '.csv', zip(self._keysInfo, self._valInfo))
             elif selected_ext.find('txt') + 1:
-                listToTxt(file + '.txt', zip(self._keysInfo, self._valInfo))
+                write_txt(file + '.txt', zip(self._keysInfo, self._valInfo))
