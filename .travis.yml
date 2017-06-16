@@ -42,10 +42,10 @@ install:
 
 # # after_success:
 # #   - ./tools/travis-upload-wheel.sh
-
-# notifications:
-#     email: false
-
-# after_success:
-#   - codecov
 script: bash build_install.sh
+
+notifications:
+    email: false
+
+after_success:
+  - codecov
