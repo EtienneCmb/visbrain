@@ -48,7 +48,7 @@ REQS = [str(ir.req) for ir in install_reqs]
 try:
     from vispy.scene.visuals import ColorBar
 except:
-    raise ValueError("You should install the right vispy version. In a "
+    raise ValueError("You should install the developer version of vispy. In a "
                      "terminal, run : pip install -e git+https://github.com"
                      "/vispy/vispy#egg=vispy-dev")
 

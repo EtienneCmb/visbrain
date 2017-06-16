@@ -30,21 +30,22 @@ install:
   - pip install setuptools
   - pip install nose
   - pip install codecov
-  - pip install pytest pytest-cov
-  # - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
-  - pip install vispy
+  # - pip install pytest pytest-cov
+  - cd ../
+  - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
+  - cd visbrain/
   - pip install .
   # - pip install -r requirements.txt
 
-script:
-  - py.test -v --cov=./
+# script:
+#   - py.test -v --cov=./
+
+# # after_success:
+# #   - ./tools/travis-upload-wheel.sh
+
+# notifications:
+#     email: false
 
 # after_success:
-#   - ./tools/travis-upload-wheel.sh
-
-notifications:
-    email: false
-
-after_success:
-  - codecov
-# script: bash build_install.sh
+#   - codecov
+script: bash build_install.sh
