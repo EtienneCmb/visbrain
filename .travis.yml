@@ -34,4 +34,15 @@ install:
   - pip install .
   # - pip install -r requirements.txt
 
-script: bash build_install.sh
+script:
+  - py.test -v --cov=./
+
+# after_success:
+#   - ./tools/travis-upload-wheel.sh
+
+notifications:
+    email: false
+
+after_success:
+  - codecov
+# script: bash build_install.sh
