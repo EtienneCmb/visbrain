@@ -5,7 +5,10 @@
 
 .. image:: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/EtienneCmb/visbrain
-  
+
+.. image:: https://badge.fury.io/py/visbrain.svg
+  :target: https://badge.fury.io/py/visbrain
+    
 Visbrain
 ########
 
