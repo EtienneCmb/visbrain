@@ -9,8 +9,8 @@ from PyQt5.QtCore import QTimer
 
 import vispy.visuals.transforms as vist
 
-from ....utils import save_hypnoTotxt, save_hypnoToElan, save_hypnoToFig
-from ....io import dialogSave, dialogLoad
+from ....utils import save_hypnoTotxt, save_hypnoToElan
+from ....io import dialogSave, dialogLoad, write_fig_hyp
 
 
 __all__ = ['uiSettings']
@@ -154,7 +154,7 @@ class uiSettings(object):
         filename = dialogSave(self, 'Save Hypnogram figure', 'hypno',
                               "PNG (*.png);;All files (*.*)")
         if filename:
-            save_hypnoToFig(filename, self._hypno, self._sf, self._toffset)
+            write_fig_hyp(filename, self._hypno, self._sf, self._toffset)
 
     def saveConfig(self):
         """Save a config file (*.txt) containing several display parameters."""
