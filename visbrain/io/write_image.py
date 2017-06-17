@@ -10,7 +10,7 @@ import numpy as np
 __all__ = ['write_fig_hyp', 'write_fig_canvas', 'write_fig_pyqt']
 
 
-def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=True,
+def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
                   colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
                           2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}):
     """Export hypnogram to a 600 dpi png figure.
@@ -74,12 +74,23 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=True,
         plt.plot(hypno, 'k', ls='steps', linewidth=lw)
     else:
         for k, i in colors.items():
-            q = k if k < 1 else min(k + 1, 4)
-            plt.plot(np.ma.masked_array(hypno, mask=hypno != k), colors[q], #ls='steps',
-                     linewidth=lw)
+            # Quick and dirty switch :
+            if k == 1:
+                q = 2
+            elif k == 4:
+                q = 1
+            elif k in [2, 3]:
+                q = k + 1
+            else:
+                q = k
+            mask = np.ones((len(hypno),), dtype=bool)
+            idxm = np.where(hypno == q)[0] + 1
+            idxm[idxm >= len(hypno)] = len(hypno) - 1
+            mask[idxm] = False
+            plt.plot(np.ma.masked_array(hypno, mask=mask), i, linewidth=lw)
 
     # Plot REM epochs
-    remcol = 'k' if not ascolor else colors[1]
+    remcol = 'k' if not ascolor else colors[4]
     for i in np.arange(0.6, 1, 0.01):
         plt.plot(np.arange(len(hypno)), i * valREM, remcol, linewidth=lw)
 
