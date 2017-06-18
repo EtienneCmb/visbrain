@@ -131,9 +131,36 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
     plt.savefig(file, format='png', dpi=600, bbox_inches='tight')
 
 
-def write_fig_canvas():
+def write_fig_canvas(filename, canvas, resolution=3000, autocrop=False,
+                     region=None):
     """Export a canvas as a figure."""
-    pass
+    from ..utils import piccrop
+    import vispy
+
+    # Manage size exportation. The dpi option present when creating a
+    # vispy canvas doesn't seems to work. The trick bellow increase the
+    # physical size of the canvas so that the exported figure has a
+    # high-definition :
+    # Get a copy of the actual canvas physical size :
+    backp_size = canvas.physical_size
+
+    # Increase the physical size :
+    ratio = max((2*resolution)/backp_size[0], resolution/backp_size[1])
+    new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
+    canvas._backend._physical_size = new_size
+
+    # Render and save :
+    if region is not None:
+        kwargs = {'region': region}
+    else:
+        kwargs = {'size': new_size}
+    img = canvas.render(**kwargs)
+    if autocrop:
+        img = piccrop(img)
+    vispy.io.imsave(filename, img)
+
+    # Set to the canvas it's previous size :
+    canvas._backend._physical_size = backp_size
 
 
 def write_fig_pyqt():
