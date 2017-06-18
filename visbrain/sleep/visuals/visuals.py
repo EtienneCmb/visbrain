@@ -539,7 +539,7 @@ class Hypnogram(object):
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
         # self.mesh.set_gl_state('translucent', depth_test=True)
-        self.mesh.set_gl_state('translucent')
+        self.edit.set_gl_state('translucent')
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.7, .7, .7, 1.),
                                             scale=(30.*time[-1]/len(time), 1.),
