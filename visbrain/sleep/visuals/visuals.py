@@ -576,11 +576,10 @@ class Hypnogram(object):
         # Build color array :
         color = np.zeros((len(data), 4), dtype=np.float32)
         for k, v in zip(self.color.keys(), self.color.values()):
-            # Avoid gradient color :
-            idx = np.where(data == k)[0] + 1
-            idx[idx >= len(data)] = len(data) - 1
             # Set the stage color :
-            color[idx, :] = v
+            color[data == k, :] = v
+        # Avoid gradient color :
+        color[1::, :] = color[0:-1, :]
         # Set data to the mesh :
         self.mesh.set_data(pos=np.vstack((time, -data)).T, width=self.width,
                            color=color)
