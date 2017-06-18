@@ -11,6 +11,7 @@ from vispy import io
 import vispy.scene.cameras as viscam
 
 from ....utils import uiSpinValue, piccrop
+from ....io import write_fig_canvas
 
 __all__ = ['uiSettings']
 
@@ -230,51 +231,19 @@ class uiSettings(object):
         if not ext:
             raise ValueError("No extension detected in "+saveas)
 
-        # Manage size exportation. The dpi option present when creating a
-        # vispy canvas doesn't seems to work. The trick bellow increase the
-        # physical size of the canvas so that the exported figure has a
-        # high-definition :
-        # Get a copy of the actual canvas physical size :
-        backp_size = self.view.canvas.physical_size
-
-        # Increase the physical size :
-        ratio = max((2*self._uirez)/backp_size[0], self._uirez/backp_size[1])
-        new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
-        self.view.canvas._backend._physical_size = new_size
-
-        # Render and save :
-        if self._crop is not None:
-            kwargs = {'region': self._crop}
-        else:
-            kwargs = {'size': new_size}
-        img = self.view.canvas.render(**kwargs)
-        if self._autocrop:
-            img = piccrop(img)
-        io.imsave(saveas, img)
-
-        # Set to the canvas it's previous size :
-        self.view.canvas._backend._physical_size = backp_size
+        # Export the main canvas :
+        write_fig_canvas(saveas, self.view.canvas, resolution=self._uirez,
+                         autocrop=self._autocrop, region=self._crop)
 
         # Export the colorbar :
         # self.cb['export'] = True
         if self.cb['export']:
-            # Get a copy of the actual canvas physical size :
-            backp_size = self.view.cbcanvas.physical_size
-            new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
-            self.view.cbcanvas._backend._physical_size = new_size
-            # Render colorbar panel :
-            if self._crop is not None:
-                kwargs = {'region': self._cbcrop}
-            else:
-                kwargs = {'size': new_size}
-            cbimg = self.view.cbcanvas.render(**kwargs)
-            if self._autocrop:
-                cbimg = piccrop(cbimg)
             # Colorbar file name : filename_colorbar.extension
-            filename = saveas.replace('.', '_colorbar.')
-            io.imsave(filename, cbimg)
-            # Set to the canvas it's previous size :
-            self.view.cbcanvas._backend._physical_size = backp_size
+            saveas = saveas.replace('.', '_colorbar.')
+
+            # Export the colorbar canvas :
+            write_fig_canvas(saveas, self.view.cbcanvas, region=self._cbcrop,
+                             autocrop=self._autocrop, resolution=self._uirez)
 
     def _toggle_settings(self):
         """Toggle method for display / hide the settings panel."""
