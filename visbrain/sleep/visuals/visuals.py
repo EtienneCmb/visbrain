@@ -777,6 +777,7 @@ class vbShortcuts(object):
                    ('2', 'Scoring: set current window to N2 (2)'),
                    ('3', 'Scoring: set current window to N3 (3)'),
                    ('r', 'Scoring: set current window to REM (4)'),
+                   ('CTRL + Num', 'Display the channel Num'),
                    ('CTRL + s', 'Save hypnogram'),
                    ('CTRL + t', 'Display shortcuts'),
                    ('CTRL + e', 'Display documentation'),
