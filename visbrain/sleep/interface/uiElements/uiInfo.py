@@ -1,10 +1,8 @@
 """Main class for info managment."""
 
 from PyQt5 import QtWidgets
-import os
 
 from ....utils import sleepstats
-from ....io import dialogSave, write_csv, write_txt
 
 __all__ = ['uiInfo']
 
@@ -17,8 +15,6 @@ class uiInfo(object):
         # Time window changed :
         self._infoTime.valueChanged.connect(self._fcn_infoUpdate)
         self._infoTime.setKeyboardTracking(False)
-        # Export file :
-        self._infoExport.clicked.connect(self._fcn_exportInfos)
 
     def _fcn_infoUpdate(self):
         """Complete the table sleep info."""
@@ -42,17 +38,3 @@ class uiInfo(object):
             # Remember variables :
             self._keysInfo[int(r) + 1] = key
             self._valInfo[int(r) + 1] = str(v)
-
-    def _fcn_exportInfos(self):
-        """Export stat info."""
-        # Find extension :
-        selected_ext = str(self._infoExportAs.currentText())
-        # Get file name :
-        path = dialogSave(self, 'Save file', 'statsinfo',
-                          selected_ext + ";;All files (*.*)")
-        if path:
-            file = os.path.splitext(str(path))[0]
-            if selected_ext.find('csv') + 1:
-                write_csv(file + '.csv', zip(self._keysInfo, self._valInfo))
-            elif selected_ext.find('txt') + 1:
-                write_txt(file + '.txt', zip(self._keysInfo, self._valInfo))

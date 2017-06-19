@@ -397,10 +397,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                          self._topocam, self._timecam)
 
     def _fcnsOnCreation(self):
-        """Functions that need to be applied on creation."""
+        """Applied on creation."""
         self._fcn_sliderMove()
         self._chanChecks[0].setChecked(True)
-        self._hypLabel.setVisible(self._PanHypViz.isChecked())
+        self._hypLabel.setVisible(self.menuDispHypno.isChecked())
         self._fcn_chanViz()
         self._fcn_chanSymAmp()
         self._fcn_infoUpdate()

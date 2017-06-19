@@ -82,7 +82,6 @@ class uiPanels(object):
         self._PanSpecChan.addItems(self._channels)
         # Connect spectrogam properties :
         self._PanSpecApply.setEnabled(False)
-        self._PanSpecViz.clicked.connect(self._fcn_specViz)
         self._PanSpecApply.clicked.connect(self._fcn_specSetData)
         self._PanSpecNfft.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecStep.valueChanged.connect(self._fcn_specCompat)
@@ -96,7 +95,6 @@ class uiPanels(object):
         # =====================================================================
         # HYPNOGRAM
         # =====================================================================
-        self._PanHypViz.clicked.connect(self._fcn_hypViz)
         self._hypCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
                                      y_label=None, x_label=None,
                                      name='Spectrogram', color='black',
@@ -109,8 +107,7 @@ class uiPanels(object):
         # Add label :
         self._hypLabel = QtWidgets.QWidget()
         layout = QtWidgets.QVBoxLayout(self._hypLabel)
-        layout.setContentsMargins(0, 0, 0, 0)#.setMargin(0)
-        # layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
         self._hypYLabels = []
         for k in self._href+['']:
             label = QtWidgets.QLabel()
@@ -136,7 +133,6 @@ class uiPanels(object):
         # Connect :
         self._PanTopoCmap.addItems(self._cmap_lst)
         self._PanTopoCmap.setCurrentIndex(self._cmap_lst.index(self._defcmap))
-        self._PanTopoViz.clicked.connect(self._fcn_topoViz)
         self._PanTopoCmin.setKeyboardTracking(False)
         self._PanTopoCmin.valueChanged.connect(self._fcn_topoSettings)
         self._PanTopoCmax.setKeyboardTracking(False)
@@ -151,7 +147,6 @@ class uiPanels(object):
         # =====================================================================
         # TIME AXIS
         # =====================================================================
-        self._PanTimeViz.clicked.connect(self._fcn_timeViz)
         # Create a unique time axis :
         self._TimeAxis = TimeAxis(xargs={'text_color': 'black'},
                                   x_label=None,
@@ -169,13 +164,6 @@ class uiPanels(object):
         self._timeLabel.setText(self._addspace + 'Time')
         self._timeLabel.setFont(self._font)
         self._chanGrid.addWidget(self._timeLabel, len(self) + 3, 0, 1, 1)
-
-        # =====================================================================
-        # INDICATORS
-        # =====================================================================
-        self._PanSpecIndic.clicked.connect(self._fcn_indicviz)
-        self._PanHypIndic.clicked.connect(self._fcn_indicviz)
-        self._PanTimeIndic.clicked.connect(self._fcn_indicviz)
 
     # =====================================================================
     # CHANNELS
@@ -410,14 +398,6 @@ class uiPanels(object):
     # =====================================================================
     # SPECTROGRAM
     # =====================================================================
-    def _fcn_specViz(self):
-        """Toggle visibility of the spectrogram panel."""
-        viz = self._PanSpecViz.isChecked()
-        self._PanSpecW.setEnabled(viz)
-        self._SpecW.setVisible(viz)
-        self._specLabel.setVisible(viz)
-        self._PanSpecIndic.setEnabled(viz)
-
     def _fcn_specSetData(self):
         """Set data to the spectrogram."""
         # Get nfft and overlap :
@@ -455,27 +435,8 @@ class uiPanels(object):
         self._PanSpecApply.setEnabled(True)
 
     # =====================================================================
-    # HYPNOGRAM
-    # =====================================================================
-    def _fcn_hypViz(self):
-        """Toggle visibility of the spectrogram panel."""
-        viz = self._PanHypViz.isChecked()
-        self._HypW.setVisible(viz)
-        self._hypLabel.setVisible(viz)
-        self._PanHypIndic.setEnabled(viz)
-
-    # =====================================================================
     # TOPOPLOT
     # =====================================================================
-    def _fcn_topoViz(self):
-        """Toggle topo panel visibility."""
-        viz = not self._topoW.isVisible()
-        self._topoW.setVisible(viz)
-        self._PanTopoVizW.setEnabled(viz)
-        if self._PanTopoViz.isChecked():
-            self._fcn_topoSettings()
-            self._fcn_sliderMove()
-
     def _fcn_topoSettings(self):
         """Manage colormap of the topoplot."""
         # ============== TYPE ==============
@@ -511,23 +472,3 @@ class uiPanels(object):
         """Apply topo settings."""
         self._fcn_sliderMove()
         self._PanTopoApply.setEnabled(False)
-
-    # =====================================================================
-    # TIME AXIS
-    # =====================================================================
-    def _fcn_timeViz(self):
-        """Toggle visibility of the time panel."""
-        viz = self._PanTimeViz.isChecked()
-        self._TimeAxisW.setVisible(viz)
-        self._PanTimeIndic.setEnabled(viz)
-        self._timeLabel.setVisible(viz)
-
-    # =====================================================================
-    # INDICATORS
-    # =====================================================================
-    def _fcn_indicviz(self):
-        """Toggle indicator visibility."""
-        self._specInd.mesh.visible = self._PanSpecIndic.isChecked()
-        self._hypInd.mesh.visible = self._PanHypIndic.isChecked()
-        self._TimeAxis.mesh.visible = self._PanTimeIndic.isChecked()
-        self._fcn_sliderMove()

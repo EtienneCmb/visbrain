@@ -4,7 +4,6 @@ import os
 from PyQt5 import QtWidgets
 
 from ....utils import transient
-from ....io import dialogSave, write_csv, write_txt
 
 __all__ = ['uiScoring']
 
@@ -20,9 +19,6 @@ class uiScoring(object):
 
         # Table edited :
         self._scoreTable.cellChanged.connect(self._fcn_Score2Hypno)
-
-        # Export file :
-        self._scoreExport.clicked.connect(self._fcn_exportScore)
 
     ##########################################################################
     # UPDATE SCORE <=> HYPNO
@@ -150,27 +146,3 @@ class uiScoring(object):
         self._scoreTable.removeRow(self._scoreTable.currentRow())
         # Update hypnogram from table :
         self._fcn_Score2Hypno()
-
-    ##########################################################################
-    # EXPORT TABLE
-    ##########################################################################
-    def _fcn_exportScore(self):
-        """Export score info."""
-        # Read Table
-        rowCount = self._scoreTable.rowCount()
-        staInd, endInd, stage = [], [], []
-        for row in np.arange(rowCount):
-            staInd.append(str(self._scoreTable.item(row, 0).text()))
-            endInd.append(str(self._scoreTable.item(row, 1).text()))
-            stage.append(str(self._scoreTable.item(row, 2).text()))
-        # Find extension :
-        selected_ext = str(self._scoreExportAs.currentText())
-        # Get file name :
-        path = dialogSave(self, 'Save file', 'scoring_info',
-                          selected_ext + ";;All files (*.*)")
-        if path:
-            file = os.path.splitext(str(path))[0]
-            if selected_ext.find('csv') + 1:
-                write_csv(file + '.csv', zip(staInd, endInd, stage))
-            elif selected_ext.find('txt') + 1:
-                write_txt(file + '.txt', zip(staInd, endInd, stage))

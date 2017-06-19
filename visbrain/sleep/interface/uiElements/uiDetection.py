@@ -43,9 +43,7 @@ class uiDetection(object):
             self._fcn_gotoLocation)
 
         # Export file :
-        self._DetectLocExport.clicked.connect(self._fcn_exportLocation)
         self._DetectLocImport.clicked.connect(self._fcn_importLocation)
-        self._DetectExportAll.clicked.connect(self._fcn_exportAllDetections)
         self._DetectImportAll.clicked.connect(self._fcn_importAllDetections)
 
     # =====================================================================
@@ -345,32 +343,6 @@ class uiDetection(object):
     # =====================================================================
     # EXPORT IMPORT TABLE
     # =====================================================================
-    def _fcn_exportLocation(self):
-        """Export locations info."""
-        channel = self._currentLoc[0]
-        method = self._currentLoc[1]
-        # Read Table
-        rowCount = self._DetectLocations.rowCount()
-        staInd = [channel, '', 'Time index (s)']
-        duration = [method, '', 'Duration (s)']
-        stage = ['', '', 'Sleep stage']
-        for row in np.arange(rowCount):
-            staInd.append(str(self._DetectLocations.item(row, 0).text()))
-            duration.append(str(self._DetectLocations.item(row, 1).text()))
-            stage.append(str(self._DetectLocations.item(row, 2).text()))
-        # Find extension :
-        selected_ext = str(self._DetectLocExportAs.currentText())
-        # Get file name :
-        saveas = "locinfo" + '_' + channel + '-' + method
-        path = dialogSave(self, 'Save ' + method + ' detection', saveas,
-                          selected_ext + ";;All files (*.*)")
-        if path:
-            file = os.path.splitext(str(path))[0]
-            file += '_' + channel + '-' + method
-            if selected_ext.find('csv') + 1:
-                write_csv(file + '.csv', zip(staInd, duration, stage))
-            elif selected_ext.find('txt') + 1:
-                write_txt(file + '.txt', zip(staInd, duration, stage))
 
     def _fcn_importLocation(self):
         """Import location table."""
@@ -398,15 +370,6 @@ class uiDetection(object):
         # Plot update :
         self._fcn_sliderMove()
         self._locLineReport()
-
-    def _fcn_exportAllDetections(self):
-        """Export all locations."""
-        # Get file name :
-        path = dialogSave(self, 'Save all detections', 'detections',
-                          "NumPy (*.npy);;All files (*.*)")
-        if path:
-            file = os.path.splitext(str(path))[0]
-            np.save(file + '.npy', self._detect.dict)
 
     def _fcn_importAllDetections(self):
         """Import detections."""
