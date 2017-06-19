@@ -78,7 +78,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -94,14 +94,14 @@
               <bool>true</bool>
              </property>
              <property name="currentIndex">
-              <number>2</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page_3">
               <property name="geometry">
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>397</width>
+                <width>377</width>
                 <height>907</height>
                </rect>
               </property>
@@ -159,7 +159,7 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>369</width>
+                       <width>349</width>
                        <height>661</height>
                       </rect>
                      </property>
@@ -381,7 +381,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>397</width>
+                <width>377</width>
                 <height>907</height>
                </rect>
               </property>

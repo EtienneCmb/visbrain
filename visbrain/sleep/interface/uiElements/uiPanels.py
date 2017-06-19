@@ -214,6 +214,7 @@ class uiPanels(object):
             # Name checkbox with channel name :
             self._chanChecks[i].setObjectName(_fromUtf8("_CheckChan"+k))
             self._chanChecks[i].setText(k)
+            self._chanChecks[i].setShortcut("Ctrl+"+str(i))
             # Add checkbox to the grid :
             self._PanChanLay.addWidget(self._chanChecks[i], i, 0, 1, 1)
             # Connect with the function :
