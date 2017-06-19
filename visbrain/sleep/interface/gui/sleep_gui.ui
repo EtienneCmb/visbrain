@@ -3734,7 +3734,7 @@ Twitches</string>
       <addaction name="menuLoadDetectSelect"/>
      </widget>
      <addaction name="menuLoadData"/>
-     <addaction name="actionHypnogram"/>
+     <addaction name="menuLoadHypno"/>
      <addaction name="menuLoadConfig"/>
      <addaction name="menuLoadDetections"/>
     </widget>
@@ -3764,8 +3764,15 @@ Twitches</string>
     <addaction name="menuDocumentation"/>
     <addaction name="menuDownload_pdf_doc"/>
    </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="menuSettingCleanHyp"/>
+   </widget>
    <addaction name="menuFiles"/>
    <addaction name="menuDisplay"/>
+   <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -3989,7 +3996,7 @@ Twitches</string>
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionHypnogram">
+  <action name="menuLoadHypno">
    <property name="text">
     <string>Hypnogram</string>
    </property>
@@ -4166,6 +4173,11 @@ Twitches</string>
    </property>
    <property name="shortcut">
     <string>Z</string>
+   </property>
+  </action>
+  <action name="menuSettingCleanHyp">
+   <property name="text">
+    <string>Clean hypnogram</string>
    </property>
   </action>
  </widget>

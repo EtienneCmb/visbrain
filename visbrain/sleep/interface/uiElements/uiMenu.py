@@ -6,9 +6,8 @@ import os
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTimer
 
-from ....utils import save_hypnoToElan, save_hypnoTotxt
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
-                    write_txt, write_hypno_txt, write_hypno_hyp)
+                    write_txt, write_hypno_txt, write_hypno_hyp, read_hypno)
 
 __all__ = ['uiMenu']
 
@@ -74,7 +73,12 @@ class uiMenu(object):
         self.menuDispZoom.triggered.connect(self._disptog_zoom)
 
         # _____________________________________________________________________
-        #                            SHORTCUTS & DOC
+        #                               SETTINGS
+        # _____________________________________________________________________
+        self.menuSettingCleanHyp.triggered.connect(self.settCleanHyp)
+
+        # _____________________________________________________________________
+        #                     SHORTCUTS & DOC
         # _____________________________________________________________________
         self.menuShortcut.triggered.connect(self._fcn_showShortPopup)
         self.menuDocumentation.triggered.connect(self._fcn_openDoc)
@@ -269,11 +273,9 @@ class uiMenu(object):
                               "Text file (*.txt);;Elan file (*.hyp);;"
                               "All files (*.*)")
         if filename:
-            file, ext = os.splitext(filename)
-            if ext == '.hyp':
-                pass
-            elif ext == '.txt':
-                pass
+            # Load the hypnogram :
+            self._hypno = read_hypno(filename, self._N).astype(np.float32)
+            self._hyp.set_data(self._sf, self._hypno, self._time)
 
     def loadConfig(self):
         """Load a config file (*.txt) containing several display parameters."""
@@ -485,6 +487,21 @@ class uiMenu(object):
         self._TimeAxis.mesh.visible = not activeIndic
 
         self._fcn_sliderSettings()
+
+    ###########################################################################
+    ###########################################################################
+    #                            SETTINGS
+    ###########################################################################
+    ###########################################################################
+    def settCleanHyp(self):
+        """Clean the hypnogram."""
+        self._hypno = np.zeros((len(self._hyp),), dtype=np.float32)
+        self._hyp.clean(self._sf, self._time)
+        # Update info table :
+        self._fcn_infoUpdate()
+        # Update scoring table :
+        self._fcn_Hypno2Score()
+        self._fcn_Score2Hypno()
 
     ###########################################################################
     ###########################################################################

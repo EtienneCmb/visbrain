@@ -676,24 +676,14 @@ class Hypnogram(object):
         elif isinstance(pos, (int, float)):
             return -self._hconvinv[-int(pos)]
 
-    def clean(self):
+    def clean(self, sf, time):
         """Clean indicators."""
-        pos = np.zeros((1, 3), dtype=np.float32)
         # Mesh :
-        self.mesh.set_data(pos=pos, color='gray')
-        self.mesh.parent = None
-        self.mesh = None
+        posmesh = np.zeros((len(self),), dtype=np.float32)
+        self.set_data(sf, posmesh, time)
         # Edit :
-        self.edit.set_data(pos=pos, face_color='gray')
-        self.edit.parent = None
-        self.edit = None
-        # Report :
-        self.report.set_data(pos=pos, face_color='gray')
-        self.report.parent = None
-        self.report = None
-        # Grid :
-        self.grid.parent = None
-        self.grid = None
+        posedit = np.full((1, 3), -10., dtype=np.float32)
+        self.edit.set_data(pos=posedit, face_color='gray')
 
     # ----------- RECT -----------
     @property
