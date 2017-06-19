@@ -70,7 +70,7 @@ class Detection(object):
             yield k
 
     def __bool__(self):
-        pass
+        return any([bool(self[k]['index'].size) for k in self])
 
     def __setitem__(self, key, value):
         self.dict[key] = value
@@ -160,6 +160,8 @@ class Detection(object):
         else:
             self.line[(chan, types)].set_data(pos=pos,
                                               connect=np.array([False]))
+        # Remove data from hypnogram :
+        self.hyp.set_data(pos=pos)
 
     def nonzero(self):
         """Return the list of channels with non-empty detections."""

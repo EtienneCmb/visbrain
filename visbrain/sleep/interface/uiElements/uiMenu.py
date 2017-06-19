@@ -40,6 +40,9 @@ class uiMenu(object):
         # _____________________________________________________________________
         # Sleep GUI config :
         self.menuLoadConfig.triggered.connect(self.loadConfig)
+        # Detections :
+        self.menuLoadDetectAll.triggered.connect(self.loadDetectAll)
+        self.menuLoadDetectSelect.triggered.connect(self.loadDetectSelect)
 
         # _____________________________________________________________________
         #                                 EXIT
@@ -141,6 +144,10 @@ class uiMenu(object):
                 write_txt(file + '.txt', zip(staInd, endInd, stage))
 
     # ______________________ DETECTIONS ______________________
+    def _CheckDetectMenu(self):
+        """Activate/Deactivate the saving detection menu."""
+        self.menuSaveDetections.setEnabled(bool(self._detect))
+
     def saveAllDetect(self):
         """Export all detections."""
         # Get file name :
@@ -323,6 +330,52 @@ class uiMenu(object):
                 self._fcn_updateAmpInfo()
                 self._fcn_chanAutoAmp()
                 self._fcn_chanSymAmp()
+
+    def loadDetectAll(self):
+        """Load all detections."""
+        # Dialog window for detection file :
+        file = dialogLoad(self, "Import detections", '',
+                          "NumPy (*.npy);;All files (*.*)")
+        self._detect.dict = np.ndarray.tolist(np.load(file))
+        # Made canvas visbles :
+        for k in self._detect:
+            if self._detect[k]['index'].size:
+                # Get channel number :
+                idx = self._channels.index(k[0])
+                self.canvas_setVisible(idx, True)
+                self._chan.visible[idx] = True
+        # Plot update :
+        self._fcn_sliderMove()
+        self._locLineReport()
+        self._CheckDetectMenu()
+
+    def loadDetectSelect(self):
+        """Load a specific detection."""
+        # Get file name :
+        file = dialogLoad(self, "Import table", '',
+                          "CSV file (*.csv);;Text file (*.txt);;"
+                          "All files (*.*)")
+        # Get channel / method from file name :
+        (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
+        # Load the file :
+        (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
+        # Sort by starting index :
+        idxsort = np.argsort(st)
+        st, dur = st[idxsort], dur[idxsort]
+        # Convert into index :
+        stInd = np.round(st * self._sf).astype(int)
+        durInd = np.round(dur * self._sf / 1000.).astype(int)
+        # Build the index array :
+        index = np.array([])
+        for k, i in zip(stInd, durInd):
+            index = np.append(index, np.arange(k, k+i))
+        index = index.astype(np.int, copy=False)
+        # Set index :
+        self._detect[(chan, meth)]['index'] = index
+        # Plot update :
+        self._fcn_sliderMove()
+        self._locLineReport()
+        self._CheckDetectMenu()
 
     ###########################################################################
     ###########################################################################

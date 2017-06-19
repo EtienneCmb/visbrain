@@ -78,7 +78,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -730,7 +730,7 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>397</width>
+                <width>377</width>
                 <height>907</height>
                </rect>
               </property>
@@ -1081,7 +1081,7 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>397</width>
+                <width>377</width>
                 <height>938</height>
                </rect>
               </property>
@@ -1314,7 +1314,7 @@ re-referenced</string>
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>377</width>
+                       <width>357</width>
                        <height>998</height>
                       </rect>
                      </property>
@@ -2036,7 +2036,7 @@ re-referenced</string>
            <item>
             <widget class="QTabWidget" name="_DetectionTab">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="q_DetectSettings">
               <attribute name="title">
@@ -3149,6 +3149,37 @@ Twitches</string>
               </attribute>
               <layout class="QVBoxLayout" name="verticalLayout_39">
                <item>
+                <widget class="QTableWidget" name="_DetectLocations">
+                 <property name="editTriggers">
+                  <set>QAbstractItemView::NoEditTriggers</set>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="sortingEnabled">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <column>
+                  <property name="text">
+                   <string>Start (seconds)</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Duration (ms)</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Stage</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+               <item>
                 <layout class="QGridLayout" name="gridLayout_23">
                  <property name="leftMargin">
                   <number>9</number>
@@ -3197,6 +3228,19 @@ Twitches</string>
                        <bool>false</bool>
                       </property>
                      </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
                     </item>
                    </layout>
                   </widget>
@@ -3255,16 +3299,6 @@ Twitches</string>
                     <property name="bottomMargin">
                      <number>0</number>
                     </property>
-                    <item>
-                     <widget class="QPushButton" name="_DetectImportAll">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Import all detections in a NumPy compatible format (.npy)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="text">
-                       <string>Import all</string>
-                      </property>
-                     </widget>
-                    </item>
                    </layout>
                   </widget>
                  </item>
@@ -3278,94 +3312,6 @@ Twitches</string>
                    </property>
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_73">
-                   <property name="font">
-                    <font>
-                     <italic>true</italic>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Export / import</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <widget class="QTableWidget" name="_DetectLocations">
-                 <property name="editTriggers">
-                  <set>QAbstractItemView::NoEditTriggers</set>
-                 </property>
-                 <property name="alternatingRowColors">
-                  <bool>true</bool>
-                 </property>
-                 <property name="sortingEnabled">
-                  <bool>true</bool>
-                 </property>
-                 <attribute name="horizontalHeaderStretchLastSection">
-                  <bool>true</bool>
-                 </attribute>
-                 <column>
-                  <property name="text">
-                   <string>Start (seconds)</string>
-                  </property>
-                 </column>
-                 <column>
-                  <property name="text">
-                   <string>Duration (ms)</string>
-                  </property>
-                 </column>
-                 <column>
-                  <property name="text">
-                   <string>Stage</string>
-                  </property>
-                 </column>
-                </widget>
-               </item>
-               <item>
-                <layout class="QGridLayout" name="gridLayout_10">
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <item row="0" column="1">
-                  <widget class="Line" name="line_29">
-                   <property name="minimumSize">
-                    <size>
-                     <width>10</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_48">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <italic>true</italic>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Export table</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="2">
-                  <widget class="QPushButton" name="_DetectLocImport">
-                   <property name="text">
-                    <string>Import</string>
                    </property>
                   </widget>
                  </item>

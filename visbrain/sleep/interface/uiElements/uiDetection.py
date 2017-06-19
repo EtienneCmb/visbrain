@@ -42,10 +42,6 @@ class uiDetection(object):
         self._DetectLocations.itemSelectionChanged.connect(
             self._fcn_gotoLocation)
 
-        # Export file :
-        self._DetectLocImport.clicked.connect(self._fcn_importLocation)
-        self._DetectImportAll.clicked.connect(self._fcn_importAllDetections)
-
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
     # =====================================================================
@@ -178,6 +174,9 @@ class uiDetection(object):
             # Update index for this channel and detection :
             self._detect.dict[(self._channels[k], method)]['index'] = index
 
+            # Activate the save detections menu :
+            self._CheckDetectMenu()
+
             if index.size:
                 # Be sure panel is displayed :
                 if not self.canvas_isVisible(k):
@@ -241,11 +240,11 @@ class uiDetection(object):
         tps = str(self._DetectTypes.currentText())
         if chan and tps:
             if tps == 'Peaks':
-                self._DetectViz.setChecked(self._detect.peaks[(chan,
-                                                              tps)].visible)
+                viz = self._detect.peaks[(chan, tps)].visible
             else:
-                self._DetectViz.setChecked(self._detect.line[(chan,
-                                                              tps)].visible)
+                viz = self._detect.line[(chan, tps)].visible
+            self._DetectViz.setChecked(viz)
+            self._DetectLocations.setEnabled(viz)
 
     def _fcn_rmLocation(self):
         """Demove a detection."""
@@ -258,8 +257,11 @@ class uiDetection(object):
         # Remove vertical indicators :
         pos = np.full((1, 3), -10., dtype=np.float32)
         self._chan.loc[self._channels.index(chan)].set_data(pos=pos)
+        # Clean table :
+        self._DetectLocations.setRowCount(0)
         # Update GUI :
         self._locLineReport()
+        self._CheckDetectMenu()
 
     def _fcn_vizLocation(self):
         """Set visible detection."""
@@ -271,6 +273,7 @@ class uiDetection(object):
         viz = self._DetectViz.isChecked()
         self._detect.visible(viz, chan, types)
         self._chan.loc[self._channels.index(chan)].visible = viz
+        self._DetectLocations.setEnabled(viz)
 
     def _fcn_runSwitchLocation(self):
         """Run switch location channel and type."""
@@ -339,51 +342,3 @@ class uiDetection(object):
             self._SlGoto.setValue(goto)
             # Set vertical lines to the location :
             self._chan.set_location(self._sf, self._data[ix, :], ix, sta, end)
-
-    # =====================================================================
-    # EXPORT IMPORT TABLE
-    # =====================================================================
-
-    def _fcn_importLocation(self):
-        """Import location table."""
-        # Get file name :
-        file = dialogLoad(self, "Import table", '',
-                          "CSV file (*.csv);;Text file (*.txt);;"
-                          "All files (*.*)")
-        # Get channel / method from file name :
-        (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
-        # Load the file :
-        (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
-        # Sort by starting index :
-        idxsort = np.argsort(st)
-        st, dur = st[idxsort], dur[idxsort]
-        # Convert into index :
-        stInd = np.round(st * self._sf).astype(int)
-        durInd = np.round(dur * self._sf / 1000.).astype(int)
-        # Build the index array :
-        index = np.array([])
-        for k, i in zip(stInd, durInd):
-            index = np.append(index, np.arange(k, k+i))
-        index = index.astype(np.int, copy=False)
-        # Set index :
-        self._detect[(chan, meth)]['index'] = index
-        # Plot update :
-        self._fcn_sliderMove()
-        self._locLineReport()
-
-    def _fcn_importAllDetections(self):
-        """Import detections."""
-        # Dialog window for detection file :
-        file = dialogLoad(self, "Import detections", '',
-                          "NumPy (*.npy);;All files (*.*)")
-        self._detect.dict = np.ndarray.tolist(np.load(file))
-        # Made canvas visbles :
-        for k in self._detect:
-            if self._detect[k]['index'].size:
-                # Get channel number :
-                idx = self._channels.index(k[0])
-                self.canvas_setVisible(idx, True)
-                self._chan.visible[idx] = True
-        # Plot update :
-        self._fcn_sliderMove()
-        self._locLineReport()
