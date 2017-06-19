@@ -7,7 +7,8 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTimer
 
 from ....utils import save_hypnoToElan, save_hypnoTotxt
-from ....io import dialogSave, dialogLoad, write_fig_hyp, write_csv, write_txt
+from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
+                    write_txt, write_hypno_txt, write_hypno_hyp)
 
 __all__ = ['uiMenu']
 
@@ -38,6 +39,8 @@ class uiMenu(object):
         # _____________________________________________________________________
         #                                 LOAD
         # _____________________________________________________________________
+        # Load hypnogram :
+        self.menuLoadHypno.triggered.connect(self.loadHypno)
         # Sleep GUI config :
         self.menuLoadConfig.triggered.connect(self.loadConfig)
         # Detections :
@@ -79,7 +82,7 @@ class uiMenu(object):
 
     ###########################################################################
     ###########################################################################
-    #                                    SAVE
+    #                           SAVE
     ###########################################################################
     ###########################################################################
 
@@ -93,10 +96,10 @@ class uiMenu(object):
 
             # Switch between differents types :
             if ext == '.hyp':
-                save_hypnoToElan(filename, self._hypno, self._sf, self._sfori,
-                                 self._N)
+                write_hypno_hyp(filename, self._hypno, self._sf, self._sfori,
+                                self._N)
             elif ext == '.txt':
-                save_hypnoTotxt(filename, self._hypno, self._sf, self._sfori,
+                write_hypno_txt(filename, self._hypno, self._sf, self._sfori,
                                 self._N, 1)
             else:
                 raise ValueError("Not a valid extension")
@@ -258,6 +261,19 @@ class uiMenu(object):
     #                                    LOAD
     ###########################################################################
     ###########################################################################
+
+    def loadHypno(self):
+        """Load a hypnogram."""
+        # Get filename :
+        filename = dialogLoad(self, 'Load hypnogram File', 'hypno',
+                              "Text file (*.txt);;Elan file (*.hyp);;"
+                              "All files (*.*)")
+        if filename:
+            file, ext = os.splitext(filename)
+            if ext == '.hyp':
+                pass
+            elif ext == '.txt':
+                pass
 
     def loadConfig(self):
         """Load a config file (*.txt) containing several display parameters."""

@@ -8,3 +8,4 @@ from .rw_utils import *
 from .rw_config import *
 from .mneio import *
 from .dialog import *
+from .write_hypno import *
