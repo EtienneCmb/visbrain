@@ -13,9 +13,9 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
-from ..utils import (FixedCam, load_sleepdataset, load_hypno, color2vb,
-                     ShortcutPopup, check_downsampling)
-from ..io import dialogLoad
+from ..utils import (FixedCam, load_sleepdataset, color2vb, ShortcutPopup,
+                     check_downsampling)
+from ..io import dialogLoad, read_hypno
 
 sip.setdestroyonexit(False)
 
@@ -120,7 +120,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             # Load hypnogram :
             if hypno_file:
                 # Load the hypnogram :
-                hypno = load_hypno(hypno_file, npts)
+                hypno = read_hypno(hypno_file, npts)
 
             # Change the sampling frequency if down-sample :
             if downsample is not None:

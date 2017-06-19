@@ -4,8 +4,8 @@ from .read_sleep import *
 from .write_table import *
 from .write_image import *
 from .write_data import *
-from .rw_utils import *
-from .rw_config import *
 from .mneio import *
 from .dialog import *
-from .write_hypno import *
+from .rw_utils import *
+from .rw_hypno import *
+from .rw_config import *
