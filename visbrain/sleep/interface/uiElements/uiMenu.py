@@ -276,6 +276,11 @@ class uiMenu(object):
             # Load the hypnogram :
             self._hypno = read_hypno(filename, self._N).astype(np.float32)
             self._hyp.set_data(self._sf, self._hypno, self._time)
+            # Update info table :
+            self._fcn_infoUpdate()
+            # Update scoring table :
+            self._fcn_Hypno2Score()
+            self._fcn_Score2Hypno()
 
     def loadConfig(self):
         """Load a config file (*.txt) containing several display parameters."""
