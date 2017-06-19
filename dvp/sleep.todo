@@ -25,13 +25,14 @@ Bug
 Etienne
 	-5 Voir si je pourrai pas implémenter ma propre class GridLines qui serait peut-être plus facile à paramétrer + transformation non-linéaires
 	-5 Clean des fillLocationTable pour peaks
-	-5 Méthode de checking si les détections lancées ou pas (pour éviter le bug d'exportation si | détections)
+	-5 Exportation hypno devrait prendre en compte l'ordre des stades définit en entrée
 	-5 Faire une unique fonction d'exportation de table : ça évitera tout les problèmes.
 	-4 Zero reference (Tarek?)
 	-4 Améliorer gestion et méthode topoplot
 	-4 Hypnogramme: on pourrait faire une checkbox "Edit mode" qui lorsqu'elle est cochée permet d'activer les fonctions de modifications de l'hypno. Lorsque l'utilisateur la coche, il doit selectionner un nom de fichier d'hypnogramme, puis à chaque modification ça enregistre automatiquement dans le fichier .hyp ou .txt
 	-3 Checking window par défaut : si les donnés sont trop courtes, cela pourrait engendrer un bug.
 	-2 Découper les objets visuals
+	+5 Méthode de checking si les détections lancées ou pas (pour éviter le bug d'exportation si | détections)
 	+5 Ajouter une reversed checkbox sur le spectrogramme pour inverser Spectral et refaire la figure de filtrage du papier.
 	+5 Permettre de changer l'ordre des états de sommeil
 	+5 Permettre à l'utilisateur d'enregistrer ses propres settings et de les charger
