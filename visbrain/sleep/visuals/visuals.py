@@ -774,8 +774,11 @@ class vbShortcuts(object):
                    ('s', 'Display / hide spectrogram'),
                    ('t', 'Display / hide topoplot'),
                    ('h', 'Display / hide hypnogram'),
-                   ('p', 'Display / disable time bar'),
+                   ('p', 'Display / hide navigation bar'),
+                   ('x', 'Display / hide time axis'),
+                   ('g', 'Display / hide time grid'),
                    ('z', 'Enable / disable zooming'),
+                   ('i', 'Enable / disable indicators'),
                    ('a', 'Scoring: set current window to Art (-1)'),
                    ('w', 'Scoring: set current window to Wake (0)'),
                    ('1', 'Scoring: set current window to N1 (1)'),
@@ -799,6 +802,7 @@ class vbShortcuts(object):
             """
             if event.text == ' ':
                 pass
+
             # ------------ SLIDER ------------
             elif event.text.lower() == 'n':  # Next (slider)
                 self._SlGoto.setValue(
@@ -816,34 +820,16 @@ class vbShortcuts(object):
                 self._PanAmpSym.setChecked(True)
                 self._PanAllAmpMax.setValue(self._PanAllAmpMax.value() - 5.)
 
-            # ------------  VISIBILITY ------------
-            elif event.text.lower() == 's':  # Toggle visibility on spec
-                self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
-                self._fcn_specViz()
-
-            elif event.text.lower() == 'h':  # Toggle visibility on hypno
-                self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
-                self._fcn_hypViz()
-
-            elif event.text.lower() == 'p':  # Toggle visibility time bar
-                self._slFrame.hide() if self._slFrame.isVisible(
-                                                    ) else self._slFrame.show()
-
-            elif event.text.lower() == 't':   # Toggle visibility on topo
-                self._PanTopoViz.setChecked(not self._PanTopoViz.isChecked())
-                self._fcn_topoViz()
-
-            elif event.text.lower() == 'z':  # Enable zoom
-                viz = self._PanTimeZoom.isChecked()
-                self._PanTimeZoom.setChecked(not viz)
-                self._PanHypZoom.setChecked(not viz)
-                self._PanSpecZoom.setChecked(not viz)
-                self._fcn_Zooming()
-
-            elif event.text.lower() == 'm':
+            # ------------  GRID/MAGNIFY ------------
+            elif event.text.lower() == 'm':  # Magnify
                 viz = self._slMagnify.isChecked()
                 self._slMagnify.setChecked(not viz)
                 self._fcn_sliderMagnify()
+
+            elif event.text.lower() == 'g':  # Grid
+                viz = self._slGrid.isChecked()
+                self._slGrid.setChecked(not viz)
+                self._fcn_gridToggle()
 
             # ------------ SCORING ------------
             elif event.text.lower() == 'a':
