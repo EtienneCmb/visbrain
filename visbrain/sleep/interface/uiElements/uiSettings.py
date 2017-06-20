@@ -1,14 +1,9 @@
 """Main class for settings managment."""
 import numpy as np
-import os
 import datetime
-
-from PyQt4.QtGui import *
-from PyQt4.QtCore import QObjectCleanupHandler, QTimer
+from PyQt5.QtCore import QObjectCleanupHandler
 
 import vispy.visuals.transforms as vist
-
-from ....utils import save_hypnoTotxt, save_hypnoToElan, save_hypnoToFig
 
 
 __all__ = ['uiSettings']
@@ -19,36 +14,6 @@ class uiSettings(object):
 
     def __init__(self):
         """Init."""
-        # =====================================================================
-        # MENU & FILES
-        # =====================================================================
-        # ---------------------- Screenshot ----------------------
-        self.actionScreenshot.triggered.connect(self._screenshot)
-        self.actionExit.triggered.connect(qApp.quit)
-
-        # ---------------------- Save ----------------------
-        self.actionHypnogram_data.triggered.connect(self.saveFile)
-        self.actionHypnogram_figure.triggered.connect(self.saveHypFig)
-        self.actionInfo_table.triggered.connect(self._fcn_exportInfos)
-        self.actionScoring_table.triggered.connect(self._fcn_exportScore)
-        self.actionDetection_table.triggered.connect(self._fcn_exportLocation)
-        self.actionSaveConfig.triggered.connect(self.saveConfig)
-
-        # ---------------------- Load ----------------------
-        self.actionLoadConfig.triggered.connect(self.loadConfig)
-
-        # ---------------------- Shortcut & Doc ----------------------
-        self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
-        self.actionDocumentation.triggered.connect(self._fcn_openDoc)
-        self.actionDownload_pdf_doc.triggered.connect(self._fcn_downloadDoc)
-
-        # =====================================================================
-        # SETTINGS PANEL
-        # =====================================================================
-        # Quick settings panel :
-        self.actionQuick_settings.triggered.connect(self._toggle_settings)
-        self.q_widget.setVisible(True)
-
         # =====================================================================
         # SLIDER
         # =====================================================================
@@ -77,161 +42,6 @@ class uiSettings(object):
         # Magnify :
         self._slMagnify.clicked.connect(self._fcn_sliderMagnify)
 
-        # =====================================================================
-        # ZOOMING
-        # =====================================================================
-        self._PanHypZoom.clicked.connect(self._fcn_Zooming)
-        self._PanSpecZoom.clicked.connect(self._fcn_Zooming)
-        self._PanTimeZoom.clicked.connect(self._fcn_Zooming)
-
-    # =====================================================================
-    # MENU & FILE MANAGMENT
-    # =====================================================================
-    def _fcn_showShortPopup(self):
-        """Open shortcut window."""
-        self._shpopup.show()
-
-    def _fcn_openDoc(self):
-        """Open documentation."""
-        import webbrowser
-        webbrowser.open('http://etiennecmb.github.io/visbrain/sleep.html')
-
-    def _fcn_downloadDoc(self):
-        """Open documentation."""
-        import webbrowser
-        webbrowser.open("https://drive.google.com/file/d/"
-                        "0B6vtJiCQZUBvNFJMTER3SERGUW8/view?usp=sharing")
-
-    # =====================================================================
-    # SCREENSHOT
-    # =====================================================================
-    def _screenshot(self):
-        """Screenshot using the GUI."""
-        # self.setFixedSize(100, 100)
-        # Get filename :
-        filename = QFileDialog.getSaveFileName(self, 'Screenshot',
-                                               'screenshot', "PNG (*.PNG);;"
-                                               "TIFF (*.tiff);;JPG (*.jpg);;"
-                                               "All files (*.*)")
-        filename = str(filename)  # py2
-        # Screnshot function :
-        def _takeScreenShot():
-            """Take the screenshot."""
-            file, ext = os.path.splitext(filename)
-            # p = QPixmap.grabWidget(self.centralwidget)
-            p = QPixmap.grabWindow(self.centralwidget.winId())
-            p.save(file + '.png')
-        # Take screenshot if filename :
-        if filename:
-            # Timer (avoid shooting the saving window)
-            self.timerScreen = QTimer()
-            # self.timerScreen.setInterval(100)
-            self.timerScreen.setSingleShot(True)
-            self.timerScreen.timeout.connect(_takeScreenShot)
-            self.timerScreen.start(500)
-
-    def _toggle_settings(self):
-        """Toggle method for display / hide the settings panel."""
-        self.q_widget.setVisible(not self.q_widget.isVisible())
-
-    def saveFile(self):
-        """Save the hypnogram."""
-        filename = QFileDialog.getSaveFileName(self, 'Save File', 'hypno',
-                                               "Text file (*.txt);;Elan file "
-                                               "(*.hyp);;All files (*.*)")
-        filename = str(filename)  # py2
-        if filename:
-            file, ext = os.path.splitext(filename)
-
-            # Switch between differents types :
-            if ext == '.hyp':
-                save_hypnoToElan(filename, self._hypno, self._sf, self._sfori,
-                                 self._N)
-            elif ext == '.txt':
-                save_hypnoTotxt(filename, self._hypno, self._sf, self._sfori,
-                                self._N, 1)
-            else:
-                raise ValueError("Not a valid extension")
-
-    def saveHypFig(self):
-        """Save a 600 dpi .png figure of the hypnogram."""
-        filename = QFileDialog.getSaveFileName(self, 'Save Hypnogram figure',
-                                               'hypno.png', "PNG (*.png)")
-        filename = str(filename)  # py2
-        if filename:
-            save_hypnoToFig(filename, self._hypno, self._sf, self._toffset)
-
-    def saveConfig(self):
-        """Save a config file (*.txt) containing several display parameters."""
-        import json
-        upath = os.path.split(self._file)[0]
-        filename = QFileDialog.getSaveFileName(self, 'Save config file',
-                                               upath, "Text file (*.txt)")
-        filename = str(filename)  # py2
-        if filename:
-            with open(filename, 'w') as f:
-                config = {}
-                viz = []
-                amp = []
-                for i, k in enumerate(self._chanChecks):
-                    viz.append(k.isChecked())
-                    amp.append(self._ymaxSpin[i].value())
-
-                config['Channel_Names'] = self._channels
-                config['Channel_Visible'] = viz
-                config['Channel_Amplitude'] = amp
-                config['Spec_Visible'] = self._PanSpecViz.isChecked()
-                config['Spec_Length'] = self._PanSpecNfft.value()
-                config['Spec_Overlap'] = self._PanSpecStep.value()
-                config['Spec_Cmap'] = self._PanSpecCmap.currentIndex()
-                config['Spec_Chan'] = self._PanSpecChan.currentIndex()
-                config['Spec_Fstart'] = self._PanSpecFstart.value()
-                config['Spec_Fend'] = self._PanSpecFend.value()
-                config['Spec_Con'] = self._PanSpecCon.value()
-                config['Hyp_Visible'] = self._PanHypViz.isChecked()
-                config['Time_Visible'] = self._PanTimeViz.isChecked()
-                json.dump(config, f)
-
-    def loadConfig(self):
-        """Load a config file (*.txt) containing several display parameters."""
-        import json
-        if hasattr(self, '_config_file'):
-            filename = str(self._config_file)
-        else:
-            upath = os.path.split(self._file)[0]
-            filename = QFileDialog.getOpenFileName(
-                self, "Open config file", upath, "Text file (*.txt)")
-            filename = str(filename)  # py2
-
-        with open(filename) as f:
-            config = json.load(f)
-            # Channels
-            for i, k in enumerate(self._chanChecks):
-                self._chanChecks[i].setChecked(config['Channel_Visible'][i])
-                self._ymaxSpin[i].setValue(config['Channel_Amplitude'][i])
-
-            # Spectrogram
-            self._PanSpecViz.setChecked(config['Spec_Visible'])
-            self._PanSpecNfft.setValue(config['Spec_Length'])
-            self._PanSpecStep.setValue(config['Spec_Overlap'])
-            self._PanSpecCmap.setCurrentIndex(config['Spec_Cmap'])
-            self._PanSpecChan.setCurrentIndex(config['Spec_Chan'])
-            self._PanSpecFstart.setValue(config['Spec_Fstart'])
-            self._PanSpecFend.setValue(config['Spec_Fend'])
-            self._PanSpecCon.setValue(config['Spec_Con'])
-
-            # Hypnogram & Time axis
-            self._PanHypViz.setChecked(config['Hyp_Visible'])
-            self._PanTimeViz.setChecked(config['Time_Visible'])
-
-            # Update display
-            self._fcn_chanViz()
-            self._fcn_chanAmplitude()
-            self._fcn_specViz()
-            self._fcn_specSetData()
-            self._fcn_hypViz()
-            self._fcn_timeViz()
-
     # =====================================================================
     # SLIDER
     # =====================================================================
@@ -243,9 +53,7 @@ class uiSettings(object):
         step = self._SigSlStep.value()
         win = self._SigWin.value()
         xlim = (val*step, val*step+win)
-        specZoom = self._PanSpecZoom.isChecked()
-        hypZoom = self._PanHypZoom.isChecked()
-        timeZoom = self._PanTimeZoom.isChecked()
+        iszoom = self.menuDispZoom.isChecked()
         unit = str(self._slRules.currentText())
 
         # Find closest time index :
@@ -261,14 +69,15 @@ class uiSettings(object):
                             ylim=self._ylims)
 
         # ---------------------------------------
+        isIndicChecked = self.menuDispIndic.isChecked()
         # Update spectrogram indicator :
-        if self._PanSpecIndic.isEnabled() and not specZoom:
+        if isIndicChecked and not iszoom:
             ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
             self._specInd.set_data(xlim=xlim, ylim=ylim)
 
         # ---------------------------------------
         # Update hypnogram indicator :
-        if self._PanHypIndic.isEnabled() and not hypZoom:
+        if isIndicChecked and not iszoom:
             self._hypInd.set_data(xlim=xlim, ylim=(-6., 2.))
 
         # ---------------------------------------
@@ -278,7 +87,7 @@ class uiSettings(object):
 
         # ---------------------------------------
         # Update Time indicator :
-        if self._PanTimeIndic.isEnabled():
+        if isIndicChecked:
             self._TimeAxis.set_data(xlim[0], win, self._time, unit=unit)
 
         # ================= GUI =================
@@ -286,17 +95,14 @@ class uiSettings(object):
         self._SlGoto.setValue(val*step)
 
         # ================= ZOOMING =================
-        # Histogram :
-        if hypZoom:
+        if iszoom:
+            # Histogram :
             self._hypcam.rect = (xlim[0], -5, xlim[1]-xlim[0], 7.)
-
-        # Spectrogram :
-        if specZoom:
+            # Spectrogram :
             self._speccam.rect = (xlim[0], self._spec.freq[0], xlim[1]-xlim[0],
                                   self._spec.freq[-1] - self._spec.freq[0])
 
-        # Time axis :
-        if timeZoom:
+            # Time axis :
             self._TimeAxis.set_data(xlim[0], win, np.array([xlim[0], xlim[1]]),
                                     unit='seconds')
             self._timecam.rect = (xlim[0], 0., win, 1.)
@@ -360,7 +166,7 @@ class uiSettings(object):
         if self._slOnStart:
             self._fcn_sliderMove()
             # Update grid :
-            if self._PanHypZoom.isChecked():
+            if self.menuDispZoom.isChecked():
                 self._hyp.set_grid(self._time, step)
             else:
                 self._hyp.set_grid(self._time, win)
@@ -407,44 +213,6 @@ class uiSettings(object):
         elif unit == 'hours':
             fact = 3600.
         return fact
-
-    # =====================================================================
-    # ZOOMING
-    # =====================================================================
-    def _fcn_Zooming(self):
-        """Apply dynamic zoom on hypnogram."""
-        # Hypnogram :
-        if self._PanHypZoom.isChecked():
-            self._PanHypIndic.setEnabled(False)
-            self._hypInd.mesh.visible = False
-        else:
-            self._PanHypIndic.setEnabled(True)
-            self._hypcam.rect = (self._time.min(), -5.,
-                                 self._time.max() - self._time.min(), 7.)
-            self._hypInd.mesh.visible = self._PanHypIndic.isChecked()
-
-        # Spectrogram :
-        if self._PanSpecZoom.isChecked():
-            self._PanSpecIndic.setEnabled(False)
-            self._specInd.mesh.visible = False
-        else:
-            self._PanSpecIndic.setEnabled(True)
-            self._speccam.rect = (self._time.min(), self._spec.freq[0],
-                                  self._time.max() - self._time.min(),
-                                  self._spec.freq[-1] - self._spec.freq[0])
-            self._specInd.mesh.visible = self._PanSpecIndic.isChecked()
-        # Time axis :
-        if self._PanTimeZoom.isChecked():
-            # self._PanTimeIndic.setChecked(False)
-            self._PanTimeIndic.setEnabled(False)
-            self._TimeAxis.mesh.visible = False
-        else:
-            self._PanTimeIndic.setEnabled(True)
-            self._timecam.rect = (self._time.min(), 0.,
-                                  self._time.max() - self._time.min(), 1.)
-            self._TimeAxis.mesh.visible = self._PanTimeIndic.isChecked()
-
-        self._fcn_sliderSettings()
 
     def on_mouse_wheel(self, event):
         """Executed function on mouse wheel."""

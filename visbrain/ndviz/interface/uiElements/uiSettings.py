@@ -1,7 +1,7 @@
 """Main class for settings managment."""
 
 import os
-from PyQt4.QtGui import *
+from PyQt5 import QtWidgets, QtGui
 from vispy import io
 
 
@@ -19,28 +19,28 @@ class uiSettings(object):
 
         # ------------------------------- FILE -------------------------------
         # Screenshot :
-        screenshot = QAction("Screenshot", self)
+        screenshot = QtWidgets.QAction("Screenshot", self)
         screenshot.setShortcut("Ctrl+N")
         screenshot.triggered.connect(self._screenshot)
         self.menuFiles.addAction(screenshot)
 
         # Save :
-        save = QAction("Save", self)
+        save = QtWidgets.QAction("Save", self)
         save.setShortcut("Ctrl+S")
         save.triggered.connect(self.saveFile)
         self.menuFiles.addAction(save)
 
         # Load :
-        openm = QAction("Load", self)
+        openm = QtWidgets.QAction("Load", self)
         openm.setShortcut("Ctrl+O")
         openm.triggered.connect(self.openFile)
         self.menuFiles.addAction(openm)
 
         # Quit :
-        exitAction = QAction(QIcon('exit.png'), '&Exit', self)
+        exitAction = QtWidgets.QAction(QtGui.QIcon('exit.png'), '&Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(qApp.quit)
+        exitAction.triggered.connect(QtWidgets.qApp.quit)
         self.menuFiles.addAction(exitAction)
 
         # ------------------------------- MENU -------------------------------

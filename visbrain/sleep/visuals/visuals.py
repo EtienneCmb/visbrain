@@ -70,7 +70,7 @@ class Detection(object):
             yield k
 
     def __bool__(self):
-        pass
+        return any([bool(self[k]['index'].size) for k in self])
 
     def __setitem__(self, key, value):
         self.dict[key] = value
@@ -160,6 +160,8 @@ class Detection(object):
         else:
             self.line[(chan, types)].set_data(pos=pos,
                                               connect=np.array([False]))
+        # Remove data from hypnogram :
+        self.hyp.set_data(pos=pos)
 
     def nonzero(self):
         """Return the list of channels with non-empty detections."""
@@ -539,7 +541,7 @@ class Hypnogram(object):
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
         # self.mesh.set_gl_state('translucent', depth_test=True)
-        self.mesh.set_gl_state('translucent')
+        self.edit.set_gl_state('translucent')
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.7, .7, .7, 1.),
                                             scale=(30.*time[-1]/len(time), 1.),
@@ -576,7 +578,10 @@ class Hypnogram(object):
         # Build color array :
         color = np.zeros((len(data), 4), dtype=np.float32)
         for k, v in zip(self.color.keys(), self.color.values()):
+            # Set the stage color :
             color[data == k, :] = v
+        # Avoid gradient color :
+        color[1::, :] = color[0:-1, :]
         # Set data to the mesh :
         self.mesh.set_data(pos=np.vstack((time, -data)).T, width=self.width,
                            color=color)
@@ -671,24 +676,14 @@ class Hypnogram(object):
         elif isinstance(pos, (int, float)):
             return -self._hconvinv[-int(pos)]
 
-    def clean(self):
+    def clean(self, sf, time):
         """Clean indicators."""
-        pos = np.zeros((1, 3), dtype=np.float32)
         # Mesh :
-        self.mesh.set_data(pos=pos, color='gray')
-        self.mesh.parent = None
-        self.mesh = None
+        posmesh = np.zeros((len(self),), dtype=np.float32)
+        self.set_data(sf, posmesh, time)
         # Edit :
-        self.edit.set_data(pos=pos, face_color='gray')
-        self.edit.parent = None
-        self.edit = None
-        # Report :
-        self.report.set_data(pos=pos, face_color='gray')
-        self.report.parent = None
-        self.report = None
-        # Grid :
-        self.grid.parent = None
-        self.grid = None
+        posedit = np.full((1, 3), -10., dtype=np.float32)
+        self.edit.set_data(pos=posedit, face_color='gray')
 
     # ----------- RECT -----------
     @property
@@ -771,14 +766,18 @@ class vbShortcuts(object):
                    ('s', 'Display / hide spectrogram'),
                    ('t', 'Display / hide topoplot'),
                    ('h', 'Display / hide hypnogram'),
-                   ('p', 'Display / disable time bar'),
+                   ('p', 'Display / hide navigation bar'),
+                   ('x', 'Display / hide time axis'),
+                   ('g', 'Display / hide time grid'),
                    ('z', 'Enable / disable zooming'),
+                   ('i', 'Enable / disable indicators'),
                    ('a', 'Scoring: set current window to Art (-1)'),
                    ('w', 'Scoring: set current window to Wake (0)'),
                    ('1', 'Scoring: set current window to N1 (1)'),
                    ('2', 'Scoring: set current window to N2 (2)'),
                    ('3', 'Scoring: set current window to N3 (3)'),
                    ('r', 'Scoring: set current window to REM (4)'),
+                   ('CTRL + Num', 'Display the channel Num'),
                    ('CTRL + s', 'Save hypnogram'),
                    ('CTRL + t', 'Display shortcuts'),
                    ('CTRL + e', 'Display documentation'),
@@ -796,6 +795,7 @@ class vbShortcuts(object):
             """
             if event.text == ' ':
                 pass
+
             # ------------ SLIDER ------------
             elif event.text.lower() == 'n':  # Next (slider)
                 self._SlGoto.setValue(
@@ -813,34 +813,16 @@ class vbShortcuts(object):
                 self._PanAmpSym.setChecked(True)
                 self._PanAllAmpMax.setValue(self._PanAllAmpMax.value() - 5.)
 
-            # ------------  VISIBILITY ------------
-            elif event.text.lower() == 's':  # Toggle visibility on spec
-                self._PanSpecViz.setChecked(not self._PanSpecViz.isChecked())
-                self._fcn_specViz()
-
-            elif event.text.lower() == 'h':  # Toggle visibility on hypno
-                self._PanHypViz.setChecked(not self._PanHypViz.isChecked())
-                self._fcn_hypViz()
-
-            elif event.text.lower() == 'p':  # Toggle visibility time bar
-                self._slFrame.hide() if self._slFrame.isVisible(
-                                                    ) else self._slFrame.show()
-
-            elif event.text.lower() == 't':   # Toggle visibility on topo
-                self._PanTopoViz.setChecked(not self._PanTopoViz.isChecked())
-                self._fcn_topoViz()
-
-            elif event.text.lower() == 'z':  # Enable zoom
-                viz = self._PanTimeZoom.isChecked()
-                self._PanTimeZoom.setChecked(not viz)
-                self._PanHypZoom.setChecked(not viz)
-                self._PanSpecZoom.setChecked(not viz)
-                self._fcn_Zooming()
-
-            elif event.text.lower() == 'm':
+            # ------------  GRID/MAGNIFY ------------
+            elif event.text.lower() == 'm':  # Magnify
                 viz = self._slMagnify.isChecked()
                 self._slMagnify.setChecked(not viz)
                 self._fcn_sliderMagnify()
+
+            elif event.text.lower() == 'g':  # Grid
+                viz = self._slGrid.isChecked()
+                self._slGrid.setChecked(not viz)
+                self._fcn_gridToggle()
 
             # ------------ SCORING ------------
             elif event.text.lower() == 'a':

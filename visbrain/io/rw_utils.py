@@ -50,8 +50,8 @@ def safety_save(path, limit=100):
     while os.path.isfile(path) and (k < limit):
         fname, fext = os.path.splitext(path)
         if fname.find('(')+1:
-            name = fname[0:fname.find('(')+1]+str(k)+')'+fext
+            path = fname[0:fname.find('(')+1]+str(k)+')'+fext
         else:
-            name = fname+'('+str(k)+')'+fext
+            path = fname+'('+str(k)+')'+fext
         k += 1
-    return name
+    return path

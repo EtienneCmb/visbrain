@@ -3,6 +3,12 @@
 .. image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
     :target: https://travis-ci.org/EtienneCmb/visbrain
 
+.. image:: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/EtienneCmb/visbrain
+
+.. image:: https://badge.fury.io/py/visbrain.svg
+  :target: https://badge.fury.io/py/visbrain
+    
 Visbrain
 ########
 

@@ -274,8 +274,6 @@ class HypnoEdition(object):
         self.event = MouseEmulation()
 
         # ============ MARKERS POSITION ============
-        # data = hypno_obj.mesh.pos[:, 1]
-        # time = hypno_obj.mesh.pos[:, 0]
         self.convert = hypno_obj.pos2GUI
         self._transient(data, time)
 
