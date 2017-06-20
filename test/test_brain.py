@@ -6,8 +6,8 @@ from distutils.sysconfig import get_python_lib
 
 def test_instance_brain():
     """Test the creation of a Brain instance."""
-    pass
-    # Brain()
+    # pass
+    Brain()
 
 
 def test_brain_templates():
