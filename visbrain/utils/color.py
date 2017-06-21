@@ -45,7 +45,7 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
             Array of RGBA colors of shape (length, 4).
     """
     # Default or static color :
-    if (color is None) or isinstance(color, (str, tuple, np.ndarray)):
+    if (color is None) or isinstance(color, (str, tuple, list, np.ndarray)):
         # Default color :
         if color is None:
             coltuple = default
