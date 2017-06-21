@@ -5,6 +5,7 @@ import vispy.visuals.transforms as vist
 import vispy.scene.cameras as viscam
 
 from ..color import array2colormap, color2vb, color2tuple
+from ..cameras import FixedCam
 
 
 class CbarVisual(object):
@@ -108,7 +109,7 @@ class CbarVisual(object):
             self._wc = self._canvas.central_widget.add_view()
             parent = self._wc.scene
             # Define the camera :
-            self._camera = viscam.PanZoomCamera(rect=(-1.2, -1.2, 2.4, 2.4))
+            self._camera = FixedCam(rect=(-1.2, -1.2, 2.4, 2.4))
             self._wc.camera = self._camera
 
         # _____________________ OBJECTS _____________________
@@ -393,7 +394,9 @@ class CbarVisual(object):
         """Set width value."""
         self._width = value
         sc = self._cbNode.transform.scale
+        tr = self._cbNode.transform.translate
         self._cbNode.transform.scale = (value, sc[1], sc[2], sc[3])
+        self._cbNode.transform.translate = (-value, tr[1], tr[2], tr[3])
 
     # ----------- BORDER -----------
     @property
