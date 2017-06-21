@@ -15,7 +15,8 @@ from .sigproc import normalize
 
 
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           '_colormap', 'type_coloring', 'mpl_cmap', 'color2tuple'
+           '_colormap', 'type_coloring', 'mpl_cmap', 'color2tuple',
+           'mpl_cmap_index'
            ]
 
 
@@ -466,3 +467,32 @@ def mpl_cmap(invert=False):
     cmap_lst.sort()
 
     return cmap_lst
+
+
+def mpl_cmap_index(cmap, cmaps=None):
+    """Find the index of a colormap.
+
+    Arg:
+        cmap: string
+            Colormap name.
+
+    Kargs:
+        cmaps: list, optional, (def: None)
+            List of colormaps.
+
+    Returns:
+        idx: int
+            Index of the colormap.
+
+        invert: bool
+            Boolean value indicating if it's a reversed colormap.
+    """
+    # Find if it's a reversed colormap :
+    invert = bool(cmap.find('_r') + 1)
+    # Get list of colormaps :
+    if cmaps is None:
+        cmap = cmap.replace('_r', '')
+        cmaps = mpl_cmap()
+        return np.where(np.char.find(cmaps, cmap) + 1)[0][0], invert
+    else:
+        return cmaps.index(cmap), invert
