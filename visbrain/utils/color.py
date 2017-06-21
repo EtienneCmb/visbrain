@@ -84,7 +84,7 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
                          "color. Use None, tuple or string")
 
 
-def color2tuple(color):
+def color2tuple(color, astype=np.float32):
     """Return a RGB tuple of the color.
 
     Kargs:
@@ -92,7 +92,7 @@ def color2tuple(color):
             The color to use. Can either be None, or a tuple (R, G, B),
             a matplotlib color or an hexadecimal color '#...'.
     """
-    return tuple(color2vb(color).ravel()[0:-1])
+    return tuple(color2vb(color).ravel()[0:-1].astype(astype))
 
 
 def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
