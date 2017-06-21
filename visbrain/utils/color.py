@@ -168,10 +168,10 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
 
     # ================== Colormap (under, over) ==================
     if (vmin is not None) and (under is not None):
-        under = color2vb(under) if isinstance(under, str) else under
+        under = color2vb(under)  # if isinstance(under, str) else under
         x_cmap[x < vmin, :] = under
     if (vmax is not None) and (over is not None):
-        over = color2vb(over) if isinstance(over, str) else over
+        over = color2vb(over)  # if isinstance(over, str) else over
         x_cmap[x > vmax, :] = over
 
     # Faces render (repeat the color to other dimensions):
