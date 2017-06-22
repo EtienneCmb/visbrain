@@ -15,6 +15,7 @@ class uiInteract(object):
         self.cbDigits.valueChanged.connect(self._fcn_Digits)
         self.cbWidth.valueChanged.connect(self._fcn_Width)
         self.cbBorder.clicked.connect(self._fcn_Border)
+        self.cbBw.valueChanged.connect(self._fcn_Bw)
         self.cbLimTxt.clicked.connect(self._fcn_Limits)
         self.cbDigits.setKeyboardTracking(False)
         self.cbWidth.setKeyboardTracking(False)
@@ -62,11 +63,13 @@ class uiInteract(object):
     def _initialize(self):
         """"""
         # Settings :
+        self._fcn_Name()
         self._fcn_BckCol()
         self._fcn_TxtCol()
         self._fcn_Digits()
         self._fcn_Width()
         self._fcn_Border()
+        self._fcn_Bw()
         self._fcn_Limits()
         # Clim/Vmin/Vmax :
         self._fcn_climchanged()
@@ -88,6 +91,7 @@ class uiInteract(object):
         self.cbDigits.setValue(self.cb.ndigits)
         self.cbWidth.setValue(self.cb.width)
         self.cbBorder.setChecked(self.cb.border)
+        self.cbBw.setValue(self.cb.bw)
         self.cbLimTxt.setChecked(self.cb.limtxt)
 
         # ________________ CMAP ________________
@@ -129,6 +133,10 @@ class uiInteract(object):
     #                              SETTINGS
     ###########################################################################
     ###########################################################################
+    def _fcn_Name(self):
+        """Add object name."""
+        self.cbObject.addItems([self.cb.name])
+
     def _fcn_BckCol(self):
         """Change background color."""
         self.cb.bgcolor = textline2color(str(self.cbBckCol.text()))[0]
@@ -153,7 +161,13 @@ class uiInteract(object):
 
     def _fcn_Border(self):
         """Set the border."""
-        self.cb.border = self.cbBorder.isChecked()
+        viz = self.cbBorder.isChecked()
+        self.cb.border = viz
+        self.cbBw.setEnabled(viz)
+
+    def _fcn_Bw(self):
+        """Change border width."""
+        self.cb.bw = self.cbBw.value()
 
     def _fcn_Limits(self):
         """Display/hide vmin/vmax."""

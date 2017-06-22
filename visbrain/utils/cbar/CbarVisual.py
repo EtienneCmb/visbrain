@@ -2,18 +2,21 @@ import numpy as np
 from vispy.scene import Node, visuals
 from vispy import scene
 import vispy.visuals.transforms as vist
-import vispy.scene.cameras as viscam
 
-from ..color import array2colormap, color2vb, color2tuple
+from .CbarBase import CbarBase
+from ..color import array2colormap, color2vb
 from ..cameras import FixedCam
 
 
-class CbarVisual(object):
+class CbarVisual(CbarBase):
     """Create a colorbar using Vispy.
 
     Kargs:
         config: string, optional, (def: None)
             Path to a configuration file.
+
+        name: string, optional, (def: 'Colorbar')
+            Object name.
 
         cmap: string, optional, (def: inferno)
             Matplotlib colormap
@@ -59,6 +62,9 @@ class CbarVisual(object):
         border: bool, optional, (def: True)
             Display colorbar borders.
 
+        bw: float, optional, (def: 2.)
+            Border width.
+
         limtxt: bool, optional, (def: True)
             Display vmin/vmax text.
 
@@ -72,40 +78,19 @@ class CbarVisual(object):
             VisPy parent to use.
     """
 
-    def __init__(self, config=None, cmap='viridis', clim=(0, 1), vmin=None,
-                 vmax=None, under='gray', over='red', cblabel='', cbtxtsz=26,
-                 cbtxtsh=2.3, txtcolor='white', txtsz=20, txtsh=1.2, width=.14,
-                 border=True, limtxt=True, bgcolor=(.1, .1, .1), ndigits=2,
-                 parent=None):
+    def __init__(self, parent=None, **kwargs):
         """Init."""
         # _____________________ INIT _____________________
         self._n = 1000
         self._ratio = 4/5
-        self._minmax = clim
-        # Cmap/Clim/Vmin/Vmax/Under/Over :
-        self._cmap, self._clim = cmap, clim
-        self._vmin, self._vmax = vmin, vmax
-        self._under, self._over = under, over
-        # Cb text :
-        self._cblabel = cblabel
-        self._cbtxtsz = cbtxtsz
-        self._cbtxtsh = cbtxtsh
-        # Text :
-        self._txtcolor = txtcolor
-        self._txtsz = txtsz
-        self._txtsh = txtsh
-        self._limtxt = limtxt
-        # Settings :
-        self._bgcolor = bgcolor
-        self._border = border
-        self._ndigits = ndigits
-        self._width = width
+        CbarBase.__init__(self, **kwargs)
 
         # _____________________ CANVAS _____________________
         if parent is None:
             # Define a canvas :
             self._canvas = scene.SceneCanvas(keys='interactive', show=False,
-                                             resizable=True, bgcolor=bgcolor)
+                                             resizable=True,
+                                             bgcolor=self._bgcolor)
             self._wc = self._canvas.central_widget.add_view()
             parent = self._wc.scene
             # Define the camera :
@@ -118,7 +103,7 @@ class CbarVisual(object):
         self._cbNode = Node(name='Colorbar', parent=parent)
         self._limNode = Node(name='Colorbar', parent=self._cbNode)
         # Rescale between (-1., 1.) :
-        self._rsc = vist.STTransform(scale=(width, 2/self._n, 1),
+        self._rsc = vist.STTransform(scale=(self._width, 2/self._n, 1),
                                      translate=(0, -1., 0))
         # Set transformation to the node :
         self._cbNode.transform = self._rsc
@@ -137,37 +122,37 @@ class CbarVisual(object):
                         [0., 0., -3.]])
         self._mBorder = visuals.Line(parent=self._cbNode, name='Border')
         self._mBorder.set_data(pos=pos, width=2., connect='segments',
-                               color=txtcolor)
+                               color=self._txtcolor)
 
         # --------------------- Labels ---------------------
         # Clim labels :
-        self._mClimM = visuals.Text(parent=self._limNode, color=txtcolor,
-                                    font_size=txtsz, name='Clim_M',
+        self._mClimM = visuals.Text(parent=self._limNode, color=self._txtcolor,
+                                    font_size=self._txtsz, name='Clim_M',
                                     anchor_x='left')
-        self._mClimm = visuals.Text(parent=self._limNode, color=txtcolor,
-                                    font_size=txtsz, name='Clim_m',
+        self._mClimm = visuals.Text(parent=self._limNode, color=self._txtcolor,
+                                    font_size=self._txtsz, name='Clim_m',
                                     anchor_x='left')
 
         # Cblabel :
-        self._mcblabel = visuals.Text(parent=self._cbNode, color=txtcolor,
-                                      font_size=cbtxtsz, name='Cblabel',
-                                      anchor_x='center')
+        self._mcblabel = visuals.Text(parent=self._cbNode, name='Cblabel',
+                                      color=self._txtcolor, anchor_x='center',
+                                      font_size=self._cbtxtsz)
         self._mcblabel.rotation = -90
 
         # Vmin/Vmax :
         self._vmMNode = Node(name='VminVmax', parent=self._limNode)
-        self._mVm = visuals.Text(parent=self._vmMNode, color=txtcolor,
-                                 font_size=self._ratio * txtsz, name='Vmin',
-                                 anchor_x='left')
-        self._mVM = visuals.Text(parent=self._vmMNode, color=txtcolor,
-                                 font_size=self._ratio * txtsz, name='Vmax',
-                                 anchor_x='left')
+        self._mVm = visuals.Text(parent=self._vmMNode, color=self._txtcolor,
+                                 font_size=self._ratio * self._txtsz,
+                                 name='Vmin', anchor_x='left')
+        self._mVM = visuals.Text(parent=self._vmMNode, color=self._txtcolor,
+                                 font_size=self._ratio * self._txtsz,
+                                 name='Vmax', anchor_x='left')
 
-        if config is None:
+        if self._config is None:
             self._up = 'all'
             self._build()
         else:
-            self.load(config)
+            self.load(self._config)
 
     # -------------------------------------------------------------------------
     #                             DEEP METHODS
@@ -284,42 +269,15 @@ class CbarVisual(object):
         return txt
 
     # -------------------------------------------------------------------------
-    #                             USER METHODS
+    #                             LOAD // SAVE
     # -------------------------------------------------------------------------
-    def set_data(self, data, clim=None, vmin=None, vmax=None, under=None,
-                 over=None):
-        self._clim = clim
-        self.minmax = (data.min(), data.max())
-
     def save(self, filename):
         """Save the configuration in a txt file."""
         import json
         import os
         file = os.path.splitext(filename)[0] + '.txt'
         with open(file, 'w') as f:
-            config = {}
-            # cmap/clim/vmin/vmax/under/over :
-            config['cmap'] = self._cmap
-            config['clim'] = self._clim
-            config['vmin'] = self._vmin
-            config['under'] = list(color2tuple(self._under, float))
-            config['vmax'] = self._vmax
-            config['over'] = list(color2tuple(self._over, float))
-            # Cblabel :
-            config['cblabel'] = self._cblabel
-            config['cbtxtsz'] = self._cbtxtsz
-            config['cbtxtsh'] = self._cbtxtsh
-            # Text :
-            config['txtcolor'] = list(color2tuple(self._txtcolor, float))
-            config['txtsz'] = self._txtsz
-            config['txtsh'] = self._txtsh
-            # Settings :
-            config['border'] = self._border
-            config['limtxt'] = self._limtxt
-            config['bgcolor'] = list(color2tuple(self._bgcolor, float))
-            config['ndigits'] = self._ndigits
-            config['width'] = self._width
-
+            config = self.to_dict()
             json.dump(config, f)
 
     def load(self, filename):
@@ -356,6 +314,17 @@ class CbarVisual(object):
     #                                 SETTINGS
     ###########################################################################
     ###########################################################################
+    # ----------- NAME -----------
+    @property
+    def name(self):
+        """Get the name value."""
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        """Set name value."""
+        self._name = value
+
     # ----------- BGCOLOR -----------
     @property
     def bgcolor(self):
@@ -409,6 +378,18 @@ class CbarVisual(object):
         """Set border value."""
         self._border = value
         self._mBorder.visible = value
+
+    # ----------- BW -----------
+    @property
+    def bw(self):
+        """Get the bw value."""
+        return self._bw
+
+    @bw.setter
+    def bw(self, value):
+        """Set bw value."""
+        self._bw = value
+        self._mBorder.set_data(width=value)
 
     # ----------- LIMTXT -----------
     @property

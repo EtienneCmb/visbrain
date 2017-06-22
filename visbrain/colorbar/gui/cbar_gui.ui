@@ -84,10 +84,13 @@
          <layout class="QVBoxLayout" name="verticalLayout_9">
           <item>
            <layout class="QGridLayout" name="gridLayout_7">
-            <item row="3" column="2">
-             <widget class="QDoubleSpinBox" name="cbWidth">
-              <property name="singleStep">
-               <double>0.010000000000000</double>
+            <item row="5" column="0" colspan="3">
+             <widget class="QCheckBox" name="cbLimTxt">
+              <property name="text">
+               <string>Display vmin/vmax text</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -95,6 +98,19 @@
              <widget class="Line" name="line_9">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QSpinBox" name="cbDigits">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>6</number>
+              </property>
+              <property name="value">
+               <number>2</number>
               </property>
              </widget>
             </item>
@@ -106,12 +122,26 @@
                </font>
               </property>
               <property name="text">
-               <string>Width</string>
+               <string>Colorbar
+width</string>
               </property>
              </widget>
             </item>
+            <item row="0" column="2">
+             <widget class="QLineEdit" name="cbBckCol"/>
+            </item>
             <item row="3" column="1">
              <widget class="Line" name="line_10">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="cbTxtCol"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="Line" name="line_7">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
@@ -130,62 +160,12 @@ digits</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_9">
-              <property name="font">
-               <font>
-                <italic>true</italic>
-               </font>
-              </property>
-              <property name="text">
-               <string>Textcolor</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="1">
              <widget class="Line" name="line_6">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
              </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="Line" name="line_7">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLineEdit" name="cbBckCol"/>
-            </item>
-            <item row="2" column="2">
-             <widget class="QSpinBox" name="cbDigits">
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>6</number>
-              </property>
-              <property name="value">
-               <number>2</number>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0" colspan="3">
-             <widget class="QCheckBox" name="cbBorder">
-              <property name="font">
-               <font>
-                <italic>true</italic>
-               </font>
-              </property>
-              <property name="text">
-               <string>Border</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="cbTxtCol"/>
             </item>
             <item row="0" column="0">
              <widget class="QLabel" name="label_8">
@@ -200,13 +180,51 @@ color</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0" colspan="3">
-             <widget class="QCheckBox" name="cbLimTxt">
-              <property name="text">
-               <string>Display vmin/vmax text</string>
+            <item row="3" column="2">
+             <widget class="QDoubleSpinBox" name="cbWidth">
+              <property name="singleStep">
+               <double>0.010000000000000</double>
               </property>
-              <property name="checked">
-               <bool>true</bool>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QCheckBox" name="cbBorder">
+              <property name="font">
+               <font>
+                <italic>true</italic>
+               </font>
+              </property>
+              <property name="text">
+               <string>Border</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="Line" name="line_11">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_9">
+              <property name="font">
+               <font>
+                <italic>true</italic>
+               </font>
+              </property>
+              <property name="text">
+               <string>Textcolor</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QDoubleSpinBox" name="cbBw">
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="minimum">
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
