@@ -32,4 +32,5 @@ def PyQt4_behavior(type, value, tback):
     """Retrieve PyQt4 behavior if an error occured."""
     sys.__excepthook__(type, value, tback)
 
+
 sys.excepthook = PyQt4_behavior

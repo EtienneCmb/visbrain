@@ -21,17 +21,30 @@ class uiMenu(object):
                               "Text file (*.txt);;All files (*.*)")
 
         if filename:
-            self.cb.save(filename)
+            self.objs.save(filename)
 
-    def loadConfig(self):
+    def loadConfig(self, *args, filename=None):
         """Load colorbar conf."""
-        filename = dialogLoad(self, 'Load config File', 'config',
-                              "Text file (*.txt);;All files (*.*)")
+        if filename is None:
+            # Open dialog box :
+            filename = dialogLoad(self, 'Load config File', 'config',
+                                  "Text file (*.txt);;All files (*.*)")
+            # Disconnect interactions :
+            self._disconnect()
+
         if filename:
-            self.cb.load(filename)
+            # Load objects :
+            self.objs.load(filename)
+            # Update colorbar visual from loaded objects :
+            self.objs.update_from_obj(self.cb)
+            # re-build colorbar :
+            self.cb._build(True, 'all')
+            self._fcn_Name()
+            # Update GUI :
             self._cb2GUI()
             self._initialize()
-            self.cb.load(filename)
+            # Re-connect interactions :
+            self._connect()
 
     def _fcn_screenshot(self):
         """Colorbar screenshot."""

@@ -149,8 +149,7 @@ class CbarVisual(CbarBase):
                                  name='Vmax', anchor_x='left')
 
         if self._config is None:
-            self._up = 'all'
-            self._build()
+            self._build(True, 'all')
         else:
             self.load(self._config)
 
@@ -171,37 +170,37 @@ class CbarVisual(CbarBase):
         except:
             return False
 
-    def _setter(self):
+    def _setter(self, toset):
         # _____________________ IMAGE _____________________
         self._mImage.set_data(self._colormap)
 
         # _____________________ CLIM _____________________
         clim = np.array(self._clim)
-        if self._up in ['all', 'clim']:
+        if toset in ['all', 'clim']:
             self._mClimm.text = str(self._digits(clim[0]))
             self._mClimM.text = str(self._digits(clim[1]))
 
         # _____________________ VMIN/VMAX _____________________
         # ------------ VMIN ------------
-        if self._up in ['all', 'vmin']:
+        if toset in ['all', 'vmin']:
             if (self._vmin is not None) and (clim[0] < self._vmin < clim[1]):
                 self._mVm.visible = True
                 self._mVm.text = str(self._digits(self._vmin))
-                self._mVm.pos = (self.txtsh, self._conv(self._vmin), 2.)
+                self._mVm.pos = (self.txtsh, self._conv(self._vmin), -3.)
             else:
                 self._mVm.visible = False
         # ------------ VMAX ------------
-        if self._up in ['all', 'vmax']:
+        if toset in ['all', 'vmax']:
             if (self._vmax is not None) and (clim[0] < self._vmax < clim[1]):
                 self._mVM.visible = True
                 self._mVM.text = str(self._digits(self._vmax))
-                self._mVM.pos = (self.txtsh, self._conv(self._vmax), 2.)
+                self._mVM.pos = (self.txtsh, self._conv(self._vmax), -3.)
             else:
                 self._mVM.visible = False
 
         # _____________________ TEXT _____________________
         # Text color :
-        if self._up in ['all', 'txtcolor']:
+        if toset in ['all', 'txtcolor']:
             self._mClimm.color = self._txtcolor
             self._mClimM.color = self._txtcolor
             self._mcblabel.color = self._txtcolor
@@ -212,27 +211,27 @@ class CbarVisual(CbarBase):
 
         # Label :
         self._cblabel = '' if self._cblabel is None else self._cblabel
-        if self._up in ['all', 'cblabel']:
+        if toset in ['all', 'cblabel']:
             self._mcblabel.text = self._cblabel
-        if self._up in ['all', 'cbtxtsh']:
-            self._mcblabel.pos = (self.cbtxtsh, self._n / 2., 2.)
-        if self._up in ['all', 'cbtxtsz']:
+        if toset in ['all', 'cbtxtsh']:
+            self._mcblabel.pos = (self.cbtxtsh, self._n / 2., -3.)
+        if toset in ['all', 'cbtxtsz']:
             self._mcblabel.font_size = self._cbtxtsz
         # Clim/Vmin/Vmax font size and position :
-        if self._up in ['all', 'txtsz']:
+        if toset in ['all', 'txtsz']:
             self._mClimm.font_size = self._txtsz
             self._mClimM.font_size = self._txtsz
             self._mVm.font_size = self._ratio * self._txtsz
             self._mVM.font_size = self._ratio * self._txtsz
-        if self._up in ['all', 'txtsh']:
-            self._mClimM.pos = (self.txtsh, self._n, -2.)
-            self._mClimm.pos = (self.txtsh, 0., -2.)
+        if toset in ['all', 'txtsh']:
+            self._mClimM.pos = (self.txtsh, self._n, -3.)
+            self._mClimm.pos = (self.txtsh, 0., -3.)
             if self._vmin is not None:
-                self._mVm.pos = (self.txtsh, self._conv(self._vmin), 2.)
+                self._mVm.pos = (self.txtsh, self._conv(self._vmin), 3.)
             if self._vmax is not None:
-                self._mVM.pos = (self.txtsh, self._conv(self._vmax), 2.)
+                self._mVM.pos = (self.txtsh, self._conv(self._vmax), 3.)
 
-    def _build(self, needupdate=True):
+    def _build(self, needupdate=True, toset='all'):
         """Build the colormap."""
         if self._check() and needupdate:
             # Generate a sample vector between clim :
@@ -243,7 +242,7 @@ class CbarVisual(CbarBase):
                                 vmax=self._vmax, under=self._under,
                                 over=self._over)
             self._colormap = cp[:, np.newaxis, :]
-        self._setter()
+        self._setter(toset)
         self._update()
 
     def _update(self):
@@ -267,47 +266,6 @@ class CbarVisual(CbarBase):
         else:
             txt = value
         return txt
-
-    # -------------------------------------------------------------------------
-    #                             LOAD // SAVE
-    # -------------------------------------------------------------------------
-    def save(self, filename):
-        """Save the configuration in a txt file."""
-        import json
-        import os
-        file = os.path.splitext(filename)[0] + '.txt'
-        with open(file, 'w') as f:
-            config = self.to_dict()
-            json.dump(config, f)
-
-    def load(self, filename):
-        """Load configuration file."""
-        import json
-        from warnings import warn
-        with open(filename) as f:
-            # Load the configuration file :
-            config = json.load(f)
-
-            def _try(string, k, self=self, config=config):
-                """Execute the string.
-
-                This function insure backward compatibility for loading the
-                configuration file.
-                """
-                try:
-                    exec(string)
-                except:
-                    warn('Cannot import ' + k)
-
-            for k, i in config.items():
-                if isinstance(i, str):
-                    _try("self._" + k + " = '" + i + "'", k)
-                else:
-                    _try("self._" + k + " = " + str(i), k)
-
-        self._up = 'all'
-        self._build()
-        self._update()
 
     ###########################################################################
     ###########################################################################
@@ -349,8 +307,7 @@ class CbarVisual(CbarBase):
         """Set ndigits value."""
         bck = self._ndigits
         self._ndigits = value
-        self._up = 'all'
-        self._build(bck is not value)
+        self._build(bck is not value, 'all')
 
     # ----------- WIDTH -----------
     @property
@@ -432,8 +389,7 @@ class CbarVisual(CbarBase):
         """Set clim value."""
         bck = self._clim
         self._clim = value
-        self._up = 'all'
-        self._build(bck is not value)
+        self._build(bck is not value, 'all')
 
     # ----------- VMIN -----------
     @property
@@ -446,8 +402,7 @@ class CbarVisual(CbarBase):
         """Set vmin value."""
         bck = self._vmin
         self._vmin = value
-        self._up = 'vmin'
-        self._build(bck is not value)
+        self._build(bck is not value, 'vmin')
 
     # ----------- UNDER -----------
     @property
@@ -473,8 +428,7 @@ class CbarVisual(CbarBase):
         """Set vmax value."""
         bck = self._vmax
         self._vmax = value
-        self._up = 'vmax'
-        self._build(bck is not value)
+        self._build(bck is not value, 'vmax')
 
     # ----------- OVER -----------
     @property
@@ -504,8 +458,7 @@ class CbarVisual(CbarBase):
     def cblabel(self, value):
         """Set cblabel value."""
         self._cblabel = value
-        self._up = 'cblabel'
-        self._build(False)
+        self._build(False, 'cblabel')
 
     # ----------- CBTXTSZ -----------
     @property
@@ -517,8 +470,7 @@ class CbarVisual(CbarBase):
     def cbtxtsz(self, value):
         """Set cbtxtsz value."""
         self._cbtxtsz = value
-        self._up = 'cbtxtsz'
-        self._build(False)
+        self._build(False, 'cbtxtsz')
 
     # ----------- CBTXTSH -----------
     @property
@@ -530,8 +482,7 @@ class CbarVisual(CbarBase):
     def cbtxtsh(self, value):
         """Set cbtxtsh value."""
         self._cbtxtsh = value
-        self._up = 'cbtxtsh'
-        self._build(False)
+        self._build(False, 'cbtxtsh')
 
     # ----------- TXTCOLOR -----------
     @property
@@ -543,8 +494,7 @@ class CbarVisual(CbarBase):
     def txtcolor(self, value):
         """Set txtcolor value."""
         self._txtcolor = color2vb(value)
-        self._up = 'txtcolor'
-        self._build(False)
+        self._build(False, 'txtcolor')
 
     # ----------- TXTSZ -----------
     @property
@@ -556,8 +506,7 @@ class CbarVisual(CbarBase):
     def txtsz(self, value):
         """Set txtsz value."""
         self._txtsz = value
-        self._up = 'txtsz'
-        self._build(False)
+        self._build(False, 'txtsz')
 
     # ----------- TXTSH -----------
     @property
@@ -569,5 +518,4 @@ class CbarVisual(CbarBase):
     def txtsh(self, value):
         """Set txtsh value."""
         self._txtsh = value
-        self._up = 'txtsh'
-        self._build(False)
+        self._build(False, 'txtsh')

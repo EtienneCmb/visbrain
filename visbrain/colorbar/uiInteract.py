@@ -9,7 +9,11 @@ class uiInteract(object):
 
     def __init__(self):
         """Init."""
+        self._connect()
+
+    def _connect(self):
         # _____________ SETTINGS _____________
+        self.cbObject.currentIndexChanged.connect(self._fcn_ChangeObj)
         self.cbBckCol.editingFinished.connect(self._fcn_BckCol)
         self.cbTxtCol.editingFinished.connect(self._fcn_TxtCol)
         self.cbDigits.valueChanged.connect(self._fcn_Digits)
@@ -60,10 +64,40 @@ class uiInteract(object):
         self.cbTxtSz.setKeyboardTracking(False)
         self.cbTxtSh.setKeyboardTracking(False)
 
+    def _disconnect(self):
+        # Settings :
+        self.cbObject.disconnect()
+        self.cbBckCol.disconnect()
+        self.cbTxtCol.disconnect()
+        self.cbDigits.disconnect()
+        self.cbWidth.disconnect()
+        self.cbBorder.disconnect()
+        self.cbBw.disconnect()
+        self.cbLimTxt.disconnect()
+        # Cmap :
+        self.cbCmap
+        self.cbCmapRev
+        # Clim :
+        self.cbClimm.disconnect()
+        self.cbClimM.disconnect()
+        # Vmin/Vmax/Under/Over :
+        self.cbVminChk.disconnect()
+        self.cbVminVal.disconnect()
+        self.cbVminUnder.disconnect()
+        self.cbVmaxChk.disconnect()
+        self.cbVmaxVal.disconnect()
+        self.cbVmaxOver.disconnect()
+        # Text :
+        self.cbCblabel.disconnect()
+        self.cbCbTxtSz.disconnect()
+        self.cbCbTxtSh.disconnect()
+        self.cbTxtSz.disconnect()
+        self.cbTxtSh.disconnect()
+
     def _initialize(self):
         """"""
         # Settings :
-        self._fcn_Name()
+        # self._fcn_Name()
         self._fcn_BckCol()
         self._fcn_TxtCol()
         self._fcn_Digits()
@@ -133,23 +167,45 @@ class uiInteract(object):
     #                              SETTINGS
     ###########################################################################
     ###########################################################################
+    def _fcn_ChangeObj(self):
+        """Change colorbar object."""
+        # Get the current selected text :
+        name = self.cbObject.currentText()
+        # Select this object :
+        self.objs.select(name)
+        # Update colorbar visual from loaded objects :
+        self.objs.update_from_obj(self.cb)
+        # re-build colorbar :
+        self.cb._build(True, 'all')
+        # Disconnect interactions :
+        self._disconnect()
+        # Update GUI :
+        self._cb2GUI()
+        self._initialize()
+        # Re-connect interactions :
+        self._connect()
+
     def _fcn_Name(self):
         """Add object name."""
-        self.cbObject.addItems([self.cb.name])
+        self.cbObject.clear()
+        self.cbObject.addItems(self.objs.list())
 
     def _fcn_BckCol(self):
         """Change background color."""
         self.cb.bgcolor = textline2color(str(self.cbBckCol.text()))[0]
+        self.objs['bgcolor'] = self.cb.bgcolor
 
     def _fcn_TxtCol(self):
         """Change text color."""
         self.cb.txtcolor = textline2color(str(self.cbTxtCol.text()))[0]
+        self.objs['txtcolor'] = self.cb.txtcolor
 
     def _fcn_Digits(self):
         """Change the number of digits."""
         ndigits = self.cbDigits.value()
         if 0 < ndigits:
             self.cb.ndigits = ndigits
+            self.objs['ndigits'] = ndigits
             self.cbClimm.setDecimals(ndigits)
             self.cbClimM.setDecimals(ndigits)
             self.cbVminVal.setDecimals(ndigits)
@@ -158,20 +214,24 @@ class uiInteract(object):
     def _fcn_Width(self):
         """Change colorbar width."""
         self.cb.width = self.cbWidth.value()
+        self.objs['width'] = self.cb.width
 
     def _fcn_Border(self):
         """Set the border."""
         viz = self.cbBorder.isChecked()
         self.cb.border = viz
+        self.objs['border'] = self.cb.border
         self.cbBw.setEnabled(viz)
 
     def _fcn_Bw(self):
         """Change border width."""
         self.cb.bw = self.cbBw.value()
+        self.objs['bw'] = self.cb.bw
 
     def _fcn_Limits(self):
         """Display/hide vmin/vmax."""
         self.cb.limtxt = self.cbLimTxt.isChecked()
+        self.objs['limtxt'] = self.cb.limtxt
 
     ###########################################################################
     ###########################################################################
@@ -182,6 +242,7 @@ class uiInteract(object):
         """Change the colormap."""
         rv = self.cbCmapRev.isChecked() * '_r'
         self.cb.cmap = str(self.cbCmap.currentText()) + rv
+        self.objs['cmap'] = self.cb.cmap
 
     ###########################################################################
     ###########################################################################
@@ -194,6 +255,7 @@ class uiInteract(object):
         climm, climM = float(self.cbClimm.value()), float(self.cbClimM.value())
         # Update clim :
         self.cb.clim = (climm, climM)
+        self.objs['clim'] = self.cb.clim
         # Fix new vmin/max limits and step :
         self._vminvmax_onLoad()
 
@@ -229,6 +291,8 @@ class uiInteract(object):
             self.cb.under = textline2color(str(self.cbVminUnder.text()))[0]
         else:
             self.cb.vmin = None
+        self.objs['vmin'] = self.cb.vmin
+        self.objs['under'] = self.cb.under
 
     def _fcn_vmaxChanged(self):
         """Change vmin/vmax/under/over."""
@@ -240,6 +304,8 @@ class uiInteract(object):
             self.cb.over = textline2color(str(self.cbVmaxOver.text()))[0]
         else:
             self.cb.vmax = None
+        self.objs['vmax'] = self.cb.vmax
+        self.objs['over'] = self.cb.over
 
     ###########################################################################
     ###########################################################################
@@ -249,19 +315,24 @@ class uiInteract(object):
     def _fcn_CbTitle(self):
         """Change colorbar title."""
         self.cb.cblabel = str(self.cbCblabel.text())
+        self.objs['cblabel'] = self.cb.cblabel
 
     def _fcn_cbTxtSize(self):
         """Change colorbar text size."""
         self.cb.cbtxtsz = self.cbCbTxtSz.value()
+        self.objs['cbtxtsz'] = self.cb.cbtxtsz
 
     def _fcn_cbTxtShift(self):
         """Change cblabel shift."""
         self.cb.cbtxtsh = self.cbCbTxtSh.value()
+        self.objs['cbtxtsh'] = self.cb.cbtxtsh
 
     def _fcn_TxtSize(self):
         """Change text size for limits."""
         self.cb.txtsz = self.cbTxtSz.value()
+        self.objs['txtsz'] = self.cb.txtsz
 
     def _fcn_TxtShift(self):
         """Change text shift."""
         self.cb.txtsh = self.cbTxtSh.value()
+        self.objs['txtsh'] = self.cb.txtsh

@@ -7,7 +7,7 @@ import vispy.app as visapp
 from .uiInit import uiInit
 from .uiMenu import uiMenu
 from .uiInteract import uiInteract
-from ..utils import CbarVisual
+from ..utils import CbarVisual, CbarObjetcs
 
 
 class Colorbar(uiInit, uiInteract, uiMenu):
@@ -69,12 +69,9 @@ class Colorbar(uiInit, uiInteract, uiMenu):
 
         ndigits: int, optional, (def: 2)
             Number of digits for the text.
-
-        parent: VisPy, optional, (def: None)
-            VisPy parent to use.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, config=None, **kwargs):
         """Init."""
         # Create the app and initialize all graphical elements :
         self._app = QtWidgets.QApplication(sys.argv)
@@ -82,18 +79,32 @@ class Colorbar(uiInit, uiInteract, uiMenu):
         uiInit.__init__(self)
         uiMenu.__init__(self)
 
+        # Enable control of multiple colorbar objects :
+        self.objs = CbarObjetcs()
+
         # Create the colorbar object and add it to the GUI :
-        self.cb = CbarVisual(**kwargs)
+        if config is None:
+            self.cb = CbarVisual(**kwargs)
+            self.objs.add_object(**self.cb.to_dict())
+        else:
+            self.cb = CbarVisual()
+            self.loadConfig(config)
         self.CbarLayout.addWidget(self.cb._canvas.native)
 
         # Set colorbar values to the GUI :
         self._cb2GUI()
+        self._fcn_Name()
 
         # Initialize GUI interactions :
         uiInteract.__init__(self)
 
         # Latest updates of the colorbar :
         self._initialize()
+
+    def add_colorbar(self, title, **kwargs):
+        kwargs['name'] = title
+        self.objs.add_object(**kwargs)
+        self._fcn_Name()
 
     def show(self):
         """Display the graphical user interface."""
