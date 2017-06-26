@@ -604,11 +604,11 @@ class Hypnogram(object):
                 Stage value.
         """
         # Convert the stage :
-        stagec = self._hconv[float(stage)]
+        stagec = self._hconv[stage]
         # Update color :
         self.mesh.color[stfrom+1:stend+1, :] = self.color[stagec]
-        # Only only the needed part :
-        self.mesh.pos[stfrom:stend, 1] = -stagec
+        # Only update the needed part :
+        self.mesh.pos[stfrom:stend, 1] = -float(stagec)
 
     def set_grid(self, time, length=30., y=1.):
         """Set grid lentgh."""
