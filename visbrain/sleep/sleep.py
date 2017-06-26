@@ -143,12 +143,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Check all data :
         self._file = file
         self._config_file = config_file
-        (self._sf, self._data, self._hypno, self._time,
+        (self._sf, self._data, self._channels, self._hypno, self._time,
          self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
                                                      downsample, time, href)
         self._hconvinv = {v: k for k, v in self._hconv.items()}
-        self._channels = [k.strip().replace(' ', '').split('.')[
-            0] for k in channels]
         self._ax = axis
         self._enabhypedit = hedit
         # ---------- Default line width ----------
@@ -255,6 +253,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             data: np.ndarray
                 The float 32 data with a shape of (n_channels, n_pts).
 
+            channels: list
+                List of cleaned channel names.
+
             hypno: np.ndarray
                 The float 32 hypnogram with a shape of (npts,).
 
@@ -322,6 +323,19 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Define time vector if needed :
         if time is None:
             time = np.arange(npts, dtype=np.float32) / sf
+        # Clean channel names :
+        patterns = ['eeg', 'EEG']
+        chanc = []
+        for k in channels:
+            # Remove informations after . :
+            k = k.split('.')[0]
+            # Exclude patterns :
+            for i in patterns:
+                k = k.replace(i, '')
+            # Remove space :
+            k = k.replace(' ', '')
+            k = k.strip()
+            chanc.append(k)
 
         # ========================== DOWN-SAMPLING ==========================
         if isinstance(downsample, (int, float)):
@@ -350,7 +364,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         if hypno.dtype != np.float32:
             hypno = hypno.astype(np.float32, copy=False)
 
-        return sf, data, hypno, time, href, conv
+        return sf, data, chanc, hypno, time, href, conv
 
     ###########################################################################
     # SUB-FONCTIONS
