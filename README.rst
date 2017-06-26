@@ -16,7 +16,7 @@ Visbrain
    :align:   center
 
 
-**Visbrain** is an open-source python package and provides hardware accelerated visualizations mainly for neuroscientific data. It is based on top of `VisPy <http://vispy.org/>`_ and PyQt and is distributed under the 3-Clause BSD license. We also provide an online `documentation <http://etiennecmb.github.io/visbrain/>`_, `examples and datasets <https://github.com/EtienneCmb/visbrain/tree/master/examples>`_ and can also be downloaded from `PyPi <https://pypi.python.org/pypi/visbrain/>`_.
+**Visbrain** is an open-source python package and provides hardware accelerated visualizations mainly for neuroscientific data. It is based on top of `VisPy <http://vispy.org/>`_ and PyQt and is distributed under the 3-Clause BSD license. We also provide an on line `documentation <http://etiennecmb.github.io/visbrain/>`_, `examples and datasets <https://github.com/EtienneCmb/visbrain/tree/master/examples>`_ and can also be downloaded from `PyPi <https://pypi.python.org/pypi/visbrain/>`_.
 
 Right now, four modules are implemented, with the first three coming with a modular graphical interface :
 
@@ -28,27 +28,24 @@ Right now, four modules are implemented, with the first three coming with a modu
 Installation
 ============
 
+.. warning::
+
+   Since version 0.2.8, Visbrain use PyQt5 and PyQt4 versions are no longer developed. Here, we only describe the installation of the PyQt5 version of Visbrain, but you can check the `documentation <http://etiennecmb.github.io/visbrain/>`_ for the installation of the older PyQt4 version.
+
 Dependencies
 ------------
 
 Visbrain requires :
 
-* Numpy
-* Scipy
-* Vispy (*development version*)
-* Matplotlib <= 1.5.1
-* PyQt4
+* NumPy
+* SciPy
+* VisPy (*development version*)
+* Matplotlib >= 1.5.5
+* PyQt5
 * Pillow
 
 User installation
 -----------------
-
-In a terminal, create and activate a 3.5 Python environment with the correct PyQt4 version :
-
-.. code-block:: shell
-
-    conda create --yes  -n visbrain python=3.5 numpy scipy pillow matplotlib=1.5.1 pip
-    activate visbrain
 
 Install the latest VisPy version from Github :
 
@@ -56,13 +53,13 @@ Install the latest VisPy version from Github :
 
     pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
 
-Finally, install Visbrain :
+Then, install Visbrain :
 
 .. code-block:: shell
 
     pip install visbain
 
-We also recommand to install pyopengl :
+We also strongly recommend to install *pyopengl* :
 
 .. code-block:: shell
 
@@ -79,7 +76,7 @@ The `Brain <http://etiennecmb.github.io/visbrain/brain.html>`_ module is primari
 * Integrate EEG/MEG/Intracranial sources/electrodes and connectivity.
 * Display Regions of Interest (ROI) based either on Brodmann or AAL atlases.
 * Project source's activity onto the brain/ROI surface.
-* An extended control of colours. 
+* An extended control of colors. 
 * Export in HD pictures with auto-cropping functionalities.
 * GUI or command line control.
 * `Examples and datasets <https://github.com/EtienneCmb/visbrain/tree/master/examples/brain>`_.
