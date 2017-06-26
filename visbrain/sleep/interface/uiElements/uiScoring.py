@@ -64,6 +64,7 @@ class uiScoring(object):
                 # Update pos if not None :
                 if tstart is not None:
                     self._hypno[tstart:tend] = stage
+                    self._hyp.set_stage(tstart, tend, stage)
             if self._enabhypedit:
                 # Reset markers points position and color :
                 self._hypedit.pos = np.array([])
@@ -74,7 +75,6 @@ class uiScoring(object):
                 self._hyp.edit.set_data(pos=self._hypedit.pos,
                                         face_color=self._hypedit.color,
                                         size=self._hypedit.size, edge_width=0.)
-            self._hyp.set_data(self._sf, self._hypno, self._time)
             self._hyp.edit.update()
             # Update sleep info :
             self._fcn_infoUpdate()
