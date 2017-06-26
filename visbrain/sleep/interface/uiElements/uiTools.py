@@ -1,7 +1,7 @@
 """Main class for sleep tools managment."""
 
 import numpy as np
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 from ....utils import (rereferencing, bipolarization, find_nonEEG,
                        commonaverage, id)
 
@@ -24,7 +24,7 @@ class uiTools(object):
         for i, k in enumerate(self._channels):
             if not self._noneeg[i]:
                 # Add a checkbox to the scrolling panel :
-                box = QtGui.QCheckBox(self._PanScrollChan)
+                box = QtWidgets.QCheckBox(self._PanScrollChan)
                 # Name checkbox with channel name :
                 box.setText(k)
                 # Get it :

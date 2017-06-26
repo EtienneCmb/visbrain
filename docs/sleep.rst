@@ -489,7 +489,11 @@ s                       Display / hide spectrogram
 t                       Display / hide topoplot
 h                       Display / hide hypnogram
 p                       Display / hide navigation bar
+x                       Display / hide time axis
+g                       Display / hide grid
 z                       Enable / disable zoom
+i                       Enable / disable indicators
+CTRL + Num              Display / hide the channel Num [0, 9]
 CTRL + d                Display quick settings panel
 CTRL + s                Save hypnogram
 CTRL + n                Screenshot window

@@ -9,15 +9,14 @@ to the calibration.
 
 """
 from logging import getLogger
-lg = getLogger(__name__)
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from math import floor
 from re import findall
-from struct import pack
-
 from numpy import empty, asarray, fromstring, iinfo, abs, max
 
+
+lg = getLogger(__name__)
 EDF_FORMAT = 'int16'  # by definition
 edf_iinfo = iinfo(EDF_FORMAT)
 DIGITAL_MAX = edf_iinfo.max
@@ -47,6 +46,7 @@ class Edf:
     """
 
     def __init__(self, edffile):
+        """Init."""
         if isinstance(edffile, str):
             self.filename = edffile
             self._read_hdr()
@@ -55,9 +55,7 @@ class Edf:
         """Read header from EDF file.
 
         It only reads the header for internal purposes and adds a hdr.
-
         """
-
         with open(self.filename, 'rb') as f:
 
             hdr = {}
@@ -123,20 +121,18 @@ class Edf:
             number of samples in the dataset
         orig : dict
             additional information taken directly from the header
-
         """
-
         subj_id = self.hdr['subject_id']
         start_time = self.hdr['start_time']
-        
+
         # Check that all channels have the same sampling rate
-        #_assert_all_the_same(self.hdr['n_samples_per_record'])
-        
+        # _assert_all_the_same(self.hdr['n_samples_per_record'])
+
         s_freq = (self.hdr['n_samples_per_record'][0] /
                   self.hdr['record_length'])
-        
+
         chan_name = self.hdr['label']
-        
+
         n_samples = (self.hdr['n_samples_per_record'][0] *
                      self.hdr['n_records'])
 
@@ -161,9 +157,7 @@ class Edf:
         -------
         numpy.ndarray
             A vector with the data as written on file, in 16-bit precision
-
         """
-
         assert begsam < endsam
 
         begsam = float(begsam)
@@ -225,7 +219,6 @@ class Edf:
         numpy.ndarray
             A 2d matrix, where the first dimension is the channels and the
             second dimension are the samples.
-
         """
         hdr = self.hdr
         dig_min = hdr['digital_min']
@@ -233,8 +226,8 @@ class Edf:
         phys_range = hdr['physical_max'] - hdr['physical_min']
         dig_range = hdr['digital_max'] - hdr['digital_min']
 
-        #assert all(phys_range > 0)
-        #assert all(dig_range > 0)
+        # assert all(phys_range > 0)
+        # assert all(dig_range > 0)
 
         gain = phys_range / dig_range
 

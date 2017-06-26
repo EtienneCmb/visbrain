@@ -1,7 +1,7 @@
 """Top level Ndviz class."""
 import numpy as np
 
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 import sys
 
 import vispy.app as visapp
@@ -12,6 +12,8 @@ from .visuals import visuals
 from warnings import warn
 # from ..utils import id
 # from .user import userfcn
+import sip
+sip.setdestroyonexit(False)
 
 
 class Ndviz(uiInit, visuals, uiElements):
@@ -96,7 +98,7 @@ class Ndviz(uiInit, visuals, uiElements):
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
-        self._app = QtGui.QApplication(sys.argv)
+        self._app = QtWidgets.QApplication(sys.argv)
         uiInit.__init__(self, bgcolor, nd_title, nd_xlabel, nd_ylabel,
                         od_title, od_xlabel, od_ylabel)
 

@@ -7,7 +7,7 @@ and associated transformations
 userfcn: initialize functions for user interaction.
 """
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 import sys
 import os
 
@@ -18,6 +18,8 @@ from .interface import uiInit, uiElements
 from .base import base
 from .user import userfcn
 from ..utils import GuideLines, ShortcutPopup
+import sip
+sip.setdestroyonexit(False)
 
 
 class Brain(uiInit, uiElements, base, userfcn):
@@ -252,7 +254,7 @@ class Brain(uiInit, uiElements, base, userfcn):
 
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
-        self._app = QtGui.QApplication(sys.argv)
+        self._app = QtWidgets.QApplication(sys.argv)
         uiInit.__init__(self, bgcolor)
 
         # Shortcuts popup window :

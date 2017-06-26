@@ -2,7 +2,7 @@
 import numpy as np
 import sip
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 import sys
 import os
 from warnings import warn
@@ -13,8 +13,9 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
-from ..utils import (FixedCam, load_sleepdataset, load_hypno, color2vb,
-                     ShortcutPopup, check_downsampling)
+from ..utils import (FixedCam, load_sleepdataset, color2vb, ShortcutPopup,
+                     check_downsampling)
+from ..io import dialogLoad, read_hypno
 
 sip.setdestroyonexit(False)
 
@@ -23,12 +24,14 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     """Visualize and edit sleep data.
 
     Use this module to :
-        - Load .eeg (Brainvision and ELAN), .edf or directly raw data.
-        - Visualize polysomnographic data, spectrogram
-        - Load, edit and save hypnogram from the interface
-        - Perform several events detection
-        - Further signal processing tools (de-mean, de-trend and filtering)
-        - Topographic data visualization
+
+        * Load .eeg (Brainvision and ELAN), .edf or directly raw data.
+        * Visualize polysomnographic data, spectrogram
+        * Load, edit and save hypnogram from the interface
+        * Perform several events detection
+        * Further signal processing tools (de-mean, de-trend and filtering)
+        * Topographic data visualization
+
     Sleep has been developped in collaboration with Raphael Vallat.
 
     Kargs:
@@ -65,7 +68,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             'agg' for smooth lines. This option might not works on some
             plateforms.
 
-        hypedit: bool, optional, (def: False)
+        hedit: bool, optional, (def: False)
             Enable the drag and drop hypnogram edition.
 
         href: list, optional, (def: ['art', 'wake', 'rem', 'n1', 'n2', 'n3'])
@@ -75,12 +78,12 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
     def __init__(self, file=None, hypno_file=None, config_file=None,
                  data=None, channels=None, sf=None, hypno=None,
-                 downsample=100., axis=False, line='gl', hypedit=False,
+                 downsample=100., axis=False, line='gl', hedit=False,
                  href=['art', 'wake', 'rem', 'n1', 'n2', 'n3']):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
-        self._app = QtGui.QApplication(sys.argv)
+        self._app = QtWidgets.QApplication(sys.argv)
         uiInit.__init__(self)
 
         # Shortcuts popup window :
@@ -95,18 +98,15 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             # --------------- Qt Dialog ---------------
             if (file is None) or not isinstance(file, str):
                 # Dialog window for the main dataset :
-                file = QtGui.QFileDialog.getOpenFileName(
-                    self, "Open dataset", "", "BrainVision /Elan (*.eeg);;"
-                    "Edf (*.edf);;Micromed (*.trc)")
-                file = str(file)  # py2
+                file = dialogLoad(self, "Open dataset", '',
+                                  "BrainVision/Elan (*.eeg);;Edf (*.edf);;"
+                                  "Micromed (*.trc);;All files (*.*)")
                 # Get the user path :
                 upath = os.path.split(file)[0]
                 # Dialog window for hypnogram :
-                hypno_file = QtGui.QFileDialog.getOpenFileName(
-                    self, "Open hypnogram", upath, "Elan (*.hyp);;"
-                    "Text file (*.txt);;""CSV file (*.csv);;All files "
-                    "(*.*)")
-                hypno_file = str(hypno_file)  # py2
+                hypno_file = dialogLoad(self, "Open hypnogram", upath,
+                                        "Elan (*.hyp);;Text file (*.txt);;"
+                                        "CSV file (*.csv);;All files (*.*)")
 
             # Load dataset :
             sf, downsample, data, channels, N, start_time = load_sleepdataset(
@@ -122,7 +122,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
             # Load hypnogram :
             if hypno_file:
                 # Load the hypnogram :
-                hypno = load_hypno(hypno_file, npts)
+                hypno = read_hypno(hypno_file, npts)
 
             # Change the sampling frequency if down-sample :
             if downsample is not None:
@@ -142,6 +142,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # ====================== VARIABLES ======================
         # Check all data :
         self._file = file
+        self._config_file = config_file
         (self._sf, self._data, self._hypno, self._time,
          self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
                                                      downsample, time, href)
@@ -149,7 +150,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._channels = [k.strip().replace(' ', '').split('.')[
             0] for k in channels]
         self._ax = axis
-        self._enabhypedit = hypedit
+        self._enabhypedit = hedit
         # ---------- Default line width ----------
         self._linemeth = line
         self._lw = 1.
@@ -204,8 +205,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._fcnsOnCreation()
 
         # Load config file
-        if config_file:
-            self._config_file = config_file
+        if self._config_file is not None:
             self.loadConfig()
 
     def __len__(self):
@@ -399,10 +399,10 @@ class Sleep(uiInit, visuals, uiElements, Tools):
                          self._topocam, self._timecam)
 
     def _fcnsOnCreation(self):
-        """Functions that need to be applied on creation."""
+        """Applied on creation."""
         self._fcn_sliderMove()
         self._chanChecks[0].setChecked(True)
-        self._hypLabel.setVisible(self._PanHypViz.isChecked())
+        self._hypLabel.setVisible(self.menuDispHypno.isChecked())
         self._fcn_chanViz()
         self._fcn_chanSymAmp()
         self._fcn_infoUpdate()

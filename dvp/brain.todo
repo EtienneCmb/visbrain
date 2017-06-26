@@ -1,3 +1,8 @@
+Nouvelles fonctions
+	-5 Visu de signaux
+	-5 Visu de maps
+	-5 Compatibilité avec atlas + ROI (voir MNE pour le chargement)
+
 Big problem
 	-5 Améliorer la gestion de la mémoire + traquer les duplication de données.
 	-5 Prendre la classe colorbar de ndviz et adapter avec. Ce sera nettement plus claire.
@@ -24,6 +29,8 @@ doc
 
 Colorbar
 	-5 Exportation de la colorbar ne marche pas bien (si GUI reste fermée). Il faudrait faire une petite opération sur le canvas pour le mettre à jour avant le screenshot
+	-5 Screenshot via commandline bug (choisir entre connectivité / projection)
+	-5 Colorbar screenshot 
 	-3 Ajouter un paramètre label pour chaque objet.
 	+4 Ajouter dans color.py une fonction mpl_colormap(name, invert=False, mymap=None) qui retourne la liste de colorbar et qui teste si mymap est bien dans la liste.
 	+5 La couleur du texte de la colorbar devrait pouvoir être fixé ou auto (en fonction de la couleur de fond)
@@ -37,8 +44,8 @@ Sources
 	+5 Ré-arranger le SourceBase càd découper en fonction, en incluant le checking d'args. Ensuite
 
 Projection
-	-5 Smooth projection
 	-1 Projection temporelle, en tenant compte de la fréquence d'échantillonage
+	+5 Smooth projection
 	+2 Ajouter un paramètre de smoothing exponentiel + filtre gaussien sur le final
 	+5 Vérifier les dernières modifs liées à la projection corticale / répartition
 	+4 Projection interne à peaufiner

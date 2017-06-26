@@ -2,12 +2,12 @@
 import numpy as np
 import os
 from warnings import warn
+from PyQt5 import QtWidgets
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
-                       peakdetect, mtdetect, listToCsv, listToTxt)
+                       peakdetect, mtdetect)
 from ....utils.sleep.event import _events_duration
-
-from PyQt4 import QtGui
+from ....io import dialogLoad, dialogSave, write_csv, write_txt
 
 __all__ = ['uiDetection']
 
@@ -41,12 +41,6 @@ class uiDetection(object):
         self._DetectViz.clicked.connect(self._fcn_vizLocation)
         self._DetectLocations.itemSelectionChanged.connect(
             self._fcn_gotoLocation)
-
-        # Export file :
-        self._DetectLocExport.clicked.connect(self._fcn_exportLocation)
-        self._DetectLocImport.clicked.connect(self._fcn_importLocation)
-        self._DetectExportAll.clicked.connect(self._fcn_exportAllDetections)
-        self._DetectImportAll.clicked.connect(self._fcn_importAllDetections)
 
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
@@ -180,6 +174,9 @@ class uiDetection(object):
             # Update index for this channel and detection :
             self._detect.dict[(self._channels[k], method)]['index'] = index
 
+            # Activate the save detections menu :
+            self._CheckDetectMenu()
+
             if index.size:
                 # Be sure panel is displayed :
                 if not self.canvas_isVisible(k):
@@ -198,9 +195,9 @@ class uiDetection(object):
         if index.size:
             # Report results on table :
             self._ToolDetectTable.setRowCount(1)
-            self._ToolDetectTable.setItem(0, 0, QtGui.QTableWidgetItem(
+            self._ToolDetectTable.setItem(0, 0, QtWidgets.QTableWidgetItem(
                 str(nb)))
-            self._ToolDetectTable.setItem(0, 1, QtGui.QTableWidgetItem(
+            self._ToolDetectTable.setItem(0, 1, QtWidgets.QTableWidgetItem(
                 str(round(dty, 2))))
         else:
             warn("\nNo " + method + " detected on channel " + self._channels[
@@ -243,11 +240,11 @@ class uiDetection(object):
         tps = str(self._DetectTypes.currentText())
         if chan and tps:
             if tps == 'Peaks':
-                self._DetectViz.setChecked(self._detect.peaks[(chan,
-                                                              tps)].visible)
+                viz = self._detect.peaks[(chan, tps)].visible
             else:
-                self._DetectViz.setChecked(self._detect.line[(chan,
-                                                              tps)].visible)
+                viz = self._detect.line[(chan, tps)].visible
+            self._DetectViz.setChecked(viz)
+            self._DetectLocations.setEnabled(viz)
 
     def _fcn_rmLocation(self):
         """Demove a detection."""
@@ -260,8 +257,11 @@ class uiDetection(object):
         # Remove vertical indicators :
         pos = np.full((1, 3), -10., dtype=np.float32)
         self._chan.loc[self._channels.index(chan)].set_data(pos=pos)
+        # Clean table :
+        self._DetectLocations.setRowCount(0)
         # Update GUI :
         self._locLineReport()
+        self._CheckDetectMenu()
 
     def _fcn_vizLocation(self):
         """Set visible detection."""
@@ -273,6 +273,7 @@ class uiDetection(object):
         viz = self._DetectViz.isChecked()
         self._detect.visible(viz, chan, types)
         self._chan.loc[self._channels.index(chan)].visible = viz
+        self._DetectLocations.setEnabled(viz)
 
     def _fcn_runSwitchLocation(self):
         """Run switch location channel and type."""
@@ -310,13 +311,13 @@ class uiDetection(object):
         # Fill the table :
         for num, (k, i) in enumerate(zip(staInd, duration)):
             # Starting :
-            self._DetectLocations.setItem(num, 0, QtGui.QTableWidgetItem(
+            self._DetectLocations.setItem(num, 0, QtWidgets.QTableWidgetItem(
                 str(self._time[k])))
             # Duration :
-            self._DetectLocations.setItem(num, 1, QtGui.QTableWidgetItem(
+            self._DetectLocations.setItem(num, 1, QtWidgets.QTableWidgetItem(
                 str(i)))
             # Type :
-            self._DetectLocations.setItem(num, 2, QtGui.QTableWidgetItem(
+            self._DetectLocations.setItem(num, 2, QtWidgets.QTableWidgetItem(
                 ref[int(self._hypno[k])]))
 
         self._DetectLocations.selectRow(0)
@@ -341,89 +342,3 @@ class uiDetection(object):
             self._SlGoto.setValue(goto)
             # Set vertical lines to the location :
             self._chan.set_location(self._sf, self._data[ix, :], ix, sta, end)
-
-    # =====================================================================
-    # EXPORT IMPORT TABLE
-    # =====================================================================
-    def _fcn_exportLocation(self):
-        """Export locations info."""
-        channel = self._currentLoc[0]
-        method = self._currentLoc[1]
-        # Read Table
-        rowCount = self._DetectLocations.rowCount()
-        staInd = [channel, '', 'Time index (s)']
-        duration = [method, '', 'Duration (s)']
-        stage = ['', '', 'Sleep stage']
-        for row in np.arange(rowCount):
-            staInd.append(str(self._DetectLocations.item(row, 0).text()))
-            duration.append(str(self._DetectLocations.item(row, 1).text()))
-            stage.append(str(self._DetectLocations.item(row, 2).text()))
-        # Find extension :
-        selected_ext = str(self._DetectLocExportAs.currentText())
-        # Get file name :
-        path = QtGui.QFileDialog.getSaveFileName(
-            self, "Save File", method + "_locinfo",
-            filter=selected_ext)
-        path = str(path)  # py2
-        if path:
-            file = os.path.splitext(str(path))[0]
-            file += '_' + channel + '-' + method
-            if selected_ext.find('csv') + 1:
-                listToCsv(file + '.csv', zip(staInd, duration, stage))
-            elif selected_ext.find('txt') + 1:
-                listToTxt(file + '.txt', zip(staInd, duration, stage))
-
-    def _fcn_importLocation(self):
-        """Import location table."""
-        # Get file name :
-        file = QtGui.QFileDialog.getOpenFileName(
-            self, "Import table", "", "CSV file (*.csv);;Text file (*.txt);;"
-            "All files (*.*)")
-        file = str(file)
-        # Get channel / method from file name :
-        (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
-        # Load the file :
-        (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
-        # Sort by starting index :
-        idxsort = np.argsort(st)
-        st, dur = st[idxsort], dur[idxsort]
-        # Convert into index :
-        stInd = np.round(st * self._sf).astype(int)
-        durInd = np.round(dur * self._sf / 1000.).astype(int)
-        # Build the index array :
-        index = np.array([])
-        for k, i in zip(stInd, durInd):
-            index = np.append(index, np.arange(k, k+i))
-        index = index.astype(np.int, copy=False)
-        # Set index :
-        self._detect[(chan, meth)]['index'] = index
-        # Plot update :
-        self._fcn_sliderMove()
-        self._locLineReport()
-
-    def _fcn_exportAllDetections(self):
-        """Export all locations."""
-        # Get file name :
-        path = QtGui.QFileDialog.getSaveFileName(
-            self, "Save all detections", filter='.npy')
-        path = str(path)  # py2
-        if path:
-            file = os.path.splitext(str(path))[0]
-            np.save(file + '.npy', self._detect.dict)
-
-    def _fcn_importAllDetections(self):
-        """Import detections."""
-        # Dialog window for detection file :
-        file = QtGui.QFileDialog.getOpenFileName(
-            self, "Import detections", "", "NumPy (*.npy)")
-        self._detect.dict = np.ndarray.tolist(np.load(file))
-        # Made canvas visbles :
-        for k in self._detect:
-            if self._detect[k]['index'].size:
-                # Get channel number :
-                idx = self._channels.index(k[0])
-                self.canvas_setVisible(idx, True)
-                self._chan.visible[idx] = True
-        # Plot update :
-        self._fcn_sliderMove()
-        self._locLineReport()
