@@ -24,12 +24,14 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     """Visualize and edit sleep data.
 
     Use this module to :
-        - Load .eeg (Brainvision and ELAN), .edf or directly raw data.
-        - Visualize polysomnographic data, spectrogram
-        - Load, edit and save hypnogram from the interface
-        - Perform several events detection
-        - Further signal processing tools (de-mean, de-trend and filtering)
-        - Topographic data visualization
+
+        * Load .eeg (Brainvision and ELAN), .edf or directly raw data.
+        * Visualize polysomnographic data, spectrogram
+        * Load, edit and save hypnogram from the interface
+        * Perform several events detection
+        * Further signal processing tools (de-mean, de-trend and filtering)
+        * Topographic data visualization
+
     Sleep has been developped in collaboration with Raphael Vallat.
 
     Kargs:

@@ -28,9 +28,7 @@ Right now, four modules are implemented, with the first three coming with a modu
 Installation
 ============
 
-.. warning::
-
-   Since version 0.2.8, Visbrain use PyQt5 and PyQt4 versions are no longer developed. Here, we only describe the installation of the PyQt5 version of Visbrain, but you can check the `documentation <http://etiennecmb.github.io/visbrain/>`_ for the installation of the older PyQt4 version.
+Since version 0.2.8, Visbrain use PyQt5 and PyQt4 versions are no longer developed. Here, we only describe the installation of the PyQt5 version of Visbrain, but you can check the `documentation <http://etiennecmb.github.io/visbrain/>`_ for the installation of the older PyQt4 version.
 
 Dependencies
 ------------
