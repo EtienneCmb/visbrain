@@ -234,12 +234,12 @@ class uiSettings(object):
         t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
         # Set the stage :
         self._hypno[t[0]:t[1]] = stage
-        self._hyp.set_data(self._sf, self._hypno, self._time)
-        # Update info table :
+        self._hyp.set_stage(t[0], t[1], stage)
+        # # Update info table :
         self._fcn_infoUpdate()
         # Update scoring table :
         self._fcn_Hypno2Score()
-        self._fcn_Score2Hypno()
+        # self._fcn_Score2Hypno()
 
     # =====================================================================
     # CLEAN / RESET GUI

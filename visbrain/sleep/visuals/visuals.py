@@ -587,6 +587,29 @@ class Hypnogram(object):
                            color=color)
         self.mesh.update()
 
+    def set_stage(self, stfrom, stend, stage):
+        """Add a stage in a specific interval.
+
+        This method only set the stage without updating the entire
+        hypnogram.
+
+        Args:
+            stfrom: int
+                The index where the stage start.
+
+            stend: int
+                The index where the stage end.
+
+            stage: int
+                Stage value.
+        """
+        # Convert the stage :
+        stagec = self._hconv[float(stage)]
+        # Update color :
+        self.mesh.color[stfrom+1:stend+1, :] = self.color[stagec]
+        # Only only the needed part :
+        self.mesh.pos[stfrom:stend, 1] = -stagec
+
     def set_grid(self, time, length=30., y=1.):
         """Set grid lentgh."""
         # Get scaling factor :
