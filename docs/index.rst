@@ -11,7 +11,7 @@
 Visbrain documentation
 ######################
 
-Visbrain is a python package in development and it's dedicated to neuroscience visualization tools. Here is the list of the current modules :
+Visbrain is a python package dedicated to multi-purpose neuroscience visualization tools. Here is the list of the current modules :
 
 * :ref:`brain` : plot your data onto a 3D MNI brain control it via the graphical interface
 * :ref:`Sleep` : display sleep data, perform spindles / REM / peaks / slow waves / K-complex detection and live hypnogram edition
@@ -57,9 +57,9 @@ Finally, install Visbrain :
 PyQt4 version
 =============
 
-New Python versions (>= 3.6) and Matplotlib comes by default with PyQt5 and this a limitation because Visbrain use the GUI backends PyQt4. We are working to port Visbrain to PyQt5 but right now, you'll have to use a Python version under 3.6 and define an isolated environnement (ex : python=3.5). In addition, Visbrain use new VisPy functionalities and the most up-to-date VisPy version on PyPi is obsolete so you will have to install VisPy from Github.
+Since the 0.2.8 Visbrain use the PyQt5 version. If you still use PyQt4, you should install the Visbrain version 0.2.7.
 
-First, in a terminal, create and activate a 3.5 Python environnement with the correct PyQt4 version :
+In a terminal, create and activate a 3.5 Python environment with the correct PyQt4 version :
 
 .. code-block:: shell
 
@@ -91,7 +91,7 @@ What's new?
   * Sleep
 
     * Enable exporting colored hypnogram
-    * Bug fixing & GUI iprovements
+    * Bug fixing & GUI improvements
 
 * New in version v0.2.3
 
