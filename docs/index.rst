@@ -1,6 +1,12 @@
 .. image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
     :target: https://travis-ci.org/EtienneCmb/visbrain
 
+.. image:: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/EtienneCmb/visbrain
+
+.. image:: https://badge.fury.io/py/visbrain.svg
+  :target: https://badge.fury.io/py/visbrain
+
 
 Visbrain documentation
 ######################
@@ -15,14 +21,41 @@ Visbrain is a python package in development and it's dedicated to neuroscience v
 Installation
 ************
 
-Here's the list of visbrain's dependancies :
+Dependencies
+============
+
+Here's the list of visbrain's dependencies :
 
 * Numpy
 * Scipy
 * Vispy : fast graphics rendering
 * Matplotlib : mainly for colors and colormaps integration
-* PyQt4 : Graphical User Interface components
+* PyQt5 : Graphical User Interface components
 * Pillow : for screenshots and image file format support.
+
+We also strongly recommend to install *pyopengl* :
+
+.. code-block:: shell
+
+    pip install pyopengl
+
+PyQt5 version
+=============
+
+For the PyQt5 version, Matplotlib's version should be >= 1.5.5. If PyQt is not installed, run either **pip install pyqt5** or **conda install pyqt**. Then, in a terminal run :
+
+.. code-block:: shell
+
+    pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
+
+Finally, install Visbrain :
+
+.. code-block:: shell
+
+    pip install visbain
+
+PyQt4 version
+=============
 
 New Python versions (>= 3.6) and Matplotlib comes by default with PyQt5 and this a limitation because Visbrain use the GUI backends PyQt4. We are working to port Visbrain to PyQt5 but right now, you'll have to use a Python version under 3.6 and define an isolated environnement (ex : python=3.5). In addition, Visbrain use new VisPy functionalities and the most up-to-date VisPy version on PyPi is obsolete so you will have to install VisPy from Github.
 
@@ -43,16 +76,22 @@ Finally, install Visbrain :
 
 .. code-block:: shell
 
-    pip install visbain
-
-We also recommand to install pyopengl :
-
-.. code-block:: shell
-
-    pip install pyopengl
+    pip install visbain==0.2.7
 
 What's new?
 ***********
+
+* New in version v0.2.8
+
+  * Visbrain
+
+    * Migration to PyQt5
+    * Start new module *Colorbar* for a better integration of color controls and properties.
+
+  * Sleep
+
+    * Enable exporting colored hypnogram
+    * Bug fixing & GUI iprovements
 
 * New in version v0.2.3
 
@@ -62,21 +101,6 @@ What's new?
     * Detection improvements
     * Add link to script and datasets to the doc
 
-* New in version v0.2.2
-  
-  * Brain
-
-    * Bug fixing
-
-  * Sleep
-
-    * Bug fixing
-    * Save and load GUI configuration
-    * Control the sleep stage order using the href input parameter
-    * Enable/disable the drag and drop on load
-    * Better Black and white hypnogram exportation
-    * New shortcuts
-
 
 Future plans
 ************
@@ -85,8 +109,7 @@ Future plans
   
   * Visbrain
 
-    * PyQt5 migration
-    * pip and conda installation
+    * conda installation
   
   * Brain
 
