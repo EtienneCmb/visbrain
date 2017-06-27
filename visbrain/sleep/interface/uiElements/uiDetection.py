@@ -1,13 +1,11 @@
 """Main class for sleep tools managment."""
 import numpy as np
-import os
 from warnings import warn
 from PyQt5 import QtWidgets
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect)
 from ....utils.sleep.event import _events_duration
-from ....io import dialogLoad, dialogSave, write_csv, write_txt
 
 __all__ = ['uiDetection']
 
