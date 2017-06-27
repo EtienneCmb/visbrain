@@ -283,18 +283,30 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._vbNode.parent = self.view.wc.scene
 
         # Fixed colorbar camera :
-        self.view.cbwc.camera = viscam.TurntableCamera(interactive=True,
-                                                       azimuth=0, elevation=90)
-        self.view.cbwc.camera.set_range(x=(-.5, .5), y=(-20, 20), margin=0)
-        # self.view.wc.scene.children[0].parent = None
+        self.view.cbwc.camera = viscam.PanZoomCamera(rect=(-.1, -2.5, 1, 5))
         self.cb._cbNode.parent = self.view.cbwc.scene
         self._rotate(fixed='axial')
 
-        # ====================== Guidelines ======================
-        # Create guide lines for exportation :
-        self.guide = GuideLines(self.view.canvas.size, parent=self._vbNode,
-                                camrange=self._xyzRange['turntable'])
-        # print(self.view.wc.scene.describe_tree(with_transform=True))
+        self._fcnOnLoad()
+
+    def _fcnOnLoad(self):
+        """Function that need to be runned on load."""
+        # Setting panel :
+        self.q_widget.setVisible(True)
+        self.QuickSettings.setCurrentIndex(0)
+        self.menuDispQuickSettings.setChecked(True)
+        self.SettingTab.setCurrentIndex(0)
+        # Display menu :
+        self.menuDispBrain.setChecked(self.atlas.mesh.visible)
+        # Sources :
+        if self.sources.mesh.visible:
+            self.menuDispSources.setChecked(True)
+        # Connectivity :
+        if self.connect.mesh.visible:
+            self.menuDispConnect.setChecked(True)
+            self._fcn_menuConnect()
+        # Colorbar :
+        self._fcn_menuCbar()
 
     def show(self):
         """Display the graphical user interface."""

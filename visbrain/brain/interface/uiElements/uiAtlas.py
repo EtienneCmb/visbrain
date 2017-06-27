@@ -17,7 +17,6 @@ class uiAtlas(object):
     def __init__(self):
         """Init."""
         # Brain control :
-        self.show_MNI.clicked.connect(self._toggle_brain_visible)
         self.Both_only.clicked.connect(self._brain_control)
         self.Lhemi_only.clicked.connect(self._brain_control)
         self.Rhemi_only.clicked.connect(self._brain_control)
@@ -27,9 +26,7 @@ class uiAtlas(object):
         self.uiSwitchTemplate.currentIndexChanged.connect(self._brain_control)
 
         # Structure :
-        eval('self.q_' + self.atlas.projection + '.setChecked(True)')
-        self.q_internal.clicked.connect(self._light_reflection)
-        self.q_external.clicked.connect(self._light_reflection)
+        self._brainTransp.clicked.connect(self._light_reflection)
 
         self.struct_color_edit.setPlaceholderText("'red', #ab4642, (1,0,0)...")
 
@@ -60,8 +57,8 @@ class uiAtlas(object):
             self._cleanProj()
 
         # Show / hide MNI :
-        self.show_MNI.setChecked(show)
-        self.atlas.mesh.visible = self.show_MNI.isChecked()
+        self.menuDispBrain.setChecked(show)
+        self.atlas.mesh.visible = self.menuDispBrain.isChecked()
 
         # Hemisphere :
         if hemisphere is not None:
@@ -93,15 +90,12 @@ class uiAtlas(object):
         fully transparent brain. The 'external' option is only usefull for
         the cortical surface.
         """
-        if self.q_internal.isChecked():
+        viz = self._brainTransp.isChecked()
+        if viz:
             self.atlas.mesh.projection('internal')
-        elif self.q_external.isChecked():
+        else:
             self.atlas.mesh.projection('external')
+            self.atlas.mesh.set_alpha(1.)
+        self.o_Brain.setChecked(viz)
+        self.o_Brain.setEnabled(viz)
         self.atlas.mesh.update()
-
-    def _toggle_brain_visible(self):
-        """Toggle to display / hide the brain."""
-        viz = not self.atlas.mesh.visible
-        self.atlas.mesh.visible = viz
-        self.show_MNI.setChecked(viz)
-        self.toolBox_2.setEnabled(viz)

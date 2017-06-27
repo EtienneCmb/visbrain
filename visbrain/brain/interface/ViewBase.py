@@ -23,13 +23,17 @@ class vbShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
-        self.sh = [('0', 'Axial rotation (top / bottom)'),
-                   ('1', 'Coronal rotation (front / back)'),
-                   ('2', 'Sagittal rotation (left / right)'),
-                   ('3', 'Set the brain transparent/opaque'),
-                   ('4', 'Display / hide the brain.'),
-                   ('5', 'Display / hide sources'),
-                   ('6', 'Display / hide connectivity'),
+        self.sh = [('<space>', 'Brain transparency'),
+                   ('0', 'Top view'),
+                   ('1', 'Bottom view'),
+                   ('2', 'Left view'),
+                   ('3', 'Right view'),
+                   ('4', 'Front view'),
+                   ('5', 'Back view'),
+                   ('b', 'Display / hide brain'),
+                   ('s', 'Display / hide sources'),
+                   ('t', 'Display / hide connectivity'),
+                   ('r', 'Display / hide ROI'),
                    ('c', 'Display / hide colorbar'),
                    ('+', 'Increase brain opacity'),
                    ('-', 'Decrease brain opacity'),
@@ -50,20 +54,10 @@ class vbShortcuts(object):
 
             :event: the trigger event
             """
-            # Switch between default views : :
-            if event.text == '0':
-                self._rotate(fixed='axial')
-            elif event.text == '1':
-                self._rotate(fixed='coronal')
-            elif event.text == '2':
-                self._rotate(fixed='sagittal')
-
             # Internal / external view :
-            elif event.text == '3':
-                if self.q_internal.isChecked():
-                    self.q_external.setChecked(True)
-                elif self.q_external.isChecked():
-                    self.q_internal.setChecked(True)
+            if event.text == ' ':
+                viz = self._brainTransp.isChecked()
+                self._brainTransp.setChecked(not viz)
                 self._light_reflection()
                 self._light_Atlas2Ui()
 
@@ -79,24 +73,6 @@ class vbShortcuts(object):
                 # Colormap :
             elif event.text == 'a':
                 self._auto_scale()
-
-            # Toggle brain visible:
-            elif event.text == '4':
-                self._toggle_brain_visible()
-
-            # Toggle sources visible :
-            elif event.text == '5':
-                self._toggle_sources_visible()
-
-            # Toggle connectivity visible :
-            elif event.text == '6':
-                self._toggle_connect_visible()
-
-            # Colorbar visibility :
-            elif event.text == 'c':
-                viz = not self._qcmapVisible.isChecked()
-                self._qcmapVisible.setChecked(viz)
-                self._toggle_cmap()
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):

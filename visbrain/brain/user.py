@@ -282,7 +282,7 @@ class userfcn(object):
         # Force to have internal projection :
         self.atlas.mesh.projection('internal')
         self.atlas.mesh.visible = show
-        self.show_MNI.setChecked(show)
+        self.menuDispBrain.setChecked(show)
         self.atlas.mesh.set_alpha(alpha)
 
     def light_reflection(self, reflect_on=None):

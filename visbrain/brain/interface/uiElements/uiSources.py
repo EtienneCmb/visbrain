@@ -20,7 +20,6 @@ class uiSources(object):
         """Init."""
         # ====================== SOURCES ======================
         # ---------- Visibility ----------
-        self.show_Sources.clicked.connect(self._toggle_sources_visible)
         self.s_uiAll.clicked.connect(self._fcn_sourcesDisplay)
         self.s_uiNone.clicked.connect(self._fcn_sourcesDisplay)
         self.s_LeftH.clicked.connect(self._fcn_sourcesDisplay)
@@ -160,18 +159,3 @@ class uiSources(object):
         self.sources.stextsize = self.q_stextsize.value()
         # Update text :
         self.sources.text_update()
-
-    def _toggle_sources_visible(self):
-        """Toggle to display / hide the brain."""
-        viz = not self.sources.mesh.visible
-        self.sources.mesh.visible = viz
-        self.sources.stextmesh.visible = viz
-        self.show_Sources.setChecked(viz)
-        self.q_stextshow.setChecked(viz)
-        self.toolBox.setEnabled(viz)
-        self.toolBox.setEnabled(viz)
-        self.groupBox_6.setEnabled(viz)
-        self.o_Sources.setEnabled(viz)
-        self.o_Sources.setChecked(viz)
-        self.o_Text.setEnabled(viz)
-        self.o_Text.setChecked(viz)

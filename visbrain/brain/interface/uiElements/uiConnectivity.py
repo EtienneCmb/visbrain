@@ -10,9 +10,6 @@ class uiConnectivity(object):
 
     def __init__(self,):
         """Init."""
-        # Show/hide connectivity :
-        self.uiConnectShow.clicked.connect(self._toggle_connect_visible)
-
         # Line width :
         self.uiConnect_lw.setValue(self.connect.lw)
         self.uiConnect_lw.valueChanged.connect(self._update_lw)
@@ -118,16 +115,6 @@ class uiConnectivity(object):
     def _ShowHide(self):
         """Show or hide connections between nodes."""
         self.connect.mesh.visible = self.uiConnectShow.isChecked()
-
-    def _toggle_connect_visible(self):
-        """Toggle to display / hide the brain."""
-        viz = not self.connect.mesh.visible
-        self.connect.mesh.visible = viz
-        self.uiConnectShow.setChecked(viz)
-        self.toolBox_5.setEnabled(viz)
-        self.toolBox_6.setEnabled(viz)
-        self.o_Connect.setEnabled(viz)
-        self.o_Connect.setChecked(viz)
 
     def _fcn_applyBundle(self):
         """Apply line bundling."""

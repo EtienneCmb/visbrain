@@ -22,7 +22,6 @@ class uiArea(object):
         self.area.color = 'lightgray'
 
         # Get plot properties :
-        self.structEnable.clicked.connect(self._fcn_show_hide_struct_panel)
         self.Sub_brod.clicked.connect(self._fcn_buildStructLst)
         self.Sub_aal.clicked.connect(self._fcn_buildStructLst)
         self.struct_color_edit.editingFinished.connect(self._fcn_colorStruct)
@@ -36,11 +35,9 @@ class uiArea(object):
         self._struct2add = []
 
         # Internal/external projection :
-        self.struct_External.clicked.connect(self._area_light_reflection)
-        self.struct_Internal.clicked.connect(self._area_light_reflection)
+        self._roiTransp.clicked.connect(self._area_light_reflection)
 
         # System :
-        self.strcutShow.clicked.connect(self._fcn_visible_area)
         self.struct_apply.clicked.connect(self._fcn_applyStruct)
         self.structClear.clicked.connect(self._fcn_roiClear)
 
@@ -164,9 +161,10 @@ class uiArea(object):
         self.area.set_camera(self.view.wc.camera)
         # Enable projection on ROI and related buttons :
         self._uitProjectOn.model().item(1).setEnabled(True)
-        self._roiReflect.setEnabled(True)
-        self.strcutShow.setEnabled(True)
+        self._roiTransp.setEnabled(True)
+        self.menuDispROI.setEnabled(True)
         self.o_Areas.setEnabled(True)
+        self._area_light_reflection()
 
     def _area_light_reflection(self, *args):
         """Change how light is refleting onto sub-areas.
@@ -174,10 +172,14 @@ class uiArea(object):
         This function can be used to see either the surface only (external) or
         deep voxels inside areas (internal).
         """
-        if self.struct_Internal.isChecked():
+        if self._roiTransp.isChecked():
             self.area.mesh.projection('internal')
-        elif self.struct_External.isChecked():
+            self.o_Areas.setChecked(True)
+            self.o_Areas.setEnabled(True)
+        else:
             self.area.mesh.projection('external')
+            self.o_Areas.setChecked(False)
+            self.o_Areas.setEnabled(False)
 
     def _fcn_colorStruct(self):
         """Apply colormap to sub-areas."""
@@ -187,14 +189,3 @@ class uiArea(object):
             self.area.set_color(self.area.color)
         except:
             pass
-
-    #########################################################################
-    # PANEL AND VISIBILITY
-    #########################################################################
-    def _fcn_show_hide_struct_panel(self):
-        """Toggle for display / hide area panel."""
-        self.structPanel.setVisible(self.structEnable.isChecked())
-
-    def _fcn_visible_area(self):
-        """Set visible area(s) visible or not."""
-        self.area.mesh.visible = self.strcutShow.isChecked()
