@@ -307,16 +307,14 @@ class uiMenu(object):
             self._fcn_Hypno2Score()
             self._fcn_Score2Hypno()
 
-    def loadConfig(self):
+    def loadConfig(self, *args, file=None):
         """Load a config file (*.txt) containing several display parameters."""
         import json
-        if self._config_file is not None:
-            filename = self._config_file
-        else:
-            filename = dialogLoad(self, 'Load config File', 'config',
-                                  "Text file (*.txt);;All files (*.*)")
-        if filename:
-            with open(filename) as f:
+        if not file:
+            file = dialogLoad(self, 'Load config File', 'config',
+                              "Text file (*.txt);;All files (*.*)")
+        if file:
+            with open(file) as f:
                 # Load the configuration file :
                 config = json.load(f)
 
