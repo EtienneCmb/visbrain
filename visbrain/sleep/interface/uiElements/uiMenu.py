@@ -32,6 +32,8 @@ class uiMenu(object):
         self.menuSaveDetectSelected.triggered.connect(self.saveSelectDetect)
         # Sleep GUI config :
         self.menuSaveConfig.triggered.connect(self.saveConfig)
+        # Annotations :
+        self.menuSaveAnnotations.triggered.connect(self.saveAnnotationTable)
         # Screenshot :
         self.menuSaveScreenshotEntire.triggered.connect(self.saveScreenEntire)
 
@@ -45,6 +47,8 @@ class uiMenu(object):
         # Detections :
         self.menuLoadDetectAll.triggered.connect(self.loadDetectAll)
         self.menuLoadDetectSelect.triggered.connect(self.loadDetectSelect)
+        # Annotations :
+        self.menuLoadAnnotations.triggered.connect(self.loadAnnotationTable)
 
         # _____________________________________________________________________
         #                                 EXIT
@@ -238,6 +242,27 @@ class uiMenu(object):
                 config['Unit'] = self._slRules.currentIndex()
                 json.dump(config, f)
 
+    # ______________________ ANNOTATION TABLE ______________________
+    def saveAnnotationTable(self):
+        """Export annotation table."""
+        # Read Table
+        rowCount = self._AnnotateTable.rowCount()
+        staInd, endInd, annot = [], [], []
+        for row in np.arange(rowCount):
+            staInd.append(str(self._AnnotateTable.item(row, 0).text()))
+            endInd.append(str(self._AnnotateTable.item(row, 1).text()))
+            annot.append(str(self._AnnotateTable.item(row, 2).text()))
+        # Get file name :
+        path = dialogSave(self, 'Save annotations', 'annotations',
+                          "CSV file (*.csv);;Text file (*.txt);;"
+                          "All files (*.*)")
+        if path:
+            file, ext = os.path.splitext(path)
+            if ext.find('csv') + 1:
+                write_csv(file + '.csv', zip(staInd, endInd, annot))
+            elif ext.find('txt') + 1:
+                write_txt(file + '.txt', zip(staInd, endInd, annot))
+
     # ______________________ SCREENSHOT ______________________
     def saveScreenEntire(self):
         """Screenshot using the GUI."""
@@ -282,16 +307,14 @@ class uiMenu(object):
             self._fcn_Hypno2Score()
             self._fcn_Score2Hypno()
 
-    def loadConfig(self):
+    def loadConfig(self, *args, file=None):
         """Load a config file (*.txt) containing several display parameters."""
         import json
-        if self._config_file is not None:
-            filename = self._config_file
-        else:
-            filename = dialogLoad(self, 'Load config File', 'config',
-                                  "Text file (*.txt);;All files (*.*)")
-        if filename:
-            with open(filename) as f:
+        if not file:
+            file = dialogLoad(self, 'Load config File', 'config',
+                              "Text file (*.txt);;All files (*.*)")
+        if file:
+            with open(file) as f:
                 # Load the configuration file :
                 config = json.load(f)
 
@@ -378,27 +401,55 @@ class uiMenu(object):
         file = dialogLoad(self, "Import table", '',
                           "CSV file (*.csv);;Text file (*.txt);;"
                           "All files (*.*)")
-        # Get channel / method from file name :
-        (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
-        # Load the file :
-        (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
-        # Sort by starting index :
-        idxsort = np.argsort(st)
-        st, dur = st[idxsort], dur[idxsort]
-        # Convert into index :
-        stInd = np.round(st * self._sf).astype(int)
-        durInd = np.round(dur * self._sf / 1000.).astype(int)
-        # Build the index array :
-        index = np.array([])
-        for k, i in zip(stInd, durInd):
-            index = np.append(index, np.arange(k, k+i))
-        index = index.astype(np.int, copy=False)
-        # Set index :
-        self._detect[(chan, meth)]['index'] = index
-        # Plot update :
-        self._fcn_sliderMove()
-        self._locLineReport()
-        self._CheckDetectMenu()
+        if file:
+            # Get channel / method from file name :
+            (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
+            # Load the file :
+            (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
+            # Sort by starting index :
+            idxsort = np.argsort(st)
+            st, dur = st[idxsort], dur[idxsort]
+            # Convert into index :
+            stInd = np.round(st * self._sf).astype(int)
+            durInd = np.round(dur * self._sf / 1000.).astype(int)
+            # Build the index array :
+            index = np.array([])
+            for k, i in zip(stInd, durInd):
+                index = np.append(index, np.arange(k, k+i))
+            index = index.astype(np.int, copy=False)
+            # Set index :
+            self._detect[(chan, meth)]['index'] = index
+            # Plot update :
+            self._fcn_sliderMove()
+            self._locLineReport()
+            self._CheckDetectMenu()
+
+    def loadAnnotationTable(self, *args, file=None):
+        """Load annotations."""
+        # Get file name :
+        if not file:
+            file = dialogLoad(self, "Import annotations", '',
+                              "CSV file (*.csv);;Text file (*.txt);;"
+                              "All files (*.*)")
+        if file:
+            # Clean annotations :
+            self._AnnotateTable.setRowCount(0)
+            # Load the file :
+            txt = np.genfromtxt(file, delimiter=',', dtype=str)
+            self._AnnotateTable.setRowCount(txt.shape[0])
+            # File the table :
+            for k in range(txt.shape[0]):
+                # Starting index :
+                self._AnnotateTable.setItem(k, 0, QtWidgets.QTableWidgetItem(
+                    txt[k, 0]))
+                # Ending index :
+                self._AnnotateTable.setItem(k, 1, QtWidgets.QTableWidgetItem(
+                    txt[k, 1]))
+                # Text :
+                self._AnnotateTable.setItem(k, 2, QtWidgets.QTableWidgetItem(
+                    txt[k, 2]))
+                # Set the current tab to the annotation tab :
+                self.QuickSettings.setCurrentIndex(5)
 
     ###########################################################################
     ###########################################################################

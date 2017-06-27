@@ -1,6 +1,5 @@
 """Main class for settings managment."""
 import numpy as np
-import os
 from PyQt5 import QtWidgets
 
 from ....utils import transient

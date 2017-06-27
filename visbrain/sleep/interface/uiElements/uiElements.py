@@ -7,12 +7,13 @@ from .uiTools import uiTools
 from .uiScoring import uiScoring
 from .uiDetection import uiDetection
 from .uiMenu import uiMenu
+from .uiAnnotate import uiAnnotate
 
 __all__ = ['uiElements']
 
 
 class uiElements(uiSettings, uiPanels, uiInfo, uiTools, uiScoring,
-                 uiDetection, uiMenu):
+                 uiDetection, uiAnnotate, uiMenu):
     """Inherit from the diffrent ui files and initialize them."""
 
     def __init__(self):
@@ -23,4 +24,5 @@ class uiElements(uiSettings, uiPanels, uiInfo, uiTools, uiScoring,
         uiTools.__init__(self)
         uiScoring.__init__(self)
         uiDetection.__init__(self)
+        uiAnnotate.__init__(self)
         uiMenu.__init__(self)

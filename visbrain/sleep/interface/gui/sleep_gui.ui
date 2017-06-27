@@ -78,7 +78,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>5</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -381,8 +381,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>377</width>
-                <height>907</height>
+                <width>359</width>
+                <height>74</height>
                </rect>
               </property>
               <attribute name="label">
@@ -730,8 +730,8 @@ on</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>377</width>
-                <height>907</height>
+                <width>300</width>
+                <height>237</height>
                </rect>
               </property>
               <attribute name="label">
@@ -3323,6 +3323,65 @@ Twitches</string>
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="tab">
+          <attribute name="title">
+           <string>Annotations</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QTableWidget" name="_AnnotateTable">
+             <property name="dragEnabled">
+              <bool>true</bool>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="sortingEnabled">
+              <bool>true</bool>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Start (seconds)</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>End (seconds)</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Text</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_21">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="_AnnotateAdd">
+               <property name="text">
+                <string>Annotate</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="_AnnotateRm">
+               <property name="text">
+                <string>Remove selected line</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -3438,6 +3497,13 @@ Twitches</string>
              <property name="topMargin">
               <number>0</number>
              </property>
+             <item row="2" column="8">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>Slider step</string>
+               </property>
+              </widget>
+             </item>
              <item row="2" column="2">
               <widget class="QLabel" name="label_12">
                <property name="text">
@@ -3569,13 +3635,6 @@ Twitches</string>
                </property>
               </spacer>
              </item>
-             <item row="2" column="8">
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>Slider step</string>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="9">
               <widget class="QDoubleSpinBox" name="_SigSlStep">
                <property name="decimals">
@@ -3630,25 +3689,81 @@ Twitches</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="0" colspan="18">
-              <widget class="QLabel" name="_SlText">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-               </property>
-               <property name="margin">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="16">
               <widget class="QCheckBox" name="_slAbsTime">
                <property name="text">
                 <string>Absolute time</string>
                </property>
               </widget>
+             </item>
+             <item row="0" column="0" colspan="18">
+              <layout class="QHBoxLayout" name="horizontalLayout_22">
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <spacer name="horizontalSpacer_18">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="_SlText">
+                 <property name="text">
+                  <string>TextLabel</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_33">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Minimum</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="_AnnotateRun">
+                 <property name="text">
+                  <string>Annotate</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_29">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </item>
             </layout>
            </item>
@@ -3720,6 +3835,7 @@ Twitches</string>
      <addaction name="menuSaveScoringTable"/>
      <addaction name="menuSaveDetections"/>
      <addaction name="menuSaveConfig"/>
+     <addaction name="menuSaveAnnotations"/>
      <addaction name="menuSaveScreenshot"/>
     </widget>
     <widget class="QMenu" name="menuLoad">
@@ -3737,6 +3853,7 @@ Twitches</string>
      <addaction name="menuLoadHypno"/>
      <addaction name="menuLoadConfig"/>
      <addaction name="menuLoadDetections"/>
+     <addaction name="menuLoadAnnotations"/>
     </widget>
     <addaction name="menuSave"/>
     <addaction name="menuLoad"/>
@@ -4178,6 +4295,16 @@ Twitches</string>
   <action name="menuSettingCleanHyp">
    <property name="text">
     <string>Clean hypnogram</string>
+   </property>
+  </action>
+  <action name="menuSaveAnnotations">
+   <property name="text">
+    <string>Annotation</string>
+   </property>
+  </action>
+  <action name="menuLoadAnnotations">
+   <property name="text">
+    <string>Annotations</string>
    </property>
   </action>
  </widget>

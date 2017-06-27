@@ -44,6 +44,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         config_file: string, optional, (def: None)
             Path to the configuration file (.txt)
 
+        annotation_file: string, optional, (def: None)
+            Path to the annotation file (.txt, .csv)
+
         data: np.ndarray, optional, (def: None)
             Array of data of shape (n_channels, n_pts)
 
@@ -77,6 +80,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
     """
 
     def __init__(self, file=None, hypno_file=None, config_file=None,
+                 annotation_file=None,
                  data=None, channels=None, sf=None, hypno=None,
                  downsample=100., axis=False, line='gl', hedit=False,
                  href=['art', 'wake', 'rem', 'n1', 'n2', 'n3']):
@@ -143,6 +147,7 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         # Check all data :
         self._file = file
         self._config_file = config_file
+        self._annot_file = annotation_file
         (self._sf, self._data, self._channels, self._hypno, self._time,
          self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
                                                      downsample, time, href)
@@ -201,10 +206,6 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         # ====================== FUNCTIONS ON LOAD ======================
         self._fcnsOnCreation()
-
-        # Load config file
-        if self._config_file is not None:
-            self.loadConfig()
 
     def __len__(self):
         """Return the number of channels."""
@@ -425,6 +426,11 @@ class Sleep(uiInit, visuals, uiElements, Tools):
         self._SpecW.setVisible(True)
         self._HypW.setVisible(True)
         self._TimeAxisW.setVisible(True)
+        # File to load :
+        if self._config_file is not None:  # Config file
+            self.loadConfig(file=self._config_file)
+        if self._annot_file is not None:
+            self.loadAnnotationTable(file=self._annot_file)
 
     def show(self):
         """Display the graphical user interface."""

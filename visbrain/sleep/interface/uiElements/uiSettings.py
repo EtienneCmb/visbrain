@@ -41,6 +41,8 @@ class uiSettings(object):
         self._slAbsTime.clicked.connect(self._fcn_sliderMove)
         # Magnify :
         self._slMagnify.clicked.connect(self._fcn_sliderMagnify)
+        # Annotation from the navigation bar :
+        self._AnnotateRun.clicked.connect(self._fcn_annotateNav)
 
     # =====================================================================
     # SLIDER
@@ -240,6 +242,16 @@ class uiSettings(object):
         # Update scoring table :
         self._fcn_Hypno2Score()
         # self._fcn_Score2Hypno()
+
+    # =====================================================================
+    # Annotate
+    # =====================================================================
+    def _fcn_annotateNav(self):
+        """Annotate from the selected window."""
+        # Set the current tab to the annotation tab :
+        self.QuickSettings.setCurrentIndex(5)
+        # Run annotation :
+        self._fcn_annotateAdd()
 
     # =====================================================================
     # CLEAN / RESET GUI
