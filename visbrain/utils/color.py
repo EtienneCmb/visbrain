@@ -15,7 +15,8 @@ from .sigproc import normalize
 
 
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           '_colormap', 'type_coloring', 'mpl_cmap', 'color2tuple'
+           '_colormap', 'type_coloring', 'mpl_cmap', 'color2tuple',
+           'mpl_cmap_index'
            ]
 
 
@@ -44,7 +45,7 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
             Array of RGBA colors of shape (length, 4).
     """
     # Default or static color :
-    if (color is None) or isinstance(color, (str, tuple, np.ndarray)):
+    if (color is None) or isinstance(color, (str, tuple, list, np.ndarray)):
         # Default color :
         if color is None:
             coltuple = default
@@ -83,7 +84,7 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
                          "color. Use None, tuple or string")
 
 
-def color2tuple(color):
+def color2tuple(color, astype=np.float32):
     """Return a RGB tuple of the color.
 
     Kargs:
@@ -91,7 +92,7 @@ def color2tuple(color):
             The color to use. Can either be None, or a tuple (R, G, B),
             a matplotlib color or an hexadecimal color '#...'.
     """
-    return tuple(color2vb(color).ravel()[0:-1])
+    return tuple(color2vb(color).ravel()[0:-1].astype(astype))
 
 
 def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
@@ -167,10 +168,10 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
 
     # ================== Colormap (under, over) ==================
     if (vmin is not None) and (under is not None):
-        under = color2vb(under) if isinstance(under, str) else under
+        under = color2vb(under)  # if isinstance(under, str) else under
         x_cmap[x < vmin, :] = under
     if (vmax is not None) and (over is not None):
-        over = color2vb(over) if isinstance(over, str) else over
+        over = color2vb(over)  # if isinstance(over, str) else over
         x_cmap[x > vmax, :] = over
 
     # Faces render (repeat the color to other dimensions):
@@ -466,3 +467,32 @@ def mpl_cmap(invert=False):
     cmap_lst.sort()
 
     return cmap_lst
+
+
+def mpl_cmap_index(cmap, cmaps=None):
+    """Find the index of a colormap.
+
+    Arg:
+        cmap: string
+            Colormap name.
+
+    Kargs:
+        cmaps: list, optional, (def: None)
+            List of colormaps.
+
+    Returns:
+        idx: int
+            Index of the colormap.
+
+        invert: bool
+            Boolean value indicating if it's a reversed colormap.
+    """
+    # Find if it's a reversed colormap :
+    invert = bool(cmap.find('_r') + 1)
+    # Get list of colormaps :
+    if cmaps is None:
+        cmap = cmap.replace('_r', '')
+        cmaps = mpl_cmap()
+        return np.where(np.char.find(cmaps, cmap) + 1)[0][0], invert
+    else:
+        return cmaps.index(cmap), invert
