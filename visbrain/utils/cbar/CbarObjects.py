@@ -5,7 +5,7 @@ __all__ = ['CbarObjetcs']
 
 
 class CbarObjetcs(object):
-    """Create and manage colorbar objects."""
+    """Create and manage multiple colorbar objects."""
 
     def __init__(self):
         """Init."""
@@ -26,6 +26,12 @@ class CbarObjetcs(object):
             yield key, val
 
     def select(self, name):
+        """Select an object.
+
+        Args:
+            name: string
+                Object name.
+        """
         if name in self._objs.keys():
             self._selected = name
         else:

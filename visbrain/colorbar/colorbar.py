@@ -88,7 +88,7 @@ class Colorbar(uiInit, uiInteract, uiMenu):
             self.objs.add_object(**self.cb.to_dict())
         else:
             self.cb = CbarVisual()
-            self.loadConfig(config)
+            self.loadConfig(filename=config)
         self.CbarLayout.addWidget(self.cb._canvas.native)
 
         # Set colorbar values to the GUI :

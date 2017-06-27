@@ -16,6 +16,8 @@ Right now, visbrain contains five modules :
 
 See etiennecmb.github.io/visbrain for a complete and step-by step documentation
 """
+import sys
+
 # Import modules :
 from .brain import Brain
 from .ndviz import Ndviz
@@ -23,9 +25,10 @@ from .sleep import Sleep
 from .figure import Figure
 from .colorbar import Colorbar
 
+__all__ = ['Brain', 'Ndviz', 'Sleep', 'Figure', 'Colorbar']
+
 # PyQt5 crash if an error occured. This small function fix it for all modules
 # to retrieve the PyQt4 behavior :
-import sys
 
 
 def PyQt4_behavior(type, value, tback):
