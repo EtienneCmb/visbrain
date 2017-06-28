@@ -896,7 +896,15 @@ class vbShortcuts(object):
 
             :event: the trigger event
             """
-            pass
+            # Get canvas title :
+            isSpHyp = canvas.title in ['Hypnogram', 'Spectrogram']
+            title = canvas.title if isSpHyp else canvas.title.split('_')[1]
+            # Annotate the timing :
+            cursor = self._time[-1] * event.pos[0] / canvas.size[0]
+            # Set the current tab to the annotation tab :
+            self.QuickSettings.setCurrentIndex(5)
+            # Run annotation :
+            self._fcn_annotateAdd('', (cursor, cursor), title)
 
         @canvas.events.mouse_move.connect
         def on_mouse_move(event):
