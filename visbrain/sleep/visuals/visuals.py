@@ -904,17 +904,27 @@ class vbShortcuts(object):
 
             Magnify for all channels under cursor locations.
             """
-            if self._slMagnify.isChecked():
+            # Get mouse cursor position for the specified canvas :
+            zoom = self.menuDispZoom.isChecked()
+            if canvas.title in ['Hypnogram', 'Spectrogram'] and not zoom:
+                cursor = self._time[-1] * event.pos[0] / canvas.size[0]
+            else:
+                # Get time parameters (window, step, slider value) :
                 val = self._SlVal.value()
                 step = self._SigSlStep.value()
                 win = self._SigWin.value()
                 tm, tM = (val*step, val*step+win)
-                # tm, tM = self._time.min(), self._time.max()
+                # Convert cursor in time position :
                 cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
-                for i, k in self._chan:
-                    self._chan.node[i].transform.center = (cursor, 0.)
-                    k.update()
-                tm, tM = self._time.min(), self._time.max()
+                # Enable/Disable magnify :
+                if self._slMagnify.isChecked():
+                    for i, k in self._chan:
+                        self._chan.node[i].transform.center = (cursor, 0.)
+                        k.update()
+                    tm, tM = self._time.min(), self._time.max()
+            # Set time position to the cursor text :
+            cursor = np.round(cursor * 1000.) / 1000.
+            self._txtCursor.setText('Cursor : '+str(cursor)+' sec')
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
