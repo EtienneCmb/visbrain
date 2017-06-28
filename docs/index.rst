@@ -81,6 +81,25 @@ Finally, install Visbrain :
 What's new?
 ***********
 
+* New in version v0.2.9
+  
+  * Visbrain
+
+    * Better integration of PyQt5
+    * Start grouping read/write function in I/O
+  
+  * Brain
+
+    * New menu and much cleaner code and GUI
+    * New colorbar
+    * **Shortcuts has changed**
+    * You can now save/load the GUI configuration either from the menu File/load or File/save or using methods *loadConfig* and *saveConfig* 
+
+  * Sleep
+
+    * Support annotations
+
+
 * New in version v0.2.8
 
   * Visbrain
@@ -136,6 +155,7 @@ Contents:
    sleep
    ndviz
    figure
+   io
 
 
 Indices and tables

@@ -31,6 +31,14 @@ Screenshot
 ~~~~~~~~~~
 .. automethod:: visbrain.brain.user.userfcn.screenshot
 
+Load an existing configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.loadConfig
+
+Save the current configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.saveConfig
+
 Brain functions
 ^^^^^^^^^^^^^^^
 
