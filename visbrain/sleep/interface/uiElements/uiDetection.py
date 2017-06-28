@@ -1,11 +1,11 @@
 """Main class for sleep tools managment."""
 import numpy as np
 from warnings import warn
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect)
-from ....utils.sleep.event import _events_duration
+from ....utils.sleep.event import _event_to_index
 
 __all__ = ['uiDetection']
 
@@ -37,8 +37,10 @@ class uiDetection(object):
         self._DetectSelect.clicked.connect(self._fcn_runSwitchLocation)
         self._DetectRm.clicked.connect(self._fcn_rmLocation)
         self._DetectViz.clicked.connect(self._fcn_vizLocation)
+        self._DetecRmEvent.clicked.connect(self._fcn_rmSelectedEvent)
         self._DetectLocations.itemSelectionChanged.connect(
             self._fcn_gotoLocation)
+        self._DetectLocations.cellChanged.connect(self._fcn_editDetection)
 
     # =====================================================================
     # ENABLE / DISABLE GUI COMPONENTS (based on selected channels)
@@ -170,7 +172,8 @@ class uiDetection(object):
                                                self._hypno, rem_only)
 
             # Update index for this channel and detection :
-            self._detect.dict[(self._channels[k], method)]['index'] = index
+            self._detect.dict[(self._channels[k],
+                               method)]['index'] = _event_to_index(index)
 
             # Activate the save detections menu :
             self._CheckDetectMenu()
@@ -283,17 +286,16 @@ class uiDetection(object):
             # Find index and durations :
             index = self._detect[(chan, types)]['index']
             # Get durations :
-            _, dur, _, _ = _events_duration(index, self._sf)
-            # Find only where index start / finish :
-            ind = np.where(np.gradient(index) != 1.)[0]
-            ind = index[np.hstack(([0], ind, [len(index) - 1]))]
+            dur = (index[:, 1] - index[:, 0]) * (1000. / self._sf)
             # Set hypnogram data :
             self._detect.build_hyp(chan, types)
             # Fill location table :
-            self._fcn_fillLocations(chan, types, ind, dur)
+            self._fcn_fillLocations(chan, types, index, dur)
 
     def _fcn_fillLocations(self, channel, kind, index, duration):
         """Fill the location table."""
+        # Disconnect location table :
+        self._DetectLocations.disconnect()
         ref = ['Wake', 'N1', 'N2', 'N3', 'REM', 'ART']
         self._currentLoc = (channel, kind)
         # Clean table :
@@ -301,24 +303,33 @@ class uiDetection(object):
         # Get starting index:
         if kind == 'Peaks':
             staInd = index[1::]
+            endInd = index[1::]
             duration = np.zeros_like(staInd)
         else:
-            staInd = index[0::2]
+            staInd = index[:, 0]
+            endInd = index[:, 1]
         # Define the length of the table:
         self._DetectLocations.setRowCount(min(len(staInd), len(duration)))
         # Fill the table :
-        for num, (k, i) in enumerate(zip(staInd, duration)):
+        for num, (k, j, i) in enumerate(zip(staInd, endInd, duration)):
             # Starting :
             self._DetectLocations.setItem(num, 0, QtWidgets.QTableWidgetItem(
                 str(self._time[k])))
-            # Duration :
+            # Ending :
             self._DetectLocations.setItem(num, 1, QtWidgets.QTableWidgetItem(
+                str(self._time[j])))
+            # Duration :
+            self._DetectLocations.setItem(num, 2, QtWidgets.QTableWidgetItem(
                 str(i)))
             # Type :
-            self._DetectLocations.setItem(num, 2, QtWidgets.QTableWidgetItem(
-                ref[int(self._hypno[k])]))
-
+            item = QtWidgets.QTableWidgetItem(ref[int(self._hypno[k])])
+            item.setFlags(QtCore.Qt.ItemIsEnabled)
+            self._DetectLocations.setItem(num, 3, item)
         self._DetectLocations.selectRow(0)
+        # Reconnect :
+        self._DetectLocations.itemSelectionChanged.connect(
+            self._fcn_gotoLocation)
+        self._DetectLocations.cellChanged.connect(self._fcn_editDetection)
 
     # =====================================================================
     # GO TO THE LOCATION
@@ -331,12 +342,50 @@ class uiDetection(object):
         if row >= 0:
             # Get starting and ending point :
             sta = float(str(self._DetectLocations.item(row, 0).text()))
-            end = sta + float(str(self._DetectLocations.item(row, 1).text())) \
-                / 1000.
-            # Get best looking location :
-            goto = ((sta + end) / 2.) - (self._SigWin.value() / 2.)
+            end = float(str(self._DetectLocations.item(row, 1).text()))
             # Go to :
-            self._SigSlStep.setValue(1)
-            self._SlGoto.setValue(goto)
+            self._SlGoto.setValue(sta)
             # Set vertical lines to the location :
             self._chan.set_location(self._sf, self._data[ix, :], ix, sta, end)
+
+    def _fcn_editDetection(self):
+        """Executed function when the item is edited."""
+        # Get selected channel :
+        chan = str(self._DetectChans.currentText())
+        # Get selected detection type :
+        types = str(self._DetectTypes.currentText())
+        # Get selected row and col :
+        row = self._DetectLocations.currentRow()
+        col = self._DetectLocations.currentColumn()
+        val = self._DetectLocations.item(row, col).text()
+        if col in [0, 1]:  # Edit starting/ending point
+            val = int(np.round(float(val) * self._sf))
+            self._detect[(chan, types)]['index'][row, col] = val
+        elif col == 2:  # Edit duration
+            val = int(np.round(float(val) * self._sf / 1000.))
+            start = self._detect[(chan, types)]['index'][row, 0]
+            self._detect[(chan, types)]['index'][row, 1] = start + val
+        elif col == 3:  # Avoid stage editing
+            self._DetectLocations
+            self._DetectLocations.setItem(row, 3,
+                                          QtWidgets.QTableWidgetItem(val))
+        # Update :
+        self._locLineReport()
+        self._DetectLocations.selectRow(row)
+
+    def _fcn_rmSelectedEvent(self):
+        """Remove the selected event in the table and update detections."""
+        # Get selected row :
+        row = self._DetectLocations.currentRow()
+        if row:
+            # Remove row :
+            self._DetectLocations.removeRow(row)
+            # Get selected channel :
+            chan = str(self._DetectChans.currentText())
+            # Get selected detection type :
+            types = str(self._DetectTypes.currentText())
+            # Delete the selected event :
+            index = self._detect[(chan, types)]['index']
+            self._detect[(chan, types)]['index'] = np.delete(index, row, 0)
+            # Update :
+            self._locLineReport()

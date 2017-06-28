@@ -4,7 +4,6 @@
 import numpy as np
 import os
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QTimer
 
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
@@ -176,12 +175,14 @@ class uiMenu(object):
         # Read Table
         rowCount = self._DetectLocations.rowCount()
         staInd = [channel, '', 'Time index (s)']
-        duration = [method, '', 'Duration (s)']
+        endInd = [method, '', 'Time index (s)']
+        duration = ['', '', 'Duration (s)']
         stage = ['', '', 'Sleep stage']
         for row in np.arange(rowCount):
             staInd.append(str(self._DetectLocations.item(row, 0).text()))
-            duration.append(str(self._DetectLocations.item(row, 1).text()))
-            stage.append(str(self._DetectLocations.item(row, 2).text()))
+            endInd.append(str(self._DetectLocations.item(row, 1).text()))
+            duration.append(str(self._DetectLocations.item(row, 2).text()))
+            stage.append(str(self._DetectLocations.item(row, 3).text()))
         # Get file name :
         saveas = "locinfo" + '_' + channel + '-' + method
         path = dialogSave(self, 'Save ' + method + ' detection', saveas,
@@ -191,9 +192,9 @@ class uiMenu(object):
             file, ext = os.path.splitext(path)
             file += '_' + channel + '-' + method
             if ext.find('csv') + 1:
-                write_csv(file + '.csv', zip(staInd, duration, stage))
+                write_csv(file + '.csv', zip(staInd, endInd, duration, stage))
             elif ext.find('txt') + 1:
-                write_txt(file + '.txt', zip(staInd, duration, stage))
+                write_txt(file + '.txt', zip(staInd, endInd, duration, stage))
 
     # ______________________ SLEEP GUI CONFIG ______________________
     def saveConfig(self):
@@ -393,18 +394,14 @@ class uiMenu(object):
             # Get channel / method from file name :
             (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
             # Load the file :
-            (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
+            (st, end) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
             # Sort by starting index :
             idxsort = np.argsort(st)
-            st, dur = st[idxsort], dur[idxsort]
+            st, end = st[idxsort], end[idxsort]
+            # Concatenate (starting, ending) index :
+            index = np.c_[st, end]
             # Convert into index :
-            stInd = np.round(st * self._sf).astype(int)
-            durInd = np.round(dur * self._sf / 1000.).astype(int)
-            # Build the index array :
-            index = np.array([])
-            for k, i in zip(stInd, durInd):
-                index = np.append(index, np.arange(k, k+i))
-            index = index.astype(np.int, copy=False)
+            index = np.round(index * self._sf).astype(int)
             # Set index :
             self._detect[(chan, meth)]['index'] = index
             # Plot update :

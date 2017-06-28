@@ -12,7 +12,7 @@ import vispy.visuals.transforms as vist
 
 from .marker import Markers
 from ...utils import (array2colormap, color2vb, TopoPlot, PrepareData)
-
+from ...utils.sleep.event import _index_to_event
 
 __all__ = ["visuals"]
 
@@ -83,12 +83,12 @@ class Detection(object):
 
         Args:
             data: np.ndarray
-                Data vector for a spcific channel.
+                Data vector for a spcefic channel.
         """
         for num, k in enumerate(self):
             if self[k]['index'].size:
                 # Get index and channel number :
-                index = self[k]['index']
+                index = _index_to_event(self[k]['index'])
                 nb = self.chans.index(k[0])
                 # Build position vector :
                 z = np.full(index.shape, 2., dtype=np.float32)
@@ -116,11 +116,7 @@ class Detection(object):
         # Get index :
         index = self[(chan, types)]['index']
         # Get only starting points :
-        if types == 'Peaks':
-            start = index
-        else:
-            start = index[np.hstack((np.gradient(index[0:-1]) != 1,
-                                     [True]))][::2]
+        start = index if types == 'Peaks' else index[:, 0]
         y = np.full_like(start, 1.5, dtype=float)
         z = np.full_like(start, -2., dtype=float)
         pos = np.vstack((self.time[start], y, z)).T
