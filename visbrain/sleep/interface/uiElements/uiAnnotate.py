@@ -16,16 +16,17 @@ class uiAnnotate(object):
         self._AnnotateTable.itemSelectionChanged.connect(
             self._fcn_annotateGoto)
 
-    def _fcn_annotateAdd(self):
+    def _fcn_annotateAdd(self, _, xlim=None, txt="Enter your annotation"):
         """Add a ligne to the annotation table."""
         # Add a ligne :
         self._AnnotateTable.setRowCount(self._AnnotateTable.rowCount() + 1)
         rw = self._AnnotateTable.rowCount() - 1
-        # Get the current window :
-        val = self._SlVal.value()
-        step = self._SigSlStep.value()
-        win = self._SigWin.value()
-        xlim = (val*step, val*step+win)
+        if xlim is None:
+            # Get the current window :
+            val = self._SlVal.value()
+            step = self._SigSlStep.value()
+            win = self._SigWin.value()
+            xlim = (val*step, val*step+win)
         # Automatically set the window :
         self._AnnotateTable.setItem(rw, 0, QtWidgets.QTableWidgetItem(
                                                               str(xlim[0])))
@@ -34,7 +35,7 @@ class uiAnnotate(object):
         # Select the text item :
         self._AnnotateTable.setCurrentCell(rw, 2)
         item = QtWidgets.QTableWidgetItem()
-        item.setText("Enter your annotation")
+        item.setText(txt)
         self._AnnotateTable.setItem(rw, 2, item)
         self._AnnotateTable.editItem(self._AnnotateTable.item(rw, 2))
 

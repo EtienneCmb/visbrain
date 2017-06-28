@@ -251,7 +251,7 @@ class uiSettings(object):
         # Set the current tab to the annotation tab :
         self.QuickSettings.setCurrentIndex(5)
         # Run annotation :
-        self._fcn_annotateAdd()
+        self._fcn_annotateAdd('')
 
     # =====================================================================
     # CLEAN / RESET GUI

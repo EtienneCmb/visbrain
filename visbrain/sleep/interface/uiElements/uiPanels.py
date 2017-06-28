@@ -97,7 +97,7 @@ class uiPanels(object):
         # =====================================================================
         self._hypCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
                                      y_label=None, x_label=None,
-                                     name='Spectrogram', color='black',
+                                     name='Hypnogram', color='black',
                                      yargs={'text_color': 'black'},
                                      xargs={'text_color': 'black'},
                                      fcn=[self.on_mouse_wheel])
@@ -149,7 +149,7 @@ class uiPanels(object):
         # =====================================================================
         # Create a unique time axis :
         self._TimeAxis = TimeAxis(xargs={'text_color': 'black'},
-                                  x_label=None,
+                                  x_label=None, name='TimeAxis',
                                   bgcolor=(1., 1., 1.), color='black',
                                   indic_color=self._indicol,
                                   fcn=[self.on_mouse_wheel])

@@ -12,7 +12,7 @@ import vispy.visuals.transforms as vist
 
 from .marker import Markers
 from ...utils import (array2colormap, color2vb, TopoPlot, PrepareData)
-
+from ...utils.sleep.event import _index_to_event
 
 __all__ = ["visuals"]
 
@@ -83,12 +83,12 @@ class Detection(object):
 
         Args:
             data: np.ndarray
-                Data vector for a spcific channel.
+                Data vector for a spcefic channel.
         """
         for num, k in enumerate(self):
             if self[k]['index'].size:
                 # Get index and channel number :
-                index = self[k]['index']
+                index = _index_to_event(self[k]['index'])
                 nb = self.chans.index(k[0])
                 # Build position vector :
                 z = np.full(index.shape, 2., dtype=np.float32)
@@ -116,11 +116,7 @@ class Detection(object):
         # Get index :
         index = self[(chan, types)]['index']
         # Get only starting points :
-        if types == 'Peaks':
-            start = index
-        else:
-            start = index[np.hstack((np.gradient(index[0:-1]) != 1,
-                                     [True]))][::2]
+        start = index if types == 'Peaks' else index[:, 0]
         y = np.full_like(start, 1.5, dtype=float)
         z = np.full_like(start, -2., dtype=float)
         pos = np.vstack((self.time[start], y, z)).T
@@ -896,7 +892,15 @@ class vbShortcuts(object):
 
             :event: the trigger event
             """
-            pass
+            # Get canvas title :
+            isSpHyp = canvas.title in ['Hypnogram', 'Spectrogram']
+            title = canvas.title if isSpHyp else canvas.title.split('_')[1]
+            # Annotate the timing :
+            cursor = self._time[-1] * event.pos[0] / canvas.size[0]
+            # Set the current tab to the annotation tab :
+            self.QuickSettings.setCurrentIndex(5)
+            # Run annotation :
+            self._fcn_annotateAdd('', (cursor, cursor), title)
 
         @canvas.events.mouse_move.connect
         def on_mouse_move(event):
@@ -904,17 +908,27 @@ class vbShortcuts(object):
 
             Magnify for all channels under cursor locations.
             """
-            if self._slMagnify.isChecked():
+            # Get mouse cursor position for the specified canvas :
+            zoom = self.menuDispZoom.isChecked()
+            if canvas.title in ['Hypnogram', 'Spectrogram'] and not zoom:
+                cursor = self._time[-1] * event.pos[0] / canvas.size[0]
+            else:
+                # Get time parameters (window, step, slider value) :
                 val = self._SlVal.value()
                 step = self._SigSlStep.value()
                 win = self._SigWin.value()
                 tm, tM = (val*step, val*step+win)
-                # tm, tM = self._time.min(), self._time.max()
+                # Convert cursor in time position :
                 cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
-                for i, k in self._chan:
-                    self._chan.node[i].transform.center = (cursor, 0.)
-                    k.update()
-                tm, tM = self._time.min(), self._time.max()
+                # Enable/Disable magnify :
+                if self._slMagnify.isChecked():
+                    for i, k in self._chan:
+                        self._chan.node[i].transform.center = (cursor, 0.)
+                        k.update()
+                    tm, tM = self._time.min(), self._time.max()
+            # Set time position to the cursor text :
+            cursor = np.round(cursor * 1000.) / 1000.
+            self._txtCursor.setText('Cursor : '+str(cursor)+' sec')
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
