@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """Main class for settings managment (save / load / light / cameras...)."""
-import os
-from PyQt5.QtGui import *
-from PyQt5 import QtCore, QtWidgets
-
-import vispy.scene.cameras as viscam
+from PyQt5 import QtCore
+from PyQt5.QtGui import QPalette, QFont
 
 from ....utils import uiSpinValue
-from ....io import write_fig_canvas
 
 __all__ = ['uiSettings']
 
@@ -22,14 +18,6 @@ class uiSettings(object):
         # MENU & FILES
         # =============================================================
         self.progressBar.hide()
-
-        # ------------- Screenshot / Exit -------------
-        self.actionScreenshot.triggered.connect(self._screenshot)
-        self.actionExit.triggered.connect(QtWidgets.qApp.quit)
-
-        # ------------- Transform -------------
-        self.actionProjection.triggered.connect(self._fcn_menuProjection)
-        self.actionRepartition.triggered.connect(self._fcn_menuRepartition)
 
         # ------------- Help -------------
         self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
@@ -114,10 +102,10 @@ class uiSettings(object):
         # Get latest settings :
         self._screenshotSettings()
         # Run screenshot :
-        self._screenshot()
+        self._fcn_screenshotCan()
 
     def _screenshotSettings(self):
-        """Get screenshot settings from the GUI.s"""
+        """Get screenshot settings from the GUI."""
         # ------------- MAIN CANVAS -------------
         # Get filename :
         file = str(self._ssSaveAs.text())
@@ -142,58 +130,12 @@ class uiSettings(object):
         self._fcn_menuCbar()
         self.cb['export'] = viz
 
-    def _screenshot(self):
-        """Screenshot using the GUI.
-
-        This function need that a savename is already defined (otherwise, a
-        window appeared so that the user specify the path/name). Then, it needs
-        an extension (png) and a boolean parameter (self.cb['export']) to
-        specify if the colorbar has to be exported.
-        """
-        # Manage filename :
-        if isinstance(self._savename, str):
-            cond = self._savename.split('.')[0] == ''
-        if (self._savename is None) or cond:
-            saveas = str(QFileDialog.getSaveFileName(self, 'Save screenshot',
-                                                     os.getenv('HOME')))
-        else:
-            saveas = self._savename
-
-        # Get filename and extension :
-        file, ext = os.path.splitext(saveas)
-        if not ext:
-            raise ValueError("No extension detected in "+saveas)
-
-        # Export the main canvas :
-        write_fig_canvas(saveas, self.view.canvas, resolution=self._uirez,
-                         autocrop=self._autocrop, region=self._crop)
-
-        # Export the colorbar :
-        # self.cb['export'] = True
-        if self.cb['export']:
-            # Colorbar file name : filename_colorbar.extension
-            saveas = saveas.replace('.', '_colorbar.')
-
-            # Export the colorbar canvas :
-            write_fig_canvas(saveas, self.view.cbcanvas, region=self._cbcrop,
-                             autocrop=self._autocrop, resolution=self._uirez)
-
     def _fcn_bgd_color(self):
         """Change canvas background color."""
         bgd = (self.bgd_red.value(), self.bgd_green.value(),
                self.bgd_blue.value())
         self.view.canvas.bgcolor = bgd
         self.view.cbcanvas.bgcolor = bgd
-
-    def _fcn_menuProjection(self):
-        """Run the cortical projection."""
-        self._tprojectas = 'activity'
-        self._sourcesProjection()
-
-    def _fcn_menuRepartition(self):
-        """Run the cortical projection."""
-        self._tprojectas = 'repartition'
-        self._sourcesProjection()
 
     # =============================================================
     # ROTATION

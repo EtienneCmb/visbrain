@@ -22,8 +22,8 @@ class uiArea(object):
         self.area.color = 'lightgray'
 
         # Get plot properties :
-        self.Sub_brod.clicked.connect(self._fcn_buildStructLst)
-        self.Sub_aal.clicked.connect(self._fcn_buildStructLst)
+        self._roiSubdivision.currentIndexChanged.connect(
+                                                    self._fcn_buildStructLst)
         self.struct_color_edit.editingFinished.connect(self._fcn_colorStruct)
 
         # List management :
@@ -120,9 +120,10 @@ class uiArea(object):
         """
         # Get avaible structures. This is automatically updated because of the
         # use  of @property and setter :
-        if self.Sub_brod.isChecked():
+        idxsub = int(self._roiSubdivision.currentIndex())
+        if idxsub == 0:
             self.area.structure = 'brod'
-        elif self.Sub_aal.isChecked():
+        elif idxsub == 1:
             self.area.structure = 'aal'
         self.area.update()
 

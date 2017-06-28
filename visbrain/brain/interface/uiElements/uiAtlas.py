@@ -17,13 +17,11 @@ class uiAtlas(object):
     def __init__(self):
         """Init."""
         # Brain control :
-        self.Both_only.clicked.connect(self._brain_control)
-        self.Lhemi_only.clicked.connect(self._brain_control)
-        self.Rhemi_only.clicked.connect(self._brain_control)
+        self._brainPickHemi.currentIndexChanged.connect(self._brain_control)
 
         # Brain template to use :
-        self.uiSwitchTemplate.setCurrentIndex(int(self.atlas.template[-1]) - 1)
-        self.uiSwitchTemplate.currentIndexChanged.connect(self._brain_control)
+        self._brainTemplate.setCurrentIndex(int(self.atlas.template[-1]) - 1)
+        self._brainTemplate.currentIndexChanged.connect(self._brain_control)
 
         # Structure :
         self._brainTransp.clicked.connect(self._light_reflection)
@@ -51,9 +49,9 @@ class uiAtlas(object):
                 raise ValueError("The template parameter must be either 'B1', "
                                  "'B2 or 'B3'")
             else:
-                self.uiSwitchTemplate.setCurrentIndex(int(template[-1]) - 1)
+                self._brainTemplate.setCurrentIndex(int(template[-1]) - 1)
         else:
-            self.atlas.template = str(self.uiSwitchTemplate.currentText())
+            self.atlas.template = str(self._brainTemplate.currentText())
             self._cleanProj()
 
         # Show / hide MNI :
@@ -66,17 +64,20 @@ class uiAtlas(object):
                 raise ValueError("The hemisphere parameter must be either "
                                  "'both', 'left' or 'right'")
             else:
-                order = (['both', 'left', 'right'],
-                         ['Both_only', 'Lhemi_only', 'Rhemi_only'])
+                if hemisphere is 'both':
+                    self._brainPickHemi.setCurrentIndex(0)
+                elif hemisphere is 'left':
+                    self._brainPickHemi.setCurrentIndex(1)
+                elif hemisphere is 'rigth':
+                    self._brainPickHemi.setCurrentIndex(2)
                 self.atlas.reload(hemisphere=hemisphere)
-                eval('self.' + order[1][order[0].index(
-                                    hemisphere)] + '.setChecked(True)')
         else:
-            if self.Both_only.isChecked():
+            currentHemi = int(self._brainPickHemi.currentIndex())
+            if currentHemi == 0:
                 self.atlas.reload(hemisphere='both')
-            elif self.Lhemi_only.isChecked():
+            elif currentHemi == 1:
                 self.atlas.reload(hemisphere='left')
-            elif self.Rhemi_only.isChecked():
+            elif currentHemi == 2:
                 self.atlas.reload(hemisphere='right')
             self._cleanProj()
 

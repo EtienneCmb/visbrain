@@ -218,11 +218,29 @@ class userfcn(object):
         if (cbzoom is not None) and isinstance(cbzoom, (float, int)):
             self.view.cbwc.camera.scale_factor = cbzoom
 
-        self._screenshot()
+        self._fcn_screenshotCan()
 
     def quit(self):
         """Quit the interface."""
         self._app.quit()
+
+    def loadConfig(self, config):
+        """Load a configuration file.
+
+        Args:
+            config: string
+                File name of the configuration file.
+        """
+        self._fcn_loadConfig('', filename=config)
+
+    def saveConfig(self, config):
+        """Save a configuration file.
+
+        Args:
+            config: string
+                File name of the configuration file.
+        """
+        self._fcn_saveConfig('', filename=config)
 
     # =========================================================================
     # =========================================================================
@@ -799,10 +817,10 @@ class userfcn(object):
             # --------------- GUI ---------------
             # Set check the corresponding subdivision :
             if subdivision == 'brod':
-                self.Sub_brod.setChecked(True)
+                self._roiSubdivision.setCurrentIndex(0)
                 idx = [list(self.area._uidx).index(k) for k in selection]
             elif subdivision == 'aal':
-                self.Sub_aal.setChecked(True)
+                self._roiSubdivision.setCurrentIndex(1)
                 idx = np.add(selection, -1)
             # Add selected items to the GUI :
             self.struct2add.addItems(self.area._label[idx])

@@ -17,7 +17,7 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .base import base
 from .user import userfcn
-from ..utils import GuideLines, ShortcutPopup
+from ..utils import ShortcutPopup
 import sip
 sip.setdestroyonexit(False)
 

@@ -24,17 +24,16 @@ class uiConnectivity(object):
 
         # Dynamic / static control of transparency : :
         self._dyn2send = self.connect.dynamic
-        self.uiConnect_static.clicked.connect(self._set_color)
-        self.uiConnect_dynamic.clicked.connect(self._set_color)
+        self._connectStaDynTransp.currentIndexChanged.connect(self._set_color)
         if (self.connect.dynamic is not None) and isinstance(
                                         self.connect.dynamic, (tuple, list)):
             self.uiConnect_dynMin.setValue(self.connect.dynamic[0])
             self.uiConnect_dynMax.setValue(self.connect.dynamic[1])
             self.uiConnect_dynControl.setEnabled(True)
-            self.uiConnect_dynamic.setChecked(True)
+            self._connectStaDynTransp.setCurrentIndex(1)
         else:
+            self._connectStaDynTransp.setCurrentIndex(0)
             self.uiConnect_dynControl.setEnabled(False)
-            self.uiConnect_static.setChecked(True)
         self.uiConnect_dynMin.valueChanged.connect(self._set_color)
         self.uiConnect_dynMax.valueChanged.connect(self._set_color)
 
@@ -82,8 +81,8 @@ class uiConnectivity(object):
         """
         # Set the dynamic control panel On / Off according to the dynamic
         # button :
-        self.uiConnect_dynControl.setEnabled(self.uiConnect_dynamic.isChecked(
-                                                                            ))
+        isdyn = int(self._connectStaDynTransp.currentIndex()) == 1
+        self.uiConnect_dynControl.setEnabled(isdyn)
 
         # Get colorby (strength / count):
         colorby = str(self.uiConnect_colorby.currentText())
@@ -104,11 +103,12 @@ class uiConnectivity(object):
         The dynamic parameter can be used to have a proportional alpha with
         the strength of connection.
         """
+        idxdyn = int(self._connectStaDynTransp.currentIndex())
         # Static color :
-        if self.uiConnect_static.isChecked():
+        if idxdyn == 0:
             self.connect.dynamic = None
         # Dynamic color :
-        elif self.uiConnect_dynamic.isChecked():
+        elif idxdyn == 1:
             self.connect.dynamic = tuple([self.uiConnect_dynMin.value(),
                                          self.uiConnect_dynMax.value()])
 

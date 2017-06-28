@@ -1,4 +1,9 @@
+"""GUI interactions with the contextual menu."""
+import os
+from PyQt5 import QtWidgets
 import vispy.scene.cameras as viscam
+
+from ....io import write_fig_canvas, dialogSave, write_fig_pyqt
 
 __all__ = ['uiMenu']
 
@@ -7,6 +12,22 @@ class uiMenu(object):
     """Interactions with the menu."""
 
     def __init__(self):
+        """Init."""
+        # =============================================================
+        # FILE
+        # =============================================================
+        # ----------- SAVE -----------
+        # Screenshots :
+        self.menuSaveScreenCan.triggered.connect(self._fcn_screenshotCan)
+        self.menuSaveScreenWin.triggered.connect(self._fcn_screenshotWin)
+        # Config :
+        self.menuSaveConfig.triggered.connect(self._fcn_saveConfig)
+        # ----------- LOAD -----------
+        # Config :
+        self.menuLoadConfig.triggered.connect(self._fcn_loadConfig)
+        # Exit :
+        self.actionExit.triggered.connect(QtWidgets.qApp.quit)
+
         # =============================================================
         # DISPLAY
         # =============================================================
@@ -38,13 +59,65 @@ class uiMenu(object):
         # =============================================================
         self.menuCamFly.triggered.connect(self._fcn_setCamFly)
 
+        # =============================================================
+        # PROJECTIONS
+        # =============================================================
+        self.menuCortProj.triggered.connect(self._fcn_menuProjection)
+        self.menuCortRep.triggered.connect(self._fcn_menuRepartition)
+
+    def _fcn_screenshotCan(self):
+        """Screenshot using the GUI.
+
+        This function need that a savename is already defined (otherwise, a
+        window appeared so that the user specify the path/name). Then, it needs
+        an extension (png) and a boolean parameter (self.cb['export']) to
+        specify if the colorbar has to be exported.
+        """
+        # Manage filename :
+        if isinstance(self._savename, str):
+            cond = self._savename.split('.')[0] == ''
+        if (self._savename is None) or cond:
+            saveas = dialogSave(self, 'Export the figure', 'brain',
+                                "PNG file (*.png);;JPG file(*.jpg);;TIFF file"
+                                " (*.tiff);;All files (*.*)")
+            self._autocrop = True
+        else:
+            saveas = self._savename
+
+        # Get filename and extension :
+        file, ext = os.path.splitext(saveas)
+        if not ext:
+            raise ValueError("No extension detected in "+saveas)
+
+        # Export the main canvas :
+        write_fig_canvas(saveas, self.view.canvas, resolution=self._uirez,
+                         autocrop=self._autocrop, region=self._crop)
+
+        # Export the colorbar :
+        # self.cb['export'] = True
+        if self.cb['export']:
+            # Colorbar file name : filename_colorbar.extension
+            saveas = saveas.replace('.', '_colorbar.')
+
+            # Export the colorbar canvas :
+            write_fig_canvas(saveas, self.view.cbcanvas, region=self._cbcrop,
+                             autocrop=self._autocrop, resolution=self._uirez)
+
+    def _fcn_screenshotWin(self):
+        """Take a screenshot of the entire window."""
+        # Get filename :
+        filename = dialogSave(self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
+                              "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
+        # Screnshot function :
+        write_fig_pyqt(self, filename)
+
     ###########################################################################
     #                                DISPLAY
     ###########################################################################
     def _fcn_menuDispSet(self):
         """Toggle method for display / hide the settings panel."""
-        viz = self.q_widget.isVisible()
-        self.q_widget.setVisible(not viz)
+        viz = self.menuDispQuickSettings.isChecked()
+        self.q_widget.setVisible(viz)
         self._xyzRange['turntable']['x'] = (-950, 1050) if viz else (-750, 850)
 
     def _fcn_menuBrain(self):
@@ -141,3 +214,16 @@ class uiMenu(object):
             self.area.mesh.set_camera(camera)
         self.view.wc.update()
         self._set_cam_range(name=camera.name)
+
+    ###########################################################################
+    #                           PROJECTIONS
+    ###########################################################################
+    def _fcn_menuProjection(self):
+        """Run the cortical projection."""
+        self._tprojectas = 'activity'
+        self._sourcesProjection()
+
+    def _fcn_menuRepartition(self):
+        """Run the cortical projection."""
+        self._tprojectas = 'repartition'
+        self._sourcesProjection()
