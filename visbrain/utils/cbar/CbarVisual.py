@@ -4,7 +4,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .CbarBase import CbarBase
-from ..color import array2colormap, color2vb
+from ..color import array2colormap, color2vb, color2tuple
 from ..cameras import FixedCam
 
 
@@ -266,6 +266,27 @@ class CbarVisual(CbarBase):
         else:
             txt = value
         return txt
+
+    def to_dict(self):
+        """Export configuration as a dictionary."""
+        dico = {'name': self.name, 'bgcolor': self.bgcolor,
+                'ndigits': self.ndigits, 'width': self.width,
+                'border': self.border, 'bw': self.bw, 'limtxt': self.limtxt,
+                'cmap': self.cmap, 'clim': self.clim, 'vmin': self.vmin,
+                'under': color2tuple(self.under, float), 'vmax': self.vmax,
+                'over': color2tuple(self.over, float), 'cblabel': self.cblabel,
+                'cbtxtsz': self.cbtxtsz, 'cbtxtsh': self.cbtxtsh,
+                'txtcolor': color2tuple(self.txtcolor, float),
+                'txtsz': self.txtsz, 'txtsh': self.txtsh}
+        return dico
+
+    def from_dict(self, dico):
+        """Define properties from a dictionary."""
+        for key, val in dico.items():
+            if isinstance(val, str):
+                exec("self."+key+"='"+val+"'")
+            else:
+                exec('self.'+key+'='+str(val))
 
     ###########################################################################
     ###########################################################################

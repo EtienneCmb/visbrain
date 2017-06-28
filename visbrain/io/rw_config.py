@@ -1,26 +1,38 @@
+"""Load and save configurations.
 """
-"""
 
-__all__ = ['write_config_json']
+__all__ = ['save_config_json', 'load_config_json']
 
 
-def write_config_json(filename, vars={}):
+def save_config_json(filename, config):
     """Save configuration file as JSON.
 
     Args:
         filename: string
-            Filename for saving.
+            Name of the configuration file to save.
 
-    Kargs:
-        vars: dict, optional, (def: {})
-            Variables to save.
+        config: dict
+            Dictionary of arguments to save.
     """
     import json
     if filename:
         with open(filename, 'w') as f:
-            json.dump(vars, f)
+            json.dump(config, f)
 
 
 def load_config_json(filename):
-    """Load configuration file as JSON."""
-    pass
+    """Load configuration file as JSON.
+
+    Args:
+        filename: string
+            Name of the configuration file to load.
+
+    Returns:
+        config: dict
+            Dictionary of config.
+    """
+    import json
+    with open(filename) as f:
+        # Load the configuration file :
+        config = json.load(f)
+    return config

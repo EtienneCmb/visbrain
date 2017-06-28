@@ -3,10 +3,10 @@
 import numpy as np
 from vispy.scene import visuals
 
-from .color import color2vb
+from .color import color2vb, color2tuple
 
 
-__all__ = ['slider2opacity', 'textline2color', 'uiSpinValue',
+__all__ = ['slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
            'ndsubplot', 'combo', 'is_color', 'GuideLines']
 
 
@@ -71,6 +71,24 @@ def textline2color(value):
         return value, color2vb(color=value)
     except:
         return 'white', (1., 1., 1., 1.)
+
+
+def color2json(obj, rmalpha=True):
+    """Turn a color textline into a json compatible one.
+
+    Args:
+        obj: PyQt textline object
+            The PyQt text line object.
+
+    Kargs:
+        rmalpha: bool, optional, (def: True)
+            Specify if the alpha component have to be deleted.
+
+    Returns:
+        coltuple: tuple
+            A json compatible tuple of floating points.
+    """
+    return color2tuple(textline2color(obj.text())[1], float, rmalpha)
 
 
 def is_color(color, comefrom='color'):

@@ -28,10 +28,6 @@ class uiCmap(object):
         self.uiCmap_update = True
         self._cmap2GUI()
 
-        # Interactive :
-        self._qcmapVisible.clicked.connect(self._toggle_cmap)
-        self._toggle_cmap()
-
         # Colorbar label :
         self.q_cmap_invert.clicked.connect(self._GUI2cmap)
         self.q_cmap_list.currentIndexChanged.connect(self._GUI2cmap)
@@ -255,9 +251,3 @@ class uiCmap(object):
 
         # Update GUI elements :
         self._cmap2GUI()
-
-    def _toggle_cmap(self):
-        """Toggle colorbar panel."""
-        viz = self._qcmapVisible.isChecked()
-        self.colorbar_pan.setEnabled(viz)
-        self.cbpanelW.setVisible(viz)

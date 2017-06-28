@@ -7,12 +7,14 @@ from .uiConnectivity import uiConnectivity
 from .uiCmap import uiCmap
 from .uiOpacity import uiOpacity
 from .uiArea import uiArea
+from .uiMenu import uiMenu
+from .uiConfig import uiConfig
 
 __all__ = ['uiElements']
 
 
 class uiElements(uiSettings, uiAtlas, uiSources, uiCmap, uiConnectivity,
-                 uiOpacity, uiArea):
+                 uiOpacity, uiArea, uiConfig, uiMenu):
     """Inherit from the diffrent ui files and initialize them."""
 
     def __init__(self):
@@ -24,3 +26,5 @@ class uiElements(uiSettings, uiAtlas, uiSources, uiCmap, uiConnectivity,
         uiCmap.__init__(self)
         uiOpacity.__init__(self)
         uiArea.__init__(self)
+        uiConfig.__init__(self)
+        uiMenu.__init__(self)

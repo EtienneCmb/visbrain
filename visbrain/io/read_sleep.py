@@ -6,7 +6,6 @@ This file contain functions to load :
 - BrainVision (*.eeg)
 - ELAN (*.eeg)
 - Hypnogram (*.hyp)
-- JSON (*.json)
 """
 import os
 

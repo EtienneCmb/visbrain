@@ -3,14 +3,9 @@
 - create a colorbar
 - Update it with new color / settings
 """
-
-import numpy as np
-
-from vispy.scene.visuals import ColorBar, Text
 from vispy.scene import Node
-from vispy.color import Colormap
 
-from ...utils import array2colormap, _colormap, color2vb
+from ...utils import _colormap, color2vb, CbarVisual
 
 
 class CbarBase(_colormap):
@@ -22,7 +17,7 @@ class CbarBase(_colormap):
     """
 
     def __init__(self, parent, cmap='viridis', clim=None, vmin=None, vmax=None,
-                 under=None, over=None, cb_export=False, cb_fontsize=15,
+                 under=None, over=None, cb_export=False, cb_fontsize=18,
                  cb_fontcolor='white', cb_label=''):
         """Init."""
         # Initialize colorbar elements :
@@ -44,72 +39,12 @@ class CbarBase(_colormap):
 
     def cbcreate(self):
         """Create a default colorbar between 0 and 1."""
-        # Define colors :
-        cmap = self.cbcolor(np.array([0, 1]), length=self['length'])
-
         # ==================================================================
         # COLORBAR OBJECT
         # ==================================================================
-        self.colorbarW = ColorBar(cmap=cmap, orientation='right', size=(40, 5),
-                                  label='', clim=('', ''), border_color="w",
-                                  padding=-10, margin=-10, border_width=1,
-                                  parent=self._cbNode)
-
-        # ==================================================================
-        # COLORBAR TEXT
-        # ==================================================================
-        # Colorbar maximum :
-        self.cbmaxW = Text(text='', color=self._cb['fontcolor'],
-                           font_size=self['fontsize']-2, pos=(4.5, 20),
-                           anchor_x='left', anchor_y='center',
-                           parent=self._cbNode)
-        # Colorbar minimum :
-        self.cbminW = Text(text='', color=self._cb['fontcolor'],
-                           font_size=self['fontsize']-2, pos=(4.5, -20-0.5),
-                           anchor_x='left', anchor_y='center',
-                           parent=self._cbNode)
-        # Colorbar label :
-        self.cblabelW = Text(text='', color=self._cb['fontcolor'],
-                             font_size=self['fontsize'], pos=(6, 0),
-                             rotation=-90, anchor_y='center',
-                             anchor_x='center', parent=self._cbNode)
-
-        # ==================================================================
-        # COLORBAR PROPERTIES
-        # ==================================================================
-        self.set_cb(None, (0, 1), self['label'], self['fontsize'],
-                    self['fontcolor'])
-
-    def cbcolor(self, data, length=10):
-        """Set the color of the colorbar.
-
-        Args:
-            data: array
-                Array of data. This array is used to automatically set the
-                minimum and maximum of the colorbar.
-
-        Kargs:
-            length: int, optional, (def: 10)
-                Length of the colorbar lines.
-
-        Return:
-            cmap: vispy colormap
-                The vispy colormap to use to create the colorbar.
-        """
-        # Define a vector of linearly spaced values :
-        try:
-            colval = np.linspace(self['clim'][0], self['clim'][1], num=length)
-        except:
-            colval = np.linspace(data.min(), data.max())
-        # Turn the colval vector into a RGB array of colors. The clim parameter
-        # is not usefull here :
-        colorbar = array2colormap(colval, vmin=self['vmin'], vmax=self['vmax'],
-                                  under=self['under'], over=self['over'],
-                                  cmap=self['cmap'], clim=None)
-        # Use the Colormap function of vispy to create a colormap :
-        cmap = Colormap(np.flipud(colorbar))
-
-        return cmap
+        sz = self['fontsize']-2
+        self.colorbarW = CbarVisual(parent=self._cbNode, cbtxtsz=sz, txtsz=sz,
+                                    txtcolor=self._cb['fontcolor'])
 
     def cbupdate(self, data, cmap, clim=None, vmin=None, under=None, vmax=None,
                  over=None, label='', fontsize=20, fontcolor='white',
@@ -166,46 +101,13 @@ class CbarBase(_colormap):
         self['vmin'], self['vmax'] = vmin, vmax
         self['under'], self['over'] = under, over
 
-        # Get data colors :
-        cmap = self.cbcolor(data, length=length)
-
-        # Update colorbar proerties :
-        clim = (str(clim[0]), str(clim[1]))
-        self.set_cb(cmap=cmap, clim=clim, label=label, fontsize=fontsize,
-                    fontcolor=fontcolor)
-
-    def set_cb(self, cmap=None, clim=None, label='', fontsize=None,
-               fontcolor='white'):
-        """Set some colorbar properties.
-
-        Kargs:
-            clim: tuple/list, optional, (def: None)
-                Limit of the colormap. The clim parameter must be a tuple /
-                list of two float number each one describing respectively the
-                (min, max) of the colormap. Every values under clim[0] or over
-                clim[1] will peaked.
-
-            label: string, optional, (def: '')
-                Colorbar label / title.
-
-            fontsize: int, optional, (def: 10)
-                Font-size of the colorbar text (min / max / title).
-
-            fontcolor: string, optional, (def: 'white')
-                Font-color of the colorbar text (min / max / title).
-        """
-        if cmap is not None:
-            self.colorbarW.cmap = cmap
-        if clim is not None:
-            self.cbminW.text = str(clim[0])
-            self.cbmaxW.text = str(clim[1])
-        if label is not None:
-            self.cblabelW.text = label
-        if fontsize is not None:
-            self.colorbarW.label.font_size = fontsize
-        if fontcolor is not None:
-            color = tuple(color2vb(fontcolor).ravel()[0:-1])
-            self.colorbarW.label.color = color
-            self.cbminW.color = color
-            self.cbmaxW.color = color
-        # self.colorbarW.update()
+        self.colorbarW.cmap = cmap
+        self.colorbarW.clim = clim
+        self.colorbarW.cblabel = label
+        self.colorbarW.cbtxtsz = fontsize
+        self.colorbarW.txtsz = fontsize
+        self.colorbarW.txtcolor = fontcolor
+        self.colorbarW.vmin = vmin
+        self.colorbarW.under = under
+        self.colorbarW.vmax = vmax
+        self.colorbarW.over = over

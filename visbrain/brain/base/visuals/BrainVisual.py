@@ -361,7 +361,7 @@ class BrainVisual(Visual):
 
         self.mesh_data_changed()
 
-    def set_color(self, data=None, color='white', cmap='viridis', dynamic=None,
+    def set_color(self, data=None, color='white', cmap='viridis',
                   alpha=1.0, vmin=None, vmax=None, under='dimgray',
                   over='darkred'):
         """Set specific colors on the brain.
@@ -383,9 +383,6 @@ class BrainVisual(Visual):
             cmap: string, optional, (def: 'viridis')
                 Colormap to use if data is a vector
 
-            dynamic: float, optional, (def: None)
-                Control the dynamic of colors
-
             alpha: float, optional, (def: 1.0)
                 Opacity to use if data is a vector
 
@@ -405,9 +402,6 @@ class BrainVisual(Visual):
             col = array2colormap(data.copy(), cmap=cmap, alpha=alpha,
                                  vmin=vmin, vmax=vmax, under=under,
                                  over=over).astype(np.float32)
-            # Dynamic color :
-            if dynamic is not None:
-                col = dynamic_color(col, data)
         elif (data.ndim > 1) and (data.shape[1] == 4):
             col = data.astype(np.float32)
         else:
@@ -632,14 +626,8 @@ class BrainVisual(Visual):
         if projection == 'internal':
             self.set_gl_state('translucent', depth_test=False, cull_face=False)
             l_color[3] = 0.1
-            # self.set_gl_state('translucent', depth_test=False,
-            #                   cull_face=True, blend=True, blend_func=(
-            #                             'src_alpha', 'one_minus_src_alpha'))
         else:
             self.set_gl_state('translucent', depth_test=True, cull_face=False)
-            l_color[3] = 1
-            # self.set_gl_state('translucent', depth_test=True,
-            #                   cull_face=False, blend=True, blend_func=(
-            #                             'src_alpha', 'one_minus_src_alpha'))
+            l_color[3] = 1.
         self.set_light(l_color=l_color)
         self.update_gl_state()

@@ -7,7 +7,8 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTimer
 
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
-                    write_txt, write_hypno_txt, write_hypno_hyp, read_hypno)
+                    write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
+                    write_fig_pyqt)
 
 __all__ = ['uiMenu']
 
@@ -266,24 +267,11 @@ class uiMenu(object):
     # ______________________ SCREENSHOT ______________________
     def saveScreenEntire(self):
         """Screenshot using the GUI."""
-        # self.setFixedSize(100, 100)
         # Get filename :
         filename = dialogSave(self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
                               "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
         # Screnshot function :
-        def _takeScreenShot():
-            """Take the screenshot."""
-            screen = QtWidgets.QApplication.primaryScreen()
-            p = screen.grabWindow(0)
-            p.save(filename)
-        # Take screenshot if filename :
-        if filename:
-            # Timer (avoid shooting the saving window)
-            self.timerScreen = QTimer()
-            # self.timerScreen.setInterval(100)
-            self.timerScreen.setSingleShot(True)
-            self.timerScreen.timeout.connect(_takeScreenShot)
-            self.timerScreen.start(500)
+        write_fig_pyqt(self, filename)
 
     ###########################################################################
     ###########################################################################

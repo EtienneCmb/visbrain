@@ -17,19 +17,14 @@ class uiAtlas(object):
     def __init__(self):
         """Init."""
         # Brain control :
-        self.show_MNI.clicked.connect(self._toggle_brain_visible)
-        self.Both_only.clicked.connect(self._brain_control)
-        self.Lhemi_only.clicked.connect(self._brain_control)
-        self.Rhemi_only.clicked.connect(self._brain_control)
+        self._brainPickHemi.currentIndexChanged.connect(self._brain_control)
 
         # Brain template to use :
-        self.uiSwitchTemplate.setCurrentIndex(int(self.atlas.template[-1]) - 1)
-        self.uiSwitchTemplate.currentIndexChanged.connect(self._brain_control)
+        self._brainTemplate.setCurrentIndex(int(self.atlas.template[-1]) - 1)
+        self._brainTemplate.currentIndexChanged.connect(self._brain_control)
 
         # Structure :
-        eval('self.q_' + self.atlas.projection + '.setChecked(True)')
-        self.q_internal.clicked.connect(self._light_reflection)
-        self.q_external.clicked.connect(self._light_reflection)
+        self._brainTransp.clicked.connect(self._light_reflection)
 
         self.struct_color_edit.setPlaceholderText("'red', #ab4642, (1,0,0)...")
 
@@ -54,14 +49,14 @@ class uiAtlas(object):
                 raise ValueError("The template parameter must be either 'B1', "
                                  "'B2 or 'B3'")
             else:
-                self.uiSwitchTemplate.setCurrentIndex(int(template[-1]) - 1)
+                self._brainTemplate.setCurrentIndex(int(template[-1]) - 1)
         else:
-            self.atlas.template = str(self.uiSwitchTemplate.currentText())
+            self.atlas.template = str(self._brainTemplate.currentText())
             self._cleanProj()
 
         # Show / hide MNI :
-        self.show_MNI.setChecked(show)
-        self.atlas.mesh.visible = self.show_MNI.isChecked()
+        self.menuDispBrain.setChecked(show)
+        self.atlas.mesh.visible = self.menuDispBrain.isChecked()
 
         # Hemisphere :
         if hemisphere is not None:
@@ -69,17 +64,20 @@ class uiAtlas(object):
                 raise ValueError("The hemisphere parameter must be either "
                                  "'both', 'left' or 'right'")
             else:
-                order = (['both', 'left', 'right'],
-                         ['Both_only', 'Lhemi_only', 'Rhemi_only'])
+                if hemisphere is 'both':
+                    self._brainPickHemi.setCurrentIndex(0)
+                elif hemisphere is 'left':
+                    self._brainPickHemi.setCurrentIndex(1)
+                elif hemisphere is 'rigth':
+                    self._brainPickHemi.setCurrentIndex(2)
                 self.atlas.reload(hemisphere=hemisphere)
-                eval('self.' + order[1][order[0].index(
-                                    hemisphere)] + '.setChecked(True)')
         else:
-            if self.Both_only.isChecked():
+            currentHemi = int(self._brainPickHemi.currentIndex())
+            if currentHemi == 0:
                 self.atlas.reload(hemisphere='both')
-            elif self.Lhemi_only.isChecked():
+            elif currentHemi == 1:
                 self.atlas.reload(hemisphere='left')
-            elif self.Rhemi_only.isChecked():
+            elif currentHemi == 2:
                 self.atlas.reload(hemisphere='right')
             self._cleanProj()
 
@@ -93,15 +91,12 @@ class uiAtlas(object):
         fully transparent brain. The 'external' option is only usefull for
         the cortical surface.
         """
-        if self.q_internal.isChecked():
+        viz = self._brainTransp.isChecked()
+        if viz:
             self.atlas.mesh.projection('internal')
-        elif self.q_external.isChecked():
+        else:
             self.atlas.mesh.projection('external')
+            self.atlas.mesh.set_alpha(1.)
+        self.o_Brain.setChecked(viz)
+        self.o_Brain.setEnabled(viz)
         self.atlas.mesh.update()
-
-    def _toggle_brain_visible(self):
-        """Toggle to display / hide the brain."""
-        viz = not self.atlas.mesh.visible
-        self.atlas.mesh.visible = viz
-        self.show_MNI.setChecked(viz)
-        self.toolBox_2.setEnabled(viz)

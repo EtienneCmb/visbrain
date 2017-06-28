@@ -64,10 +64,15 @@ class base(CbarBase, Projections):
 
         # Sources panel:
         if self.sources.mesh.name is 'NoneSources':
+            # Disable menu :
+            self.menuDispSources.setChecked(False)
+            self.menuDispSources.setEnabled(False)
+            self.menuTransform.setEnabled(False)
+            # Disable source/connect/cbar tabs :
             self.QuickSettings.setTabEnabled(2, False)
             self.QuickSettings.setTabEnabled(3, False)
             self.QuickSettings.setTabEnabled(5, False)
-            self.menuTransform.setEnabled(False)
+            # Disable transparency on sources :
             self.o_Sources.setEnabled(False)
             self.o_Sources.setChecked(False)
 
@@ -79,6 +84,10 @@ class base(CbarBase, Projections):
 
         # Connectivity panel:
         if self.connect.mesh.name == 'NoneConnect':
+            # Disable menu :
+            self.menuDispConnect.setEnabled(False)
+            self.menuDispConnect.setChecked(False)
+            # Disable Connect tab :
             self.QuickSettings.setTabEnabled(3, False)
             self.cmapConnect.setEnabled(False)
             self.o_Connect.setEnabled(False)

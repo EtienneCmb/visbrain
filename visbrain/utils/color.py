@@ -84,15 +84,29 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
                          "color. Use None, tuple or string")
 
 
-def color2tuple(color, astype=np.float32):
+def color2tuple(color, astype=np.float32, rmalpha=True):
     """Return a RGB tuple of the color.
 
-    Kargs:
+    Args:
         color: None/tuple/string, optional, (def: None)
             The color to use. Can either be None, or a tuple (R, G, B),
             a matplotlib color or an hexadecimal color '#...'.
+
+    Kargs:
+        astype: type, optional, (def: np.float32)
+            The final color type.
+
+        rmalpha: bool, optional, (def: True)
+            Specify if the alpha component have to be deleted.
+
+    Returns:
+        coltuple: tuple
+            Tuple of colors.
     """
-    return tuple(color2vb(color).ravel()[0:-1].astype(astype))
+    if rmalpha:
+        return tuple(color2vb(color).ravel()[0:-1].astype(astype))
+    else:
+        return tuple(color2vb(color).ravel().astype(astype))
 
 
 def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
