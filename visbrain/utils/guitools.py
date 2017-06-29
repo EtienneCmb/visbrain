@@ -7,7 +7,7 @@ from .color import color2vb, color2tuple
 
 
 __all__ = ['slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
-           'ndsubplot', 'combo', 'is_color', 'GuideLines']
+           'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines']
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -227,6 +227,21 @@ def combo(lst, idx):
     return out, ind
 
 
+class MouseEventControl(object):
+    """Additional mouse control on VisPy canvas."""
+
+    def _isLeftClick(self, event):
+        """Return if the pressed button is the left one."""
+        return event.button == 1
+
+    def _isModifier(self, event, modifier):
+        """Return the name of the modifier use."""
+        try:
+            return event.modifiers[0].name == modifier
+        except:
+            return False
+
+
 class GuideLines(object):
     """Display GUI guidelines for screenshot.
 
@@ -275,7 +290,7 @@ class GuideLines(object):
         # segment[6, :] = (cropHW[0], cropXY[1], 0.)
         # segment[7, :] = (cropXY[0], cropXY[1], 0.)
         segment = np.array([
-                           [-154., -100., 0.], 
+                           [-154., -100., 0.],
                            [154., 100., 0.]
                            ])
         self.mesh.set_data(pos=segment)
@@ -290,11 +305,10 @@ class GuideLines(object):
     def range(self):
         """Get the range value."""
         return self._range
-    
+
     @range.setter
     def range(self, value):
         """Set range value."""
         self._range = value
         self.xm, self.xM = self.range['x'][0], self.range['x'][1]
         self.ym, self.yM = self.range['y'][0], self.range['y'][1]
-    
