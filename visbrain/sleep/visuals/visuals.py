@@ -801,6 +801,8 @@ class vbShortcuts(object):
                    ('2', 'Scoring: set current window to N2 (2)'),
                    ('3', 'Scoring: set current window to N3 (3)'),
                    ('r', 'Scoring: set current window to REM (4)'),
+                   ('Double clik', 'Insert annotation'),
+                   ('CTRL + left click', 'Magnify signal under the cursor'),
                    ('CTRL + Num', 'Display the channel Num'),
                    ('CTRL + s', 'Save hypnogram'),
                    ('CTRL + t', 'Display shortcuts'),
@@ -941,9 +943,11 @@ class vbShortcuts(object):
 
             Magnigy the signal under the mouse cursor only.
             """
-            # Get canvas name :
+            # ------------- MAGNIFY : CTRL + left click -------------
             name = canvas.title
-            condition = bool(name.find('Canvas') + 1)
+            isleft = self._isLeftClick(event)
+            isCtrl = self._isModifier(event, 'Control')
+            condition = bool(name.find('Canvas') + 1) and isleft and isCtrl
             if condition and not self._slMagnify.isChecked():
                 # Get channel name :
                 chan = name.split('Canvas_')[1]
