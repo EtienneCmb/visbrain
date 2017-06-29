@@ -57,11 +57,15 @@ class uiSettings(object):
         xlim = (val*step, val*step+win)
         iszoom = self.menuDispZoom.isChecked()
         unit = str(self._slRules.currentText())
-
         # Find closest time index :
         t = [0, 0]
         t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))
         t[1] = int(round(np.abs(self._time - xlim[1]).argmin()))
+        # Hypnogram info :
+        hypref = int(self._hypno[t[0]])
+        hypconv = self._hconv[hypref]
+        hypcol = self._hypcolor[hypconv]
+        stage = str(self._hypYLabels[hypconv + 1].text())
 
         # ================= MESH UPDATES =================
         # ---------------------------------------
@@ -85,7 +89,15 @@ class uiSettings(object):
         # ---------------------------------------
         # Update topoplot if visible :
         if self._topoW.isVisible():
+            # Enable topoplot :
             self._topo.set_data(self._sf, self._time[sl], self._data[:, sl])
+            # Update title :
+            fm, fM = self._PanTopoFmin.value(), self._PanTopoFmax.value()
+            dispas = self._PanTopoDisp.currentText()
+            txt = 'Mean '+dispas+' in\n['+str(fm)+';'+str(fM)+'hz]'
+            self._topoTitle.setText(txt)
+            self._topoTitle.setStyleSheet("QLabel {color: " +
+                                          hypcol + ";}")
 
         # ---------------------------------------
         # Update Time indicator :
@@ -110,10 +122,6 @@ class uiSettings(object):
             self._timecam.rect = (xlim[0], 0., win, 1.)
 
         # ================= TEXT INFO =================
-        hypref = int(self._hypno[t[0]])
-        hypconv = self._hconv[hypref]
-        hypcol = self._hypcolor[hypconv]
-        stage = str(self._hypYLabels[hypconv + 1].text())
         # Get unit and convert:
         if self._slAbsTime.isChecked():
             xlim = np.asarray(xlim) + self._toffset
