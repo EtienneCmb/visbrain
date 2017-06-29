@@ -1,3 +1,4 @@
+"""Visual colorbar object using VisPy."""
 import numpy as np
 from vispy.scene import Node, visuals
 from vispy import scene
