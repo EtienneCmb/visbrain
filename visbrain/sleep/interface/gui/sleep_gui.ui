@@ -4200,12 +4200,12 @@ display</string>
   </action>
   <action name="menuLoadConfig">
    <property name="text">
-    <string>Sleep GUI config</string>
+    <string>GUI config</string>
    </property>
   </action>
   <action name="menuSaveConfig">
    <property name="text">
-    <string>Sleep GUI config</string>
+    <string>GUI config</string>
    </property>
   </action>
   <action name="menuDownload_pdf_doc">

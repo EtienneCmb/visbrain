@@ -98,6 +98,8 @@ What's new?
   * Sleep
 
     * Support annotations
+    * Enable editing/removing detections
+    * Improve default topoplot state
 
 
 * New in version v0.2.8

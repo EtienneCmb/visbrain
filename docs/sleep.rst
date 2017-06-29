@@ -465,6 +465,38 @@ Perform a peak detection.
 * *Lookahead* : minimum distance between two peaks.
 * *Display* : display either maximum / minimum / maximum & minimum
 
+
+Load and save the GUI configuration
+-----------------------------------
+
+From the **Files** menu, you can save the GUI configuration *Files/Save/Gui config*. This will save the state of all buttons and properties inside *Sleep*. Then, you can recharge the GUI configuration using *Files/Load/Gui config*.
+Alternatively, if you want to use a configuration when running *Sleep*, you can use the *config_file* argument to directly pass the path to a configuration file.
+
+.. code-block:: python
+
+  from mne import io
+  # Import the Sleep module:
+  from visbrain import Sleep
+  
+  Sleep(config_file='pathto/myconfig.txt')
+
+
+Annotations
+-----------
+
+*Sleep* provides a table for annotations where you can specify where the event start, finish and the text associated. In addition, there is an "Annotate" push button on the navigation bar to annotate the currently displayed window. Double clicking on a canvas is an other way to quickly add annotations.
+The list of annotations can be exported (either in .txt or .csv) or loaded from the **Files** menu.
+Just as for the configuration file, you can use the input variable *annotation_file* to set the pass to an existing annotation file that need to be loaded on load. 
+
+.. code-block:: python
+
+  from mne import io
+  # Import the Sleep module:
+  from visbrain import Sleep
+  
+  Sleep(annotation_file='pathto/myannotations.txt')
+
+
 Shortcuts
 ---------
 
