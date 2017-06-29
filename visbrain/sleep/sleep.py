@@ -14,13 +14,13 @@ from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
 from ..utils import (FixedCam, load_sleepdataset, color2vb, ShortcutPopup,
-                     check_downsampling)
+                     check_downsampling, MouseEventControl)
 from ..io import dialogLoad, read_hypno
 
 sip.setdestroyonexit(False)
 
 
-class Sleep(uiInit, visuals, uiElements, Tools):
+class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
     """Visualize and edit sleep data.
 
     Use this module to :
@@ -95,6 +95,9 @@ class Sleep(uiInit, visuals, uiElements, Tools):
 
         # Set default GUI state :
         self.setDefaultState()
+
+        # Mouse control :
+        MouseEventControl.__init__(self)
 
         # ====================== LOAD FILE ======================
         # Load file and convert if needed :
