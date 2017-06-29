@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets
-from vispy import app, scene
+from vispy import app
 
 from .gui import Ui_MainWindow
 
