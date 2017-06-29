@@ -87,20 +87,25 @@ class Detection(object):
         """
         for num, k in enumerate(self):
             if self[k]['index'].size:
-                # Get index and channel number :
-                index = _index_to_event(self[k]['index'])
+                # Get the channel number :
                 nb = self.chans.index(k[0])
-                # Build position vector :
-                z = np.full(index.shape, 2., dtype=np.float32)
-                pos = np.vstack((self.time[index], data[nb, index], z)).T
-                # Build connections :
-                connect = np.gradient(index) == 1.
-                connect[0], connect[-1] = True, False
                 # Send data :
                 if k[1] is 'Peaks':
+                    # Get index and channel number :
+                    index = self[k]['index'][:, 0]
+                    z = np.full(len(index), 2., dtype=np.float32)
+                    pos = np.vstack((self.time[index], data[nb, index], z)).T
                     self.peaks[k].set_data(pos=pos, edge_width=0.,
                                            face_color=self[k]['color'])
                 else:
+                    # Get index and channel number :
+                    index = _index_to_event(self[k]['index'])
+                    z = np.full(index.shape, 2., dtype=np.float32)
+                    # Build position vector :
+                    pos = np.vstack((self.time[index], data[nb, index], z)).T
+                    # Build connections :
+                    connect = np.gradient(index) == 1.
+                    connect[0], connect[-1] = True, False
                     self.line[k].set_data(pos=pos, width=4., connect=connect)
 
     def build_hyp(self, chan, types):
@@ -116,7 +121,7 @@ class Detection(object):
         # Get index :
         index = self[(chan, types)]['index']
         # Get only starting points :
-        start = index if types == 'Peaks' else index[:, 0]
+        start = index[:, 0]
         y = np.full_like(start, 1.5, dtype=float)
         z = np.full_like(start, -2., dtype=float)
         pos = np.vstack((self.time[start], y, z)).T
@@ -140,7 +145,7 @@ class Detection(object):
                 Detection type name.
         """
         self.hyp.visible = viz
-        if types is 'Peaks':
+        if types == 'Peaks':
             self.peaks[(chan, types)].visible = viz
         else:
             self.line[(chan, types)].visible = viz
@@ -151,7 +156,7 @@ class Detection(object):
         self[(chan, types)]['index'] = np.array([])
         # Remove data from plot :
         pos = np.full((1, 3), -10., dtype=np.float32)
-        if types is 'Peaks':
+        if types == 'Peaks':
             self.peaks[(chan, types)].set_data(pos=pos)
         else:
             self.line[(chan, types)].set_data(pos=pos,

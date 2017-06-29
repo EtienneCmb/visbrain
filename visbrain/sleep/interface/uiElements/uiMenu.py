@@ -170,8 +170,7 @@ class uiMenu(object):
 
     def saveSelectDetect(self):
         """Export selected detection."""
-        channel = self._currentLoc[0]
-        method = self._currentLoc[1]
+        channel, method = self._getCurrentChanType()
         # Read Table
         rowCount = self._DetectLocations.rowCount()
         staInd = [channel, '', 'Time index (s)']

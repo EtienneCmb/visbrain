@@ -107,8 +107,7 @@ class uiTools(object):
 
         # Update and clear detections :
         self._DetectLocations.setRowCount(0)
-        self._DetectChans.clear()
-        self._DetectTypes.clear()
+        self._DetectChanSw.clear()
         self._detect.update_keys(self._channels)
         self._detect.reset()
 
