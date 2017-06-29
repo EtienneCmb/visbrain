@@ -18,6 +18,7 @@ from .interface import uiInit, uiElements
 from .base import base
 from .user import userfcn
 from ..utils import ShortcutPopup
+from ..utils import CbarForm
 import sip
 sip.setdestroyonexit(False)
 
@@ -288,6 +289,9 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._rotate(fixed='axial')
 
         self._fcnOnLoad()
+
+        self.cbar = CbarForm()
+        self.cbar.setupUi(self._cbarWidget)
 
     def _fcnOnLoad(self):
         """Function that need to be runned on load."""
