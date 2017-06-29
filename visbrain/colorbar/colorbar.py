@@ -5,7 +5,7 @@ from PyQt5 import QtWidgets
 import vispy.app as visapp
 
 from .uiInit import uiInit
-from ..utils import CbarQt
+from ..utils import CbarQt, CbarBase, CbarObjetcs
 
 
 class Colorbar(uiInit, CbarQt):
@@ -75,8 +75,15 @@ class Colorbar(uiInit, CbarQt):
         self._app = QtWidgets.QApplication(sys.argv)
         # Initialise GUI :
         uiInit.__init__(self)
-        CbarQt.__init__(self, self.guiW, self.vizW)
 
+        obj1 = CbarBase(cmap='jet', vmin=-31, vmax=33, clim=(-32, 37), bgcolor='green', cblabel='OKiii !')
+        obj2 = CbarBase(cmap='viridis', vmin=2, vmax=4, clim=(21, 23))
+        self.cbobjs = CbarObjetcs()
+        self.cbobjs.add_object('obj1', obj1)
+        self.cbobjs.add_object('obj2', obj2, overwrite=False)
+        self.cbobjs.select('obj1')
+
+        CbarQt.__init__(self, self.guiW, self.vizW)
 
     def show(self):
         """Display the graphical user interface."""

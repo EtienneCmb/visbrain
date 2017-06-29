@@ -19,4 +19,9 @@
                       |
                       |
         Visual <---------------- GUI
-   (CbarVisual.py)        (gui/CbarPyQtGui.py)              
+   (CbarVisual.py)        (gui/CbarPyQtGui.py)      
+          |        
+          |        
+          |        
+          |        
+       CbarBase        
