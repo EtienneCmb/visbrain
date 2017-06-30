@@ -5,7 +5,7 @@ The following elements are initialized :
     * Sources : deep points inside / over the brain. They can materialized
     intracranial electrodes, MEG / EEG sensors...
     * Connectivity : straight lines which connect the deep sources.
-    * Areas : deep structures can be added (like brodmann areas or gyrus...).
+    * Roi : deep structures can be added (like brodmann areas or gyrus...).
     This can be for processing (like projecting sources activity on it),
     educational or simply for visualiation purpose.
     * Colorbar : initialize the colorbar elements.
@@ -20,12 +20,13 @@ from vispy.scene import Node
 from .AtlasBase import AtlasBase
 from .SourcesBase import SourcesBase
 from .ConnectBase import ConnectBase
-from .CbarBase import CbarBase
-from .AreaBase import AreaBase
+from .RoiBase import RoiBase
 from .projection import Projections
 
+from ...utils import CbarObjetcs, CbarBase
 
-class base(CbarBase, Projections):
+
+class base(Projections):
     """Initialize Brain objects.
 
     Initialize sources / connectivity / areas / colorbar / projections.
@@ -40,19 +41,13 @@ class base(CbarBase, Projections):
         # Get progress bar :
         self.progressbar = progressbar
 
-        # Initialize brain, sources and connectivity objects and put them in
-        # the relevant attribute :
+        # Initialize brain, sources, connectivity and ROI objects :
         self.atlas = AtlasBase(**kwargs)
         self.sources = SourcesBase(**kwargs)
         self.connect = ConnectBase(_xyz=self.sources.xyz,
                                    c_xyz=self.sources.xyz, **kwargs)
-        self.area = AreaBase(scale_factor=self.atlas._scaleMax,
+        self.area = RoiBase(scale_factor=self.atlas._scaleMax,
                              name='NoneArea', select=None, color='#ab4642')
-
-        # Initialize colorbar base  (by default, with sources base):
-        self.cb = CbarBase(self.view.cbwc, cb_fontcolor=self._cbfontcolor,
-                           cb_fontsize=self._cbfontsize,
-                           cb_label=self._cblabel, **self.sources._cb)
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -89,13 +84,18 @@ class base(CbarBase, Projections):
             self.menuDispConnect.setChecked(False)
             # Disable Connect tab :
             self.QuickSettings.setTabEnabled(3, False)
-            self.cmapConnect.setEnabled(False)
             self.o_Connect.setEnabled(False)
             self.o_Connect.setChecked(False)
         elif self.connect.colval is not None:
             self.cmapConnect.setEnabled(False)
             self.o_Connect.setEnabled(False)
         self._lw = kwargs.get('c_linewidth', 4.)
+
+        # ---------- Colorbar objects ----------
+        # Create the cbar objects anager :
+        self.cbobjs = CbarObjetcs()
+        self.cbobjs.add_object('Projection', CbarBase(**self.sources._cb))
+        self.cbobjs.add_object('Connectivity', CbarBase(fcn=self.connect.update, **self.connect._cb))
 
         # ---------- Put everything in a root node ----------
         # Here, each object is put in a root node so that each transformation

@@ -119,3 +119,7 @@ class CbarObjetcs(object):
         # Select the first one :
         if (select is None) or (select not in self._objs.keys()):
             self._selected = list(self._objs.keys())[0]
+
+    def update(self):
+        """Update function when an attribute change."""
+        self._objs[self._selected]._fcn()

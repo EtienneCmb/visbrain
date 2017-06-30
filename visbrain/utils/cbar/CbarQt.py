@@ -19,7 +19,7 @@ class CbarQt(object):
             The widget for adding the VisPy based colorbar.
     """
 
-    def __init__(self, guiW, vizW):
+    def __init__(self, guiW, vizW, cbobjs, parent=None, camera=None):
         """Init."""
         # --------------------------------------------------------------------
         #                             GUI COMPONENTS
@@ -28,13 +28,19 @@ class CbarQt(object):
         self.cbui = CbarForm()
         self.cbui.setupUi(guiW)
         # Add VisPy based colorbar :
-        self.cbviz = CbarVisual()
+        self.cbviz = CbarVisual(parent=parent)
         vizW.addWidget(self.cbviz._canvas.native)
+        self.cbobjs = cbobjs
 
         self['object'].addItems(self.cbobjs.keys())
         self._initialize()
         self._connect()
 
+    ###########################################################################
+    ###########################################################################
+    #                            GET / SET ITEMS
+    ###########################################################################
+    ###########################################################################
     def __getitem__(self, key):
         """Get the item from the GUI."""
         return eval('self.cbui.'+key)
@@ -46,6 +52,44 @@ class CbarQt(object):
         else:
             exec("self.cbviz."+key+"='"+value+"'")
 
+    ###########################################################################
+    ###########################################################################
+    #                            LOAD / SAVE
+    ###########################################################################
+    ###########################################################################
+    def save(self, filename):
+        """Save all colorbar configurations.
+
+        Args:
+            filename: string
+                Name of the file to be saved.
+        """
+        self.cbobjs.save(filename)
+
+    def load(self, filename, **kwargs):
+        """Load a colorbar configuration file.
+
+        Args:
+            filename: string
+                Name of the file to load.
+
+        Kargs:
+            kwargs: dict, optional, (def: {})
+                Further arguments to pass to the CbarObjects class.
+        """
+        self.cbobjs.load(filename, **kwargs)
+
+    def add_camera(self, camera):
+        self.cbviz._wc.camera = camera
+
+    ###########################################################################
+    ###########################################################################
+    #                CONNECT / DISCONNECT / INITIALIZE
+    ###########################################################################
+    ###########################################################################
+    # --------------------------------------------------------------------
+    #                          INITIALIZE GUI
+    # --------------------------------------------------------------------
     def _initialize(self):
         # _____________ SETTINGS _____________
         self['bckCol'].setText(str(self.cbobjs['bgcolor']))
@@ -65,8 +109,17 @@ class CbarQt(object):
         self['cmapRev'].setChecked(rev)
 
         # _____________ CLIM _____________
-        self['climm'].setValue(self.cbobjs['clim'][0])
-        self['climM'].setValue(self.cbobjs['clim'][1])
+        if self.cbobjs['clim'][0] is not None:
+            climm = self.cbobjs['clim'][0]
+        else:
+            climm = 0.
+        self['climm'].setValue(climm)
+        if self.cbobjs['clim'][1] is not None:
+            climM = self.cbobjs['clim'][1]
+        else:
+            climM = 1.
+        self['climm'].setValue(climm)
+        self['climM'].setValue(climM)
 
         # _____________ VMIN/VMAX _____________
         # Set vmin/vmax limits :
@@ -95,6 +148,9 @@ class CbarQt(object):
 
         self._gui2visual()
 
+    # --------------------------------------------------------------------
+    #                             GUI -> VISUAL
+    # --------------------------------------------------------------------
     def _gui2visual(self):
         # Settings :
         self._fcn_BckCol()
@@ -115,11 +171,11 @@ class CbarQt(object):
         self._fcn_TxtSize()
         self._fcn_TxtShift()
 
+    # --------------------------------------------------------------------
+    #                             CONNECT
+    # --------------------------------------------------------------------
     def _connect(self):
         """Connect cbui to cbviz."""
-        # --------------------------------------------------------------------
-        #                             GUI INTERACTIONS
-        # --------------------------------------------------------------------
         # _____________ SETTINGS _____________
         self['object'].currentIndexChanged.connect(self._fcn_ChangeObj)
         self['bckCol'].editingFinished.connect(self._fcn_BckCol)
@@ -167,6 +223,9 @@ class CbarQt(object):
         self['txtSz'].setKeyboardTracking(False)
         self['txtSh'].setKeyboardTracking(False)
 
+    # --------------------------------------------------------------------
+    #                             DISCONNECT
+    # --------------------------------------------------------------------
     def _disconnect(self):
         # Settings :
         self['object'].disconnect()
@@ -199,9 +258,12 @@ class CbarQt(object):
 
     ###########################################################################
     ###########################################################################
-    #                              SETTINGS
+    #                              SUB-FONCTION
     ###########################################################################
     ###########################################################################
+    # --------------------------------------------------------------------
+    #                             SETTINGS
+    # --------------------------------------------------------------------
     def _fcn_ChangeObj(self, *args, clean=False):
         """Change colorbar object."""
         # Disconnect interactions :
@@ -224,12 +286,6 @@ class CbarQt(object):
         bgcolor = color2json(self['bckCol'])
         self['bgcolor'] = bgcolor
         self.cbobjs['bgcolor'] = self.cbviz.bgcolor
-
-    def _fcn_TxtCol(self):
-        """Change text color."""
-        txtcolor = color2json(self['txtCol'])
-        self['txtcolor'] = txtcolor
-        self.cbobjs['txtcolor'] = self.cbviz.txtcolor
 
     def _fcn_Digits(self):
         """Change the number of digits."""
@@ -259,27 +315,19 @@ class CbarQt(object):
         self['bw'] = self['bw'].value()
         self.cbobjs['bw'] = self.cbviz.bw
 
-    def _fcn_Limits(self):
-        """Display/hide vmin/vmax."""
-        self['limtxt'] = self['limTxt'].isChecked()
-        self.cbobjs['limtxt'] = self.cbviz.limtxt
-
-    ###########################################################################
-    ###########################################################################
-    #                              COLORMAP
-    ###########################################################################
-    ###########################################################################
+    # --------------------------------------------------------------------
+    #                                CMAP
+    # --------------------------------------------------------------------
     def _fcn_cmapChanged(self):
         """Change the colormap."""
         rv = self['cmapRev'].isChecked() * '_r'
         self['cmap'] = str(self['cmap'].currentText()) + rv
         self.cbobjs['cmap'] = self.cbviz.cmap
+        self.cbobjs.update()
 
-    ###########################################################################
-    ###########################################################################
-    #                              CLIM
-    ###########################################################################
-    ###########################################################################
+    # --------------------------------------------------------------------
+    #                             CLIM
+    # --------------------------------------------------------------------
     def _fcn_climchanged(self):
         """Update colorbar limits."""
         # Get value :
@@ -291,11 +339,9 @@ class CbarQt(object):
         # Update vmin/vmax limits :
         self._vminvmaxCheck()
 
-    ###########################################################################
-    ###########################################################################
-    #                              VMIN/VMAX
-    ###########################################################################
-    ###########################################################################
+    # --------------------------------------------------------------------
+    #                   VMIN / VMAX / UNDER / OVER
+    # --------------------------------------------------------------------
     def _vminvmaxCheck(self):
         """Activate checkboxs if vmin/vmax not None."""
         if isinstance(self.cbobjs['vmin'], (int, float)):
@@ -340,11 +386,14 @@ class CbarQt(object):
         self.cbobjs['vmax'] = self.cbviz.vmax
         self.cbobjs['over'] = self.cbviz.over
 
-    ###########################################################################
-    ###########################################################################
-    #                              TEXT
-    ###########################################################################
-    ###########################################################################
+    def _fcn_Limits(self):
+        """Display/hide vmin/vmax."""
+        self['limtxt'] = self['limTxt'].isChecked()
+        self.cbobjs['limtxt'] = self.cbviz.limtxt
+
+    # --------------------------------------------------------------------
+    #                             TEXT
+    # --------------------------------------------------------------------
     def _fcn_CbTitle(self):
         """Change colorbar title."""
         self['cblabel'] = str(self['cblabel'].text())
@@ -368,4 +417,10 @@ class CbarQt(object):
     def _fcn_TxtShift(self):
         """Change text shift."""
         self['txtsh'] = self['txtSh'].value()
+
+    def _fcn_TxtCol(self):
+        """Change text color."""
+        txtcolor = color2json(self['txtCol'])
+        self['txtcolor'] = txtcolor
+        self.cbobjs['txtcolor'] = self.cbviz.txtcolor
         self.cbobjs['txtsh'] = self.cbviz.txtsh

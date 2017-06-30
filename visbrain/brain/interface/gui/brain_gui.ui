@@ -72,7 +72,7 @@
           <bool>true</bool>
          </property>
          <property name="currentIndex">
-          <number>6</number>
+          <number>5</number>
          </property>
          <property name="documentMode">
           <bool>true</bool>
@@ -102,7 +102,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>364</width>
-                <height>611</height>
+                <height>686</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1670,7 +1670,7 @@ color</string>
                 <x>0</x>
                 <y>0</y>
                 <width>364</width>
-                <height>349</height>
+                <height>387</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_48">
@@ -1874,7 +1874,7 @@ color</string>
                 <x>0</x>
                 <y>0</y>
                 <width>364</width>
-                <height>704</height>
+                <height>779</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -2688,7 +2688,7 @@ type</string>
                 <x>0</x>
                 <y>0</y>
                 <width>364</width>
-                <height>704</height>
+                <height>779</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_63">
@@ -3171,7 +3171,7 @@ width</string>
                 <x>0</x>
                 <y>0</y>
                 <width>364</width>
-                <height>704</height>
+                <height>779</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_32">
@@ -3578,411 +3578,62 @@ division</string>
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="q_TRANS">
+         <widget class="QWidget" name="tab">
           <attribute name="title">
            <string>Cbar</string>
           </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_23">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QWidget" name="colorbar_pan" native="true">
+            <widget class="QWidget" name="_cbarWidget" native="true"/>
+           </item>
+           <item>
+            <widget class="QProgressBar" name="progressBar">
+             <property name="value">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="UserMsgBox" native="true">
              <property name="minimumSize">
               <size>
                <width>0</width>
                <height>0</height>
               </size>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_46">
+             <layout class="QHBoxLayout" name="horizontalLayout_52">
               <item>
-               <widget class="QGroupBox" name="groupBox_12">
-                <property name="title">
-                 <string>Apply on</string>
+               <widget class="QLabel" name="uiErrorMsg">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
                 </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_39">
-                 <item>
-                  <layout class="QGridLayout" name="gridLayout_4">
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <item row="0" column="1">
-                    <widget class="QRadioButton" name="cmapSources">
-                     <property name="text">
-                      <string>Sources</string>
-                     </property>
-                     <property name="checked">
-                      <bool>true</bool>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QRadioButton" name="cmapConnect">
-                     <property name="text">
-                      <string>Connectivity</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <spacer name="horizontalSpacer_57">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item row="0" column="3">
-                    <spacer name="horizontalSpacer_58">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
+                <property name="text">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;ErrorMsg&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
                </widget>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_13">
-                <property name="title">
-                 <string>Colormap</string>
+               <spacer name="horizontalSpacer_53">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_41">
-                 <item>
-                  <layout class="QVBoxLayout" name="verticalLayout_21">
-                   <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_18">
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QLabel" name="label_10">
-                       <property name="text">
-                        <string>Colormap</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QComboBox" name="q_cmap_list">
-                       <property name="editable">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="q_cmap_invert">
-                       <property name="text">
-                        <string>Invert</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="q_auto_scale">
-                       <property name="text">
-                        <string>Auto-scale</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_15">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_48">
-                     <property name="bottomMargin">
-                      <number>5</number>
-                     </property>
-                     <item>
-                      <widget class="QLabel" name="label_18">
-                       <property name="text">
-                        <string>clim</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_50">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item>
-                      <widget class="QDoubleSpinBox" name="q_cmin">
-                       <property name="minimum">
-                        <double>-16777215.000000000000000</double>
-                       </property>
-                       <property name="maximum">
-                        <double>16777215.000000000000000</double>
-                       </property>
-                       <property name="singleStep">
-                        <double>1.000000000000000</double>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_51">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item>
-                      <widget class="QDoubleSpinBox" name="q_cmax">
-                       <property name="minimum">
-                        <double>-16777215.000000000000000</double>
-                       </property>
-                       <property name="maximum">
-                        <double>16777215.000000000000000</double>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_52">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_20">
-                     <property name="bottomMargin">
-                      <number>5</number>
-                     </property>
-                     <item>
-                      <widget class="QCheckBox" name="q_vmin_chk">
-                       <property name="toolTip">
-                        <string>Every values under vmin will be set to the &quot;under&quot; color</string>
-                       </property>
-                       <property name="text">
-                        <string>vmin</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_14">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item>
-                      <widget class="QDoubleSpinBox" name="q_vmin">
-                       <property name="minimum">
-                        <double>-16777215.000000000000000</double>
-                       </property>
-                       <property name="maximum">
-                        <double>16777215.000000000000000</double>
-                       </property>
-                       <property name="singleStep">
-                        <double>1.000000000000000</double>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_17">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="q_vmax_chk">
-                       <property name="text">
-                        <string>vmax</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QDoubleSpinBox" name="q_vmax">
-                       <property name="minimum">
-                        <double>-16777215.000000000000000</double>
-                       </property>
-                       <property name="maximum">
-                        <double>16777215.000000000000000</double>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_16">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_21">
-                     <item>
-                      <widget class="QLabel" name="qUnder_txt">
-                       <property name="text">
-                        <string>Under</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLineEdit" name="q_under"/>
-                     </item>
-                     <item>
-                      <widget class="QLabel" name="qOver_txt">
-                       <property name="text">
-                        <string>Over</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLineEdit" name="q_over"/>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <widget class="Line" name="line">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_25">
-                     <property name="spacing">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QLabel" name="label_11">
-                       <property name="text">
-                        <string>Colorbar label: </string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLineEdit" name="q_cblabel"/>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="tab">
-          <attribute name="title">
-           <string>Page</string>
-          </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <widget class="QWidget" name="_cbarWidget" native="true"/>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </item>
-       <item>
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>0</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="UserMsgBox" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_52">
-          <item>
-           <widget class="QLabel" name="uiErrorMsg">
-            <property name="font">
-             <font>
-              <pointsize>9</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;ErrorMsg&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_53">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
         </widget>
        </item>
        <item>
@@ -4492,15 +4143,6 @@ division</string>
   <tabstop>o_Brain</tabstop>
   <tabstop>o_Sources</tabstop>
   <tabstop>o_Connect</tabstop>
-  <tabstop>q_cmap_list</tabstop>
-  <tabstop>q_cmap_invert</tabstop>
-  <tabstop>q_vmin_chk</tabstop>
-  <tabstop>q_vmin</tabstop>
-  <tabstop>q_vmax_chk</tabstop>
-  <tabstop>q_vmax</tabstop>
-  <tabstop>q_under</tabstop>
-  <tabstop>q_over</tabstop>
-  <tabstop>q_cblabel</tabstop>
   <tabstop>bgd_red</tabstop>
   <tabstop>QuickSettings</tabstop>
  </tabstops>

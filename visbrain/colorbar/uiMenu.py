@@ -11,32 +11,32 @@ class uiMenu(object):
     def __init__(self):
         """Init."""
         # __________ CONFIG __________
-        self.actionSaveConfig.triggered.connect(self.saveCbarConfig)
-        self.actionLoadConfig.triggered.connect(self.loadCbarConfig)
-        self.actionScreenshot.triggered.connect(self._fcn_screenshot)
+        self.menuCbarSaveConfig.triggered.connect(self._fcn_saveCbarConfig)
+        self.menuCbarLoadConfig.triggered.connect(self._fcn_loadCbarConfig)
+        self.menuCbarScreenshot.triggered.connect(self._fcn_CbarScreenshot)
 
-    def saveCbarConfig(self):
+    def _fcn_saveCbarConfig(self):
         """Save colorbar config."""
         filename = dialogSave(self, 'Save config File', 'config',
                               "Text file (*.txt);;All files (*.*)")
 
         if filename:
-            self.cbobjs.save(filename)
+            self.cbqt.save(filename)
 
-    def loadCbarConfig(self):
+    def _fcn_loadCbarConfig(self):
         """Load colorbar conf."""
         # Open dialog box :
         filename = dialogLoad(self, 'Load config File', 'config',
                               "Text file (*.txt);;All files (*.*)")
 
         if filename:
-            self.cbobjs.load(filename)
-            self._fcn_ChangeObj(clean=True)
+            self.cbqt.load(filename)
+            self.cbqt._fcn_ChangeObj(clean=True)
 
-    def _fcn_screenshot(self):
+    def _fcn_CbarScreenshot(self):
         """Colorbar screenshot."""
         filename = dialogSave(self, 'Save config File', 'config',
                               "PNG file (*.png);;JPG file (*.jpg);;TIFF file"
                               " (*.tiff);;All files (*.*)")
         if filename:
-            write_fig_canvas(filename, self.cbviz._canvas, autocrop=True)
+            write_fig_canvas(filename, self.cbqt.cbviz._canvas, autocrop=True)

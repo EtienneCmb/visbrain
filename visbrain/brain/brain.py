@@ -18,7 +18,7 @@ from .interface import uiInit, uiElements
 from .base import base
 from .user import userfcn
 from ..utils import ShortcutPopup
-from ..utils import CbarForm
+from ..utils import CbarQt, CbarObjetcs, CbarBase
 import sip
 sip.setdestroyonexit(False)
 
@@ -284,14 +284,15 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._vbNode.parent = self.view.wc.scene
 
         # Fixed colorbar camera :
-        self.view.cbwc.camera = viscam.PanZoomCamera(rect=(-.1, -2.5, 1, 5))
-        self.cb._cbNode.parent = self.view.cbwc.scene
+        camera = viscam.PanZoomCamera(rect=(-.1, -2.5, 1, 5))
         self._rotate(fixed='axial')
 
         self._fcnOnLoad()
 
-        self.cbar = CbarForm()
-        self.cbar.setupUi(self._cbarWidget)
+        # cbobjs = CbarObjetcs()
+        # cbobjs.add_object('Sources', CbarBase(cmap='inferno'), overwrite=False)
+        self.cbqt = CbarQt(self._cbarWidget, self.cbpanel, self.cbobjs)
+        self.cbqt.add_camera(camera)
 
     def _fcnOnLoad(self):
         """Function that need to be runned on load."""

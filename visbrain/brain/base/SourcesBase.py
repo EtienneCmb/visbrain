@@ -24,7 +24,7 @@ class SourcesBase(_colormap):
 
     This class can be used for like plotting, loading... Each source's input
     start with 's_'. Other arguments (**kwargs) are ignored. This class is also
-    responsible for associated text of each source.
+    responsible for associated text to each source.
     """
 
     def __init__(self, s_xyz=None, s_data=None, s_color='#ab4652',
@@ -75,7 +75,7 @@ class SourcesBase(_colormap):
         return len(np.where(np.logical_not(self.data.mask))[0])
 
     def __iter__(self):
-        """Iterations over sources coordinates."""
+        """Iterate over sources coordinates."""
         for k in range(len(self)):
             yield np.ravel(self.xyz[k, :])
 

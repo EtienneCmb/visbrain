@@ -8,7 +8,7 @@ from .uiInit import uiInit
 from ..utils import CbarQt, CbarBase, CbarObjetcs
 
 
-class Colorbar(uiInit, CbarQt):
+class Colorbar(uiInit):
     """Display a colorbar editor.
 
     Kargs:
@@ -76,9 +76,9 @@ class Colorbar(uiInit, CbarQt):
         # Initialise GUI :
         uiInit.__init__(self)
 
-        self.cbobjs = CbarObjetcs()
+        cbobjs = CbarObjetcs()
         if config is not None:
-            self.cbobjs.load(config)
+            cbobjs.load(config)
         else:
             if 'name' in kwargs.keys():
                 name = kwargs['name']
@@ -86,8 +86,8 @@ class Colorbar(uiInit, CbarQt):
             else:
                 name = 'Colorbar'
             obj1 = CbarBase(**kwargs)
-            self.cbobjs.add_object(name, obj1, overwrite=False)
-        CbarQt.__init__(self, self.guiW, self.vizW)
+            cbobjs.add_object(name, obj1, overwrite=False)
+        self.cbqt = CbarQt(self.guiW, self.vizW, cbobjs)
 
     def show(self):
         """Display the graphical user interface."""

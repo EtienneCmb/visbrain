@@ -15,10 +15,11 @@ from vispy import gloo
 from vispy.visuals import Visual
 from vispy.geometry import MeshData
 import vispy.visuals.transforms as vist
+from vispy.scene.visuals import create_visual_node
 
 from ....utils import array2colormap, color2vb, vpnormalize
 
-__all__ = ['BrainVisual']
+__all__ = ['BrainMesh']
 
 
 # Vertex shader : executed code for individual vertices. The transformation
@@ -631,3 +632,5 @@ class BrainVisual(Visual):
             l_color[3] = 1.
         self.set_light(l_color=l_color)
         self.update_gl_state()
+
+BrainMesh = create_visual_node(BrainVisual)

@@ -1,2 +1,4 @@
 """Import the *Mesh objects."""
-from .visual import BrainMesh, ConnectMesh
+from .BrainVisual import BrainMesh
+from .ConnectVisual import ConnectMesh
+

@@ -57,7 +57,7 @@ kwargs['s_edgecolor'] = None  # 'white'
 kwargs['s_edgewidth'] = 0
 
 # Colormap properties (for sources) :
-kwargs['s_cmap'] = 'viridis'				# Matplotlib colormap
+kwargs['s_cmap'] = 'Spectral_r'				# Matplotlib colormap
 kwargs['s_cmap_vmin'], kwargs['s_cmap_vmax'] = -40, 21
 kwargs['s_cmap_under'], kwargs['s_cmap_over'] = 'midnightblue', "#e74c3c"
 

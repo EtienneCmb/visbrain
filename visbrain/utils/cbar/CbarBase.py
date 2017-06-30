@@ -33,6 +33,9 @@ class CbarBase(object):
         self._ndigits = ndigits
         self._width = width
         self._minmax = clim
+        if fcn is None:
+            def fcn():
+                print('okiiiiii')
         self._fcn = fcn
 
     def __getitem__(self, key):
