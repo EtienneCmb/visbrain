@@ -1,5 +1,6 @@
 
 from .CbarBase import CbarBase
+from ...io import save_config_json, load_config_json
 
 __all__ = ['CbarObjetcs']
 
@@ -25,6 +26,10 @@ class CbarObjetcs(object):
         for key, val in self._objs[self._selected].to_dict().items():
             yield key, val
 
+    def __bool__(self):
+        """Test if it's not empty."""
+        return self._objs and self._selected
+
     def select(self, name):
         """Select an object.
 
@@ -37,44 +42,80 @@ class CbarObjetcs(object):
         else:
             raise ValueError(name + " not in the object list.")
 
-    def add_object(self, **kwargs):
-        """Add object."""
-        self._selected = kwargs['name']
-        self._objs[kwargs['name']] = CbarBase(**kwargs)
+    def add_object(self, name, obj, overwrite=True):
+        """Add a colorbar object.
 
-    def update_from_obj(self, obj, sup='_'):
-        for key, val in self:
-            if isinstance(val, str):
-                exec("obj." + sup + key + "='" + val + "'")
-            else:
-                exec("obj." + sup + key + "=" + str(val))
+        Args:
+            name: string
+                Name of the object.
+
+            obj: CbarBase
+                The CbarBase object to add.
+
+        Kargs:
+            overwrite: bool, optional, (def: True)
+                If a colorbar object already has the same name, define if it
+                should be overwritten.
+        """
+        # Test if name is a string :
+        if not isinstance(name, str):
+            raise ValueError("name must be a string.")
+        # Test if the name is free :
+        if not overwrite and (name in self._objs.keys()):
+            raise ValueError("The colorbar object '"+name+"' already exist. "
+                             "Use an other name")
+        if isinstance(obj, CbarBase):
+            self._selected = name
+            self._objs[name] = obj
+        else:
+            raise ValueError("The object to add must be a CbarBase type.")
 
     def to_kwargs(self):
+        """Return a dictionary for input arguments."""
         return self._objs[self._selected].to_kwargs()
 
+    def to_dict(self):
+        """Return a dictionary of all colorbar args."""
+        return self._objs[self._selected].to_dict()
+
+    def keys(self):
+        """Return the list of entries in the object dict."""
+        return self._objs.keys()
+
     def save(self, filename):
-        """Save all colorbar configuration."""
-        import json
-        import os
-        file = os.path.splitext(filename)[0] + '.txt'
-        with open(file, 'w') as f:
-            config = {}
-            for k, i in self._objs.items():
-                config[k] = i.to_dict()
-            json.dump(config, f)
+        """Save all colorbar configurations.
 
-    def load(self, filename):
-        """Load configuration file."""
-        self._objs = {}
-        import json
-        with open(filename) as f:
-            # Load the configuration file :
-            config = json.load(f)
+        Args:
+            filename: string
+                Name of the file to be saved.
+        """
+        # Build the configuration file :
+        config = {k: i.to_dict() for k, i in self._objs.items()}
+        # Save in a txt file :
+        save_config_json(filename, config)
 
-            for k in config.keys():
-                self._objs[config[k]['name']] = CbarBase(**config[k])
+    def load(self, filename, clean=True, select=None):
+        """Load a colorbar configuration file.
 
-        self._selected = list(self._objs.keys())[0]
+        Args:
+            filename: string
+                Name of the file to load.
 
-    def list(self):
-        return list(self._objs.keys())
+        Kargs:
+            clean: bool, optional, (def: True)
+                Specify if all objects have to be clean before.
+
+            select: string, optional, (def: None)
+                Name of the object to select on load.
+        """
+        # Load the configuration :
+        config = load_config_json(filename)
+        # Clean current objects :
+        if clean:
+            self._objs = {}
+        # Load objects :
+        for k, i in config.items():
+            self.add_object(k, CbarBase(**i))
+        # Select the first one :
+        if (select is None) or (select not in self._objs.keys()):
+            self._selected = list(self._objs.keys())[0]

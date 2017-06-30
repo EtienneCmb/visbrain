@@ -1,10 +1,11 @@
+"""Visual colorbar object using VisPy."""
 import numpy as np
 from vispy.scene import Node, visuals
 from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .CbarBase import CbarBase
-from ..color import array2colormap, color2vb, color2tuple
+from ..color import array2colormap, color2tuple
 from ..cameras import FixedCam
 
 
@@ -12,9 +13,6 @@ class CbarVisual(CbarBase):
     """Create a colorbar using Vispy.
 
     Kargs:
-        config: string, optional, (def: None)
-            Path to a configuration file.
-
         name: string, optional, (def: 'Colorbar')
             Object name.
 
@@ -148,10 +146,8 @@ class CbarVisual(CbarBase):
                                  font_size=self._ratio * self._txtsz,
                                  name='Vmax', anchor_x='left')
 
-        if self._config is None:
-            self._build(True, 'all')
-        else:
-            self.load(self._config)
+        # Build colorbar :
+        self._build(True, 'all')
 
     # -------------------------------------------------------------------------
     #                             DEEP METHODS
@@ -266,27 +262,6 @@ class CbarVisual(CbarBase):
         else:
             txt = value
         return txt
-
-    def to_dict(self):
-        """Export configuration as a dictionary."""
-        dico = {'name': self.name, 'bgcolor': self.bgcolor,
-                'ndigits': self.ndigits, 'width': self.width,
-                'border': self.border, 'bw': self.bw, 'limtxt': self.limtxt,
-                'cmap': self.cmap, 'clim': self.clim, 'vmin': self.vmin,
-                'under': color2tuple(self.under, float), 'vmax': self.vmax,
-                'over': color2tuple(self.over, float), 'cblabel': self.cblabel,
-                'cbtxtsz': self.cbtxtsz, 'cbtxtsh': self.cbtxtsh,
-                'txtcolor': color2tuple(self.txtcolor, float),
-                'txtsz': self.txtsz, 'txtsh': self.txtsh}
-        return dico
-
-    def from_dict(self, dico):
-        """Define properties from a dictionary."""
-        for key, val in dico.items():
-            if isinstance(val, str):
-                exec("self."+key+"='"+val+"'")
-            else:
-                exec('self.'+key+'='+str(val))
 
     ###########################################################################
     ###########################################################################
@@ -435,7 +410,7 @@ class CbarVisual(CbarBase):
     def under(self, value):
         """Set under value."""
         bck = self._under
-        self._under = color2vb(value)
+        self._under = color2tuple(value, float)
         self._build(bck is not value)
 
     # ----------- VMAX -----------
@@ -461,7 +436,7 @@ class CbarVisual(CbarBase):
     def over(self, value):
         """Set over value."""
         bck = self._over
-        self._over = color2vb(value)
+        self._over = color2tuple(value, float)
         self._build(bck is not value)
 
     ###########################################################################
@@ -514,7 +489,7 @@ class CbarVisual(CbarBase):
     @txtcolor.setter
     def txtcolor(self, value):
         """Set txtcolor value."""
-        self._txtcolor = color2vb(value)
+        self._txtcolor = color2tuple(value, float)
         self._build(False, 'txtcolor')
 
     # ----------- TXTSZ -----------

@@ -1,12 +1,13 @@
 from PyQt5 import QtWidgets
-from vispy import app, scene
+from vispy import app
 
 from .gui import Ui_MainWindow
+from .uiMenu import uiMenu
 
 __all__ = ['uiInit']
 
 
-class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
+class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, uiMenu):
     """Group and initialize the graphical elements and interactions."""
 
     def __init__(self):
@@ -14,3 +15,4 @@ class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
         # Create the main window :
         super(uiInit, self).__init__(None)
         self.setupUi(self)
+        uiMenu.__init__(self)

@@ -84,7 +84,7 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
                          "color. Use None, tuple or string")
 
 
-def color2tuple(color, astype=np.float32, rmalpha=True):
+def color2tuple(color, astype=np.float32, rmalpha=True, roundto=2):
     """Return a RGB tuple of the color.
 
     Args:
@@ -99,14 +99,21 @@ def color2tuple(color, astype=np.float32, rmalpha=True):
         rmalpha: bool, optional, (def: True)
             Specify if the alpha component have to be deleted.
 
+        roundto: int, optional, (def: 2)
+            Number of digits per RGB.
+
     Returns:
         coltuple: tuple
             Tuple of colors.
     """
+    # Get the converted color :
+    ccol = color2vb(color).ravel().astype(astype)
+    # Round it :
+    ccol = np.ndarray.tolist(np.around(ccol, roundto))
     if rmalpha:
-        return tuple(color2vb(color).ravel()[0:-1].astype(astype))
+        return tuple(ccol[0:-1])
     else:
-        return tuple(color2vb(color).ravel().astype(astype))
+        return tuple(ccol)
 
 
 def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,

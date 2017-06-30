@@ -11,44 +11,32 @@ class uiMenu(object):
     def __init__(self):
         """Init."""
         # __________ CONFIG __________
-        self.actionSaveConfig.triggered.connect(self.saveConfig)
-        self.actionLoadConfig.triggered.connect(self.loadConfig)
+        self.actionSaveConfig.triggered.connect(self.saveCbarConfig)
+        self.actionLoadConfig.triggered.connect(self.loadCbarConfig)
         self.actionScreenshot.triggered.connect(self._fcn_screenshot)
 
-    def saveConfig(self):
+    def saveCbarConfig(self):
         """Save colorbar config."""
         filename = dialogSave(self, 'Save config File', 'config',
                               "Text file (*.txt);;All files (*.*)")
 
         if filename:
-            self.objs.save(filename)
+            self.cbobjs.save(filename)
 
-    def loadConfig(self, *args, filename=None):
+    def loadCbarConfig(self):
         """Load colorbar conf."""
-        if filename is None:
-            # Open dialog box :
-            filename = dialogLoad(self, 'Load config File', 'config',
-                                  "Text file (*.txt);;All files (*.*)")
-            # Disconnect interactions :
-            self._disconnect()
+        # Open dialog box :
+        filename = dialogLoad(self, 'Load config File', 'config',
+                              "Text file (*.txt);;All files (*.*)")
 
         if filename:
-            # Load objects :
-            self.objs.load(filename)
-            # Update colorbar visual from loaded objects :
-            self.objs.update_from_obj(self.cb)
-            # re-build colorbar :
-            self.cb._build(True, 'all')
-            self._fcn_Name()
-            # Update GUI :
-            self._cb2GUI()
-            self._initialize()
-            # Re-connect interactions :
-            self._connect()
+            self.cbobjs.load(filename)
+            self._fcn_ChangeObj(clean=True)
 
     def _fcn_screenshot(self):
         """Colorbar screenshot."""
         filename = dialogSave(self, 'Save config File', 'config',
                               "PNG file (*.png);;JPG file (*.jpg);;TIFF file"
                               " (*.tiff);;All files (*.*)")
-        write_fig_canvas(filename, self.cb._canvas, autocrop=True)
+        if filename:
+            write_fig_canvas(filename, self.cbviz._canvas, autocrop=True)

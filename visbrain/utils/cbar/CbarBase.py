@@ -7,11 +7,11 @@ __all__ = ['CbarBase']
 class CbarBase(object):
     """Base class for colorbar."""
 
-    def __init__(self, config=None, cmap='viridis', clim=(0, 1), vmin=None,
+    def __init__(self, cmap='viridis', clim=(0, 1), vmin=None,
                  vmax=None, under='gray', over='red', cblabel='', cbtxtsz=26,
                  cbtxtsh=2.3, txtcolor='white', txtsz=20, txtsh=1.2, width=.14,
                  border=True, bw=2., limtxt=True, bgcolor=(.1, .1, .1),
-                 ndigits=2, name='Colorbar'):
+                 ndigits=2, fcn=None):
         """Init."""
         # Cmap/Clim/Vmin/Vmax/Under/Over :
         self._cmap, self._clim = cmap, clim
@@ -27,27 +27,41 @@ class CbarBase(object):
         self._txtsh = txtsh
         self._limtxt = limtxt
         # Settings :
-        self._config = config
-        self._name = name
         self._bgcolor = bgcolor
         self._border = border
         self._bw = bw
         self._ndigits = ndigits
         self._width = width
         self._minmax = clim
+        self._fcn = fcn
+
+    def __getitem__(self, key):
+        """Get item (usefull for CbarObjects)."""
+        return eval('self._'+key)
 
     # -------------------------------------------------------------------------
     #                             USER METHODS
     # -------------------------------------------------------------------------
     def set_data(self, data, cmap=None, clim=None, vmin=None, vmax=None,
                  under=None, over=None):
+        """"""
         # Cmap/Clim/Vmin/Vmax/Under/Over :
-        self._cmap, self._clim = cmap, clim
-        self._vmin, self._vmax = vmin, vmax
-        self._under, self._over = under, over
+        if cmap is not None:
+            self._cmap = cmap
+        if clim is not None:
+            self._clim = clim
+        if vmin is not None:
+            self._vmin = vmin
+        if vmax is not None:
+            self._vmax = vmax
+        if under is not None:
+            self._under = under
+        if over is not None:
+            self._over = over
         self._minmax = (data.min(), data.max())
 
     def autoscale(self):
+        """Autoscale by setting clim=minmax."""
         self._clim = self._minmax
 
     def to_kwargs(self):
@@ -62,7 +76,7 @@ class CbarBase(object):
         return kwargs
 
     def to_dict(self):
-        """Return a dictionary of colorbar args."""
+        """Return a dictionary of all colorbar args."""
         todict = {}
         # cmap/clim/vmin/vmax/under/over :
         todict['cmap'] = self._cmap
@@ -82,10 +96,16 @@ class CbarBase(object):
         # Settings :
         todict['border'] = self._border
         todict['bw'] = self._bw
-        todict['name'] = self._name
         todict['limtxt'] = self._limtxt
         todict['bgcolor'] = list(color2tuple(self._bgcolor, float))
         todict['ndigits'] = self._ndigits
         todict['width'] = self._width
 
         return todict
+
+    def update(self):
+        """Fonction to run when an update is needed."""
+        if self._fcn is not None:
+            self._fcn()
+        else:
+            raise ValueError("No updating function found.")
