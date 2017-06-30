@@ -50,7 +50,7 @@ class CbarQt(object):
         # _____________ SETTINGS _____________
         self['bckCol'].setText(str(self.cbobjs['bgcolor']))
         self['txtCol'].setText(str(self.cbobjs['txtcolor']))
-        self['digits'].setValue(self.cbobjs['ndigits'])
+        self['ndigits'].setValue(self.cbobjs['ndigits'])
         self['width'].setValue(self.cbobjs['width'])
         self['border'].setChecked(self.cbobjs['border'])
         self['bw'].setValue(self.cbobjs['bw'])
@@ -72,10 +72,16 @@ class CbarQt(object):
         # Set vmin/vmax limits :
         self._vminvmaxCheck()
         # Vmin/under :
-        self['vmin'].setValue(self.cbobjs['vmin'])
+        if self.cbobjs['vmin']:
+            self['vmin'].setValue(self.cbobjs['vmin'])
+        else:
+            self['vminChk'].setChecked(False)
         self['under'].setText(str(self.cbobjs['under']))
         # Vmax/over :
-        self['vmax'].setValue(self.cbobjs['vmax'])
+        if self.cbobjs['vmax']:
+            self['vmax'].setValue(self.cbobjs['vmax'])
+        else:
+            self['vmaxChk'].setChecked(False)
         self['over'].setText(str(self.cbobjs['over']))
 
         # _____________ TEXT _____________
@@ -118,12 +124,12 @@ class CbarQt(object):
         self['object'].currentIndexChanged.connect(self._fcn_ChangeObj)
         self['bckCol'].editingFinished.connect(self._fcn_BckCol)
         self['txtCol'].editingFinished.connect(self._fcn_TxtCol)
-        self['digits'].valueChanged.connect(self._fcn_Digits)
+        self['ndigits'].valueChanged.connect(self._fcn_Digits)
         self['width'].valueChanged.connect(self._fcn_Width)
         self['border'].clicked.connect(self._fcn_Border)
         self['bw'].valueChanged.connect(self._fcn_Bw)
         self['limTxt'].clicked.connect(self._fcn_Limits)
-        self['digits'].setKeyboardTracking(False)
+        self['ndigits'].setKeyboardTracking(False)
         self['width'].setKeyboardTracking(False)
 
         # _____________ COLORMAPS _____________
@@ -166,7 +172,7 @@ class CbarQt(object):
         self['object'].disconnect()
         self['bckCol'].disconnect()
         self['txtCol'].disconnect()
-        self['digits'].disconnect()
+        self['ndigits'].disconnect()
         self['width'].disconnect()
         self['border'].disconnect()
         self['bw'].disconnect()
@@ -196,14 +202,18 @@ class CbarQt(object):
     #                              SETTINGS
     ###########################################################################
     ###########################################################################
-    def _fcn_ChangeObj(self):
+    def _fcn_ChangeObj(self, *args, clean=False):
         """Change colorbar object."""
+        # Disconnect interactions :
+        self._disconnect()
+        # Clean drowdown box for object selection :
+        if clean:
+            self['object'].clear()
+            self['object'].addItems(self.cbobjs.keys())
         # Get the current selected text :
         name = str(self['object'].currentText())
         # Select this object :
         self.cbobjs.select(name)
-        # Disconnect interactions :
-        self._disconnect()
         # Update GUI :
         self._initialize()
         # Re-connect interactions :
@@ -223,7 +233,7 @@ class CbarQt(object):
 
     def _fcn_Digits(self):
         """Change the number of digits."""
-        ndigits = self['digits'].value()
+        ndigits = self['ndigits'].value()
         if 0 < ndigits:
             self['ndigits'] = ndigits
             self.cbobjs['ndigits'] = self.cbviz.ndigits

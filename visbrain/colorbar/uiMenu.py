@@ -11,21 +11,32 @@ class uiMenu(object):
     def __init__(self):
         """Init."""
         # __________ CONFIG __________
-        self.actionSaveConfig.triggered.connect(self.saveConfig)
-        self.actionLoadConfig.triggered.connect(self.loadConfig)
+        self.actionSaveConfig.triggered.connect(self.saveCbarConfig)
+        self.actionLoadConfig.triggered.connect(self.loadCbarConfig)
         self.actionScreenshot.triggered.connect(self._fcn_screenshot)
 
-    def saveConfig(self):
+    def saveCbarConfig(self):
         """Save colorbar config."""
-        print(self.cbobjs.to_dict())
+        filename = dialogSave(self, 'Save config File', 'config',
+                              "Text file (*.txt);;All files (*.*)")
 
-    def loadConfig(self):
+        if filename:
+            self.cbobjs.save(filename)
+
+    def loadCbarConfig(self):
         """Load colorbar conf."""
-        pass
+        # Open dialog box :
+        filename = dialogLoad(self, 'Load config File', 'config',
+                              "Text file (*.txt);;All files (*.*)")
+
+        if filename:
+            self.cbobjs.load(filename)
+            self._fcn_ChangeObj(clean=True)
 
     def _fcn_screenshot(self):
         """Colorbar screenshot."""
         filename = dialogSave(self, 'Save config File', 'config',
                               "PNG file (*.png);;JPG file (*.jpg);;TIFF file"
                               " (*.tiff);;All files (*.*)")
-        write_fig_canvas(filename, self.cb._canvas, autocrop=True)
+        if filename:
+            write_fig_canvas(filename, self.cbviz._canvas, autocrop=True)

@@ -5,7 +5,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .CbarBase import CbarBase
-from ..color import array2colormap, color2vb
+from ..color import array2colormap, color2tuple
 from ..cameras import FixedCam
 
 
@@ -410,7 +410,7 @@ class CbarVisual(CbarBase):
     def under(self, value):
         """Set under value."""
         bck = self._under
-        self._under = color2vb(value)
+        self._under = color2tuple(value, float)
         self._build(bck is not value)
 
     # ----------- VMAX -----------
@@ -436,7 +436,7 @@ class CbarVisual(CbarBase):
     def over(self, value):
         """Set over value."""
         bck = self._over
-        self._over = color2vb(value)
+        self._over = color2tuple(value, float)
         self._build(bck is not value)
 
     ###########################################################################
@@ -489,7 +489,7 @@ class CbarVisual(CbarBase):
     @txtcolor.setter
     def txtcolor(self, value):
         """Set txtcolor value."""
-        self._txtcolor = color2vb(value)
+        self._txtcolor = color2tuple(value, float)
         self._build(False, 'txtcolor')
 
     # ----------- TXTSZ -----------

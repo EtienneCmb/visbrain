@@ -76,13 +76,17 @@ class Colorbar(uiInit, CbarQt):
         # Initialise GUI :
         uiInit.__init__(self)
 
-        obj1 = CbarBase(cmap='jet', vmin=-31, vmax=33, clim=(-32, 37), bgcolor='green', cblabel='OKiii !')
-        obj2 = CbarBase(cmap='viridis', vmin=2, vmax=4, clim=(21, 23))
         self.cbobjs = CbarObjetcs()
-        self.cbobjs.add_object('obj1', obj1)
-        self.cbobjs.add_object('obj2', obj2, overwrite=False)
-        self.cbobjs.select('obj1')
-
+        if config is not None:
+            self.cbobjs.load(config)
+        else:
+            if 'name' in kwargs.keys():
+                name = kwargs['name']
+                del kwargs['name']
+            else:
+                name = 'Colorbar'
+            obj1 = CbarBase(**kwargs)
+            self.cbobjs.add_object(name, obj1, overwrite=False)
         CbarQt.__init__(self, self.guiW, self.vizW)
 
     def show(self):
