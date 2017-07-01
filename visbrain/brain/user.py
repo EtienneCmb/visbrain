@@ -8,7 +8,6 @@ Brain instance.
 
 import numpy as np
 from scipy.spatial import ConvexHull
-import os
 
 from .base.visuals import BrainMesh
 from .base.SourcesBase import SourcesBase
@@ -39,30 +38,32 @@ class userfcn(object):
 
         The rotation is applied on every objects on the scene.
 
-        Kargs:
-            fixed: string, optional, (def: 'axial')
-                Predefined rotation. Use either 'axial', 'coronal' or
-                'sagittal'. As a complement, use the suffixe '_0' or
-                '_1' to switch between possible views.
+        Parameters
+        ----------
+        fixed : string | 'axial'
+            Predefined rotation. Use either 'axial', 'coronal' or
+            'sagittal'. As a complement, use the suffixe '_0' or
+            '_1' to switch between possible views.
 
-                * 'axial_0/1': switch between top/bottom view
-                * 'coronal_0/1': switch between front/back view
-                * 'sagittal_0/1': switch between left/right view
+            * 'axial_0/1': switch between top/bottom view
+            * 'coronal_0/1': switch between front/back view
+            * 'sagittal_0/1': switch between left/right view
 
-            custom: tuple, optional, (def: None)
-                Custom rotation. The custom parameter must be a
-                tuple of two float respectively for azimuth and
-                elevation.
+        custom : tuple | None
+            Custom rotation. The custom parameter must be a
+            tuple of two float respectively for azimuth and
+            elevation.
 
-        Example:
-            >>> # Define a Brain instance :
-            >>> vb = Brain()
-            >>> # Predefined rotation :
-            >>> vb.rotate(fixed='sagittal_1')
-            >>> # Custom rotation :
-            >>> vb.rotate(custom=(90.0, 0.0))
-            >>> # Show the GUI :
-            >>> vb.show()
+        Examples
+        --------
+        >>> # Define a Brain instance :
+        >>> vb = Brain()
+        >>> # Predefined rotation :
+        >>> vb.rotate(fixed='sagittal_1')
+        >>> # Custom rotation :
+        >>> vb.rotate(custom=(90.0, 0.0))
+        >>> # Show the GUI :
+        >>> vb.show()
         """
         self._rotate(fixed=fixed, custom=custom)
 
@@ -73,31 +74,32 @@ class userfcn(object):
         displayed. The colorbar has it own canvas and the background set will
         be the same as the one of the main canvas.
 
-        Kargs:
-            color: tuple/string, optional, (def: (.1, .1, .1))
-                The color to use for the background color of the main canvas.
-                The color can either be a tuple of integers (R, G, B),
-                a matplotlib color (string) or a hexadecimal color (string).
+        Parameters
+        ----------
+        color: tuple/string, optional, (def: (.1, .1, .1))
+            The color to use for the background color of the main canvas.
+            The color can either be a tuple of integers (R, G, B),
+            a matplotlib color (string) or a hexadecimal color (string).
 
-        Example:
-            >>> # Define a Brain instance :
-            >>> vb = Brain()
-            >>> # Set the background color (using a RGB tuple) :
-            >>> vb.background_color(color=(1., 1., 1.))
-            >>> # Set the background color (using matplotlib format) :
-            >>> vb.background_color(color='white')
-            >>> # Set the background color (using hexadecimal format) :
-            >>> vb.background_color(color='#ffffff')
-            >>> # Show the GUI :
-            >>> vb.show()
+        Examples
+        --------
+        >>> # Define a Brain instance :
+        >>> vb = Brain()
+        >>> # Set the background color (using a RGB tuple) :
+        >>> vb.background_color(color=(1., 1., 1.))
+        >>> # Set the background color (using matplotlib format) :
+        >>> vb.background_color(color='white')
+        >>> # Set the background color (using hexadecimal format) :
+        >>> vb.background_color(color='#ffffff')
+        >>> # Show the GUI :
+        >>> vb.show()
         """
         bckcolor = color2vb(color).ravel()[0:-1]
         self.view.canvas.bgcolor = bckcolor
-        self.view.cbcanvas.bgcolor = bckcolor
 
     def screenshot(self, name, region=None, zoom=None, colorbar=False,
-                   cbregion=None, cbzoom=None, transparent=False,
-                   resolution=3000., autocrop=False):
+                   cbzoom=None, transparent=False, resolution=3000.,
+                   autocrop=False):
         """Take a screenshot of the current scene and save it as a picture.
 
         This method try to make a high-fidelity screenshot of your scene.
@@ -133,9 +135,6 @@ class userfcn(object):
 
             colorbar: bool, optional, (def: False)
                 Specify if the colorbar has to be exported too.
-
-            cbregion: tuple, optional, (def: None)
-                Same parameter as the region but applied on the colorbar canvas
 
             cbzoom: float, optional, (def: None)
                 Define the zoom level over the colorbar canvas.
@@ -188,35 +187,26 @@ class userfcn(object):
                                  "width, height)")
         self._autocrop = autocrop
 
-        if cbregion is not None:
-            if isinstance(region, (tuple, list)) and (len(region) == 4):
-                self._cbcrop = cbregion
-            else:
-                raise ValueError("The cbregion parameter must be a tuple of"
-                                 "four integers describing (x_start, y_start, "
-                                 "width, height)")
-
         # Define screenshot resolution :
         if isinstance(resolution, (int, float)):
             self._uirez = float(resolution)
 
         # Define if the colorbar has to be exported :
-        if isinstance(colorbar, bool):
-            self.cb['export'] = colorbar
-        else:
+        if not isinstance(colorbar, bool):
             raise ValueError("The colorbar parameter must be a bool describing"
                              " if the colorbar have to exported too.")
+        self._cbarexport = colorbar
 
         # Force transparent background :
         if transparent:
             self.view.canvas.bgcolor = [0.] * 4
-            self.view.cbcanvas.bgcolor = [0.] * 4
+            self.cbqt.cbviz._canvas.bgcolor = [0.] * 4
 
         # Zoom :
         if (zoom is not None) and isinstance(zoom, (float, int)):
             self.view.wc.camera.scale_factor = zoom
         if (cbzoom is not None) and isinstance(cbzoom, (float, int)):
-            self.view.cbwc.camera.scale_factor = cbzoom
+            self.cbqt.cbviz._wc.camera.scale_factor = cbzoom
 
         self._fcn_screenshotCan()
 
@@ -330,7 +320,7 @@ class userfcn(object):
                 raise ValueError("The reflect_on parameter must be either "
                                  "'internal' or 'external'")
             else:
-                eval('self.q_' + reflect_on + '.setChecked(True)')
+                self._brainTransp.setChecked(reflect_on == 'internal')
         self._light_reflection()
 
     def add_mesh(self, name, vertices, faces, **kwargs):
@@ -649,7 +639,7 @@ class userfcn(object):
         for i, k in zip(['cmap', 'clim', 'vmin', 'vmax', 'under', 'over'],
                         [cmap, clim, vmin, vmax, under, over]):
             if k is not None:
-                self.sources._cb[i] = k
+                self.cbqt.cbobjs._objs['Projection'][i] = k
 
     def sources_fit(self, obj='brain'):
         """Force sources coordinates to fit to a selected object.
@@ -855,7 +845,7 @@ class userfcn(object):
                                  "'internal' or 'external'")
             else:
                 eval('self.struct_' + reflect_on.capitalize(
-                                            ) + '.setChecked(True)')
+                ) + '.setChecked(True)')
 
         self._area_light_reflection()
 
@@ -904,3 +894,15 @@ class userfcn(object):
             >>> print(lst)
         """
         return str(self.area)
+
+    # =========================================================================
+    # =========================================================================
+    #                             COLORBAR
+    # =========================================================================
+    # =========================================================================
+    def colorbar_control(self, name, cmap):
+        """Control the colorbar of a specific object.
+
+
+        """
+        pass

@@ -31,7 +31,7 @@ class uiConfig(object):
             config['CbarViz'] = self.menuDispCbar.isChecked()
             # ----------------- CAMERAS -----------------
             config['CamState'] = self.view.wc.camera.get_state()
-            rect = self.view.cbwc.camera.rect
+            rect = self.cbqt.cbviz._wc.camera.rect
             config['CamCbState'] = list(rect.pos) + list(rect.size)
             # ----------------- GUI SETTINGS -----------------
             # Background color :
@@ -82,9 +82,8 @@ class uiConfig(object):
             config['RoiStruct'] = struct2add
             # ----------------- CBAR -----------------
             # Visual:
-            dico = self.cb.colorbarW.to_dict()
-            del dico["bgcolor"]  # Don't to save the background color
-            config['CbarVisual'] = dico
+            config['Cbar'] = self.cbqt.cbobjs.to_dict(alldicts=True)
+            config['CbarIdx'] = self.cbqt.cbui.object.currentIndex()
 
             # Write the configuration into a json file :
             save_config_json(filename, config)
@@ -111,7 +110,7 @@ class uiConfig(object):
                 try:
                     exec(string)
                 except:
-                    warn("Cannot execute for loading the config : "+string)
+                    warn("Cannot execute for loading the config : " + string)
 
             # ----------------- VISIBLE OBJECTS -----------------
             # Settings :
@@ -135,7 +134,7 @@ class uiConfig(object):
             _try("self._fcn_menuCbar()")
             # ----------------- CAMERA -----------------
             _try("self.view.wc.camera.set_state(config['CamState'])")
-            _try("self.view.cbwc.camera.rect=config['CamCbState']")
+            _try("self.cbqt.cbviz._wc.camera.rect=config['CamCbState']")
             # ----------------- BRAIN -----------------
             _try("self._brainTransp.setChecked(config['BrainTransp'])")
             _try("self._brainPickHemi.setCurrentIndex(config["
@@ -191,13 +190,20 @@ class uiConfig(object):
             # ----------------- GUI SETTINGS -----------------
             # Background color :
             rgb = config['BcgColor']
-            _try("self.bgd_red.setValue("+str(rgb[0])+")")
-            _try("self.bgd_green.setValue("+str(rgb[1])+")")
-            _try("self.bgd_blue.setValue("+str(rgb[2])+")")
+            _try("self.bgd_red.setValue(" + str(rgb[0]) + ")")
+            _try("self.bgd_green.setValue(" + str(rgb[1]) + ")")
+            _try("self.bgd_blue.setValue(" + str(rgb[2]) + ")")
             _try("self._fcn_bgd_color()")
             # Tab :
             _try("self.QuickSettings.setCurrentIndex(config["
                  "'CurrentTab'])")
             # ----------------- CBAR -----------------
             # Cbar visual :
-            _try("self.cb.colorbarW.from_dict(config['CbarVisual'])")
+            _try("self.cbqt.cbobjs.from_dict(config['Cbar'])")
+            _try("self.cbqt._disconnect()")
+            _try("self.cbqt._initialize()")
+            _try("self.cbqt._connect()")
+            _try("self.cbqt.link('Projection', self._fcn_link_proj, "
+                 "self._fcn_minmax_proj)")
+            _try("self.cbqt.link('Connectivity', self._fcn_link_connect, "
+                 "self._fcn_minmax_connect)")

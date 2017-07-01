@@ -330,12 +330,17 @@ class BrainVisual(Visual):
             # Recenter the brain around (0, 0, 0) and rescale it:
             self._btransform = vpnormalize(vertices, 2 * self._scaleFactor)
 
-            # Keep maximum/minimum pear coordinates :
+            # Keep maximum/minimum per coordinates :
             self._vertsize = [(vertices[:, 0, 0].min(),
                                vertices[:, 0, 0].max()),
                               (vertices[:, 1, 0].min(),
                                vertices[:, 1, 0].max()),
                               (vertices[:, 2].min(), vertices[:, 2].max())]
+            self._vertsize = np.array(self._vertsize)
+
+            # Find ratio for the camera :
+            self._camratio = self._vertsize.max(1) * 2
+            self._camratio *= self._scaleFactor / self._camratio.max()
 
         # Load only left/ritgh hemisphere :
         if hemisphere in ['left', 'right']:

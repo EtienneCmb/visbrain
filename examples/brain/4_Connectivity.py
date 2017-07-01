@@ -58,7 +58,8 @@ kwargs['s_edgewidth'] = 0
 
 # Colormap properties (for sources) :
 kwargs['s_cmap'] = 'Spectral_r'				# Matplotlib colormap
-kwargs['s_cmap_vmin'], kwargs['s_cmap_vmax'] = -40, 21
+kwargs['s_cmap_clim'] = (-50., 50.)
+kwargs['s_cmap_vmin'], kwargs['s_cmap_vmax'] = None, 21
 kwargs['s_cmap_under'], kwargs['s_cmap_over'] = 'midnightblue', "#e74c3c"
 
 # Colormap properties (for connectivity) :
@@ -76,7 +77,7 @@ kwargs['c_radiusmin'] = 4
 kwargs['c_dynamic'] = (0.1, 1)
 
 # Atlas template and opacity :
-kwargs['a_template'] = 'B2'
+kwargs['a_template'] = 'B1'
 
 # Set font size, color and label for the colorbar :
 kwargs['cb_fontsize'] = 15

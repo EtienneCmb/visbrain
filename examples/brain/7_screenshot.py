@@ -32,7 +32,6 @@ kwargs['cb_fontcolor'] = 'black'
 # (this configuration has been tested on a 17" laptop) :
 region = (1200, 200, 500, 600)     # Crop your figure using this region
 cbzoom = 50.                       # Zoom level over the colobar canvas
-cbregion = (2500, 100, 200, 600)   # Crop the colorbar canvas
 
 # Create a brain instance :
 vb = Brain(**kwargs)
@@ -59,8 +58,7 @@ vb.rotate(custom=(-210, 10.))           # Rotate the brain
 vb.brain_control(show=False)            # Hide the brain
 vb.screenshot('screenshot3.png',        # Export with transparent background and colorbar
               region=region,
-              transparent=True, cbzoom=cbzoom, cbregion=cbregion,
-              colorbar=True)
+              transparent=False, colorbar=True)
 
 # Alternatively, you can display the GUI at the end, but it's not a necessity :
 # vb.show()

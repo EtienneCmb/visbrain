@@ -65,8 +65,12 @@ class uiConnectivity(object):
         else:
             self._densityPanel.setVisible(False)
         self.connect.needupdate = True
-        self.connect._cb['vmin'] = None
-        self.connect._cb['vmax'] = None
+        self.cbobjs._objs['Connectivity']._vmin = None
+        self.cbobjs._objs['Connectivity']._isvmin = False
+        self.cbobjs._objs['Connectivity']._vmax = None
+        self.cbobjs._objs['Connectivity']._isvmax = False
+        self.connect._vmin = self.connect._vmax = None
+        self.connect._isvmin = self.connect._isvmax = False
         # Get density radius :
         self.connect.dradius = self._densityRadius.value()
         # Update color :
@@ -95,7 +99,7 @@ class uiConnectivity(object):
         self.connect._check_color()
 
         if update:
-            self._auto_scale()
+            self.cbqt._fcn_cbAutoscale(name='Connectivity')
 
     def _getMinMax_dyn(self):
         """Dynamic lines opacity.

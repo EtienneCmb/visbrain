@@ -62,8 +62,8 @@ class CbarObjetcs(object):
             raise ValueError("name must be a string.")
         # Test if the name is free :
         if not overwrite and (name in self._objs.keys()):
-            raise ValueError("The colorbar object '"+name+"' already exist. "
-                             "Use an other name")
+            raise ValueError("The colorbar object '" + name + "' already "
+                             "exist. Use an other name")
         if isinstance(obj, CbarBase):
             self._selected = name
             self._objs[name] = obj
@@ -74,9 +74,12 @@ class CbarObjetcs(object):
         """Return a dictionary for input arguments."""
         return self._objs[self._selected].to_kwargs()
 
-    def to_dict(self):
+    def to_dict(self, alldicts=False):
         """Return a dictionary of all colorbar args."""
-        return self._objs[self._selected].to_dict()
+        if alldicts:
+            return {k: i.to_dict() for k, i in self._objs.items()}
+        else:
+            return self._objs[self._selected].to_dict()
 
     def keys(self):
         """Return the list of entries in the object dict."""
@@ -120,6 +123,25 @@ class CbarObjetcs(object):
         if (select is None) or (select not in self._objs.keys()):
             self._selected = list(self._objs.keys())[0]
 
+    def from_dict(self, dico, clean=True):
+        """Define cbar objects from dictionary."""
+        # Clean :
+        if clean:
+            self._objs = {}
+        # Load objects :
+        for k, i in dico.items():
+            self._objs[k] = CbarBase(**i)
+
     def update(self):
         """Update function when an attribute change."""
         self._objs[self._selected]._fcn()
+
+    def autoscale(self):
+        """Execute autoscale function associated to the object."""
+        self._objs[self._selected]._minmaxfcn()
+
+    # ----------- NAME -----------
+    @property
+    def name(self):
+        """Get the name value."""
+        return self._selected

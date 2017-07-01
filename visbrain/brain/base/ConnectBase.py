@@ -10,13 +10,13 @@ from warnings import warn
 
 import vispy.scene.visuals as visu
 
-from ...utils import _colormap, color2vb, array2colormap, normalize
+from ...utils import CbarArgs, color2vb, array2colormap, normalize
 
 
 __all__ = ['ConnectBase']
 
 
-class ConnectBase(_colormap):
+class ConnectBase(CbarArgs):
     """Base class for connecivity managment.
 
     From all inputs arguments, this class use only those containing 'c_'
@@ -26,7 +26,7 @@ class ConnectBase(_colormap):
     def __init__(self, _xyz=[], c_xyz=None, c_connect=None, c_select=None,
                  c_colorby='strength', c_dynamic=None, c_cmap='viridis',
                  c_cmap_vmin=None, c_cmap_vmax=None, c_colval=None,
-                 c_cmap_under=None, c_cmap_over=None, c_cmap_clim=None,
+                 c_cmap_under=None, c_cmap_over=None, c_cmap_clim=(0., 1.),
                  c_linewidth=3., c_dradius=30., c_blxyz=.1, c_blradius=13.,
                  c_bundling=False, **kwargs):
         """Init."""
@@ -55,15 +55,16 @@ class ConnectBase(_colormap):
         self.blinterp = 100
 
         # Initialize colormap :
-        _colormap.__init__(self, c_cmap, c_cmap_clim, c_cmap_vmin, c_cmap_vmax,
-                           c_cmap_under, c_cmap_over, c_connect)
+        isvmin, isvmax = c_cmap_vmin is not None, c_cmap_vmax is not None
+        CbarArgs.__init__(self, c_cmap, c_cmap_clim, isvmin, c_cmap_vmin,
+                          isvmax, c_cmap_vmax, c_cmap_under, c_cmap_over)
 
         # Object creation :
         if (self.xyz is not None) and (self.connect is not None):
-            self.mesh = visu.Line(name='Connectivity', antialias=True)
+            self.mesh = visu.Line(name='Connectivity', antialias=False)
             self.mesh.set_gl_state('translucent')
             self.update()
-            self._maskbck = self.connect.mask.copy() 
+            self._maskbck = self.connect.mask.copy()
         else:
             self.mesh = visu.Line(name='NoneConnect')
 
@@ -150,9 +151,9 @@ class ConnectBase(_colormap):
 
         # ================== MinMax ==================
         # Get (min / max) :
-        self._MinMax = (self._all_nnz.min(), self._all_nnz.max())
+        self._minmax = (self._all_nnz.min(), self._all_nnz.max())
         if self.needupdate:
-            self._cb['clim'] = self._MinMax
+            self._clim = self._minmax
 
         # ================== GET COLOR ==================
         # ----------- User specific color -----------
@@ -164,12 +165,12 @@ class ConnectBase(_colormap):
 
         # ----------- Colormap -----------
         else:
-            colormap = array2colormap(self._all_nnz, cmap=self._cb['cmap'],
-                                      vmin=self._cb['vmin'],
-                                      vmax=self._cb['vmax'],
-                                      under=self._cb['under'],
-                                      over=self._cb['over'],
-                                      clim=self._cb['clim'])
+            colormap = array2colormap(self._all_nnz, cmap=self._cmap,
+                                      vmin=self._vmin,
+                                      vmax=self._vmax,
+                                      under=self._under,
+                                      over=self._over,
+                                      clim=self._clim)
 
             # Dynamic alpha :
             if (self.dynamic is not False) and isinstance(self.dynamic, tuple):
@@ -257,3 +258,9 @@ class ConnectBase(_colormap):
     def lw(self, value):
         """Set lw value."""
         self.mesh.set_data(width=value)
+
+    # ----------- NAME -----------
+    @property
+    def name(self):
+        """Get the name value."""
+        return self.mesh.name

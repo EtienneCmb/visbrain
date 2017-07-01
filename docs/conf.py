@@ -37,6 +37,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
+    'numpydoc',
 ]
 #     'sphinx.ext.githubpages',
 

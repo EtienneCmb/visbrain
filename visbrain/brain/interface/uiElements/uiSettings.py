@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Main class for settings managment (save / load / light / cameras...)."""
+import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtGui import QPalette, QFont
 
@@ -22,6 +23,7 @@ class uiSettings(object):
         # ------------- Help -------------
         self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
         self.actionDocumentation.triggered.connect(self._fcn_openDoc)
+        self.QuickSettings.currentChanged.connect(self._fcn_tab_changed)
 
         # =============================================================
         # SCREENSHOT
@@ -94,6 +96,17 @@ class uiSettings(object):
         import webbrowser
         webbrowser.open('http://etiennecmb.github.io/visbrain/brain.html')
 
+    def _fcn_tab_changed(self):
+        """Executed function when the user change the tab."""
+        # Get tab name :
+        tabname = str(self.QuickSettings.currentWidget().objectName())
+        # 
+        if (tabname == 'q_CONNECT') and (self.connect.name != 'NoneConnect'):
+            self.cbqt.select('Connectivity')
+        elif (tabname == 'q_SOURCES') and (self.sources.name != 'NoneSources'):
+            if self._modproj is not None:
+                self.cbqt.select('Projection')
+
     # =============================================================
     # SCREENSHOT
     # =============================================================
@@ -128,19 +141,17 @@ class uiSettings(object):
         viz = self._ssCbEnable.isChecked()
         self.menuDispCbar.setChecked(viz)
         self._fcn_menuCbar()
-        self.cb['export'] = viz
 
     def _fcn_bgd_color(self):
         """Change canvas background color."""
         bgd = (self.bgd_red.value(), self.bgd_green.value(),
                self.bgd_blue.value())
         self.view.canvas.bgcolor = bgd
-        self.view.cbcanvas.bgcolor = bgd
 
     # =============================================================
     # ROTATION
     # =============================================================
-    def _rotate(self, fixed=None, custom=None):
+    def _rotate(self, fixed=None, custom=None, margin=0.08):
         """Rotate the scene elements using a predefined or a custom rotation.
 
         The rotation is applied on every objects on the scene.
@@ -190,6 +201,7 @@ class uiSettings(object):
                     azimuth, elevation = 90, 0
                     self.atlas.sagittal = 0
                 self.atlas.coronal, self.atlas.axial = 0, 0
+                scale_factor = 2 * self.atlas.mesh._camratio[0]
             # Coronal (front, back)
             elif view == 'coronal':
                 if self.atlas.coronal == 0:  # Front
@@ -199,6 +211,7 @@ class uiSettings(object):
                     azimuth, elevation = 0, 0
                     self.atlas.coronal = 0
                 self.atlas.sagittal, self.atlas.axial = 0, 0
+                scale_factor = 2 * self.atlas.mesh._camratio[1]
             # Axial (top, bottom)
             elif view == 'axial':
                 if self.atlas.axial == 0:  # Top
@@ -208,18 +221,20 @@ class uiSettings(object):
                     azimuth, elevation = 0, -90
                     self.atlas.axial = 0
                 self.atlas.sagittal, self.atlas.coronal = 0, 0
+                scale_factor = 2 * self.atlas.mesh._camratio[2]
         elif custom is not None:
             azimuth, elevation = custom[0], custom[1]
+            scale_factor = 2 * self.atlas.mesh._camratio[2]
 
         # Set camera and range :
         self.view.wc.camera.azimuth = azimuth
         self.view.wc.camera.elevation = elevation
-        self._set_cam_range()
+        self.view.wc.camera.scale_factor = (1. + margin) * scale_factor
 
     def _set_cam_range(self, name='turntable'):
         """Set the camera range."""
         dic = self._xyzRange[name]
-        self.view.wc.camera.set_range(x=dic['x'], y=dic['x'], z=dic['z'])
+        self.view.wc.camera.set_range(x=dic['x'], y=dic['y'], z=dic['z'])
 
     # =============================================================
     # LIGHT
@@ -328,10 +343,11 @@ class uiSettings(object):
         distance) at the bottom of the setting panel.
         """
         # Define and set the rotation string :
-        rotstr = 'Azimuth: {az}°, Elevation: {el}°, Distance: {di}'
+        rotstr = 'Azimuth: {a}°, Elevation: {e}°, Distance: {d}, Scale: {s}'
         # Get camera Azimuth / Elevation / Distance :
-        az = str(self.view.wc.camera.azimuth)
-        el = str(self.view.wc.camera.elevation)
-        di = str(round(self.view.wc.camera.distance * 100) / 100)
+        a = str(self.view.wc.camera.azimuth)
+        e = str(self.view.wc.camera.elevation)
+        d = str(np.around(self.view.wc.camera.distance, 2))
+        s = str(np.around(self.view.wc.camera.scale_factor, 2))
         # Set the text to the box :
-        self.userRotation.setText(rotstr.format(az=az, el=el, di=di))
+        self.userRotation.setText(rotstr.format(a=a, e=e, d=d, s=s))

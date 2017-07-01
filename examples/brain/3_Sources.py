@@ -39,6 +39,7 @@ kwargs['s_cmap_vmin'] = -60                 # Define a minimum
 kwargs['s_cmap_vmax'] = 60                  # Define a maximum
 kwargs['s_cmap_under'] = 'gray'             # Every values under vmin are going to be gray
 kwargs['s_cmap_over'] = (0.1, 0.1, 0.1, 1)  # Every values over vmax are going to be black
+kwargs['s_cmap_clim'] = (-70, 70)
 
 # If you want to customize the colormap, display the quick settings menu (or CTRL+D)
 # and checked the button 'See live changement of colormap settings'

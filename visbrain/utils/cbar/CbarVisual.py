@@ -87,7 +87,7 @@ class CbarVisual(CbarBase):
         if parent is None:
             # Define a canvas :
             self._canvas = scene.SceneCanvas(keys='interactive', show=False,
-                                             resizable=True,
+                                             resizable=True, dpi=600,
                                              bgcolor=self._bgcolor)
             self._wc = self._canvas.central_widget.add_view()
             parent = self._wc.scene
@@ -132,7 +132,7 @@ class CbarVisual(CbarBase):
                                     anchor_x='left')
 
         # Cblabel :
-        self._mcblabel = visuals.Text(parent=self._cbNode, name='Cblabel',
+        self._mcblabel = visuals.Text(parent=self._limNode, name='Cblabel',
                                       color=self._txtcolor, anchor_x='center',
                                       font_size=self._cbtxtsz)
         self._mcblabel.rotation = -90
@@ -164,7 +164,7 @@ class CbarVisual(CbarBase):
             assert (self._vmax is None) or isinstance(self._vmax, (int, float))
             return True
         except:
-            return False
+            raise ValueError("Error in checking")
 
     def _setter(self, toset):
         # _____________________ IMAGE _____________________
@@ -179,7 +179,8 @@ class CbarVisual(CbarBase):
         # _____________________ VMIN/VMAX _____________________
         # ------------ VMIN ------------
         if toset in ['all', 'vmin']:
-            if (self._vmin is not None) and (clim[0] < self._vmin < clim[1]):
+            isnn = (self._vmin is not None) and self._isvmin
+            if isnn and (clim[0] < self._vmin < clim[1]):
                 self._mVm.visible = True
                 self._mVm.text = str(self._digits(self._vmin))
                 self._mVm.pos = (self.txtsh, self._conv(self._vmin), -3.)
@@ -187,7 +188,8 @@ class CbarVisual(CbarBase):
                 self._mVm.visible = False
         # ------------ VMAX ------------
         if toset in ['all', 'vmax']:
-            if (self._vmax is not None) and (clim[0] < self._vmax < clim[1]):
+            isnn = (self._vmax is not None) and self._isvmax
+            if isnn and (clim[0] < self._vmax < clim[1]):
                 self._mVM.visible = True
                 self._mVM.text = str(self._digits(self._vmax))
                 self._mVM.pos = (self.txtsh, self._conv(self._vmax), -3.)
@@ -233,10 +235,12 @@ class CbarVisual(CbarBase):
             # Generate a sample vector between clim :
             sample = np.linspace(self._clim[0], self._clim[1], self._n,
                                  endpoint=True)
+            # Avoid setting vmin/vmax if checkboxes inactives :
+            vmin = self._vmin if self._isvmin else None
+            vmax = self._vmax if self._isvmax else None
             # Get the associated colormap :
-            cp = array2colormap(sample, cmap=self._cmap, vmin=self._vmin,
-                                vmax=self._vmax, under=self._under,
-                                over=self._over)
+            cp = array2colormap(sample, cmap=self._cmap, vmin=vmin,
+                                vmax=vmax, under=self._under, over=self._over)
             self._colormap = cp[:, np.newaxis, :]
         self._setter(toset)
         self._update()
@@ -387,6 +391,19 @@ class CbarVisual(CbarBase):
         self._clim = value
         self._build(bck is not value, 'all')
 
+    # ----------- ISVMIN -----------
+    @property
+    def isvmin(self):
+        """Get the isvmin value."""
+        return self._isvmin
+
+    @isvmin.setter
+    def isvmin(self, value):
+        """Set isvmin value."""
+        bck = self._isvmin
+        self._isvmin = value
+        self._build(bck is not value, 'vmin')
+
     # ----------- VMIN -----------
     @property
     def vmin(self):
@@ -412,6 +429,19 @@ class CbarVisual(CbarBase):
         bck = self._under
         self._under = color2tuple(value, float)
         self._build(bck is not value)
+
+    # ----------- ISVMAX -----------
+    @property
+    def isvmax(self):
+        """Get the isvmax value."""
+        return self._isvmax
+
+    @isvmax.setter
+    def isvmax(self, value):
+        """Set isvmax value."""
+        bck = self._isvmax
+        self._isvmax = value
+        self._build(bck is not value, 'vmax')
 
     # ----------- VMAX -----------
     @property

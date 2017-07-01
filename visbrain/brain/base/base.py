@@ -15,15 +15,13 @@ The following elements are initialized :
     can have access to the previously defined elements.
 """
 
-from vispy.scene import Node
+from vispy import scene
 
 from .AtlasBase import AtlasBase
 from .SourcesBase import SourcesBase
 from .ConnectBase import ConnectBase
 from .RoiBase import RoiBase
 from .projection import Projections
-
-from ...utils import CbarObjetcs, CbarBase
 
 
 class base(Projections):
@@ -47,7 +45,7 @@ class base(Projections):
         self.connect = ConnectBase(_xyz=self.sources.xyz,
                                    c_xyz=self.sources.xyz, **kwargs)
         self.area = RoiBase(scale_factor=self.atlas._scaleMax,
-                             name='NoneArea', select=None, color='#ab4642')
+                            name='NoneArea', select=None, color='#ab4642')
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -58,7 +56,7 @@ class base(Projections):
         # corresponding object.
 
         # Sources panel:
-        if self.sources.mesh.name is 'NoneSources':
+        if self.sources.name is 'NoneSources':
             # Disable menu :
             self.menuDispSources.setChecked(False)
             self.menuDispSources.setEnabled(False)
@@ -78,7 +76,7 @@ class base(Projections):
             self.grpText.setEnabled(False)
 
         # Connectivity panel:
-        if self.connect.mesh.name == 'NoneConnect':
+        if self.connect.name == 'NoneConnect':
             # Disable menu :
             self.menuDispConnect.setEnabled(False)
             self.menuDispConnect.setChecked(False)
@@ -91,24 +89,21 @@ class base(Projections):
             self.o_Connect.setEnabled(False)
         self._lw = kwargs.get('c_linewidth', 4.)
 
-        # ---------- Colorbar objects ----------
-        # Create the cbar objects anager :
-        self.cbobjs = CbarObjetcs()
-        self.cbobjs.add_object('Projection', CbarBase(**self.sources._cb))
-        self.cbobjs.add_object('Connectivity', CbarBase(fcn=self.connect.update, **self.connect._cb))
-
         # ---------- Put everything in a root node ----------
         # Here, each object is put in a root node so that each transformation
         # can be applied to all elements.
 
         # Create a root node :
-        self._vbNode = Node(name='visbrain')
+        self._vbNode = scene.Node(name='visbrain')
 
         # Make this root node the parent of others Brain objects :
         self.atlas.mesh.parent = self._vbNode
         self.sources.mesh.parent = self._vbNode
         self.connect.mesh.parent = self._vbNode
         self.sources.stextmesh.parent = self._vbNode
+
+        # Add XYZ axis (debugging : x=red, y=green, z=blue)
+        # scene.visuals.XYZAxis(parent=self._vbNode)
 
         # Add a rescale / translate transformation to the Node :
         self._vbNode.transform = self.atlas.transform

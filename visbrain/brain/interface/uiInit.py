@@ -12,7 +12,7 @@ from vispy import app, scene
 from .gui import Ui_MainWindow
 from ...utils import color2vb
 
-__all__ = ['uiInit']
+__all__ = ('uiInit')
 
 
 class vbShortcuts(object):
@@ -76,7 +76,7 @@ class vbShortcuts(object):
 
                 # Colormap :
             elif event.text == 'a':
-                self._auto_scale()
+                self.cbqt._fcn_cbAutoscale()
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):
@@ -120,8 +120,7 @@ class vbShortcuts(object):
 class vbCanvas(object):
     """This class is responsible of cannvas creation.
 
-    The main canvas in which the brain is displayed (canvas) and the canvas
-    for the colorbar (cbcanvas)
+    The main canvas in which the brain is displayed.
 
     Kargs:
         bgcolor: tuple, optional, (def: (0, 0, 0))

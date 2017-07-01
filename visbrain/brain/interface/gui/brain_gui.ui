@@ -3758,14 +3758,28 @@ division</string>
       <addaction name="menuSaveScreenCan"/>
       <addaction name="menuSaveScreenWin"/>
      </widget>
+     <widget class="QMenu" name="menuConfig">
+      <property name="title">
+       <string>Config</string>
+      </property>
+      <addaction name="menuSaveGuiConfig"/>
+      <addaction name="menuSaveCbarConfig"/>
+     </widget>
      <addaction name="menuScreenshot"/>
-     <addaction name="menuSaveConfig"/>
+     <addaction name="menuConfig"/>
     </widget>
     <widget class="QMenu" name="menuLoad">
      <property name="title">
       <string>Load</string>
      </property>
-     <addaction name="menuLoadConfig"/>
+     <widget class="QMenu" name="menuConfig_2">
+      <property name="title">
+       <string>Config</string>
+      </property>
+      <addaction name="menuLoadGuiConfig"/>
+      <addaction name="menuLoadCbarConfig"/>
+     </widget>
+     <addaction name="menuConfig_2"/>
     </widget>
     <addaction name="menuSave"/>
     <addaction name="menuLoad"/>
@@ -3776,8 +3790,15 @@ division</string>
     <property name="title">
      <string>Project</string>
     </property>
-    <addaction name="menuCortProj"/>
-    <addaction name="menuCortRep"/>
+    <widget class="QMenu" name="menuRun_projection">
+     <property name="title">
+      <string>Run projection</string>
+     </property>
+     <addaction name="menuCortProj"/>
+     <addaction name="menuCortRep"/>
+    </widget>
+    <addaction name="menuRun_projection"/>
+    <addaction name="actionClean_projection"/>
    </widget>
    <widget class="QMenu" name="menuDisplay">
     <property name="title">
@@ -4126,14 +4147,29 @@ division</string>
     <string>Config</string>
    </property>
   </action>
-  <action name="menuSaveConfig">
+  <action name="menuSaveGuiConfig">
    <property name="text">
-    <string>Config</string>
+    <string>GUI config</string>
    </property>
   </action>
-  <action name="menuLoadConfig">
+  <action name="menuSaveCbarConfig">
    <property name="text">
-    <string>Config</string>
+    <string>Cbar config</string>
+   </property>
+  </action>
+  <action name="menuLoadGuiConfig">
+   <property name="text">
+    <string>GUI config</string>
+   </property>
+  </action>
+  <action name="menuLoadCbarConfig">
+   <property name="text">
+    <string>Cbar config</string>
+   </property>
+  </action>
+  <action name="actionClean_projection">
+   <property name="text">
+    <string>Clean projection</string>
    </property>
   </action>
  </widget>

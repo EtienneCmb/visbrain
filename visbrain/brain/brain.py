@@ -15,15 +15,15 @@ import vispy.app as visapp
 import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
-from .base import base
+from .interface.uiInit import vbShortcuts
+from .base import base, BrainCbar
 from .user import userfcn
 from ..utils import ShortcutPopup
-from ..utils import CbarQt, CbarObjetcs, CbarBase
 import sip
 sip.setdestroyonexit(False)
 
 
-class Brain(uiInit, uiElements, base, userfcn):
+class Brain(uiInit, uiElements, base, BrainCbar, userfcn):
     """Visualization of neuroscientic data on a standard MNI brain.
 
     Kargs:
@@ -182,25 +182,9 @@ class Brain(uiInit, uiElements, base, userfcn):
         ui_autocrop: bool, optional, (def: False)
             Automaticaly crop figures when saving.
 
-        ui_cbregion: tuple, optional, (def: None)
-            Crop the exportation of the colorbar canvas to the region define by
-            (x, y, width, height).
-
         ui_resolution: float, optional, (def: 3000)
             Define the screenshot resolution by indicating the number of times
             the definition of your screen must be multiplied.
-
-        cb_label: string, optional, (def: '')
-            Colorbar label.
-
-        cb_export: bool, optional, (def: True)
-            Control if the colorbor must be exported when doing a screenshot
-
-        cb_fontsize: int, optional, (def: 15)
-            Font-size of colorbar text (min / max / title)
-
-        cb_fontcolor: string, optional, (def: 'white')
-            Font-color of colorbar text (min / max / title)
 
         l_position: tuple, optional, (def: (100., 100., 100.))
             Position of the light
@@ -241,16 +225,13 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._savename = kwargs.get('ui_savename', None)
         self._crop = kwargs.get('ui_region', None)
         self._autocrop = kwargs.get('ui_autocrop', False)
-        self._cbcrop = kwargs.get('ui_cbregion', None)
         self._uirez = kwargs.get('ui_resolution', 3000.)
-        self._xyzRange = {'turntable': {'x': (-750, 850), 'y': (-0, 0),
-                                        'z': (-0, 0)},
+        self._xyzRange = {'turntable': {'x': None, 'y': (-1200, 1200),
+                                        'z': None},
                           'fly': {'x': (-120, 120), 'y': (-100, 200),
                                   'z': (-90, 90)},
                           }
-        self._cbfontsize = kwargs.get('cb_fontsize', 15)
-        self._cbfontcolor = kwargs.get('cb_fontcolor', 'white')
-        self._cblabel = kwargs.get('cb_label', '')
+        self._cbarexport = True
         self._userobj = {}
 
         # ====================== App creation ======================
@@ -284,15 +265,16 @@ class Brain(uiInit, uiElements, base, userfcn):
         self._vbNode.parent = self.view.wc.scene
 
         # Fixed colorbar camera :
-        camera = viscam.PanZoomCamera(rect=(-.1, -2.5, 1, 5))
+        camera = viscam.PanZoomCamera(rect=(-.2, -2.5, 1, 5))
         self._rotate(fixed='axial')
 
-        self._fcnOnLoad()
+        # ====================== Colorbar ======================
+        # Cbar creation :
+        BrainCbar.__init__(self, camera)
+        # Add shortcuts on it :
+        vbShortcuts.__init__(self, self.cbqt.cbviz._canvas)
 
-        # cbobjs = CbarObjetcs()
-        # cbobjs.add_object('Sources', CbarBase(cmap='inferno'), overwrite=False)
-        self.cbqt = CbarQt(self._cbarWidget, self.cbpanel, self.cbobjs)
-        self.cbqt.add_camera(camera)
+        self._fcnOnLoad()
 
     def _fcnOnLoad(self):
         """Function that need to be runned on load."""
@@ -318,5 +300,5 @@ class Brain(uiInit, uiElements, base, userfcn):
         # This function has to be placed here (and not in the user.py script)
         self.showMaximized()
         # Fix brain range :
-        self._set_cam_range()
+        # self._set_cam_range()
         visapp.run()
