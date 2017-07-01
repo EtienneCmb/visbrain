@@ -244,10 +244,10 @@ class Brain(uiInit, uiElements, base, BrainCbar, userfcn):
         self._shpopup.set_shortcuts(self.sh)
 
         # Set icon :
-        pathfile = sys.modules[__name__].__file__
-        path = os.path.join(*['brain', 'interface', 'gui', 'vbicon.png'])
-        self.setWindowIcon(QtGui.QIcon(os.path.join(pathfile.split(
-                                                        '/vbrain')[0], path)))
+        # pathfile = sys.modules[__name__].__file__
+        # path = os.path.join(*['brain', 'interface', 'gui', 'vbicon.png'])
+        # self.setWindowIcon(QtGui.QIcon(os.path.join(pathfile.split(
+        #     '/vbrain')[0], path)))
 
         # ====================== Objects creation ======================
         camera = viscam.TurntableCamera(azimuth=0, distance=1000,

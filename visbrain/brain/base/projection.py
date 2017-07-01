@@ -46,6 +46,9 @@ class Projections(object):
             raise ValueError("The radius parameter must be a integer or a "
                              "float number.")
 
+        # Clean projection :
+        self._cleanProj()
+
         # Check projection type :
         if self._tprojectas not in ['activity', 'repartition']:
             raise ValueError("The t_projectas parameter must either be "

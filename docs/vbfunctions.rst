@@ -31,13 +31,16 @@ Screenshot
 ~~~~~~~~~~
 .. automethod:: visbrain.brain.user.userfcn.screenshot
 
+Load and save GUI configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Load an existing configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.brain.user.userfcn.loadConfig
+.. automethod:: visbrain.brain.user.userfcn.load_config
 
 Save the current configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.brain.user.userfcn.saveConfig
+.. automethod:: visbrain.brain.user.userfcn.save_config
 
 Brain functions
 ^^^^^^^^^^^^^^^
@@ -99,7 +102,7 @@ Fit to an object
 
 Convert into convex hull
 ~~~~~~~~~~~~~~~~~~~~~~~~
-.. automethod:: visbrain.brain.user.userfcn.sources_to_convexHull
+.. automethod:: visbrain.brain.user.userfcn.sources_to_convex_hull
 
 Cortical projection
 ~~~~~~~~~~~~~~~~~~~
@@ -156,3 +159,14 @@ Opacity
 Light reflection
 ~~~~~~~~~~~~~~~~
 .. automethod:: visbrain.brain.user.userfcn.roi_light_reflection
+
+Colorbar
+^^^^^^^^
+
+Colorbar control
+~~~~~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.cbar_control
+
+Auto-scaling
+~~~~~~~~~~~~
+.. automethod:: visbrain.brain.user.userfcn.cbar_autoscale

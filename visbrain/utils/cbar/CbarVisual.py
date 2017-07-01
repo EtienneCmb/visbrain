@@ -12,68 +12,51 @@ from ..cameras import FixedCam
 class CbarVisual(CbarBase):
     """Create a colorbar using Vispy.
 
-    Kargs:
-        name: string, optional, (def: 'Colorbar')
-            Object name.
-
-        cmap: string, optional, (def: inferno)
-            Matplotlib colormap
-
-        clim: tuple/list, optional, (def: None)
-            Limit of the colormap. The clim parameter must be a tuple / list
-            of two float number each one describing respectively the (min, max)
-            of the colormap. Every values under clim[0] or over clim[1] will
-            peaked.
-
-        vmin: float, optional, (def: None)
-            Threshold from which every color will have the color defined using
-            the under parameter bellow.
-
-        under: tuple/string, optional, (def: 'gray')
-            Matplotlib color for values under vmin.
-
-        vmax: float, optional, (def: None)
-            Threshold from which every color will have the color defined using
-            the over parameter bellow.
-
-        over: tuple/string, optional, (def: 'red')
-            Matplotlib color for values over vmax.
-
-        cblabel: string, optional, (def: '')
-            Colorbar label.
-
-        cbtxtsz: float, optional, (def: 26.)
-            Text size of the colorbar label.
-
-        cbtxtsh: float, optional, (def: 2.3)
-            Shift for the colorbar label.
-
-        txtcolor: string, optional, (def: 'white')
-            Text color.
-
-        txtsz: float, optional, (def: 20.)
-            Text size for clim/vmin/vmax text.
-
-        txtsh: float, optional, (def: 1.2)
-            Shift for clim/vmin/vmax text.
-
-        border: bool, optional, (def: True)
-            Display colorbar borders.
-
-        bw: float, optional, (def: 2.)
-            Border width.
-
-        limtxt: bool, optional, (def: True)
-            Display vmin/vmax text.
-
-        bgcolor: tuple/string, optional, (def: (.1, .1, .1))
-            Background color of the colorbar canvas.
-
-        ndigits: int, optional, (def: 2)
-            Number of digits for the text.
-
-        parent: VisPy, optional, (def: None)
-            VisPy parent to use.
+    Parameters
+    ----------
+    cmap : string | None
+        Matplotlib colormap (like 'viridis', 'inferno'...).
+    clim : tuple/list | None
+        Colorbar limit. Every values under / over clim will
+        clip.
+    isvmin : bool | False
+        Activate/deactivate vmin.
+    vmin : float | None
+        Every values under vmin will have the color defined
+        using the under parameter.
+    isvmax : bool | False
+        Activate/deactivate vmax.
+    vmax : float | None
+        Every values over vmin will have the color defined
+        using the over parameter.
+    under : tuple/string | None
+        Matplotlib color under vmin.
+    over : tuple/string | None
+        Matplotlib color over vmax.
+    cblabel : string | ''
+        Colorbar label.
+    cbtxtsz : float | 5..
+        Text size of the colorbar label.
+    cbtxtsh : float | 2.3
+        Shift for the colorbar label.
+    txtcolor : string | 'white'
+        Text color.
+    txtsz : float | 3.
+        Text size for clim/vmin/vmax text.
+    txtsh : float | 1.2
+        Shift for clim/vmin/vmax text.
+    border : bool | True
+        Display colorbar borders.
+    bw : float | 2.
+        Border width.
+    limtxt : bool | True
+        Display vmin/vmax text.
+    bgcolor : tuple/string | (.1, .1, .1)
+        Background color of the colorbar canvas.
+    ndigits : int | 2
+        Number of digits for the text.
+    parent : VisPy | None
+        VisPy parent to use.
     """
 
     def __init__(self, parent=None, **kwargs):

@@ -7,33 +7,27 @@ __all__ = ['CbarArgs', 'CbarBase']
 class CbarArgs(object):
     """Manage the diffrent inputs for the colormap creation.
 
-    Kargs:
-        cmap: string, optional, (def: None)
-            Matplotlib colormap (like 'viridis', 'inferno'...).
-
-        clim: tuple/list, optional, (def: None)
-            Colorbar limit. Every values under / over clim will
-            clip.
-
-        isvmin: bool, optional, (def: False)
-            Activate/deactivate vmin.
-
-        vmin: float, optional, (def: None)
-            Every values under vmin will have the color defined
-            using the under parameter.
-
-        isvmax: bool, optional, (def: False)
-            Activate/deactivate vmax.
-
-        vmax: float, optional, (def: None)
-            Every values over vmin will have the color defined
-            using the over parameter.
-
-        under: tuple/string, optional, (def: None)
-            Matplotlib color under vmin.
-
-        over: tuple/string, optional, (def: None)
-            Matplotlib color over vmax.
+    Parameters
+    ----------
+    cmap : string | None
+        Matplotlib colormap (like 'viridis', 'inferno'...).
+    clim : tuple/list | None
+        Colorbar limit. Every values under / over clim will
+        clip.
+    isvmin : bool | False
+        Activate/deactivate vmin.
+    vmin : float | None
+        Every values under vmin will have the color defined
+        using the under parameter.
+    isvmax : bool | False
+        Activate/deactivate vmax.
+    vmax : float | None
+        Every values over vmin will have the color defined
+        using the over parameter.
+    under : tuple/string | None
+        Matplotlib color under vmin.
+    over : tuple/string | None
+        Matplotlib color over vmax.
     """
 
     def __init__(self, cmap=None, clim=None, isvmin=False, vmin=None,
@@ -48,10 +42,11 @@ class CbarArgs(object):
     def to_kwargs(self, addisminmax=False):
         """Return a dictionary for input arguments.
 
-        Kwargs:
-            addisminmax: bool, optional, (def: False)
-                Specify if the returned dictionary have to had the ismin and
-                ismax variables.
+        Parameters
+        ----------
+        addisminmax : bool | False
+            Specify if the returned dictionary have to had the ismin and
+            ismax variables.
         """
         kwargs = {}
         kwargs['cmap'] = self._cmap
@@ -74,7 +69,33 @@ class CbarArgs(object):
 
 
 class CbarBase(CbarArgs):
-    """Base class for colorbar."""
+    """Base class for colorbar.
+
+    Parameters
+    ----------
+    cblabel : string | ''
+        Colorbar label.
+    cbtxtsz : float | 5..
+        Text size of the colorbar label.
+    cbtxtsh : float | 2.3
+        Shift for the colorbar label.
+    txtcolor : string | 'white'
+        Text color.
+    txtsz : float | 3.
+        Text size for clim/vmin/vmax text.
+    txtsh : float | 1.2
+        Shift for clim/vmin/vmax text.
+    border : bool | True
+        Display colorbar borders.
+    bw : float | 2.
+        Border width.
+    limtxt : bool | True
+        Display vmin/vmax text.
+    bgcolor : tuple/string | (.1, .1, .1)
+        Background color of the colorbar canvas.
+    ndigits : int | 2
+        Number of digits for the text.
+    """
 
     def __init__(self, cmap='viridis', clim=(0, 1), vmin=None, isvmin=False,
                  vmax=None, isvmax=False, under='gray', over='red', cblabel='',
