@@ -196,14 +196,15 @@ class TopoPlot(PrepareData):
 
     def __str__(self):
         """Display current settings."""
-        if not self.filt:
-            st = 'Mean of raw data ([' + str(self.time[0]) + \
-                ', ' + str(self.time[1]) + '] min)'
-        else:
-            st = 'Mean of ' + self.dispas  + ' ([' + str(self.time[0]) + \
-                ', ' + str(self.time[1]) + '] min) in [' + \
-                str(self.fstart) + ', ' + str(self.fend) + ']hz'
-        return st
+        # if not self.filt:
+        #     st = 'Mean of raw data ([' + str(self.time[0]) + \
+        #         ', ' + str(self.time[1]) + '] min)'
+        # else:
+        #     st = 'Mean of ' + self.dispas  + ' ([' + str(self.time[0]) + \
+        #         ', ' + str(self.time[1]) + '] min) in [' + \
+        #         str(self.fstart) + ', ' + str(self.fend) + ']hz'
+        # return st
+        return ''
 
     ###########################################################################
     # STATIC METHODS

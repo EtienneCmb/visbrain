@@ -78,3 +78,7 @@ atlas_B2.npz
 atlas_B3.npz
 AAL_label_bck.npz
 # *.todo
+
+docs/generated/
+docs/auto_examples/
+docs/modules/

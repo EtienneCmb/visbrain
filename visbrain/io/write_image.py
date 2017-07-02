@@ -133,7 +133,25 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
 
 def write_fig_canvas(filename, canvas, resolution=3000, autocrop=False,
                      region=None):
-    """Export a canvas as a figure."""
+    """Export a canvas as a figure.
+
+    Args:
+        filename: string
+            Name of the figure to export.
+
+        canvas: VisPy canvas
+            The vispy canvas to export.
+
+    Kargs:
+        resolution: int, optional, (def: 3000)
+            Coefficient to multiply the size of the canvas.
+
+        autocrop: bool, optional, (def: False)
+            Auto-cropping argument to remove useless space.
+
+        region: tuple/list, optional, (def: None)
+            The region to export.
+    """
     from ..utils import piccrop
     import vispy
 
@@ -163,6 +181,28 @@ def write_fig_canvas(filename, canvas, resolution=3000, autocrop=False,
     canvas._backend._physical_size = backp_size
 
 
-def write_fig_pyqt():
-    """Export a GUI window as a figure."""
-    pass
+def write_fig_pyqt(self, filename):
+    """Export a GUI window as a figure.
+
+    Args:
+        self: struct
+            The self structure of the GUI window.
+
+        filename: string
+            The picture file name.
+    """
+    from PyQt5 import QtWidgets, QtCore
+    # Screnshot function :
+    def _takeScreenShot():
+        """Take the screenshot."""
+        screen = QtWidgets.QApplication.primaryScreen()
+        p = screen.grabWindow(0)
+        p.save(filename)
+    # Take screenshot if filename :
+    if filename:
+        # Timer (avoid shooting the saving window)
+        self.timerScreen = QtCore.QTimer()
+        # self.timerScreen.setInterval(100)
+        self.timerScreen.setSingleShot(True)
+        self.timerScreen.timeout.connect(_takeScreenShot)
+        self.timerScreen.start(500)

@@ -4,10 +4,10 @@
 import numpy as np
 import os
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QTimer
 
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
-                    write_txt, write_hypno_txt, write_hypno_hyp, read_hypno)
+                    write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
+                    write_fig_pyqt)
 
 __all__ = ['uiMenu']
 
@@ -32,6 +32,8 @@ class uiMenu(object):
         self.menuSaveDetectSelected.triggered.connect(self.saveSelectDetect)
         # Sleep GUI config :
         self.menuSaveConfig.triggered.connect(self.saveConfig)
+        # Annotations :
+        self.menuSaveAnnotations.triggered.connect(self.saveAnnotationTable)
         # Screenshot :
         self.menuSaveScreenshotEntire.triggered.connect(self.saveScreenEntire)
 
@@ -45,6 +47,8 @@ class uiMenu(object):
         # Detections :
         self.menuLoadDetectAll.triggered.connect(self.loadDetectAll)
         self.menuLoadDetectSelect.triggered.connect(self.loadDetectSelect)
+        # Annotations :
+        self.menuLoadAnnotations.triggered.connect(self.loadAnnotationTable)
 
         # _____________________________________________________________________
         #                                 EXIT
@@ -166,17 +170,18 @@ class uiMenu(object):
 
     def saveSelectDetect(self):
         """Export selected detection."""
-        channel = self._currentLoc[0]
-        method = self._currentLoc[1]
+        channel, method = self._getCurrentChanType()
         # Read Table
         rowCount = self._DetectLocations.rowCount()
         staInd = [channel, '', 'Time index (s)']
-        duration = [method, '', 'Duration (s)']
+        endInd = [method, '', 'Time index (s)']
+        duration = ['', '', 'Duration (s)']
         stage = ['', '', 'Sleep stage']
         for row in np.arange(rowCount):
             staInd.append(str(self._DetectLocations.item(row, 0).text()))
-            duration.append(str(self._DetectLocations.item(row, 1).text()))
-            stage.append(str(self._DetectLocations.item(row, 2).text()))
+            endInd.append(str(self._DetectLocations.item(row, 1).text()))
+            duration.append(str(self._DetectLocations.item(row, 2).text()))
+            stage.append(str(self._DetectLocations.item(row, 3).text()))
         # Get file name :
         saveas = "locinfo" + '_' + channel + '-' + method
         path = dialogSave(self, 'Save ' + method + ' detection', saveas,
@@ -186,9 +191,9 @@ class uiMenu(object):
             file, ext = os.path.splitext(path)
             file += '_' + channel + '-' + method
             if ext.find('csv') + 1:
-                write_csv(file + '.csv', zip(staInd, duration, stage))
+                write_csv(file + '.csv', zip(staInd, endInd, duration, stage))
             elif ext.find('txt') + 1:
-                write_txt(file + '.txt', zip(staInd, duration, stage))
+                write_txt(file + '.txt', zip(staInd, endInd, duration, stage))
 
     # ______________________ SLEEP GUI CONFIG ______________________
     def saveConfig(self):
@@ -238,27 +243,35 @@ class uiMenu(object):
                 config['Unit'] = self._slRules.currentIndex()
                 json.dump(config, f)
 
+    # ______________________ ANNOTATION TABLE ______________________
+    def saveAnnotationTable(self):
+        """Export annotation table."""
+        # Read Table
+        rowCount = self._AnnotateTable.rowCount()
+        staInd, endInd, annot = [], [], []
+        for row in np.arange(rowCount):
+            staInd.append(str(self._AnnotateTable.item(row, 0).text()))
+            endInd.append(str(self._AnnotateTable.item(row, 1).text()))
+            annot.append(str(self._AnnotateTable.item(row, 2).text()))
+        # Get file name :
+        path = dialogSave(self, 'Save annotations', 'annotations',
+                          "CSV file (*.csv);;Text file (*.txt);;"
+                          "All files (*.*)")
+        if path:
+            file, ext = os.path.splitext(path)
+            if ext.find('csv') + 1:
+                write_csv(file + '.csv', zip(staInd, endInd, annot))
+            elif ext.find('txt') + 1:
+                write_txt(file + '.txt', zip(staInd, endInd, annot))
+
     # ______________________ SCREENSHOT ______________________
     def saveScreenEntire(self):
         """Screenshot using the GUI."""
-        # self.setFixedSize(100, 100)
         # Get filename :
         filename = dialogSave(self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
                               "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
         # Screnshot function :
-        def _takeScreenShot():
-            """Take the screenshot."""
-            screen = QtWidgets.QApplication.primaryScreen()
-            p = screen.grabWindow(0)
-            p.save(filename)
-        # Take screenshot if filename :
-        if filename:
-            # Timer (avoid shooting the saving window)
-            self.timerScreen = QTimer()
-            # self.timerScreen.setInterval(100)
-            self.timerScreen.setSingleShot(True)
-            self.timerScreen.timeout.connect(_takeScreenShot)
-            self.timerScreen.start(500)
+        write_fig_pyqt(self, filename)
 
     ###########################################################################
     ###########################################################################
@@ -282,16 +295,14 @@ class uiMenu(object):
             self._fcn_Hypno2Score()
             self._fcn_Score2Hypno()
 
-    def loadConfig(self):
+    def loadConfig(self, *args, file=None):
         """Load a config file (*.txt) containing several display parameters."""
         import json
-        if self._config_file is not None:
-            filename = self._config_file
-        else:
-            filename = dialogLoad(self, 'Load config File', 'config',
-                                  "Text file (*.txt);;All files (*.*)")
-        if filename:
-            with open(filename) as f:
+        if not file:
+            file = dialogLoad(self, 'Load config File', 'config',
+                              "Text file (*.txt);;All files (*.*)")
+        if file:
+            with open(file) as f:
                 # Load the configuration file :
                 config = json.load(f)
 
@@ -378,27 +389,51 @@ class uiMenu(object):
         file = dialogLoad(self, "Import table", '',
                           "CSV file (*.csv);;Text file (*.txt);;"
                           "All files (*.*)")
-        # Get channel / method from file name :
-        (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
-        # Load the file :
-        (st, dur) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
-        # Sort by starting index :
-        idxsort = np.argsort(st)
-        st, dur = st[idxsort], dur[idxsort]
-        # Convert into index :
-        stInd = np.round(st * self._sf).astype(int)
-        durInd = np.round(dur * self._sf / 1000.).astype(int)
-        # Build the index array :
-        index = np.array([])
-        for k, i in zip(stInd, durInd):
-            index = np.append(index, np.arange(k, k+i))
-        index = index.astype(np.int, copy=False)
-        # Set index :
-        self._detect[(chan, meth)]['index'] = index
-        # Plot update :
-        self._fcn_sliderMove()
-        self._locLineReport()
-        self._CheckDetectMenu()
+        if file:
+            # Get channel / method from file name :
+            (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
+            # Load the file :
+            (st, end) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
+            # Sort by starting index :
+            idxsort = np.argsort(st)
+            st, end = st[idxsort], end[idxsort]
+            # Concatenate (starting, ending) index :
+            index = np.c_[st, end]
+            # Convert into index :
+            index = np.round(index * self._sf).astype(int)
+            # Set index :
+            self._detect[(chan, meth)]['index'] = index
+            # Plot update :
+            self._fcn_sliderMove()
+            self._locLineReport()
+            self._CheckDetectMenu()
+
+    def loadAnnotationTable(self, *args, file=None):
+        """Load annotations."""
+        # Get file name :
+        if not file:
+            file = dialogLoad(self, "Import annotations", '',
+                              "CSV file (*.csv);;Text file (*.txt);;"
+                              "All files (*.*)")
+        if file:
+            # Clean annotations :
+            self._AnnotateTable.setRowCount(0)
+            # Load the file :
+            txt = np.genfromtxt(file, delimiter=',', dtype=str)
+            self._AnnotateTable.setRowCount(txt.shape[0])
+            # File the table :
+            for k in range(txt.shape[0]):
+                # Starting index :
+                self._AnnotateTable.setItem(k, 0, QtWidgets.QTableWidgetItem(
+                    txt[k, 0]))
+                # Ending index :
+                self._AnnotateTable.setItem(k, 1, QtWidgets.QTableWidgetItem(
+                    txt[k, 1]))
+                # Text :
+                self._AnnotateTable.setItem(k, 2, QtWidgets.QTableWidgetItem(
+                    txt[k, 2]))
+                # Set the current tab to the annotation tab :
+                self.QuickSettings.setCurrentIndex(5)
 
     ###########################################################################
     ###########################################################################

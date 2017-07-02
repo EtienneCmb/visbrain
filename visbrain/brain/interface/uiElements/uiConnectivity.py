@@ -10,9 +10,6 @@ class uiConnectivity(object):
 
     def __init__(self,):
         """Init."""
-        # Show/hide connectivity :
-        self.uiConnectShow.clicked.connect(self._toggle_connect_visible)
-
         # Line width :
         self.uiConnect_lw.setValue(self.connect.lw)
         self.uiConnect_lw.valueChanged.connect(self._update_lw)
@@ -27,17 +24,16 @@ class uiConnectivity(object):
 
         # Dynamic / static control of transparency : :
         self._dyn2send = self.connect.dynamic
-        self.uiConnect_static.clicked.connect(self._set_color)
-        self.uiConnect_dynamic.clicked.connect(self._set_color)
+        self._connectStaDynTransp.currentIndexChanged.connect(self._set_color)
         if (self.connect.dynamic is not None) and isinstance(
                                         self.connect.dynamic, (tuple, list)):
             self.uiConnect_dynMin.setValue(self.connect.dynamic[0])
             self.uiConnect_dynMax.setValue(self.connect.dynamic[1])
             self.uiConnect_dynControl.setEnabled(True)
-            self.uiConnect_dynamic.setChecked(True)
+            self._connectStaDynTransp.setCurrentIndex(1)
         else:
+            self._connectStaDynTransp.setCurrentIndex(0)
             self.uiConnect_dynControl.setEnabled(False)
-            self.uiConnect_static.setChecked(True)
         self.uiConnect_dynMin.valueChanged.connect(self._set_color)
         self.uiConnect_dynMax.valueChanged.connect(self._set_color)
 
@@ -69,8 +65,12 @@ class uiConnectivity(object):
         else:
             self._densityPanel.setVisible(False)
         self.connect.needupdate = True
-        self.connect._cb['vmin'] = None
-        self.connect._cb['vmax'] = None
+        self.cbobjs._objs['Connectivity']._vmin = None
+        self.cbobjs._objs['Connectivity']._isvmin = False
+        self.cbobjs._objs['Connectivity']._vmax = None
+        self.cbobjs._objs['Connectivity']._isvmax = False
+        self.connect._vmin = self.connect._vmax = None
+        self.connect._isvmin = self.connect._isvmax = False
         # Get density radius :
         self.connect.dradius = self._densityRadius.value()
         # Update color :
@@ -85,8 +85,8 @@ class uiConnectivity(object):
         """
         # Set the dynamic control panel On / Off according to the dynamic
         # button :
-        self.uiConnect_dynControl.setEnabled(self.uiConnect_dynamic.isChecked(
-                                                                            ))
+        isdyn = int(self._connectStaDynTransp.currentIndex()) == 1
+        self.uiConnect_dynControl.setEnabled(isdyn)
 
         # Get colorby (strength / count):
         colorby = str(self.uiConnect_colorby.currentText())
@@ -99,7 +99,7 @@ class uiConnectivity(object):
         self.connect._check_color()
 
         if update:
-            self._auto_scale()
+            self.cbqt._fcn_cbAutoscale(name='Connectivity')
 
     def _getMinMax_dyn(self):
         """Dynamic lines opacity.
@@ -107,27 +107,18 @@ class uiConnectivity(object):
         The dynamic parameter can be used to have a proportional alpha with
         the strength of connection.
         """
+        idxdyn = int(self._connectStaDynTransp.currentIndex())
         # Static color :
-        if self.uiConnect_static.isChecked():
+        if idxdyn == 0:
             self.connect.dynamic = None
         # Dynamic color :
-        elif self.uiConnect_dynamic.isChecked():
+        elif idxdyn == 1:
             self.connect.dynamic = tuple([self.uiConnect_dynMin.value(),
                                          self.uiConnect_dynMax.value()])
 
     def _ShowHide(self):
         """Show or hide connections between nodes."""
         self.connect.mesh.visible = self.uiConnectShow.isChecked()
-
-    def _toggle_connect_visible(self):
-        """Toggle to display / hide the brain."""
-        viz = not self.connect.mesh.visible
-        self.connect.mesh.visible = viz
-        self.uiConnectShow.setChecked(viz)
-        self.toolBox_5.setEnabled(viz)
-        self.toolBox_6.setEnabled(viz)
-        self.o_Connect.setEnabled(viz)
-        self.o_Connect.setChecked(viz)
 
     def _fcn_applyBundle(self):
         """Apply line bundling."""

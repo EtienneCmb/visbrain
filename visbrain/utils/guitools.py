@@ -3,11 +3,11 @@
 import numpy as np
 from vispy.scene import visuals
 
-from .color import color2vb
+from .color import color2vb, color2tuple
 
 
-__all__ = ['slider2opacity', 'textline2color', 'uiSpinValue',
-           'ndsubplot', 'combo', 'is_color', 'GuideLines']
+__all__ = ['slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
+           'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines']
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -71,6 +71,24 @@ def textline2color(value):
         return value, color2vb(color=value)
     except:
         return 'white', (1., 1., 1., 1.)
+
+
+def color2json(obj, rmalpha=True):
+    """Turn a color textline into a json compatible one.
+
+    Args:
+        obj: PyQt textline object
+            The PyQt text line object.
+
+    Kargs:
+        rmalpha: bool, optional, (def: True)
+            Specify if the alpha component have to be deleted.
+
+    Returns:
+        coltuple: tuple
+            A json compatible tuple of floating points.
+    """
+    return color2tuple(textline2color(obj.text())[1], float, rmalpha)
 
 
 def is_color(color, comefrom='color'):
@@ -209,6 +227,21 @@ def combo(lst, idx):
     return out, ind
 
 
+class MouseEventControl(object):
+    """Additional mouse control on VisPy canvas."""
+
+    def _isLeftClick(self, event):
+        """Return if the pressed button is the left one."""
+        return event.button == 1
+
+    def _isModifier(self, event, modifier):
+        """Return the name of the modifier use."""
+        try:
+            return event.modifiers[0].name == modifier
+        except:
+            return False
+
+
 class GuideLines(object):
     """Display GUI guidelines for screenshot.
 
@@ -257,7 +290,7 @@ class GuideLines(object):
         # segment[6, :] = (cropHW[0], cropXY[1], 0.)
         # segment[7, :] = (cropXY[0], cropXY[1], 0.)
         segment = np.array([
-                           [-154., -100., 0.], 
+                           [-154., -100., 0.],
                            [154., 100., 0.]
                            ])
         self.mesh.set_data(pos=segment)
@@ -272,11 +305,10 @@ class GuideLines(object):
     def range(self):
         """Get the range value."""
         return self._range
-    
+
     @range.setter
     def range(self, value):
         """Set range value."""
         self._range = value
         self.xm, self.xM = self.range['x'][0], self.range['x'][1]
         self.ym, self.yM = self.range['y'][0], self.range['y'][1]
-    

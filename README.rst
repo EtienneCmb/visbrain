@@ -77,7 +77,7 @@ The `Brain <http://etiennecmb.github.io/visbrain/brain.html>`_ module is primari
 * An extended control of colors. 
 * Export in HD pictures with auto-cropping functionalities.
 * GUI or command line control.
-* `Examples and datasets <https://github.com/EtienneCmb/visbrain/tree/master/examples/brain>`_.
+* `Brain xxamples and datasets <https://github.com/EtienneCmb/visbrain/tree/master/examples/brain>`_.
 
 .. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png
    :align:   center
@@ -92,7 +92,7 @@ Sleep
 * Load, edit and save hypnogram data or as publication-ready figures.
 * Perform automatic event detections (Spindles / REM / Peaks / Slow waves / K-complex / Muscle twitches).
 * Signal processing tools (filtering / wavelets / power...) and re-referencing (either to a single channel, common average or bipolarization).
-* `Examples and datasets <https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing>`_.
+* `Sleep examples and datasets <https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing>`_.
 
 .. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_main.png
    :align:   center
@@ -106,7 +106,7 @@ Ndviz
 * Basic plotting forms (continuous line / cloud of points / image).
 * Compute histogram / spectrogram.
 * Swap data dimensions from the GUI.
-* `Examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/ndviz>`_.
+* `Ndviz examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/ndviz>`_.
 
 .. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/ndviz_example.png
    :align:   center
@@ -120,7 +120,7 @@ Figure
 * Add x/y labels and titles.
 * Simple colorbar control.
 * Export the final figure with dpi control.
-* `Examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/figure>`_.
+* `Figure examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/figure>`_.
 
 
 Contribution
@@ -135,4 +135,4 @@ Main developers
 With the help of
 ----------------
 
-Karim Jerbi, Christian O'Reilly, David Meunier, Dmitri Altukchov, Tarek Lajnef, Perrine Ruby, JB Einchenlaub, kevroy314, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian
+*Karim Jerbi, Christian O'Reilly, David Meunier, Dmitri Altukchov, Tarek Lajnef, Perrine Ruby, JB Einchenlaub, kevroy314, Annalisa Pascarella, Thomas Thiery, Yann Harel, Anne-Lise Saive, Golnush Alamian*

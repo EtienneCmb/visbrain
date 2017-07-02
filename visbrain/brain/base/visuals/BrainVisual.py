@@ -15,10 +15,11 @@ from vispy import gloo
 from vispy.visuals import Visual
 from vispy.geometry import MeshData
 import vispy.visuals.transforms as vist
+from vispy.scene.visuals import create_visual_node
 
 from ....utils import array2colormap, color2vb, vpnormalize
 
-__all__ = ['BrainVisual']
+__all__ = ['BrainMesh']
 
 
 # Vertex shader : executed code for individual vertices. The transformation
@@ -329,12 +330,17 @@ class BrainVisual(Visual):
             # Recenter the brain around (0, 0, 0) and rescale it:
             self._btransform = vpnormalize(vertices, 2 * self._scaleFactor)
 
-            # Keep maximum/minimum pear coordinates :
+            # Keep maximum/minimum per coordinates :
             self._vertsize = [(vertices[:, 0, 0].min(),
                                vertices[:, 0, 0].max()),
                               (vertices[:, 1, 0].min(),
                                vertices[:, 1, 0].max()),
                               (vertices[:, 2].min(), vertices[:, 2].max())]
+            self._vertsize = np.array(self._vertsize)
+
+            # Find ratio for the camera :
+            self._camratio = self._vertsize.max(1) * 2
+            self._camratio *= self._scaleFactor / self._camratio.max()
 
         # Load only left/ritgh hemisphere :
         if hemisphere in ['left', 'right']:
@@ -361,7 +367,7 @@ class BrainVisual(Visual):
 
         self.mesh_data_changed()
 
-    def set_color(self, data=None, color='white', cmap='viridis', dynamic=None,
+    def set_color(self, data=None, color='white', cmap='viridis',
                   alpha=1.0, vmin=None, vmax=None, under='dimgray',
                   over='darkred'):
         """Set specific colors on the brain.
@@ -383,9 +389,6 @@ class BrainVisual(Visual):
             cmap: string, optional, (def: 'viridis')
                 Colormap to use if data is a vector
 
-            dynamic: float, optional, (def: None)
-                Control the dynamic of colors
-
             alpha: float, optional, (def: 1.0)
                 Opacity to use if data is a vector
 
@@ -405,9 +408,6 @@ class BrainVisual(Visual):
             col = array2colormap(data.copy(), cmap=cmap, alpha=alpha,
                                  vmin=vmin, vmax=vmax, under=under,
                                  over=over).astype(np.float32)
-            # Dynamic color :
-            if dynamic is not None:
-                col = dynamic_color(col, data)
         elif (data.ndim > 1) and (data.shape[1] == 4):
             col = data.astype(np.float32)
         else:
@@ -632,14 +632,10 @@ class BrainVisual(Visual):
         if projection == 'internal':
             self.set_gl_state('translucent', depth_test=False, cull_face=False)
             l_color[3] = 0.1
-            # self.set_gl_state('translucent', depth_test=False,
-            #                   cull_face=True, blend=True, blend_func=(
-            #                             'src_alpha', 'one_minus_src_alpha'))
         else:
             self.set_gl_state('translucent', depth_test=True, cull_face=False)
-            l_color[3] = 1
-            # self.set_gl_state('translucent', depth_test=True,
-            #                   cull_face=False, blend=True, blend_func=(
-            #                             'src_alpha', 'one_minus_src_alpha'))
+            l_color[3] = 1.
         self.set_light(l_color=l_color)
         self.update_gl_state()
+
+BrainMesh = create_visual_node(BrainVisual)

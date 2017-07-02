@@ -4,7 +4,7 @@ import numpy as np
 from scipy.signal import hilbert
 
 __all__ = ['_events_duration', '_events_removal', '_events_distance_fill',
-           '_events_mean_freq']
+           '_events_mean_freq', '_event_to_index', '_index_to_event']
 
 
 def _events_duration(index, sf):
@@ -182,3 +182,38 @@ def _event_amplitude(x, idx_sup_thr, idx_start, idx_stop, sf):
                 distance_ms = 0.
 
         return amp_range, distance_ms
+
+
+def _event_to_index(x):
+    """Convert a continuous vector of indices into an 2D array (start, end).
+
+    Args:
+        x: np.ndarray
+            Array of indices.
+
+    Returns:
+        xidx: np.ndarray
+            An array of shape (n_events, 2) where the dimension 2 refer to the
+            indices where each event start and finish.
+    """
+    # Split indices where it stopped :
+    sp = np.split(x, np.where(np.diff(x) != 1)[0]+1)
+    # Return (start, end) :
+    return np.array([[k[0], k[-1]] for k in sp]).astype(int)
+
+
+def _index_to_event(x):
+    """Convert a 2D (start, end) array into a continuous one.
+
+    Args:
+        x: np.ndarra
+            2D array of indicies.
+
+    Returns:
+        index: np.ndarray
+            Continuous array of indicies.
+    """
+    index = np.array([])
+    for k in range(x.shape[0]):
+        index = np.append(index, np.arange(x[k, 0], x[k, 1]+1))
+    return index.astype(int)

@@ -1,4 +1,8 @@
-"""This example show how to display and control a 2D signal."""
+"""
+Plot 2D signal
+==============
+
+This example show how to display and control a 2D signal."""
 
 import numpy as np
 from visbrain import Ndviz

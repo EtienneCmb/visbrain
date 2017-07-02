@@ -1,8 +1,12 @@
-"""This script generate some figures using the Brain module. Those exported
+"""
+Generate pictures
+=================
+
+This script generate some figures using the Brain module. Those exported
 pictures are going to be set in a layout in the 1_LayoutExample.py script.
 """
 import numpy as np
-from visbrain import Brain, Figure
+from visbrain import Brain
 
 
 kwargs = {}

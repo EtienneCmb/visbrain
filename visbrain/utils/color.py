@@ -15,7 +15,7 @@ from .sigproc import normalize
 
 
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           '_colormap', 'type_coloring', 'mpl_cmap', 'color2tuple'
+           'type_coloring', 'mpl_cmap', 'color2tuple', 'mpl_cmap_index'
            ]
 
 
@@ -44,7 +44,7 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
             Array of RGBA colors of shape (length, 4).
     """
     # Default or static color :
-    if (color is None) or isinstance(color, (str, tuple, np.ndarray)):
+    if (color is None) or isinstance(color, (str, tuple, list, np.ndarray)):
         # Default color :
         if color is None:
             coltuple = default
@@ -83,15 +83,36 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
                          "color. Use None, tuple or string")
 
 
-def color2tuple(color):
+def color2tuple(color, astype=np.float32, rmalpha=True, roundto=2):
     """Return a RGB tuple of the color.
 
-    Kargs:
+    Args:
         color: None/tuple/string, optional, (def: None)
             The color to use. Can either be None, or a tuple (R, G, B),
             a matplotlib color or an hexadecimal color '#...'.
+
+    Kargs:
+        astype: type, optional, (def: np.float32)
+            The final color type.
+
+        rmalpha: bool, optional, (def: True)
+            Specify if the alpha component have to be deleted.
+
+        roundto: int, optional, (def: 2)
+            Number of digits per RGB.
+
+    Returns:
+        coltuple: tuple
+            Tuple of colors.
     """
-    return tuple(color2vb(color).ravel()[0:-1])
+    # Get the converted color :
+    ccol = color2vb(color).ravel().astype(astype)
+    # Round it :
+    ccol = np.ndarray.tolist(np.around(ccol, roundto))
+    if rmalpha:
+        return tuple(ccol[0:-1])
+    else:
+        return tuple(ccol)
 
 
 def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
@@ -167,10 +188,10 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
 
     # ================== Colormap (under, over) ==================
     if (vmin is not None) and (under is not None):
-        under = color2vb(under) if isinstance(under, str) else under
+        under = color2vb(under)  # if isinstance(under, str) else under
         x_cmap[x < vmin, :] = under
     if (vmax is not None) and (over is not None):
-        over = color2vb(over) if isinstance(over, str) else over
+        over = color2vb(over)  # if isinstance(over, str) else over
         x_cmap[x > vmax, :] = over
 
     # Faces render (repeat the color to other dimensions):
@@ -233,88 +254,6 @@ def color2faces(color, length):
     colorL = np.tile(np.array(color)[..., np.newaxis, np.newaxis],
                      (1, length, 3))
     return np.transpose(colorL, (1, 2, 0))
-
-
-class _colormap(object):
-    """Manage the diffrent inputs for the colormap creation.
-
-    Kargs:
-        cmap: string, optional, (def: None)
-            Matplotlib colormap (like 'viridis', 'inferno'...).
-
-        clim: tuple/list, optional, (def: None)
-            Colorbar limit. Every values under / over clim will
-            clip.
-
-        vmin: float, optional, (def: None)
-            Every values under vmin will have the color defined
-            using the under parameter.
-
-        vmax: float, optional, (def: None)
-            Every values over vmin will have the color defined
-            using the over parameter.
-
-        under: tuple/string, optional, (def: None)
-            Matplotlib color under vmin.
-
-        over: tuple/string, optional, (def: None)
-            Matplotlib color over vmax.
-
-        data: ndarray, optional, (def: None)
-            The data to use. This is only usefull to define automatically
-            the clim parameter.
-    """
-
-    def __init__(self, cmap=None, clim=None, vmin=None, vmax=None, under=None,
-                 over=None, data=None):
-        """Init."""
-        if data is None:
-            clim = (None, None)
-            vmin, vmax, under, over = None, None, None, None
-            self._MinMax = (None, None)
-        else:
-            if clim is None:
-                clim = [data.min(), data.max()]
-            self._MinMax = (data.min(), data.max())
-        self._cb = {'cmap': cmap, 'clim': clim, 'vmin': vmin, 'vmax': vmax,
-                    'under': under, 'over': over}
-
-    def __getitem__(self, key):
-        """Get the item value, specified using the key parameter.
-
-        Arg:
-            key: string
-                Name of the parameter
-
-        Return:
-            The item value
-        """
-        return self._cb[key]
-
-    def __setitem__(self, key, item):
-        """Set a value to an item.
-
-        Arg:
-            key: string
-                Name of the parameter
-
-            item: any
-                The value of the item
-        """
-        self._cb[key] = item
-
-    def cbUpdateFrom(self, obj):
-        """Update a _colormap object using based on an other _colormap object.
-
-        Arg:
-            obj: _colormap object
-                The _colormap object to use to take it values.
-        """
-        objkeys = obj._cb.keys()
-        for k in self._cb.keys():
-            if k in objkeys:
-                self[k] = obj[k]
-        self._MinMax = obj._MinMax
 
 
 def colorclip(x, th, kind='under'):
@@ -466,3 +405,32 @@ def mpl_cmap(invert=False):
     cmap_lst.sort()
 
     return cmap_lst
+
+
+def mpl_cmap_index(cmap, cmaps=None):
+    """Find the index of a colormap.
+
+    Arg:
+        cmap: string
+            Colormap name.
+
+    Kargs:
+        cmaps: list, optional, (def: None)
+            List of colormaps.
+
+    Returns:
+        idx: int
+            Index of the colormap.
+
+        invert: bool
+            Boolean value indicating if it's a reversed colormap.
+    """
+    # Find if it's a reversed colormap :
+    invert = bool(cmap.find('_r') + 1)
+    # Get list of colormaps :
+    if cmaps is None:
+        cmap = cmap.replace('_r', '')
+        cmaps = mpl_cmap()
+        return np.where(np.char.find(cmaps, cmap) + 1)[0][0], invert
+    else:
+        return cmaps.index(cmap), invert

@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """Main class for settings managment (save / load / light / cameras...)."""
-import os
 import numpy as np
-from PyQt5.QtGui import *
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore
+from PyQt5.QtGui import QPalette, QFont
 
-
-from vispy import io
-import vispy.scene.cameras as viscam
-
-from ....utils import uiSpinValue, piccrop
-from ....io import write_fig_canvas
+from ....utils import uiSpinValue
 
 __all__ = ['uiSettings']
 
@@ -26,24 +20,10 @@ class uiSettings(object):
         # =============================================================
         self.progressBar.hide()
 
-        # ------------- Screenshot / Exit -------------
-        self.actionScreenshot.triggered.connect(self._screenshot)
-        self.actionExit.triggered.connect(QtWidgets.qApp.quit)
-
-        # ------------- Display -------------
-        self.actionUi_settings.triggered.connect(self._fcn_panSettingsViz)
-        self.actionMNI.triggered.connect(self._fcn_panSettingsViz)
-        self.actionSources.triggered.connect(self._fcn_panSettingsViz)
-        self.actionConnectivity.triggered.connect(self._fcn_panSettingsViz)
-        self.actionColormap.triggered.connect(self._fcn_panSettingsViz)
-
-        # ------------- Transform -------------
-        self.actionProjection.triggered.connect(self._fcn_menuProjection)
-        self.actionRepartition.triggered.connect(self._fcn_menuRepartition)
-
         # ------------- Help -------------
         self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
         self.actionDocumentation.triggered.connect(self._fcn_openDoc)
+        self.QuickSettings.currentChanged.connect(self._fcn_tab_changed)
 
         # =============================================================
         # SCREENSHOT
@@ -63,33 +43,16 @@ class uiSettings(object):
         self._ssResolution.valueChanged.connect(self._screenshotSettings)
         self._ssCbEnable.clicked.connect(self._screenshotSettings)
         self._ssRun.clicked.connect(self._fcn_runScreenshot)
-        self._ssGuide.clicked.connect(self._screenshotSettings)
         self._ssAutoCrop.clicked.connect(self._screenshotSettings)
         self._ssCropXs.valueChanged.connect(self._screenshotSettings)
         self._ssCropYs.valueChanged.connect(self._screenshotSettings)
         self._ssCropXe.valueChanged.connect(self._screenshotSettings)
         self._ssCropYe.valueChanged.connect(self._screenshotSettings)
 
-        # =============================================================
-        # SETTINGS PANEL
-        # =============================================================
-        # Quick settings panel :
-        self.actionQuick_settings.triggered.connect(self._toggle_settings)
-        self.QuickSettings.currentChanged.connect(self._fcn_onTabChange)
-        self.q_widget.setVisible(True)
-
         # Background color :
         self.bgd_green.valueChanged.connect(self._fcn_bgd_color)
         self.bgd_red.valueChanged.connect(self._fcn_bgd_color)
         self.bgd_blue.valueChanged.connect(self._fcn_bgd_color)
-
-        # =============================================================
-        # ROTATION
-        # =============================================================
-        # Coronal / axial / sagittal :
-        self.q_coronal.clicked.connect(self._fcn_coronal)
-        self.q_axial.clicked.connect(self._fcn_axial)
-        self.q_sagittal.clicked.connect(self._fcn_sagittal)
 
         # =============================================================
         # LIGHT
@@ -114,13 +77,6 @@ class uiSettings(object):
         self._light_Atlas2Ui()
 
         # =============================================================
-        # CAMERAS
-        # =============================================================
-        # Cameras types :
-        self.c_Turnable.clicked.connect(self._fcn_switch_camera)
-        self.c_Fly.clicked.connect(self._fcn_switch_camera)
-
-        # =============================================================
         # ERROR // WARNING MESSAGES
         # =============================================================
         # Hide Error / warning wessage :
@@ -140,30 +96,16 @@ class uiSettings(object):
         import webbrowser
         webbrowser.open('http://etiennecmb.github.io/visbrain/brain.html')
 
-    def _fcn_panSettingsViz(self):
-        """
-        """
-        # Ui settings :
-        if self.actionUi_settings.isChecked():
-            self.QuickSettings.setCurrentIndex(0)
-            self.q_widget.setVisible(True)
-            self.actionUi_settings.setChecked(False)
-        elif self.actionMNI.isChecked():
-            self.QuickSettings.setCurrentIndex(1)
-            self.q_widget.setVisible(True)
-            self.actionMNI.setChecked(False)
-        elif self.actionSources.isChecked():
-            self.QuickSettings.setCurrentIndex(2)
-            self.q_widget.setVisible(True)
-            self.actionSources.setChecked(False)
-        elif self.actionConnectivity.isChecked():
-            self.QuickSettings.setCurrentIndex(3)
-            self.q_widget.setVisible(True)
-            self.actionConnectivity.setChecked(False)
-        elif self.actionColormap.isChecked():
-            self.QuickSettings.setCurrentIndex(4)
-            self.q_widget.setVisible(True)
-            self.actionColormap.setChecked(False)
+    def _fcn_tab_changed(self):
+        """Executed function when the user change the tab."""
+        # Get tab name :
+        tabname = str(self.QuickSettings.currentWidget().objectName())
+        # 
+        if (tabname == 'q_CONNECT') and (self.connect.name != 'NoneConnect'):
+            self.cbqt.select('Connectivity')
+        elif (tabname == 'q_SOURCES') and (self.sources.name != 'NoneSources'):
+            if self._modproj is not None:
+                self.cbqt.select('Projection')
 
     # =============================================================
     # SCREENSHOT
@@ -173,10 +115,10 @@ class uiSettings(object):
         # Get latest settings :
         self._screenshotSettings()
         # Run screenshot :
-        self._screenshot()
+        self._fcn_screenshotCan()
 
     def _screenshotSettings(self):
-        """Get screenshot settings from the GUI.s"""
+        """Get screenshot settings from the GUI."""
         # ------------- MAIN CANVAS -------------
         # Get filename :
         file = str(self._ssSaveAs.text())
@@ -191,97 +133,25 @@ class uiSettings(object):
                 self._ssCropXe.value(), self._ssCropYe.value())
         self._crop = crop if viz else None
         self._ssCropW.setEnabled((not self._autocrop) and viz)
-        # self.guide.mesh.visible = self._ssGuide.isChecked()
-        # if self._ssGuide.isChecked() and self._ssCropW.isEnabled():
-        #     print(self.view.wc.camera.center)
-        #     self.guide.size = self.view.canvas.size
-        #     self.guide.range['x'] = self.view.wc.camera._xlim
-        #     self.guide.range['y'] = self.view.wc.camera._ylim
-        #     print(self.guide.range)
-        #     self.guide.set_data(crop=crop)
         # Resolution :
         self._uirez = float(self._ssResolution.value())
 
         # ------------- COLORBAR CANVAS -------------
         # Colorbar :
         viz = self._ssCbEnable.isChecked()
-        self._qcmapVisible.setChecked(viz)
-        self._toggle_cmap()
-        self.cb['export'] = viz
-
-    def _screenshot(self):
-        """Screenshot using the GUI.
-
-        This function need that a savename is already defined (otherwise, a
-        window appeared so that the user specify the path/name). Then, it needs
-        an extension (png) and a boolean parameter (self.cb['export']) to
-        specify if the colorbar has to be exported.
-        """
-        # Manage filename :
-        if isinstance(self._savename, str):
-            cond = self._savename.split('.')[0] == ''
-        if (self._savename is None) or cond:
-            saveas = str(QFileDialog.getSaveFileName(self, 'Save screenshot',
-                                                     os.getenv('HOME')))
-        else:
-            saveas = self._savename
-
-        # Get filename and extension :
-        file, ext = os.path.splitext(saveas)
-        if not ext:
-            raise ValueError("No extension detected in "+saveas)
-
-        # Export the main canvas :
-        write_fig_canvas(saveas, self.view.canvas, resolution=self._uirez,
-                         autocrop=self._autocrop, region=self._crop)
-
-        # Export the colorbar :
-        # self.cb['export'] = True
-        if self.cb['export']:
-            # Colorbar file name : filename_colorbar.extension
-            saveas = saveas.replace('.', '_colorbar.')
-
-            # Export the colorbar canvas :
-            write_fig_canvas(saveas, self.view.cbcanvas, region=self._cbcrop,
-                             autocrop=self._autocrop, resolution=self._uirez)
-
-    def _toggle_settings(self):
-        """Toggle method for display / hide the settings panel."""
-        viz = self.q_widget.isVisible()
-        self.q_widget.setVisible(not viz)
-        self._xyzRange['turntable']['x'] = (-950, 1050) if viz else (-750, 850)
+        self.menuDispCbar.setChecked(viz)
+        self._fcn_menuCbar()
 
     def _fcn_bgd_color(self):
         """Change canvas background color."""
         bgd = (self.bgd_red.value(), self.bgd_green.value(),
                self.bgd_blue.value())
         self.view.canvas.bgcolor = bgd
-        self.view.cbcanvas.bgcolor = bgd
-
-    def _fcn_onTabChange(self):
-        """Triggered method when tab changed."""
-        # Get current tab :
-        currentIndex = self.QuickSettings.currentIndex()
-        # if currentIndex == 2:
-        #     self.cmapSources.setChecked(True)
-        # if currentIndex == 3:
-        #     self.cmapConnect.setChecked(True)
-        # self._select_object_cmap()
-
-    def _fcn_menuProjection(self):
-        """Run the cortical projection."""
-        self._tprojectas = 'activity'
-        self._sourcesProjection()
-
-    def _fcn_menuRepartition(self):
-        """Run the cortical projection."""
-        self._tprojectas = 'repartition'
-        self._sourcesProjection()
 
     # =============================================================
     # ROTATION
     # =============================================================
-    def _rotate(self, fixed=None, custom=None):
+    def _rotate(self, fixed=None, custom=None, margin=0.08):
         """Rotate the scene elements using a predefined or a custom rotation.
 
         The rotation is applied on every objects on the scene.
@@ -331,6 +201,7 @@ class uiSettings(object):
                     azimuth, elevation = 90, 0
                     self.atlas.sagittal = 0
                 self.atlas.coronal, self.atlas.axial = 0, 0
+                scale_factor = 2 * self.atlas.mesh._camratio[0]
             # Coronal (front, back)
             elif view == 'coronal':
                 if self.atlas.coronal == 0:  # Front
@@ -340,6 +211,7 @@ class uiSettings(object):
                     azimuth, elevation = 0, 0
                     self.atlas.coronal = 0
                 self.atlas.sagittal, self.atlas.axial = 0, 0
+                scale_factor = 2 * self.atlas.mesh._camratio[1]
             # Axial (top, bottom)
             elif view == 'axial':
                 if self.atlas.axial == 0:  # Top
@@ -349,30 +221,20 @@ class uiSettings(object):
                     azimuth, elevation = 0, -90
                     self.atlas.axial = 0
                 self.atlas.sagittal, self.atlas.coronal = 0, 0
+                scale_factor = 2 * self.atlas.mesh._camratio[2]
         elif custom is not None:
             azimuth, elevation = custom[0], custom[1]
+            scale_factor = 2 * self.atlas.mesh._camratio[2]
 
         # Set camera and range :
         self.view.wc.camera.azimuth = azimuth
         self.view.wc.camera.elevation = elevation
-        self._set_cam_range()
+        self.view.wc.camera.scale_factor = (1. + margin) * scale_factor
 
     def _set_cam_range(self, name='turntable'):
         """Set the camera range."""
         dic = self._xyzRange[name]
-        self.view.wc.camera.set_range(x=dic['x'], y=dic['x'], z=dic['z'])
-
-    def _fcn_coronal(self):
-        """GUI to deep function for a fixed coronal view."""
-        self._rotate(fixed='coronal')
-
-    def _fcn_axial(self):
-        """GUI to deep function for a fixed axial view."""
-        self._rotate(fixed='axial')
-
-    def _fcn_sagittal(self):
-        """GUI to deep function for a fixed sagittal view."""
-        self._rotate(fixed='sagittal')
+        self.view.wc.camera.set_range(x=dic['x'], y=dic['y'], z=dic['z'])
 
     # =============================================================
     # LIGHT
@@ -410,33 +272,6 @@ class uiSettings(object):
                      self.uil_colR, self.uil_colG, self.uil_colB,
                      self.uil_colA, self.uil_AmbCoef, self.uil_SpecCoef],
                     self.atlas.mesh.get_light)
-
-    # =============================================================
-    # CAMERA
-    # =============================================================
-    def _fcn_switch_camera(self):
-        """Switch between different types of cameras.
-
-        The user can either use a Turntable or a Fly camera. The turntable
-        camera is centered on the central object. Every rotation is arround
-        this object. The fly camera can be used for go in every deep part of
-        the brain (not easy to control).
-        """
-        # Get radio buttons values :
-        if self.c_Turnable.isChecked():
-            camera = viscam.TurntableCamera(azimuth=0, distance=1000,
-                                            name='turntable')
-        if self.c_Fly.isChecked():
-            # camera = viscam.PanZoomCamera(aspect=1)
-            camera = viscam.FlyCamera(name='fly')
-
-        # Add camera to the mesh and to the canvas :
-        self.view.wc.camera = camera
-        self.atlas.mesh.set_camera(camera)
-        if self.area.name == 'displayed':
-            self.area.mesh.set_camera(camera)
-        self.view.wc.update()
-        self._set_cam_range(name=camera.name)
 
     # =============================================================
     # ERROR // WARNING MESSAGES
@@ -508,10 +343,11 @@ class uiSettings(object):
         distance) at the bottom of the setting panel.
         """
         # Define and set the rotation string :
-        rotstr = 'Azimuth: {az}°, Elevation: {el}°, Distance: {di}'
+        rotstr = 'Azimuth: {a}°, Elevation: {e}°, Distance: {d}, Scale: {s}'
         # Get camera Azimuth / Elevation / Distance :
-        az = str(self.view.wc.camera.azimuth)
-        el = str(self.view.wc.camera.elevation)
-        di = str(round(self.view.wc.camera.distance * 100) / 100)
+        a = str(self.view.wc.camera.azimuth)
+        e = str(self.view.wc.camera.elevation)
+        d = str(np.around(self.view.wc.camera.distance, 2))
+        s = str(np.around(self.view.wc.camera.scale_factor, 2))
         # Set the text to the box :
-        self.userRotation.setText(rotstr.format(az=az, el=el, di=di))
+        self.userRotation.setText(rotstr.format(a=a, e=e, d=d, s=s))

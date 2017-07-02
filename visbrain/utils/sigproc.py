@@ -4,8 +4,8 @@ import numpy as np
 from warnings import warn
 
 
-__all__ = ['normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh',
-           'zerocrossing']
+__all__ = ('normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh',
+           'zerocrossing', 'power_of_ten')
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -168,3 +168,49 @@ def zerocrossing(data):
     pos = data > 0
     npos = ~pos
     return ((pos[:-1] & npos[1:]) | (npos[:-1] & pos[1:])).nonzero()[0] + 1
+
+
+def power_of_ten(x, e=3):
+    """Power of ten format.
+
+    Args:
+        x: float
+            The floating point to transform.
+
+    Kargs:
+        e: int, optional, (def: 2)
+            If x is over 10 ** -e and bellow 10 ** e, this function doesn't
+            change the format.
+
+    Returns:
+        xtronc: float
+            The troncate version of x.
+
+        power: int
+            The power of ten to retrieve x.
+    """
+    x = np.abs(x)
+    sign = np.sign(x)
+    stx = str(x)
+    if 0 < x <= 10 ** -e:  # x is a power of e- :
+        if stx.find('e-') + 1:  # Format : 'xe-y'
+            sp = stx.split('e-')
+            return float(sp[0]), -int(sp[1])
+        else:  # Format : 0.000x
+            sp = stx.split('.')[1]
+            l = 0
+            while sp[l] == '0':
+                l += 1
+            l += 1
+            return (sign * x) * (10 ** l), -l
+    elif x >= 10 ** e:  # x is a power of e :
+        if stx.find('e') + 1:  # Format : 'xey'
+            sp = stx.split('e')
+            return float(sp[0]), -int(sp[1])
+        else:
+            k = e
+            while x % (10 ** k) != x:
+                k += 1
+            return (sign * x) / (10 ** (k - 1)), k - 1
+    else:
+        return sign * x, 0

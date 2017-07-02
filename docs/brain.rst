@@ -25,29 +25,12 @@ There's four fundamental objects in Brain :
 * The main brain, which can be generated using one of the three possible template or simply pass vertices / faces of your own template.
 * Sources, which can represent deep electrodes, EEG / MEG captors or source localization...
 * Connectivity, in order to materialize a connexion strength between those sources (like coherence, amplitude-amplitude coupling...)
-* Areas, which are brain sub-structures (brodmann areas or AAL)
+* ROI (Region Of Interest), which are brain sub-structures (Brodmann areas or AAL)
 
 
 .. figure::  picture/objects.png
    :align:   center
 
-Inputs
-------
-
-Each one of the above objects can be controled using input parameters for the Brain class. All possible inputs use a prefixe, refering to the object itself :
-
-	* 'a(_)': atlas properties
-	* 's(_)': sources properties
-	* 'c(_)': connectivity properties
-	* 'cmap(_)': colormap properties
-	* 't(_)': transformations properties
-	* 'ui(_)': graphical interface properties
-	* 'cb(_)': colorbar properties
-	* 'l(_)': light properties
-
-Here's the list of all possible inputs :
-
-.. autoclass:: visbrain.brain.brain.Brain
 
 Color
 -----
@@ -63,15 +46,15 @@ The colormap can be personalized using five variables :
 .. figure::  picture/colormap.png
    :align:   center
 
-User functions
---------------
+API
+---
 
-The user functions correspond to a bundle of functions that the user can use to control Brain operations without opening the graphical interface. This can be convenient to generate a large amount of pictures. 
+The user functions correspond to a bundle of functions that can be used to control Brain operations without opening the graphical interface. This can be convenient to generate a large amount of pictures. 
 
 .. toctree::
    :maxdepth: 4
    
-   vbfunctions
+   brainAPI
 
 
 Screenshot tutorial
@@ -90,17 +73,26 @@ Shortcuts
 ==============          ==================================================================================
 Keys                    Description
 ==============          ==================================================================================
-CTRL+d                  Display quick settings panel
-CTRL+n                  Screenshot window
-0                       Toggle axial view
-1                       Toggle coronal view
-2                       Toggle sagittal view
-3                       Toggle light reflection on the brain
-4                       Display / hide the brain
-5                       Display / hide the sources (if defined)
-6                       Display / hide the connectivity lines (if defined)
+<space>                 Brain transparency
+0                       Top view
+1                       Bottom view
+2                       Left view
+3                       Right view
+4                       Front view
+5                       Back view
+b                       Display / hide the brain
+s                       Display / hide sources
+t                       Display / hide connectivity
+r                       Display / hide Region Of Interest (ROI)
+c                       Display / hide colorbar
+a                       Auto-scale colormap
 "+"                     Increase brain opacity
 "-"                     Decrease brain opacity
-CTRL+p                  Run the cortical projection
-CTRL+r                  Run the cortical repartition
+CTRL+P                  Run the cortical projection
+CTRL+R                  Run the cortical repartition
+CTRL+D                  Display quick settings panel
+CTRL+N                  Screenshot of the main canvas
+CTRL+W                  Screenshot of the entire window
+CTRL+T                  Show the shortcuts panel
+CTRL+Q                  Exit
 ==============          ==================================================================================

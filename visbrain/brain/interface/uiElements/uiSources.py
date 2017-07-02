@@ -20,13 +20,8 @@ class uiSources(object):
         """Init."""
         # ====================== SOURCES ======================
         # ---------- Visibility ----------
-        self.show_Sources.clicked.connect(self._toggle_sources_visible)
-        self.s_uiAll.clicked.connect(self._fcn_sourcesDisplay)
-        self.s_uiNone.clicked.connect(self._fcn_sourcesDisplay)
-        self.s_LeftH.clicked.connect(self._fcn_sourcesDisplay)
-        self.s_RightH.clicked.connect(self._fcn_sourcesDisplay)
-        self.s_Inside.clicked.connect(self._fcn_sourcesDisplay)
-        self.s_Outside.clicked.connect(self._fcn_sourcesDisplay)
+        self._sourcesPickdisp.currentIndexChanged.connect(
+                                                      self._fcn_sourcesDisplay)
         # ---------- Change marker look ----------
         # Symbol :
         sym = [self.s_Symbol.itemText(i) for i in range(self.s_Symbol.count())]
@@ -75,17 +70,18 @@ class uiSources(object):
     # =====================================================================
     def _fcn_sourcesDisplay(self):
         """Select which part of sources to display."""
-        if self.s_uiAll.isChecked():
+        idx = int(self._sourcesPickdisp.currentIndex())
+        if idx == 0:
             self.sources_display(select='all')
-        elif self.s_uiNone.isChecked():
+        elif idx == 1:
             self.sources_display(select='none')
-        elif self.s_LeftH.isChecked():
+        elif idx == 2:
             self.sources_display(select='left')
-        elif self.s_RightH.isChecked():
+        elif idx == 3:
             self.sources_display(select='right')
-        elif self.s_Inside.isChecked():
+        elif idx == 4:
             self.sources_display(select='inside')
-        elif self.s_Outside.isChecked():
+        elif idx == 5:
             self.sources_display(select='outside')
 
     def _fcn_MarkerLook(self):
@@ -130,9 +126,10 @@ class uiSources(object):
             self._tcontribute = new_contribute
             self._cleanProj()
         # Run either the activity / repartition projection :
-        if self._uitActivity.isChecked():
+        idxproj = int(self._uitPickProj.currentIndex())
+        if idxproj == 0:
             self._tprojectas = 'activity'
-        elif self._uitRepartition.isChecked():
+        elif idxproj == 1:
             self._tprojectas = 'repartition'
         self._sourcesProjection()
 
@@ -160,18 +157,3 @@ class uiSources(object):
         self.sources.stextsize = self.q_stextsize.value()
         # Update text :
         self.sources.text_update()
-
-    def _toggle_sources_visible(self):
-        """Toggle to display / hide the brain."""
-        viz = not self.sources.mesh.visible
-        self.sources.mesh.visible = viz
-        self.sources.stextmesh.visible = viz
-        self.show_Sources.setChecked(viz)
-        self.q_stextshow.setChecked(viz)
-        self.toolBox.setEnabled(viz)
-        self.toolBox.setEnabled(viz)
-        self.groupBox_6.setEnabled(viz)
-        self.o_Sources.setEnabled(viz)
-        self.o_Sources.setChecked(viz)
-        self.o_Text.setEnabled(viz)
-        self.o_Text.setChecked(viz)

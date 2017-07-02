@@ -97,7 +97,7 @@ class uiPanels(object):
         # =====================================================================
         self._hypCanvas = AxisCanvas(axis=self._ax, bgcolor=(1., 1., 1.),
                                      y_label=None, x_label=None,
-                                     name='Spectrogram', color='black',
+                                     name='Hypnogram', color='black',
                                      yargs={'text_color': 'black'},
                                      xargs={'text_color': 'black'},
                                      fcn=[self.on_mouse_wheel])
@@ -132,10 +132,11 @@ class uiPanels(object):
         self._PanTopoCmax.setValue(.5)
         # Connect :
         self._PanTopoCmap.addItems(self._cmap_lst)
-        self._PanTopoCmap.setCurrentIndex(self._cmap_lst.index(self._defcmap))
+        self._PanTopoCmap.setCurrentIndex(self._cmap_lst.index('Spectral'))
         self._PanTopoCmin.setKeyboardTracking(False)
         self._PanTopoCmin.valueChanged.connect(self._fcn_topoSettings)
         self._PanTopoCmax.setKeyboardTracking(False)
+        self._PanTopoRev.clicked.connect(self._fcn_topoSettings)
         self._PanTopoCmax.valueChanged.connect(self._fcn_topoSettings)
         self._PanTopoCmap.currentIndexChanged.connect(self._fcn_topoSettings)
         self._PanTopoDisp.currentIndexChanged.connect(self._fcn_topoSettings)
@@ -149,7 +150,7 @@ class uiPanels(object):
         # =====================================================================
         # Create a unique time axis :
         self._TimeAxis = TimeAxis(xargs={'text_color': 'black'},
-                                  x_label=None,
+                                  x_label=None, name='TimeAxis',
                                   bgcolor=(1., 1., 1.), color='black',
                                   indic_color=self._indicol,
                                   fcn=[self.on_mouse_wheel])
@@ -442,15 +443,10 @@ class uiPanels(object):
         """Manage colormap of the topoplot."""
         # ============== TYPE ==============
         dispas = self._PanTopoDisp.currentText()
-        if dispas == 'raw':
-            self._topo.demean = False
-            self._topo.detrend = False
-            self._topo.filt = False
-        else:
-            self._topo.filt = True
-            self._topo.dispas = dispas
-            self._topo.fstart = self._PanTopoFmin.value()
-            self._topo.fend = self._PanTopoFmax.value()
+        self._topo.filt = True
+        self._topo.dispas = dispas
+        self._topo.fstart = self._PanTopoFmin.value()
+        self._topo.fend = self._PanTopoFmax.value()
 
         # ============== LIMITS / COLORMAP ==============
         # Get limits :
@@ -462,7 +458,8 @@ class uiPanels(object):
             cmin = self._PanTopoCmin.value()
             cmax = self._PanTopoCmax.value()
         # Get and set colormap :
-        cmap = self._PanTopoCmap.currentText()
+        rv = self._PanTopoRev.isChecked()
+        cmap = self._PanTopoCmap.currentText() + rv * '_r'
         # Send data :
         self._topo.set_cmap(clim=(cmin, cmax), cmap=cmap)
 

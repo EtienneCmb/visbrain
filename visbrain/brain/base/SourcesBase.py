@@ -14,17 +14,17 @@ from scipy.spatial.distance import cdist
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
 
-from ...utils import color2vb, normalize, _colormap
+from ...utils import color2vb, normalize, CbarArgs
 
 __all__ = ['SourcesBase']
 
 
-class SourcesBase(_colormap):
+class SourcesBase(CbarArgs):
     """Initialize the source object and to add some necessary functions.
 
     This class can be used for like plotting, loading... Each source's input
     start with 's_'. Other arguments (**kwargs) are ignored. This class is also
-    responsible for associated text of each source.
+    responsible for associated text to each source.
     """
 
     def __init__(self, s_xyz=None, s_data=None, s_color='#ab4652',
@@ -32,7 +32,7 @@ class SourcesBase(_colormap):
                  s_edgecolor=None, s_edgewidth=0.6, s_scaling=False,
                  s_text=None, s_symbol='disc', s_textcolor='black',
                  s_textsize=3, s_textshift=(0, 2, 0), s_mask=None,
-                 s_maskcolor='gray', s_cmap='inferno', s_cmap_clim=None,
+                 s_maskcolor='gray', s_cmap='inferno', s_cmap_clim=(0., 1.),
                  s_cmap_vmin=None, s_cmap_vmax=None, s_cmap_under=None,
                  s_cmap_over=None, s_projecton='surface', **kwargs):
         """Init."""
@@ -57,10 +57,6 @@ class SourcesBase(_colormap):
         self._defcolor = 'slateblue'
         self._rescale = 3.0
 
-        # Initialize colorbar elements :
-        _colormap.__init__(self, s_cmap, s_cmap_clim, s_cmap_vmin, s_cmap_vmax,
-                           s_cmap_under, s_cmap_over, self.data)
-
         # Plot :
         if self.xyz is not None:
             self.prepare2plot()
@@ -70,12 +66,21 @@ class SourcesBase(_colormap):
             self.mesh = visu.Markers(name='NoneSources')
             self.stextmesh = visu.Text(name='NoneText')
 
+        # Vmin/Vmax only active if not None and in [clim[0], clim[1]] :
+        isvmin = (s_cmap_vmin is not None) and (
+                                s_cmap_clim[0] < s_cmap_vmin < s_cmap_clim[1])
+        isvmax = (s_cmap_vmax is not None) and (
+                                s_cmap_clim[0] < s_cmap_vmax < s_cmap_clim[1])
+        # Initialize colorbar elements :
+        CbarArgs.__init__(self, s_cmap, s_cmap_clim, isvmin, s_cmap_vmin,
+                          isvmax, s_cmap_vmax, s_cmap_under, s_cmap_over)
+
     def __len__(self):
         """Get the length of non-masked sources."""
         return len(np.where(np.logical_not(self.data.mask))[0])
 
     def __iter__(self):
-        """Iterations over sources coordinates."""
+        """Iterate over sources coordinates."""
         for k in range(len(self)):
             yield np.ravel(self.xyz[k, :])
 
@@ -587,3 +592,9 @@ class SourcesBase(_colormap):
             self.stextmesh.color = self.stextcolor
             self.stextmesh.font_size = self.stextsize
             self.stextmesh.update()
+
+    # ----------- NAME -----------
+    @property
+    def name(self):
+        """Get the name value."""
+        return self.mesh.name

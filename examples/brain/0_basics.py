@@ -1,4 +1,8 @@
-"""This is the most basic example to illustrate how to start a Brain instance
+"""
+Basic plotting
+==============
+
+This is the most basic example to illustrate how to start a Brain instance
 and visualize a basic standard MNI brain.
 """
 from visbrain import Brain

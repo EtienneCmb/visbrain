@@ -1,4 +1,8 @@
-"""This example demonstrate how to display deep sources using MNI coordinates.
+"""
+Real data example
+=================
+
+This example demonstrate how to display deep sources using MNI coordinates.
 """
 from visbrain import Brain
 import numpy as np
