@@ -7,6 +7,14 @@
 .. image:: https://badge.fury.io/py/visbrain.svg
   :target: https://badge.fury.io/py/visbrain
 
+.. Levels :
+.. # Main title
+.. * Tile 1
+.. = Title 2
+.. - Title 3
+.. ~ Title 4
+.. ^ Title 5
+.. + Title 6
 
 Visbrain documentation
 ######################

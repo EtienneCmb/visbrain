@@ -25,29 +25,12 @@ There's four fundamental objects in Brain :
 * The main brain, which can be generated using one of the three possible template or simply pass vertices / faces of your own template.
 * Sources, which can represent deep electrodes, EEG / MEG captors or source localization...
 * Connectivity, in order to materialize a connexion strength between those sources (like coherence, amplitude-amplitude coupling...)
-* Areas, which are brain sub-structures (brodmann areas or AAL)
+* ROI (Region Of Interest), which are brain sub-structures (Brodmann areas or AAL)
 
 
 .. figure::  picture/objects.png
    :align:   center
 
-Inputs
-------
-
-Each one of the above objects can be controled using input parameters for the Brain class. All possible inputs use a prefixe, refering to the object itself :
-
-	* 'a(_)': atlas properties
-	* 's(_)': sources properties
-	* 'c(_)': connectivity properties
-	* 'cmap(_)': colormap properties
-	* 't(_)': transformations properties
-	* 'ui(_)': graphical interface properties
-	* 'cb(_)': colorbar properties
-	* 'l(_)': light properties
-
-Here's the list of all possible inputs :
-
-.. autoclass:: visbrain.brain.brain.Brain
 
 Color
 -----
@@ -63,15 +46,15 @@ The colormap can be personalized using five variables :
 .. figure::  picture/colormap.png
    :align:   center
 
-User functions
---------------
+API
+---
 
-The user functions correspond to a bundle of functions that the user can use to control Brain operations without opening the graphical interface. This can be convenient to generate a large amount of pictures. 
+The user functions correspond to a bundle of functions that can be used to control Brain operations without opening the graphical interface. This can be convenient to generate a large amount of pictures. 
 
 .. toctree::
    :maxdepth: 4
    
-   vbfunctions
+   brainAPI
 
 
 Screenshot tutorial

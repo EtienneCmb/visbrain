@@ -12,12 +12,12 @@ from scipy.spatial import ConvexHull
 from .base.visuals import BrainMesh
 from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
-from ..utils import color2vb, AddMesh, CbarBase
+from ..utils import color2vb, AddMesh
 
-__all__ = ['userfcn']
+__all__ = ('BrainUserMethods')
 
 
-class userfcn(object):
+class BrainUserMethods(object):
     """Group all functions accessible by the user.
 
     Those functions are grouped in the following categories:
@@ -698,8 +698,8 @@ class userfcn(object):
         >>> Define a brain instance :
         >>> vb = Brain(s_xyz=s_xyz, c_connect=c_connect)
 
-        Seel also
-        ---------
+        See also
+        --------
         cbar_control : control the colormap of a specific object
         """
         if colorby is not None:
