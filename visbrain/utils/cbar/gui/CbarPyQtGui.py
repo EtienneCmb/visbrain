@@ -358,6 +358,17 @@ class Ui_Form(object):
         self.verticalLayout_5.addLayout(self.gridLayout_4)
         spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem5)
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_5.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem6)
+        self._cbarRstCam = QtWidgets.QPushButton(self.groupBox)
+        self._cbarRstCam.setObjectName("_cbarRstCam")
+        self.horizontalLayout_5.addWidget(self._cbarRstCam)
+        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem7)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_5)
         self.CbarLayout.addWidget(self.groupBox)
         self.verticalLayout.addLayout(self.CbarLayout)
 
@@ -424,6 +435,7 @@ class Ui_Form(object):
         self.txtSz.setToolTip(_translate("Form", "<html><head/><body><p>Text size of limits (clim / vmin / vmax)</p></body></html>"))
         self.label_14.setText(_translate("Form", "Size"))
         self.label_15.setText(_translate("Form", "Shift"))
+        self._cbarRstCam.setText(_translate("Form", "Reset camera"))
 
 
 if __name__ == "__main__":
