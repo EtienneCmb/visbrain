@@ -1,4 +1,4 @@
-"""Main class for managing sub-structures (areas).
+"""Main class for managing sub-structures (ROI).
 
 Areas are sub-divided parts of the brain. The present file display those areas
 using either Automated Anatomical Labeling (AAL) or Brodmann area labeling.
@@ -18,10 +18,10 @@ from .visuals import BrainMesh
 from ...utils import array2colormap, color2vb, color2faces
 
 # warnings.filterwarnings('ignore', r'with ndim')
-__all__ = ['AreaBase']
+__all__ = ['RoiBase']
 
 
-class AreaBase(object):
+class RoiBase(object):
     """Main class for managing sub-division brain areas.
 
     This class contains several method for managing areas (loading, color,
@@ -32,7 +32,7 @@ class AreaBase(object):
                  scale_factor=1, name='', smooth=3):
         """Init."""
         self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
-            'Area')[0], 'templates')
+            'Roi')[0], 'templates')
         self.file = 'roi.npz'
         self._roitype = {}
         self._structure = structure

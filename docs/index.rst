@@ -7,6 +7,14 @@
 .. image:: https://badge.fury.io/py/visbrain.svg
   :target: https://badge.fury.io/py/visbrain
 
+.. Levels :
+.. # Main title
+.. * Tile 1
+.. = Title 2
+.. - Title 3
+.. ~ Title 4
+.. ^ Title 5
+.. + Title 6
 
 Visbrain documentation
 ######################
@@ -17,6 +25,8 @@ Visbrain is a python package dedicated to multi-purpose neuroscience visualizati
 * :ref:`Sleep` : display sleep data, perform spindles / REM / peaks / slow waves / K-complex detection and live hypnogram edition
 * :ref:`Ndviz` : inspect data your n-dimentional data.
 * :ref:`Figure` : arange exported pictures in a grid, add colorbar and save a paper ready figure.
+
+See the :ref:`ChangelogFutur`.
 
 Installation
 ************
@@ -78,74 +88,6 @@ Finally, install Visbrain :
 
     pip install visbain==0.2.7
 
-What's new?
-***********
-
-* New in version v0.2.9
-  
-  * Visbrain
-
-    * Better integration of PyQt5
-    * Start grouping read/write function in I/O
-  
-  * Brain
-
-    * New menu and much cleaner code and GUI
-    * New colorbar
-    * **Shortcuts has changed**
-    * You can now save/load the GUI configuration either from the menu File/load or File/save or using methods *loadConfig* and *saveConfig* 
-
-  * Sleep
-
-    * Support annotations
-    * Enable editing/removing detections
-    * Improve default topoplot state
-
-
-* New in version v0.2.8
-
-  * Visbrain
-
-    * Migration to PyQt5
-    * Start new module *Colorbar* for a better integration of color controls and properties.
-
-  * Sleep
-
-    * Enable exporting colored hypnogram
-    * Bug fixing & GUI improvements
-
-* New in version v0.2.3
-
-  * Sleep
-
-    * New re-referencing method (common average)
-    * Detection improvements
-    * Add link to script and datasets to the doc
-
-
-Future plans
-************
-
-.. todo::
-  
-  * Visbrain
-
-    * conda installation
-  
-  * Brain
-
-    * Compatibility with other brain templates
-    * Display brain signals/2D maps attached to sources
-    * Better integration of ROI + possibility to the user to use other volume templates
-
-  * Sleep
-
-    * Improve detections GUI integration
-    * Add default supported files integration
-    * Color screenshot
-    * Command line control
-    * Automatic scoring
-
 
 Contents:
 *********
@@ -158,6 +100,8 @@ Contents:
    ndviz
    figure
    io
+   auto_examples/index.rst
+   changelog_futur
 
 
 Indices and tables

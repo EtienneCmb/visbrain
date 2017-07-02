@@ -34,49 +34,38 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
 
     Sleep has been developped in collaboration with Raphael Vallat.
 
-    Kargs:
-        file: string, optional, (def: None)
-            Path to the data file (.eeg, .trc or .edf).
-
-        hypno_file: string, optional, (def: None)
-            Path to the hypnogram file (.hyp, .txt or .csv)
-
-        config_file: string, optional, (def: None)
-            Path to the configuration file (.txt)
-
-        annotation_file: string, optional, (def: None)
-            Path to the annotation file (.txt, .csv)
-
-        data: np.ndarray, optional, (def: None)
-            Array of data of shape (n_channels, n_pts)
-
-        channels: list, optional, (def: None)
-            List of channel names. The length of this list must be n_channels.
-
-        sf: float, optional, (def: None)
-            The sampling frequency of raw data.
-
-        hypno: np.ndarray, optional, (def: None)
-            Hypnogram data. Should be a raw vector of shape (n_pts,)
-
-        downsample: float, optional, (def: 100.)
-            The downsampling frequency for the data and hypnogram raw data.
-
-        axis: bool, optional, (def: Fals)
-            Specify if each axis have to contains its own axis. Be carefull
-            with this option, the rendering can be much slower.
-
-        line: string, optional, (def: 'gl')
-            Specify the line rendering. Use 'gl' for the default line (fast) or
-            'agg' for smooth lines. This option might not works on some
-            plateforms.
-
-        hedit: bool, optional, (def: False)
-            Enable the drag and drop hypnogram edition.
-
-        href: list, optional, (def: ['art', 'wake', 'rem', 'n1', 'n2', 'n3'])
-            List of sleep stages. This list can be used to changed the display
-            order into the GUI.
+    Parameters
+    ----------
+    file : string | None
+        Path to the data file (.eeg, .trc or .edf).
+    hypno_file : string | None
+        Path to the hypnogram file (.hyp, .txt or .csv)
+    config_file : string | None
+        Path to the configuration file (.txt)
+    annotation_file : string | None
+        Path to the annotation file (.txt, .csv)
+    data : array_like | None
+        Array of data of shape (n_channels, n_pts)
+    channels : list | None
+        List of channel names. The length of this list must be n_channels.
+    sf : float | None
+        The sampling frequency of raw data.
+    hypno : array_like | None
+        Hypnogram data. Should be a raw vector of shape (n_pts,)
+    downsample : float | 100.
+        The downsampling frequency for the data and hypnogram raw data.
+    axis : bool | Fals
+        Specify if each axis have to contains its own axis. Be carefull
+        with this option, the rendering can be much slower.
+    line : string | 'gl'
+        Specify the line rendering. Use 'gl' for the default line (fast) or
+        'agg' for smooth lines. This option might not works on some
+        plateforms.
+    hedit : bool | False
+        Enable the drag and drop hypnogram edition.
+    href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
+        List of sleep stages. This list can be used to changed the display
+        order into the GUI.
     """
 
     def __init__(self, file=None, hypno_file=None, config_file=None,
@@ -133,7 +122,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
 
             # Change the sampling frequency if down-sample :
             if downsample is not None:
-                time = time[::int(np.round(sf/downsample))]
+                time = time[::int(np.round(sf / downsample))]
                 sf = downsample
                 downsample = None
 
@@ -225,49 +214,40 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
                     time=None, href=None):
         """Check data, hypnogram, channels and sample frequency after loading.
 
-        Args:
-            sf: float
-                The sampling frequency.
+        Parameters
+        ----------
+        sf: float
+            The sampling frequency.
+        data: array_like
+            The data to use. Must be a (n_channels, n_pts) array.
+        channel : list
+            List of string where each element refer to a channel names.
+            The length of this list must be n_channels.
+        hypno : array_like | None
+            A row vector of shape (npts,) containing hypnogram values.
+            If the hypnogram is None, this functions returns a row vector
+            fill with zeros.
+        time : array_like | None
+            The time vector to use. If the time vector is None, it will be
+            inferred from data length (be carefull to time consistency).
+        href : list | None
+            List of sleep stages. This list can be used to changed the
+            display order into the GUI.
 
-            data: np.ndarray
-                The data to use. Must be a (n_channels, n_pts) array.
-
-            channel: list
-                List of string where each element refer to a channel names.
-                The length of this list must be n_channels.
-
-        Kargs:
-            hypno: np.ndarray, optional, (def: None)
-                A row vector of shape (npts,) containing hypnogram values.
-                If the hypnogram is None, this functions returns a row vector
-                fill with zeros.
-
-            time: np.ndarray, optional, (def: None)
-                The time vector to use. If the time vector is None, it will be
-                inferred from data length (be carefull to time consistency).
-
-            href: list, optional, (def: None)
-                List of sleep stages. This list can be used to changed the
-                display order into the GUI.
-
-        Returns:
-            sf: float
-                The sampling frequency
-
-            data: np.ndarray
-                The float 32 data with a shape of (n_channels, n_pts).
-
-            channels: list
-                List of cleaned channel names.
-
-            hypno: np.ndarray
-                The float 32 hypnogram with a shape of (npts,).
-
-            time: np.ndarray
-                The time vector with a shape of (npts,).
-
-            href: list, optional, (def: default)
-                List of checked hypno reference.
+        Returns
+        -------
+        sf: float
+            The sampling frequency
+        data : array_like
+            The float 32 data with a shape of (n_channels, n_pts).
+        channels : list
+            List of cleaned channel names.
+        hypno : array_like
+            The float 32 hypnogram with a shape of (npts,).
+        time : array_like
+            The time vector with a shape of (npts,).
+        href : list | default
+            List of checked hypno reference.
         """
         # ========================== CHECKING ==========================
         nchan = len(channels)
@@ -289,7 +269,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         # Channels checking :
         if nchan not in data.shape:
             raise ValueError("Incorrect data shape. The number of channels "
-                             "("+str(nchan)+') can not be found.')
+                             "(" + str(nchan) + ') can not be found.')
         # href checking :
         absref = ['art', 'wake', 'n1', 'n2', 'n3', 'rem']
         absint = [-1, 0, 1, 2, 3, 4]
@@ -301,7 +281,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
             # Check that all stage are present :
             for k in absref:
                 if k not in href:
-                    raise ValueError(k+" not found in href.")
+                    raise ValueError(k + " not found in href.")
             # Force capitalize :
             href = [k.capitalize() for k in href]
             href[href.index('Rem')] = 'REM'

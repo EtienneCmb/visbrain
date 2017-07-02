@@ -46,6 +46,9 @@ class Projections(object):
             raise ValueError("The radius parameter must be a integer or a "
                              "float number.")
 
+        # Clean projection :
+        self._cleanProj()
+
         # Check projection type :
         if self._tprojectas not in ['activity', 'repartition']:
             raise ValueError("The t_projectas parameter must either be "
@@ -64,18 +67,21 @@ class Projections(object):
         elif self._tprojectas == 'repartition':
             mod = self.sources._repartition(v, r, c)
         self._modproj = mod
-        self.sources._MinMax = (mod.min(), mod.max())
+        self.sources._minmax = (mod.min(), mod.max())
 
         # ============= MASKED =============
         if self.sources and (self._idxmasked is None):
             self._idxmasked = self.sources._MaskedEucl(v, self._tradius, c)
 
         # ============= COLOR =============
-        self._proj2Color()
+        self._proj2Color(init=True)
 
-    def _proj2Color(self):
+    def _proj2Color(self, init=False):
         """Turn the projection into colormap."""
-        color = array2colormap(self._modproj, **self.sources._cb)
+        # Get color arguents :
+        kwargs = self.cbobjs._objs['Projection'].to_kwargs()
+        # Get the colormap :
+        color = array2colormap(self._modproj, **kwargs)
         color[self._modproj.mask, ...] = 1.
 
         if self.sources:
@@ -86,6 +92,22 @@ class Projections(object):
 
         # ============= MESH =============
         self._tobj[self._tprojecton].mesh.set_color(data=color)
+
+        if init:
+            # Disconnect interactions :
+            self.cbqt._disconnect()
+            # Enable projection in the cbar object selection :
+            self.cbqt.setEnabled('Projection', True)
+            self.cbqt.select('Projection')
+            # Update variables :
+            self.cbqt._fcn_ChangeObj()
+            # Enable to display cbar from the menu :
+            self.menuDispCbar.setEnabled(True)
+            self.menuDispCbar.setChecked(True)
+            self._fcn_menuCbar()
+            # Link the colorbase with projections :
+            self.cbqt.link('Projection', self._fcn_link_proj,
+                           self._fcn_minmax_proj)
 
     def _cleanProj(self):
         """Clean projection variables."""

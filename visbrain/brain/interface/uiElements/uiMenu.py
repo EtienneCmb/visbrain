@@ -21,10 +21,10 @@ class uiMenu(object):
         self.menuSaveScreenCan.triggered.connect(self._fcn_screenshotCan)
         self.menuSaveScreenWin.triggered.connect(self._fcn_screenshotWin)
         # Config :
-        self.menuSaveConfig.triggered.connect(self._fcn_saveConfig)
+        self.menuSaveGuiConfig.triggered.connect(self._fcn_saveConfig)
         # ----------- LOAD -----------
         # Config :
-        self.menuLoadConfig.triggered.connect(self._fcn_loadConfig)
+        self.menuLoadGuiConfig.triggered.connect(self._fcn_loadConfig)
         # Exit :
         self.actionExit.triggered.connect(QtWidgets.qApp.quit)
 
@@ -69,9 +69,7 @@ class uiMenu(object):
         """Screenshot using the GUI.
 
         This function need that a savename is already defined (otherwise, a
-        window appeared so that the user specify the path/name). Then, it needs
-        an extension (png) and a boolean parameter (self.cb['export']) to
-        specify if the colorbar has to be exported.
+        window appeared so that the user specify the path/name).
         """
         # Manage filename :
         if isinstance(self._savename, str):
@@ -94,14 +92,17 @@ class uiMenu(object):
                          autocrop=self._autocrop, region=self._crop)
 
         # Export the colorbar :
-        # self.cb['export'] = True
-        if self.cb['export']:
+        if self._cbarexport:
+            # Display colorbar :
+            self.cbpanelW.setVisible(True)
+
             # Colorbar file name : filename_colorbar.extension
             saveas = saveas.replace('.', '_colorbar.')
 
             # Export the colorbar canvas :
-            write_fig_canvas(saveas, self.view.cbcanvas, region=self._cbcrop,
-                             autocrop=self._autocrop, resolution=self._uirez)
+            write_fig_canvas(saveas, self.cbqt.cbviz._canvas,
+                             region=None, autocrop=self._autocrop,
+                             resolution=1000)
 
     def _fcn_screenshotWin(self):
         """Take a screenshot of the entire window."""
@@ -118,7 +119,6 @@ class uiMenu(object):
         """Toggle method for display / hide the settings panel."""
         viz = self.menuDispQuickSettings.isChecked()
         self.q_widget.setVisible(viz)
-        self._xyzRange['turntable']['x'] = (-950, 1050) if viz else (-750, 850)
 
     def _fcn_menuBrain(self):
         """Display/hide the main Brain."""
@@ -130,7 +130,8 @@ class uiMenu(object):
 
     def _fcn_menuSources(self):
         """Display/hide sources."""
-        viz = self.menuDispSources.isChecked()
+        inn = self.sources.mesh.name != 'NoneSources'
+        viz = self.menuDispSources.isChecked() and inn
         self.sources.mesh.visible = viz
         self.sources.stextmesh.visible = viz
         self.q_stextshow.setChecked(viz)
@@ -144,7 +145,8 @@ class uiMenu(object):
 
     def _fcn_menuConnect(self):
         """Display/hide connectivity."""
-        viz = self.menuDispConnect.isChecked()
+        inn = self.connect.mesh.name != 'NoneConnect'
+        viz = self.menuDispConnect.isChecked() and inn
         self.connect.mesh.visible = viz
         self.toolBox_5.setEnabled(viz)
         self.toolBox_6.setEnabled(viz)
@@ -213,7 +215,8 @@ class uiMenu(object):
         if self.area.name == 'displayed':
             self.area.mesh.set_camera(camera)
         self.view.wc.update()
-        self._set_cam_range(name=camera.name)
+        if camera.name == 'turntable':
+            self._rotate(fixed='axial_0')
 
     ###########################################################################
     #                           PROJECTIONS

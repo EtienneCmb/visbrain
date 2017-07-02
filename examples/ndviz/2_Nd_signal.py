@@ -1,4 +1,8 @@
-"""This example show how to display and control a ND signal."""
+"""
+Plot multidimensional signals
+=============================
+
+This example show how to display and control a ND signal."""
 
 import numpy as np
 from visbrain import Ndviz
@@ -9,8 +13,8 @@ kw = {}
 # Sampling frequency :
 sf = 1024.
 # Create a 10hz cardinal sinus :
-time = np.arange(10*8*1000*20)/1024.
-y = np.sin(2*10*time).astype(np.float32).reshape(10, 8, 1000, 20)
+time = np.arange(10 * 8 * 1000 * 20) / 1024.
+y = np.sin(2 * 10 * time).astype(np.float32).reshape(10, 8, 1000, 20)
 y += np.random.rand(10, 8, 1000, 20).astype(np.float32)
 y *= np.random.rand(10, 8, 1, 20).astype(np.float32)
 kw['sf'] = sf

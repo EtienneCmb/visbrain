@@ -11,6 +11,9 @@ __all__ = ['CbarQt']
 class CbarQt(object):
     """Link the GUI colorbar with the VisPy based colorbar.
 
+    self[obj_name] : get the item from the GUI
+    self[obj_name] = value : set the value to the VisPy based colorbar.
+
     Args:
         guiW: PyQt widget
             The widget for adding the GUI colorar properties.
@@ -19,7 +22,7 @@ class CbarQt(object):
             The widget for adding the VisPy based colorbar.
     """
 
-    def __init__(self, guiW, vizW):
+    def __init__(self, guiW, vizW, cbobjs, parent=None, camera=None):
         """Init."""
         # --------------------------------------------------------------------
         #                             GUI COMPONENTS
@@ -28,24 +31,110 @@ class CbarQt(object):
         self.cbui = CbarForm()
         self.cbui.setupUi(guiW)
         # Add VisPy based colorbar :
-        self.cbviz = CbarVisual()
+        self.cbviz = CbarVisual(parent=parent)
         vizW.addWidget(self.cbviz._canvas.native)
+        self.cbobjs = cbobjs
 
         self['object'].addItems(self.cbobjs.keys())
-        self._initialize()
-        self._connect()
 
+    ###########################################################################
+    ###########################################################################
+    #                            GET / SET ITEMS
+    ###########################################################################
+    ###########################################################################
     def __getitem__(self, key):
         """Get the item from the GUI."""
-        return eval('self.cbui.'+key)
+        return eval('self.cbui.' + key)
 
     def __setitem__(self, key, value):
         """Set VisPy based colormap item from GUI properties."""
         if not isinstance(value, str):
-            exec('self.cbviz.'+key+'='+str(value))
+            exec('self.cbviz.' + key + '=' + str(value))
         else:
-            exec("self.cbviz."+key+"='"+value+"'")
+            exec("self.cbviz." + key + "='" + value + "'")
 
+    ###########################################################################
+    ###########################################################################
+    #                            LOAD / SAVE
+    ###########################################################################
+    ###########################################################################
+    def save(self, filename):
+        """Save all colorbar configurations.
+
+        Args:
+            filename: string
+                Name of the file to be saved.
+        """
+        self.cbobjs.save(filename)
+
+    def load(self, filename, **kwargs):
+        """Load a colorbar configuration file.
+
+        Args:
+            filename: string
+                Name of the file to load.
+
+        Kargs:
+            kwargs: dict, optional, (def: {})
+                Further arguments to pass to the CbarObjects class.
+        """
+        self.cbobjs.load(filename, **kwargs)
+
+    def add_camera(self, camera):
+        """Add a camera to the VisPy based colorbar."""
+        self.cbviz._wc.camera = camera
+
+    def to_dict(self):
+        """Return a dictionary of the current visual state."""
+        self.cbviz.to_dict()
+
+    def link(self, name, fcn, minmaxfcn):
+        """Link an object with a function.
+
+        When an colormap argument changed, a function associated to the object
+        is executed (only for colormap arguments i.e. cmap, clim, vmin, vmax,
+        under, over).
+        """
+        self.cbobjs._objs[name]._fcn = fcn
+        self.cbobjs._objs[name]._minmaxfcn = minmaxfcn
+
+    def select(self, name, onload=False):
+        """Select an object.
+
+        Args:
+            name: string
+                Name of the object to select.
+        """
+        # Get the list of all current objects :
+        allItems = [self['object'].itemText(i) for i in range(
+            self['object'].count())]
+        if name in allItems:
+            # Select object in the cbar object manager :
+            self.cbobjs.select(name)
+            # Find the index and set it in the combobox :
+            idx = allItems.index(name)
+            self['object'].setCurrentIndex(idx)
+        else:
+            raise ValueError(name + " not in the list of objects.")
+
+    def setEnabled(self, name, enable=True):
+        """Deactivate an object."""
+        # Get the list of all current objects :
+        allItems = [self['object'].itemText(i) for i in range(
+            self['object'].count())]
+        if name in allItems:
+            # Find the index and set it in the combobox :
+            idx = allItems.index(name)
+            self['object'].model().item(idx).setEnabled(enable)
+
+    ###########################################################################
+    ###########################################################################
+    #                CONNECT / DISCONNECT / INITIALIZE
+    ###########################################################################
+    ###########################################################################
+    # --------------------------------------------------------------------
+    #                          INITIALIZE GUI
+    # --------------------------------------------------------------------
     def _initialize(self):
         # _____________ SETTINGS _____________
         self['bckCol'].setText(str(self.cbobjs['bgcolor']))
@@ -65,6 +154,7 @@ class CbarQt(object):
         self['cmapRev'].setChecked(rev)
 
         # _____________ CLIM _____________
+        # Clim should never be None :
         self['climm'].setValue(self.cbobjs['clim'][0])
         self['climM'].setValue(self.cbobjs['clim'][1])
 
@@ -72,16 +162,12 @@ class CbarQt(object):
         # Set vmin/vmax limits :
         self._vminvmaxCheck()
         # Vmin/under :
-        if self.cbobjs['vmin']:
-            self['vmin'].setValue(self.cbobjs['vmin'])
-        else:
-            self['vminChk'].setChecked(False)
+        self['isvmin'].setChecked(self.cbobjs['isvmin'])
+        self['vmin'].setValue(self.cbobjs['vmin'])
         self['under'].setText(str(self.cbobjs['under']))
         # Vmax/over :
-        if self.cbobjs['vmax']:
-            self['vmax'].setValue(self.cbobjs['vmax'])
-        else:
-            self['vmaxChk'].setChecked(False)
+        self['isvmax'].setChecked(self.cbobjs['isvmax'])
+        self['vmax'].setValue(self.cbobjs['vmax'])
         self['over'].setText(str(self.cbobjs['over']))
 
         # _____________ TEXT _____________
@@ -95,6 +181,9 @@ class CbarQt(object):
 
         self._gui2visual()
 
+    # --------------------------------------------------------------------
+    #                             GUI -> VISUAL
+    # --------------------------------------------------------------------
     def _gui2visual(self):
         # Settings :
         self._fcn_BckCol()
@@ -104,7 +193,8 @@ class CbarQt(object):
         self._fcn_Border()
         self._fcn_Bw()
         self._fcn_Limits()
-        # Clim/Vmin/Vmax :
+        # Cmap/Clim/Vmin/Vmax :
+        self._fcn_cmapChanged()
         self._fcn_climchanged()
         self._fcn_vminChanged()
         self._fcn_vmaxChanged()
@@ -115,11 +205,11 @@ class CbarQt(object):
         self._fcn_TxtSize()
         self._fcn_TxtShift()
 
+    # --------------------------------------------------------------------
+    #                             CONNECT
+    # --------------------------------------------------------------------
     def _connect(self):
         """Connect cbui to cbviz."""
-        # --------------------------------------------------------------------
-        #                             GUI INTERACTIONS
-        # --------------------------------------------------------------------
         # _____________ SETTINGS _____________
         self['object'].currentIndexChanged.connect(self._fcn_ChangeObj)
         self['bckCol'].editingFinished.connect(self._fcn_BckCol)
@@ -144,12 +234,12 @@ class CbarQt(object):
 
         # _____________ VMIN/VMAX _____________
         # Vmin :
-        self['vminChk'].clicked.connect(self._fcn_vminChanged)
+        self['isvmin'].clicked.connect(self._fcn_vminChanged)
         self['vmin'].valueChanged.connect(self._fcn_vminChanged)
         self['under'].editingFinished.connect(self._fcn_vminChanged)
         self['vmin'].setKeyboardTracking(False)
         # Vmax :
-        self['vmaxChk'].clicked.connect(self._fcn_vmaxChanged)
+        self['isvmax'].clicked.connect(self._fcn_vmaxChanged)
         self['vmax'].valueChanged.connect(self._fcn_vmaxChanged)
         self['over'].editingFinished.connect(self._fcn_vmaxChanged)
         self['vmax'].setKeyboardTracking(False)
@@ -167,41 +257,59 @@ class CbarQt(object):
         self['txtSz'].setKeyboardTracking(False)
         self['txtSh'].setKeyboardTracking(False)
 
+        # _____________ AUTOSCALE _____________
+        self['autoscale'].clicked.connect(self._fcn_cbAutoscale)
+
+    # --------------------------------------------------------------------
+    #                             DISCONNECT
+    # --------------------------------------------------------------------
     def _disconnect(self):
+        def _try(obj):
+            """Be sure to deconnect to all interactions."""
+            while True:
+                try:
+                    obj.disconnect()
+                except TypeError:
+                    break
         # Settings :
-        self['object'].disconnect()
-        self['bckCol'].disconnect()
-        self['txtCol'].disconnect()
-        self['ndigits'].disconnect()
-        self['width'].disconnect()
-        self['border'].disconnect()
-        self['bw'].disconnect()
-        self['limTxt'].disconnect()
+        _try(self['object'])
+        _try(self['bckCol'])
+        _try(self['txtCol'])
+        _try(self['ndigits'])
+        _try(self['width'])
+        _try(self['border'])
+        _try(self['bw'])
+        _try(self['limTxt'])
         # Cmap :
-        self['cmap'].disconnect()
-        self['cmapRev'].disconnect()
+        _try(self['cmap'])
+        _try(self['cmapRev'])
         # Clim :
-        self['climm'].disconnect()
-        self['climM'].disconnect()
+        _try(self['climm'])
+        _try(self['climM'])
         # Vmin/Vmax/Under/Over :
-        self['vminChk'].disconnect()
-        self['vmin'].disconnect()
-        self['under'].disconnect()
-        self['vmaxChk'].disconnect()
-        self['vmax'].disconnect()
-        self['over'].disconnect()
+        _try(self['isvmin'])
+        _try(self['vmin'])
+        _try(self['under'])
+        _try(self['isvmax'])
+        _try(self['vmax'])
+        _try(self['over'])
         # Text :
-        self['cblabel'].disconnect()
-        self['cbTxtSz'].disconnect()
-        self['cbTxtSh'].disconnect()
-        self['txtSz'].disconnect()
-        self['txtSh'].disconnect()
+        _try(self['cblabel'])
+        _try(self['cbTxtSz'])
+        _try(self['cbTxtSh'])
+        _try(self['txtSz'])
+        _try(self['txtSh'])
+        # Autoscale :
+        _try(self['autoscale'])
 
     ###########################################################################
     ###########################################################################
-    #                              SETTINGS
+    #                              SUB-FONCTION
     ###########################################################################
     ###########################################################################
+    # --------------------------------------------------------------------
+    #                             SETTINGS
+    # --------------------------------------------------------------------
     def _fcn_ChangeObj(self, *args, clean=False):
         """Change colorbar object."""
         # Disconnect interactions :
@@ -224,12 +332,6 @@ class CbarQt(object):
         bgcolor = color2json(self['bckCol'])
         self['bgcolor'] = bgcolor
         self.cbobjs['bgcolor'] = self.cbviz.bgcolor
-
-    def _fcn_TxtCol(self):
-        """Change text color."""
-        txtcolor = color2json(self['txtCol'])
-        self['txtcolor'] = txtcolor
-        self.cbobjs['txtcolor'] = self.cbviz.txtcolor
 
     def _fcn_Digits(self):
         """Change the number of digits."""
@@ -259,92 +361,98 @@ class CbarQt(object):
         self['bw'] = self['bw'].value()
         self.cbobjs['bw'] = self.cbviz.bw
 
-    def _fcn_Limits(self):
-        """Display/hide vmin/vmax."""
-        self['limtxt'] = self['limTxt'].isChecked()
-        self.cbobjs['limtxt'] = self.cbviz.limtxt
-
-    ###########################################################################
-    ###########################################################################
-    #                              COLORMAP
-    ###########################################################################
-    ###########################################################################
+    # --------------------------------------------------------------------
+    #                                CMAP
+    # --------------------------------------------------------------------
     def _fcn_cmapChanged(self):
         """Change the colormap."""
         rv = self['cmapRev'].isChecked() * '_r'
         self['cmap'] = str(self['cmap'].currentText()) + rv
         self.cbobjs['cmap'] = self.cbviz.cmap
+        # Run object's update function :
+        self.cbobjs.update()
 
-    ###########################################################################
-    ###########################################################################
-    #                              CLIM
-    ###########################################################################
-    ###########################################################################
+    # --------------------------------------------------------------------
+    #                             CLIM
+    # --------------------------------------------------------------------
     def _fcn_climchanged(self):
         """Update colorbar limits."""
-        # Get value :
+        # Get value (climm, climM):
         climm = float(self['climm'].value())
         climM = float(self['climM'].value())
-        # Update clim :
-        self['clim'] = (climm, climM)
-        self.cbobjs['clim'] = self.cbviz.clim
-        # Update vmin/vmax limits :
-        self._vminvmaxCheck()
+        # Fix (climm, climM) limits :
+        if climm < climM:
+            # Update clim :
+            self['clim'] = (climm, climM)
+            self.cbobjs['clim'] = self.cbviz.clim
+            # Update vmin/vmax limits :
+            self._vminvmaxCheck()
+            # Run object's update function :
+            self.cbobjs.update()
+        else:
+            raise ValueError(str(tuple((climm, climM))) + " : clim.min() "
+                             "> clim.max().")
 
-    ###########################################################################
-    ###########################################################################
-    #                              VMIN/VMAX
-    ###########################################################################
-    ###########################################################################
+    # --------------------------------------------------------------------
+    #                   VMIN / VMAX / UNDER / OVER
+    # --------------------------------------------------------------------
     def _vminvmaxCheck(self):
         """Activate checkboxs if vmin/vmax not None."""
-        if isinstance(self.cbobjs['vmin'], (int, float)):
-            self['vminChk'].setChecked(True)
-        if isinstance(self.cbobjs['vmax'], (int, float)):
-            self['vmaxChk'].setChecked(True)
+        # Get clim and define step :
         climm = float(self['climm'].value())
         climM = float(self['climM'].value())
-        # Define step :
         step = (climM - climm) / 100.
+        # -------------- Vmin --------------
+        if not isinstance(self.cbobjs['vmin'], (int, float)):
+            self.cbobjs['vmin'] = climm - 1.
         self['vmin'].setMinimum(climm)
         self['vmin'].setMaximum(climM)
         self['vmin'].setSingleStep(step)
+
+        # -------------- Vmax --------------
+        if not isinstance(self.cbobjs['vmax'], (int, float)):
+            self.cbobjs['vmax'] = climM + 1.
         self['vmax'].setMinimum(climm)
         self['vmax'].setMaximum(climM)
         self['vmax'].setSingleStep(step)
 
     def _fcn_vminChanged(self):
         """Change vmin/vmax/under/over."""
-        isvmin = self['vminChk'].isChecked()
+        isvmin = self['isvmin'].isChecked()
         # Enable/Disable panels :
         self['vminW'].setEnabled(isvmin)
         # Vmin :
-        if isvmin:
-            self['vmin'] = self['vmin'].value()
-            self['under'] = color2json(self['under'])
-        else:
-            self['vmin'] = None
+        self['isvmin'] = isvmin
+        self['vmin'] = self['vmin'].value()
+        self['under'] = color2json(self['under'])
+        self.cbobjs['isvmin'] = self.cbviz.isvmin
         self.cbobjs['vmin'] = self.cbviz.vmin
         self.cbobjs['under'] = self.cbviz.under
+        # Run object's update function :
+        self.cbobjs.update()
 
     def _fcn_vmaxChanged(self):
         """Change vmin/vmax/under/over."""
-        isvmax = self['vmaxChk'].isChecked()
+        isvmax = self['isvmax'].isChecked()
         self['vmaxW'].setEnabled(isvmax)
         # Vmax
-        if isvmax:
-            self['vmax'] = self['vmax'].value()
-            self['over'] = color2json(self['over'])
-        else:
-            self['vmax'] = None
+        self['isvmax'] = isvmax
+        self['vmax'] = self['vmax'].value()
+        self['over'] = color2json(self['over'])
+        self.cbobjs['isvmax'] = self.cbviz.isvmax
         self.cbobjs['vmax'] = self.cbviz.vmax
         self.cbobjs['over'] = self.cbviz.over
+        # Run object's update function :
+        self.cbobjs.update()
 
-    ###########################################################################
-    ###########################################################################
-    #                              TEXT
-    ###########################################################################
-    ###########################################################################
+    def _fcn_Limits(self):
+        """Display/hide vmin/vmax."""
+        self['limtxt'] = self['limTxt'].isChecked()
+        self.cbobjs['limtxt'] = self.cbviz.limtxt
+
+    # --------------------------------------------------------------------
+    #                             TEXT
+    # --------------------------------------------------------------------
     def _fcn_CbTitle(self):
         """Change colorbar title."""
         self['cblabel'] = str(self['cblabel'].text())
@@ -368,4 +476,40 @@ class CbarQt(object):
     def _fcn_TxtShift(self):
         """Change text shift."""
         self['txtsh'] = self['txtSh'].value()
+
+    def _fcn_TxtCol(self):
+        """Change text color."""
+        txtcolor = color2json(self['txtCol'])
+        self['txtcolor'] = txtcolor
+        self.cbobjs['txtcolor'] = self.cbviz.txtcolor
         self.cbobjs['txtsh'] = self.cbviz.txtsh
+
+    # --------------------------------------------------------------------
+    #                             TEXT
+    # --------------------------------------------------------------------
+    def _fcn_cbAutoscale(self, *args, name=None):
+        """Autoscale limits to data (Min, Max)."""
+        # Select object if it's not the current one :
+        if (name is not None) and self.cbobjs.name != name:
+            self.select(name)
+        # Disconnect clim buttons :
+        self['climm'].disconnect()
+        self['climM'].disconnect()
+        # Run the auto-scaling function :
+        self.cbobjs.autoscale()
+        # Set clim to the gui :
+        self['climm'].setValue(self.cbobjs['clim'][0])
+        self['climM'].setValue(self.cbobjs['clim'][1])
+        # Check vmin/vmax values :
+        self._vminvmaxCheck()
+        # Set clim the the VisPy based colorbar :
+        self['clim'] = self.cbobjs['clim']
+        # Reconnect clim buttons :
+        self['climm'].valueChanged.connect(self._fcn_climchanged)
+        self['climM'].valueChanged.connect(self._fcn_climchanged)
+        self['climm'].setKeyboardTracking(False)
+        self['climM'].setKeyboardTracking(False)
+        # Deactivate vmin/vmax :
+        self['isvmin'].setChecked(False)
+        self['isvmax'].setChecked(False)
+        self['isvmin'] = self['isvmax'] = False

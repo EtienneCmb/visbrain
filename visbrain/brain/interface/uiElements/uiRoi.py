@@ -8,10 +8,10 @@ structure panel in the GUI is present in the MNI -> Structures tab.
 from ....utils import textline2color
 
 
-__all__ = ['uiArea']
+__all__ = ['uiRoi']
 
 
-class uiArea(object):
+class uiRoi(object):
     """Link graphical interface with sub-structures functions."""
 
     def __init__(self,):

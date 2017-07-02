@@ -5,7 +5,7 @@ The following elements are initialized :
     * Sources : deep points inside / over the brain. They can materialized
     intracranial electrodes, MEG / EEG sensors...
     * Connectivity : straight lines which connect the deep sources.
-    * Areas : deep structures can be added (like brodmann areas or gyrus...).
+    * Roi : deep structures can be added (like brodmann areas or gyrus...).
     This can be for processing (like projecting sources activity on it),
     educational or simply for visualiation purpose.
     * Colorbar : initialize the colorbar elements.
@@ -15,17 +15,16 @@ The following elements are initialized :
     can have access to the previously defined elements.
 """
 
-from vispy.scene import Node
+from vispy import scene
 
 from .AtlasBase import AtlasBase
 from .SourcesBase import SourcesBase
 from .ConnectBase import ConnectBase
-from .CbarBase import CbarBase
-from .AreaBase import AreaBase
+from .RoiBase import RoiBase
 from .projection import Projections
 
 
-class base(CbarBase, Projections):
+class base(Projections):
     """Initialize Brain objects.
 
     Initialize sources / connectivity / areas / colorbar / projections.
@@ -40,19 +39,13 @@ class base(CbarBase, Projections):
         # Get progress bar :
         self.progressbar = progressbar
 
-        # Initialize brain, sources and connectivity objects and put them in
-        # the relevant attribute :
+        # Initialize brain, sources, connectivity and ROI objects :
         self.atlas = AtlasBase(**kwargs)
         self.sources = SourcesBase(**kwargs)
         self.connect = ConnectBase(_xyz=self.sources.xyz,
                                    c_xyz=self.sources.xyz, **kwargs)
-        self.area = AreaBase(scale_factor=self.atlas._scaleMax,
-                             name='NoneArea', select=None, color='#ab4642')
-
-        # Initialize colorbar base  (by default, with sources base):
-        self.cb = CbarBase(self.view.cbwc, cb_fontcolor=self._cbfontcolor,
-                           cb_fontsize=self._cbfontsize,
-                           cb_label=self._cblabel, **self.sources._cb)
+        self.area = RoiBase(scale_factor=self.atlas._scaleMax,
+                            name='NoneArea', select=None, color='#ab4642')
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -63,7 +56,7 @@ class base(CbarBase, Projections):
         # corresponding object.
 
         # Sources panel:
-        if self.sources.mesh.name is 'NoneSources':
+        if self.sources.name is 'NoneSources':
             # Disable menu :
             self.menuDispSources.setChecked(False)
             self.menuDispSources.setEnabled(False)
@@ -83,13 +76,12 @@ class base(CbarBase, Projections):
             self.grpText.setEnabled(False)
 
         # Connectivity panel:
-        if self.connect.mesh.name == 'NoneConnect':
+        if self.connect.name == 'NoneConnect':
             # Disable menu :
             self.menuDispConnect.setEnabled(False)
             self.menuDispConnect.setChecked(False)
             # Disable Connect tab :
             self.QuickSettings.setTabEnabled(3, False)
-            self.cmapConnect.setEnabled(False)
             self.o_Connect.setEnabled(False)
             self.o_Connect.setChecked(False)
         elif self.connect.colval is not None:
@@ -102,13 +94,16 @@ class base(CbarBase, Projections):
         # can be applied to all elements.
 
         # Create a root node :
-        self._vbNode = Node(name='visbrain')
+        self._vbNode = scene.Node(name='visbrain')
 
         # Make this root node the parent of others Brain objects :
         self.atlas.mesh.parent = self._vbNode
         self.sources.mesh.parent = self._vbNode
         self.connect.mesh.parent = self._vbNode
         self.sources.stextmesh.parent = self._vbNode
+
+        # Add XYZ axis (debugging : x=red, y=green, z=blue)
+        # scene.visuals.XYZAxis(parent=self._vbNode)
 
         # Add a rescale / translate transformation to the Node :
         self._vbNode.transform = self.atlas.transform

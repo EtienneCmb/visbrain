@@ -534,8 +534,8 @@ CTRL + t                Display shortcuts window
 CTRL + q                Close the window
 ==============          ==================================================================================
 
-Sleep inputs
-------------
+API
+---
 
 Here is the list of default Sleep inputs :
 

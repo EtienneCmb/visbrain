@@ -1,4 +1,8 @@
-"""This example show how to display and control a ND signal."""
+"""
+Configure the uni and multi-dimensional plot
+============================================
+
+This example show how to display and control a ND signal."""
 
 import numpy as np
 from visbrain import Ndviz
@@ -8,9 +12,9 @@ kw = {}
 
 sf = 1024.
 npts = 200
-time = np.arange(-npts/2, npts/2)/1024.
+time = np.arange(-npts / 2, npts / 2) / 1024.
 # Create a 2d signal :
-y = np.sinc(2*10*time).astype(np.float32)
+y = np.sinc(2 * 10 * time).astype(np.float32)
 y = y.reshape(len(y), 1) + y
 y = y.reshape(200, 200, 1) + y
 kw['sf'] = sf

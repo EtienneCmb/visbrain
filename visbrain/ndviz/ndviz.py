@@ -11,7 +11,6 @@ from .interface import uiInit, uiElements
 from .visuals import visuals
 from warnings import warn
 # from ..utils import id
-# from .user import userfcn
 import sip
 sip.setdestroyonexit(False)
 

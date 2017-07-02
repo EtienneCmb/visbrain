@@ -12,10 +12,12 @@ import numpy as np
 from collections import Counter
 
 from vispy import gloo, visuals
+from vispy.scene.visuals import create_visual_node
+
 from ....utils import array2colormap, normalize, color2vb
 
 
-__all__ = ['ConnectVisual']
+__all__ = ['ConnectMesh']
 
 # Vertex shader : executed code for individual vertices. The transformation
 # applied to each one of them is the camera rotation.
@@ -426,3 +428,5 @@ class ConnectVisual(visuals.Visual):
     def get_MinMax(self):
         """Get the (min, max) connexions strength."""
         return self._MinMax
+
+ConnectMesh = create_visual_node(ConnectVisual)

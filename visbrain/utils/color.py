@@ -15,8 +15,7 @@ from .sigproc import normalize
 
 
 __all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
-           '_colormap', 'type_coloring', 'mpl_cmap', 'color2tuple',
-           'mpl_cmap_index'
+           'type_coloring', 'mpl_cmap', 'color2tuple', 'mpl_cmap_index'
            ]
 
 
@@ -255,88 +254,6 @@ def color2faces(color, length):
     colorL = np.tile(np.array(color)[..., np.newaxis, np.newaxis],
                      (1, length, 3))
     return np.transpose(colorL, (1, 2, 0))
-
-
-class _colormap(object):
-    """Manage the diffrent inputs for the colormap creation.
-
-    Kargs:
-        cmap: string, optional, (def: None)
-            Matplotlib colormap (like 'viridis', 'inferno'...).
-
-        clim: tuple/list, optional, (def: None)
-            Colorbar limit. Every values under / over clim will
-            clip.
-
-        vmin: float, optional, (def: None)
-            Every values under vmin will have the color defined
-            using the under parameter.
-
-        vmax: float, optional, (def: None)
-            Every values over vmin will have the color defined
-            using the over parameter.
-
-        under: tuple/string, optional, (def: None)
-            Matplotlib color under vmin.
-
-        over: tuple/string, optional, (def: None)
-            Matplotlib color over vmax.
-
-        data: ndarray, optional, (def: None)
-            The data to use. This is only usefull to define automatically
-            the clim parameter.
-    """
-
-    def __init__(self, cmap=None, clim=None, vmin=None, vmax=None, under=None,
-                 over=None, data=None):
-        """Init."""
-        if data is None:
-            clim = (None, None)
-            vmin, vmax, under, over = None, None, None, None
-            self._MinMax = (None, None)
-        else:
-            if clim is None:
-                clim = [data.min(), data.max()]
-            self._MinMax = (data.min(), data.max())
-        self._cb = {'cmap': cmap, 'clim': clim, 'vmin': vmin, 'vmax': vmax,
-                    'under': under, 'over': over}
-
-    def __getitem__(self, key):
-        """Get the item value, specified using the key parameter.
-
-        Arg:
-            key: string
-                Name of the parameter
-
-        Return:
-            The item value
-        """
-        return self._cb[key]
-
-    def __setitem__(self, key, item):
-        """Set a value to an item.
-
-        Arg:
-            key: string
-                Name of the parameter
-
-            item: any
-                The value of the item
-        """
-        self._cb[key] = item
-
-    def cbUpdateFrom(self, obj):
-        """Update a _colormap object using based on an other _colormap object.
-
-        Arg:
-            obj: _colormap object
-                The _colormap object to use to take it values.
-        """
-        objkeys = obj._cb.keys()
-        for k in self._cb.keys():
-            if k in objkeys:
-                self[k] = obj[k]
-        self._MinMax = obj._MinMax
 
 
 def colorclip(x, th, kind='under'):

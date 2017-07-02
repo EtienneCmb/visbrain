@@ -53,26 +53,26 @@
      <property name="title">
       <string>Configuration</string>
      </property>
-     <addaction name="actionSaveConfig"/>
-     <addaction name="actionLoadConfig"/>
+     <addaction name="menuCbarSaveConfig"/>
+     <addaction name="menuCbarLoadConfig"/>
     </widget>
     <addaction name="menuConfiguration"/>
-    <addaction name="actionScreenshot"/>
+    <addaction name="menuCbarScreenshot"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionScreenshot">
+  <action name="menuCbarScreenshot">
    <property name="text">
     <string>Screenshot</string>
    </property>
   </action>
-  <action name="actionSaveConfig">
+  <action name="menuCbarSaveConfig">
    <property name="text">
     <string>Save</string>
    </property>
   </action>
-  <action name="actionLoadConfig">
+  <action name="menuCbarLoadConfig">
    <property name="text">
     <string>Load</string>
    </property>

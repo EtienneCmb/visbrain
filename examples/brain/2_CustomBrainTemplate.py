@@ -1,8 +1,9 @@
-"""This example demonstrate how to import a custom atlas and to adapt it
-to the software.
 """
+Use your own brain template
+===========================
+
+Import a custom atlas and to adapt it to the software."""
 import visbrain
-import os
 import numpy as np
 import vispy.visuals.transforms as vist
 
