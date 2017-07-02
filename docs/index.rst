@@ -100,6 +100,7 @@ Contents:
    ndviz
    figure
    io
+   auto_examples/index.rst
    changelog_futur
 
 

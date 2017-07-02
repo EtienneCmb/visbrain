@@ -1,4 +1,8 @@
-"""This example show how to display and control simple 1d signal."""
+"""
+Plot a 1d signal
+================
+
+This example show how to display and control simple 1d signal."""
 
 import numpy as np
 from visbrain import Ndviz
@@ -9,8 +13,8 @@ kw = {}
 # Sampling frequency :
 sf = 1024.
 # Create a 10hz cardinal sinus :
-time = np.arange(-1000.1, 1000.1)/1024.
-y = np.sinc(2*10*time).astype(np.float32)
+time = np.arange(-1000.1, 1000.1) / 1024.
+y = np.sinc(2 * 10 * time).astype(np.float32)
 kw['sf'] = sf
 
 # ===================================================================

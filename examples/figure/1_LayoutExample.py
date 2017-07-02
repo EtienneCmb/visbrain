@@ -1,6 +1,9 @@
-"""This script illustrate how to arange pictures in a grid. Before running this
-script, make sure you generate pictures before using 0_GeneratePictures.py.
 """
+Page layout example
+===================
+
+Arange pictures in a grid. Before running this script, make sure you generate
+pictures before using 0_GeneratePictures.py."""
 from visbrain import Figure
 
 # Files to load :

@@ -1,4 +1,8 @@
-"""This script illustrate how to export your figures and the colorbar.
+"""
+Screenshot example
+==================
+
+This script illustrate how to export your figures and the colorbar.
 
 The full tutorial is :
 https://etiennecmb.github.io/visbrain/vbexport.html

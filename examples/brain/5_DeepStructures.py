@@ -1,4 +1,8 @@
-"""This example illustrate how to display Region Of Interest (ROI).
+"""
+Add Region of interest (ROI)
+============================
+
+This example illustrate how to display Region Of Interest (ROI).
 
 This small dataset (thx to Tarek Lajnef) contains sources inside the thalamus
 and alpha power for each source. We are going to display the thalamus, then

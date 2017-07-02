@@ -1,6 +1,8 @@
-"""Start with some possible customization for the ui and for the brain
-template
 """
+Interface customization
+=======================
+
+Customize the GUI before loading."""
 from visbrain import Brain
 
 
