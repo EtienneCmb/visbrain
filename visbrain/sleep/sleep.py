@@ -43,7 +43,8 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
     config_file : string | None
         Path to the configuration file (.txt)
     annotation_file : string | None
-        Path to the annotation file (.txt, .csv)
+        Path to the annotation file (.txt, .csv). Alternatively, you can pass
+        an annotation instance of MNE.
     data : array_like | None
         Array of data of shape (n_channels, n_pts)
     channels : list | None
