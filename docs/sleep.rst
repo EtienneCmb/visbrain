@@ -500,8 +500,8 @@ Alternatively, you can use annotations from MNE-python and pass your annotations
 
 .. code-block:: python
 
-  from mne import io
   import numpy as np
+  from mne import Annotations
   from visbrain import Sleep
 
   # Define the onset, duration and description :

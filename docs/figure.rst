@@ -73,8 +73,11 @@ Example
 
    Code above : four exported figures from the Brain module are aranged in a (2, 2) grid. Then, some have a colorbar, xlabel, ylabel. Finally, there is two shared colorbars.
 
-Inputs
-------
+API
+---
+
+Main *Figure* class inputs
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 First, you will need to create a Figure objects with the files to load, titles, xlabels... Then, there's a list of embedded methods that provide further controls :
 
@@ -86,31 +89,31 @@ First, you will need to create a Figure objects with the files to load, titles, 
 .. autoclass:: visbrain.figure.figure.Figure
 
 Methods
--------
+^^^^^^^
 
 .. _show:
 
 show
-^^^^
+~~~~
 
 .. automethod:: visbrain.figure.Figure.show
 
 .. _save:
 
 save
-^^^^
+~~~~
 .. automethod:: visbrain.figure.Figure.save
 
 .. _colorbar_to_axis:
 
 colorbar_to_axis
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
 .. automethod:: visbrain.figure.Figure.colorbar_to_axis
 
 .. _shared_colorbar:
 
 shared_colorbar
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
 .. automethod:: visbrain.figure.Figure.shared_colorbar

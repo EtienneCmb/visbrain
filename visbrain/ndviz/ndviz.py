@@ -21,45 +21,37 @@ class Ndviz(uiInit, visuals, uiElements):
     This class to visualize multi-dimentional array or to inspect single
     signal in several forms (line / markers / histogram / spectrogram / image).
 
-    Args:
-        data: array
-            The array to plot. It can have any dimension.
-    Kargs:
-        sf: float, optionam, (def: 1.)
-            The sampling frequency
+    Parameters
+    ----------
+    data : array
+        The array to plot. It can have any dimension.
+    sf : float | 1.
+        The sampling frequency
+    nd_lw : float | 1.
+        Line width of each signal for the Nd-plot.
+    nd_title : string | 'Nd-plot'
+        Title of the Nd plot.
+    nd_xlabel : string | 'X axis'
+        Label of the x axis for the Nd plot.
+    nd_ylabel : string | 'Y axis'
+        Label of the y axis for the Nd plot.
+    od_lw : float | 1.
+        Line width of each signal for the 1d-plot line.
+    on_title : string | '1d-plot'
+        Title of the 1d plot.
+    od_xlabel : string | 'X axis'
+        Label of the x axis for the 1d plot.
+    od_ylabel : string | 'Y axis'
+        Label of the y axis for the 1d plot.
+    ui_bgcolor : string/tuple | (.09, .09, .09)
+        Background color of the main canvas.
 
-        nd_lw: float, optional, (def: 1.)
-            Line width of each signal for the Nd-plot.
-
-        nd_title: string, optional, (def: 'Nd-plot')
-            Title of the Nd plot.
-
-        nd_xlabel: string, optional, (def: 'X axis')
-            Label of the x axis for the Nd plot.
-
-        nd_ylabel: string, optional, (def: 'Y axis')
-            Label of the y axis for the Nd plot.
-
-        od_lw: float, optional, (def: 1.)
-            Line width of each signal for the 1d-plot line.
-
-        on_title: string, optional, (def: '1d-plot')
-            Title of the 1d plot.
-
-        od_xlabel: string, optional, (def: 'X axis')
-            Label of the x axis for the 1d plot.
-
-        od_ylabel: string, optional, (def: 'Y axis')
-            Label of the y axis for the 1d plot.
-
-        ui_bgcolor: string/tuple, optional, (def: (.09, .09, .09))
-            Background color of the main canvas.
-
-    Example:
-        >>> import numpy as np
-        >>> from visbrain import Ndviz
-        >>> y = np.random.rand(1000, 10, 20)
-        >>> Ndviz(y).show()
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain import Ndviz
+    >>> y = np.random.rand(1000, 10, 20)
+    >>> Ndviz(y).show()
     """
 
     def __init__(self, data, sf=1, **kwargs):
