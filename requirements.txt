@@ -1,5 +1,0 @@
-numpy
-scipy
-matplotlib>=1.5.5
-pyqt5
-pillow

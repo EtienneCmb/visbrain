@@ -1,6 +1,0 @@
-include README.rst
-include LICENSE
-include requirements.txt
-recursive-include visbrain/brain/base/templates *.npz
-recursive-include visbrain/utils/topo *.npz
-recursive-include visbrain/sleep/ico *.svg
