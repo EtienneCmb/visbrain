@@ -1,0 +1,757 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.figure.figure &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.figure.figure</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.figure.figure</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Docstring.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">scipy.misc</span> <span class="k">import</span> <span class="n">imread</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">color2tuple</span><span class="p">,</span> <span class="n">piccrop</span><span class="p">,</span> <span class="n">picresize</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Figure&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Figure"><a class="viewcode-back" href="../../../figure.html#visbrain.figure.figure.Figure">[docs]</a><span class="k">class</span> <span class="nc">Figure</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Automatically arange pictures in a grid and save a paper ready figure.</span>
+
+<span class="sd">    This class can be used to generate figures to be then used in a paper. For</span>
+<span class="sd">    example, if you export 10 pictures, you may want to concatenate them in a</span>
+<span class="sd">    (5, 2) grid and add a colorbar.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        files: str/list/tuple</span>
+<span class="sd">            Files to load. If it&#39;s a string, only one file will be loaded.</span>
+<span class="sd">            Otherwise, if files is a iterable object of strings (list, tuple)</span>
+<span class="sd">            all the files will be loaded.</span>
+
+<span class="sd">    Kwargs:</span>
+<span class="sd">        path: str, optional, (def: None)</span>
+<span class="sd">            Specify where files are located. If all files are in separate</span>
+<span class="sd">            folders, use the files variable : files = [&#39;path1/file1.png&#39;,</span>
+<span class="sd">            &#39;path2/file2.jpg&#39;, ...]. If all pictures are in the same folder,</span>
+<span class="sd">            use path=&#39;path2myfolder/&#39; and files=[&#39;file1.png&#39;, &#39;file2.jpg&#39;, ...]</span>
+
+<span class="sd">        grid: tuple, optional, (def: None)</span>
+<span class="sd">            Tuple of integers describing how to arange figures. The grid</span>
+<span class="sd">            describe (n_rows, n_columns) of the final figure. If grid is None</span>
+<span class="sd">            all pictures will be displayed on a line. For example, if 12</span>
+<span class="sd">            pictures are loaded, grid could be (6, 2), (4, 3)...</span>
+
+<span class="sd">        figtitle: str, optional, (def: None)</span>
+<span class="sd">            Title of the entire figure.</span>
+
+<span class="sd">        y: float, optional, (def: 1.02)</span>
+<span class="sd">            Distance between top and title of each axis (if title displayed).</span>
+
+<span class="sd">        titles: str/list/tuple, optional, (def: None)</span>
+<span class="sd">            Specify the title of each figure. If titles is None, no title will</span>
+<span class="sd">            be added. If titles is a string, the same title will be applied to</span>
+<span class="sd">            all figures. If titles is a list/tuple of strings, the strings</span>
+<span class="sd">            inside will be used to set the title of each picture independantly</span>
+<span class="sd">            (must have the same length as files.)</span>
+
+<span class="sd">        xlabels: str/list/tuple, optional, (def: None)</span>
+<span class="sd">            Specify the x-axis label of each figure. If xlabels is None,</span>
+<span class="sd">            no label will be added. If xlabels is a string, the same label will</span>
+<span class="sd">            be applied to all figures. If xlabels is a list/tuple of strings,</span>
+<span class="sd">            the strings inside will be used to set the label of each picture</span>
+<span class="sd">            independantly (must have the same length as files.)</span>
+
+<span class="sd">        ylabels: str/list/tuple, optional, (def: None)</span>
+<span class="sd">            Specify the y-axis label of each figure. If ylabels is None,</span>
+<span class="sd">            no label will be added. If ylabels is a string, the same label will</span>
+<span class="sd">            be applied to all figures. If ylabels is a list/tuple of strings,</span>
+<span class="sd">            the strings inside will be used to set the label of each picture</span>
+<span class="sd">            independantly (must have the same length as files.)</span>
+
+<span class="sd">        figsize: tuple, optional, (def: None)</span>
+<span class="sd">            The size of the figure. Should be a tuple of integers.</span>
+
+<span class="sd">        subspace: dict, optional, (def: None)</span>
+<span class="sd">            Control margins and the distance between subplots. Use:</span>
+<span class="sd">                * &#39;left&#39; : The left side of the subplots of the figure</span>
+<span class="sd">                * &#39;right&#39; : The right side of the subplots of the figure</span>
+<span class="sd">                * &#39;bottom&#39; : The bottom of the subplots of the figure</span>
+<span class="sd">                * &#39;top&#39; : The top of the subplots of the figure</span>
+<span class="sd">                * &#39;hspace&#39; : The amount of height reserved for white space</span>
+<span class="sd">                  between subplots, expressed as a fraction of the average axis</span>
+<span class="sd">                  height.</span>
+<span class="sd">                * &#39;wspace&#39; : The amount of width reserved for blank space</span>
+<span class="sd">                  between subplots, expressed as a fraction of the average axis</span>
+<span class="sd">                  width.</span>
+
+<span class="sd">            Default : {&#39;left&#39;: 0., &#39;right&#39;: 1., &#39;bottom&#39;: 0., &#39;top&#39;: .9,</span>
+<span class="sd">                       &#39;wspace&#39;: 0., &#39;hspace&#39;: 0.05}</span>
+
+<span class="sd">        rmax: bool, optional, (def: True)</span>
+<span class="sd">            Remove borders of each axis.</span>
+
+<span class="sd">        fig_bgcolor: str/tuple/list, optional, (def: None)</span>
+<span class="sd">            Background color of the figure. By default, no background is used.</span>
+
+<span class="sd">        ax_bgcolor: str/tuple/list, optional, (def: None)</span>
+<span class="sd">            Background color of each axis. If None, no background will be used.</span>
+<span class="sd">            If ax_bgcolor is a string, the same background will be used for all</span>
+<span class="sd">            axes. Finally, use a list of colors to control the background color</span>
+<span class="sd">            of each axis. This is a very important parameter for transparent</span>
+<span class="sd">            pictures (like png or tiff files).</span>
+
+<span class="sd">        text_color: str/tuple/list, optional, (def: &#39;black&#39;)</span>
+<span class="sd">            Color of text elements (figure title, axes titles, x and y labels.)</span>
+
+<span class="sd">        autocrop: bool, optional, (def: False)</span>
+<span class="sd">            Specify if each picture has to be automatically cropped.</span>
+
+<span class="sd">        autoresize: bool, optional, (def: False)</span>
+<span class="sd">            Specify if all pictures have to be resized. If True, all pictures</span>
+<span class="sd">            will be resized according to the minimum size along row axis. For</span>
+<span class="sd">            further controls, define autoresize as a dictionary. Use the</span>
+<span class="sd">            key &#39;axis&#39; to specify if pictures have to share the same height (0)</span>
+<span class="sd">            or width (1). Use &#39;extend&#39; if the smallest (False) or the largest</span>
+<span class="sd">            have to be considered as the reference.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        show:</span>
+<span class="sd">            Display the final figure.</span>
+
+<span class="sd">        save:</span>
+<span class="sd">            Save the figure.</span>
+
+<span class="sd">        colorbar_to_axis:</span>
+<span class="sd">            Add a specific colorbar to a selected picture.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">,</span>
+                 <span class="n">titles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xlabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">subspace</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span>
+                           <span class="s1">&#39;wspace&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;hspace&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span> <span class="n">rmax</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">fig_bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax_bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                 <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">autoresize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_im</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_figure</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_figtitle</span> <span class="o">=</span> <span class="n">figtitle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_figsize</span> <span class="o">=</span> <span class="n">figsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subspace</span> <span class="o">=</span> <span class="n">subspace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rmax</span> <span class="o">=</span> <span class="n">rmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_autocrop</span> <span class="o">=</span> <span class="n">autocrop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_autoresize</span> <span class="o">=</span> <span class="n">autoresize</span>
+
+        <span class="c1"># ================ CHECKING ================</span>
+        <span class="c1"># Files / path :</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">files</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="s2">&quot; is not a file.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_files</span> <span class="o">=</span> <span class="n">files</span>
+
+        <span class="c1"># Grid :</span>
+        <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Type checking :</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The grid parameter must be a list/tuple of&quot;</span>
+                                 <span class="s2">&quot;integers.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ngrid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ngrid</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The number of subplots is n_rows x &quot;</span>
+                                     <span class="s2">&quot;n_columns = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ngrid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;. But &quot;</span>
+                                     <span class="s2">&quot;there&#39;s &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; pictures&quot;</span>
+                                     <span class="s2">&quot; loaded so it can not be aranged in a&quot;</span>
+                                     <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; grid.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="n">grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">grid</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">grid</span><span class="p">)</span>
+
+        <span class="c1"># Color :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_figcol</span> <span class="o">=</span> <span class="n">color2tuple</span><span class="p">(</span><span class="n">fig_bgcolor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tcol</span> <span class="o">=</span> <span class="n">color2tuple</span><span class="p">(</span><span class="n">text_color</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ax_bgcolor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax_bgcolor</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax_bgcolor</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">ax_bgcolor</span> <span class="o">=</span> <span class="p">[</span><span class="n">color2tuple</span><span class="p">(</span><span class="n">ax_bgcolor</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax_bgcolor</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ax_bgcolor</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The length of the ax_bgcolor parameter must &quot;</span>
+                                 <span class="s2">&quot;be the same as the number of loaded files.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax_bgcolor</span> <span class="o">=</span> <span class="p">[</span><span class="n">color2tuple</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ax_bgcolor</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axcol</span> <span class="o">=</span> <span class="n">ax_bgcolor</span>
+
+        <span class="c1"># Titles / xlabels / ylabels :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_titles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replicate</span><span class="p">(</span><span class="n">titles</span><span class="p">,</span> <span class="s1">&#39;titles&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xlabels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replicate</span><span class="p">(</span><span class="n">xlabels</span><span class="p">,</span> <span class="s1">&#39;xlabels&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ylabels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replicate</span><span class="p">(</span><span class="n">ylabels</span><span class="p">,</span> <span class="s1">&#39;ylabels&#39;</span><span class="p">)</span>
+
+        <span class="c1"># ================ MAKE ================</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_make</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the number of loaded pictures.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loop over loaded pictures.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">k</span>
+
+    <span class="c1">##########################################################################</span>
+    <span class="c1"># METHODS</span>
+    <span class="c1">##########################################################################</span>
+<div class="viewcode-block" id="Figure.show"><a class="viewcode-back" href="../../../figure.html#visbrain.figure.figure.Figure.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display the figure.&quot;&quot;&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Figure.save"><a class="viewcode-back" href="../../../figure.html#visbrain.figure.figure.Figure.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save the figure.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            saveas: string</span>
+<span class="sd">                Name of the saved figure.</span>
+
+<span class="sd">        Kargs:</span>
+<span class="sd">            dpi: int, optional, (def: 300)</span>
+<span class="sd">                The resolution of the exported figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span>
+                          <span class="n">facecolor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figcol</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Figure.colorbar_to_axis"><a class="viewcode-back" href="../../../figure.html#visbrain.figure.figure.Figure.colorbar_to_axis">[docs]</a>    <span class="k">def</span> <span class="nf">colorbar_to_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toaxis</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+                         <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ycb</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+                         <span class="n">fz_title</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="s1">&#39;complete&#39;</span><span class="p">,</span> <span class="n">fz_ticks</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                         <span class="n">outline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a colorbar to a particular axis.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            toaxis: int</span>
+<span class="sd">                Integer to specify the axis to which add the colorbar.</span>
+
+<span class="sd">            clim: tuple/list</span>
+<span class="sd">                A tuple of float/int describing the limit of the colorbar.</span>
+
+<span class="sd">            cmap: str</span>
+<span class="sd">                The colormap to use (&#39;viridis&#39;, &#39;jet&#39;, &#39;Spectral&#39;...)</span>
+
+<span class="sd">        Kargs:</span>
+
+<span class="sd">            vmin: float, optional, (def: None)</span>
+<span class="sd">                Minimum threshold. See the under parameter for further details.</span>
+
+<span class="sd">            under: string/tuple/list, optional, (def: &#39;gray&#39;)</span>
+<span class="sd">                Every values bellow vmin will be set to the under color.</span>
+
+<span class="sd">            vmax: float, optional, (def: None)</span>
+<span class="sd">                Maximum threshold. See the over parameter for further details.</span>
+
+<span class="sd">            over: string/tuple/list, optional, (def: &#39;red&#39;)</span>
+<span class="sd">                Every values over vmax will be set to the over color.</span>
+
+<span class="sd">            title: string, optional, (def: None)</span>
+<span class="sd">                Title of the colorbar.</span>
+
+<span class="sd">            ycb: float, optional, (def: 10.)</span>
+<span class="sd">                Distance between the colorbar and it title (if defined).</span>
+
+<span class="sd">            fz_title: int/float, optional, (def: 15)</span>
+<span class="sd">                The fontsize of colorbar title.</span>
+
+<span class="sd">            ticks: string/int/float/np.ndarray, optional, (def: &#39;complete&#39;)</span>
+<span class="sd">                Ticks of the colorbar. This parameter is only active if clim</span>
+<span class="sd">                is defined. Use &#39;complete&#39; to see only the minimum,</span>
+<span class="sd">                maximum, vmin and vmax (if defined). Use &#39;minmax&#39; to only see</span>
+<span class="sd">                the maximum and minimum. If ticks is a float, an linear</span>
+<span class="sd">                interpolation between the maximum and minimum will be used.</span>
+<span class="sd">                Finally, if ticks is a NumPy array, it will be used as colorbar</span>
+<span class="sd">                ticks directly.</span>
+
+<span class="sd">            fz_ticks: int/float, optional, (def: 10)</span>
+<span class="sd">                Fontsize of tick labels.</span>
+
+<span class="sd">            outline: bool, optional, (def: False)</span>
+<span class="sd">                Specify if the box arround the colorbar have to be displayed.</span>
+
+<span class="sd">            orientation: string, optional, (def: &#39;vertical&#39;)</span>
+<span class="sd">                Colorbar orientation. Use either &#39;vertical&#39; or &#39;horizontal&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># ----------------- CHECKING -----------------</span>
+        <span class="k">if</span> <span class="n">orientation</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Colorbar orientation must either be &#39;vertical&#39; &quot;</span>
+                             <span class="s2">&quot;or &#39;horizontal&#39;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># ----------------- CURRENT AXIS -----------------</span>
+        <span class="n">cim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_im</span><span class="p">[</span><span class="n">toaxis</span><span class="p">]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="p">[</span><span class="n">toaxis</span><span class="p">])</span>
+
+        <span class="c1"># ----------------- COLORMAP -----------------</span>
+        <span class="c1"># Manually create the colormap :</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_customcmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
+        <span class="n">cim</span><span class="o">.</span><span class="n">set_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
+
+        <span class="c1"># ----------------- COLORBAR -----------------</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cim</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                          <span class="n">orientation</span><span class="o">=</span><span class="n">orientation</span><span class="p">)</span>
+
+        <span class="c1"># # ----------------- CLIM -----------------</span>
+        <span class="n">cim</span><span class="o">.</span><span class="n">set_clim</span><span class="p">(</span><span class="o">*</span><span class="n">clim</span><span class="p">)</span>
+        <span class="n">cb</span><span class="o">.</span><span class="n">set_clim</span><span class="p">(</span><span class="o">*</span><span class="n">clim</span><span class="p">)</span>
+
+        <span class="c1"># ----------------- CBAR -----------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cbar</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ycb</span><span class="p">,</span>
+                   <span class="n">fz_title</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">fz_ticks</span><span class="p">,</span> <span class="n">outline</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tcol</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Figure.shared_colorbar"><a class="viewcode-back" href="../../../figure.html#visbrain.figure.figure.Figure.shared_colorbar">[docs]</a>    <span class="k">def</span> <span class="nf">shared_colorbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span>
+                        <span class="n">width</span><span class="o">=.</span><span class="mi">02</span><span class="p">,</span> <span class="n">pltmargin</span><span class="o">=.</span><span class="mi">02</span><span class="p">,</span> <span class="n">figmargin</span><span class="o">=.</span><span class="mi">07</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">ycb</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">fz_title</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="s1">&#39;complete&#39;</span><span class="p">,</span> <span class="n">fz_ticks</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                        <span class="n">outline</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a colorbar to a particular axis.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            toaxis: int</span>
+<span class="sd">                Integer to specify the axis to which add the colorbar.</span>
+
+<span class="sd">            clim: tuple/list</span>
+<span class="sd">                A tuple of float/int describing the limit of the colorbar.</span>
+
+<span class="sd">            cmap: str</span>
+<span class="sd">                The colormap to use (&#39;viridis&#39;, &#39;jet&#39;, &#39;Spectral&#39;...)</span>
+
+<span class="sd">        Kargs:</span>
+<span class="sd">            position: str, optional, (def: &#39;right&#39;)</span>
+<span class="sd">                Position of the shared colorbar. Use either &#39;left&#39;, &#39;right&#39;,</span>
+<span class="sd">                or &#39;bottom&#39;.</span>
+
+<span class="sd">            height: float, optional, (def: .5)</span>
+<span class="sd">                Height of the colorbar.</span>
+
+<span class="sd">            width: float, optional, (def: .02)</span>
+<span class="sd">                Width of the colorbar.</span>
+
+<span class="sd">            pltmargin: float, optional, (def: .05)</span>
+<span class="sd">                Margin between plots and the colorbar.</span>
+
+<span class="sd">            figmargin: float, optional, (def: .07)</span>
+<span class="sd">                Margin between the edge of the figure and the colorbar.</span>
+
+<span class="sd">            vmin: float, optional, (def: None)</span>
+<span class="sd">                Minimum threshold. See the under parameter for further details.</span>
+
+<span class="sd">            under: string/tuple/list, optional, (def: &#39;gray&#39;)</span>
+<span class="sd">                Every values bellow vmin will be set to the under color.</span>
+
+<span class="sd">            vmax: float, optional, (def: None)</span>
+<span class="sd">                Maximum threshold. See the over parameter for further details.</span>
+
+<span class="sd">            over: string/tuple/list, optional, (def: &#39;red&#39;)</span>
+<span class="sd">                Every values over vmax will be set to the over color.</span>
+
+<span class="sd">            title: string, optional, (def: None)</span>
+<span class="sd">                Title of the colorbar.</span>
+
+<span class="sd">            ycb: float, optional, (def: 10.)</span>
+<span class="sd">                Distance between the colorbar and it title (if defined).</span>
+
+<span class="sd">            fz_title: int/float, optional, (def: 15)</span>
+<span class="sd">                The fontsize of colorbar title.</span>
+
+<span class="sd">            ticks: string/int/float/np.ndarray, optional, (def: &#39;complete&#39;)</span>
+<span class="sd">                Ticks of the colorbar. This parameter is only active if clim</span>
+<span class="sd">                is defined. Use &#39;complete&#39; to see only the minimum,</span>
+<span class="sd">                maximum, vmin and vmax (if defined). Use &#39;minmax&#39; to only see</span>
+<span class="sd">                the maximum and minimum. If ticks is a float, an linear</span>
+<span class="sd">                interpolation between the maximum and minimum will be used.</span>
+<span class="sd">                Finally, if ticks is a NumPy array, it will be used as colorbar</span>
+<span class="sd">                ticks directly.</span>
+
+<span class="sd">            fz_ticks: int/float, optional, (def: 10)</span>
+<span class="sd">                Fontsize of tick labels.</span>
+
+<span class="sd">            outline: bool, optional, (def: False)</span>
+<span class="sd">                Specify if the box arround the colorbar have to be displayed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># ================ POSITION ================</span>
+        <span class="k">if</span> <span class="n">position</span> <span class="o">==</span> <span class="s1">&#39;right&#39;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">width</span> <span class="o">-</span> <span class="n">figmargin</span> <span class="o">-</span> <span class="n">pltmargin</span><span class="p">)</span>
+            <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">width</span> <span class="o">-</span> <span class="n">figmargin</span><span class="p">,</span> <span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">])</span>
+            <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;vertical&#39;</span>
+        <span class="k">elif</span> <span class="n">position</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="n">figmargin</span> <span class="o">+</span> <span class="n">width</span> <span class="o">+</span> <span class="n">pltmargin</span><span class="p">)</span>
+            <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="n">figmargin</span><span class="p">,</span> <span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">])</span>
+            <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;vertical&#39;</span>
+        <span class="k">elif</span> <span class="n">position</span> <span class="o">==</span> <span class="s1">&#39;bottom&#39;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="n">figmargin</span> <span class="o">+</span> <span class="n">width</span> <span class="o">+</span> <span class="n">pltmargin</span><span class="p">)</span>
+            <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">figmargin</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">])</span>
+            <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;horizontal&#39;</span>
+
+        <span class="n">cmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_customcmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span><span class="n">cax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="n">orientation</span><span class="p">,</span>
+                                       <span class="n">norm</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="o">*</span><span class="n">clim</span><span class="p">))</span>
+
+        <span class="c1"># ----------------- CBAR -----------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cbar</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ycb</span><span class="p">,</span>
+                   <span class="n">fz_title</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">fz_ticks</span><span class="p">,</span> <span class="n">outline</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tcol</span><span class="p">)</span></div>
+
+    <span class="c1">##########################################################################</span>
+    <span class="c1"># SUB-METHODS</span>
+    <span class="c1">##########################################################################</span>
+    <span class="k">def</span> <span class="nf">_replicate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Replicate a argument if string.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">arg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The &#39;&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;&#39; must have the same length&quot;</span>
+                                 <span class="s2">&quot; as the number of loaded files&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">arg</span>
+
+    <span class="k">def</span> <span class="nf">_make</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make the figure.&quot;&quot;&quot;</span>
+        <span class="c1"># ================ LOAD / RESIZE ================</span>
+        <span class="c1"># Load files :</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="p">:</span>
+            <span class="n">_dat</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autocrop</span> <span class="k">else</span> <span class="n">piccrop</span><span class="p">(</span><span class="n">imread</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_dat</span><span class="p">)</span>
+        <span class="c1"># Resize :</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_autoresize</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autoresize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">picresize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_autoresize</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">picresize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_autoresize</span><span class="p">)</span>
+
+        <span class="c1"># ================ FIGURE ================</span>
+        <span class="c1"># Figure creation :</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_figcol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.facecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_figcol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figsize</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_figtitle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_figtitle</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                               <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tcol</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subspace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_subspace</span><span class="p">)</span>
+
+        <span class="c1"># ================ SUBPLOTS ================</span>
+        <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c1"># --------- Display ---------</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">num</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">im</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_im</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+            <span class="c1"># --------- Background color ---------</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axcol</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_axcol</span><span class="p">[</span><span class="n">num</span><span class="p">])</span>
+            <span class="c1"># --------- Labels / title ---------</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xlabels</span><span class="p">[</span><span class="n">num</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xlabels</span><span class="p">[</span><span class="n">num</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tcol</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ylabels</span><span class="p">[</span><span class="n">num</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ylabels</span><span class="p">[</span><span class="n">num</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tcol</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_titles</span><span class="p">[</span><span class="n">num</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_titles</span><span class="p">[</span><span class="n">num</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tcol</span><span class="p">)</span>
+            <span class="c1"># --------- Remove borders ---------</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rmax</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">loc</span><span class="p">,</span> <span class="n">spine</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="s1">&#39;bottom&#39;</span><span class="p">]:</span>
+                        <span class="n">spine</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">loc</span><span class="p">:</span> <span class="s1">&#39;off&#39;</span><span class="p">})</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_cbar</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ycb</span><span class="p">,</span> <span class="n">fz_title</span><span class="p">,</span>
+              <span class="n">ticks</span><span class="p">,</span> <span class="n">fz_ticks</span><span class="p">,</span> <span class="n">outline</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="n">tcol</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Colorbar creation.&quot;&quot;&quot;</span>
+        <span class="c1"># ----------------- TITLE -----------------</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="n">ycb</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">tcol</span><span class="p">,</span>
+                         <span class="n">fontsize</span><span class="o">=</span><span class="n">fz_title</span><span class="p">)</span>
+
+        <span class="c1"># ----------------- TICKS -----------------</span>
+        <span class="k">if</span> <span class="n">clim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Display only (min, max) :</span>
+            <span class="k">if</span> <span class="n">ticks</span> <span class="o">==</span> <span class="s1">&#39;minmax&#39;</span><span class="p">:</span>
+                <span class="n">ticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">clim</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="c1"># Display (min, vmin, vmax, max) :</span>
+            <span class="k">elif</span> <span class="n">ticks</span> <span class="o">==</span> <span class="s1">&#39;complete&#39;</span><span class="p">:</span>
+                <span class="n">ticks</span> <span class="o">=</span> <span class="p">[</span><span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">vmin</span><span class="p">:</span>
+                    <span class="n">ticks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">vmax</span><span class="p">:</span>
+                    <span class="n">ticks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span>
+                <span class="n">ticks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="c1"># Use linearly spaced ticks :</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticks</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                <span class="n">ticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">clim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticks</span><span class="p">)</span>
+            <span class="c1"># Set ticks and ticklabels :</span>
+            <span class="n">cb</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span>
+            <span class="n">cb</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span>
+            <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">fz_ticks</span><span class="p">)</span>
+            <span class="c1"># Change ticks color :</span>
+            <span class="n">tic</span> <span class="o">=</span>  <span class="s1">&#39;y&#39;</span> <span class="k">if</span> <span class="p">(</span><span class="n">orientation</span> <span class="o">==</span> <span class="s1">&#39;vertical&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;x&#39;</span>
+            <span class="n">cbytick_obj</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="p">,</span> <span class="n">tic</span> <span class="o">+</span> <span class="s1">&#39;ticklabels&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">cbytick_obj</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">tcol</span><span class="p">)</span>
+
+        <span class="c1"># ----------------- OUTLINE -----------------</span>
+        <span class="n">cb</span><span class="o">.</span><span class="n">outline</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="n">outline</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_customcmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="c1"># Generate linearly spaced data :</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">clim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">N</span><span class="p">)</span>
+        <span class="c1"># Create the colormap and apply to data :</span>
+        <span class="n">sc</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+        <span class="n">data_sc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">data</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># Vmin / Vmax :</span>
+        <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data_sc</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">vmin</span><span class="p">]</span> <span class="o">=</span> <span class="n">color2tuple</span><span class="p">(</span><span class="n">under</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data_sc</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">vmax</span><span class="p">]</span> <span class="o">=</span> <span class="n">color2tuple</span><span class="p">(</span><span class="n">over</span><span class="p">)</span>
+        <span class="c1"># Generate the colormap :</span>
+        <span class="k">return</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="n">data_sc</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

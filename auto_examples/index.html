@@ -1,0 +1,455 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Examples &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="../index.html"/>
+        <link rel="next" title="Real data example" href="brain/6_RealDataExample.html"/>
+        <link rel="prev" title="I/O" href="../io.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io.html">I/O</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#brain-examples">Brain Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brain/6_RealDataExample.html">Real data example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain/0_basics.html">Basic plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain/1_InterfaceCustomization.html">Interface customization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain/5_DeepStructures.html">Add Region of interest (ROI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain/2_CustomBrainTemplate.html">Use your own brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain/7_screenshot.html">Screenshot example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain/3_Sources.html">Add deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain/8_AddMultipleObjects.html">Add multiple objects to the scene</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain/4_Connectivity.html">Connect deep sources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#colorbar-examples">Colorbar Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="colorbar/load_existing_config.html">Load an existing colorbar configuration file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="colorbar/open_editor.html">Open the colorbar editor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#figure-examples">Figure Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figure/1_LayoutExample.html">Page layout example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figure/0_GeneratePictures.html">Generate pictures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ndviz-examples">Ndviz Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ndviz/3_just_for_fun.html">Configure the uni and multi-dimensional plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ndviz/1_2d_signal.html">Plot 2D signal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ndviz/0_basic_1d_signal.html">Plot a 1d signal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ndviz/2_Nd_signal.html">Plot multidimensional signals</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sleep-examples">Sleep Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sleep/load_BrainVision.html">Load a BrainVision file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep/load_elan.html">Load ELAN files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep/load_edf.html">Load EDF file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep/load_usingMNE.html">Load a file using MNE-python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep/load_matlab.html">Load a Matlab file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Examples</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/auto_examples/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="examples">
+<span id="general-examples"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#brain-examples" id="id23">Brain Examples</a></li>
+<li><a class="reference internal" href="#colorbar-examples" id="id24">Colorbar Examples</a></li>
+<li><a class="reference internal" href="#figure-examples" id="id25">Figure Examples</a></li>
+<li><a class="reference internal" href="#ndviz-examples" id="id26">Ndviz Examples</a></li>
+<li><a class="reference internal" href="#sleep-examples" id="id27">Sleep Examples</a></li>
+</ul>
+</div>
+<div style='clear:both'></div><div class="section" id="brain-examples">
+<h2><a class="toc-backref" href="#id23">Brain Examples</a><a class="headerlink" href="#brain-examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples demonstrating visualizations on a standard 3D-MNI brain.</p>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display deep sources using MNI coordinates. "><div class="figure" id="id1">
+<img alt="../_images/sphx_glr_6_RealDataExample_thumb.png" src="../_images/sphx_glr_6_RealDataExample_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="brain/6_RealDataExample.html#sphx-glr-auto-examples-brain-6-realdataexample-py"><span class="std std-ref">Real data example</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This is the most basic example to illustrate how to start a Brain instance and visualize a basi..."><div class="figure" id="id2">
+<img alt="../_images/sphx_glr_0_basics_thumb.png" src="../_images/sphx_glr_0_basics_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="brain/0_basics.html#sphx-glr-auto-examples-brain-0-basics-py"><span class="std std-ref">Basic plotting</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Customize the GUI before loading."><div class="figure" id="id3">
+<img alt="../_images/sphx_glr_1_InterfaceCustomization_thumb.png" src="../_images/sphx_glr_1_InterfaceCustomization_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="brain/1_InterfaceCustomization.html#sphx-glr-auto-examples-brain-1-interfacecustomization-py"><span class="std std-ref">Interface customization</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI)."><div class="figure" id="id4">
+<img alt="../_images/sphx_glr_5_DeepStructures_thumb.png" src="../_images/sphx_glr_5_DeepStructures_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="brain/5_DeepStructures.html#sphx-glr-auto-examples-brain-5-deepstructures-py"><span class="std std-ref">Add Region of interest (ROI)</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Import a custom atlas and to adapt it to the software."><div class="figure" id="id5">
+<img alt="../_images/sphx_glr_2_CustomBrainTemplate_thumb.png" src="../_images/sphx_glr_2_CustomBrainTemplate_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="brain/2_CustomBrainTemplate.html#sphx-glr-auto-examples-brain-2-custombraintemplate-py"><span class="std std-ref">Use your own brain template</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This script illustrate how to export your figures and the colorbar."><div class="figure" id="id6">
+<img alt="../_images/sphx_glr_7_screenshot_thumb.png" src="../_images/sphx_glr_7_screenshot_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="brain/7_screenshot.html#sphx-glr-auto-examples-brain-7-screenshot-py"><span class="std std-ref">Screenshot example</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display deep sources using MNI coordinates."><div class="figure" id="id7">
+<img alt="../_images/sphx_glr_3_Sources_thumb.png" src="../_images/sphx_glr_3_Sources_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="brain/3_Sources.html#sphx-glr-auto-examples-brain-3-sources-py"><span class="std std-ref">Add deep sources</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display connectivity. To this end, we will define some deep sou..."><div class="figure" id="id8">
+<img alt="../_images/sphx_glr_8_AddMultipleObjects_thumb.png" src="../_images/sphx_glr_8_AddMultipleObjects_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="brain/8_AddMultipleObjects.html#sphx-glr-auto-examples-brain-8-addmultipleobjects-py"><span class="std std-ref">Add multiple objects to the scene</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display connectivity. To this end, we will define some deep sou..."><div class="figure" id="id9">
+<img alt="../_images/sphx_glr_4_Connectivity_thumb.png" src="../_images/sphx_glr_4_Connectivity_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="brain/4_Connectivity.html#sphx-glr-auto-examples-brain-4-connectivity-py"><span class="std std-ref">Connect deep sources</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div></div>
+<div class="section" id="colorbar-examples">
+<h2><a class="toc-backref" href="#id24">Colorbar Examples</a><a class="headerlink" href="#colorbar-examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples demonstrating how to open and configure the Colorbar editor.</p>
+<div class="sphx-glr-thumbcontainer" tooltip="The configuration is in a config.txt file and is loaded to reproduce the colorbar configuration..."><div class="figure" id="id10">
+<img alt="../_images/sphx_glr_load_existing_config_thumb.png" src="../_images/sphx_glr_load_existing_config_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="colorbar/load_existing_config.html#sphx-glr-auto-examples-colorbar-load-existing-config-py"><span class="std std-ref">Load an existing colorbar configuration file</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Open the colorbar editor and pass inputs to control it. "><div class="figure" id="id11">
+<img alt="../_images/sphx_glr_open_editor_thumb.png" src="../_images/sphx_glr_open_editor_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="colorbar/open_editor.html#sphx-glr-auto-examples-colorbar-open-editor-py"><span class="std std-ref">Open the colorbar editor</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div></div>
+<div class="section" id="figure-examples">
+<h2><a class="toc-backref" href="#id25">Figure Examples</a><a class="headerlink" href="#figure-examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples demonstrating figure layout.</p>
+<div class="sphx-glr-thumbcontainer" tooltip="Arange pictures in a grid. Before running this script, make sure you generate pictures before u..."><div class="figure" id="id12">
+<img alt="../_images/sphx_glr_1_LayoutExample_thumb.png" src="../_images/sphx_glr_1_LayoutExample_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="figure/1_LayoutExample.html#sphx-glr-auto-examples-figure-1-layoutexample-py"><span class="std std-ref">Page layout example</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This script generate some figures using the Brain module. Those exported pictures are going to ..."><div class="figure" id="id13">
+<img alt="../_images/sphx_glr_0_GeneratePictures_thumb.png" src="../_images/sphx_glr_0_GeneratePictures_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="figure/0_GeneratePictures.html#sphx-glr-auto-examples-figure-0-generatepictures-py"><span class="std std-ref">Generate pictures</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div></div>
+<div class="section" id="ndviz-examples">
+<h2><a class="toc-backref" href="#id26">Ndviz Examples</a><a class="headerlink" href="#ndviz-examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples demonstrating basic plotting of multi-dimensional data.</p>
+<div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control a ND signal."><div class="figure" id="id14">
+<img alt="../_images/sphx_glr_3_just_for_fun_thumb.png" src="../_images/sphx_glr_3_just_for_fun_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="ndviz/3_just_for_fun.html#sphx-glr-auto-examples-ndviz-3-just-for-fun-py"><span class="std std-ref">Configure the uni and multi-dimensional plot</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control a 2D signal."><div class="figure" id="id15">
+<img alt="../_images/sphx_glr_1_2d_signal_thumb.png" src="../_images/sphx_glr_1_2d_signal_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="ndviz/1_2d_signal.html#sphx-glr-auto-examples-ndviz-1-2d-signal-py"><span class="std std-ref">Plot 2D signal</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control simple 1d signal."><div class="figure" id="id16">
+<img alt="../_images/sphx_glr_0_basic_1d_signal_thumb.png" src="../_images/sphx_glr_0_basic_1d_signal_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="ndviz/0_basic_1d_signal.html#sphx-glr-auto-examples-ndviz-0-basic-1d-signal-py"><span class="std std-ref">Plot a 1d signal</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control a ND signal."><div class="figure" id="id17">
+<img alt="../_images/sphx_glr_2_Nd_signal_thumb.png" src="../_images/sphx_glr_2_Nd_signal_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="ndviz/2_Nd_signal.html#sphx-glr-auto-examples-ndviz-2-nd-signal-py"><span class="std std-ref">Plot multidimensional signals</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div></div>
+<div class="section" id="sleep-examples">
+<h2><a class="toc-backref" href="#id27">Sleep Examples</a><a class="headerlink" href="#sleep-examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples demonstrating how to load files in Sleep.</p>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a BrainVision file."><div class="figure" id="id18">
+<img alt="../_images/sphx_glr_load_BrainVision_thumb.png" src="../_images/sphx_glr_load_BrainVision_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="sleep/load_BrainVision.html#sphx-glr-auto-examples-sleep-load-brainvision-py"><span class="std std-ref">Load a BrainVision file</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file."><div class="figure" id="id19">
+<img alt="../_images/sphx_glr_load_elan_thumb.png" src="../_images/sphx_glr_load_elan_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="sleep/load_elan.html#sphx-glr-auto-examples-sleep-load-elan-py"><span class="std std-ref">Load ELAN files</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an EDF file."><div class="figure" id="id20">
+<img alt="../_images/sphx_glr_load_edf_thumb.png" src="../_images/sphx_glr_load_edf_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="sleep/load_edf.html#sphx-glr-auto-examples-sleep-load-edf-py"><span class="std std-ref">Load EDF file</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example shows how to load data using MNE-Python package. https://martinos.org/mne/stable/i..."><div class="figure" id="id21">
+<img alt="../_images/sphx_glr_load_usingMNE_thumb.png" src="../_images/sphx_glr_load_usingMNE_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="sleep/load_usingMNE.html#sphx-glr-auto-examples-sleep-load-usingmne-py"><span class="std std-ref">Load a file using MNE-python</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file."><div class="figure" id="id22">
+<img alt="../_images/sphx_glr_load_matlab_thumb.png" src="../_images/sphx_glr_load_matlab_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py"><span class="std std-ref">Load a Matlab file</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div><div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/auto_examples_python.zip" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">auto_examples_python.zip</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/auto_examples_jupyter.zip" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">auto_examples_jupyter.zip</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="brain/6_RealDataExample.html" class="btn btn-neutral float-right" title="Real data example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../io.html" class="btn btn-neutral" title="I/O" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

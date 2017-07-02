@@ -1,0 +1,462 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>I/O &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="index.html"/>
+        <link rel="next" title="Examples" href="auto_examples/index.html"/>
+        <link rel="prev" title="Figure" href="figure.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">I/O</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#gui-dialog">GUI dialog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mne">MNE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-file">Configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#image">Image</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>I/O</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/io.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="i-o">
+<span id="io"></span><h1>I/O<a class="headerlink" href="#i-o" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="gui-dialog">
+<h2>GUI dialog<a class="headerlink" href="#gui-dialog" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="visbrain.io.dialog.dialogSave">
+<code class="descclassname">visbrain.io.dialog.</code><code class="descname">dialogSave</code><span class="sig-paren">(</span><em>self, name=’Save file’, default=’file’, allext=[‘All files (*.*)’]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/dialog.html#dialogSave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.dialog.dialogSave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a window to save a file.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>self: class</dt>
+<dd>Class containing PyQt5 elemnets.</dd>
+</dl>
+</dd>
+<dt>Kargs:</dt>
+<dd><dl class="first last docutils">
+<dt>name: string, optional, (def: ‘Save file’)</dt>
+<dd>Name of the saving window.</dd>
+<dt>default: string, optional, (def: ‘file’)</dt>
+<dd>Default name of the saved file.</dd>
+<dt>allext: list, optional, (def: [‘All files (<em>.</em>)’])</dt>
+<dd>String containing all the extensions. Must be a list where each
+element is a string of type ‘Ext (<a href="#id1"><span class="problematic" id="id2">*</span></a>.ext)’</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>filename: string</dt>
+<dd>Filename for saving.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="visbrain.io.dialog.dialogLoad">
+<code class="descclassname">visbrain.io.dialog.</code><code class="descname">dialogLoad</code><span class="sig-paren">(</span><em>self, name=’Open file’, default=’file’, allext=[‘All files (*.*)’]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/dialog.html#dialogLoad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.dialog.dialogLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a window to load a file.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>self: class</dt>
+<dd>Class containing PyQt5 elemnets.</dd>
+</dl>
+</dd>
+<dt>Kargs:</dt>
+<dd><dl class="first last docutils">
+<dt>name: string, optional, (def: ‘Save file’)</dt>
+<dd>Name of the opening window.</dd>
+<dt>default: string, optional, (def: ‘file’)</dt>
+<dd>Default name of the opened file.</dd>
+<dt>allext: list, optional, (def: [‘All files (<em>.</em>)’])</dt>
+<dd>String containing all the extensions. Must be a list where each
+element is a string of type ‘Ext (<a href="#id3"><span class="problematic" id="id4">*</span></a>.ext)’</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>filename: string</dt>
+<dd>Filename for opening.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="mne">
+<h2>MNE<a class="headerlink" href="#mne" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="visbrain.io.mneio.mne_is_installed">
+<code class="descclassname">visbrain.io.mneio.</code><code class="descname">mne_is_installed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/mneio.html#mne_is_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.mneio.mne_is_installed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if MNE is installed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="visbrain.io.mneio.mne_read_sleep">
+<code class="descclassname">visbrain.io.mneio.</code><code class="descname">mne_read_sleep</code><span class="sig-paren">(</span><em>file</em>, <em>ext</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/mneio.html#mne_read_sleep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.mneio.mne_read_sleep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read sleep datasets using mne.io.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>file: string</dt>
+<dd>Filename.</dd>
+<dt>ext: string</dt>
+<dd>File extension.</dd>
+<dt>arg: tuple</dt>
+<dd>Further arguments.</dd>
+</dl>
+</dd>
+<dt>Kargs:</dt>
+<dd><dl class="first last docutils">
+<dt>kargs: dict, optional, (def: {})</dt>
+<dd>Further optional arguments.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="configuration-file">
+<h2>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="visbrain.io.rw_config.save_config_json">
+<code class="descclassname">visbrain.io.rw_config.</code><code class="descname">save_config_json</code><span class="sig-paren">(</span><em>filename</em>, <em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/rw_config.html#save_config_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.rw_config.save_config_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save configuration file as JSON.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>filename: string</dt>
+<dd>Name of the configuration file to save.</dd>
+<dt>config: dict</dt>
+<dd>Dictionary of arguments to save.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="visbrain.io.rw_config.load_config_json">
+<code class="descclassname">visbrain.io.rw_config.</code><code class="descname">load_config_json</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/rw_config.html#load_config_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.rw_config.load_config_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load configuration file as JSON.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>filename: string</dt>
+<dd>Name of the configuration file to load.</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>config: dict</dt>
+<dd>Dictionary of config.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="image">
+<h2>Image<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="visbrain.io.write_image.write_fig_hyp">
+<code class="descclassname">visbrain.io.write_image.</code><code class="descname">write_fig_hyp</code><span class="sig-paren">(</span><em>file</em>, <em>hypno</em>, <em>sf</em>, <em>tstartsec</em>, <em>grid=False</em>, <em>ascolor=False</em>, <em>colors={-1: ‘#8bbf56’</em>, <em>0: ‘#56bf8b’</em>, <em>1: ‘#aabcce’</em>, <em>2: ‘#405c79’</em>, <em>3: ‘#0b1c2c’</em>, <em>4: ‘#bf5656’}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/write_image.html#write_fig_hyp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.write_image.write_fig_hyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export hypnogram to a 600 dpi png figure.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>file: str</dt>
+<dd>Filename (with full path) to sleep dataset.</dd>
+<dt>hypno: np.ndarray</dt>
+<dd>Hypnogram vector</dd>
+<dt>sf: float, optional, (def: 100.)</dt>
+<dd>The sampling frequency of displayed elements (could be the
+down-sampling frequency)</dd>
+<dt>tstartsec: int</dt>
+<dd>Record starting time given in seconds.</dd>
+</dl>
+</dd>
+<dt>Kargs:</dt>
+<dd><dl class="first last docutils">
+<dt>grid: boolean, optional (def False)</dt>
+<dd>Plot X and Y grid.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="visbrain.io.write_image.write_fig_canvas">
+<code class="descclassname">visbrain.io.write_image.</code><code class="descname">write_fig_canvas</code><span class="sig-paren">(</span><em>filename</em>, <em>canvas</em>, <em>resolution=3000</em>, <em>autocrop=False</em>, <em>region=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/write_image.html#write_fig_canvas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.write_image.write_fig_canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export a canvas as a figure.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>filename: string</dt>
+<dd>Name of the figure to export.</dd>
+<dt>canvas: VisPy canvas</dt>
+<dd>The vispy canvas to export.</dd>
+</dl>
+</dd>
+<dt>Kargs:</dt>
+<dd><dl class="first last docutils">
+<dt>resolution: int, optional, (def: 3000)</dt>
+<dd>Coefficient to multiply the size of the canvas.</dd>
+<dt>autocrop: bool, optional, (def: False)</dt>
+<dd>Auto-cropping argument to remove useless space.</dd>
+<dt>region: tuple/list, optional, (def: None)</dt>
+<dd>The region to export.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="visbrain.io.write_image.write_fig_pyqt">
+<code class="descclassname">visbrain.io.write_image.</code><code class="descname">write_fig_pyqt</code><span class="sig-paren">(</span><em>self</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/write_image.html#write_fig_pyqt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.write_image.write_fig_pyqt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export a GUI window as a figure.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>self: struct</dt>
+<dd>The self structure of the GUI window.</dd>
+<dt>filename: string</dt>
+<dd>The picture file name.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="auto_examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="figure.html" class="btn btn-neutral" title="Figure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

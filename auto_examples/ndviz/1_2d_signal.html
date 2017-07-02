@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Plot 2D signal &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="../../index.html"/>
+        <link rel="up" title="Examples" href="../index.html"/>
+        <link rel="next" title="Plot a 1d signal" href="0_basic_1d_signal.html"/>
+        <link rel="prev" title="Configure the uni and multi-dimensional plot" href="3_just_for_fun.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">I/O</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#ndviz-examples">Ndviz Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="3_just_for_fun.html">Configure the uni and multi-dimensional plot</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Plot 2D signal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0_basic_1d_signal.html">Plot a 1d signal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2_Nd_signal.html">Plot multidimensional signals</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+      <li>Plot 2D signal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/auto_examples/ndviz/1_2d_signal.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="plot-2d-signal">
+<span id="sphx-glr-auto-examples-ndviz-1-2d-signal-py"></span><h1>Plot 2D signal<a class="headerlink" href="#plot-2d-signal" title="Permalink to this headline">¶</a></h1>
+<p>This example show how to display and control a 2D signal.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Ndviz</span>
+
+<span class="c1"># Create an empty dictionary :</span>
+<span class="n">kw</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1"># Sampling frequency :</span>
+<span class="n">sf</span> <span class="o">=</span> <span class="mf">1024.</span>
+<span class="n">npts</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">npts</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">npts</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mf">1024.</span>
+<span class="c1"># Create a 2d signal :</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mi">10</span><span class="o">*</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span>
+<span class="c1"># Add a little bit of noise :</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;sf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sf</span>
+
+<span class="c1"># ===================================================================</span>
+<span class="c1"># Nd-plot configuration :</span>
+<span class="c1"># -----------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The y signal has a shape of (200, 200). By default, the first axis is</span>
+<span class="sd">considered as the number of time points. The second axis is then used to</span>
+<span class="sd">dispatch signals in the most optimal grid. In that case, you&#39;ll have a</span>
+<span class="sd">(10 rows, 20 columns) grid of signals.</span>
+<span class="sd">You can switch axis directly from the interface or using the nd_axis.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># ===================================================================</span>
+<span class="c1"># Display the Nd-plot panel and display the grid :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;nd_visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;nd_grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="c1"># Use a random color for each signal :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;nd_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;random&#39;</span>
+<span class="c1"># Set the linewidth :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;nd_lw&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="c1"># ===================================================================</span>
+<span class="c1"># 1d-plot configuration :</span>
+<span class="c1"># -----------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">When a 2D array is passed to Nd-viz, you can use the image panel to see</span>
+<span class="sd">it as an image.</span>
+<span class="sd">For the line / marker / spectrogram / histogram types, the X-axis is where are</span>
+<span class="sd">the time points and the Y-axis is the column that is curently inspecting.</span>
+<span class="sd">For example, if in the Inspect/1d-Signal the X-axis is 0, Y-axis is 1 and index</span>
+<span class="sd">is 22 this can be resume as data[:, 22]. Then you can use shortcuts &quot;n&quot; and &quot;p&quot;</span>
+<span class="sd">respectively to display next or previous signal along the Y-axis.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># ===================================================================</span>
+<span class="c1"># Display the Nd-plot panel and display the grid :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;The 2D signal&#39;</span>
+<span class="c1"># Marker size :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_msize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="c1"># Number of bins in the histogram :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_bins&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="c1"># Number of fft points / step / starting and ending frequency :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_nfft&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">512.</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">10.</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_fstart&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_fend&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="c1"># The color dynamically change with the amplitude of the signal :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Spectral&#39;</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;dyn_minmax&#39;</span>
+<span class="c1"># Every values under 0 will be set to red :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_vmin&#39;</span><span class="p">],</span> <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_under&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span> <span class="s1">&#39;#ab4642&#39;</span>
+<span class="c1"># Every values over 0.9 will be set to gay :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_vmax&#39;</span><span class="p">],</span> <span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span>
+<span class="c1"># Linewidth :</span>
+<span class="n">kw</span><span class="p">[</span><span class="s1">&#39;od_lw&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">Ndviz</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/1_2d_signal.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">1_2d_signal.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/1_2d_signal.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">1_2d_signal.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="0_basic_1d_signal.html" class="btn btn-neutral float-right" title="Plot a 1d signal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="3_just_for_fun.html" class="btn btn-neutral" title="Configure the uni and multi-dimensional plot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

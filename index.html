@@ -1,0 +1,426 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Visbrain documentation &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="#"/>
+        <link rel="next" title="Brain" href="brain.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Visbrain documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <a class="reference external image-reference" href="https://travis-ci.org/EtienneCmb/visbrain"><img alt="https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master" src="https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/EtienneCmb/visbrain"><img alt="https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg" src="https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg" /></a>
+<a class="reference external image-reference" href="https://badge.fury.io/py/visbrain"><img alt="https://badge.fury.io/py/visbrain.svg" src="https://badge.fury.io/py/visbrain.svg" /></a>
+<div class="section" id="visbrain-documentation">
+<h1>Visbrain documentation<a class="headerlink" href="#visbrain-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Visbrain is a python package dedicated to multi-purpose neuroscience visualization tools. Here is the list of the current modules :</p>
+<ul class="simple">
+<li><a class="reference internal" href="brain.html#brain"><span class="std std-ref">Brain</span></a> : plot your data onto a 3D MNI brain control it via the graphical interface</li>
+<li><a class="reference internal" href="sleep.html#sleep"><span class="std std-ref">Sleep</span></a> : display sleep data, perform spindles / REM / peaks / slow waves / K-complex detection and live hypnogram edition</li>
+<li><a class="reference internal" href="ndviz.html#ndviz"><span class="std std-ref">Ndviz</span></a> : inspect data your n-dimentional data.</li>
+<li><a class="reference internal" href="figure.html#figure"><span class="std std-ref">Figure</span></a> : arange exported pictures in a grid, add colorbar and save a paper ready figure.</li>
+</ul>
+<p>See the <a class="reference internal" href="changelog_futur.html#changelogfutur"><span class="std std-ref">Changelog and future directions</span></a>.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
+<p>Here’s the list of visbrain’s dependencies :</p>
+<ul class="simple">
+<li>Numpy</li>
+<li>Scipy</li>
+<li>Vispy : fast graphics rendering</li>
+<li>Matplotlib : mainly for colors and colormaps integration</li>
+<li>PyQt5 : Graphical User Interface components</li>
+<li>Pillow : for screenshots and image file format support.</li>
+</ul>
+<p>We also strongly recommend to install <em>pyopengl</em> :</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install pyopengl
+</pre></div>
+</div>
+</div>
+<div class="section" id="pyqt5-version">
+<h3>PyQt5 version<a class="headerlink" href="#pyqt5-version" title="Permalink to this headline">¶</a></h3>
+<p>For the PyQt5 version, Matplotlib’s version should be &gt;= 1.5.5. If PyQt is not installed, run either <strong>pip install pyqt5</strong> or <strong>conda install pyqt</strong>. Then, in a terminal run :</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install -e git+https://github.com/vispy/vispy#egg<span class="o">=</span>vispy-dev
+</pre></div>
+</div>
+<p>Finally, install Visbrain :</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install visbain
+</pre></div>
+</div>
+</div>
+<div class="section" id="pyqt4-version">
+<h3>PyQt4 version<a class="headerlink" href="#pyqt4-version" title="Permalink to this headline">¶</a></h3>
+<p>Since the 0.2.8 Visbrain use the PyQt5 version. If you still use PyQt4, you should install the Visbrain version 0.2.7.</p>
+<p>In a terminal, create and activate a 3.5 Python environment with the correct PyQt4 version :</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>conda create --yes  -n visbrain <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5 numpy scipy pillow <span class="nv">matplotlib</span><span class="o">=</span><span class="m">1</span>.5.1 pip
+activate visbrain
+</pre></div>
+</div>
+<p>Then you’ll need to install the latest VisPy version from github :</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install -e git+https://github.com/vispy/vispy#egg<span class="o">=</span>vispy-dev
+</pre></div>
+</div>
+<p>Finally, install Visbrain :</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install <span class="nv">visbain</span><span class="o">==</span><span class="m">0</span>.2.7
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="contents">
+<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="brain.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brain.html#objects">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brain.html#color">Color</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brain.html#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html">Main <em>Brain</em> class inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#brain-methods"><em>Brain</em> methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="brain.html#screenshot-tutorial">Screenshot tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vbexport.html">Exporting your figures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vbexport.html#screenshot-function">Screenshot function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vbexport.html#transparency">Transparency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="brain.html#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#import-and-use-sleep">Import and use sleep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#examples-and-datasets">Examples and datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#supported-files-and-format">Supported files and format</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#data-files">Data files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#hypnogram">Hypnogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#save-hypnogram">Save hypnogram</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#load-your-files">Load your files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#from-the-gui">From the GUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#from-path">From path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#raw-data">Raw data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#using-mne-python">Using MNE-Python</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#tabs-descripion">Tabs descripion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#panels">Panels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#tools">Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#info">Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#scoring">Scoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#detection">Detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#load-and-save-the-gui-configuration">Load and save the GUI configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#annotations">Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#shortcuts">Shortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html#collaborator">Collaborator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ndviz.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ndviz.html#inputs">Inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ndviz.html#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="figure.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="figure.html#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="figure.html#inputs">Inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="figure.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#show">show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#save">save</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#colorbar-to-axis">colorbar_to_axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#shared-colorbar">shared_colorbar</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="io.html#gui-dialog">GUI dialog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#mne">MNE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#configuration-file">Configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#image">Image</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#brain-examples">Brain Examples</a><ul>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#colorbar-examples">Colorbar Examples</a><ul>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#figure-examples">Figure Examples</a><ul>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#ndviz-examples">Ndviz Examples</a><ul>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#sleep-examples">Sleep Examples</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog_futur.html#changelog">Changelog</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-2-9">v0.2.9</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-2-8">v0.2.8</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="changelog_futur.html#future-directions">Future directions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#id3">Visbrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#brain">Brain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#sleep">Sleep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#figure">Figure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="brain.html" class="btn btn-neutral float-right" title="Brain" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

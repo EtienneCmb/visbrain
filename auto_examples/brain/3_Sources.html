@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Add deep sources &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="../../index.html"/>
+        <link rel="up" title="Examples" href="../index.html"/>
+        <link rel="next" title="Add multiple objects to the scene" href="8_AddMultipleObjects.html"/>
+        <link rel="prev" title="Screenshot example" href="7_screenshot.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">I/O</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="6_RealDataExample.html">Real data example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0_basics.html">Basic plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_InterfaceCustomization.html">Interface customization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5_DeepStructures.html">Add Region of interest (ROI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2_CustomBrainTemplate.html">Use your own brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7_screenshot.html">Screenshot example</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Add deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8_AddMultipleObjects.html">Add multiple objects to the scene</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4_Connectivity.html">Connect deep sources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#ndviz-examples">Ndviz Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+      <li>Add deep sources</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/auto_examples/brain/3_Sources.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="add-deep-sources">
+<span id="sphx-glr-auto-examples-brain-3-sources-py"></span><h1>Add deep sources<a class="headerlink" href="#add-deep-sources" title="Permalink to this headline">¶</a></h1>
+<p>This example demonstrate how to display deep sources using MNI coordinates.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c1"># Define a empty dictionnary :</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
+<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">],</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
+
+<span class="c1"># The &quot;subjects&quot; list is composed of 6 diffrents subjects.</span>
+<span class="c1"># Now, we define the color of sources pear subject :</span>
+<span class="n">u_color</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#9b59b6&quot;</span><span class="p">,</span> <span class="s2">&quot;#3498db&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;#e74c3c&quot;</span><span class="p">,</span> <span class="s2">&quot;#34495e&quot;</span><span class="p">,</span> <span class="s2">&quot;#2ecc71&quot;</span><span class="p">]</span>  <span class="c1"># The unique color per subject</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">u_color</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">subjects</span><span class="p">]</span>  <span class="c1"># Set the subject corresponding color, for each electrode</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_opacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="c1"># Sources opacity</span>
+
+<span class="c1"># Now, create some random data between [-50,50]</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span><span class="c1">#np.round(100*np.random.rand(kwargs[&#39;s_xyz&#39;].shape[0])-50)</span>
+
+<span class="c1"># Control the dynamic range of sources radius :</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_radiusmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>               <span class="c1"># Minimum radius</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_radiusmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">15</span>               <span class="c1"># Maximum radius</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Color of the edges</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_edgewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>              <span class="c1"># Width of the edges</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_symbol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;square&#39;</span>           <span class="c1"># Source&#39;s symbol</span>
+
+<span class="c1"># Next, we will mask data between [-20, 20]:</span>
+<span class="c1"># kwargs[&#39;s_mask&#39;] = np.logical_and(kwargs[&#39;s_data&#39;] &gt;= -20, kwargs[&#39;s_data&#39;] &lt;= 20)</span>
+<span class="c1"># kwargs[&#39;s_maskcolor&#39;] = &#39;gray&#39;</span>
+
+
+<span class="c1"># Cortical projection/repartition :</span>
+<span class="c1"># Navigate to the menu to transform -&gt; cortical projection (or CTRL+P)</span>
+<span class="c1"># then, the activity of deep sources can be project on the surface.</span>
+<span class="c1"># To make a pretty plot, we can define some colormap properties :</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;viridis&#39;</span>                <span class="c1"># Matplotlib colormap</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_cmap_vmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">60</span>                 <span class="c1"># Define a minimum</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_cmap_vmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">60</span>                  <span class="c1"># Define a maximum</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_cmap_under&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>             <span class="c1"># Every values under vmin are going to be gray</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_cmap_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Every values over vmax are going to be black</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_cmap_clim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="c1"># If you want to customize the colormap, display the quick settings menu (or CTRL+D)</span>
+<span class="c1"># and checked the button &#39;See live changement of colormap settings&#39;</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cb_label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Deep sources projection&#39;</span>
+
+<span class="c1"># Now, we can labelize each source :</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">subjects</span>             <span class="c1"># Each source will show the name of the subject</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_textcolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#f39c12&quot;</span>       <span class="c1"># Set to yellow the text color</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_textsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>              <span class="c1"># Size of the text</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_textshift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>   <span class="c1"># To avoid a superposition between the text and sources sphere, we move the text of (x, y, z) points</span>
+
+
+<span class="c1"># Pass all arguments in the dictionnary :</span>
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/3_Sources.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">3_Sources.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/3_Sources.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">3_Sources.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="8_AddMultipleObjects.html" class="btn btn-neutral float-right" title="Add multiple objects to the scene" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="7_screenshot.html" class="btn btn-neutral" title="Screenshot example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

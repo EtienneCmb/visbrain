@@ -1,0 +1,518 @@
+:orphan:
+
+.. _general_examples:
+
+Examples
+========
+
+.. contents:: Contents
+   :local:
+   :depth: 2
+
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+Brain Examples
+--------------
+
+Examples demonstrating visualizations on a standard 3D-MNI brain.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display deep sources using MNI coordinates. ">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_6_RealDataExample_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_6_RealDataExample.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/6_RealDataExample
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This is the most basic example to illustrate how to start a Brain instance and visualize a basi...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_0_basics_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_0_basics.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/0_basics
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Customize the GUI before loading.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_1_InterfaceCustomization_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_1_InterfaceCustomization.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/1_InterfaceCustomization
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to display Region Of Interest (ROI).">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_5_DeepStructures_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_5_DeepStructures.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/5_DeepStructures
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Import a custom atlas and to adapt it to the software.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_2_CustomBrainTemplate_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_2_CustomBrainTemplate.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/2_CustomBrainTemplate
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This script illustrate how to export your figures and the colorbar.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_7_screenshot_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_7_screenshot.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/7_screenshot
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display deep sources using MNI coordinates.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_3_Sources_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_3_Sources.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/3_Sources
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display connectivity. To this end, we will define some deep sou...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_8_AddMultipleObjects_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_8_AddMultipleObjects.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/8_AddMultipleObjects
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display connectivity. To this end, we will define some deep sou...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_4_Connectivity_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_4_Connectivity.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/4_Connectivity
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+Colorbar Examples
+-----------------
+
+Examples demonstrating how to open and configure the Colorbar editor.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The configuration is in a config.txt file and is loaded to reproduce the colorbar configuration...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/colorbar/images/thumb/sphx_glr_load_existing_config_thumb.png
+
+        :ref:`sphx_glr_auto_examples_colorbar_load_existing_config.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/colorbar/load_existing_config
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Open the colorbar editor and pass inputs to control it. ">
+
+.. only:: html
+
+    .. figure:: /auto_examples/colorbar/images/thumb/sphx_glr_open_editor_thumb.png
+
+        :ref:`sphx_glr_auto_examples_colorbar_open_editor.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/colorbar/open_editor
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+Figure Examples
+---------------
+
+Examples demonstrating figure layout.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Arange pictures in a grid. Before running this script, make sure you generate pictures before u...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/figure/images/thumb/sphx_glr_1_LayoutExample_thumb.png
+
+        :ref:`sphx_glr_auto_examples_figure_1_LayoutExample.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/figure/1_LayoutExample
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This script generate some figures using the Brain module. Those exported pictures are going to ...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/figure/images/thumb/sphx_glr_0_GeneratePictures_thumb.png
+
+        :ref:`sphx_glr_auto_examples_figure_0_GeneratePictures.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/figure/0_GeneratePictures
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+Ndviz Examples
+--------------
+
+Examples demonstrating basic plotting of multi-dimensional data.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control a ND signal.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/ndviz/images/thumb/sphx_glr_3_just_for_fun_thumb.png
+
+        :ref:`sphx_glr_auto_examples_ndviz_3_just_for_fun.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/ndviz/3_just_for_fun
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control a 2D signal.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/ndviz/images/thumb/sphx_glr_1_2d_signal_thumb.png
+
+        :ref:`sphx_glr_auto_examples_ndviz_1_2d_signal.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/ndviz/1_2d_signal
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control simple 1d signal.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/ndviz/images/thumb/sphx_glr_0_basic_1d_signal_thumb.png
+
+        :ref:`sphx_glr_auto_examples_ndviz_0_basic_1d_signal.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/ndviz/0_basic_1d_signal
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control a ND signal.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/ndviz/images/thumb/sphx_glr_2_Nd_signal_thumb.png
+
+        :ref:`sphx_glr_auto_examples_ndviz_2_Nd_signal.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/ndviz/2_Nd_signal
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+Sleep Examples
+--------------
+
+Examples demonstrating how to load files in Sleep.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a BrainVision file.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_BrainVision_thumb.png
+
+        :ref:`sphx_glr_auto_examples_sleep_load_BrainVision.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/sleep/load_BrainVision
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_elan_thumb.png
+
+        :ref:`sphx_glr_auto_examples_sleep_load_elan.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/sleep/load_elan
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an EDF file.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_edf_thumb.png
+
+        :ref:`sphx_glr_auto_examples_sleep_load_edf.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/sleep/load_edf
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to load data using MNE-Python package. https://martinos.org/mne/stable/i...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_usingMNE_thumb.png
+
+        :ref:`sphx_glr_auto_examples_sleep_load_usingMNE.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/sleep/load_usingMNE
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load an ELAN file.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_matlab_thumb.png
+
+        :ref:`sphx_glr_auto_examples_sleep_load_matlab.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/sleep/load_matlab
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+
+
+.. container:: sphx-glr-footer
+
+
+  .. container:: sphx-glr-download
+
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/etienne/Toolbox/visbrain/docs/auto_examples/auto_examples_python.zip>`
+
+
+
+  .. container:: sphx-glr-download
+
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/etienne/Toolbox/visbrain/docs/auto_examples/auto_examples_jupyter.zip>`
+
+.. rst-class:: sphx-glr-signature
+
+    `Generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_

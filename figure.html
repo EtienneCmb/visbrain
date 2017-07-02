@@ -1,0 +1,592 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Figure &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="index.html"/>
+        <link rel="next" title="I/O" href="io.html"/>
+        <link rel="prev" title="Ndviz" href="ndviz.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Figure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#show">show</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#save">save</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#colorbar-to-axis">colorbar_to_axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shared-colorbar">shared_colorbar</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Figure</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/figure.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="figure">
+<span id="id1"></span><h1>Figure<a class="headerlink" href="#figure" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This module can be used to arange several exported figures in a grid, to control background colors, colorbar (either one per picture or shared colorbar…)</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Figure</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Import the Figure module :</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Figure</span>
+
+<span class="c1"># Set the list of files to load :</span>
+<span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;front.png&#39;</span><span class="p">,</span> <span class="s1">&#39;top.png&#39;</span><span class="p">,</span> <span class="s1">&#39;connect.png&#39;</span><span class="p">,</span> <span class="s1">&#39;connect.png&#39;</span><span class="p">]</span>
+
+<span class="c1"># Define titles, xlabels and ylabels :</span>
+<span class="n">title</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Front&#39;</span><span class="p">,</span> <span class="s1">&#39;Top&#39;</span><span class="p">,</span> <span class="s1">&#39;Transp&#39;</span><span class="p">,</span> <span class="s1">&#39;Connect&#39;</span><span class="p">]</span>
+<span class="n">xlabels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;xlab0&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;xlab3&#39;</span><span class="p">]</span>
+<span class="n">ylabels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ylab0&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;ylab3&#39;</span><span class="p">]</span>
+
+<span class="c1"># Define the background color of each axis : the two last pictures are</span>
+<span class="c1"># transparent brains. By setting the background color to &#39;slateblue&#39; and</span>
+<span class="c1"># &#39;#ab4642&#39;, brains turn respectively to blue and red :</span>
+<span class="n">ax_bgcolor</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;slateblue&#39;</span><span class="p">,</span> <span class="s1">&#39;#ab4642&#39;</span><span class="p">]</span>
+
+<span class="c1"># Define the Figure object :</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="n">titles</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="s1">&#39;My figure&#39;</span><span class="p">,</span> <span class="n">xlabels</span><span class="o">=</span><span class="n">xlabels</span><span class="p">,</span>
+           <span class="n">ylabels</span><span class="o">=</span><span class="n">ylabels</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">ax_bgcolor</span><span class="o">=</span><span class="n">ax_bgcolor</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+           <span class="n">fig_bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.098</span><span class="p">,</span> <span class="mf">0.098</span><span class="p">,</span> <span class="mf">0.098</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+           <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># Add a colorbar only to the second axis :</span>
+<span class="n">f</span><span class="o">.</span><span class="n">colorbar_to_axis</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Repartition&#39;</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="s1">&#39;complete&#39;</span><span class="p">,</span>
+                   <span class="n">vmax</span><span class="o">=.</span><span class="mi">9</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;#ab4642&#39;</span><span class="p">,</span> <span class="n">fz_ticks</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                   <span class="n">vmin</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add a colorbar only to the third axis :</span>
+<span class="n">f</span><span class="o">.</span><span class="n">colorbar_to_axis</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Connectivity&#39;</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="s1">&#39;minmax&#39;</span><span class="p">,</span>
+                   <span class="n">vmax</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;#ab4642&#39;</span><span class="p">,</span> <span class="n">fz_ticks</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                   <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add a vertical shared colormap :</span>
+<span class="n">f</span><span class="o">.</span><span class="n">shared_colorbar</span><span class="p">((</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">fz_title</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">7</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                  <span class="n">under</span><span class="o">=</span><span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;firebrick&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span>
+                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Shared vertical colorbar&#39;</span><span class="p">,</span> <span class="n">fz_ticks</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">pltmargin</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span>
+                  <span class="n">figmargin</span><span class="o">=.</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Add a horizontal shared colormap :</span>
+<span class="n">f</span><span class="o">.</span><span class="n">shared_colorbar</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;magma&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">17</span><span class="p">,</span> <span class="mi">17</span><span class="p">),</span> <span class="n">fz_title</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">11</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                  <span class="n">under</span><span class="o">=</span><span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;firebrick&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span>
+                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Shared horizontal colorbar&#39;</span><span class="p">,</span> <span class="n">fz_ticks</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">pltmargin</span><span class="o">=.</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Save the final figure in 600 dpi:</span>
+<span class="n">f</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;figlayout.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+
+<span class="c1"># Alternatively, you can show the figure :</span>
+<span class="n">f</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id6">
+<img alt="_images/figure.png" src="_images/figure.png" />
+<p class="caption"><span class="caption-text">Code above : four exported figures from the Brain module are aranged in a (2, 2) grid. Then, some have a colorbar, xlabel, ylabel. Finally, there is two shared colorbars.</span></p>
+</div>
+</div>
+<div class="section" id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<p>First, you will need to create a Figure objects with the files to load, titles, xlabels… Then, there’s a list of embedded methods that provide further controls :</p>
+<ul class="simple">
+<li><a class="reference internal" href="#show"><span class="std std-ref">show</span></a> : display the final figure</li>
+<li><a class="reference internal" href="#save"><span class="std std-ref">save</span></a> : save the final figure</li>
+<li><a class="reference internal" href="#colorbar-to-axis"><span class="std std-ref">colorbar_to_axis</span></a> : add a colorbar to a specific axis</li>
+<li><a class="reference internal" href="#shared-colorbar"><span class="std std-ref">shared_colorbar</span></a> : add a shared colorbar</li>
+</ul>
+<dl class="class">
+<dt id="visbrain.figure.figure.Figure">
+<em class="property">class </em><code class="descclassname">visbrain.figure.figure.</code><code class="descname">Figure</code><span class="sig-paren">(</span><em>files</em>, <em>path=None</em>, <em>grid=None</em>, <em>figtitle=None</em>, <em>y=1.02</em>, <em>titles=None</em>, <em>xlabels=None</em>, <em>ylabels=None</em>, <em>figsize=None</em>, <em>subspace={‘left’: 0.05</em>, <em>’right’: 1.0</em>, <em>’bottom’: 0.1</em>, <em>’top’: 0.9</em>, <em>’wspace’: 0.0</em>, <em>’hspace’: 0.3}</em>, <em>rmax=True</em>, <em>fig_bgcolor=None</em>, <em>ax_bgcolor=None</em>, <em>text_color=’black’</em>, <em>autocrop=False</em>, <em>autoresize=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.figure.Figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically arange pictures in a grid and save a paper ready figure.</p>
+<p>This class can be used to generate figures to be then used in a paper. For
+example, if you export 10 pictures, you may want to concatenate them in a
+(5, 2) grid and add a colorbar.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>files: str/list/tuple</dt>
+<dd>Files to load. If it’s a string, only one file will be loaded.
+Otherwise, if files is a iterable object of strings (list, tuple)
+all the files will be loaded.</dd>
+</dl>
+</dd>
+<dt>Kwargs:</dt>
+<dd><dl class="first last docutils">
+<dt>path: str, optional, (def: None)</dt>
+<dd>Specify where files are located. If all files are in separate
+folders, use the files variable : files = [‘path1/file1.png’,
+‘path2/file2.jpg’, …]. If all pictures are in the same folder,
+use path=’path2myfolder/’ and files=[‘file1.png’, ‘file2.jpg’, …]</dd>
+<dt>grid: tuple, optional, (def: None)</dt>
+<dd>Tuple of integers describing how to arange figures. The grid
+describe (n_rows, n_columns) of the final figure. If grid is None
+all pictures will be displayed on a line. For example, if 12
+pictures are loaded, grid could be (6, 2), (4, 3)…</dd>
+<dt>figtitle: str, optional, (def: None)</dt>
+<dd>Title of the entire figure.</dd>
+<dt>y: float, optional, (def: 1.02)</dt>
+<dd>Distance between top and title of each axis (if title displayed).</dd>
+<dt>titles: str/list/tuple, optional, (def: None)</dt>
+<dd>Specify the title of each figure. If titles is None, no title will
+be added. If titles is a string, the same title will be applied to
+all figures. If titles is a list/tuple of strings, the strings
+inside will be used to set the title of each picture independantly
+(must have the same length as files.)</dd>
+<dt>xlabels: str/list/tuple, optional, (def: None)</dt>
+<dd>Specify the x-axis label of each figure. If xlabels is None,
+no label will be added. If xlabels is a string, the same label will
+be applied to all figures. If xlabels is a list/tuple of strings,
+the strings inside will be used to set the label of each picture
+independantly (must have the same length as files.)</dd>
+<dt>ylabels: str/list/tuple, optional, (def: None)</dt>
+<dd>Specify the y-axis label of each figure. If ylabels is None,
+no label will be added. If ylabels is a string, the same label will
+be applied to all figures. If ylabels is a list/tuple of strings,
+the strings inside will be used to set the label of each picture
+independantly (must have the same length as files.)</dd>
+<dt>figsize: tuple, optional, (def: None)</dt>
+<dd>The size of the figure. Should be a tuple of integers.</dd>
+<dt>subspace: dict, optional, (def: None)</dt>
+<dd><dl class="first last docutils">
+<dt>Control margins and the distance between subplots. Use:</dt>
+<dd><ul class="first last simple">
+<li>‘left’ : The left side of the subplots of the figure</li>
+<li>‘right’ : The right side of the subplots of the figure</li>
+<li>‘bottom’ : The bottom of the subplots of the figure</li>
+<li>‘top’ : The top of the subplots of the figure</li>
+<li>‘hspace’ : The amount of height reserved for white space
+between subplots, expressed as a fraction of the average axis
+height.</li>
+<li>‘wspace’ : The amount of width reserved for blank space
+between subplots, expressed as a fraction of the average axis
+width.</li>
+</ul>
+</dd>
+<dt>Default <span class="classifier-delimiter">:</span> <span class="classifier">{‘left’: 0., ‘right’: 1., ‘bottom’: 0., ‘top’: .9,</span></dt>
+<dd>‘wspace’: 0., ‘hspace’: 0.05}</dd>
+</dl>
+</dd>
+<dt>rmax: bool, optional, (def: True)</dt>
+<dd>Remove borders of each axis.</dd>
+<dt>fig_bgcolor: str/tuple/list, optional, (def: None)</dt>
+<dd>Background color of the figure. By default, no background is used.</dd>
+<dt>ax_bgcolor: str/tuple/list, optional, (def: None)</dt>
+<dd>Background color of each axis. If None, no background will be used.
+If ax_bgcolor is a string, the same background will be used for all
+axes. Finally, use a list of colors to control the background color
+of each axis. This is a very important parameter for transparent
+pictures (like png or tiff files).</dd>
+<dt>text_color: str/tuple/list, optional, (def: ‘black’)</dt>
+<dd>Color of text elements (figure title, axes titles, x and y labels.)</dd>
+<dt>autocrop: bool, optional, (def: False)</dt>
+<dd>Specify if each picture has to be automatically cropped.</dd>
+<dt>autoresize: bool, optional, (def: False)</dt>
+<dd>Specify if all pictures have to be resized. If True, all pictures
+will be resized according to the minimum size along row axis. For
+further controls, define autoresize as a dictionary. Use the
+key ‘axis’ to specify if pictures have to share the same height (0)
+or width (1). Use ‘extend’ if the smallest (False) or the largest
+have to be considered as the reference.</dd>
+</dl>
+</dd>
+<dt>Methods:</dt>
+<dd><dl class="first last docutils">
+<dt>show:</dt>
+<dd>Display the final figure.</dd>
+<dt>save:</dt>
+<dd>Save the figure.</dd>
+<dt>colorbar_to_axis:</dt>
+<dd>Add a specific colorbar to a selected picture.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="show">
+<span id="id2"></span><h3>show<a class="headerlink" href="#show" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.figure.Figure.show">
+<code class="descclassname">Figure.</code><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the figure.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="save">
+<span id="id3"></span><h3>save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.figure.Figure.save">
+<code class="descclassname">Figure.</code><code class="descname">save</code><span class="sig-paren">(</span><em>saveas</em>, <em>dpi=300</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the figure.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>saveas: string</dt>
+<dd>Name of the saved figure.</dd>
+</dl>
+</dd>
+<dt>Kargs:</dt>
+<dd><dl class="first last docutils">
+<dt>dpi: int, optional, (def: 300)</dt>
+<dd>The resolution of the exported figure.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="colorbar-to-axis">
+<span id="id4"></span><h3>colorbar_to_axis<a class="headerlink" href="#colorbar-to-axis" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.figure.Figure.colorbar_to_axis">
+<code class="descclassname">Figure.</code><code class="descname">colorbar_to_axis</code><span class="sig-paren">(</span><em>toaxis</em>, <em>clim</em>, <em>cmap</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em>, <em>orientation=’vertical’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.colorbar_to_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.colorbar_to_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a colorbar to a particular axis.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>toaxis: int</dt>
+<dd>Integer to specify the axis to which add the colorbar.</dd>
+<dt>clim: tuple/list</dt>
+<dd>A tuple of float/int describing the limit of the colorbar.</dd>
+<dt>cmap: str</dt>
+<dd>The colormap to use (‘viridis’, ‘jet’, ‘Spectral’…)</dd>
+</dl>
+</dd>
+</dl>
+<p>Kargs:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>vmin: float, optional, (def: None)</dt>
+<dd>Minimum threshold. See the under parameter for further details.</dd>
+<dt>under: string/tuple/list, optional, (def: ‘gray’)</dt>
+<dd>Every values bellow vmin will be set to the under color.</dd>
+<dt>vmax: float, optional, (def: None)</dt>
+<dd>Maximum threshold. See the over parameter for further details.</dd>
+<dt>over: string/tuple/list, optional, (def: ‘red’)</dt>
+<dd>Every values over vmax will be set to the over color.</dd>
+<dt>title: string, optional, (def: None)</dt>
+<dd>Title of the colorbar.</dd>
+<dt>ycb: float, optional, (def: 10.)</dt>
+<dd>Distance between the colorbar and it title (if defined).</dd>
+<dt>fz_title: int/float, optional, (def: 15)</dt>
+<dd>The fontsize of colorbar title.</dd>
+<dt>ticks: string/int/float/np.ndarray, optional, (def: ‘complete’)</dt>
+<dd>Ticks of the colorbar. This parameter is only active if clim
+is defined. Use ‘complete’ to see only the minimum,
+maximum, vmin and vmax (if defined). Use ‘minmax’ to only see
+the maximum and minimum. If ticks is a float, an linear
+interpolation between the maximum and minimum will be used.
+Finally, if ticks is a NumPy array, it will be used as colorbar
+ticks directly.</dd>
+<dt>fz_ticks: int/float, optional, (def: 10)</dt>
+<dd>Fontsize of tick labels.</dd>
+<dt>outline: bool, optional, (def: False)</dt>
+<dd>Specify if the box arround the colorbar have to be displayed.</dd>
+<dt>orientation: string, optional, (def: ‘vertical’)</dt>
+<dd>Colorbar orientation. Use either ‘vertical’ or ‘horizontal’.</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="shared-colorbar">
+<span id="id5"></span><h3>shared_colorbar<a class="headerlink" href="#shared-colorbar" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.figure.Figure.shared_colorbar">
+<code class="descclassname">Figure.</code><code class="descname">shared_colorbar</code><span class="sig-paren">(</span><em>clim</em>, <em>cmap</em>, <em>position=’right’</em>, <em>height=0.5</em>, <em>width=0.02</em>, <em>pltmargin=0.02</em>, <em>figmargin=0.07</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.shared_colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.shared_colorbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a colorbar to a particular axis.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>toaxis: int</dt>
+<dd>Integer to specify the axis to which add the colorbar.</dd>
+<dt>clim: tuple/list</dt>
+<dd>A tuple of float/int describing the limit of the colorbar.</dd>
+<dt>cmap: str</dt>
+<dd>The colormap to use (‘viridis’, ‘jet’, ‘Spectral’…)</dd>
+</dl>
+</dd>
+<dt>Kargs:</dt>
+<dd><dl class="first last docutils">
+<dt>position: str, optional, (def: ‘right’)</dt>
+<dd>Position of the shared colorbar. Use either ‘left’, ‘right’,
+or ‘bottom’.</dd>
+<dt>height: float, optional, (def: .5)</dt>
+<dd>Height of the colorbar.</dd>
+<dt>width: float, optional, (def: .02)</dt>
+<dd>Width of the colorbar.</dd>
+<dt>pltmargin: float, optional, (def: .05)</dt>
+<dd>Margin between plots and the colorbar.</dd>
+<dt>figmargin: float, optional, (def: .07)</dt>
+<dd>Margin between the edge of the figure and the colorbar.</dd>
+<dt>vmin: float, optional, (def: None)</dt>
+<dd>Minimum threshold. See the under parameter for further details.</dd>
+<dt>under: string/tuple/list, optional, (def: ‘gray’)</dt>
+<dd>Every values bellow vmin will be set to the under color.</dd>
+<dt>vmax: float, optional, (def: None)</dt>
+<dd>Maximum threshold. See the over parameter for further details.</dd>
+<dt>over: string/tuple/list, optional, (def: ‘red’)</dt>
+<dd>Every values over vmax will be set to the over color.</dd>
+<dt>title: string, optional, (def: None)</dt>
+<dd>Title of the colorbar.</dd>
+<dt>ycb: float, optional, (def: 10.)</dt>
+<dd>Distance between the colorbar and it title (if defined).</dd>
+<dt>fz_title: int/float, optional, (def: 15)</dt>
+<dd>The fontsize of colorbar title.</dd>
+<dt>ticks: string/int/float/np.ndarray, optional, (def: ‘complete’)</dt>
+<dd>Ticks of the colorbar. This parameter is only active if clim
+is defined. Use ‘complete’ to see only the minimum,
+maximum, vmin and vmax (if defined). Use ‘minmax’ to only see
+the maximum and minimum. If ticks is a float, an linear
+interpolation between the maximum and minimum will be used.
+Finally, if ticks is a NumPy array, it will be used as colorbar
+ticks directly.</dd>
+<dt>fz_ticks: int/float, optional, (def: 10)</dt>
+<dd>Fontsize of tick labels.</dd>
+<dt>outline: bool, optional, (def: False)</dt>
+<dd>Specify if the box arround the colorbar have to be displayed.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="io.html" class="btn btn-neutral float-right" title="I/O" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ndviz.html" class="btn btn-neutral" title="Ndviz" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

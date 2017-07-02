@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Brain &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="index.html"/>
+        <link rel="next" title="Main Brain class inputs" href="brainAPI.html"/>
+        <link rel="prev" title="Visbrain documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Brain</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#objects">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#color">Color</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html">Main <em>Brain</em> class inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#brain-methods"><em>Brain</em> methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#screenshot-tutorial">Screenshot tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vbexport.html">Exporting your figures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vbexport.html#screenshot-function">Screenshot function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vbexport.html#transparency">Transparency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Brain</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/brain.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="brain">
+<span id="id1"></span><h1>Brain<a class="headerlink" href="#brain" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center">
+<img alt="_images/example.png" src="_images/example.png" />
+</div>
+<p>Brain is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, brodmann areas, materialize connectivity… This module use <a class="reference external" href="http://vispy.org/">vispy</a> and can be imported as follow :</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+</pre></div>
+</div>
+<p>Visit this page for a set of <a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/examples/brain">examples</a>.</p>
+</div>
+<div class="section" id="objects">
+<h2>Objects<a class="headerlink" href="#objects" title="Permalink to this headline">¶</a></h2>
+<p>There’s four fundamental objects in Brain :</p>
+<ul class="simple">
+<li>The main brain, which can be generated using one of the three possible template or simply pass vertices / faces of your own template.</li>
+<li>Sources, which can represent deep electrodes, EEG / MEG captors or source localization…</li>
+<li>Connectivity, in order to materialize a connexion strength between those sources (like coherence, amplitude-amplitude coupling…)</li>
+<li>ROI (Region Of Interest), which are brain sub-structures (Brodmann areas or AAL)</li>
+</ul>
+<div class="figure align-center">
+<img alt="_images/objects.png" src="_images/objects.png" />
+</div>
+</div>
+<div class="section" id="color">
+<h2>Color<a class="headerlink" href="#color" title="Permalink to this headline">¶</a></h2>
+<p>Brain can manage several types of color inputs. All possible colors can be a matplotlib color name (‘olive’, ‘slateblue’…), an hexadecimal type (‘#9b59b6’, ‘#3498db’, ‘#95a5a6’…*) or an array of RGB or RGBA colors ((1., 0., 0.), (.1, .1, .1)…).</p>
+<p>The colormap can be personalized using five variables :</p>
+<ul class="simple">
+<li>clim : define the colorbar limits (like (-10, 10) or (-245, 7)…). The clim parameter must be a tuple/list of two floats. Every values over or under the colorbar limits will clip.</li>
+<li>vmin / under : vmin is a float and under is a color. The vmin parameter can be defined in order to control the color of data that is under vmin.</li>
+<li>vmax / over : vmax is a float and over is a color. The over parameter can be defined in order to control the color of data that is over vmax.</li>
+</ul>
+<div class="figure align-center">
+<img alt="_images/colormap.png" src="_images/colormap.png" />
+</div>
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<p>The user functions correspond to a bundle of functions that can be used to control Brain operations without opening the graphical interface. This can be convenient to generate a large amount of pictures.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="brainAPI.html">Main <em>Brain</em> class inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brainAPI.html#brain-methods"><em>Brain</em> methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#gui-functions-and-settings">GUI functions and settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#show-graphical-interface">Show graphical interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#quit-graphical-interface">Quit graphical interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#rotation">Rotation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#background-color">Background color</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#screenshot">Screenshot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#load-and-save-gui-configuration">Load and save GUI configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#load-an-existing-configuration">Load an existing configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#save-the-current-configuration">Save the current configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#atlas-methods">Atlas methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#control">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#opacity">Opacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#light-reflection">Light reflection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#sources-methods">Sources methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#set-data">Set data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#id1">Opacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#select-sources">Select sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#add-source-object">Add source object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#fit-to-an-object">Fit to an object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#convert-into-convex-hull">Convert into convex hull</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#cortical-projection">Cortical projection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#cortical-repartition">Cortical repartition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#colormap">Colormap</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#connectivity-methods">Connectivity methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#connectivity-settings">Connectivity settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#add-connectivity-object">Add connectivity object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#roi-methods">ROI methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#list-of-suported-roi">List of suported ROI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#plot-selection">Plot selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#id2">Opacity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#id3">Light reflection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#colorbar-methods">Colorbar methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#colorbar-control">Colorbar control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#auto-scaling">Auto-scaling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="screenshot-tutorial">
+<h2>Screenshot tutorial<a class="headerlink" href="#screenshot-tutorial" title="Permalink to this headline">¶</a></h2>
+<p>See this tutorial to export your figures in a proper way in order to use them in your research / paper…</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vbexport.html">Exporting your figures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vbexport.html#screenshot-function">Screenshot function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vbexport.html#name-of-your-figure">Name of your figure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vbexport.html#cropping-region">Cropping region</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vbexport.html#zoom">Zoom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vbexport.html#colorbar">Colorbar</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vbexport.html#transparency">Transparency</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vbexport.html#png-files">PNG files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vbexport.html#combine-transparent-figures">Combine transparent figures</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="shortcuts">
+<h2>Shortcuts<a class="headerlink" href="#shortcuts" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Keys</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>&lt;space&gt;</td>
+<td>Brain transparency</td>
+</tr>
+<tr class="row-odd"><td>0</td>
+<td>Top view</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>Bottom view</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>Left view</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>Right view</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>Front view</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>Back view</td>
+</tr>
+<tr class="row-odd"><td>b</td>
+<td>Display / hide the brain</td>
+</tr>
+<tr class="row-even"><td>s</td>
+<td>Display / hide sources</td>
+</tr>
+<tr class="row-odd"><td>t</td>
+<td>Display / hide connectivity</td>
+</tr>
+<tr class="row-even"><td>r</td>
+<td>Display / hide Region Of Interest (ROI)</td>
+</tr>
+<tr class="row-odd"><td>c</td>
+<td>Display / hide colorbar</td>
+</tr>
+<tr class="row-even"><td>a</td>
+<td>Auto-scale colormap</td>
+</tr>
+<tr class="row-odd"><td>“+”</td>
+<td>Increase brain opacity</td>
+</tr>
+<tr class="row-even"><td>“-“</td>
+<td>Decrease brain opacity</td>
+</tr>
+<tr class="row-odd"><td>CTRL+P</td>
+<td>Run the cortical projection</td>
+</tr>
+<tr class="row-even"><td>CTRL+R</td>
+<td>Run the cortical repartition</td>
+</tr>
+<tr class="row-odd"><td>CTRL+D</td>
+<td>Display quick settings panel</td>
+</tr>
+<tr class="row-even"><td>CTRL+N</td>
+<td>Screenshot of the main canvas</td>
+</tr>
+<tr class="row-odd"><td>CTRL+W</td>
+<td>Screenshot of the entire window</td>
+</tr>
+<tr class="row-even"><td>CTRL+T</td>
+<td>Show the shortcuts panel</td>
+</tr>
+<tr class="row-odd"><td>CTRL+Q</td>
+<td>Exit</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="brainAPI.html" class="btn btn-neutral float-right" title="Main Brain class inputs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Visbrain documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

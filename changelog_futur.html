@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Changelog and future directions &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="index.html"/>
+        <link rel="prev" title="Load a Matlab file" href="auto_examples/sleep/load_matlab.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog and future directions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#changelog">Changelog</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#v0-2-9">v0.2.9</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#visbrain">Visbrain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#brain-module">Brain module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sleep-module">Sleep module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#colorbar-module">Colorbar module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#v0-2-8">v0.2.8</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Visbrain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Sleep module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#future-directions">Future directions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Visbrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain">Brain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sleep">Sleep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#figure">Figure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Changelog and future directions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/changelog_futur.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="changelog-and-future-directions">
+<span id="changelogfutur"></span><h1>Changelog and future directions<a class="headerlink" href="#changelog-and-future-directions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="changelog">
+<h2>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="v0-2-9">
+<h3>v0.2.9<a class="headerlink" href="#v0-2-9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="visbrain">
+<h4>Visbrain<a class="headerlink" href="#visbrain" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Better integration of PyQt5</li>
+<li>Start grouping read/write function in I/O</li>
+<li>Fix closing window when Python error occurs</li>
+</ul>
+</div>
+<div class="section" id="brain-module">
+<h4>Brain module<a class="headerlink" href="#brain-module" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>New menu and much cleaner code and GUI</li>
+<li>New colorbar with better controls</li>
+<li><strong>Shortcuts has changed</strong></li>
+<li>Save/load the GUI configuration either from the menu File/load or File/save or using methods <em>loadConfig</em> and <em>saveConfig</em></li>
+<li>Fix camera</li>
+</ul>
+</div>
+<div class="section" id="sleep-module">
+<h4>Sleep module<a class="headerlink" href="#sleep-module" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Support annotations</li>
+<li>Enable editing/removing detections</li>
+<li>Improve default topoplot state</li>
+</ul>
+</div>
+<div class="section" id="colorbar-module">
+<h4>Colorbar module<a class="headerlink" href="#colorbar-module" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><strong>New colorbar module</strong> : use this new module to design colorbars and to export the configuration.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="v0-2-8">
+<h3>v0.2.8<a class="headerlink" href="#v0-2-8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h4>Visbrain<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Migration to PyQt5</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h4>Sleep module<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Enable exporting colored hypnogram</li>
+<li>Bug fixing &amp; GUI improvements</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="future-directions">
+<h2>Future directions<a class="headerlink" href="#future-directions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>Visbrain<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>conda installation</li>
+<li>Independent of the VisPy developer version for better installation (ST)</li>
+<li>Code style improvements (flake8 and numpydoc) (ST)</li>
+<li>Improve coverage (right now, PyQt tests failed) (ST)</li>
+<li>Improve doc with sphinx-gallery (ST)</li>
+<li>New modules are planned (<em>Connect</em>, <em>Signal</em>, <em>Image</em>, <em>ERP</em>, <em>Topo</em>) (LT)</li>
+</ul>
+</div>
+<div class="section" id="brain">
+<h3>Brain<a class="headerlink" href="#brain" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Colorbar support very low and very high values (see utils.power_of_ten) (ST)</li>
+<li>Better ROI color control (ST)</li>
+<li>Display time-series/2D maps attached to sources (ST)</li>
+<li>Support load atlas from several extensions (LT)</li>
+<li>Support adding custom ROI (LT)</li>
+</ul>
+</div>
+<div class="section" id="sleep">
+<h3>Sleep<a class="headerlink" href="#sleep" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Support annotations from MNE (ST)</li>
+<li>Better integration of non-supported files (compatibility with MNE)  (ST)</li>
+<li>Command-line control (LT)</li>
+<li>De-noising (LT)</li>
+<li>Zero re-referencing (LT)</li>
+<li>Automatic-scoring (LT)</li>
+</ul>
+</div>
+<div class="section" id="figure">
+<h3>Figure<a class="headerlink" href="#figure" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Improve memory efficiency when loading files in a loop.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="auto_examples/sleep/load_matlab.html" class="btn btn-neutral" title="Load a Matlab file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

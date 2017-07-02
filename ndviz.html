@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Ndviz &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="index.html"/>
+        <link rel="next" title="Figure" href="figure.html"/>
+        <link rel="prev" title="Sleep" href="sleep.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Ndviz</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Ndviz</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/ndviz.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ndviz">
+<span id="id1"></span><h1>Ndviz<a class="headerlink" href="#ndviz" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The Ndviz module groups a bundle of functionalities for the visualization of mutli-dimentional data. It can be used to represent all of your signals in a single canvas (see this <a class="reference external" href="https://github.com/vispy/vispy/blob/master/examples/demo/gloo/realtime_signals.py">example</a> by <a class="reference external" href="https://github.com/rossant">Cyrille Rossant</a> for the original script). Each single signal can then be ploted as a traditional continious line, a cloud of points, a histogram, a spectrogram or as an image.</p>
+<div class="figure align-center">
+<img alt="_images/ndviz_example.png" src="_images/ndviz_example.png" />
+</div>
+<p>Use the following command to import Ndviz :</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Ndviz</span>
+</pre></div>
+</div>
+<p>Visit this page for a set of <a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/examples/ndviz">examples</a>.</p>
+</div>
+<div class="section" id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="visbrain.ndviz.ndviz.Ndviz">
+<em class="property">class </em><code class="descclassname">visbrain.ndviz.ndviz.</code><code class="descname">Ndviz</code><span class="sig-paren">(</span><em>data</em>, <em>sf=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/ndviz/ndviz.html#Ndviz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.ndviz.ndviz.Ndviz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signal visualization tool.</p>
+<p>This class to visualize multi-dimentional array or to inspect single
+signal in several forms (line / markers / histogram / spectrogram / image).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>data: array</dt>
+<dd>The array to plot. It can have any dimension.</dd>
+</dl>
+</dd>
+<dt>Kargs:</dt>
+<dd><dl class="first last docutils">
+<dt>sf: float, optionam, (def: 1.)</dt>
+<dd>The sampling frequency</dd>
+<dt>nd_lw: float, optional, (def: 1.)</dt>
+<dd>Line width of each signal for the Nd-plot.</dd>
+<dt>nd_title: string, optional, (def: ‘Nd-plot’)</dt>
+<dd>Title of the Nd plot.</dd>
+<dt>nd_xlabel: string, optional, (def: ‘X axis’)</dt>
+<dd>Label of the x axis for the Nd plot.</dd>
+<dt>nd_ylabel: string, optional, (def: ‘Y axis’)</dt>
+<dd>Label of the y axis for the Nd plot.</dd>
+<dt>od_lw: float, optional, (def: 1.)</dt>
+<dd>Line width of each signal for the 1d-plot line.</dd>
+<dt>on_title: string, optional, (def: ‘1d-plot’)</dt>
+<dd>Title of the 1d plot.</dd>
+<dt>od_xlabel: string, optional, (def: ‘X axis’)</dt>
+<dd>Label of the x axis for the 1d plot.</dd>
+<dt>od_ylabel: string, optional, (def: ‘Y axis’)</dt>
+<dd>Label of the y axis for the 1d plot.</dd>
+<dt>ui_bgcolor: string/tuple, optional, (def: (.09, .09, .09))</dt>
+<dd>Background color of the main canvas.</dd>
+</dl>
+</dd>
+<dt>Example:</dt>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="k">import</span> <span class="n">Ndviz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Ndviz</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="shortcuts">
+<h2>Shortcuts<a class="headerlink" href="#shortcuts" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Keys</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>CTRL+d</td>
+<td>Display quick settings panem</td>
+</tr>
+<tr class="row-odd"><td>CTRL+n</td>
+<td>Screenshot window</td>
+</tr>
+<tr class="row-even"><td>&lt;space&gt;</td>
+<td>Play signals on Nd-plot canvas</td>
+</tr>
+<tr class="row-odd"><td>r</td>
+<td>Reset signals after playing</td>
+</tr>
+<tr class="row-even"><td>0</td>
+<td>Reset camera</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>Display / hide the Nd-plot canvas</td>
+</tr>
+<tr class="row-even"><td>2</td>
+<td>Display / hide the Inspect</td>
+</tr>
+<tr class="row-odd"><td>g</td>
+<td>Display / hide axis grid</td>
+</tr>
+<tr class="row-even"><td>l</td>
+<td>Display the line plot type</td>
+</tr>
+<tr class="row-odd"><td>m</td>
+<td>Display the marker plot type</td>
+</tr>
+<tr class="row-even"><td>s</td>
+<td>Display the spectrogram plot type</td>
+</tr>
+<tr class="row-odd"><td>h</td>
+<td>Display the histogram plot type</td>
+</tr>
+<tr class="row-even"><td>i</td>
+<td>Display the image plot type</td>
+</tr>
+<tr class="row-odd"><td>a</td>
+<td>Auto-scale colormap</td>
+</tr>
+<tr class="row-even"><td>n</td>
+<td>Next signal (for line / marker / histogram / spectrogram)</td>
+</tr>
+<tr class="row-odd"><td>p</td>
+<td>Previous signal (for line / marker / histogram / spectrogram)</td>
+</tr>
+<tr class="row-even"><td>N</td>
+<td>Next signal (for image)</td>
+</tr>
+<tr class="row-odd"><td>P</td>
+<td>Previous signal (for image)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="figure.html" class="btn btn-neutral float-right" title="Figure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sleep.html" class="btn btn-neutral" title="Sleep" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
