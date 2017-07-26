@@ -70,7 +70,7 @@ class vbShortcuts(object):
                 # Get slider value :
                 sl = self.OpacitySlider.value()
                 step = 10 if (event.text == '+') else -10
-                self.OpacitySlider.setValue(sl+step)
+                self.OpacitySlider.setValue(sl + step)
                 self._fcn_opacity()
                 self._light_Atlas2Ui()
 
@@ -104,6 +104,7 @@ class vbShortcuts(object):
             if self.view.wc.camera.name == 'turntable':
                 # Display the rotation panel and set informations :
                 self._fcn_userRotation()
+            print(event.pos)
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
@@ -159,7 +160,7 @@ class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
         super(uiInit, self).__init__(None)
         self.setupUi(self)
         if self._savename is not None:
-            self.setWindowTitle('Brain - '+self._savename)
+            self.setWindowTitle('Brain - ' + self._savename)
 
         # Initlialize view :
         self.view = vbCanvas(bgcolor)
