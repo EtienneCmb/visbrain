@@ -148,10 +148,10 @@ class CbarBase(CbarArgs):
         todict['cmap'] = self._cmap
         todict['clim'] = [float(k) for k in self._clim]
         todict['isvmin'] = self._isvmin
-        todict['vmin'] = float(self._vmin)
+        todict['vmin'] = self._vmin
         todict['under'] = list(color2tuple(self._under, float))
         todict['isvmax'] = self._isvmax
-        todict['vmax'] = float(self._vmax)
+        todict['vmax'] = self._vmax
         todict['over'] = list(color2tuple(self._over, float))
         # Cblabel :
         todict['cblabel'] = self._cblabel
