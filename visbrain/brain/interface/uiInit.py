@@ -104,7 +104,6 @@ class vbShortcuts(object):
             if self.view.wc.camera.name == 'turntable':
                 # Display the rotation panel and set informations :
                 self._fcn_userRotation()
-            print(event.pos)
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):

@@ -54,7 +54,7 @@ class uiConfig(object):
             config['SourcesEw'] = self.s_EdgeWidth.value()
             config['SourcesScale'] = self.s_Scaling.isChecked()
             # Source's text :
-            config['StextShow'] = self.q_stextshow.isChecked()
+            config['StextShow'] = self.grpText.isChecked()
             config['StextSz'] = self.q_stextsize.value()
             config['StextCol'] = color2json(self.q_stextcolor)
             config['StextXYZ'] = (self.x_text.value(), self.y_text.value(),
@@ -64,6 +64,13 @@ class uiConfig(object):
             config['SprojType'] = self._uitPickProj.currentIndex()
             config['SprojOn'] = self._uitProjectOn.currentIndex()
             config['SprojCon'] = self._uitContribute.isChecked()
+            # Source's time-series :
+            config['StsWidth'] = self._tsWidth.value()
+            config['StsAmp'] = self._tsAmp.value()
+            config['StsLw'] = self._tsLw.value()
+            config['StsDxyz'] = (self._tsDx.value(), self._tsDy.value(),
+                                 self._tsDz.value())
+            config['StsColor'] = color2json(self._tsColor)
             # ----------------- CONNECTIVITY -----------------
             config['ConnectCby'] = self.uiConnect_colorby.currentIndex()
             config['ConnectAlp'] = self._connectStaDynTransp.currentIndex()
@@ -157,7 +164,7 @@ class uiConfig(object):
             _try("self.s_Scaling.setChecked(config['SourcesScale'])")
             _try("self._fcn_MarkerRadius()")
             # Source's text :
-            _try("self.q_stextshow.setChecked(config['StextShow'])")
+            _try("self.grpText.setChecked(config['StextShow'])")
             _try("self.q_stextsize.setValue(config['StextSz'])")
             _try("self.q_stextcolor.setText(str(config['StextCol']))")
             _try("self.x_text.setValue(config['StextXYZ'][0])")
@@ -168,6 +175,15 @@ class uiConfig(object):
             _try("self._uitPickProj.setCurrentIndex(config['SprojType'])")
             _try("self._uitProjectOn.setCurrentIndex(config['SprojOn'])")
             _try("self._uitContribute.setChecked(config['SprojCon'])")
+            # Source's time-series :
+            _try("self._tsWidth.setValue(config['StsWidth'])")
+            _try("self._tsAmp.setValue(config['StsAmp'])")
+            _try("self._tsLw.setValue(config['StsLw'])")
+            _try("self._tsDx.setValue(config['StsDxyz'][0])")
+            _try("self._tsDy.setValue(config['StsDxyz'][1])")
+            _try("self._tsDz.setValue(config['StsDxyz'][2])")
+            _try("self._tsColor.setText(str(config['StsColor']))")
+            _try("self._fcn_ts_update()")
             # ----------------- CONNECTIVITY -----------------
             _try("self.uiConnect_colorby.setCurrentIndex(config["
                  "'ConnectCby'])")
