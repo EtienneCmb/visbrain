@@ -30,7 +30,7 @@ class SourcesBase(CbarArgs):
     def __init__(self, s_xyz=None, s_data=None, s_color='#ab4652',
                  s_opacity=1.0, s_radiusmin=5.0, s_radiusmax=10.0,
                  s_edgecolor=None, s_edgewidth=0.6, s_scaling=False,
-                 s_text=None, s_symbol='disc', s_textcolor='black',
+                 s_text=None, s_symbol='disc', s_textcolor='white',
                  s_textsize=3, s_textshift=(0, 2, 0), s_mask=None,
                  s_maskcolor='gray', s_cmap='inferno', s_cmap_clim=(0., 1.),
                  s_cmap_vmin=None, s_cmap_vmax=None, s_cmap_under=None,
