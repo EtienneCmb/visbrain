@@ -134,7 +134,7 @@ class uiMenu(object):
         viz = self.menuDispSources.isChecked() and inn
         self.sources.mesh.visible = viz
         self.sources.stextmesh.visible = viz
-        self.q_stextshow.setChecked(viz)
+        self.grpText.setChecked(viz)
         self.toolBox.setEnabled(viz)
         self.toolBox.setEnabled(viz)
         self.groupBox_6.setEnabled(viz)

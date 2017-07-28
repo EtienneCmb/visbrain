@@ -1,11 +1,11 @@
-
+"""Most basic colorbar class."""
 from ..color import color2tuple
 
 __all__ = ['CbarArgs', 'CbarBase']
 
 
 class CbarArgs(object):
-    """Manage the diffrent inputs for the colormap creation.
+    """Manage the different inputs for the colormap creation.
 
     Parameters
     ----------
@@ -122,17 +122,20 @@ class CbarBase(CbarArgs):
         self._ndigits = ndigits
         self._width = width
         if fcn is None:
-            def fcn(): pass
+            def fcn():
+                pass
         self._fcn = fcn
         if minmaxfcn is None:
-            def minmaxfcn(): pass
+            def minmaxfcn():
+                pass
         self._minmaxfcn = minmaxfcn
 
     def __getitem__(self, key):
         """Get item (usefull for CbarObjects)."""
-        return eval('self._'+key)
+        return eval('self._' + key)
 
     def __setitem__(self, key, value):
+        """Set self items."""
         if not isinstance(value, str):
             exec("self._" + key + "=" + str(value))
         else:
@@ -148,10 +151,10 @@ class CbarBase(CbarArgs):
         todict['cmap'] = self._cmap
         todict['clim'] = [float(k) for k in self._clim]
         todict['isvmin'] = self._isvmin
-        todict['vmin'] = float(self._vmin)
+        todict['vmin'] = self._vmin
         todict['under'] = list(color2tuple(self._under, float))
         todict['isvmax'] = self._isvmax
-        todict['vmax'] = float(self._vmax)
+        todict['vmax'] = self._vmax
         todict['over'] = list(color2tuple(self._over, float))
         # Cblabel :
         todict['cblabel'] = self._cblabel
