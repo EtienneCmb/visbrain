@@ -29,118 +29,177 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     ----------
     a_color : tuple | (1,1,1)
         RGB colors of the MNI brain.
+
     a_opacity : int/float | 1.
         Transparency of the MNI brain. Must be between 0 and 1.
+
     a_proj : string | 'internal'
         Turn a_proj to 'internal' for internal projection or 'external' for
         cortical rendering.
+
     a_template : string | 'B1'
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
-    a_vertices /a_faces: ndarray | None
+
+    a_vertices /a_faces: array_like | None
         Specify an alternativ surface to use. Both parameters must be a 2D
         array, respectively of shapes (N_vertices, 3) and (N_faces, 3)
-    a_shading : string | 'smooth'
-        Shading method to use for the brain. Switch between 'smooth',
-        'flat' or None.
-    s_xyz : ndarray | None
+
+    s_xyz : array_like | None
         Array of talairach or MNI coordinates to display sources
         into the brain. The shape of the array must be (N, 3) where
         '3' is for (x, y, z) coordinates and N, the number of sources.
-    s_data: ndarray, (def, None)
+
+    s_data: array_like, (def, None)
         Add some data to sources. As a consequence, the radius of each
         source will be a function of s_data. must be an array of shape
         (N,). If s_data is None, all sources will have the same value.
         The parameter s_data can be masked using numpy.ma module.
-    s_color : string/list/ndarray | 'red'
+
+    s_color : string/list/array_like | 'red'
         Color of each source sphere. If s_color is a single string,
         all sphere will have the same color. If it's' a list of strings,
         the length must be N. Alternatively, s_color can be a (N, 3) RGB
         or (N, 4) RGBA colors.
+
     s_alpha : int/float | 1.0
         Transparency of all sources. Must be between 0 and 1.
-    s_radiusmin /s_radiusmax: int/float | 5.0/10.0
+
+    s_radiusmin /s_radiusmax: float | 5.0/10.0
         Define the minimum and maximum source's possible radius. By default
         if all sources have the same value, the radius will be s_radiusmin.
-    s_edgecolor : string/list/ndarray | None
+
+    s_edgecolor : string/list/array_like | None
         Add an edge to sources
+
     s_edgewidth : float | 0.4
         Edge width of sources
+
     s_scaling : bool | True
         If set to True, marker scales when rezooming.
+
     s_symbol : string | 'disc'
         Symbol to use for sources. Allowed style strings are: disc, arrow,
         ring, clobber, square, diamond, vbar, hbar, cross, tailed_arrow, x,
         triangle_up, triangle_down, and star.
+
     s_text : list/tuple | None
         Set text to each electrode. s_text should be an iterable object,
         composed of strings, with the same length as the number of sources.
-    s_textcolor : string/list/ndarray | 'k'
+
+    s_textcolor : string/list/array_like | 'k'
         A single color element for all the text
+
     s_textsize : int | 3
         Fontsize of text elements
+
     s_textshift : list/tuple | (0,1,0)
         Translate the text along (x, y, z) coordinates to improve text
         visibility
+
     s_projecton : string | 'surface'
         Project sources activity either on surface or, if displayed,
         on deep structures.
-    s_mask : ndarray | None
+
+    s_mask : array_like | None
         Vector of boolean values, with the same length as the length of
         s_xyz. Use this parameter to mask some sources but keep it
         displayed.
+
     s_maskcolor : list/tuple | 'gray'
         Color of masked sources when projected on surface.
-    c_connect : ndarray | None
+
+    ts_data : array_like | None
+        Array of data for the time-series. This array must have a shape of
+        (n_sources, n_time_points).
+
+    ts_color : string/list/tuple/array_like | 'white'
+        Color of the time-series.
+
+    ts_amp : float | 6.
+        Graphical amplitude of the time-series.
+
+    ts_width : float | 20.
+        Graphical width of th time-series.
+
+    ts_lw : float | 1.5
+        Line width of the time-series.
+
+    ts_dxyz : tuple | (0., 0., 1.)
+        Offset along the (x, y, z) axis for the time-series.
+
+    c_connect : array_like | None
         Connections between sources. Define N sources location using s_xyz
         of shape (N, 3). Then, c_connect must be a (N, N) array defining
         each value of connection between all sources. The diagonal is going
         to be systematically ignored.
-    c_select : ndarray | None
+
+    c_select : array_like | None
         Select relevant connections do display. This array should be
         composed of 0 and 1 and must have the same shape as c_connect.
         Alternatively, set a mask to c_connect to have the same effect
         without using this parameter.
+
     c_dynamic : tuple | None
         Control the dynamic opacity. For example, if c_dynamic=(0, 1),
         strong connections will be more opaque than weak connections.
+
     c_colorby : string | 'strength'
         Define how to color connexions. Use 'strength' if the color has to
         be modulate by the connectivity strength. Use 'count' if the
         color depends on the number of connexions per node. Use 'density'
         to define colors according to the number of line in a sphere of
         radius c_dradius.
+
     c_dradius : float | 30.
         Radius for the density color line method.
+
     c_colval : dict | None
         Define colors for a specifics values. For example, c_colval=
         {1.5: 'red', 2.1: 'blue'} every connexions equal to 1.5 are going
         to be red and blue for 2.1. Use np.nan: 'gray' in order to define
         the color of all connexions that are not in the dictionary
         otherwise they are going to be ignored.
+
     c_linewidth : float | 3.0
         Linewidth of connectivity lines.
-    t_radius : int/float | 10
+
+    t_radius : float | 10.
         The projection radius to use (depending on coordinates type)
+
+    t_contribute : bool | False
+        Specify if source's can contribute to both hemisphere during projection
+        (True) or if it can only be projected on the hemisphere the source
+        belong.
+
     ui_bgcolor : string/tuple | (0.09, 0.09, 0.09)
         Backgroud color of the ui
+
     ui_savename : string | None
         The save name when exporting
+
     ui_region : tuple | None
         Crop the exportation of the main canvas to the region define by
         (x, y, width, height).
+
     ui_autocrop : bool | True
         Automaticaly crop figures when saving.
+
     ui_resolution : float | 3000
         Define the screenshot resolution by indicating the number of times
         the definition of your screen must be multiplied.
+
     l_position : tuple | (100., 100., 100.)
         Position of the light
+
     l_intensity : tuple | (1., 1., 1.)
         Intensity of the light
+
     l_color : tuple | (1., 1., 1., 1.)
         Color of the light
+
     l_coefAmbient : float | 0.05
         Coefficient for the ambient light
+
     l_coefSpecular : float | 0.5
         Coefficient for the specular light
 
@@ -207,20 +266,20 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(self.view.wc.camera)
         self._vbNode.parent = self.view.wc.scene
-
-        # Fixed colorbar camera :
-        camera = viscam.PanZoomCamera(rect=(-.2, -2.5, 1, 5))
         self._rotate(fixed='axial')
+        self.view.wc.camera.set_default_state()
 
         # ====================== Colorbar ======================
+        # Fixed colorbar camera :
+        camera = viscam.PanZoomCamera(rect=(-.2, -2.5, 1, 5))
         # Cbar creation :
         BrainCbar.__init__(self, camera)
         # Add shortcuts on it :
         vbShortcuts.__init__(self, self.cbqt.cbviz._canvas)
 
-        self._fcnOnLoad()
+        self._fcn_on_load()
 
-    def _fcnOnLoad(self):
+    def _fcn_on_load(self):
         """Function that need to be executed on load."""
         # Setting panel :
         self.q_widget.setVisible(True)
