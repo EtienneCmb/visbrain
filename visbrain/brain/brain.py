@@ -139,16 +139,16 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         Alternatively, set a mask to c_connect to have the same effect
         without using this parameter.
 
-    c_dynamic : tuple | None
-        Control the dynamic opacity. For example, if c_dynamic=(0, 1),
-        strong connections will be more opaque than weak connections.
-
     c_colorby : string | 'strength'
         Define how to color connexions. Use 'strength' if the color has to
         be modulate by the connectivity strength. Use 'count' if the
         color depends on the number of connexions per node. Use 'density'
         to define colors according to the number of line in a sphere of
         radius c_dradius.
+
+    c_dynamic : tuple | None
+        Control the dynamic opacity. For example, if c_dynamic=(0, 1),
+        strong connections will be more opaque than weak connections.
 
     c_dradius : float | 30.
         Radius for the density color line method.
