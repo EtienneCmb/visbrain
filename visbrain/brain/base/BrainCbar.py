@@ -20,6 +20,9 @@ class BrainCbar(object):
         # Cbarbase for the connectivity :
         cbconnect = CbarBase(**self.connect.to_kwargs(True))
         self.cbobjs.add_object('Connectivity', cbconnect)
+        # Cbarbase for the pictures :
+        cbpic = CbarBase(**self.pic.to_kwargs(True))
+        self.cbobjs.add_object('Pictures', cbpic)
 
         # ------------------- CBQT -------------------
         # Add colorbar and interactions :
@@ -27,6 +30,7 @@ class BrainCbar(object):
 
         # ------------------- LINK -------------------
         if self.sources.name != 'NoneSources':
+            # No connections :
             if self.connect.name != 'NoneConnect':
                 # Link the colorbase with connectivity :
                 self.cbqt.link('Connectivity', self._fcn_link_connect,
@@ -34,18 +38,30 @@ class BrainCbar(object):
             else:
                 self.cbqt.setEnabled('Connectivity', False)
                 self.menuDispCbar.setEnabled(False)
+            # No pictures :
+            if self.pic.mesh.name != 'NonePic':
+                # Link the colorbase with connectivity :
+                self.cbqt.link('Pictures', self._fcn_link_pic,
+                               self._fcn_minmax_pic)
+                self.menuDispCbar.setEnabled(True)
+            else:
+                self.cbqt.setEnabled('Pictures', False)
 
             # Connect graphical buttons :
             self.cbqt.select('Projection', onload=False)
             self.cbqt._connect()
         else:
             self.cbqt.setEnabled('Connectivity', False)
+            self.cbqt.setEnabled('Pictures', False)
             self.menuDispCbar.setEnabled(False)
         self.cbqt.setEnabled('Projection', False)
 
         # Add the camera to the colorbar :
         self.cbqt.add_camera(camera)
 
+    ###########################################################################
+    #                              PROJECTION
+    ###########################################################################
     def _fcn_link_proj(self):
         """Executed function when projection need updates."""
         self._proj2Color()
@@ -55,6 +71,9 @@ class BrainCbar(object):
         self.cbqt.cbobjs._objs['Projection']._clim = self.sources._minmax
         self._proj2Color()
 
+    ###########################################################################
+    #                              CONNECTIVITY
+    ###########################################################################
     def _fcn_link_connect(self):
         """Executed function when connectivity need updates."""
         kwargs = self.cbqt.cbobjs._objs['Connectivity'].to_kwargs()
@@ -66,3 +85,19 @@ class BrainCbar(object):
         self.connect.needupdate = True
         self.connect.update()
         self.cbqt.cbobjs._objs['Connectivity']._clim = self.connect._minmax
+
+    ###########################################################################
+    #                              PICTURES
+    ###########################################################################
+    def _fcn_link_pic(self):
+        """Executed function when pictures need updates."""
+        kwargs = self.cbqt.cbobjs._objs['Pictures'].to_kwargs()
+        self.pic.mesh.set_data(**kwargs)
+        self.pic.mesh.update()
+
+    def _fcn_minmax_pic(self):
+        """Executed function for autoscale pictures."""
+        self.cbqt.cbobjs._objs['Pictures']._clim = self.pic._minmax
+        kwargs = self.cbqt.cbobjs._objs['Pictures'].to_kwargs()
+        self.pic.mesh.set_data(**kwargs)
+        self.pic.mesh.update()
