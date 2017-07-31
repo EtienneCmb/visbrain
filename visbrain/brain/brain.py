@@ -265,6 +265,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         # # Main camera :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(self.view.wc.camera)
+        self.pic.set_camera(self.view.wc.camera)
         self._vbNode.parent = self.view.wc.scene
         self._rotate(fixed='axial')
         self.view.wc.camera.set_default_state()
