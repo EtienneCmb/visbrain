@@ -22,6 +22,7 @@ from .SourcesBase import SourcesBase
 from .ConnectBase import ConnectBase
 from .RoiBase import RoiBase
 from .TimeSeriesBase import TimeSeriesBase
+from .PicBase import PicBase
 from .projection import Projections
 
 
@@ -48,6 +49,7 @@ class base(Projections):
         self.area = RoiBase(scale_factor=self.atlas._scaleMax,
                             name='NoneArea', select=None, color='#ab4642')
         self.tseries = TimeSeriesBase(ts_xyz=self.sources.xyz, **kwargs)
+        self.pic = PicBase(pic_xyz=self.sources.xyz, **kwargs)
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -81,6 +83,10 @@ class base(Projections):
         if self.tseries.mesh.name == 'NoneTimeSeries':
             self.grpTs.setEnabled(False)
 
+        # Pictures panel :
+        if self.pic.mesh.name == 'NonePic':
+            self.grpPic.setEnabled(False)
+
         # Connectivity panel:
         if self.connect.name == 'NoneConnect':
             # Disable menu :
@@ -108,6 +114,7 @@ class base(Projections):
         self.connect.mesh.parent = self._vbNode
         self.sources.stextmesh.parent = self._vbNode
         self.tseries.mesh.parent = self._vbNode
+        self.pic.mesh.parent = self._vbNode
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)
         # scene.visuals.XYZAxis(parent=self._vbNode)
