@@ -112,6 +112,10 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         Array of data for the time-series. This array must have a shape of
         (n_sources, n_time_points).
 
+    ts_select : array_like | None
+        Array of boolean values to specify which time-series to hide or to
+        display.
+
     ts_color : string/list/tuple/array_like | 'white'
         Color of the time-series.
 
@@ -126,6 +130,18 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
 
     ts_dxyz : tuple | (0., 0., 1.)
         Offset along the (x, y, z) axis for the time-series.
+
+    pic_data : array_like | None
+        Array of picture data. Must have a shape of (n_sources, n_rows, n_cols)
+
+    pic_width : float | 7.
+        Width of each picture.
+
+    pic_height : float | 7.
+        Height of each picture.
+
+    pic_dxyz : float | (0., 0., 1.)
+        Offset along the (x, y, z) axis for the pictures.
 
     c_connect : array_like | None
         Connections between sources. Define N sources location using s_xyz

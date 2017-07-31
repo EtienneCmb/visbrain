@@ -32,9 +32,9 @@ class SourcesBase(CbarArgs):
                  s_edgecolor=None, s_edgewidth=0.6, s_scaling=False,
                  s_text=None, s_symbol='disc', s_textcolor='white',
                  s_textsize=3, s_textshift=(0, 2, 0), s_mask=None,
-                 s_maskcolor='gray', s_cmap='inferno', s_cmap_clim=(0., 1.),
-                 s_cmap_vmin=None, s_cmap_vmax=None, s_cmap_under=None,
-                 s_cmap_over=None, s_projecton='surface', **kwargs):
+                 s_maskcolor='gray', s_cmap='inferno', s_clim=(0., 1.),
+                 s_vmin=None, s_vmax=None, s_under=None, s_over=None,
+                 s_projecton='surface', **kwargs):
         """Init."""
         # Initialize elements :
         self.xyz = s_xyz
@@ -67,13 +67,13 @@ class SourcesBase(CbarArgs):
             self.stextmesh = visu.Text(name='NoneText')
 
         # Vmin/Vmax only active if not None and in [clim[0], clim[1]] :
-        isvmin = (s_cmap_vmin is not None) and (
-                                s_cmap_clim[0] < s_cmap_vmin < s_cmap_clim[1])
-        isvmax = (s_cmap_vmax is not None) and (
-                                s_cmap_clim[0] < s_cmap_vmax < s_cmap_clim[1])
+        isvmin = (s_vmin is not None) and (
+            s_clim[0] < s_vmin < s_clim[1])
+        isvmax = (s_vmax is not None) and (
+            s_clim[0] < s_vmax < s_clim[1])
         # Initialize colorbar elements :
-        CbarArgs.__init__(self, s_cmap, s_cmap_clim, isvmin, s_cmap_vmin,
-                          isvmax, s_cmap_vmax, s_cmap_under, s_cmap_over)
+        CbarArgs.__init__(self, s_cmap, s_clim, isvmin, s_vmin,
+                          isvmax, s_vmax, s_under, s_over)
 
     def __len__(self):
         """Get the length of non-masked sources."""
@@ -142,7 +142,7 @@ class SourcesBase(CbarArgs):
         # Check mask :
         if self.smask is not None:
             if (len(self.smask) != self.nSources) or not isinstance(
-                                                    self.smask, np.ndarray):
+                    self.smask, np.ndarray):
                 raise ValueError("The mask must be an array of bool with the "
                                  "same length as the number of electrodes")
             else:
@@ -567,7 +567,7 @@ class SourcesBase(CbarArgs):
 
             # Apply a transformation to text elements to not cover sources :
             self.stextmesh.transform = vist.STTransform(
-                                                    translate=self.stextshift)
+                translate=self.stextshift)
         else:
             self.stextmesh = visu.Text(name='NoneText')
 

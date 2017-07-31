@@ -62,15 +62,15 @@ kwargs['s_edgewidth'] = 0
 
 # Colormap properties (for sources) :
 kwargs['s_cmap'] = 'Spectral_r'				# Matplotlib colormap
-kwargs['s_cmap_clim'] = (-50., 50.)
-kwargs['s_cmap_vmin'], kwargs['s_cmap_vmax'] = None, 21
-kwargs['s_cmap_under'], kwargs['s_cmap_over'] = 'midnightblue', "#e74c3c"
+kwargs['s_clim'] = (-50., 50.)
+kwargs['s_vmin'], kwargs['s_vmax'] = None, 21
+kwargs['s_under'], kwargs['s_over'] = 'midnightblue', "#e74c3c"
 
 # Colormap properties (for connectivity) :
 kwargs['c_cmap'] = 'gnuplot'				# Matplotlib colormap
-kwargs['c_cmap_vmin'], kwargs['c_cmap_vmax'] = umin+0.2, umax-0.1
-kwargs['c_cmap_under'], kwargs['c_cmap_over'] = 'green', "white"
-kwargs['c_cmap_clim'] = [umin, umax]
+kwargs['c_vmin'], kwargs['c_vmax'] = umin+0.2, umax-0.1
+kwargs['c_under'], kwargs['c_over'] = 'green', "white"
+kwargs['c_clim'] = [umin, umax]
 
 # Finally, use c_colorby to define how connections have to be colored.
 # if c_colorby is 'count', it's the number of connections which pear node

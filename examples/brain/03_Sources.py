@@ -39,11 +39,11 @@ kwargs['s_symbol'] = 'square'           # Source's symbol
 # then, the activity of deep sources can be project on the surface. 
 # To make a pretty plot, we can define some colormap properties :
 kwargs['s_cmap'] = 'viridis'                # Matplotlib colormap
-kwargs['s_cmap_vmin'] = -60                 # Define a minimum
-kwargs['s_cmap_vmax'] = 60                  # Define a maximum
-kwargs['s_cmap_under'] = 'gray'             # Every values under vmin are going to be gray
-kwargs['s_cmap_over'] = (0.1, 0.1, 0.1, 1)  # Every values over vmax are going to be black
-kwargs['s_cmap_clim'] = (-70, 70)
+kwargs['s_vmin'] = -60                 # Define a minimum
+kwargs['s_vmax'] = 60                  # Define a maximum
+kwargs['s_under'] = 'gray'             # Every values under vmin are going to be gray
+kwargs['s_over'] = (0.1, 0.1, 0.1, 1)  # Every values over vmax are going to be black
+kwargs['s_clim'] = (-70, 70)
 
 # If you want to customize the colormap, display the quick settings menu (or CTRL+D)
 # and checked the button 'See live changement of colormap settings'

@@ -25,8 +25,8 @@ class ConnectBase(CbarArgs):
 
     def __init__(self, _xyz=[], c_xyz=None, c_connect=None, c_select=None,
                  c_colorby='strength', c_dynamic=None, c_cmap='viridis',
-                 c_cmap_vmin=None, c_cmap_vmax=None, c_colval=None,
-                 c_cmap_under=None, c_cmap_over=None, c_cmap_clim=(0., 1.),
+                 c_vmin=None, c_vmax=None, c_colval=None,
+                 c_under=None, c_over=None, c_clim=(0., 1.),
                  c_linewidth=3., c_dradius=30., c_blxyz=.1, c_blradius=13.,
                  c_bundling=False, **kwargs):
         """Init."""
@@ -55,9 +55,9 @@ class ConnectBase(CbarArgs):
         self.blinterp = 100
 
         # Initialize colormap :
-        isvmin, isvmax = c_cmap_vmin is not None, c_cmap_vmax is not None
-        CbarArgs.__init__(self, c_cmap, c_cmap_clim, isvmin, c_cmap_vmin,
-                          isvmax, c_cmap_vmax, c_cmap_under, c_cmap_over)
+        isvmin, isvmax = c_vmin is not None, c_vmax is not None
+        CbarArgs.__init__(self, c_cmap, c_clim, isvmin, c_vmin,
+                          isvmax, c_vmax, c_under, c_over)
 
         # Object creation :
         if (self.xyz is not None) and (self.connect is not None):
