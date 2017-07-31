@@ -26,11 +26,10 @@ pha = np.random.randint(1, 7, n_sources).reshape(-1, 1)
 ts_data = amp * np.sin(2 * np.pi * pha * time)
 ts_data += np.random.randn(n_sources, n_time_points)
 
-# Using masked array you can hide some of the time-series :
+# Use a boolean vector to hide/display time-series :
 ts_to_mask = [5, 7, 11, 3, 14, 17, 22, 23]
-mask = np.zeros_like(ts_data, dtype=bool)
-mask[ts_to_mask, :] = True
-ts_data = np.ma.masked_array(ts_data, mask=mask)
+ts_select = np.ones((s_xyz.shape[0],), dtype=bool)
+ts_select[ts_to_mask] = False
 
 # Time-series (TS) graphical properties :
 ts_amp = 5.4            # TS graphical amplitude
@@ -42,5 +41,5 @@ ts_lw = 2.2             # TS line-width
 
 b = Brain(s_xyz=s_xyz, s_text=s_text, ts_data=ts_data, s_textsize=s_textsize,
           ts_amp=ts_amp, ts_width=ts_width, ts_color=ts_color, ts_dxyz=ts_dxyz,
-          ts_lw=ts_lw, t_contribute=True)
+          ts_lw=ts_lw, ts_select=ts_select)
 b.show()

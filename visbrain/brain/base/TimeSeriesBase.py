@@ -16,10 +16,12 @@ class TimeSeriesBase(object):
     """
 
     def __init__(self, ts_xyz=None, ts_data=None, ts_color='white', ts_amp=6.,
-                 ts_width=20., ts_lw=1.5, ts_dxyz=(0., 0., 1.), **kwargs):
+                 ts_width=20., ts_lw=1.5, ts_dxyz=(0., 0., 1.), ts_select=None,
+                 **kwargs):
         """Init."""
         self.xyz = ts_xyz
         self.data = ts_data
+        self.select = ts_select
         self.color = color2vb(ts_color)
         self.amp = ts_amp
         self.width = ts_width
@@ -51,10 +53,9 @@ class TimeSeriesBase(object):
             pos[k, :, 2] = self.xyz[k, 2] + self.dxyz[2]
         pos = pos.reshape(nsources * npts, 3)
         # Build the connection vector :
-        if not np.ma.is_masked(self.data):
-            connect = np.ones((nsources, npts), dtype=bool)
-        else:
-            connect = ~ self.data.mask
+        connect = np.ones((nsources, npts), dtype=bool)
+        if (self.select is not None) and (len(self.select) == nsources):
+            connect[~self.select, :] = False
         connect[:, -1] = False
         self.mesh.set_data(pos=pos, color=self.color, connect=connect.ravel(),
                            width=self.lw)
