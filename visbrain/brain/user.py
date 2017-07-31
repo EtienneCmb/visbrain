@@ -12,6 +12,8 @@ from scipy.spatial import ConvexHull
 from .base.visuals import BrainMesh
 from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
+from .base.TimeSeriesBase import TimeSeriesBase
+from .base.PicBase import PicBase
 from ..utils import color2vb, AddMesh
 
 __all__ = ('BrainUserMethods')
@@ -233,7 +235,7 @@ class BrainUserMethods(object):
 
     # =========================================================================
     # =========================================================================
-    #                                  MESH
+    #                                  BRAIN
     # =========================================================================
     # =========================================================================
     def brain_control(self, template=None, show=True, hemisphere=None):
@@ -355,9 +357,10 @@ class BrainUserMethods(object):
     #                              SOURCES
     # =========================================================================
     # =========================================================================
-    def sources_data(self, data, color='#ab4652', symbol='disc', radiusmin=5.,
-                     radiusmax=10., edgecolor=None, edgewidth=0.6,
-                     scaling=False, opacity=1.0, mask=None, maskcolor='gray'):
+    def sources_settings(self, data, color='#ab4652', symbol='disc',
+                         radiusmin=5., radiusmax=10., edgecolor=None,
+                         edgewidth=0.6, scaling=False, opacity=1.0, mask=None,
+                         maskcolor='gray'):
         """Set data to sources and control source's properties.
 
         Parameters
@@ -402,7 +405,7 @@ class BrainUserMethods(object):
         >>> # Define some color :
         >>> color = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
         >>> # Set data and properties :
-        >>> vb.sources_data(data=data, symbol='x', radiusmin=1., radiusmax=20.,
+        >>> vb.sources_settings(data=data, symbol='x', radiusmin=1., radiusmax=20.,
         >>>                 color=color, edgecolor='orange', edgewidth=2)
         >>> # Show the GUI :
         >>> vb.show()
@@ -591,7 +594,7 @@ class BrainUserMethods(object):
         >>> # Define some random data :
         >>> data = 100 * np.random.rand(10)
         >>> # Set data and properties :
-        >>> vb.sources_data(data=data)
+        >>> vb.sources_settings(data=data)
         >>> # Run the cortical projection :
         >>> vb.cortical_projection()
         >>> # Set colormap proprties :
@@ -666,10 +669,95 @@ class BrainUserMethods(object):
 
     # =========================================================================
     # =========================================================================
+    #                            TIME-SERIES
+    # =========================================================================
+    # =========================================================================
+    def time_series_settings(self, color=None, lw=None, amp=None, width=None,
+                             dxyz=None, visible=True):
+        """Control time-series settings.
+
+        Parameters
+        ----------
+        color : string/list/tuple/array_like | None
+            Color of the time-series.
+        amp : float | None
+            Graphical amplitude of the time-series.
+        width : float | None
+            Graphical width of th time-series.
+        lw : float | None
+            Line width of the time-series.
+        dxyz : tuple | None
+            Offset along the (x, y, z) axis for the time-series.
+        """
+        self.tseries.set_data(color, lw, amp, width, dxyz, visible)
+        self.tseries.mesh.update()
+
+    def add_time_series(self, name, ts_xyz, ts_data, **kwargs):
+        """Add time-series (TS) object.
+
+        Parameters
+        ----------
+        name : string
+            Name of the TS object.
+        ts_xyz : array_like
+            Array of (x, y, z) coordinates of shape (n_sources, 3).
+        ts_data : array_like
+            Array of time-serie's data of shape (n_sources, n_time_points).
+        kwargs : dict | {}
+            Further arguments starting with *ts_*.
+        """
+        self._userobj[name] = TimeSeriesBase(ts_xyz, ts_data, **kwargs)
+        self._userobj[name].mesh.parent = self._vbNode
+        self.grpTs.setEnabled(True)
+
+    # =========================================================================
+    # =========================================================================
+    #                             PICTURES
+    # =========================================================================
+    # =========================================================================
+    def pictures_settings(self, width=None, height=None, dxyz=None, **kwargs):
+        """Control pictures settings.
+
+        Parameters
+        ----------
+        width : float | 7.
+            Width of each picture.
+        height : float | 7.
+            Height of each picture.
+        dxyz : float | (0., 0., 1.)
+            Offset along the (x, y, z) axis for the pictures.
+        kwargs : dict | {}
+            Further arguments can be used to control the colorbar (clim, cmap,
+            vmin, under, vmax, over).
+        """
+        self.pic.mesh.set_data(width, height, dxyz, **kwargs)
+
+    def add_pictures(self, name, pic_xyz, pic_data, **kwargs):
+        """Add pictures object.
+
+        Parameters
+        ----------
+        name : string
+            Name of the pictures object.
+        pic_xyz : array_like
+            Array of (x, y, z) coordinates of shape (n_sources, 3).
+        pic_data : array_like
+            Array of pictures data of shape (n_sources, n_rows, n_cols).
+        kwargs : dict | {}
+            Further arguments starting with *pic_*.
+        """
+        self._userobj[name] = PicBase(pic_xyz, pic_data, **kwargs)
+        self._userobj[name].mesh.parent = self._vbNode
+        self._userobj[name].set_camera(self.view.wc.camera)
+        self.grpPic.setEnabled(True)
+
+    # =========================================================================
+    # =========================================================================
     #                            CONNECTIVITY
     # =========================================================================
     # =========================================================================
-    def connect_display(self, colorby=None, dynamic=None, show=True, **kwargs):
+    def connect_settings(self, colorby=None, dynamic=None, show=True,
+                         **kwargs):
         """Update connectivity object.
 
         Parameters
@@ -680,6 +768,11 @@ class BrainUserMethods(object):
             color depends on the number of connexions per node. Use
             'density'to define colors according to the number of line in a
             sphere of radius c_dradius.
+        dynamic : tuple | None
+            Control the dynamic opacity. For example, if dynamic=(0, 1),
+            strong connections will be more opaque than weak connections.
+        show : bool | True
+            Display or hide connectivity.
         kwargs : dict | {}
             Further arguments are be passed to the cbar_control method.
 
@@ -722,7 +815,7 @@ class BrainUserMethods(object):
         name : string
             Your connectivity lines object name.
         kwargs : dict
-            Pass every further arguments starting with "c" (like c_xyz,
+            Pass every further arguments starting with *c_* (like c_xyz,
             c_connect, c_select, c_colorby...)
         """
         self._userobj[name] = ConnectBase(**kwargs)

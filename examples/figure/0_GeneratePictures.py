@@ -43,17 +43,17 @@ vb.screenshot('inside.png', autocrop=True)
 # ============= Connectivity =============
 # Colorby network density :
 vb.sources_display('none')
-vb.connect_display(show=True, cmap='magma', colorby='density', clim=(0., 35.),
+vb.connect_settings(show=True, cmap='magma', colorby='density', clim=(0., 35.),
                    vmin=10., vmax=30., under='gray', over='darkred',
                    dynamic=(.7, 1.))
 vb.screenshot('density.png', autocrop=True)
 # Color by number of connections per node :
-vb.connect_display(show=True, cmap='viridis', colorby='count', clim=(1., 5.),
+vb.connect_settings(show=True, cmap='viridis', colorby='count', clim=(1., 5.),
                    vmin=0., vmax=10., dynamic=(.1, 1.))
 vb.screenshot('count.png', autocrop=True)
 
 # ============= Projection =============
-vb.connect_display(show=False)
+vb.connect_settings(show=False)
 vb.sources_display('all')
 vb.cortical_repartition(cmap='viridis', clim=(1., 6.), vmin=2., under='gray',
                         vmax=4., over='#ab4642', radius=16.)

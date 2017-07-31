@@ -28,10 +28,8 @@ class PicBase(CbarArgs):
             self.mesh = visu.Image(name='NonePic')
             clim = (0., 1.)
         # Vmin/Vmax only active if not None and in [clim[0], clim[1]] :
-        isvmin = (pic_vmin is not None) and (
-            pic_clim[0] < pic_vmin < pic_clim[1])
-        isvmax = (pic_vmax is not None) and (
-            pic_clim[0] < pic_vmax < pic_clim[1])
+        isvmin = (pic_vmin is not None) and (clim[0] < pic_vmin < clim[1])
+        isvmax = (pic_vmax is not None) and (clim[0] < pic_vmax < clim[1])
         # Initialize colorbar elements :
         CbarArgs.__init__(self, pic_cmap, clim, isvmin, pic_vmin,
                           isvmax, pic_vmax, pic_under, pic_over)

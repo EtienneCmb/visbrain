@@ -25,6 +25,34 @@ sip.setdestroyonexit(False)
 class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     """Visualization of neuroscientic data on a standard MNI brain.
 
+    The *Brain* module include several objects that can be individually
+    controlled :
+
+    * **a_** : Atlas properties
+    * **s_** : Sources properties
+    * **ts_** : Time-series properties
+    * **pic_** : Pictures properties
+    * **c_** : Connectivity properties
+    * **t_** : Transformations properties
+    * **ui_** : Graphical User Interface properties
+    * **l_** : Light properties
+
+    In addition, some objects provide an extended control of color properties.
+    This is the case for source's projection (**s_**), connectivity (**c_**)
+    and pictures (**pic_**). Here's the list of color properties for those
+    objects :
+
+    * **clim** : a tuple of two floats for the colorbar limits.
+    * **cmap** : a string name of a matplotlib colormap.
+    * **vmin** : a float for the lower threshold.
+    * **under** : a string for color under vmin.
+    * **vmax** : a float for the higher threshold.
+    * **over** : a string for color over vmax.
+
+    As an example, s_cmap, c_clim and pic_vmin respectively controlled the
+    colormap of projected source's activity, the colorbar limits of the
+    connectivity and the lower threshold of pictures.
+
     Parameters
     ----------
     a_color : tuple | (1,1,1)
@@ -41,7 +69,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
 
     a_vertices /a_faces: array_like | None
-        Specify an alternativ surface to use. Both parameters must be a 2D
+        Specify an alternative surface to use. Both parameters must be a 2D
         array, respectively of shapes (N_vertices, 3) and (N_faces, 3)
 
     s_xyz : array_like | None
@@ -75,7 +103,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         Edge width of sources
 
     s_scaling : bool | True
-        If set to True, marker scales when rezooming.
+        If set to True, marker scales when zooming.
 
     s_symbol : string | 'disc'
         Symbol to use for sources. Allowed style strings are: disc, arrow,
@@ -90,7 +118,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         A single color element for all the text
 
     s_textsize : int | 3
-        Fontsize of text elements
+        Font size of text elements
 
     s_textshift : list/tuple | (0,1,0)
         Translate the text along (x, y, z) coordinates to improve text
@@ -177,7 +205,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         otherwise they are going to be ignored.
 
     c_linewidth : float | 3.0
-        Linewidth of connectivity lines.
+        Line width of connectivity lines.
 
     t_radius : float | 10.
         The projection radius to use (depending on coordinates type)
@@ -188,7 +216,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         belong.
 
     ui_bgcolor : string/tuple | (0.09, 0.09, 0.09)
-        Backgroud color of the ui
+        Background color of the ui
 
     ui_savename : string | None
         The save name when exporting
@@ -198,7 +226,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         (x, y, width, height).
 
     ui_autocrop : bool | True
-        Automaticaly crop figures when saving.
+        Automatically crop figures when saving.
 
     ui_resolution : float | 3000
         Define the screenshot resolution by indicating the number of times

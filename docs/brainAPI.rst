@@ -2,15 +2,6 @@
 Main *Brain* class inputs
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Each object can be controlled independently, using input parameters for the *Brain* class. All possible inputs use a prefix and refer to the object itself :
-
-    * 'a(_)': atlas properties
-    * 's(_)': sources properties
-    * 'c(_)': connectivity properties
-    * 't(_)': transformations properties
-    * 'ui(_)': graphical interface properties
-    * 'l(_)': light properties
-
 .. autoclass:: visbrain.brain.brain.Brain
 
 
@@ -93,10 +84,10 @@ Set of functions for an interactive control of sources object. Use the methods b
 .. figure::  picture/SourcesObj.png
    :align:   center
 
-Set data
-++++++++
+Source's settings
++++++++++++++++++
 
-.. automethod:: visbrain.brain.user.BrainUserMethods.sources_data
+.. automethod:: visbrain.brain.user.BrainUserMethods.sources_settings
 
 Opacity
 +++++++
@@ -135,6 +126,31 @@ Colormap
 ++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.sources_colormap
 
+
+Time-series methods
+^^^^^^^^^^^^^^^^^^^
+
+Time-series settings
+++++++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.time_series_settings
+
+
+Add time-series
++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.add_time_series
+
+Pictures methods
+^^^^^^^^^^^^^^^^
+
+Pictures settings
++++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.pictures_settings
+
+
+Add pictures
+++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.add_pictures
+
 Connectivity methods
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -147,7 +163,7 @@ Set of functions for an interactive control of connectivity object. Use the meth
 
 Connectivity settings
 +++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.connect_display
+.. automethod:: visbrain.brain.user.BrainUserMethods.connect_settings
 
 Add connectivity object
 +++++++++++++++++++++++

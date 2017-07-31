@@ -81,7 +81,7 @@ def test_brain_user_functions():
 
     # ---------------- SOURCES DATA  ----------------
     # Send data :
-    vb.sources_data(data=sdata, symbol='x', radiusmin=1., radiusmax=20.,
+    vb.sources_settings(data=sdata, symbol='x', radiusmin=1., radiusmax=20.,
                     color=scolor, edgecolor='orange', edgewidth=2, mask=smask,
                     maskcolor='blue')
     # Set opacity :
@@ -109,7 +109,7 @@ def test_brain_user_functions():
     # ---------------- CONNECTIVITY  ----------------
     # Test coloring :
     for k in ['strength', 'count', 'density']:
-        vb.connect_display(colorby=k, dynamic=(.1, .7), cmap='jet',
+        vb.connect_settings(colorby=k, dynamic=(.1, .7), cmap='jet',
                            clim=(.4, .8), vmin=.5, vmax=.75, under='gray',
                            over=(.1, .1, .1), cblabel='Colorby ' + k)
     # Test to add connectivity object :

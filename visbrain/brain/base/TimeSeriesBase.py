@@ -62,21 +62,16 @@ class TimeSeriesBase(object):
 
     def set_data(self, color=None, lw=None, amp=None, width=None, dxyz=None,
                  visible=True):
-        needupdate = False
-        if amp is not None:
+        if isinstance(amp, (int, float)):
             self.amp = amp
-            needupdate = True
-        if width is not None:
+        if isinstance(width, (int, float)):
             self.width = width
-            needupdate = True
         if dxyz is not None:
             self.dxyz = dxyz
-            needupdate = True
         if color is not None:
             self.color = color
         if lw is not None:
             self.lw = lw
 
-        if needupdate:
-            self._data2xyz()
+        self._data2xyz()
         self.mesh.visible = visible
