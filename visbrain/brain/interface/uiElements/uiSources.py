@@ -91,6 +91,24 @@ class uiSources(object):
         self._tsDy.valueChanged.connect(self._fcn_ts_update)
         self._tsDz.valueChanged.connect(self._fcn_ts_update)
 
+        # ====================== PICTURES ======================
+        if self.pic.mesh.name is not 'NonePic':
+            # Groupbox :
+            self.grpPic.clicked.connect(self._fcn_pic_update)
+            # Width :
+            self._picWidth.setValue(self.pic.mesh.w)
+            self._picWidth.valueChanged.connect(self._fcn_pic_update)
+            # Height :
+            self._picHeight.setValue(self.pic.mesh.h)
+            self._picHeight.valueChanged.connect(self._fcn_pic_update)
+            # (dx, dy, dz) :
+            self._picDx.setValue(self.pic.mesh._dxyz[0])
+            self._picDx.valueChanged.connect(self._fcn_pic_update)
+            self._picDy.setValue(self.pic.mesh._dxyz[1])
+            self._picDy.valueChanged.connect(self._fcn_pic_update)
+            self._picDz.setValue(self.pic.mesh._dxyz[2])
+            self._picDz.valueChanged.connect(self._fcn_pic_update)
+
     # =====================================================================
     # SOURCES
     # =====================================================================
@@ -197,3 +215,19 @@ class uiSources(object):
         viz = self.grpTs.isChecked()
         self.tseries.set_data(width=width, amp=amp, dxyz=dxyz, color=color,
                               lw=lw, visible=viz)
+
+    # =====================================================================
+    # TIME-SERIES
+    # =====================================================================
+    def _fcn_pic_update(self):
+        """Update pictures."""
+        # Visibility :
+        self.pic.mesh.visible = self.grpPic.isChecked()
+        # Get width, height and (dx, dy, dz) :
+        w, h = self._picWidth.value(), self._picHeight.value()
+        x, y, z = self._picDx.value(), self._picDy.value(), self._picDz.value()
+        # Get latest color properties :
+        kwargs = self.cbqt.cbobjs._objs['Pictures'].to_kwargs()
+        # Update pictures :
+        self.pic.mesh.set_data(width=w, height=h, dxyz=(x, y, z), **kwargs)
+        self.pic.mesh.update()

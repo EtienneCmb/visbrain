@@ -162,6 +162,12 @@ class uiMenu(object):
         viz = self.menuDispCbar.isChecked()
         self.QuickSettings.setTabEnabled(5, viz)
         self.cbpanelW.setVisible(viz)
+        # Get enabled objects :
+        cbox = self.cbqt.cbui.object
+        objs = [cbox.model().item(k).isEnabled() for k in range(cbox.count())]
+        if sum(objs) == 1:
+            # Select the name of the enabled object :
+            self.cbqt.select(cbox.itemText( objs.index(True)))
 
     ###########################################################################
     #                                ROTATION
