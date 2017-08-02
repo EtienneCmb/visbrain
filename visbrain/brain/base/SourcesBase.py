@@ -14,7 +14,7 @@ from scipy.spatial.distance import cdist
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
 
-from ...utils import color2vb, normalize, CbarArgs
+from ...utils import color2vb, normalize, CbarArgs, tal2mni
 
 __all__ = ['SourcesBase']
 
@@ -34,7 +34,7 @@ class SourcesBase(CbarArgs):
                  s_textsize=3, s_textshift=(0, 2, 0), s_mask=None,
                  s_maskcolor='gray', s_cmap='inferno', s_clim=(0., 1.),
                  s_vmin=None, s_vmax=None, s_under=None, s_over=None,
-                 s_projecton='surface', **kwargs):
+                 s_projecton='surface', s_system='mni', **kwargs):
         """Init."""
         # Initialize elements :
         self.xyz = s_xyz
@@ -54,6 +54,7 @@ class SourcesBase(CbarArgs):
         self.smask = s_mask
         self.smaskcolor = color2vb(s_maskcolor)
         self.projecton = s_projecton
+        self.system = s_system
         self._defcolor = 'slateblue'
         self._rescale = 3.0
 
@@ -112,6 +113,11 @@ class SourcesBase(CbarArgs):
             self.xyz = self.xyz.T
         self.xyz = self.xyz
         self.nSources = self.xyz.shape[0]
+        # Check coordinate system :
+        if self.system not in ['mni', 'tal']:
+            raise ValueError("The s_system must either be 'mni' or 'tal'.")
+        elif self.system is 'tal':
+            self.xyz = tal2mni(self.xyz)
 
         # ======================== Check color ========================
         # Simple string :

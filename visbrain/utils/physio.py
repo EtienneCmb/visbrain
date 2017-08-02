@@ -2,23 +2,25 @@
 import numpy as np
 from re import findall
 
-__all__ = ['find_nonEEG', 'rereferencing', 'bipolarization', 'commonaverage']
+__all__ = ('find_nonEEG', 'rereferencing', 'bipolarization', 'commonaverage',
+           'tal2mni')
 
 
 def find_nonEEG(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
     """Find non-EEG channels.
 
-    Args:
-        channels: list
-            List of channel names.
+    Parameters
+    ----------
+    channels : list
+        List of channel names.
 
-    Kargs:
-        pattern: list, optional, (def: ['eog', 'emg', 'ecg', 'abd'])
-            List of patterns for non-EEG channels.
+    pattern : list | ['eog', 'emg', 'ecg', 'abd']
+        List of patterns for non-EEG channels.
 
-    Returns:
-        iseeg: np.ndarray
-            NumPy vector of boolean values.
+    Returns
+    -------
+    iseeg : array_like
+        NumPy vector of boolean values.
     """
     # Set channels in lower case :
     channels = np.char.lower(np.asarray(channels))
@@ -30,33 +32,40 @@ def find_nonEEG(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
     return iseeg
 
 
+###############################################################################
+###############################################################################
+#                               RE-REFERENCING
+###############################################################################
+###############################################################################
+
 def rereferencing(data, chans, reference, to_ignore=None):
     """Re-reference data.
 
-    Args:
-        data: np.ndarray
-            The array of data of shape (nchan, npts).
+    Parameters
+    ----------
+    data : array_like
+        The array of data of shape (nchan, npts).
 
-        chans: list
-            List of channel names of length nchan.
+    chans : list
+        List of channel names of length nchan.
 
-        reference: int
-            The index of the channel to consider as a reference.
+    reference : int
+        The index of the channel to consider as a reference.
 
-    Kargs:
-        to_ignore: list, optional, (def: None)
-            List of channels to ignore in the re-referencing.
+    to_ignore : list | None
+        List of channels to ignore in the re-referencing.
 
-    Returns:
-        datar: np.ndarray
-            The re-referenced data.
+    Returns
+    -------
+    datar : array_like
+        The re-referenced data.
 
-        channelsr: list
-            List of re-referenced channel names.
+    channelsr : list
+        List of re-referenced channel names.
 
-        consider: list
-            List of boolean values of channels that have to be considered
-            during the ploting processus.
+    consider : list
+        List of boolean values of channels that have to be considered
+        during the ploting processus.
     """
     # Get shapes :
     nchan, npts = data.shape
@@ -75,7 +84,8 @@ def rereferencing(data, chans, reference, to_ignore=None):
     # Re-reference data :
     data[sl, :] -= ref
     # Build channel names :
-    chan = [k+'-'+name if consider[num] else k for num, k in enumerate(chans)]
+    chan = [k + '-' + name if consider[num]
+            else k for num, k in enumerate(chans)]
 
     return data, chan, consider
 
@@ -83,32 +93,33 @@ def rereferencing(data, chans, reference, to_ignore=None):
 def bipolarization(data, chans, to_ignore=None, sep='.'):
     """Bipolarize data.
 
-    Args:
-        data: np.ndarray
-            The array of data of shape (nchan, npts).
+    Parameters
+    ----------
+    data : array_like
+        The array of data of shape (nchan, npts).
 
-        chans: list
-            List of channel names of length nchan.
+    chans : list
+        List of channel names of length nchan.
 
-    Kargs:
-        to_ignore: list, optional, (def: None)
-            List of channels to ignore in the re-referencing.
+    to_ignore : list | None
+        List of channels to ignore in the re-referencing.
 
-        sep: string, optional, (def: '.')
-            Separator to simplify electrode names by removing undesired name
-            after the sep. For example, if channel = ['h1.025', 'h2.578']
-            and sep='.', the final name will be 'h2-h1'.
+    sep : string | '.'
+        Separator to simplify electrode names by removing undesired name
+        after the sep. For example, if channel = ['h1.025', 'h2.578']
+        and sep='.', the final name will be 'h2-h1'.
 
-    Returns:
-        datar: np.ndarray
-            The re-referenced data.
+    Returns
+    -------
+    datar : array_like
+        The re-referenced data.
 
-        channelsr: list
-            List of re-referenced channel names.
+    channelsr : list
+        List of re-referenced channel names.
 
-        consider: list
-            List of boolean values of channels that have to be considered
-            during the ploting processus.
+    consider : list
+        List of boolean values of channels that have to be considered
+        during the ploting processus.
     """
     # Variables :
     nchan, npts = data.shape
@@ -140,15 +151,15 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
         # If there's a number :
         if chnums[num] and (num in sl):
             # Get the name of the channel to find :
-            chanTofind = chnames[num] + str(int(chnums[num]) - 1)
+            chan_to_find = chnames[num] + str(int(chnums[num]) - 1)
             # Search if exist in channel list :
-            if chanTofind in chans:
+            if chan_to_find in chans:
                 # Get the index :
-                ind = chans.index(chanTofind)
+                ind = chans.index(chan_to_find)
                 # Substract to data :
                 data[num, :] -= data[ind, :]
                 # Update channel name :
-                chans[num] = chans[num] + '-' + chanTofind
+                chans[num] = chans[num] + '-' + chan_to_find
             else:
                 consider[num] = False
         else:
@@ -160,27 +171,28 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
 def commonaverage(data, chans, to_ignore=None):
     """Re-referencement using common average.
 
-    Args:
-        data: np.ndarray
-            The array of data of shape (nchan, npts).
+    Parameters
+    ----------
+    data : array_like
+        The array of data of shape (nchan, npts).
 
-        chans: list
-            List of channel names of length nchan.
+    chans : list
+        List of channel names of length nchan.
 
-    Kargs:
-        to_ignore: list, optional, (def: None)
-            List of channels to ignore in the re-referencing.
+    to_ignore : list | None
+        List of channels to ignore in the re-referencing.
 
-    Returns:
-        datar: np.ndarray
-            The re-referenced data.
+    Returns
+    -------
+    datar : array_like
+        The re-referenced data.
 
-        channelsr: list
-            List of re-referenced channel names.
+    channelsr : list
+        List of re-referenced channel names.
 
-        consider: list
-            List of boolean values of channels that have to be considered
-            during the ploting processus.
+    consider : list
+        List of boolean values of channels that have to be considered
+        during the ploting processus.
     """
     # Variables :
     nchan, npts = data.shape
@@ -196,3 +208,90 @@ def commonaverage(data, chans, to_ignore=None):
     for k in range(len(chans)):
         chans[k] = chans[k] + '-m' if consider[k] else chans[k]
     return data, chans, consider
+
+
+###############################################################################
+###############################################################################
+#                               XYZ CONVERSION
+###############################################################################
+###############################################################################
+
+def _spm_matrix(p):
+    """Matrix transformation.
+
+    Parameters
+    ----------
+    p : array_like
+        Vector of floats for defining each tranformation. p must be a vector of
+        length 9.
+
+    Returns
+    -------
+    Pr : array_like
+        The tranformed array.
+    """
+    q = [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0]
+    p.extend(q[len(p):12])
+
+    # Translation t :
+    t = np.matrix([[1, 0, 0, p[0]],
+                   [0, 1, 0, p[1]],
+                   [0, 0, 1, p[2]],
+                   [0, 0, 0, 1]])
+    # Rotation 1 :
+    r1 = np.matrix([[1, 0, 0, 0],
+                    [0, np.cos(p[3]), np.sin(p[3]), 0],
+                    [0, -np.sin(p[3]), np.cos(p[3]), 0],
+                    [0, 0, 0, 1]])
+    # Rotation 2 :
+    r2 = np.matrix([[np.cos(p[4]), 0, np.sin(p[4]), 0],
+                    [0, 1, 0, 0],
+                    [-np.sin([p[4]]), 0, np.cos(p[4]), 0],
+                    [0, 0, 0, 1]])
+    # Rotation 3 :
+    r3 = np.matrix([[np.cos(p[5]), np.sin(p[5]), 0, 0],
+                    [-np.sin(p[5]), np.cos(p[5]), 0, 0],
+                    [0, 0, 1, 0],
+                    [0, 0, 0, 1]])
+    # Translation z :
+    z = np.matrix([[p[6], 0, 0, 0],
+                   [0, p[7], 0, 0],
+                   [0, 0, p[8], 0],
+                   [0, 0, 0, 1]])
+    # Translation s :
+    s = np.matrix([[1, p[9], p[10], 0],
+                   [0, 1, p[11], 0],
+                   [0, 0, 1, 0],
+                   [0, 0, 0, 1]])
+    return t * r1 * r2 * r3 * z * s
+
+
+def tal2mni(xyz):
+    """Transform Talairach coordinates into MNI.
+
+    Parameters
+    ----------
+    xyz : array_like
+        Array of MNI coordinates of shape (n_sources, 3)
+
+    Returns
+    -------
+    xyz_r : array_like
+        Array of Talairach coordinates of shape (n_sources, 3)
+    """
+    # Check xyz to be (n_sources, 3) :
+    if (xyz.ndim != 2) or (xyz.shape[1] != 3):
+        raise ValueError("The shape of xyz must be (N, 3).")
+    n_sources = xyz.shape[0]
+
+    # Transformation matrices, different zooms above/below AC
+    rotn = np.linalg.inv(_spm_matrix([0., 0., 0., .05]))
+    upz = np.linalg.inv(_spm_matrix([0., 0., 0., 0., 0., 0., .99, .97, .92]))
+    downz = np.linalg.inv(_spm_matrix([0., 0., 0., 0., 0., 0., .99, .97, .84]))
+
+    # Apply rotation :
+    xyz = rotn * np.c_[xyz, np.ones((n_sources, ))].T
+    tmp = np.array(xyz)[2, :] < 0.
+    xyz[:, tmp] = downz * xyz[:, tmp]
+    xyz[:, ~tmp] = upz * xyz[:, ~tmp]
+    return xyz[0:3, :].T
