@@ -67,7 +67,7 @@ Finally, install Visbrain :
 PyQt4 version
 =============
 
-Since the 0.2.8 Visbrain use the PyQt5 version. If you still use PyQt4, you should install the Visbrain version 0.2.7.
+Since version 0.2.8, Visbrain use the PyQt5. If you still use PyQt4, you should install the Visbrain version 0.2.7.
 
 In a terminal, create and activate a 3.5 Python environment with the correct PyQt4 version :
 
