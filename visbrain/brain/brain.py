@@ -77,11 +77,15 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         into the brain. The shape of the array must be (N, 3) where
         '3' is for (x, y, z) coordinates and N, the number of sources.
 
-    s_data: array_like, (def, None)
+    s_data: array_like | None
         Add some data to sources. As a consequence, the radius of each
         source will be a function of s_data. must be an array of shape
         (N,). If s_data is None, all sources will have the same value.
         The parameter s_data can be masked using numpy.ma module.
+
+    s_system : string | 'mni'
+        Specify the coordinate system. Use either 'mni' (MNI) or 'tal'
+        (Talairach).
 
     s_color : string/list/array_like | 'red'
         Color of each source sphere. If s_color is a single string,
