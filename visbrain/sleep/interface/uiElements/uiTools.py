@@ -2,7 +2,7 @@
 
 import numpy as np
 from PyQt5 import QtWidgets
-from ....utils import (rereferencing, bipolarization, find_nonEEG,
+from ....utils import (rereferencing, bipolarization, find_non_eeg,
                        commonaverage, id)
 
 __all__ = ['uiTools']
@@ -14,7 +14,7 @@ class uiTools(object):
     def __init__(self):
         """Init."""
         # Find non-eeg channels :
-        self._noneeg = find_nonEEG(self._channels)
+        self._noneeg = find_non_eeg(self._channels)
         # =====================================================================
         # RE-REFERENCING
         # =====================================================================
