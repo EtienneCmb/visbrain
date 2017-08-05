@@ -41,6 +41,9 @@ class uiRoi(object):
         self.struct_apply.clicked.connect(self._fcn_applyStruct)
         self.structClear.clicked.connect(self._fcn_roiClear)
 
+        # Color :
+        self.struct_color_edit.setPlaceholderText("'red', #ab4642, (1,0,0)...")
+
         self._fcn_buildStructLst()
 
     #########################################################################
