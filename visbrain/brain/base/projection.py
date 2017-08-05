@@ -102,8 +102,6 @@ class Projections(object):
             # Update variables :
             self.cbqt._fcn_ChangeObj()
             # Enable to display cbar from the menu :
-            self.menuDispCbar.setEnabled(True)
-            self.menuDispCbar.setChecked(True)
             self._fcn_menuCbar()
             # Link the colorbase with projections :
             self.cbqt.link('Projection', self._fcn_link_proj,
