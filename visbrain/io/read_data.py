@@ -7,15 +7,20 @@ This file contain functions to load :
 - Text (*.txt)
 - CSV (*.csv)
 - JSON (*.json)
+- NIFTI
 """
 import numpy as np
 from scipy.io import loadmat
-import os
+# import os
 
+import vispy.visuals.transforms as vist
+
+from ..utils import array_to_stt
+from .dependencies import is_nibabel_installed
 from .rw_utils import get_file_ext
 
-__all__ = ['switch_data', 'read_mat', 'read_pickle', 'read_npy', 'read_npz',
-           'read_txt', 'read_csv', 'read_json']
+__all__ = ('switch_data', 'read_mat', 'read_pickle', 'read_npy', 'read_npz',
+           'read_txt', 'read_csv', 'read_json', 'read_nifti')
 
 
 def switch_data(path, *args, **kwargs):
@@ -91,3 +96,35 @@ def read_csv(path):
 def read_json(path):
     """Read data from a JSON (json) file."""
     pass
+
+
+def read_nifti(path):
+    """Read data from a NIFTI file using Nibabel.
+
+    Parameters
+    ----------
+    path : string
+        Path to the nifti file.
+
+    Returns
+    -------
+    vol : array_like
+        The 3-D volume data.
+    header : Nifti1Header
+        Nifti header.
+    transform : VisPy.transform
+        The transformation
+    """
+    if is_nibabel_installed():
+        import nibabel as nib
+        # Load the file :
+        img = nib.load(path)
+        # Get the data and affine transformation ::
+        vol = img.get_data()
+        affine = img.affine
+        # Define the transformation :
+        transform = array_to_stt(affine)
+
+        return vol, img.header, transform
+    else:
+        raise ValueError("Install Nibabel ")

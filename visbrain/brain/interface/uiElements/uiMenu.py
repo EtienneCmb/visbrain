@@ -35,6 +35,10 @@ class uiMenu(object):
         self.menuDispQuickSettings.triggered.connect(self._fcn_menuDispSet)
         # Brain :
         self.menuDispBrain.triggered.connect(self._fcn_menuBrain)
+        # Cross-sections :
+        self.menuDispCrossec.triggered.connect(self._fcn_menuCrossec)
+        # Volume :
+        self.menuDispVol.triggered.connect(self._fcn_menuVol)
         # Sources :
         self.menuDispSources.triggered.connect(self._fcn_menuSources)
         # Connectivity :
@@ -127,6 +131,22 @@ class uiMenu(object):
         self.QuickSettings.setTabEnabled(1, viz)
         self.o_Brain.setEnabled(viz)
         self.o_Brain.setChecked(viz)
+
+    def _fcn_menuCrossec(self):
+        """Display/hide the Cross-sections."""
+        viz = self.menuDispCrossec.isChecked()
+        # Set cross-sections visible/hide :
+        self.crossec.visible = viz
+        self.grpSec.setChecked(viz)
+        # Check (min, max) of slider :
+        self._fcn_crossec_sl_limits()
+        # Enable/disable colorbar choice :
+        self.cbqt.setEnabled('Cross-sections', True)
+        self.cbqt.select('Cross-sections')
+
+    def _fcn_menuVol(self):
+        """Display/hide the volume."""
+        pass
 
     def _fcn_menuSources(self):
         """Display/hide sources."""

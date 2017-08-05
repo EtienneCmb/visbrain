@@ -23,6 +23,7 @@ from .ConnectBase import ConnectBase
 from .RoiBase import RoiBase
 from .TimeSeriesBase import TimeSeriesBase
 from .PicBase import PicBase
+from .CrossSecBase import CrossSections
 from .projection import Projections
 
 
@@ -41,7 +42,7 @@ class base(Projections):
         # Get progress bar :
         self.progressbar = progressbar
 
-        # Initialize brain, sources, connectivity and ROI objects :
+        # Initialize visbrain objects :
         self.atlas = AtlasBase(**kwargs)
         self.sources = SourcesBase(**kwargs)
         self.connect = ConnectBase(_xyz=self.sources.xyz,
@@ -50,6 +51,7 @@ class base(Projections):
                             name='NoneArea', select=None, color='#ab4642')
         self.tseries = TimeSeriesBase(ts_xyz=self.sources.xyz, **kwargs)
         self.pic = PicBase(pic_xyz=self.sources.xyz, **kwargs)
+        self.crossec = CrossSections(visible=False)
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -115,6 +117,7 @@ class base(Projections):
         self.sources.stextmesh.parent = self._vbNode
         self.tseries.mesh.parent = self._vbNode
         self.pic.mesh.parent = self._vbNode
+        self.crossec._node.parent = self._vbNode
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)
         # scene.visuals.XYZAxis(parent=self._vbNode)

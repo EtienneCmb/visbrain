@@ -16,18 +16,36 @@ class uiAtlas(object):
 
     def __init__(self):
         """Init."""
+        #######################################################################
+        #                              BRAIN
+        #######################################################################
         # Brain control :
         self._brainPickHemi.currentIndexChanged.connect(self._brain_control)
-
         # Brain template to use :
         self._brainTemplate.setCurrentIndex(int(self.atlas.template[-1]) - 1)
         self._brainTemplate.currentIndexChanged.connect(self._brain_control)
-
         # Structure :
         self._brainTransp.clicked.connect(self._light_reflection)
 
-        self.struct_color_edit.setPlaceholderText("'red', #ab4642, (1,0,0)...")
+        #######################################################################
+        #                           CROSS-SECTIONS
+        #######################################################################
+        # Set (min, max) for sliders :
+        self._fcn_crossec_sl_limits()
+        # Sagittal, coronal and axial slider :
+        self._secSagit.sliderMoved.connect(self._fcn_crossec_move)
+        self._secCoron.sliderMoved.connect(self._fcn_crossec_move)
+        self._secAxial.sliderMoved.connect(self._fcn_crossec_move)
+        # Subdivision :
+        self._secSubdivision.currentIndexChanged.connect(self._fcn_crossec_change)
+        # Visibility :
+        self.grpSec.clicked.connect(self._fcn_crossec_viz)
 
+    ###########################################################################
+    ###########################################################################
+    #                                 BRAIN
+    ###########################################################################
+    ###########################################################################
     def _brain_control(self, _, template=None, show=True, hemisphere=None):
         """Control the type of brain to use.
 
@@ -100,3 +118,46 @@ class uiAtlas(object):
         self.o_Brain.setChecked(viz)
         self.o_Brain.setEnabled(viz)
         self.atlas.mesh.update()
+
+    ###########################################################################
+    ###########################################################################
+    #                                 CROSS-SECTIONS
+    ###########################################################################
+    ###########################################################################
+    def _fcn_crossec_sl_limits(self):
+        """Define (min, max) of sliders."""
+        # Sagittal :
+        self._secSagit.setMinimum(self.crossec._nx[0])
+        self._secSagit.setMaximum(self.crossec._nx[1])
+        # Coronal :
+        self._secCoron.setMinimum(self.crossec._ny[0])
+        self._secCoron.setMaximum(self.crossec._ny[1])
+        # Axial :
+        self._secAxial.setMinimum(self.crossec._nz[0])
+        self._secAxial.setMaximum(self.crossec._nz[1])
+
+    def _fcn_crossec_move(self):
+        # Get center position :
+        dx = self._secSagit.value()
+        dy = self._secCoron.value()
+        dz = self._secAxial.value()
+        # Set new center position :
+        bgd = (self.bgd_red.value(), self.bgd_green.value(),
+               self.bgd_blue.value())
+        self.crossec.set_data(dx, dy, dz, bgcolor=bgd, alpha=0.2)
+
+    def _fcn_crossec_viz(self):
+        """Control cross-sections visibility."""
+        self.menuDispCrossec.setChecked(self.grpSec.isChecked())
+        self._fcn_menuCrossec()
+
+    def _fcn_crossec_change(self):
+        """Change the cross-sections subdivision type."""
+        # Get selected volume :
+        name = self._secSubdivision.currentText()
+        # Set it :
+        self.crossec.set_volume(name)
+        # Update clim and minmax :
+        self._fcn_crossec_sl_limits()
+        self._fcn_minmax_crossec()
+        self._fcn_crossec_move()
