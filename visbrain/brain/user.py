@@ -9,6 +9,8 @@ Brain instance.
 import numpy as np
 from scipy.spatial import ConvexHull
 
+import vispy.visuals.transforms as vist
+
 from .base.visuals import BrainMesh
 from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
@@ -351,6 +353,41 @@ class BrainUserMethods(object):
         self._userobj[name].parent = self._vbNode
         # Add mesh for projection :
         self._tobj[name] = AddMesh(self._userobj[name])
+
+    def add_cross_section(self, name, vol, transform=None):
+        """Add a cross-section volume.
+
+        To then use this volume, go to the Brain/Cross-section tab and pick up
+        the defined cross-sections volume.
+
+        Parameters
+        ----------
+        name : string
+            Name of the cross-section object.
+        vol : array_like
+            The 3-D volume array.
+        transform : VisPy.transform | None
+            The transformation to add to this volume.
+        """
+        # Check name and volume :
+        if not isinstance(name, str):
+            raise ValueError("The name variabe must be a string.")
+        if not isinstance(vol, np.ndarray) or not (vol.ndim == 3):
+            raise ValueError("The vol variable must be an 3-D array.")
+
+        # Add the volume :
+        self.crossec.add_volume(name, vol, transform)
+
+        # Get the current list of volumes and add the new one :
+        cbox = self._secSubdivision
+        all_items = [cbox.itemText(i) for i in range(cbox.count())]
+        all_items.append(name)
+
+        # Add the list of volumes to the GUI :
+        cbox.disconnect()
+        cbox.clear()
+        cbox.addItems(all_items)
+        cbox.currentIndexChanged.connect(self._fcn_crossec_change)
 
     # =========================================================================
     # =========================================================================
