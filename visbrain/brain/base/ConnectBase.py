@@ -56,8 +56,8 @@ class ConnectBase(CbarArgs):
 
         # Initialize colormap :
         isvmin, isvmax = c_vmin is not None, c_vmax is not None
-        CbarArgs.__init__(self, c_cmap, c_clim, isvmin, c_vmin,
-                          isvmax, c_vmax, c_under, c_over)
+        CbarArgs.__init__(self, c_cmap, c_clim, isvmin, c_vmin, isvmax, c_vmax,
+                          c_under, c_over)
 
         # Object creation :
         if (self.xyz is not None) and (self.connect is not None):
