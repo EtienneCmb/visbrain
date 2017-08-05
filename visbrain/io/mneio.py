@@ -1,15 +1,6 @@
-"""Utility functions if MNE is installed."""
+"""Utility functions for MNE."""
 
-__all__ = ['mne_is_installed', 'mne_read_sleep']
-
-
-def mne_is_installed():
-    """Test if MNE is installed."""
-    try:
-        import mne
-        return True
-    except:
-        return False
+__all__ = ['mne_read_sleep']
 
 
 def mne_read_sleep(file, ext, *args, **kwargs):

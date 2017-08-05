@@ -7,7 +7,7 @@ from PyQt5 import QtWidgets
 
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    write_fig_pyqt, mne_is_installed)
+                    write_fig_pyqt, is_mne_installed)
 
 __all__ = ['uiMenu']
 
@@ -424,7 +424,7 @@ class uiMenu(object):
                 # Get starting/ending/annotation :
                 start, end, annot = np.genfromtxt(file, delimiter=',',
                                                   dtype=str)
-            elif mne_is_installed():
+            elif is_mne_installed():
                 import mne
                 if isinstance(file, mne.annotations.Annotations):
                     start = file.onset
