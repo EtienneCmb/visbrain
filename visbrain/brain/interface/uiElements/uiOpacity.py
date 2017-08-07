@@ -127,8 +127,8 @@ class uiOpacity(object):
 
         # =================== Areas opacity ===================
         if self.o_Areas.isChecked():
-            self.area.set_alpha(sl_01)
-            self.area.mesh.visible = visible
+            self.volume.set_roi_alpha(sl_01)
+            self.volume.mesh.visible = visible
 
         self.view.canvas.update()
 
