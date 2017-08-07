@@ -181,7 +181,7 @@ class BrainVisual(Visual):
                  l_position=(1., 1., 1.), l_color=(1., 1., 1., 1.),
                  l_intensity=(1., 1., 1.), l_coefAmbient=0.07,
                  l_coefSpecular=0.5, scale_factor=10, hemisphere='both',
-                 recenter=True):
+                 recenter=True, vertfcn=None):
         """Init."""
         # Initialize the vispy.Visual class with the vertex / fragment buffer :
         Visual.__init__(self, vcode=VERT_SHADER, fcode=FRAG_SHADER)
@@ -189,6 +189,7 @@ class BrainVisual(Visual):
         # Usefull variables :
         self._scaleFactor = scale_factor
         self._btransform = vist.ChainTransform([vist.NullTransform()])
+        self._vertfcn = vist.NullTransform() if vertfcn is None else vertfcn
 
         # Define buffers
         self._vertices = gloo.VertexBuffer(np.zeros((0, 3), dtype=np.float32))
@@ -543,7 +544,7 @@ class BrainVisual(Visual):
     @property
     def get_vertices(self):
         """Mesh data."""
-        return self._vertFaces
+        return self._vertfcn.map(self._vertFaces)[..., 0:-1]
 
     @property
     def get_normals(self):
