@@ -31,10 +31,10 @@ data1, header1, tf1 = read_nifti(path1)
 vb.add_volume('Volume1', data1, transform=tf1)
 
 # You can add multiple volumes :
-# path_to_nifti2 = os.getenv("HOME")
-# file_nifti2 = 'GG-853-WM-0.7mm.nii.gz'
-# path2 = os.path.join(path_to_nifti2, file_nifti2)
-# data2, header2, tf2 = read_nifti(path2)
-# vb.add_volume('Volume2', data2, transform=tf2)
+path_to_nifti2 = os.getenv("HOME")
+file_nifti2 = 'GG-853-WM-0.7mm.nii.gz'
+path2 = os.path.join(path_to_nifti2, file_nifti2)
+data2, header2, tf2 = read_nifti(path2)
+vb.add_volume('Volume2', data2, transform=tf2)
 
 vb.show()
