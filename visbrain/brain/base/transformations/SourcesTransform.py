@@ -91,7 +91,7 @@ class SourcesTransform(object):
             nv, vertices = self.atlas._nv, self.atlas.vert
         # Project on deep areas :
         elif self._tprojecton == 'roi':
-            vertices = self.area.mesh.get_vertices
+            vertices = self.volume.mesh.get_vertices
             nv = vertices.shape[0]
 
         return vertices, nv
@@ -457,6 +457,6 @@ class SourcesTransform(object):
         elif self._tprojecton == 'roi':
             # Apply general color to the brain :
             cortmask[nnz, 0:3] = self.atlas.color
-            # cortmask[nnz, 0:3] = self.area.mesh.get_color[nnz, 0:3]
+            # cortmask[nnz, 0:3] = self.volume.mesh.get_color[nnz, 0:3]
             # Update mesh with cmap :
-            self.area.mesh.set_color(data=cortmask)
+            self.volume.mesh.set_color(data=cortmask)
