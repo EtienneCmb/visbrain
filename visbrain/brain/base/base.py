@@ -43,12 +43,12 @@ class base(Projections):
 
         # Initialize visbrain objects :
         self.atlas = AtlasBase(**kwargs)
+        self.volume = VolumeBase()
         self.sources = SourcesBase(**kwargs)
         self.connect = ConnectBase(_xyz=self.sources.xyz,
                                    c_xyz=self.sources.xyz, **kwargs)
         self.tseries = TimeSeriesBase(ts_xyz=self.sources.xyz, **kwargs)
         self.pic = PicBase(pic_xyz=self.sources.xyz, **kwargs)
-        self.volume = VolumeBase()
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -108,13 +108,13 @@ class base(Projections):
         self._vbNode = scene.Node(name='visbrain')
 
         # Make this root node the parent of others Brain objects :
-        self.atlas.mesh.parent = self._vbNode
+        self.volume.parent = self._vbNode
         self.sources.mesh.parent = self._vbNode
         self.connect.mesh.parent = self._vbNode
         self.sources.stextmesh.parent = self._vbNode
+        self.atlas.mesh.parent = self._vbNode
         self.tseries.mesh.parent = self._vbNode
         self.pic.mesh.parent = self._vbNode
-        self.volume.parent = self._vbNode
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)
         # scene.visuals.XYZAxis(parent=self._vbNode)
