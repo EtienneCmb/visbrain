@@ -6,8 +6,9 @@ from vispy.scene import visuals
 from .color import color2vb, color2tuple
 
 
-__all__ = ['slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
-           'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines']
+__all__ = ('slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
+           'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines',
+           'extend_combo_list', 'get_combo_list_index')
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -182,19 +183,19 @@ def ndsubplot(n, line=4, force_col=None, max_rows=100):
     else:
         if force_col is not None:
             ncols = force_col
-            nrows = int(n/ncols)
+            nrows = int(n / ncols)
         else:
             # Build a linearly decreasing vector :
             vec = np.linspace(max_rows, 2, max_rows + 1,
                               endpoint=False).astype(int)
             # Compute n modulo each point in vec :
-            mod, div  = n % vec, n / vec
+            mod, div = n % vec, n / vec
             # Find where the result is zero :
             nbool = np.invert(mod.astype(bool))
             if any(nbool):
                 cmin = np.abs(vec[nbool] - div[nbool]).argmin()
                 ncols = vec[nbool][cmin]
-                nrows = int(n/ncols)
+                nrows = int(n / ncols)
             else:
                 nrows, ncols = 1, n
 
@@ -241,6 +242,53 @@ class MouseEventControl(object):
         except:
             return False
 
+
+def extend_combo_list(cbox, item, reconnect=None):
+    """Extend a QtComboList with a new item.
+
+    Parameters
+    ----------
+    cbox : PyQt.QtComboList
+        The PyQt combo list object.
+    item : string
+        Name of the new item.
+    reconnect : function | None
+        The function to apply when the index changed.
+    """
+    # Get the list of current items and extend it :
+    all_items = [cbox.itemText(i) for i in range(cbox.count())]
+    all_items.append(item)
+    # Reconnect function :
+    is_connected = reconnect is not None
+    # Disconnect if connected :
+    if is_connected:
+        cbox.disconnect()
+    # Clear and safely add items :
+    cbox.clear()
+    cbox.addItems(all_items)
+    # Reconnect if connected :
+    if is_connected:
+        cbox.currentIndexChanged.connect(reconnect)
+
+
+def get_combo_list_index(cbox, name):
+    """Extend a QtComboList with a new item.
+
+    Parameters
+    ----------
+    cbox : PyQt.QtComboList
+        The PyQt combo list object.
+    name : string
+        Name of the item.
+
+    Returns
+    -------
+    index : int
+        Index of the item in the combo box.
+    """
+    # Get the list of current items and extend it :
+    all_items = [cbox.itemText(i) for i in range(cbox.count())]
+    return all_items.index(name)
 
 class GuideLines(object):
     """Display GUI guidelines for screenshot.
