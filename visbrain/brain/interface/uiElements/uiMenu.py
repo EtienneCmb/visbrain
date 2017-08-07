@@ -128,7 +128,6 @@ class uiMenu(object):
         """Display/hide the main Brain."""
         viz = self.menuDispBrain.isChecked()
         self.atlas.mesh.visible = viz
-        self.QuickSettings.setTabEnabled(1, viz)
         self.o_Brain.setEnabled(viz)
         self.o_Brain.setChecked(viz)
 
@@ -136,17 +135,17 @@ class uiMenu(object):
         """Display/hide the Cross-sections."""
         viz = self.menuDispCrossec.isChecked()
         # Set cross-sections visible/hide :
-        self.crossec.visible = viz
+        self.volume.visible_cs = viz
         self.grpSec.setChecked(viz)
         # Check (min, max) of slider :
         self._fcn_crossec_sl_limits()
-        # Enable/disable colorbar choice :
-        self.cbqt.setEnabled('Cross-sections', True)
-        self.cbqt.select('Cross-sections')
 
     def _fcn_menuVol(self):
         """Display/hide the volume."""
-        pass
+        viz = self.menuDispVol.isChecked()
+        # Set volume visible/hide :
+        self.volume.visible_vol = viz
+        self.grpVol.setChecked(viz)
 
     def _fcn_menuSources(self):
         """Display/hide sources."""
@@ -175,7 +174,7 @@ class uiMenu(object):
 
     def _fcn_menuROI(self):
         """Display/hide ROI."""
-        self.area.mesh.visible = self.menuDispROI.isChecked()
+        self.volume.mesh.visible = self.menuDispROI.isChecked()
 
     def _fcn_menuCbar(self):
         """Display/hide the colorbar."""
@@ -238,8 +237,8 @@ class uiMenu(object):
         # Add camera to the mesh and to the canvas :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(camera)
-        if self.area.name == 'displayed':
-            self.area.mesh.set_camera(camera)
+        if self.volume.name_roi == 'ROI':
+            self.volume.mesh.set_camera(camera)
         self.view.wc.update()
         if camera.name == 'turntable':
             self._rotate(fixed='axial_0')
