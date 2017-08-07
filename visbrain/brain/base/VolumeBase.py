@@ -181,9 +181,9 @@ class VolumeBase(CrossSections, Volume3D, RoiBase):
         self._node = scene.Node(name='Volume')
 
         # Initialize Cross-Sections, ROI and volume :
+        Volume3D.__init__(self, parent=self._node)
         CrossSections.__init__(self, parent=self._node)
         RoiBase.__init__(self, parent=self._node)
-        Volume3D.__init__(self, parent=self._node)
 
         # Load default templates and select Brodmann:
         self._load_default()
