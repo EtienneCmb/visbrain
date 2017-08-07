@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets
 import vispy.scene.cameras as viscam
 
 from ....io import write_fig_canvas, dialogSave, write_fig_pyqt
+from ....utils import toggle_enable_tab
 
 __all__ = ['uiMenu']
 
@@ -179,7 +180,7 @@ class uiMenu(object):
     def _fcn_menuCbar(self):
         """Display/hide the colorbar."""
         viz = self.menuDispCbar.isChecked()
-        self.QuickSettings.setTabEnabled(5, viz)
+        toggle_enable_tab(self.QuickSettings, 'Cbar', viz)
         self.cbpanelW.setVisible(viz)
         # Get enabled objects :
         cbox = self.cbqt.cbui.object

@@ -24,6 +24,7 @@ from .TimeSeriesBase import TimeSeriesBase
 from .PicBase import PicBase
 from .VolumeBase import VolumeBase
 from .projection import Projections
+from ...utils import toggle_enable_tab
 
 
 class base(Projections):
@@ -65,9 +66,9 @@ class base(Projections):
             self.menuDispSources.setEnabled(False)
             self.menuTransform.setEnabled(False)
             # Disable source/connect/cbar tabs :
-            self.QuickSettings.setTabEnabled(2, False)
-            self.QuickSettings.setTabEnabled(3, False)
-            self.QuickSettings.setTabEnabled(5, False)
+            toggle_enable_tab(self.QuickSettings, 'Sources', False)
+            toggle_enable_tab(self.QuickSettings, 'Connect', False)
+            toggle_enable_tab(self.QuickSettings, 'Cbar', False)
             # Disable transparency on sources :
             self.o_Sources.setEnabled(False)
             self.o_Sources.setChecked(False)
@@ -92,7 +93,7 @@ class base(Projections):
             self.menuDispConnect.setEnabled(False)
             self.menuDispConnect.setChecked(False)
             # Disable Connect tab :
-            self.QuickSettings.setTabEnabled(3, False)
+            toggle_enable_tab(self.QuickSettings, 'Connect', False)
             self.o_Connect.setEnabled(False)
             self.o_Connect.setChecked(False)
         elif self.connect.colval is not None:
