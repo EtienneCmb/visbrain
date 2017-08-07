@@ -8,7 +8,7 @@ from .color import color2vb, color2tuple
 
 __all__ = ('slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
            'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines',
-           'extend_combo_list', 'get_combo_list_index')
+           'extend_combo_list', 'get_combo_list_index', 'toggle_enable_tab')
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -289,6 +289,27 @@ def get_combo_list_index(cbox, name):
     # Get the list of current items and extend it :
     all_items = [cbox.itemText(i) for i in range(cbox.count())]
     return all_items.index(name)
+
+
+def toggle_enable_tab(tab, name, enable=False):
+    """Enable or disable a tab based on the name.
+
+    Parameters
+    ----------
+    tab : PyQt.QTabWidget
+        The PyQt tab.
+    name : string
+        Name of the tab.
+    enable : bool | False
+        Enable or disble the tab.
+    """
+    # Get all tab names :
+    names = [tab.tabText(k) for k in range(tab.count())]
+    # Get index of named tab :
+    idx = names.index(name)
+    # Set tab enable/disable :
+    tab.setTabEnabled(idx, enable)
+
 
 class GuideLines(object):
     """Display GUI guidelines for screenshot.
