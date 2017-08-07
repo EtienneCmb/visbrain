@@ -127,4 +127,5 @@ def read_nifti(path):
 
         return vol, img.header, transform
     else:
-        raise ValueError("Install Nibabel ")
+        raise IOError("The python package Nibabel must be installed to load "
+                      "the Nifti file.")
