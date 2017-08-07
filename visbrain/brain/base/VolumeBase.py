@@ -50,7 +50,7 @@ class Volume3D(object):
         Colormap name.
     """
 
-    def __init__(self, parent=None, cmap='TransGrays'):
+    def __init__(self, parent=None, cmap='OpaqueGrays'):
         """Init."""
         # Create the node for the 3-D volume :
         self._node_vol = scene.Node(name='Volume3D')
@@ -66,7 +66,7 @@ class Volume3D(object):
         self.vol3d = visu.Volume(vol, parent=self._node_vol,
                                  cmap=self._cmaps[cmap])
 
-    def set_vol_data(self, method='mip', update=True, cmap='TransGrays',
+    def set_vol_data(self, method='mip', update=True, cmap='OpaqueGrays',
                      threshold=0.):
         """Set volume data.
 
@@ -141,7 +141,8 @@ class VolumeObject(object):
         else:
             self.transform = transform
         # Index and label :
-        if isinstance(roi_values, np.ndarray) and isinstance(roi_labels, np.ndarray):
+        if isinstance(roi_values, np.ndarray) and isinstance(
+                roi_labels, np.ndarray):
             self._is_roi = len(roi_labels) == len(roi_values)
         else:
             self._is_roi = False
