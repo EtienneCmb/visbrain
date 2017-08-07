@@ -83,10 +83,10 @@ class uiConfig(object):
             config['ConnectBunDxyz'] = self._conBlDxyz.value()
             # ----------------- ROI -----------------
             config['RoiTransp'] = self._roiTransp.isChecked()
-            config['RoiAnat'] = self._roiSubdivision.currentIndex()
+            config['RoiAnat'] = self._roiDiv.currentIndex()
             config['RoiSmooth'] = self._roiSmooth.value()
-            struct2add = [str(k) for k in self._struct2add]
-            config['RoiStruct'] = struct2add
+            _roiToAdd = [str(k) for k in self._struct2add]
+            config['RoiStruct'] = _roiToAdd
             # ----------------- CBAR -----------------
             # Visual:
             config['Cbar'] = self.cbqt.cbobjs.to_dict(alldicts=True)
@@ -198,9 +198,9 @@ class uiConfig(object):
             _try("self._conBlDxyz.setValue(config['ConnectBunDxyz'])")
             # ----------------- ROI -----------------
             _try("self._roiTransp.setChecked(config['RoiTransp'])")
-            _try("self._roiSubdivision.setCurrentIndex(config['RoiAnat'])")
+            _try("self._roiDiv.setCurrentIndex(config['RoiAnat'])")
             _try("self._roiSmooth.setValue(config['RoiSmooth'])")
-            _try("self.struct2add.clear()")
+            _try("self._roiToAdd.clear()")
             _try("self._struct2add = config['RoiStruct']")
             _try("self._fcn_update_list()")
             # ----------------- GUI SETTINGS -----------------
