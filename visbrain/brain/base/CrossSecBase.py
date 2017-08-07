@@ -1,14 +1,10 @@
 """File for Cross-sections object."""
-import numpy as np
-import os
-import sys
-
 from vispy import scene
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
 from vispy.util.transforms import rotate
 
-from ...utils import array2colormap, color2vb, CbarArgs, array_to_stt
+from ...utils import array2colormap, color2vb
 
 __all__ = ('CrossSections')
 
@@ -18,13 +14,18 @@ class ImageSection(visu.Image):
 
     Parameters
     ----------
+    name : string | None
+        Name of the image.
     parent : VisPy | None
         VisPy parent.
+    interpolation : string | 'bilinear'
+        Interpolation method to pass to the visu.Image object.
     """
 
-    def __init__(self, parent=None, interpolation='bilinear'):
+    def __init__(self, name=None, parent=None, interpolation='bilinear'):
         """Init."""
-        visu.Image.__init__(self, parent=parent, interpolation=interpolation)
+        visu.Image.__init__(self, parent=parent, interpolation=interpolation,
+                            name=name)
         self.unfreeze()
         self._zeros = 0.
         self._idx = 0
@@ -66,33 +67,21 @@ class ImageSection(visu.Image):
             self._data[self._zeros, 3] = alpha
 
 
-class CrossSections(CbarArgs):
+class CrossSections(object):
     """Cross-sections images based on a volume.
 
     Parameters
     ----------
-    vol : array_like
-        The volume to use for cross-sections of shape (nx, ny, nz).
-    hdr : array_like
-        Tranformation array of shape (4, 4). This array contains rotations and
-        translations.
     parent : VisPy | None
         VisPy parent.
     visible : bool | True
         Set cross-sections visible.
     """
 
-    def __init__(self, vol=None, hdr=None, parent=None, visible=True,
-                 cmap='viridis'):
+    def __init__(self, parent=None, visible=True, cmap='viridis'):
         """Init."""
-        self._vol = vol
-        self._hdr = hdr
-        self._roi = {}
-        self._visible = visible
-        self._nx = (0, 100)
-        self._ny = (0, 100)
-        self._nz = (0, 100)
-        self._transform = {}
+        self._visible_cs = visible
+        self._cmap_cs = cmap
         #######################################################################
         #                           TRANFORMATIONS
         #######################################################################
@@ -116,61 +105,27 @@ class CrossSections(CbarArgs):
         #                            ELEMENTS
         #######################################################################
         # Create a root node :
-        self._node = scene.Node(name='ImInter')
+        self._node_cs = scene.Node(name='Cross-Sections')
+        self._node_cs.parent = parent
+        self._node_cs.visible = visible
         # Axial :
-        self.axial = ImageSection(parent=self._node)
+        self.axial = ImageSection(parent=self._node_cs, name='Axial')
         self.axial.transform = vist.ChainTransform(tf_axial)
         # Coronal :
-        self.coron = ImageSection(parent=self._node)
+        self.coron = ImageSection(parent=self._node_cs, name='Coronal')
         self.coron.transform = vist.ChainTransform(tf_coron)
         # Sagittal :
-        self.sagit = ImageSection(parent=self._node)
+        self.sagit = ImageSection(parent=self._node_cs, name='Sagittal')
         self.sagit.transform = vist.ChainTransform(tf_sagit)
-
-        self._node.transform = vist.MatrixTransform()
-        self._node.parent = parent
-        self._node.visible = visible
-
+        # Set GL state :
         kwargs = {'depth_test': True, 'cull_face': False, 'blend': False,
                   'blend_func': ('src_alpha', 'one_minus_src_alpha')}
         self.sagit.set_gl_state('translucent', **kwargs)
         self.coron.set_gl_state('translucent', **kwargs)
         self.axial.set_gl_state('translucent', **kwargs)
 
-        CbarArgs.__init__(self, cmap, (0, 100), False, None, False, None,
-                          None, None)
-
-    def _check_data(self):
-        """Check volume and data and tranformations.
-
-        This method also load the ROI template if empty.
-        """
-        # Load volume if needed :
-        if 'AAL' not in self._roi.keys():
-            # Get path to the roi.npz file :
-            cur_path = sys.modules[__name__].__file__.split('Cross')[0]
-            roi_path = (cur_path, 'templates', 'roi.npz')
-            path = os.path.join(*roi_path)
-            # Load the volume :
-            v = np.load(path)
-            # Define the transformation :
-            tr = array_to_stt(v['hdr'])
-            # hdr = v['hdr'][0:-1, -1]
-            # transform_aal = vist.STTransform(translate=hdr)
-            # transform_brod = vist.STTransform(translate=hdr)
-            # Add Brodmann volume :
-            self.add_volume('Brodmann', v['brod_idx'], tr)
-            self.add_volume('AAL', v['vol'], tr)
-            # Set Brodmann as the default template to use :
-            self.set_volume('Brodmann')
-
-        # Check volume :
-        if (self._vol.ndim != 3) or (self._vol.min() != 0):
-            raise ValueError("The volume must be a 3-D array with values "
-                             "starting from 0.")
-
-    def set_data(self, dx=None, dy=None, dz=None, bgcolor=(.2, .2, .2),
-                 alpha=0., cmap=None, update=False):
+    def set_cs_data(self, dx=None, dy=None, dz=None, bgcolor=(.2, .2, .2),
+                    alpha=0., cmap=None, update=False):
         """Set data to cross-sections.
 
         Parameters
@@ -192,15 +147,15 @@ class CrossSections(CbarArgs):
         """
         # Get the colormap :
         if cmap is None:
-            cmap = self._cmap
+            cmap = self._cmap_cs
         else:
-            self._cmap = cmap
+            self._cmap_cs = cmap
 
         # Sagittal image :
         if (dx is not None) or update:
             if dx is None:
                 dx = self.sagit._idx
-            sagit = self._vol[dx, :, :]
+            sagit = self.vol[dx, :, :]
             sagit_z = sagit == 0
             sagit_cmap = array2colormap(sagit, clim=self._clim, cmap=cmap)
             self.sagit.set_data(sagit_cmap, sagit_z, dx)
@@ -209,7 +164,7 @@ class CrossSections(CbarArgs):
         if (dy is not None) or update:
             if dy is None:
                 dy = self.coron._idx
-            coro = self._vol[:, dy, :]
+            coro = self.vol[:, dy, :]
             coro_z = coro == 0
             coro_cmap = array2colormap(coro, clim=self._clim, cmap=cmap)
             coro_cmap[dx - 1:dx + 1, :, 0:3] = 0.
@@ -219,7 +174,7 @@ class CrossSections(CbarArgs):
         if (dz is not None) or update:
             if dz is None:
                 dz = self.axial._idx
-            axial = self._vol[:, :, dz]
+            axial = self.vol[:, :, dz]
             axial_z = axial == 0
             axial_cmap = array2colormap(axial, clim=self._clim, cmap=cmap)
             axial_cmap[dx - 1:dx + 1, :, 0:3] = 0.
@@ -238,7 +193,7 @@ class CrossSections(CbarArgs):
             self.coron.set_color(bgcolor, alpha)
             self.axial.set_color(bgcolor, alpha)
 
-        self._node.update()
+        self._node_cs.update()
 
     def _move_images(self, dx=None, dy=None, dz=None):
         """Move images to a defined center.
@@ -265,54 +220,14 @@ class CrossSections(CbarArgs):
             tr = self._tr_axial.translate
             self._tr_axial.translate = (tr[0], tr[1], dz, tr[3])
 
-    def set_volume(self, name):
-        """Set new volume data.
-
-        Parameters
-        ----------
-        name : string
-            Name of the volume to use.
-        """
-        # Set the volume and corresponding tranformation :
-        self._vol = self._roi[name]
-        self._node.transform = self._transform[name]
-        # Get (min, max) across (x, y, z) axes :
-        self._nx = (0, self._vol.shape[0] - 1)
-        self._ny = (0, self._vol.shape[1] - 1)
-        self._nz = (0, self._vol.shape[2] - 1)
-        # Get fixed clim :
-        self._clim = (self._vol.min(), self._vol.max())
-        self._minmax = self._clim
-        # self._node.transform.update()
-        # self._node.update()
-
-    def add_volume(self, name, vol, transform=None):
-        """Add a new volume.
-
-        Parameters
-        ----------
-        name : string
-            Name of the volume to use.
-        vol : array_like
-            The volume to use for cross-sections of shape (nx, ny, nz).
-        transform : VisPy.tranformation | None
-            The associated transformation.
-        """
-        # Add volume and transformation :
-        if transform is None:
-            transform = vist.NullTransform()
-        self._roi[name] = vol
-        self._transform[name] = transform
-
     # ----------- VISIBLE -----------
     @property
-    def visible(self):
-        """Get the visible value."""
-        return self._visible
+    def visible_cs(self):
+        """Get the visible_cs value."""
+        return self._visible_cs
 
-    @visible.setter
-    def visible(self, value):
-        """Set visible value."""
-        self._check_data()
-        self._visible = value
-        self._node.visible = value
+    @visible_cs.setter
+    def visible_cs(self, value):
+        """Set visible_cs value."""
+        self._visible_cs = value
+        self._node_cs.visible = value
