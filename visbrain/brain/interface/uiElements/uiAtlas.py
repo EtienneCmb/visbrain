@@ -322,7 +322,7 @@ class uiAtlas(object):
         # Set new center position :
         bgd = (self.bgd_red.value(), self.bgd_green.value(),
                self.bgd_blue.value())
-        self.volume.set_cs_data(dx, dy, dz, bgcolor=bgd, alpha=0.2, cmap=cmap)
+        self.volume.set_cs_data(dx, dy, dz, bgcolor=bgd, alpha=0., cmap=cmap)
 
     def _fcn_crossec_viz(self):
         """Control cross-sections visibility."""
