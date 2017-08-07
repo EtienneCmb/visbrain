@@ -20,10 +20,9 @@ from vispy import scene
 from .AtlasBase import AtlasBase
 from .SourcesBase import SourcesBase
 from .ConnectBase import ConnectBase
-from .RoiBase import RoiBase
 from .TimeSeriesBase import TimeSeriesBase
 from .PicBase import PicBase
-from .CrossSecBase import CrossSections
+from .VolumeBase import VolumeBase
 from .projection import Projections
 
 
@@ -47,11 +46,9 @@ class base(Projections):
         self.sources = SourcesBase(**kwargs)
         self.connect = ConnectBase(_xyz=self.sources.xyz,
                                    c_xyz=self.sources.xyz, **kwargs)
-        self.area = RoiBase(scale_factor=self.atlas._scaleMax,
-                            name='NoneArea', select=None, color='#ab4642')
         self.tseries = TimeSeriesBase(ts_xyz=self.sources.xyz, **kwargs)
         self.pic = PicBase(pic_xyz=self.sources.xyz, **kwargs)
-        self.crossec = CrossSections(visible=False)
+        self.volume = VolumeBase()
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -117,7 +114,7 @@ class base(Projections):
         self.sources.stextmesh.parent = self._vbNode
         self.tseries.mesh.parent = self._vbNode
         self.pic.mesh.parent = self._vbNode
-        self.crossec._node.parent = self._vbNode
+        self.volume.parent = self._vbNode
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)
         # scene.visuals.XYZAxis(parent=self._vbNode)
