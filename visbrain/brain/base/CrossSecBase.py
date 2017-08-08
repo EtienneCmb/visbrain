@@ -1,10 +1,12 @@
 """File for Cross-sections object."""
+import numpy as np
+
 from vispy import scene
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
 from vispy.util.transforms import rotate
 
-from ...utils import array2colormap, color2vb
+from ...utils import array2colormap
 
 __all__ = ('CrossSections')
 
@@ -37,12 +39,16 @@ class ImageSection(visu.Image):
         Parameters
         ----------
         data : array_like
-            Array of RGBBA color data of shape (n_rows, n_cols, 4).
+            Array of RGBA color data of shape (n_rows, n_cols, 4).
         zeros : array_like
             Array of boolean values where the image is 0.
         idx : int
             Offset integer.
         """
+        # Keep data shape :
+        self.unfreeze()
+        self._sh = data[..., 0].shape
+        self.freeze()
         # Set data to visu.Image :
         super(visu.Image, self).set_data(data)
         # Keep the index and boolean index where the image is 0 :
@@ -124,17 +130,17 @@ class CrossSections(object):
         self.coron.set_gl_state('translucent', **kwargs)
         self.axial.set_gl_state('translucent', **kwargs)
 
-    def set_cs_data(self, dx=None, dy=None, dz=None, bgcolor=(.2, .2, .2),
-                    alpha=0., cmap=None, update=False):
+    def set_cs_data(self, dx, dy, dz, bgcolor=(.2, .2, .2), alpha=0.,
+                    cmap=None, radius=5., mask=0.):
         """Set data to cross-sections.
 
         Parameters
         ----------
-        dx : int | None
+        dx : int
             Offset for the sagittal image.
-        dy : int | None
+        dy : int
             Offset for the coronale image.
-        dz : int | None
+        dz : int
             Offset for the axial image.
         bgcolor : string/tuple | None
             Background color for zeros values.
@@ -142,8 +148,10 @@ class CrossSections(object):
             Opacity for zeros values.
         cmap : string | None
             Colormap name.
-        update : bool | False
-            Force updating.
+        radius : float | 5.
+            Radius of the disc intersection.
+        mask : float or array_like | 0.
+            Values to be potentially transparent.
         """
         # Get the colormap :
         if cmap is None:
@@ -152,73 +160,115 @@ class CrossSections(object):
             self._cmap_cs = cmap
 
         # Sagittal image :
-        if (dx is not None) or update:
-            if dx is None:
-                dx = self.sagit._idx
-            sagit = self.vol[dx, :, :]
-            sagit_z = sagit == 0
-            sagit_cmap = array2colormap(sagit, clim=self._clim, cmap=cmap)
-            self.sagit.set_data(sagit_cmap, sagit_z, dx)
+        cross = [(slice(dy - 1, dy + 1), slice(None)),
+                 (slice(None), slice(dz - 1, dz + 1))]
+        self._set_cs_cmap(self.sagit, self.vol[dx, :, :], dx, (dy, dz),
+                          cmap, radius, bgcolor, alpha, cross, mask)
 
         # Coronal image :
-        if (dy is not None) or update:
-            if dy is None:
-                dy = self.coron._idx
-            coro = self.vol[:, dy, :]
-            coro_z = coro == 0
-            coro_cmap = array2colormap(coro, clim=self._clim, cmap=cmap)
-            coro_cmap[dx - 1:dx + 1, :, 0:3] = 0.
-            self.coron.set_data(coro_cmap, coro_z, dy)
+        cross = [(slice(dx - 1, dx + 1), slice(None)),
+                 (slice(None), slice(dz - 1, dz + 1))]
+        self._set_cs_cmap(self.coron, self.vol[:, dy, :], dy, (dx, dz),
+                          cmap, radius, bgcolor, alpha, cross, mask)
 
         # Axial image :
-        if (dz is not None) or update:
-            if dz is None:
-                dz = self.axial._idx
-            axial = self.vol[:, :, dz]
-            axial_z = axial == 0
-            axial_cmap = array2colormap(axial, clim=self._clim, cmap=cmap)
-            axial_cmap[dx - 1:dx + 1, :, 0:3] = 0.
-            axial_cmap[:, dy - 1:dy + 1, 0:3] = 0.
-            self.axial.set_data(axial_cmap, axial_z, dz)
+        cross = [(slice(dx - 1, dx + 1), slice(None)),
+                 (slice(None), slice(dy - 1, dy + 1))]
+        self._set_cs_cmap(self.axial, self.vol[:, :, dz], dz, (dx, dy),
+                          cmap, radius, bgcolor, alpha, cross, mask)
 
         # Translate images to (dx, dy, dz) :
-        if any([dx, dy, dz, update]):
-            self._move_images(dx, dy, dz)
-
-        # Set opacity level and color :
-        if bgcolor is not None:
-            bgcolor = color2vb(bgcolor)[:, 0:-1]
-        if alpha is not None:
-            self.sagit.set_color(bgcolor, alpha)
-            self.coron.set_color(bgcolor, alpha)
-            self.axial.set_color(bgcolor, alpha)
+        self._move_images(dx, dy, dz)
 
         self._node_cs.update()
 
-    def _move_images(self, dx=None, dy=None, dz=None):
+    def _set_cs_cmap(self, obj, img, d, center, cmap, radius, bgcolor, alpha,
+                     cross, mask):
+        """Set the colormap to a section.
+
+        Parameters
+        ----------
+        obj : ImageSection
+            The ImageSection object
+        img : array_like
+            The 2-D image data.
+        d : float
+            Image offset.
+        center : tuple
+            A tuple of two integers where the center is located.
+        cmap : string
+            description
+        radius : int
+            Radius for the disc.
+        bgcolor : tuple
+            Tuple color for the background image.
+        alpha : float
+            Transparency level.
+        cross : list
+            List of slices where the cross have to be turn to black.
+        mask : float or array_like | 0.
+            Values to be potentially transparent.
+        """
+        # Find indices where img is mask :
+        if isinstance(mask, (int, float)):
+            img_z = img == 0
+        elif isinstance(mask, np.ndarray) and (img.shape == mask.shape):
+            img_z = mask
+        # Get the colormap :
+        img_cmap = array2colormap(img, clim=self._clim, cmap=cmap)
+        # Turn image sections cross to black :
+        for (k, i) in cross:
+            img_cmap[k, i, 0:3] = 0.
+        # Set cross-center to red :
+        img_cmap[self._cs_center(img, center, radius), :] = (1., 0., 0., 1.)
+        # Set colormap to image section object :
+        obj.set_data(img_cmap, img_z, d)
+        # Set background color and transparency :
+        obj.set_color(bgcolor, alpha)
+
+    def _cs_center(self, img, center, radius):
+        """Get indices of a disc around center.
+
+        Parameters
+        ----------
+        img : array_like
+            The 2-D image data.
+        center : tuple
+            A tuple of two integers where the center is located.
+        radius : int
+            Radius for the disc.
+
+        Returns
+        -------
+        idx : array_like
+            Boolean index of the disc.
+        """
+        dx, dy = center
+        nr, nc = img.shape
+        y, x = np.ogrid[-dx:nr - dx, -dy:nc - dy]
+        return x ** 2 + y ** 2 <= radius
+
+    def _move_images(self, dx, dy, dz):
         """Move images to a defined center.
 
         Parameters
         ----------
-        dx : int | None
+        dx : int
             Offset for the sagittal image.
-        dy : int | None
+        dy : int
             Offset for the coronale image.
-        dz : int | None
+        dz : int
             Offset for the axial image.
         """
         # Sagittal image :
-        if dx is not None:
-            tr = self._tr_sagit.translate
-            self._tr_sagit.translate = (dx, tr[1], tr[2], tr[3])
+        tr = self._tr_sagit.translate
+        self._tr_sagit.translate = (dx, tr[1], tr[2], tr[3])
         # Coronal image :
-        if dy is not None:
-            tr = self._tr_coron.translate
-            self._tr_coron.translate = (tr[0], dy, tr[2], tr[3])
+        tr = self._tr_coron.translate
+        self._tr_coron.translate = (tr[0], dy, tr[2], tr[3])
         # Axial image :
-        if dz is not None:
-            tr = self._tr_axial.translate
-            self._tr_axial.translate = (tr[0], tr[1], dz, tr[3])
+        tr = self._tr_axial.translate
+        self._tr_axial.translate = (tr[0], tr[1], dz, tr[3])
 
     # ----------- VISIBLE -----------
     @property
