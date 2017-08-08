@@ -343,7 +343,7 @@ class uiSettings(object):
         distance) at the bottom of the setting panel.
         """
         # Define and set the rotation string :
-        rotstr = 'Azimuth: {a}°, Elevation: {e}°, Distance: {d}, Scale: {s}'
+        rotstr = 'Azimuth: {a}°, Elevation: {e}°,\nDistance: {d}, Scale: {s}'
         # Get camera Azimuth / Elevation / Distance :
         a = str(self.view.wc.camera.azimuth)
         e = str(self.view.wc.camera.elevation)
