@@ -17,7 +17,7 @@ from .interface import uiInit, uiElements
 from .interface.uiInit import vbShortcuts
 from .base import base, BrainCbar
 from .user import BrainUserMethods
-from ..utils import ShortcutPopup
+from ..utils import ShortcutPopup, set_widget_size
 import sip
 sip.setdestroyonexit(False)
 
@@ -333,8 +333,10 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         # Setting panel :
         self.q_widget.setVisible(True)
         self.QuickSettings.setCurrentIndex(0)
+        self._objsPage.setCurrentIndex(0)
         self.menuDispQuickSettings.setChecked(True)
         self.SettingTab.setCurrentIndex(0)
+        set_widget_size(self._app, self.q_widget, 23)
         # Display menu :
         self.menuDispBrain.setChecked(self.atlas.mesh.visible)
         # Sources :
