@@ -7,6 +7,7 @@ the bridge between the user and the GUI.
 """
 
 import numpy as np
+from PyQt5 import QtWidgets
 
 import vispy.visuals.transforms as vist
 
@@ -108,6 +109,36 @@ class uiSources(object):
             self._picDy.valueChanged.connect(self._fcn_pic_update)
             self._picDz.setValue(self.pic.mesh._dxyz[2])
             self._picDz.valueChanged.connect(self._fcn_pic_update)
+
+        # ====================== TABLE ======================
+        if self.sources.name is not 'NoneSources':
+            # Set table length :
+            n_sources = self.sources.xyz.shape[0]
+            self._sourcesTable.setRowCount(n_sources)
+            # Enable table :
+            self._sourcesTable.setEnabled(True)
+            rg = np.arange(n_sources)
+            # Source's text :
+            if self.sources.stextmesh.name == 'NoneText':
+                txt = np.full((n_sources), 'e')
+                txt = np.core.defchararray.add(txt, rg.astype(str))
+            else:
+                txt = self.sources.stext
+            for k in rg:
+                # Text :
+                self._sourcesTable.setItem(k, 0, QtWidgets.QTableWidgetItem(
+                    txt[k]))
+                # X :
+                self._sourcesTable.setItem(k, 1, QtWidgets.QTableWidgetItem(
+                    str(self.sources.xyz[k, 0])))
+                # Y :
+                self._sourcesTable.setItem(k, 2, QtWidgets.QTableWidgetItem(
+                    str(self.sources.xyz[k, 1])))
+                # Z :
+                self._sourcesTable.setItem(k, 3, QtWidgets.QTableWidgetItem(
+                    str(self.sources.xyz[k, 2])))
+            # Connect table :
+            self._sourcesTable.itemSelectionChanged.connect(self._fcn_goto_cs)
 
     # =====================================================================
     # SOURCES
@@ -231,3 +262,23 @@ class uiSources(object):
         # Update pictures :
         self.pic.mesh.set_data(width=w, height=h, dxyz=(x, y, z), **kwargs)
         self.pic.mesh.update()
+
+    # =====================================================================
+    # GOTO CROSS-SECTIONS
+    # =====================================================================
+    def _fcn_goto_cs(self):
+        """Cross-section at source location."""
+        # Get selected row and xyz :
+        row = self._sourcesTable.currentRow()
+        xyz = self.sources.xyz[row, :]
+        # Set menu cross-sections menu checked :
+        self.grpSec.setChecked(True)
+        self._fcn_crossec_viz()
+        # Get transformation and apply to xyz :
+        ixyz = self.volume.transform.imap(xyz)[0:-1]
+        ixyz = np.round(ixyz).astype(int)
+        # Set it to cross-sections sliders :
+        self._csSagit.setValue(ixyz[0])
+        self._csCoron.setValue(ixyz[1])
+        self._csAxial.setValue(ixyz[2])
+        self._fcn_crossec_move()
