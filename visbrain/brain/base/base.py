@@ -113,9 +113,9 @@ class base(Projections):
         self.sources.mesh.parent = self._vbNode
         self.connect.mesh.parent = self._vbNode
         self.sources.stextmesh.parent = self._vbNode
-        self.atlas.mesh.parent = self._vbNode
         self.tseries.mesh.parent = self._vbNode
         self.pic.mesh.parent = self._vbNode
+        self.atlas.mesh.parent = self._vbNode
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)
         # scene.visuals.XYZAxis(parent=self._vbNode)
