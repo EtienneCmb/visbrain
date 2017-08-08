@@ -69,8 +69,12 @@ class uiAtlas(object):
         idx = mpl_cmap_index(self.volume._cmap_cs)
         self._csCmap.setCurrentIndex(idx[0])
         self._csCmap.currentIndexChanged.connect(self._fcn_crossec_move)
+        # Transparency :
+        self._csTransp.clicked.connect(self._fcn_crossec_move)
         # Visibility :
         self.grpSec.clicked.connect(self._fcn_crossec_viz)
+        # Split view :
+        self._csSplit.clicked.connect(self._fcn_crossec_split)
 
         #######################################################################
         #                           VOLUME
@@ -322,7 +326,19 @@ class uiAtlas(object):
         # Set new center position :
         bgd = (self.bgd_red.value(), self.bgd_green.value(),
                self.bgd_blue.value())
-        self.volume.set_cs_data(dx, dy, dz, bgcolor=bgd, alpha=0., cmap=cmap)
+        # Get transparency level :
+        alpha = 1. - float(self._csTransp.isChecked())
+        self.volume.set_cs_data(dx, dy, dz, bgcolor=bgd, alpha=alpha,
+                                cmap=cmap)
+        # Split view
+        if self._csSplit.isChecked():
+            self._csImg[0].set_data(self.volume.axial._data)
+            self._csImg[0].update()
+            self._fcn_crossec_cam()
+            self._csImg[1].set_data(self.volume.coron._data)
+            self._csImg[1].update()
+            self._csImg[2].set_data(self.volume.sagit._data)
+            self._csImg[2].update()
 
     def _fcn_crossec_viz(self):
         """Control cross-sections visibility."""
@@ -338,6 +354,35 @@ class uiAtlas(object):
         # Update clim and minmax :
         self._fcn_crossec_sl_limits()
         self._fcn_crossec_move()
+
+    def _fcn_crossec_split(self):
+        """Toggle split view."""
+        if self._csSplit.isChecked():  # Split view
+            self._objsPage.setCurrentIndex(1)
+            self.view.canvas.show(False)
+            [k.canvas.show(True) for k in self._csView]
+        else:  # Intersection
+            self._objsPage.setCurrentIndex(0)
+            self.view.canvas.show(True)
+            [k.canvas.show(False) for k in self._csView]
+        self._fcn_crossec_move()
+
+    def _fcn_crossec_cam(self):
+        """Update camera for splitted views."""
+        # Deffine margin :
+        m = 10
+        # Axial view :
+        nr, nc = self.volume.axial._sh
+        self._csView[0].wc.camera.rect = (-nc - m, -nr - m, nc + m, nr + m)
+        self._csView[0].wc.camera.aspect = nc / nr
+        # Coronal view :
+        nr, nc = self.volume.coron._sh
+        self._csView[1].wc.camera.rect = (-nr - m, -m, nr + m, nc + m)
+        self._csView[1].wc.camera.aspect = nr / nc
+        # Sagittal view :
+        nr, nc = self.volume.sagit._sh
+        self._csView[2].wc.camera.rect = (-nr - m, -m, nr + m, nc + m)
+        self._csView[2].wc.camera.aspect = nr / nc
 
     ###########################################################################
     ###########################################################################
