@@ -7,6 +7,7 @@ import vispy.visuals.transforms as vist
 from vispy.util.transforms import rotate
 
 from ...utils import array2colormap
+# from ..interface.uiInit import vbCanvas
 
 __all__ = ('CrossSections')
 
@@ -73,19 +74,129 @@ class ImageSection(visu.Image):
             self._data[self._zeros, 3] = alpha
 
 
-class CrossSections(object):
+class CrossSectionsSplit(object):
+    """Main class for the splitted cross section.
+
+    Parameters
+    ----------
+    parent : dict | None
+        Dictionary of parents for each image.
+    """
+
+    def __init__(self, parent=None):
+        """Init."""
+        # Add PanZoom cameras to each box :
+        parent['Sagit'].camera = scene.PanZoomCamera()
+        parent['Coron'].camera = scene.PanZoomCamera()
+        parent['Axial'].camera = scene.PanZoomCamera()
+        # Define three images (Sagittal, Coronal, Axial) :
+        kwargs_im = {'interpolation': 'bilinear'}
+        self._cspSagit = visu.Image(name='SagitSplit', **kwargs_im)
+        self._cspCoron = visu.Image(name='CoronSplit', **kwargs_im)
+        self._cspAxial = visu.Image(name='AxialSplit', **kwargs_im)
+        # Define three text object :
+        kwargs_txt = {'color': 'white', 'font_size': 2, 'anchor_x': 'left',
+                      'anchor_y': 'bottom'}
+        self._cspTxtSagit = visu.Text(text='Sagit', **kwargs_txt)
+        self._cspTxtCoron = visu.Text(text='Coron', **kwargs_txt)
+        self._cspTxtAxial = visu.Text(text='Axial', **kwargs_txt)
+        # Add each image to parent :
+        parent['Sagit'].add(self._cspSagit)
+        parent['Coron'].add(self._cspCoron)
+        parent['Axial'].add(self._cspAxial)
+        # Add text to parent :
+        parent['Sagit'].add(self._cspTxtSagit)
+        parent['Coron'].add(self._cspTxtCoron)
+        parent['Axial'].add(self._cspTxtAxial)
+        # Add transformations :
+        r90 = vist.MatrixTransform()
+        r90.rotate(90, (0, 0, 1))
+        r180 = vist.MatrixTransform()
+        r180.rotate(180, (0, 0, 1))
+        self._cspSagit.transform = r90
+        self._cspCoron.transform = r90
+        self._cspAxial.transform = r180
+        self._parent_sp = parent
+
+    def set_csp_data(self, sagittal, coronal, axial):
+        """Set data to the splitted cross-section.
+
+        Parameters
+        ----------
+        sagittal : array_like
+            Color array for sagittal image (n_row, n_col, RGBA)
+        coronal : array_like
+            Color array for coronal image (n_row, n_col, RGBA)
+        axial : array_like
+            Color array for axial image (n_row, n_col, RGBA)
+        """
+        # Sagittal data :
+        self._cspSagit.set_data(sagittal)
+        self._cspSagit.update()
+        # Coronal data :
+        self._cspCoron.set_data(coronal)
+        self._cspCoron.update()
+        # Axial data :
+        self._cspAxial.set_data(axial)
+        self._cspAxial.update()
+
+    def _set_csp_camera(self, xyz, pos, m=10.):
+        """Set camera properties.
+
+        Parameters
+        ----------
+        xyz : tuple
+            Tuple of center position.
+        m : float | 10.
+            Margin to use.
+        """
+        st = 'Slice : {} | {} : {}'
+        parent = self._parent_sp
+        # _____________________ SAGITTAL _____________________
+        # Camera :
+        nr, nc = self.sagit._sh
+        parent['Sagit'].camera.rect = (-nr - m, -m, nr + m, nc + m)
+        parent['Sagit'].camera.aspect = nr / nc
+        # Text :
+        self._cspTxtSagit.pos = (-nr - m, -m / 2, 0)
+        self._cspTxtSagit.text = st.format(xyz[0], 'x', pos[0])
+
+        # _____________________ CORONAL _____________________
+        # Camera :
+        nr, nc = self.coron._sh
+        parent['Coron'].camera.rect = (-nr - m, -m, nr + m, nc + m)
+        parent['Coron'].camera.aspect = nr / nc
+        # Text :
+        self._cspTxtCoron.pos = (-nr - m, -m / 2, 0)
+        self._cspTxtCoron.text = st.format(xyz[1], 'y', pos[1])
+
+        # _____________________ AXIAL _____________________
+        # Camera :
+        nr, nc = self.axial._sh
+        parent['Axial'].camera.rect = (-nc - m, -nr - m, nc + m, nr + m)
+        parent['Axial'].camera.aspect = nc / nr
+        # Text :
+        self._cspTxtAxial.pos = (-nc - m, -nr - m / 2, 0)
+        self._cspTxtAxial.text = st.format(xyz[2], 'z', pos[2])
+
+
+class CrossSections(CrossSectionsSplit):
     """Cross-sections images based on a volume.
 
     Parameters
     ----------
     parent : VisPy | None
-        VisPy parent.
+        VisPy parent for the 3-D cross-sections.
+    parent_sp : VisPy | None
+        VisPy parent for the splitted view.
     visible : bool | True
         Set cross-sections visible.
     """
 
-    def __init__(self, parent=None, visible=True, cmap='viridis'):
+    def __init__(self, parent=None, parent_sp=None, visible=True,
+                 cmap='gray'):
         """Init."""
+        CrossSectionsSplit.__init__(self, parent_sp)
         self._visible_cs = visible
         self._cmap_cs = cmap
         #######################################################################
@@ -247,6 +358,18 @@ class CrossSections(object):
         nr, nc = img.shape
         y, x = np.ogrid[-dx:nr - dx, -dy:nc - dy]
         return x ** 2 + y ** 2 <= radius
+
+    def _test_cs_range(self, dx, dy, dz):
+        """Test sagittal, coronal and axial ranges."""
+        # Test sagittal :
+        if not dx <= self._nx:
+            raise ValueError("Sagittal section must be <= " + str(self._nx))
+        # Test coronal :
+        if not dy <= self._ny:
+            raise ValueError("Coronal section must be <= " + str(self._ny))
+        # Test axial :
+        if not dz <= self._nz:
+            raise ValueError("Axial section must be <= " + str(self._nz))
 
     def _move_images(self, dx, dy, dz):
         """Move images to a defined center.
