@@ -68,7 +68,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     a_template : string | 'B1'
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
 
-    a_vertices /a_faces: array_like | None
+    a_vertices / a_faces : array_like | None
         Specify an alternative surface to use. Both parameters must be a 2D
         array, respectively of shapes (N_vertices, 3) and (N_faces, 3)
 
@@ -77,7 +77,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         into the brain. The shape of the array must be (N, 3) where
         '3' is for (x, y, z) coordinates and N, the number of sources.
 
-    s_data: array_like | None
+    s_data : array_like | None
         Add some data to sources. As a consequence, the radius of each
         source will be a function of s_data. must be an array of shape
         (N,). If s_data is None, all sources will have the same value.
@@ -96,7 +96,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     s_alpha : int/float | 1.0
         Transparency of all sources. Must be between 0 and 1.
 
-    s_radiusmin /s_radiusmax: float | 5.0/10.0
+    s_radiusmin / s_radiusmax : float | 5.0/10.0
         Define the minimum and maximum source's possible radius. By default
         if all sources have the same value, the radius will be s_radiusmin.
 

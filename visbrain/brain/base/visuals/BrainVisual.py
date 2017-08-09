@@ -114,54 +114,40 @@ class BrainVisual(Visual):
     type of 3D objects). Light is automatically ajust acording to camera
     rotations.
 
-    Kargs:
-        vertices: ndarray, optional, (def: None)
-            Vertices to set of shape (N, 3) or (M, 3)
-
-        faces: ndarray, optional, (def: None)
-            Faces to set of shape (M, 3)
-
-        normals: ndarray, optional, (def: None)
-            The normals to set (same shape as vertices)
-
-        vertex_colors: ndarray, optional, (def: None)
-            Vertex color of shape (N, 4) or (M, 3, 4)
-
-        camera: vispy, optional, (def: None)
-            Add a camera to the mesh. This object must be a vispy edfault
-            camera.
-
-        meshdata: vispy.meshdata, optional, (def: None)
-            Custom vispy mesh data
-
-        color: tuple/string/hex, optional, (def: None)
-            Alternatively, you can specify a uniform color.
-
-        l_position: tuple, optional, (def: (1., 1., 1.))
-            Position of the light
-
-        l_color: tuple, optional, (def: (1., 1., 1., 1.))
-            Color of the light (RGBA)
-
-        l_intensity: tuple, optional, (def: (1., 1., 1.))
-            Intensity of the light
-
-        l_coefAmbient: float, optional, (def: 0.11)
-            Coefficient for the ambient light
-
-        l_coefSpecular: float, optional, (def: 0.5)
-            Coefficient for the specular light
-
-        scale_factor: float, optional, (def: 10.)
-            Rescale the mesh between (-scale_factor, scale_factor).
-
-        hemisphere: string, optional, (def: 'both')
-            Choose if an hemisphere has to be selected ('both', 'left',
-            'right')
-
-        recenter: bool, optional, (def: True)
-            Recenter the mesh arround 0. This is convenient using OpenGL and
-            for rotation control.
+    Parameters
+    ----------
+    vertices : array_like | None
+        Vertices to set of shape (N, 3) or (M, 3)
+    faces : array_like | None
+        Faces to set of shape (M, 3)
+    normals : array_like | None
+        The normals to set (same shape as vertices)
+    vertex_colors : array_like | None
+        Vertex color of shape (N, 4) or (M, 3, 4)
+    camera : vispy | None
+        Add a camera to the mesh. This object must be a vispy edfault
+        camera.
+    meshdata : vispy.meshdata | None
+        Custom vispy mesh data
+    color : tuple/string/hex | None
+        Alternatively, you can specify a uniform color.
+    l_position : tuple | (1., 1., 1.)
+        Position of the light
+    l_color : tuple | (1., 1., 1., 1.)
+        Color of the light (RGBA)
+    l_intensity : tuple | (1., 1., 1.)
+        Intensity of the light
+    l_coefAmbient : float | 0.11
+        Coefficient for the ambient light
+    l_coefSpecular : float | 0.5
+        Coefficient for the specular light
+    scale_factor : float | 10.
+        Rescale the mesh between (-scale_factor, scale_factor).
+    hemisphere : string | 'both'
+        Choose if an hemisphere has to be selected ('both', 'left', 'right')
+    recenter : bool | True
+        Recenter the mesh arround 0. This is convenient using OpenGL and
+        for rotation control.
     """
 
     def __len__(self):
@@ -180,7 +166,7 @@ class BrainVisual(Visual):
                  vertex_colors=None, camera=None, meshdata=None,
                  l_position=(1., 1., 1.), l_color=(1., 1., 1., 1.),
                  l_intensity=(1., 1., 1.), l_coefAmbient=0.07,
-                 l_coefSpecular=0.5, scale_factor=10, hemisphere='both',
+                 l_coefSpecular=.5, scale_factor=10., hemisphere='both',
                  recenter=True, vertfcn=None):
         """Init."""
         # Initialize the vispy.Visual class with the vertex / fragment buffer :
@@ -251,33 +237,27 @@ class BrainVisual(Visual):
                  color=None, hemisphere='both'):
         """Set data to the mesh.
 
-        Kargs:
-            vertices: ndarray, optional, (def: None)
-                Vertices to set of shape (N, 3) or (M, 3)
-
-            faces: ndarray, optional, (def: None)
-                Faces to set of shape (M, 3)
-
-            normals: ndarray, optional, (def: None)
-                The normals to set (same shape as vertices)
-
-            invert_normals: bool, optional, (def: False)
-                Sometimes it appear that the brain color is full
-                black. In that case, turn this parameter to True
-                in order to invert normals.
-
-            meshdata: vispy.meshdata, optional, (def: None)
-                Custom vispy mesh data
-
-            vertex_colors: ndarray, optional, (def: None)
-                Vertex color of shape (N, 4) or (M, 3, 4)
-
-            color: tuple/string/hex, optional, (def: None)
-                Alternatively, you can specify a uniform color.
-
-            hemisphere: string, optional, (def: 'both')
-                Choose if an hemisphere has to be selected ('both', 'left',
-                'right')
+        Parameters
+        ----------
+        vertices : ndarray | None
+            Vertices to set of shape (N, 3) or (M, 3)
+        faces : ndarray | None
+            Faces to set of shape (M, 3)
+        normals : ndarray | None
+            The normals to set (same shape as vertices)
+        invert_normals : bool | False
+            Sometimes it appear that the brain color is full
+            black. In that case, turn this parameter to True
+            in order to invert normals.
+        meshdata : vispy.meshdata | None
+            Custom vispy mesh data
+        vertex_colors : ndarray | None
+            Vertex color of shape (N, 4) or (M, 3, 4)
+        color : tuple/string/hex | None
+            Alternatively, you can specify a uniform color.
+        hemisphere : string | 'both'
+            Choose if an hemisphere has to be selected ('both', 'left',
+            'right')
         """
         # -------------- Check inputs --------------
         # Check if faces index start at zero (Matlab like):
@@ -298,7 +278,7 @@ class BrainVisual(Visual):
 
         # Only vertices and faces :
         if (vertices is not None) and (faces is not None) and (
-                                                            normals is None):
+                normals is None):
             md = MeshData(vertices=vertices, faces=faces)
             vertices = md.get_vertices(indexed='faces')
             normals = md.get_vertex_normals(indexed='faces')
@@ -312,7 +292,7 @@ class BrainVisual(Visual):
         # -------------- Vertices color --------------
         # Wrong shape for vertex color :
         if (vertex_colors is not None) and (vertex_colors.shape != (
-                                                        faces.shape[0], 3, 4)):
+                faces.shape[0], 3, 4)):
             warn("Wrong shape for vertex color. Default color will be used "
                  "instead.")
             vertex_colors = None
@@ -363,7 +343,7 @@ class BrainVisual(Visual):
         # Assign elements :
         self._vertFaces = np.ascontiguousarray(vertices, dtype=np.float32)
         self._colFaces = np.ascontiguousarray(vertex_colors, dtype=np.float32)
-        self._normFaces = np.ascontiguousarray(norm_coef*normals,
+        self._normFaces = np.ascontiguousarray(norm_coef * normals,
                                                dtype=np.float32)
         self._tri = faces.astype('uint32')
 
@@ -379,25 +359,25 @@ class BrainVisual(Visual):
                 Data to use for the color. If data is None
 
         Kargs:
-            data: np.ndarray, optional, (def: None)
+            data: np.ndarray | None
                 Data to use for the color. If data is None, the color will
                 be uniform using the color parameter. If data is a vector,
                 the color is going to be deduced from this vector. If data
                 is a (N, 4) it will be interpreted as a color.
 
-            color: tuple/string/hex, optional, (def: 'white')
+            color: tuple/string/hex | 'white'
                 The default uniform color
 
-            cmap: string, optional, (def: 'viridis')
+            cmap: string | 'viridis'
                 Colormap to use if data is a vector
 
-            alpha: float, optional, (def: 1.0)
+            alpha: float | 1.0
                 Opacity to use if data is a vector
 
-            vmin/vmax: float, optional, (def: None)
+            vmin/vmax: float | None
                 Minimum/maximum value for clipping
 
-            under/over: tuple/string/hex, optional, (def: 'dimgray'/'darkred')
+            under/over: tuple/string/hex | 'dimgray'/'darkred'
                 Color to use under/over respectively vmin/max
         """
         # Color to RGBA :
@@ -443,19 +423,19 @@ class BrainVisual(Visual):
                   l_coefAmbient=None, l_coefSpecular=None):
         """Set light properties.
 
-        l_position: tuple, optional, (def: (1., 1., 1.))
+        l_position: tuple | (1., 1., 1.)
             Position of the light
 
-        l_color: tuple, optional, (def: (1., 1., 1., 1.))
+        l_color: tuple | (1., 1., 1., 1.)
             Color of the light (RGBA)
 
-        l_intensity: tuple, optional, (def: (1., 1., 1.))
+        l_intensity: tuple | (1., 1., 1.)
             Intensity of the light
 
-        l_coefAmbient: float, optional, (def: 0.11)
+        l_coefAmbient: float | 0.11
             Coefficient for the ambient light
 
-        l_coefSpecular: float, optional, (def: 0.5)
+        l_coefSpecular: float | 0.5
             Coefficient for the specular light
         """
         # Light position :
@@ -482,7 +462,7 @@ class BrainVisual(Visual):
         rotations (transformation) to the vertex shader.
 
         Kargs:
-            camera: vispy.camera, optional, (def: None)
+            camera: vispy.camera | None
                 Set a camera to the Mesh for light adaptation
         """
         if camera is not None:
@@ -581,7 +561,7 @@ class BrainVisual(Visual):
     def get_light(self):
         """List of all light properties."""
         return list(self.get_l_position) + list(self.get_l_intensity) + list(
-                    self.get_l_color) + list(self.get_l_coef)
+            self.get_l_color) + list(self.get_l_coef)
 
     # =======================================================================
     # =======================================================================
