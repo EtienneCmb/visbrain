@@ -54,30 +54,6 @@ class uiOpacity(object):
         self.zSlices.sliderMoved.connect(self._fcn_xyzSlice)
         self.zSlices_2.sliderMoved.connect(self._fcn_xyzSlice)
 
-    def _getOpacitySlider(self, tomin=0., tomax=1.):
-        """Get and normalize the opacity slider value.
-
-        Kargs:
-            tomin: float, optional, (def: 0)
-                Set to tomin if value is under 0.
-
-            tomax: float, optional, (def: 1.)
-                Set to tomax if value is over 100.
-
-        Returns:
-            slval: float
-                The normalized slider value.
-
-            sl: float
-                The unprocessed slider value.
-        """
-        # Get opacity from the slider :
-        sl = float(self.OpacitySlider.value())
-        # Normalize this value :
-        slval = slider2opacity(sl, thmin=0.0, thmax=100.0, vmin=self._slmin,
-                               vmax=self._slmax, tomin=tomin, tomax=tomax)
-        return slval, sl
-
     def _fcn_opacity(self):
         """Change opacity of objects using the slider.
 
