@@ -174,37 +174,16 @@ class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
         #######################################################################
         #                         CROSS-SECTIONS CANVAS
         #######################################################################
-        # Create one canvas per view and respectively attach to layout :
-        self._csView = [vbCanvas('AxialCanvas', bgcolor),
-                        vbCanvas('CoronalCanvas', bgcolor),
-                        vbCanvas('SagittalCanvas', bgcolor)]
-        self._axialLayout.addWidget(self._csView[0].canvas.native)
-        self._coronLayout.addWidget(self._csView[1].canvas.native)
-        self._sagitLayout.addWidget(self._csView[2].canvas.native)
-        # Create one node per view :
-        self._csNode = [scene.Node(name='AxialNode'),
-                        scene.Node(name='CoronalNode'),
-                        scene.Node(name='SagittalNode')]
-        self._csNode[0].parent = self._csView[0].wc.scene
-        self._csNode[1].parent = self._csView[1].wc.scene
-        self._csNode[2].parent = self._csView[2].wc.scene
-        # Add one image per node :
-        self._csImg = [visu.Image(name='AxialSplit', parent=self._csNode[0]),
-                       visu.Image(name='CoronalSplit', parent=self._csNode[1]),
-                       visu.Image(name='SagittalSplit', parent=self._csNode[2])
-                       ]
-        # Add one PanZoom camera per canvas :
-        self._csView[0].wc.camera = 'panzoom'
-        self._csView[1].wc.camera = 'panzoom'
-        self._csView[2].wc.camera = 'panzoom'
-        # Finally add transformations to each node :
-        r90 = vist.MatrixTransform()
-        r90.rotate(90, (0, 0, 1))
-        r180 = vist.MatrixTransform()
-        r180.rotate(180, (0, 0, 1))
-        self._csImg[0].transform = r180
-        self._csImg[1].transform = r90
-        self._csImg[2].transform = r90
+        self._csView = vbCanvas('SplittedCrossSections', bgcolor)
+        self._csGrid = {'grid': self._csView.canvas.central_widget.add_grid()}
+        self._csGrid['Sagit'] = self._csGrid['grid'].add_view(row=0, col=0)
+        self._csGrid['Coron'] = self._csGrid['grid'].add_view(row=0, col=1)
+        self._csGrid['Axial'] = self._csGrid['grid'].add_view(row=1, col=0,
+                                                              col_span=2)
+        self._csGrid['Axial'].border_color = (1., 1., 1., 1.)
+        self._csGrid['Coron'].border_color = (1., 1., 1., 1.)
+        self._csGrid['Sagit'].border_color = (1., 1., 1., 1.)
+        self._axialLayout.addWidget(self._csView.canvas.native)
 
         # Set background color and hide quick settings panel :
         self.bgcolor = tuple(color2vb(color=bgcolor, length=1)[0, 0:3])
