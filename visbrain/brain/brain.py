@@ -265,13 +265,86 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     >>> vb = Brain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)
     >>> # Finally, display the interface :
     >>> vb.show()
+
+    Methods
+    -------
+    show()
+        Display the graphical user interface.
+    quit()
+        Quit the interface.
+    rotate()
+        Rotate the scene elements using a predefined or a custom rotation.
+    background_color()
+        Set the background color of the main canvas and the colorbar.
+    screenshot()
+        Take a screenshot of the current scene and save it as a picture.
+    load_config()
+        Load a configuration file.
+    save_config()
+        Save a configuration file.
+    brain_control()
+        Control the type of brain to use.
+    brain_opacity()
+        Set the level of transparency of the brain.
+    light_reflection()
+        Change how light is reflected onto the brain
+    add_mesh()
+        Add a mesh to the scene.
+    add_volume()
+        Add a new volume to the interface.
+    volume_list()
+        Get the list of volumes avaible.
+    set_cross_sections()
+        Set the cross-section position.
+    sources_settings()
+        Set data to sources and control source's properties.
+    sources_opacity()
+        Set the level of transparency of sources.
+    sources_display()
+        Select sources to display.
+    cortical_projection()
+        Project sources activity.
+    cortical_repartition()
+        Get the number of contributing sources per vertex.
+    sources_colormap()
+        Change the colormap of cortical projection / repartition.
+    sources_fit()
+        Force sources coordinates to fit to a selected object.
+    sources_to_convex_hull()
+        Convert a set of sources into a convex hull.
+    add_sources()
+        Add a supplementar source's object.
+    time_series_settings()
+        Control time-series settings.
+    add_time_series()
+        Add time-series (TS) object.
+    pictures_settings()
+        Control pictures settings.
+    add_pictures()
+        Add pictures object.
+    connect_settings()
+        Update connectivity object.
+    add_connect()
+        Add a supplementar connectivity object.
+    roi_plot()
+        Select Region Of Interest (ROI) to plot.
+    roi_light_reflection()
+        Change how light is reflecting onto roi.
+    roi_opacity()
+        Set the level of transparency of the deep structures.
+    roi_list()
+        Get the list of supported ROI.
+    cbar_control()
+        Control the colorbar of a specific object.
+    cbar_autoscale()
+        Autoscale the colorbar to the best limits.
     """
 
     def __init__(self, *args, **kwargs):
         """Init."""
         # ====================== ui Arguments ======================
         # Background color (for the main and the colorbar canvas) :
-        bgcolor = kwargs.get('ui_bgcolor', (0.098, 0.098, 0.098))
+        bgcolor = kwargs.get('ui_bgcolor', (0., 0., 0.))
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
         self._crop = kwargs.get('ui_region', None)
