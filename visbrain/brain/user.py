@@ -355,7 +355,7 @@ class BrainUserMethods(object):
 
     def add_volume(self, name, vol, transform=None, roi_values=None,
                    roi_labels=None):
-        """Add a volume.
+        """Add a new volume to the interface.
 
         When a new volume is added, it can be then used in the Cross-sections,
         Volume or ROI part if the roi_values and roi_labels are not None.
@@ -372,6 +372,10 @@ class BrainUserMethods(object):
             Array of strings describing the name of each ROI.
         roi_values : array_like | None
             Array of values describing values of each ROI.
+
+        See also
+        --------
+        volume_list : Get the list of volumes avaible.
         """
         # Add the volume :
         self.volume.add_volume(name, vol, transform=transform,
@@ -388,6 +392,79 @@ class BrainUserMethods(object):
             self.volume._vols[name].roi_labels = label
             # Extend ROI combo list :
             extend_combo_list(self._roiDiv, name, self._fcn_build_roi_lst)
+
+    def volume_list(self):
+        """Get the list of volumes avaible.
+
+        Returns
+        -------
+        volume_list : list
+            List of volumes avaibles.
+        """
+        return list(self.volume._vols.keys())
+
+    def set_cross_sections(self, pos=(0., 0., 0.), center=None,
+                           volume='Brodmann', split_view=True,
+                           transparent=True, cmap='gray', visible=True):
+        """Set the cross-section position.
+
+        The three sections (sagittal, coronal and axial) can be defined in two
+        ways :
+
+            * Using the _pos_ input for the use of real coordinates.
+            * Using the _center_ input to directly use slices.
+
+        Parameters
+        ----------
+        pos : array_like | (0., 0., 0.)
+            The position of the center in the MNI system. This array of float
+            positions is then converted into slices usng the inverse transform
+            of the selected volume.
+        center : type | default
+            Array of 3 integers corresponding respectively to the position of
+            the sagittal, coronal and axial sections.
+        volume : string | 'Brodmann'
+            Name of the volume to use. See the volume_list() method to get the
+            list of volumes avaible.
+        split_view : bool | True
+            If True, the cross-section is splitted into three images. If False,
+            the cross-section is directly displayed inside the brain.
+        transparent : bool | True
+            Use transparent or opaque borders.
+        cmap : string | 'gray'
+            Name of the colormap to use.
+        visible : bool | True
+            Set the cross-sections visible.
+
+        See also
+        --------
+        add_volume : Add a new volume to the interface.
+        volume_list : Get the list of volumes avaible.
+        """
+        # Set volume :
+        idx = get_combo_list_index(self._csDiv, volume)
+        self._csDiv.setCurrentIndex(idx)
+        # Get cross-center :
+        if center is not None:
+            dx, dy, dz = center
+        else:
+            pos = np.asarray(pos).ravel()
+            ipos = self.volume.transform.imap(pos)[0:-1]
+            dx, dy, dz = np.round(ipos).astype(int)
+        # Set sagittal, coronal and axial sections :
+        self.volume._test_cs_range(dx, dy, dz)
+        self._csSagit.setValue(dx)
+        self._csCoron.setValue(dy)
+        self._csAxial.setValue(dz)
+        # Set colormap :
+        idx = get_combo_list_index(self._csCmap, cmap)
+        self._csCmap.setCurrentIndex(idx)
+        # Set split view, transparent and visible :
+        self._csSplit.setChecked(split_view)
+        self._csTransp.setChecked(transparent)
+        self.grpSec.setChecked(visible)
+        self.menuDispCrossec.setChecked(visible)
+        self._fcn_crossec_split()
 
     # =========================================================================
     # =========================================================================
@@ -562,8 +639,10 @@ class BrainUserMethods(object):
         >>> # Show the GUI :
         >>> vb.show()
 
-        See also:
-            area_plot, sources_colormap
+        See also
+        --------
+        roi_plot : add a region of interest.
+        sources_colormap : Change the colormap properties.
         """
         # Update variables :
         self._tradius = float(radius)
@@ -866,7 +945,7 @@ class BrainUserMethods(object):
     # =========================================================================
     def roi_plot(self, selection=[], subdivision='Brodmann', smooth=3,
                  name='roi'):
-        """Select some roi to plot.
+        """Select Region Of Interest (ROI) to plot.
 
         Parameters
         ----------
