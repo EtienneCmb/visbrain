@@ -1,39 +1,40 @@
 """Usefull functions for graphical interface managment."""
 
+from PyQt5 import QtCore
+
 import numpy as np
 from vispy.scene import visuals
 
 from .color import color2vb, color2tuple
 
 
-__all__ = ['slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
-           'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines']
+__all__ = ('slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
+           'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines',
+           'extend_combo_list', 'get_combo_list_index', 'toggle_enable_tab',
+           'set_widget_size')
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
                    tomin=-1000.0, tomax=1000.0):
     """Convert a slider value into opacity.
 
-    Args:
-        value: float
-            The slider value
+    Parameters
+    ----------
+    value : float
+        The slider value
+    thmin : float | 0.0
+        Minimum threshold to consider
+    thmax : float | 100.0
+        Maximum threshold to consider
+    tomin : float | -1000.0
+        Set to tomin if value is under vmin
+    tomax : float | 1000.0
+        Set to tomax if value is over vmax
 
-    Kargs:
-        thmin: float, optional, (def: 0.0)
-            Minimum threshold to consider
-
-        thmax: float, optional, (def: 100.0)
-            Maximum threshold to consider
-
-        tomin: float, optional, (def: -1000.0)
-            Set to tomin if value is under vmin
-
-        tomax: float, optional, (def: 1000.0)
-            Set to tomax if value is over vmax
-
-    Return:
-        color: array
-            Array of RGBA colors
+    Returns
+    -------
+    color : array_like
+        Array of RGBA colors
     """
     alpha = 0.0
     # Linear decrease :
@@ -50,14 +51,17 @@ def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
 def textline2color(value):
     """Transform a Qt text line editor into color.
 
-    Args:
-        value: string
-            The edited string
+    Parameters
+    ----------
+    value : string
+        The edited string
 
-    Return:
-        The processed value
-
-        tuple of RGBA colors
+    Returns
+    -------
+    value : string
+        The processed string value.
+    color : tuple
+        Tuple of RGBA colors
     """
     # Remove ' caracter :
     try:
@@ -76,17 +80,17 @@ def textline2color(value):
 def color2json(obj, rmalpha=True):
     """Turn a color textline into a json compatible one.
 
-    Args:
-        obj: PyQt textline object
-            The PyQt text line object.
+    Parameters
+    ----------
+    obj : PyQt textline object
+        The PyQt text line object.
+    rmalpha : bool | True
+        Specify if the alpha component have to be deleted.
 
-    Kargs:
-        rmalpha: bool, optional, (def: True)
-            Specify if the alpha component have to be deleted.
-
-    Returns:
-        coltuple: tuple
-            A json compatible tuple of floating points.
+    Returns
+    -------
+    coltuple : tuple
+        A json compatible tuple of floating points.
     """
     return color2tuple(textline2color(obj.text())[1], float, rmalpha)
 
@@ -94,23 +98,23 @@ def color2json(obj, rmalpha=True):
 def is_color(color, comefrom='color'):
     """Test if a variable is a color.
 
-    Args:
-        color: str/tuple/list/array
-            The color to test.
+    Parameters
+    ----------
+    color : str/tuple/list/array
+        The color to test.
+    comefrom : string | 'color'
+        Where come from the color object. Use either 'color' if it has to
+        be considered directly as a color or 'textline' if it comes from a
+        textline gui objects.
 
-    Kargs:
-        comefrom: string, optional, (def: 'color')
-            Where come from the color object. Use either 'color' if it has to
-            be considered directly as a color or 'textline' if it comes from a
-            textline gui objects.
-
-    Returns:
-        iscol: bool
-            A boolean value to indicate if it is a color.
+    Returns
+    -------
+    iscol : bool
+        A boolean value to indicate if it is a color.
     """
     if comefrom is 'color':
         try:
-            _ = color2vb(color)
+            color2vb(color)
             iscol = True
         except:
             iscol = False
@@ -122,7 +126,7 @@ def is_color(color, comefrom='color'):
                     color = eval(color)
             except:
                 pass
-            _ = color2vb(color=color)
+            color2vb(color=color)
             iscol = True
         except:
             iscol = False
@@ -135,12 +139,12 @@ def is_color(color, comefrom='color'):
 def uiSpinValue(elements, values):
     """Set a list of value to a list of elements.
 
-    Args:
-        elements: QtSpin
-            List of qt spin elements
-
-        values: list
-            List of values per element
+    Parameters
+    ----------
+    elements : QtSpin
+        List of Qt spin elements.
+    values : list
+        List of values per element.
     """
     if len(elements) != len(values):
         raise ValueError("List of Qt spins must have the same length "
@@ -151,28 +155,23 @@ def uiSpinValue(elements, values):
 def ndsubplot(n, line=4, force_col=None, max_rows=100):
     """Get the optimal number of rows / columns for a given integer.
 
-    Note
+    Parameters
+    ----------
+    n : int
+        The length to convert into rows / columns.
+    line : int | 4
+        If n <= line, the number of rows will be forced to be 1.
+    force_col : int | None
+        Force the number of columns.
+    max_rows : int | 10
+        Maximum number of rows.
 
-    Args:
-        n: int
-            The length to convert into rows / columns.
-
-    Kargs:
-        line: int, optional, (def: 4)
-            If n <= line, the number of rows will be forced to be 1.
-
-        force_col: int, optional, (def: None)
-            Force the number of columns.
-
-        max_rows: int, optional, (def: 10)
-            Maximum number of rows.
-
-    Returns:
-        nrows: int
-            The number of rows.
-
-        ncols: int
-            The number of columns.
+    Returns
+    -------
+    nrows : int
+        The number of rows.
+    ncols : int
+        The number of columns.
     """
     # Force n to be integer :
     n = int(n)
@@ -182,19 +181,19 @@ def ndsubplot(n, line=4, force_col=None, max_rows=100):
     else:
         if force_col is not None:
             ncols = force_col
-            nrows = int(n/ncols)
+            nrows = int(n / ncols)
         else:
             # Build a linearly decreasing vector :
             vec = np.linspace(max_rows, 2, max_rows + 1,
                               endpoint=False).astype(int)
             # Compute n modulo each point in vec :
-            mod, div  = n % vec, n / vec
+            mod, div = n % vec, n / vec
             # Find where the result is zero :
             nbool = np.invert(mod.astype(bool))
             if any(nbool):
                 cmin = np.abs(vec[nbool] - div[nbool]).argmin()
                 ncols = vec[nbool][cmin]
-                nrows = int(n/ncols)
+                nrows = int(n / ncols)
             else:
                 nrows, ncols = 1, n
 
@@ -204,19 +203,19 @@ def ndsubplot(n, line=4, force_col=None, max_rows=100):
 def combo(lst, idx):
     """Manage combo box.
 
-    Args:
-        lst: list
-            List of possible values.
+    Parameters
+    ----------
+    lst : list
+        List of possible values.
+    idx : list
+        List of index of several combo box.
 
-        idx: list
-            List of index of several combo box.
-
-    Returns:
-        out: list
-            List of possible values for each combo box.
-
-        ind: list
-            List of the new current index of each combo box.
+    Returns
+    -------
+    out : list
+        List of possible values for each combo box.
+    ind : list
+        List of the new current index of each combo box.
     """
     out, ind, original = [], [], set(lst)
     for k in range(len(idx)):
@@ -242,23 +241,120 @@ class MouseEventControl(object):
             return False
 
 
+def extend_combo_list(cbox, item, reconnect=None):
+    """Extend a QtComboList with a new item.
+
+    Parameters
+    ----------
+    cbox : PyQt.QtComboList
+        The PyQt combo list object.
+    item : string
+        Name of the new item.
+    reconnect : function | None
+        The function to apply when the index changed.
+    """
+    # Get the list of current items and extend it :
+    all_items = [cbox.itemText(i) for i in range(cbox.count())]
+    all_items.append(item)
+    # Reconnect function :
+    is_connected = reconnect is not None
+    # Disconnect if connected :
+    if is_connected:
+        cbox.disconnect()
+    # Clear and safely add items :
+    cbox.clear()
+    cbox.addItems(all_items)
+    # Reconnect if connected :
+    if is_connected:
+        cbox.currentIndexChanged.connect(reconnect)
+
+
+def get_combo_list_index(cbox, name):
+    """Extend a QtComboList with a new item.
+
+    Parameters
+    ----------
+    cbox : PyQt.QtComboList
+        The PyQt combo list object.
+    name : string
+        Name of the item.
+
+    Returns
+    -------
+    index : int
+        Index of the item in the combo box.
+    """
+    # Get the list of current items and extend it :
+    all_items = [cbox.itemText(i) for i in range(cbox.count())]
+    return all_items.index(name)
+
+
+def toggle_enable_tab(tab, name, enable=False):
+    """Enable or disable a tab based on the name.
+
+    Parameters
+    ----------
+    tab : PyQt.QTabWidget
+        The PyQt tab.
+    name : string
+        Name of the tab.
+    enable : bool | False
+        Enable or disble the tab.
+    """
+    # Get all tab names :
+    names = [tab.tabText(k) for k in range(tab.count())]
+    # Get index of named tab :
+    idx = names.index(name)
+    # Set tab enable/disable :
+    tab.setTabEnabled(idx, enable)
+
+
+def set_widget_size(app, widget, width=100., height=100.):
+    """Set widget size proportionaly to screen resolution.
+
+    Parameters
+    ----------
+    app : QtApplication
+        A PyQt application.
+    widget : QtWidget
+        The PyQt widget.
+    width : float | 100.
+        Proportional width (0 < width <= 100).
+    height : float | 100.
+        Proportional height (0 < height <= 100).
+    """
+    # Check width and height :
+    if not 0. < width <= 100.:
+        raise ValueError("The width parameter must be 0 < width <= 100")
+    if not 0. < height <= 100.:
+        raise ValueError("The height parameter must be 0 < height <= 100")
+    # Get scren resolution :
+    s_resolution = app.desktop().screenGeometry()
+    s_width, s_height = s_resolution.width(), s_resolution.height()
+    # Convert (width, height) into pixels :
+    s_width = np.around(s_width * width / 100)
+    s_height = np.around(s_height * height / 100)
+    # Set maximum size to the widget :
+    size = QtCore.QSize(s_width, s_height)
+    widget.setMaximumSize(size)
+
+
 class GuideLines(object):
     """Display GUI guidelines for screenshot.
 
-    Args:
-        size: tuple
-            Size of the canvas.
-
-    Kargs:
-        parent: vispy, optional, (def: None)
-            The guide lines parent.
-
-        camrange: dict, optional, (def: None)
-            Dictionary with the camera range.
+    Parameters
+    ----------
+    size : tuple
+        Size of the canvas.
+    parent : vispy | None
+        The guide lines parent.
+    camrange : dict | None
+        Dictionary with the camera range.
     """
 
     def __init__(self, size, parent=None, color='#ab4642', camrange=None):
         """Init."""
+        raise NotImplementedError()
         self.size = size
         self.range = camrange
         self.xm, self.xM = self.range['x'][0], self.range['x'][1]

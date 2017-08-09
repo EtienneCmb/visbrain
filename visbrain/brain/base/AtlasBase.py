@@ -185,5 +185,6 @@ class AtlasBase(object):
         self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                            hemisphere=hemisphere)
         self.mesh.set_color(color=self.color)
+        self.mask = np.zeros((len(self.mesh), 3), dtype=bool)
         self._nv = len(self.mesh)
         self.vert = self.mesh.get_vertices

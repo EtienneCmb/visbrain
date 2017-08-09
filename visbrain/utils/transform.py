@@ -90,7 +90,9 @@ def array_to_stt(arr):
     transform : VisPy.transform
         The VisPy transformation.
     """
-    transform = MatrixTransform()
-    transform.scale(np.diag(arr)[0:-1])
-    transform.translate(arr[0:-1, -1])
+    arr[-1, 0:-1] = arr[0:-1, -1]
+    arr[0:-1, -1] = 0.
+    transform = MatrixTransform(arr)
+    # transform.scale(np.diag(arr)[0:-1])
+    # transform.translate(arr[0:-1, -1])
     return transform

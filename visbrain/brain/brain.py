@@ -17,7 +17,7 @@ from .interface import uiInit, uiElements
 from .interface.uiInit import vbShortcuts
 from .base import base, BrainCbar
 from .user import BrainUserMethods
-from ..utils import ShortcutPopup
+from ..utils import ShortcutPopup, set_widget_size
 import sip
 sip.setdestroyonexit(False)
 
@@ -68,7 +68,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     a_template : string | 'B1'
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
 
-    a_vertices /a_faces: array_like | None
+    a_vertices / a_faces : array_like | None
         Specify an alternative surface to use. Both parameters must be a 2D
         array, respectively of shapes (N_vertices, 3) and (N_faces, 3)
 
@@ -77,7 +77,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         into the brain. The shape of the array must be (N, 3) where
         '3' is for (x, y, z) coordinates and N, the number of sources.
 
-    s_data: array_like | None
+    s_data : array_like | None
         Add some data to sources. As a consequence, the radius of each
         source will be a function of s_data. must be an array of shape
         (N,). If s_data is None, all sources will have the same value.
@@ -96,7 +96,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     s_alpha : int/float | 1.0
         Transparency of all sources. Must be between 0 and 1.
 
-    s_radiusmin /s_radiusmax: float | 5.0/10.0
+    s_radiusmin / s_radiusmax : float | 5.0/10.0
         Define the minimum and maximum source's possible radius. By default
         if all sources have the same value, the radius will be s_radiusmin.
 
@@ -265,13 +265,86 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     >>> vb = Brain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)
     >>> # Finally, display the interface :
     >>> vb.show()
+
+    Methods
+    -------
+    show()
+        Display the graphical user interface.
+    quit()
+        Quit the interface.
+    rotate()
+        Rotate the scene elements using a predefined or a custom rotation.
+    background_color()
+        Set the background color of the main canvas and the colorbar.
+    screenshot()
+        Take a screenshot of the current scene and save it as a picture.
+    load_config()
+        Load a configuration file.
+    save_config()
+        Save a configuration file.
+    brain_control()
+        Control the type of brain to use.
+    brain_opacity()
+        Set the level of transparency of the brain.
+    light_reflection()
+        Change how light is reflected onto the brain
+    add_mesh()
+        Add a mesh to the scene.
+    add_volume()
+        Add a new volume to the interface.
+    volume_list()
+        Get the list of volumes avaible.
+    set_cross_sections()
+        Set the cross-section position.
+    sources_settings()
+        Set data to sources and control source's properties.
+    sources_opacity()
+        Set the level of transparency of sources.
+    sources_display()
+        Select sources to display.
+    cortical_projection()
+        Project sources activity.
+    cortical_repartition()
+        Get the number of contributing sources per vertex.
+    sources_colormap()
+        Change the colormap of cortical projection / repartition.
+    sources_fit()
+        Force sources coordinates to fit to a selected object.
+    sources_to_convex_hull()
+        Convert a set of sources into a convex hull.
+    add_sources()
+        Add a supplementar source's object.
+    time_series_settings()
+        Control time-series settings.
+    add_time_series()
+        Add time-series (TS) object.
+    pictures_settings()
+        Control pictures settings.
+    add_pictures()
+        Add pictures object.
+    connect_settings()
+        Update connectivity object.
+    add_connect()
+        Add a supplementar connectivity object.
+    roi_plot()
+        Select Region Of Interest (ROI) to plot.
+    roi_light_reflection()
+        Change how light is reflecting onto roi.
+    roi_opacity()
+        Set the level of transparency of the deep structures.
+    roi_list()
+        Get the list of supported ROI.
+    cbar_control()
+        Control the colorbar of a specific object.
+    cbar_autoscale()
+        Autoscale the colorbar to the best limits.
     """
 
     def __init__(self, *args, **kwargs):
         """Init."""
         # ====================== ui Arguments ======================
         # Background color (for the main and the colorbar canvas) :
-        bgcolor = kwargs.get('ui_bgcolor', (0.098, 0.098, 0.098))
+        bgcolor = kwargs.get('ui_bgcolor', (0., 0., 0.))
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
         self._crop = kwargs.get('ui_region', None)
@@ -303,14 +376,15 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         # ====================== Objects creation ======================
         camera = viscam.TurntableCamera(azimuth=0, distance=1000,
                                         name='turntable')
-        base.__init__(self, self.view.wc, self.progressBar, **kwargs)
+        base.__init__(self, self.view.wc, self._csGrid, self.progressBar,
+                      **kwargs)
 
         # ====================== UI to visbrain ======================
         # Link UI and visbrain function :
         uiElements.__init__(self)
 
         # ====================== Cameras ======================
-        # # Main camera :
+        # Main camera :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(self.view.wc.camera)
         self.pic.set_camera(self.view.wc.camera)
@@ -333,8 +407,10 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         # Setting panel :
         self.q_widget.setVisible(True)
         self.QuickSettings.setCurrentIndex(0)
+        self._objsPage.setCurrentIndex(0)
         self.menuDispQuickSettings.setChecked(True)
         self.SettingTab.setCurrentIndex(0)
+        set_widget_size(self._app, self.q_widget, 23)
         # Display menu :
         self.menuDispBrain.setChecked(self.atlas.mesh.visible)
         # Sources :

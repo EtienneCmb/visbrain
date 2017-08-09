@@ -9,14 +9,13 @@ Brain instance.
 import numpy as np
 from scipy.spatial import ConvexHull
 
-import vispy.visuals.transforms as vist
-
 from .base.visuals import BrainMesh
 from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
 from .base.TimeSeriesBase import TimeSeriesBase
 from .base.PicBase import PicBase
-from ..utils import color2vb, AddMesh
+from ..utils import (color2vb, AddMesh, extend_combo_list,
+                     get_combo_list_index)
 
 __all__ = ('BrainUserMethods')
 
@@ -354,11 +353,12 @@ class BrainUserMethods(object):
         # Add mesh for projection :
         self._tobj[name] = AddMesh(self._userobj[name])
 
-    def add_cross_section(self, name, vol, transform=None):
-        """Add a cross-section volume.
+    def add_volume(self, name, vol, transform=None, roi_values=None,
+                   roi_labels=None):
+        """Add a new volume to the interface.
 
-        To then use this volume, go to the Brain/Cross-section tab and pick up
-        the defined cross-sections volume.
+        When a new volume is added, it can be then used in the Cross-sections,
+        Volume or ROI part if the roi_values and roi_labels are not None.
 
         Parameters
         ----------
@@ -368,26 +368,103 @@ class BrainUserMethods(object):
             The 3-D volume array.
         transform : VisPy.transform | None
             The transformation to add to this volume.
+        roi_labels : array_like | None
+            Array of strings describing the name of each ROI.
+        roi_values : array_like | None
+            Array of values describing values of each ROI.
+
+        See also
+        --------
+        volume_list : Get the list of volumes avaible.
         """
-        # Check name and volume :
-        if not isinstance(name, str):
-            raise ValueError("The name variabe must be a string.")
-        if not isinstance(vol, np.ndarray) or not (vol.ndim == 3):
-            raise ValueError("The vol variable must be an 3-D array.")
-
         # Add the volume :
-        self.crossec.add_volume(name, vol, transform)
+        self.volume.add_volume(name, vol, transform=transform,
+                               roi_values=roi_values, roi_labels=roi_labels)
 
-        # Get the current list of volumes and add the new one :
-        cbox = self._secSubdivision
-        all_items = [cbox.itemText(i) for i in range(cbox.count())]
-        all_items.append(name)
+        # Extend the list of volumes for 3-D volume and cross-section :
+        extend_combo_list(self._csDiv, name, self._fcn_crossec_change)
+        extend_combo_list(self._volDiv, name, self._fcn_vol3d_change)
 
-        # Add the list of volumes to the GUI :
-        cbox.disconnect()
-        cbox.clear()
-        cbox.addItems(all_items)
-        cbox.currentIndexChanged.connect(self._fcn_crossec_change)
+        # Extend the list of ROI volumes if possible :
+        if self.volume._vols[name]._is_roi:
+            # Set label to "N: " + label :
+            label = self.volume._labels_to_gui(roi_labels)
+            self.volume._vols[name].roi_labels = label
+            # Extend ROI combo list :
+            extend_combo_list(self._roiDiv, name, self._fcn_build_roi_lst)
+
+    def volume_list(self):
+        """Get the list of volumes avaible.
+
+        Returns
+        -------
+        volume_list : list
+            List of volumes avaibles.
+        """
+        return list(self.volume._vols.keys())
+
+    def set_cross_sections(self, pos=(0., 0., 0.), center=None,
+                           volume='Brodmann', split_view=True,
+                           transparent=True, cmap='gray', visible=True):
+        """Set the cross-section position.
+
+        The three sections (sagittal, coronal and axial) can be defined in two
+        ways :
+
+            * Using the _pos_ input for the use of real coordinates.
+            * Using the _center_ input to directly use slices.
+
+        Parameters
+        ----------
+        pos : array_like | (0., 0., 0.)
+            The position of the center in the MNI system. This array of float
+            positions is then converted into slices usng the inverse transform
+            of the selected volume.
+        center : type | default
+            Array of 3 integers corresponding respectively to the position of
+            the sagittal, coronal and axial sections.
+        volume : string | 'Brodmann'
+            Name of the volume to use. See the volume_list() method to get the
+            list of volumes avaible.
+        split_view : bool | True
+            If True, the cross-section is splitted into three images. If False,
+            the cross-section is directly displayed inside the brain.
+        transparent : bool | True
+            Use transparent or opaque borders.
+        cmap : string | 'gray'
+            Name of the colormap to use.
+        visible : bool | True
+            Set the cross-sections visible.
+
+        See also
+        --------
+        add_volume : Add a new volume to the interface.
+        volume_list : Get the list of volumes avaible.
+        """
+        # Set volume :
+        idx = get_combo_list_index(self._csDiv, volume)
+        self._csDiv.setCurrentIndex(idx)
+        # Get cross-center :
+        if center is not None:
+            dx, dy, dz = center
+        else:
+            pos = np.asarray(pos).ravel()
+            ipos = self.volume.transform.imap(pos)[0:-1]
+            dx, dy, dz = np.round(ipos).astype(int)
+        # Set sagittal, coronal and axial sections :
+        self.volume._test_cs_range(dx, dy, dz)
+        self._csSagit.setValue(dx)
+        self._csCoron.setValue(dy)
+        self._csAxial.setValue(dz)
+        # Set colormap :
+        idx = get_combo_list_index(self._csCmap, cmap)
+        self._csCmap.setCurrentIndex(idx)
+        # Set split view, transparent and visible :
+        self._csSplit.setChecked(split_view)
+        self._csTransp.setChecked(transparent)
+        self.grpSec.setChecked(visible)
+        self.menuDispCrossec.setChecked(visible)
+        self._fcn_crossec_split()
 
     # =========================================================================
     # =========================================================================
@@ -442,8 +519,9 @@ class BrainUserMethods(object):
         >>> # Define some color :
         >>> color = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
         >>> # Set data and properties :
-        >>> vb.sources_settings(data=data, symbol='x', radiusmin=1., radiusmax=20.,
-        >>>                 color=color, edgecolor='orange', edgewidth=2)
+        >>> vb.sources_settings(data=data, symbol='x', radiusmin=1.,
+        >>>                     radiusmax=20., color=color, edgecolor='orange',
+        >>>                     edgewidth=2)
         >>> # Show the GUI :
         >>> vb.show()
         """
@@ -561,8 +639,10 @@ class BrainUserMethods(object):
         >>> # Show the GUI :
         >>> vb.show()
 
-        See also:
-            area_plot, sources_colormap
+        See also
+        --------
+        roi_plot : add a region of interest.
+        sources_colormap : Change the colormap properties.
         """
         # Update variables :
         self._tradius = float(radius)
@@ -863,8 +943,9 @@ class BrainUserMethods(object):
     #                                 ROI
     # =========================================================================
     # =========================================================================
-    def roi_plot(self, selection=[], subdivision='brod', smooth=3, name='roi'):
-        """Select some roi to plot.
+    def roi_plot(self, selection=[], subdivision='Brodmann', smooth=3,
+                 name='roi'):
+        """Select Region Of Interest (ROI) to plot.
 
         Parameters
         ----------
@@ -872,9 +953,9 @@ class BrainUserMethods(object):
             List of integers where each one refer to a particular roi. The
             corresponding list can be found in the graphical interface in
             the ROI tab or using the function roi_list.
-        subdivision : {'brod', 'aal'}
-            Select the sub-division method i.e 'brod' (for brodmann areas)
-            or 'aal' (Anatomical Automatic Labeling)
+        subdivision : {'Brodmann', 'AAL'}
+            Select the sub-division method i.e 'Brodmann' (for brodmann areas)
+            or 'AAL' (Anatomical Automatic Labeling)
         smoth : int | 3
             Define smooth proportion.
         name : string | 'roi'
@@ -885,7 +966,7 @@ class BrainUserMethods(object):
         >>> # Define a Brain instance :
         >>> vb = Brain()
         >>> # Display brodmann area 4 and 6 :
-        >>> vb.roi_plot(selection=[4, 6], subdivision='brod', smooth=5)
+        >>> vb.roi_plot(selection=[4, 6], subdivision='Brodmann', smooth=5)
         >>> # Show the GUI :
         >>> vb.show()
 
@@ -893,38 +974,24 @@ class BrainUserMethods(object):
         --------
         roi_list : display the list of supported areas.
         """
-        # Inputs checking :
-        if not isinstance(selection, list):
+        # Check ROI selection :
+        if not isinstance(selection, list) and bool(selection):
             raise ValueError("The selection parameter must be a list of "
                              "integers")
-        if subdivision not in ['brod', 'aal']:
-            raise ValueError("The subdivision parameter must either be 'brod' "
-                             "or 'aal'")
-
-        # roi selection (only if it's not empty) :
-        if selection:
-            # Sort selection :
-            selection.sort()
-            self.area.select = selection
-            self.area.structure = subdivision
-            self._roiSmooth.setValue(smooth)
-            # Plot ROI :
-            self._area_plot()
-            # Add roi to current objects and update list :
-            self._tobj[name] = self.area
-            self._fcn_updateProjList()
-            # --------------- GUI ---------------
-            # Set check the corresponding subdivision :
-            if subdivision == 'brod':
-                self._roiSubdivision.setCurrentIndex(0)
-                idx = [list(self.area._uidx).index(k) for k in selection]
-            elif subdivision == 'aal':
-                self._roiSubdivision.setCurrentIndex(1)
-                idx = np.add(selection, -1)
-            # Add selected items to the GUI :
-            self.struct2add.addItems(self.area._label[idx])
-            self.struct2select.clear()
-            self.struct2select.addItems(self.area._label)
+        selection = np.unique(selection)
+        # Select subdivision in the combo list :
+        idx = get_combo_list_index(self._roiDiv, subdivision)
+        self._roiDiv.setCurrentIndex(idx)
+        # Update the list of structures :
+        self._fcn_build_roi_lst()
+        # Set selection :
+        self._roiToAdd.addItems(self.volume.roi_labels[selection])
+        # Apply selection :
+        self._struct2add = self.volume.roi_labels[selection]
+        self._fcn_apply_roi()
+        # Add ROI to mesh list :
+        self._tobj[name] = self.volume
+        self._fcn_updateProjList()
 
     def roi_light_reflection(self, reflect_on=None):
         """Change how light is reflecting onto roi.
@@ -942,7 +1009,7 @@ class BrainUserMethods(object):
         >>> # Define a Brain instance :
         >>> vb = Brain()
         >>> # Display brodmann area 4 and 6 :
-        >>> vb.roi_plot(selection=[4, 6], subdivision='brod')
+        >>> vb.roi_plot(selection=[4, 6], subdivision='Brodmann')
         >>> # Display the external surface :
         >>> vb.roi_light_reflection(reflect_on='internal')
         >>> # Hide the brain :
@@ -973,28 +1040,30 @@ class BrainUserMethods(object):
         --------
         >>> # Define a Brain instance :
         >>> vb = Brain()
+        >>> # Display brodmann area 4 and 6 :
+        >>> vb.roi_plot(selection=[4, 6], subdivision='Brodmann')
         >>> # Set transparency :
         >>> vb.roi_opacity(alpha=0.1, show=True)
         >>> # Show the GUI :
         >>> vb.show()
         """
         # Force to have internal projection :
-        self.area.mesh.projection('internal')
-        self.area.mesh.visible = show
-        self.area.mesh.set_alpha(alpha)
+        self.volume.mesh.projection('internal')
+        self.volume.mesh.visible = show
+        self.volume.mesh.set_alpha(alpha)
 
-    def roi_list(self, subdivision='brod'):
+    def roi_list(self, subdivision='Brodmann'):
         """Get the list of supported ROI.
 
         Parameters
         ----------
-        subdivision : str | 'brod'
-            Select the sub-division method i.e 'brod' (for brodmann areas)
-            or 'aal' (Anatomical Automatic Labeling)
+        subdivision : str | 'Brodmann'
+            Select the sub-division method i.e 'Brodmann' (for brodmann areas)
+            or 'AAL' (Anatomical Automatic Labeling)
 
         Returns
         -------
-        labels : list
+        roi_labels : array_like
             The currently supported ROI's labels.
 
         Examples
@@ -1002,11 +1071,11 @@ class BrainUserMethods(object):
         >>> # Define a Brain instance :
         >>> vb = Brain()
         >>> # Get list of ROI for AAL :
-        >>> lst = vb.roi_list(subdivision='aal')
+        >>> lst = vb.roi_list(subdivision='AAL')
         >>> # Print this list :
         >>> print(lst)
         """
-        return str(self.area)
+        return self.volume._vols[subdivision].roi_labels
 
     # =========================================================================
     # =========================================================================

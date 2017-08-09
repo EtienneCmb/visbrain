@@ -23,9 +23,6 @@ class BrainCbar(object):
         # Cbarbase for the pictures :
         cbpic = CbarBase(**self.pic.to_kwargs(True))
         self.cbobjs.add_object('Pictures', cbpic)
-        # Cbarbase for the cross-sections :
-        cbcross = CbarBase(**self.crossec.to_kwargs(True))
-        self.cbobjs.add_object('Cross-sections', cbcross)
 
         # ------------------- CBQT -------------------
         # Add colorbar and interactions :
@@ -51,15 +48,11 @@ class BrainCbar(object):
 
             # Connect graphical buttons :
             self.cbqt.select('Projection', onload=False)
+            self.cbqt._connect()
         else:
             self.cbqt.setEnabled('Connectivity', False)
             self.cbqt.setEnabled('Pictures', False)
         self.cbqt.setEnabled('Projection', False)
-        # ________ Cross-sections ________
-        self.cbqt.setEnabled('Cross-sections', False)
-        self.cbqt.link('Cross-sections', self._fcn_link_crossec,
-                       self._fcn_minmax_crossec)
-        self.cbqt._connect()
 
         # Add the camera to the colorbar :
         self.cbqt.add_camera(camera)
@@ -106,16 +99,3 @@ class BrainCbar(object):
         kwargs = self.cbqt.cbobjs._objs['Pictures'].to_kwargs()
         self.pic.mesh.set_data(**kwargs)
         self.pic.mesh.update()
-
-    ###########################################################################
-    #                              CROSS-SECTIONS
-    ###########################################################################
-    def _fcn_link_crossec(self):
-        """Executed function when pictures need updates."""
-        kwargs = self.cbqt.cbobjs._objs['Cross-sections'].to_kwargs()
-        self.crossec.set_data(cmap=kwargs['cmap'], update=True)
-        self.crossec._node.update()
-
-    def _fcn_minmax_crossec(self):
-        """Executed function for autoscale pictures."""
-        self.cbqt.cbobjs._objs['Cross-sections']._clim = self.crossec._minmax

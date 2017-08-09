@@ -7,7 +7,10 @@ Grouped components :
 """
 
 from PyQt5 import QtWidgets
+
 from vispy import app, scene
+import vispy.scene.visuals as visu
+import vispy.visuals.transforms as vist
 
 from .gui import Ui_MainWindow
 from ...utils import color2vb
@@ -128,12 +131,13 @@ class vbCanvas(object):
             which the brain is displayed and the canvas for the colorbar)
     """
 
-    def __init__(self, bgcolor=(0, 0, 0)):
+    def __init__(self, title='', bgcolor=(0, 0, 0)):
         """Init."""
         # Initialize main canvas:
         self.canvas = scene.SceneCanvas(keys='interactive', show=False,
                                         dpi=600, bgcolor=bgcolor,
-                                        fullscreen=True, resizable=True)
+                                        fullscreen=True, resizable=True,
+                                        title=title)
         self.wc = self.canvas.central_widget.add_view()
         # Visualization settings. The min/maxOpacity attributes are defined
         # because it seems that OpenGL have trouble with small opacity (usually
@@ -161,15 +165,28 @@ class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
         if self._savename is not None:
             self.setWindowTitle('Brain - ' + self._savename)
 
-        # Initlialize view :
-        self.view = vbCanvas(bgcolor)
-
-        # Add the canvas to the UI (vBrain widget) and colorbar:
+        #######################################################################
+        #                            BRAIN CANVAS
+        #######################################################################
+        self.view = vbCanvas('MainCanvas', bgcolor)
         self.vBrain.addWidget(self.view.canvas.native)
+
+        #######################################################################
+        #                         CROSS-SECTIONS CANVAS
+        #######################################################################
+        self._csView = vbCanvas('SplittedCrossSections', bgcolor)
+        self._csGrid = {'grid': self._csView.canvas.central_widget.add_grid()}
+        self._csGrid['Sagit'] = self._csGrid['grid'].add_view(row=0, col=0)
+        self._csGrid['Coron'] = self._csGrid['grid'].add_view(row=0, col=1)
+        self._csGrid['Axial'] = self._csGrid['grid'].add_view(row=1, col=0,
+                                                              col_span=2)
+        self._csGrid['Axial'].border_color = (1., 1., 1., 1.)
+        self._csGrid['Coron'].border_color = (1., 1., 1., 1.)
+        self._csGrid['Sagit'].border_color = (1., 1., 1., 1.)
+        self._axialLayout.addWidget(self._csView.canvas.native)
 
         # Set background color and hide quick settings panel :
         self.bgcolor = tuple(color2vb(color=bgcolor, length=1)[0, 0:3])
-        self.q_widget.hide()
 
         # Set background elements :
         self.bgd_red.setValue(self.bgcolor[0])
