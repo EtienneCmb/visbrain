@@ -3,8 +3,7 @@
 Make the bridge between GUI and deep functions. Add some usefull
 commands for the user
 """
-
-from vispy.color import get_colormaps
+import numpy as np
 
 from ....utils import mpl_cmap, mpl_cmap_index
 
@@ -312,15 +311,18 @@ class uiAtlas(object):
     def _fcn_crossec_sl_limits(self):
         """Define (min, max) of sliders."""
         # Sagittal / Coronal / Axial :
-        self._csSagit.setMaximum(self.volume._nx)
-        self._csCoron.setMaximum(self.volume._ny)
-        self._csAxial.setMaximum(self.volume._nz)
+        self._csSagit.setMaximum(self.volume._nx + 5)
+        self._csCoron.setMaximum(self.volume._ny + 5)
+        self._csAxial.setMaximum(self.volume._nz + 5)
 
     def _fcn_crossec_move(self):
+        """Trigged when a slider move."""
         # Get center position :
-        dx = self._csSagit.value()
-        dy = self._csCoron.value()
-        dz = self._csAxial.value()
+        dx = min(max(0, self._csSagit.value()), self.volume._nx)
+        dy = min(max(0, self._csCoron.value()), self.volume._ny)
+        dz = min(max(0, self._csAxial.value()), self.volume._nz)
+        # Transform slices -> position :
+        pos = self.volume.transform.map(np.array([dx, dy, dz]))
         # Get selected colormap :
         cmap = str(self._csCmap.currentText())
         # Set new center position :
@@ -332,13 +334,10 @@ class uiAtlas(object):
                                 cmap=cmap)
         # Split view
         if self._csSplit.isChecked():
-            self._csImg[0].set_data(self.volume.axial._data)
-            self._csImg[0].update()
-            self._fcn_crossec_cam()
-            self._csImg[1].set_data(self.volume.coron._data)
-            self._csImg[1].update()
-            self._csImg[2].set_data(self.volume.sagit._data)
-            self._csImg[2].update()
+            self.volume.set_csp_data(self.volume.sagit._data,
+                                     self.volume.coron._data,
+                                     self.volume.axial._data)
+            self.volume._set_csp_camera((dx, dy, dz), pos)
 
     def _fcn_crossec_viz(self):
         """Control cross-sections visibility."""
@@ -359,30 +358,13 @@ class uiAtlas(object):
         """Toggle split view."""
         if self._csSplit.isChecked():  # Split view
             self._objsPage.setCurrentIndex(1)
-            self.view.canvas.show(False)
-            [k.canvas.show(True) for k in self._csView]
+            # self.view.canvas.show(False)
+            # [k.canvas.show(True) for k in self._csView]
         else:  # Intersection
             self._objsPage.setCurrentIndex(0)
             self.view.canvas.show(True)
-            [k.canvas.show(False) for k in self._csView]
+            # [k.canvas.show(False) for k in self._csView]
         self._fcn_crossec_move()
-
-    def _fcn_crossec_cam(self):
-        """Update camera for splitted views."""
-        # Deffine margin :
-        m = 10
-        # Axial view :
-        nr, nc = self.volume.axial._sh
-        self._csView[0].wc.camera.rect = (-nc - m, -nr - m, nc + m, nr + m)
-        self._csView[0].wc.camera.aspect = nc / nr
-        # Coronal view :
-        nr, nc = self.volume.coron._sh
-        self._csView[1].wc.camera.rect = (-nr - m, -m, nr + m, nc + m)
-        self._csView[1].wc.camera.aspect = nr / nc
-        # Sagittal view :
-        nr, nc = self.volume.sagit._sh
-        self._csView[2].wc.camera.rect = (-nr - m, -m, nr + m, nc + m)
-        self._csView[2].wc.camera.aspect = nr / nc
 
     ###########################################################################
     ###########################################################################
