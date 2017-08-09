@@ -173,7 +173,7 @@ class VolumeBase(CrossSections, Volume3D, RoiBase):
     Those objects shared loaded volumes.
     """
 
-    def __init__(self):
+    def __init__(self, parent_sp):
         """Init."""
         self._vols = {}
 
@@ -182,7 +182,7 @@ class VolumeBase(CrossSections, Volume3D, RoiBase):
 
         # Initialize Cross-Sections, ROI and volume :
         Volume3D.__init__(self, parent=self._node)
-        CrossSections.__init__(self, parent=self._node)
+        CrossSections.__init__(self, parent=self._node, parent_sp=parent_sp)
         RoiBase.__init__(self, parent=self._node)
 
         # Load default templates and select Brodmann:

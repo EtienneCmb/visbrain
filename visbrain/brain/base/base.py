@@ -36,7 +36,7 @@ class base(Projections):
     GUI has to be deactivate).
     """
 
-    def __init__(self, canvas, progressbar, **kwargs):
+    def __init__(self, canvas, parent_sp, progressbar, **kwargs):
         """Init."""
         # ---------- Initialize base ----------
         # Get progress bar :
@@ -44,7 +44,7 @@ class base(Projections):
 
         # Initialize visbrain objects :
         self.atlas = AtlasBase(**kwargs)
-        self.volume = VolumeBase()
+        self.volume = VolumeBase(parent_sp=parent_sp)
         self.sources = SourcesBase(**kwargs)
         self.connect = ConnectBase(_xyz=self.sources.xyz,
                                    c_xyz=self.sources.xyz, **kwargs)
