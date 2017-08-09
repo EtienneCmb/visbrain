@@ -252,19 +252,6 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="2">
-                     <widget class="QCheckBox" name="o_Sections">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apply opacity / slices onto ROI&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="text">
-                       <string>Sections</string>
-                      </property>
-                     </widget>
-                    </item>
                    </layout>
                   </item>
                   <item>
@@ -1687,7 +1674,7 @@ color</string>
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-346</y>
+                <y>-368</y>
                 <width>351</width>
                 <height>1133</height>
                </rect>
@@ -2247,6 +2234,9 @@ type</string>
                     </item>
                     <item row="2" column="2">
                      <widget class="QSlider" name="_csCoron">
+                      <property name="minimum">
+                       <number>-5</number>
+                      </property>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
                       </property>
@@ -2306,6 +2296,9 @@ type</string>
                     </item>
                     <item row="1" column="2">
                      <widget class="QSlider" name="_csSagit">
+                      <property name="minimum">
+                       <number>-5</number>
+                      </property>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
                       </property>
@@ -2335,6 +2328,9 @@ type</string>
                     </item>
                     <item row="3" column="2">
                      <widget class="QSlider" name="_csAxial">
+                      <property name="minimum">
+                       <number>-5</number>
+                      </property>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
                       </property>
@@ -3934,6 +3930,12 @@ type</string>
                <item>
                 <widget class="QTableWidget" name="_sourcesTable">
                  <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="sortingEnabled">
                   <bool>false</bool>
                  </property>
                  <column>
