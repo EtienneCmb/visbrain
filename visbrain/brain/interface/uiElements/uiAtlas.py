@@ -154,6 +154,9 @@ class uiAtlas(object):
         # Update transformation :
         self._vbNode.transform = self.atlas.transform
 
+        # Update slice limits :
+        self._fcn_minmax_slice()
+
     def _light_reflection(self):
         """Change how light is reflected onto the brain.
 

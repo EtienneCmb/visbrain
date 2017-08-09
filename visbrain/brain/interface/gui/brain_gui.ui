@@ -72,7 +72,7 @@
           <bool>true</bool>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="documentMode">
           <bool>true</bool>
@@ -427,16 +427,16 @@
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Slice along y-axis : Back -&amp;gt; Front&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
                       <property name="minimum">
-                       <number>-140</number>
+                       <number>-800</number>
                       </property>
                       <property name="maximum">
-                       <number>140</number>
+                       <number>800</number>
                       </property>
                       <property name="pageStep">
                        <number>1</number>
                       </property>
                       <property name="value">
-                       <number>-140</number>
+                       <number>-800</number>
                       </property>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
@@ -449,10 +449,10 @@
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Slice along x-axis : Left &amp;lt;- Right&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
                       <property name="minimum">
-                       <number>-110</number>
+                       <number>-800</number>
                       </property>
                       <property name="maximum">
-                       <number>110</number>
+                       <number>800</number>
                       </property>
                       <property name="singleStep">
                        <number>1</number>
@@ -461,7 +461,7 @@
                        <number>1</number>
                       </property>
                       <property name="value">
-                       <number>-110</number>
+                       <number>-800</number>
                       </property>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
@@ -496,16 +496,16 @@
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Slice along y-axis : Back &amp;lt;- Front&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
                       <property name="minimum">
-                       <number>-140</number>
+                       <number>-800</number>
                       </property>
                       <property name="maximum">
-                       <number>140</number>
+                       <number>800</number>
                       </property>
                       <property name="pageStep">
                        <number>1</number>
                       </property>
                       <property name="value">
-                       <number>-140</number>
+                       <number>-800</number>
                       </property>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
@@ -540,16 +540,16 @@
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Slice along z-axis : Bottom &amp;lt;- Top&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
                       <property name="minimum">
-                       <number>-110</number>
+                       <number>-800</number>
                       </property>
                       <property name="maximum">
-                       <number>110</number>
+                       <number>800</number>
                       </property>
                       <property name="pageStep">
                        <number>1</number>
                       </property>
                       <property name="value">
-                       <number>-110</number>
+                       <number>-800</number>
                       </property>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
@@ -584,16 +584,16 @@
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Slice along z-axis : Bottom -&amp;gt; Top&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
                       <property name="minimum">
-                       <number>-110</number>
+                       <number>-800</number>
                       </property>
                       <property name="maximum">
-                       <number>110</number>
+                       <number>800</number>
                       </property>
                       <property name="pageStep">
                        <number>1</number>
                       </property>
                       <property name="value">
-                       <number>-110</number>
+                       <number>-800</number>
                       </property>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
@@ -606,10 +606,10 @@
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Slice along x-axis : Left -&amp;gt; Right&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
                       <property name="minimum">
-                       <number>-110</number>
+                       <number>-800</number>
                       </property>
                       <property name="maximum">
-                       <number>110</number>
+                       <number>800</number>
                       </property>
                       <property name="singleStep">
                        <number>1</number>
@@ -618,7 +618,7 @@
                        <number>1</number>
                       </property>
                       <property name="value">
-                       <number>-110</number>
+                       <number>-800</number>
                       </property>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>

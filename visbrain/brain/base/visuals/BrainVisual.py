@@ -336,7 +336,8 @@ class BrainVisual(Visual):
                                vertices[:, 0, 0].max()),
                               (vertices[:, 1, 0].min(),
                                vertices[:, 1, 0].max()),
-                              (vertices[:, 2].min(), vertices[:, 2].max())]
+                              (vertices[:, 2].min(),
+                               vertices[:, 2].max())]
             self._vertsize = np.array(self._vertsize)
 
             # Find ratio for the camera :
