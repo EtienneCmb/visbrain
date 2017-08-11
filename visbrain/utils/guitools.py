@@ -241,6 +241,21 @@ class MouseEventControl(object):
             return False
 
 
+def disconnect_all(obj):
+    """Disconnect all functions related to an PyQt object.
+
+    Parameters
+    ----------
+    obj : PyQt object
+        The PyQt object to disconnect.
+    """
+    while True:
+        try:
+            obj.disconnect()
+        except TypeError:
+            break
+
+
 def extend_combo_list(cbox, item, reconnect=None):
     """Extend a QtComboList with a new item.
 
