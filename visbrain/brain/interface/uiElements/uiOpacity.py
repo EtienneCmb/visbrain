@@ -42,21 +42,22 @@ class uiOpacity(object):
     def _fcn_minmax_slice(self):
         """Set minimum / maximum of slices."""
         minfact = 1.2
+        vert = vert = self.atlas.mesh._vertFaces
         # X-axis :
-        self.xSlices.setMinimum(self.atlas.vert[..., 0].min() * minfact)
-        self.xSlices.setMaximum(self.atlas.vert[..., 0].max() * minfact)
-        self.xSlices_2.setMinimum(self.atlas.vert[..., 0].min() * minfact)
-        self.xSlices_2.setMaximum(self.atlas.vert[..., 0].max() * minfact)
+        self.xSlices.setMinimum(vert[..., 0].min() * minfact)
+        self.xSlices.setMaximum(vert[..., 0].max() * minfact)
+        self.xSlices_2.setMinimum(vert[..., 0].min() * minfact)
+        self.xSlices_2.setMaximum(vert[..., 0].max() * minfact)
         # Y-axis :
-        self.ySlices.setMinimum(self.atlas.vert[..., 1].min() * minfact)
-        self.ySlices.setMaximum(self.atlas.vert[..., 1].max() * minfact)
-        self.ySlices_2.setMinimum(self.atlas.vert[..., 1].min() * minfact)
-        self.ySlices_2.setMaximum(self.atlas.vert[..., 1].max() * minfact)
+        self.ySlices.setMinimum(vert[..., 1].min() * minfact)
+        self.ySlices.setMaximum(vert[..., 1].max() * minfact)
+        self.ySlices_2.setMinimum(vert[..., 1].min() * minfact)
+        self.ySlices_2.setMaximum(vert[..., 1].max() * minfact)
         # Z-axis :
-        self.zSlices.setMinimum(self.atlas.vert[:, 2].min() * minfact)
-        self.zSlices.setMaximum(self.atlas.vert[:, 2].max() * minfact)
-        self.zSlices_2.setMinimum(self.atlas.vert[:, 2].min() * minfact)
-        self.zSlices_2.setMaximum(self.atlas.vert[:, 2].max() * minfact)
+        self.zSlices.setMinimum(vert[:, 2].min() * minfact)
+        self.zSlices.setMaximum(vert[:, 2].max() * minfact)
+        self.zSlices_2.setMinimum(vert[:, 2].min() * minfact)
+        self.zSlices_2.setMaximum(vert[:, 2].max() * minfact)
 
     def _fcn_opacity(self):
         """Change opacity of objects using the slider.
@@ -134,7 +135,7 @@ class uiOpacity(object):
             # Reset mask :
             self.atlas.mask = np.zeros_like(self.atlas.mask)
             # Find vertices to remove :
-            tohide = eval(formatstr.format(obj='self.atlas.vert'))
+            tohide = eval(formatstr.format(obj='self.atlas.mesh._vertFaces'))
             # Update mask :
             self.atlas.mask[tohide] = True
             # Get vertices and color :
