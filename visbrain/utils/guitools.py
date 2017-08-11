@@ -309,6 +309,12 @@ def set_combo_list_index(cbox, idx, fcn=None):
 
     Parameters
     ----------
+    cbox : PyQt.QtComboList
+        The PyQt combo list object.
+    idx : float/string
+        Index or name of the item.
+    fcn : list | None
+        List of functions to disconnect then reconnect.
     """
     if isinstance(fcn, list):
         disconnect_all(cbox)
