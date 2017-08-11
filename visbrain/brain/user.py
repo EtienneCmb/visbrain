@@ -15,7 +15,7 @@ from .base.ConnectBase import ConnectBase
 from .base.TimeSeriesBase import TimeSeriesBase
 from .base.PicBase import PicBase
 from ..utils import (color2vb, AddMesh, extend_combo_list,
-                     get_combo_list_index)
+                     get_combo_list_index, set_combo_list_index)
 
 __all__ = ('BrainUserMethods')
 
@@ -239,7 +239,8 @@ class BrainUserMethods(object):
     #                                  BRAIN
     # =========================================================================
     # =========================================================================
-    def brain_control(self, template=None, show=True, hemisphere=None):
+    def brain_control(self, template=None, hemisphere=None, transparent=None,
+                      alpha=None, visible=True):
         """Control the type of brain to use.
 
         Use this method to switch between several brain templates. Then, you
@@ -250,10 +251,10 @@ class BrainUserMethods(object):
         template : string | None
             Template to use for the MNI brain. Use either 'B1', 'B2' or
             'B3'.
-        show : bool | True
+        visible : bool | True
             Show (True) or hide (False) the MNI brain.
-        hemisphere : string | None
-            Define if you want to see only 'left' or 'right'hemisphere.
+        hemisphere : {'both', 'left', 'ritgh'}
+            Define if you want to see only 'left' or 'right' hemisphere.
             Otherwise use 'both'.
 
         Examples
@@ -264,72 +265,46 @@ class BrainUserMethods(object):
         >>> vb.brain_control(template='B3', hemisphere='right')
         >>> # Show the GUI :
         >>> vb.show()
-        """
-        self._brain_control('', template=template, show=show,
-                            hemisphere=hemisphere)
-
-    def brain_opacity(self, alpha=0.1, show=True):
-        """Set the level of transparency of the brain.
-
-        Parameters
-        ----------
-        alpha : float | 0.1
-            Transparency level (usually between 0 and 1).
-        show : bool | True
-            Specify if the brain has be shown.
-
-        Examples
-        --------
-        >>> # Define a Brain instance :
-        >>> vb = Brain()
-        >>> # Set transparency :
-        >>> vb.brain_opacity(alpha=0.1, show=True)
-        >>> # Show the GUI :
-        >>> vb.show()
-
-        Notes
-        -----
-        .. note:: The brain opacity is only avaible for internal projection
-        """
-        # Force to have internal projection :
-        self.atlas.mesh.projection('internal')
-        self.atlas.mesh.visible = show
-        self.menuDispBrain.setChecked(show)
-        self.atlas.mesh.set_alpha(alpha)
-
-    def light_reflection(self, reflect_on=None):
-        """Change how light is reflected onto the brain.
-
-        This function can be used to see either the surface only (external) or
-        deep voxels inside the brain (internal).
-
-        Parameters
-        ----------
-        reflect_on : {'internal', 'external'}
-            Choose either between 'internal' or 'external'. Inside the
-            graphical interface, this can be done using the shortcut 3.
-
-        Examples
-        --------
-        >>> # Define a Brain instance :
-        >>> vb = Brain()
-        >>> # Display the external surface :
-        >>> vb.light_reflection(reflect_on='external')
-        >>> # Show the GUI :
-        >>> vb.show()
 
         See also
         --------
-        brain_control : change brain template or change hemisphere
-        brain_opacity : change brain opacity
+        brain_list : Get the list of avaible mesh brain templates.
         """
-        if reflect_on is not None:
-            if reflect_on not in ['internal', 'external']:
-                raise ValueError("The reflect_on parameter must be either "
-                                 "'internal' or 'external'")
-            else:
-                self._brainTransp.setChecked(reflect_on == 'internal')
+        # Template :
+        if template in self.brain_list():
+            set_combo_list_index(self._brainTemplate, template,
+                                 [self._brain_control])
+        # Hemisphere :
+        if hemisphere in ['both', 'left', 'right']:
+            set_combo_list_index(self._brainPickHemi, hemisphere,
+                                 [self._brain_control])
+        # Opacity :
+        if isinstance(alpha, float):
+            transparent = True
+            self.atlas.mesh.set_alpha(alpha)
+        # Transparent / opaque :
+        if isinstance(transparent, bool):
+            self._brainTransp.setChecked(transparent)
+        # Visible :
+        self.menuDispBrain.setChecked(visible)
+        self._brain_control()
         self._light_reflection()
+
+    def brain_list(self):
+        """Get the list of avaible mesh brain templates.
+
+        Returns
+        -------
+        meshes : list
+            List of avaible mesh brain templates.
+
+        Examples
+        --------
+        >>> # Define a Brain instance :
+        >>> vb = Brain()
+        >>> print(vb.brain_list())
+        """
+        return self.atlas._surf_list
 
     def add_mesh(self, name, vertices, faces, **kwargs):
         """Add a mesh to the scene.
@@ -602,7 +577,8 @@ class BrainUserMethods(object):
 
         # Display sources that are either in the inside / outside the brain :
         elif select in ['inside', 'outside']:
-            self.sources._isInside(self.atlas.vert, select, self.progressbar)
+            vert = self.atlas.mesh.get_vertices
+            self.sources._isInside(vert, select, self.progressbar)
 
         else:
             raise ValueError("The select parameter must either be 'all', "
