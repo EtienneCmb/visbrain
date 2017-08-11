@@ -10,8 +10,8 @@ from .color import color2vb, color2tuple
 
 __all__ = ('slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
            'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines',
-           'extend_combo_list', 'get_combo_list_index', 'toggle_enable_tab',
-           'set_widget_size')
+           'disconnect_all', 'extend_combo_list', 'get_combo_list_index',
+           'set_combo_list_index', 'toggle_enable_tab', 'set_widget_size')
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -302,6 +302,22 @@ def get_combo_list_index(cbox, name):
     # Get the list of current items and extend it :
     all_items = [cbox.itemText(i) for i in range(cbox.count())]
     return all_items.index(name)
+
+
+def set_combo_list_index(cbox, idx, fcn=None):
+    """Set combo list index without trigger.
+
+    Parameters
+    ----------
+    """
+    if isinstance(fcn, list):
+        disconnect_all(cbox)
+    if isinstance(idx, str):
+        idx = get_combo_list_index(cbox, idx)
+    cbox.setCurrentIndex(idx)
+    if isinstance(fcn, list):
+        for k in fcn:
+            cbox.currentIndexChanged.connect(k)
 
 
 def toggle_enable_tab(tab, name, enable=False):
