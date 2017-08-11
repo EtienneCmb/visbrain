@@ -51,7 +51,7 @@ vb.add_volume('Volume2', data2, transform=tf2)
 print('Add Volume2 to the list of volumes : ', vb.volume_list())
 
 # Set the cross-section to be centered on the last source :
-vb.set_cross_sections(pos=s_xyz[3, :], volume='Volume2', cmap='gist_stern',
-                      split_view=True)
+vb.cross_sections_control(pos=s_xyz[3, :], volume='Volume2', cmap='gist_stern',
+                          split_view=True)
 
 vb.show()

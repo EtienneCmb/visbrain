@@ -27,7 +27,7 @@ vb.rotate(fixed='axial_0')
 # don't know what is the index of your ROI, open the GUI and look at the
 # number in front of the name. Otherwise, un comment the following line :
 # print(vb.roi_list('AAL'))
-vb.roi_plot(selection=[76, 77], subdivision='AAL', smooth=5, name='thalamus')
+vb.roi_control(selection=[76, 77], subdivision='AAL', smooth=5, name='thalamus')
 # Project the source's activity onto ROI directly :
 vb.cortical_projection(project_on='thalamus', cmap='Spectral_r',
                        clim=(100, 2300))

@@ -2,9 +2,9 @@
 Brain control
 =============
 
-This example basic brain controls such as the choice of the template to use,
-the hemisphere to display and transparency level. By default, Visbrain come
-with three different templates (B1, B2 and B3).
+Control the brain such as the choice of the template to use, the hemisphere
+to display and transparency level. By default, Visbrain come with three
+different templates (B1, B2 and B3).
 
 This file also show how to rotate the using either predefined rotations
 (axial, sagittal or coronal) or custom rotation. Uncomment lines to be

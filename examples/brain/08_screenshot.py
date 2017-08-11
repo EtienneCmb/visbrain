@@ -51,7 +51,7 @@ vb.light_reflection('external')   # Make the brain opaque
 vb.screenshot('screenshot2.tiff', region=region)
 
 # Make a screenshot of ROI :
-vb.roi_plot(selection=[4, 6, 40],       # Display Brodmann area 4 and 6 :
+vb.roi_control(selection=[4, 6, 40],       # Display Brodmann area 4 and 6 :
             subdivision='brod',
             smooth=5)
 vb.sources_colormap(cmap='Spectral_r')
