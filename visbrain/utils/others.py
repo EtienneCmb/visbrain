@@ -1,26 +1,32 @@
 """This script contains some other utility functions."""
 
+import sys
+import os
 from warnings import warn
+import numpy as np
 
-__all__ = ['vis_args', 'check_downsampling']
+from vispy.geometry import MeshData
+
+__all__ = ('vis_args', 'check_downsampling', 'vispy_array', 'convert_meshdata',
+           'add_brain_template', 'remove_brain_template')
 
 
 def vis_args(kw, prefix, ignore=[]):
     """Extract arguments that contain a prefix from a dictionary.
 
-    Args:
-        kw: dict
-            The dictionary of arguments
+    Parameters
+    ----------
+    kw : dict
+        The dictionary of arguments
+    prefix : string
+        The prefix to use (something like 'nd_', 'cb_'...)
 
-        prefix: string
-            The prefix to use (something like 'nd_', 'cb_'...)
-
-    Returns:
-        args: dict
-            The dictionary which contain aguments starting with prefix.
-
-        others: dict
-            A dictionary with all other arguments.
+    Returns
+    -------
+    args : dict
+        The dictionary which contain aguments starting with prefix.
+    others : dict
+        A dictionary with all other arguments.
     """
     # Create two dictionaries (for usefull args and others) :
     args, others = {}, {}
@@ -38,16 +44,17 @@ def vis_args(kw, prefix, ignore=[]):
 def check_downsampling(sf, ds):
     """Check the down-sampling frequency and return the most appropriate one.
 
-    Args:
-        sf: float
-            The sampling frequency
+    Parameters
+    ----------
+    sf : float
+        The sampling frequency
+    ds : float
+        The desired down-sampling frequency.
 
-        ds: float
-            The desired down-sampling frequency.
-
-    Return:
-        dsout: float
-            The most appropriate down-sampling frequency.
+    Returns
+    -------
+    dsout : float
+        The most appropriate down-sampling frequency.
     """
     if sf % ds != 0:
         dsbck = ds
