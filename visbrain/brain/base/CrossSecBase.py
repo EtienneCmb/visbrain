@@ -150,7 +150,7 @@ class CrossSectionsSplit(object):
         m : float | 10.
             Margin to use.
         """
-        st = 'Slice : {} | {} : {}'
+        st = 'Slice {} : {} | Pos {} : {}'
         parent = self._parent_sp
         # _____________________ SAGITTAL _____________________
         # Camera :
@@ -159,7 +159,7 @@ class CrossSectionsSplit(object):
         parent['Sagit'].camera.aspect = nr / nc
         # Text :
         self._cspTxtSagit.pos = (-nr - m, -m / 2, 0)
-        self._cspTxtSagit.text = st.format(xyz[0], 'x', pos[0])
+        self._cspTxtSagit.text = st.format('x', xyz[0], 'x', pos[0])
 
         # _____________________ CORONAL _____________________
         # Camera :
@@ -168,7 +168,7 @@ class CrossSectionsSplit(object):
         parent['Coron'].camera.aspect = nr / nc
         # Text :
         self._cspTxtCoron.pos = (-nr - m, -m / 2, 0)
-        self._cspTxtCoron.text = st.format(xyz[1], 'y', pos[1])
+        self._cspTxtCoron.text = st.format('y', xyz[1], 'y', pos[1])
 
         # _____________________ AXIAL _____________________
         # Camera :
@@ -177,7 +177,7 @@ class CrossSectionsSplit(object):
         parent['Axial'].camera.aspect = nc / nr
         # Text :
         self._cspTxtAxial.pos = (-nc - m, -nr - m / 2, 0)
-        self._cspTxtAxial.text = st.format(xyz[2], 'z', pos[2])
+        self._cspTxtAxial.text = st.format('z', xyz[2], 'z', pos[2])
 
 
 class CrossSections(CrossSectionsSplit):
