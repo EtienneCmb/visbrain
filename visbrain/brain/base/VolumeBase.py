@@ -63,7 +63,7 @@ class Volume3D(object):
         self._cmaps['OpaqueGrays'] = OpaqueGrays()
         # Create 3-D volume :
         vol = np.zeros((1, 1, 1), dtype=np.float32)
-        self.vol3d = visu.Volume(vol, parent=self._node_vol,
+        self.vol3d = visu.Volume(vol, parent=self._node_vol, threshold=0.,
                                  cmap=self._cmaps[cmap])
 
     def set_vol_data(self, method='mip', update=True, cmap='OpaqueGrays',
@@ -82,12 +82,13 @@ class Volume3D(object):
         # Update bol :
         if update or (self.vol3d._vol_shape == (1, 1, 1)):
             self.vol3d.set_data(np.transpose(self.vol, (2, 1, 0)))
-        self.vol3d.method = method
+        if method in ['mip', 'translucent', 'additive', 'iso']:
+            self.vol3d.method = method
+        if method == 'iso':
+            self.vol3d.threshold = threshold
         if cmap is not self._cmap_vol:
             self.vol3d.cmap = self._cmaps[cmap]
             self._cmap_vol = cmap
-        if method == 'iso':
-            self.vol3d.threshold = threshold
 
     # ----------- VISIBLE_VOL -----------
     @property
