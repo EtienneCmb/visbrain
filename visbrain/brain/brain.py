@@ -55,22 +55,18 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
 
     Parameters
     ----------
-    a_color : tuple | (1,1,1)
-        RGB colors of the MNI brain.
+    a_color : tuple | (1., 1., 1.)
+        RGB colors of the MNI brain (default is white).
 
     a_opacity : int/float | 1.
         Transparency of the MNI brain. Must be between 0 and 1.
 
-    a_proj : string | 'internal'
+    a_proj : string | {'internal', 'external'}
         Turn a_proj to 'internal' for internal projection or 'external' for
         cortical rendering.
 
     a_template : string | 'B1'
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
-
-    a_vertices / a_faces : array_like | None
-        Specify an alternative surface to use. Both parameters must be a 2D
-        array, respectively of shapes (N_vertices, 3) and (N_faces, 3)
 
     s_xyz : array_like | None
         Array of talairach or MNI coordinates to display sources
@@ -245,10 +241,10 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     l_color : tuple | (1., 1., 1., 1.)
         Color of the light
 
-    l_coefAmbient : float | 0.05
+    l_ambient : float | 0.05
         Coefficient for the ambient light
 
-    l_coefSpecular : float | 0.5
+    l_specular : float | 0.5
         Coefficient for the specular light
 
     Examples
@@ -284,10 +280,8 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         Save a configuration file.
     brain_control()
         Control the type of brain to use.
-    brain_opacity()
-        Set the level of transparency of the brain.
-    light_reflection()
-        Change how light is reflected onto the brain
+    brain_list()
+        Get the list of avaible mesh brain templates.
     add_mesh()
         Add a mesh to the scene.
     add_volume()
