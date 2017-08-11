@@ -5,7 +5,7 @@ commands for the user
 """
 import numpy as np
 
-from ....utils import mpl_cmap, mpl_cmap_index, get_combo_list_index
+from ....utils import mpl_cmap, mpl_cmap_index
 
 __all__ = ['uiAtlas']
 
@@ -350,8 +350,8 @@ class uiAtlas(object):
         kwargs['cmap'] = str(self._volCmap.currentText())
         # Set threshold :
         if kwargs['method'] == 'iso':
-            kwargs['threshold'] = self._volIsoTh.value()
             self._volIsoTh.setEnabled(True)
+            kwargs['threshold'] = self._volIsoTh.value()
         else:
             self._volIsoTh.setEnabled(False)
         # Set this data volume :
