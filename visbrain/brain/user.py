@@ -14,7 +14,7 @@ from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
 from .base.TimeSeriesBase import TimeSeriesBase
 from .base.PicBase import PicBase
-from ..utils import (color2vb, AddMesh, extend_combo_list,
+from ..utils import (color2vb, AddMesh, extend_combo_list, disconnect_all,
                      get_combo_list_index, set_combo_list_index)
 
 __all__ = ('BrainUserMethods')
@@ -397,10 +397,10 @@ class BrainUserMethods(object):
         """
         return list(self.volume._vols.keys())
 
-    def set_cross_sections(self, pos=(0., 0., 0.), center=None,
-                           volume='Brodmann', split_view=True,
-                           transparent=True, cmap='gray', visible=True):
-        """Set the cross-section position.
+    def cross_sections_control(self, pos=(0., 0., 0.), center=None,
+                               volume='Brodmann', split_view=True,
+                               transparent=True, cmap='gray', visible=True):
+        """Control the cross-section.
 
         The three sections (sagittal, coronal and axial) can be defined in two
         ways :
@@ -436,8 +436,7 @@ class BrainUserMethods(object):
         volume_list : Get the list of volumes avaible.
         """
         # Set volume :
-        idx = get_combo_list_index(self._csDiv, volume)
-        self._csDiv.setCurrentIndex(idx)
+        set_combo_list_index(self._csDiv, volume, self._fcn_crossec_change)
         # Get cross-center :
         if center is not None:
             dx, dy, dz = center
@@ -451,8 +450,7 @@ class BrainUserMethods(object):
         self._csCoron.setValue(dy)
         self._csAxial.setValue(dz)
         # Set colormap :
-        idx = get_combo_list_index(self._csCmap, cmap)
-        self._csCmap.setCurrentIndex(idx)
+        set_combo_list_index(self._csCmap, cmap, self._fcn_crossec_move)
         # Set split view, transparent and visible :
         self._csSplit.setChecked(split_view)
         self._csTransp.setChecked(transparent)
@@ -460,15 +458,47 @@ class BrainUserMethods(object):
         self.menuDispCrossec.setChecked(visible)
         self._fcn_crossec_split()
 
+    def volume_control(self, volume='Brodmann', rendering='mip',
+                       cmap='OpaqueGrays', threshold=0., visible=True):
+        """
+
+        Parameters
+        ----------
+        volume : string | 'Brodmann'
+            Name of the volume to use. See the volume_list() method to get the
+            list of volumes avaible.
+        rendering : {'mip', 'translucent', 'additive', 'iso'}
+            description
+        """
+        # Set volume :
+        if volume in self.volume_list():
+            set_combo_list_index(self._volDiv, volume,
+                                 [self._fcn_vol3d_change])
+        # Threshold :
+        disconnect_all(self._volIsoTh)
+        self._volIsoTh.setValue(threshold)
+        self._volIsoTh.valueChanged.connect(self._fcn_vol3d_change)
+        self._volIsoTh.setKeyboardTracking(False)
+        # Set cmap :
+        set_combo_list_index(self._volCmap, cmap, [self._fcn_vol3d_change])
+        # Set rendering :
+        if rendering in ['mip', 'translucent', 'additive', 'iso']:
+            set_combo_list_index(self._volRendering, rendering,
+                                 [self._fcn_vol3d_change])
+        # Visible :
+        self.menuDispVol.setChecked(visible)
+        self.grpVol.setChecked(visible)
+        self._fcn_vol3d_change()
+
     # =========================================================================
     # =========================================================================
     #                              SOURCES
     # =========================================================================
     # =========================================================================
-    def sources_settings(self, data, color='#ab4652', symbol='disc',
-                         radiusmin=5., radiusmax=10., edgecolor=None,
-                         edgewidth=0.6, scaling=False, opacity=1.0, mask=None,
-                         maskcolor='gray'):
+    def sources_control(self, data, color='#ab4652', symbol='disc',
+                        radiusmin=5., radiusmax=10., edgecolor=None,
+                        edgewidth=0.6, scaling=False, opacity=1.0, mask=None,
+                        maskcolor='gray'):
         """Set data to sources and control source's properties.
 
         Parameters
@@ -513,7 +543,7 @@ class BrainUserMethods(object):
         >>> # Define some color :
         >>> color = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
         >>> # Set data and properties :
-        >>> vb.sources_settings(data=data, symbol='x', radiusmin=1.,
+        >>> vb.sources_control(data=data, symbol='x', radiusmin=1.,
         >>>                     radiusmax=20., color=color, edgecolor='orange',
         >>>                     edgewidth=2)
         >>> # Show the GUI :
@@ -636,7 +666,7 @@ class BrainUserMethods(object):
 
         See also
         --------
-        roi_plot : add a region of interest.
+        roi_control : add a region of interest.
         sources_colormap : Change the colormap properties.
         """
         # Update variables :
@@ -644,10 +674,10 @@ class BrainUserMethods(object):
         self._tprojecton = project_on
         self._tcontribute = contribute
         self._tprojectas = 'activity'
-        # Colormap control :
-        self.sources_colormap(**kwargs)
         # Run the corticale projection :
         self._sourcesProjection()
+        # Colormap control :
+        self.sources_colormap(**kwargs)
 
     def cortical_repartition(self, radius=10., project_on='brain',
                              contribute=False, **kwargs):
@@ -706,7 +736,7 @@ class BrainUserMethods(object):
         >>> # Define some random data :
         >>> data = 100 * np.random.rand(10)
         >>> # Set data and properties :
-        >>> vb.sources_settings(data=data)
+        >>> vb.sources_control(data=data)
         >>> # Run the cortical projection :
         >>> vb.cortical_projection()
         >>> # Set colormap proprties :
@@ -784,8 +814,8 @@ class BrainUserMethods(object):
     #                            TIME-SERIES
     # =========================================================================
     # =========================================================================
-    def time_series_settings(self, color=None, lw=None, amp=None, width=None,
-                             dxyz=None, visible=True):
+    def time_series_control(self, color=None, lw=None, amp=None, width=None,
+                            dxyz=None, visible=True):
         """Control time-series settings.
 
         Parameters
@@ -827,7 +857,7 @@ class BrainUserMethods(object):
     #                             PICTURES
     # =========================================================================
     # =========================================================================
-    def pictures_settings(self, width=None, height=None, dxyz=None, **kwargs):
+    def pictures_control(self, width=None, height=None, dxyz=None, **kwargs):
         """Control pictures settings.
 
         Parameters
@@ -868,8 +898,8 @@ class BrainUserMethods(object):
     #                            CONNECTIVITY
     # =========================================================================
     # =========================================================================
-    def connect_settings(self, colorby=None, dynamic=None, show=True,
-                         **kwargs):
+    def connect_control(self, colorby=None, dynamic=None, show=True,
+                        **kwargs):
         """Update connectivity object.
 
         Parameters
@@ -938,8 +968,8 @@ class BrainUserMethods(object):
     #                                 ROI
     # =========================================================================
     # =========================================================================
-    def roi_plot(self, selection=[], subdivision='Brodmann', smooth=3,
-                 name='roi'):
+    def roi_control(self, selection=[], subdivision='Brodmann', smooth=3,
+                    name='roi'):
         """Select Region Of Interest (ROI) to plot.
 
         Parameters
@@ -961,7 +991,7 @@ class BrainUserMethods(object):
         >>> # Define a Brain instance :
         >>> vb = Brain()
         >>> # Display brodmann area 4 and 6 :
-        >>> vb.roi_plot(selection=[4, 6], subdivision='Brodmann', smooth=5)
+        >>> vb.roi_control(selection=[4, 6], subdivision='Brodmann', smooth=5)
         >>> # Show the GUI :
         >>> vb.show()
 
@@ -1004,7 +1034,7 @@ class BrainUserMethods(object):
         >>> # Define a Brain instance :
         >>> vb = Brain()
         >>> # Display brodmann area 4 and 6 :
-        >>> vb.roi_plot(selection=[4, 6], subdivision='Brodmann')
+        >>> vb.roi_control(selection=[4, 6], subdivision='Brodmann')
         >>> # Display the external surface :
         >>> vb.roi_light_reflection(reflect_on='internal')
         >>> # Hide the brain :
@@ -1036,7 +1066,7 @@ class BrainUserMethods(object):
         >>> # Define a Brain instance :
         >>> vb = Brain()
         >>> # Display brodmann area 4 and 6 :
-        >>> vb.roi_plot(selection=[4, 6], subdivision='Brodmann')
+        >>> vb.roi_control(selection=[4, 6], subdivision='Brodmann')
         >>> # Set transparency :
         >>> vb.roi_opacity(alpha=0.1, show=True)
         >>> # Show the GUI :
@@ -1077,6 +1107,24 @@ class BrainUserMethods(object):
     #                             COLORBAR
     # =========================================================================
     # =========================================================================
+    def _cbar_item_is_enable(self, name):
+        """Test if an item is enabled.
+
+        Parameters
+        ----------
+        name : string, {'Projection', 'Connectivity', 'Pictures'}
+            Name of the colorbar object. If you want to control the colorbar of
+            either the cortical projection, use 'Projection'. And
+            'Connectivity' or 'Pictures' if defined.
+        """
+        avaibles = self.cbar_list()
+        if name in avaibles:
+            # Select the object :
+            self.cbqt.select(name)
+        else:
+            raise ValueError(name + " cannot be controlled. Use "
+                             "either : " + ", ".join(avaibles))
+
     def cbar_control(self, name, **kwargs):
         """Control the colorbar of a specific object.
 
@@ -1084,10 +1132,10 @@ class BrainUserMethods(object):
 
         Parameters
         ----------
-        name : string, {'Projection', 'Connectivity'}
+        name : string, {'Projection', 'Connectivity', 'Pictures'}
             Name of the colorbar object. If you want to control the colorbar of
             either the cortical projection, use 'Projection'. And
-            'Connectivity' for the colormap of connectivity (if defined).
+            'Connectivity' or 'Pictures' if defined.
         cmap : string | None
             Matplotlib colormap (like 'viridis', 'inferno'...).
         clim : tuple/list | None
@@ -1130,6 +1178,8 @@ class BrainUserMethods(object):
         ndigits : int | None
             Number of digits for the text.
         """
+        # Test if the item "name" is enabled :
+        self._cbar_item_is_enable(name)
         # Select the object :
         self.cbqt.select(name)
         # Define a CbarBase instance :
@@ -1138,14 +1188,50 @@ class BrainUserMethods(object):
                 self.cbqt.cbobjs._objs[name][k] = i
         self.cbqt._fcn_ChangeObj()
 
+    def cbar_select(self, name, visible=True):
+        """Select and disply a colorbar.
+
+        Parameters
+        ----------
+        name : string, {'Projection', 'Connectivity', 'Pictures'}
+            Name of the colorbar object. If you want to control the colorbar of
+            either the cortical projection, use 'Projection'. And
+            'Connectivity' or 'Pictures' if defined.
+        visible : bool | True
+            Set the colorbar of the object "name" visible.
+        """
+        # Test if the item "name" is enabled :
+        self._cbar_item_is_enable(name)
+        # Select the object :
+        self.cbqt.select(name)
+        # Display / hide the colorbar :
+        self.menuDispCbar.setChecked(visible)
+        self._fcn_menuCbar()
+
+    def cbar_list(self):
+        """Get the list of objects for which the colorbar can be controlled.
+
+        Returns
+        -------
+        cbobjs : list
+            List of objects for which the colorbar can be controlled.
+        """
+        obj = self.cbqt.cbui.object
+        allitems = [obj.itemText(i) for i in range(
+            obj.count()) if obj.model().item(i).isEnabled()]
+        return allitems
+
     def cbar_autoscale(self, name):
         """Autoscale the colorbar to the best limits.
 
         Parameters
         ----------
-        name : string, {'Projection', 'Connectivity'}
+        name : string, {'Projection', 'Connectivity', 'Pictures'}
             Name of the colorbar object. If you want to control the colorbar of
             either the cortical projection, use 'Projection'. And
-            'Connectivity' for the colormap of connectivity (if defined).
+            'Connectivity' or 'Pictures' if defined.
         """
+        # Test if the item "name" is enabled :
+        self._cbar_item_is_enable(name)
+        # Autoscale :
         self.cbqt._fcn_cbAutoscale(name=name)
