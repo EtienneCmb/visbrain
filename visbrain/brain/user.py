@@ -240,7 +240,7 @@ class BrainUserMethods(object):
     # =========================================================================
     # =========================================================================
     def brain_control(self, template=None, hemisphere=None, transparent=None,
-                      alpha=None, visible=True):
+                      alpha=None, color=None, visible=True):
         """Control the type of brain to use.
 
         Use this method to switch between several brain templates. Then, you
@@ -256,6 +256,14 @@ class BrainUserMethods(object):
         hemisphere : {'both', 'left', 'ritgh'}
             Define if you want to see only 'left' or 'right' hemisphere.
             Otherwise use 'both'.
+        transparent : bool | None
+            Set the brain transparent (True) or opaque (False).
+        alpha : float | None
+            Transparency level.
+        color : string/tuple | None
+            Brain color.
+        visible : bool | True
+            Display or hide the brain.
 
         Examples
         --------
@@ -270,14 +278,17 @@ class BrainUserMethods(object):
         --------
         brain_list : Get the list of avaible mesh brain templates.
         """
+        _brain_update = _light_update = False
         # Template :
         if template in self.brain_list():
             set_combo_list_index(self._brainTemplate, template,
                                  [self._brain_control])
+            _brain_update = True
         # Hemisphere :
         if hemisphere in ['both', 'left', 'right']:
             set_combo_list_index(self._brainPickHemi, hemisphere,
                                  [self._brain_control])
+            _brain_update = True
         # Opacity :
         if isinstance(alpha, float):
             transparent = True
@@ -285,10 +296,18 @@ class BrainUserMethods(object):
         # Transparent / opaque :
         if isinstance(transparent, bool):
             self._brainTransp.setChecked(transparent)
+            _light_update = True
         # Visible :
         self.menuDispBrain.setChecked(visible)
-        self._brain_control()
-        self._light_reflection()
+        self.atlas.mesh.visible = visible
+        # Update :
+        if _brain_update:
+            self._brain_control()
+        if _light_update:
+            self._light_reflection()
+        # Color :
+        if color is not None:
+            self.atlas.mesh.set_color(color=color)
 
     def brain_list(self):
         """Get the list of avaible mesh brain templates.
