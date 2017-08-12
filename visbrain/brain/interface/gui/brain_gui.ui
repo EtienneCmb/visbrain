@@ -72,7 +72,7 @@
           <bool>true</bool>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <property name="documentMode">
           <bool>true</bool>
@@ -1752,21 +1752,6 @@ color</string>
                       <property name="toolTip">
                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Switch brain template.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Input parameter : &lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;a_template&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                       </property>
-                      <item>
-                       <property name="text">
-                        <string>B1</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>B2</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>B3</string>
-                       </property>
-                      </item>
                      </widget>
                     </item>
                     <item row="2" column="1">
@@ -1789,17 +1774,17 @@ color</string>
                       </property>
                       <item>
                        <property name="text">
-                        <string>Both hemisphere</string>
+                        <string>both</string>
                        </property>
                       </item>
                       <item>
                        <property name="text">
-                        <string>Left hemisphere</string>
+                        <string>left</string>
                        </property>
                       </item>
                       <item>
                        <property name="text">
-                        <string>Right hemisphere</string>
+                        <string>right</string>
                        </property>
                       </item>
                      </widget>
@@ -2464,6 +2449,9 @@ type</string>
                      <widget class="QDoubleSpinBox" name="_volIsoTh">
                       <property name="decimals">
                        <number>4</number>
+                      </property>
+                      <property name="minimum">
+                       <double>0.010000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>0.999900000000000</double>

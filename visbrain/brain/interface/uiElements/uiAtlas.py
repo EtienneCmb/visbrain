@@ -22,12 +22,14 @@ class uiAtlas(object):
         #######################################################################
         #                              BRAIN
         #######################################################################
-        # Brain control :
-        self._brainPickHemi.currentIndexChanged.connect(self._brain_control)
-        # Brain template to use :
-        self._brainTemplate.setCurrentIndex(int(self.atlas.template[-1]) - 1)
+        # Template :
+        self._brainTemplate.addItems(self.atlas._surf_list)
+        idx = self.atlas._surf_list.index(self.atlas.template)
+        self._brainTemplate.setCurrentIndex(idx)
         self._brainTemplate.currentIndexChanged.connect(self._brain_control)
-        # Structure :
+        # Hemisphere :
+        self._brainPickHemi.currentIndexChanged.connect(self._brain_control)
+        # Transparent :
         self._brainTransp.clicked.connect(self._light_reflection)
 
         #######################################################################
@@ -98,64 +100,23 @@ class uiAtlas(object):
     #                                 BRAIN
     ###########################################################################
     ###########################################################################
-    def _brain_control(self, _, template=None, show=True, hemisphere=None):
-        """Control the type of brain to use.
+    def _brain_control(self):
+        """Control the type of brain to use."""
+        # _____________________ TEMPLATE _____________________
+        template = str(self._brainTemplate.currentText())
+        hemisphere = str(self._brainPickHemi.currentText())
+        self.atlas.set_data(template, hemisphere)
 
-        Kargs:
-            template: string, optional, (def: None)
-                Template to use for the MNI brain. Use either 'B1', 'B2' or
-                'B3'.
-
-            show: bool, optional, (def: True)
-                Show (True) or hide (False) the MNI brain.
-
-            hemisphere: string, optional, (def: None)
-                Define if you want to see only 'left' or 'right'hemisphere.
-                Otherwise use 'both'.
-        """
-        # Template :
-        if template is not None:
-            if template not in ['B1', 'B2', 'B3']:
-                raise ValueError("The template parameter must be either 'B1', "
-                                 "'B2 or 'B3'")
-            else:
-                self._brainTemplate.setCurrentIndex(int(template[-1]) - 1)
-        else:
-            self.atlas.template = str(self._brainTemplate.currentText())
-            self._cleanProj()
-
-        # Show / hide MNI :
-        self.menuDispBrain.setChecked(show)
+        # _____________________ VISIBLE _____________________
         self.atlas.mesh.visible = self.menuDispBrain.isChecked()
 
-        # Hemisphere :
-        if hemisphere is not None:
-            if hemisphere not in ['both', 'left', 'right']:
-                raise ValueError("The hemisphere parameter must be either "
-                                 "'both', 'left' or 'right'")
-            else:
-                if hemisphere is 'both':
-                    self._brainPickHemi.setCurrentIndex(0)
-                elif hemisphere is 'left':
-                    self._brainPickHemi.setCurrentIndex(1)
-                elif hemisphere is 'rigth':
-                    self._brainPickHemi.setCurrentIndex(2)
-                self.atlas.reload(hemisphere=hemisphere)
-        else:
-            current_hemi = int(self._brainPickHemi.currentIndex())
-            if current_hemi == 0:
-                self.atlas.reload(hemisphere='both')
-            elif current_hemi == 1:
-                self.atlas.reload(hemisphere='left')
-            elif current_hemi == 2:
-                self.atlas.reload(hemisphere='right')
-            self._cleanProj()
-
-        # Update transformation :
-        self._vbNode.transform = self.atlas.transform
-
-        # Update slice limits :
+        # _____________________ RELATED _____________________
+        self._cleanProj()
         self._fcn_minmax_slice()
+
+        # _____________________ TRANSFORMATION _____________________
+        self._vbNode.transform = self.atlas.mesh._btransform
+        self._vbNode.update()
 
     def _light_reflection(self):
         """Change how light is reflected onto the brain.
@@ -389,8 +350,8 @@ class uiAtlas(object):
         kwargs['cmap'] = str(self._volCmap.currentText())
         # Set threshold :
         if kwargs['method'] == 'iso':
-            kwargs['threshold'] = self._volIsoTh.value()
             self._volIsoTh.setEnabled(True)
+            kwargs['threshold'] = self._volIsoTh.value()
         else:
             self._volIsoTh.setEnabled(False)
         # Set this data volume :

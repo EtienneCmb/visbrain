@@ -121,4 +121,4 @@ class base(Projections):
         # scene.visuals.XYZAxis(parent=self._vbNode)
 
         # Add a rescale / translate transformation to the Node :
-        self._vbNode.transform = self.atlas.transform
+        self._vbNode.transform = self.atlas.mesh._btransform

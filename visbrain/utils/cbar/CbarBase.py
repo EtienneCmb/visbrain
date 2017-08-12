@@ -91,7 +91,7 @@ class CbarBase(CbarArgs):
         Border width.
     limtxt : bool | True
         Display vmin/vmax text.
-    bgcolor : tuple/string | (.1, .1, .1)
+    bgcolor : tuple/string | (0., 0., 0.)
         Background color of the colorbar canvas.
     ndigits : int | 2
         Number of digits for the text.
@@ -101,7 +101,7 @@ class CbarBase(CbarArgs):
                  vmax=None, isvmax=False, under='gray', over='red', cblabel='',
                  cbtxtsz=5., cbtxtsh=2.3, txtcolor='white', txtsz=3.,
                  txtsh=1.2, width=.17, border=True, bw=2., limtxt=True,
-                 bgcolor=(.1, .1, .1), ndigits=2, minmax=None, fcn=None,
+                 bgcolor=(0., 0., 0.), ndigits=2, minmax=None, fcn=None,
                  minmaxfcn=None):
         """Init."""
         CbarArgs.__init__(self, cmap, clim, isvmin, vmin, isvmax, vmax, under,

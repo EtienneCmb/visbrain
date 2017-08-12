@@ -55,22 +55,18 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
 
     Parameters
     ----------
-    a_color : tuple | (1,1,1)
-        RGB colors of the MNI brain.
+    a_color : tuple | (1., 1., 1.)
+        RGB colors of the MNI brain (default is white).
 
     a_opacity : int/float | 1.
         Transparency of the MNI brain. Must be between 0 and 1.
 
-    a_proj : string | 'internal'
+    a_proj : string | {'internal', 'external'}
         Turn a_proj to 'internal' for internal projection or 'external' for
         cortical rendering.
 
     a_template : string | 'B1'
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
-
-    a_vertices / a_faces : array_like | None
-        Specify an alternative surface to use. Both parameters must be a 2D
-        array, respectively of shapes (N_vertices, 3) and (N_faces, 3)
 
     s_xyz : array_like | None
         Array of talairach or MNI coordinates to display sources
@@ -245,10 +241,10 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     l_color : tuple | (1., 1., 1., 1.)
         Color of the light
 
-    l_coefAmbient : float | 0.05
+    l_ambient : float | 0.05
         Coefficient for the ambient light
 
-    l_coefSpecular : float | 0.5
+    l_specular : float | 0.5
         Coefficient for the specular light
 
     Examples
@@ -284,19 +280,17 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         Save a configuration file.
     brain_control()
         Control the type of brain to use.
-    brain_opacity()
-        Set the level of transparency of the brain.
-    light_reflection()
-        Change how light is reflected onto the brain
+    brain_list()
+        Get the list of avaible mesh brain templates.
     add_mesh()
         Add a mesh to the scene.
     add_volume()
         Add a new volume to the interface.
     volume_list()
         Get the list of volumes avaible.
-    set_cross_sections()
+    cross_sections_control()
         Set the cross-section position.
-    sources_settings()
+    sources_control()
         Set data to sources and control source's properties.
     sources_opacity()
         Set the level of transparency of sources.
@@ -314,19 +308,19 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         Convert a set of sources into a convex hull.
     add_sources()
         Add a supplementar source's object.
-    time_series_settings()
+    time_series_control()
         Control time-series settings.
     add_time_series()
         Add time-series (TS) object.
-    pictures_settings()
+    pictures_control()
         Control pictures settings.
     add_pictures()
         Add pictures object.
-    connect_settings()
+    connect_control()
         Update connectivity object.
     add_connect()
         Add a supplementar connectivity object.
-    roi_plot()
+    roi_control()
         Select Region Of Interest (ROI) to plot.
     roi_light_reflection()
         Change how light is reflecting onto roi.
@@ -336,8 +330,14 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         Get the list of supported ROI.
     cbar_control()
         Control the colorbar of a specific object.
+    cbar_select()
+        Select and disply a colorbar.
+    cbar_list()
+        Get the list of objects for which the colorbar can be controlled.
     cbar_autoscale()
         Autoscale the colorbar to the best limits.
+    cbar_export()
+        Export colorbars in a text file or in a dictionary.
     """
 
     def __init__(self, *args, **kwargs):

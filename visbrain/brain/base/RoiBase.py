@@ -177,13 +177,15 @@ class RoiBase(object):
     def _smooth(self, data):
         """Volume smoothing.
 
-        Args:
-            data: np.ndarray
-                Data volume (M, N, P)
+        Parameters
+        ----------
+        data : array_like
+            Data volume (M, N, P)
 
-        Return:
-            data_sm: np.ndarray
-                The smoothed data with the same shape as the data (M, N, P)
+        Returns
+        -------
+        data_sm : array_like
+            The smoothed data with the same shape as the data (M, N, P)
         """
         if self._smooth_roi >= 3:
             # Define smooth arguments :
@@ -201,15 +203,13 @@ class RoiBase(object):
         """
         if not hasattr(self, 'mesh'):
             self.mesh = BrainMesh(vertices=self.vert, faces=self.faces,
-                                  vertex_colors=self.vertex_colors,
                                   scale_factor=1., name=self.name_roi,
                                   recenter=False, parent=self._parent,
                                   vertfcn=self.transform)
             self.name_roi = 'ROI'
         else:
-            # Clean the mesh :
-            self.mesh.set_data(vertices=self.vert, faces=self.faces,
-                               vertex_colors=self.vertex_colors)
+            self.mesh.set_data(vertices=self.vert, faces=self.faces)
+        self.mesh.set_color(self.vertex_colors)
 
     def _get_idx_mask(self, index):
         """Get a boolean array where each structure is located.
@@ -217,14 +217,16 @@ class RoiBase(object):
         For a list of index, this function return where those index are
         located.
 
-        Args:
-            index: list
-                List of index. Each index must be an integer. If this parameter
-                is None, the entire list is returned.
+        Parameters
+        ----------
+        index : list
+            List of index. Each index must be an integer. If this parameter
+            is None, the entire list is returned.
 
-        Return:
-            mask: np.ndarray
-                An array of boolean values.
+        Returns
+        -------
+        mask : array_like
+            An array of boolean values.
         """
         # Get list of unique index :
         uindex = np.unique(self._color_idx)
@@ -252,15 +254,14 @@ class RoiBase(object):
 
         This method can be used to set the transparency of deep structures.
 
-        Args:
-            alpha: float
-                The transparency level. This number must be between 0 and 1.
-
-        Kargs:
-            index: list, optional, (def: None)
-                List of structures to modify their transparency. This parameter
-                must be a list of integers. If index is None, the transparency
-                is applied to all structures.
+        Parameters
+        ----------
+        alpha : float
+            The transparency level. This number must be between 0 and 1.
+        index : list | None
+            List of structures to modify their transparency. This parameter
+            must be a list of integers. If index is None, the transparency
+            is applied to all structures.
         """
         # Get corresponding index of areas :
         mask = self._get_idx_mask(index)
@@ -272,16 +273,15 @@ class RoiBase(object):
 
         This method can be used to set the color of deep structures.
 
-        Args:
-            color: string/tuple
-                The color to use. This parameter can either be a matplotlib
-                color or a RGB tuple.
-
-        Kargs:
-            index: list, optional, (def: None)
-                List of structures to modify their color. This parameter must
-                be a list of integers. If index is None, the color is applied
-                to all structures.
+        Parameters
+        ----------
+        color: string/tuple
+            The color to use. This parameter can either be a matplotlib
+            color or a RGB tuple.
+        index : list | None
+            List of structures to modify their color. This parameter must
+            be a list of integers. If index is None, the color is applied
+            to all structures.
         """
         # Get corresponding index of areas :
         mask = self._get_idx_mask(index)

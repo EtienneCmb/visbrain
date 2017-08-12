@@ -51,7 +51,7 @@ class CbarVisual(CbarBase):
         Border width.
     limtxt : bool | True
         Display vmin/vmax text.
-    bgcolor : tuple/string | (.1, .1, .1)
+    bgcolor : tuple/string | (0., 0., 0.)
         Background color of the colorbar canvas.
     ndigits : int | 2
         Number of digits for the text.
@@ -63,7 +63,7 @@ class CbarVisual(CbarBase):
         """Init."""
         # _____________________ INIT _____________________
         self._n = 1000
-        self._ratio = 4/5
+        self._ratio = 4 / 5
         CbarBase.__init__(self, **kwargs)
 
         # _____________________ CANVAS _____________________
@@ -84,7 +84,7 @@ class CbarVisual(CbarBase):
         self._cbNode = Node(name='Colorbar', parent=parent)
         self._limNode = Node(name='Colorbar', parent=self._cbNode)
         # Rescale between (-1., 1.) :
-        self._rsc = vist.STTransform(scale=(self._width, 2/self._n, 1),
+        self._rsc = vist.STTransform(scale=(self._width, 2 / self._n, 1),
                                      translate=(0, -1., 0))
         # Set transformation to the node :
         self._cbNode.transform = self._rsc

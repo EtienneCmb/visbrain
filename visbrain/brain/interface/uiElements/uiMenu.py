@@ -135,9 +135,15 @@ class uiMenu(object):
     def _fcn_menuCrossec(self):
         """Display/hide the Cross-sections."""
         viz = self.menuDispCrossec.isChecked()
+        # Split view :
+        self._fcn_crossec_split()
         # Set cross-sections visible/hide :
         self.volume.visible_cs = viz
         self.grpSec.setChecked(viz)
+        # Disable split view if not visible :
+        if not viz:
+            self._objsPage.setCurrentIndex(0)
+            self.view.canvas.show(True)
         # Check (min, max) of slider :
         self._fcn_crossec_sl_limits()
 
@@ -187,7 +193,7 @@ class uiMenu(object):
         objs = [cbox.model().item(k).isEnabled() for k in range(cbox.count())]
         if sum(objs) == 1:
             # Select the name of the enabled object :
-            self.cbqt.select(cbox.itemText( objs.index(True)))
+            self.cbqt.select(cbox.itemText(objs.index(True)))
 
     ###########################################################################
     #                                ROTATION

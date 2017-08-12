@@ -14,12 +14,12 @@ class CbarQt(object):
     self[obj_name] : get the item from the GUI
     self[obj_name] = value : set the value to the VisPy based colorbar.
 
-    Args:
-        guiW: PyQt widget
-            The widget for adding the GUI colorar properties.
-
-        vizW: PyQt widget
-            The widget for adding the VisPy based colorbar.
+    Parameters
+    ----------
+    guiW: PyQt widget
+        The widget for adding the GUI colorar properties.
+    vizW: PyQt widget
+        The widget for adding the VisPy based colorbar.
     """
 
     def __init__(self, guiW, vizW, cbobjs, parent=None, camera=None):
@@ -61,22 +61,22 @@ class CbarQt(object):
     def save(self, filename):
         """Save all colorbar configurations.
 
-        Args:
-            filename: string
-                Name of the file to be saved.
+        Parameters
+        ----------
+        filename : string
+            Name of the file to be saved.
         """
         self.cbobjs.save(filename)
 
     def load(self, filename, **kwargs):
         """Load a colorbar configuration file.
 
-        Args:
-            filename: string
-                Name of the file to load.
-
-        Kargs:
-            kwargs: dict, optional, (def: {})
-                Further arguments to pass to the CbarObjects class.
+        Parameters
+        ----------
+        filename : string
+            Name of the file to load.
+        kwargs : dict, optional, (def: {})
+            Further arguments to pass to the CbarObjects class.
         """
         self.cbobjs.load(filename, **kwargs)
 
@@ -101,9 +101,10 @@ class CbarQt(object):
     def select(self, name, onload=False):
         """Select an object.
 
-        Args:
-            name: string
-                Name of the object to select.
+        Parameters
+        ----------
+        name : string
+            Name of the object to select.
         """
         # Get the list of all current objects :
         allItems = [self['object'].itemText(i) for i in range(

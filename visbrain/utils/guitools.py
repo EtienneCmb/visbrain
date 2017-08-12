@@ -10,8 +10,9 @@ from .color import color2vb, color2tuple
 
 __all__ = ('slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
            'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines',
-           'extend_combo_list', 'get_combo_list_index', 'toggle_enable_tab',
-           'set_widget_size')
+           'disconnect_all', 'extend_combo_list', 'get_combo_list_index',
+           'safely_set_cbox', 'safely_set_spin', 'safely_set_slider',
+           'toggle_enable_tab', 'set_widget_size')
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -241,6 +242,21 @@ class MouseEventControl(object):
             return False
 
 
+def disconnect_all(obj):
+    """Disconnect all functions related to an PyQt object.
+
+    Parameters
+    ----------
+    obj : PyQt object
+        The PyQt object to disconnect.
+    """
+    while True:
+        try:
+            obj.disconnect()
+        except TypeError:
+            break
+
+
 def extend_combo_list(cbox, item, reconnect=None):
     """Extend a QtComboList with a new item.
 
@@ -287,6 +303,71 @@ def get_combo_list_index(cbox, name):
     # Get the list of current items and extend it :
     all_items = [cbox.itemText(i) for i in range(cbox.count())]
     return all_items.index(name)
+
+
+def safely_set_cbox(cbox, idx, fcn=None):
+    """Set QtComboBox list index without trigger.
+
+    Parameters
+    ----------
+    cbox : PyQt.QtComboList
+        The PyQt combo list object.
+    idx : float/string
+        Index or name of the item.
+    fcn : list | None
+        List of functions to disconnect then reconnect.
+    """
+    if isinstance(fcn, list):
+        disconnect_all(cbox)
+    if isinstance(idx, str):
+        idx = get_combo_list_index(cbox, idx)
+    cbox.setCurrentIndex(idx)
+    if isinstance(fcn, list):
+        for k in fcn:
+            cbox.currentIndexChanged.connect(k)
+
+
+def safely_set_spin(spin, value, fcn, keyboard_tracking=True):
+    """Set value to QtSpin without trigger.
+
+    Parameters
+    ----------
+    spin : QtSpin
+        The Qt spin object.
+    value : float
+        Value to set.
+    fcn : function
+        List of function to reconnect.
+    keyboard_tracking : bool | True
+        Trigger while pressing values on keyboard.
+    """
+    # Disconnect and set value :
+    disconnect_all(spin)
+    spin.setValue(value)
+    # Reconnect :
+    for k in fcn:
+        spin.valueChanged.connect(k)
+    spin.setKeyboardTracking(False)
+
+
+def safely_set_slider(slider, value, fcn):
+    """Set value to QtSlider without trigger.
+
+    Parameters
+    ----------
+    slider : QtSlider
+        The Qt slider object.
+    value : float
+        Value to set.
+    fcn : function
+        List of function to reconnect.
+    """
+    # Disconnect and set value :
+    disconnect_all(slider)
+    slider.setValue(value)
+    # Reconnect :
+    for k in fcn:
+        slider.sliderMoved.connect(k)
 
 
 def toggle_enable_tab(tab, name, enable=False):
