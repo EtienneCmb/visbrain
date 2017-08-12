@@ -14,8 +14,9 @@ from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
 from .base.TimeSeriesBase import TimeSeriesBase
 from .base.PicBase import PicBase
-from ..utils import (color2vb, AddMesh, extend_combo_list, disconnect_all,
-                     get_combo_list_index, set_combo_list_index)
+from ..utils import (color2vb, AddMesh, extend_combo_list, safely_set_cbox,
+                     get_combo_list_index, safely_set_spin, safely_set_slider)
+from ..io import save_config_json
 
 __all__ = ('BrainUserMethods')
 
@@ -281,17 +282,17 @@ class BrainUserMethods(object):
         _brain_update = _light_update = False
         # Template :
         if template in self.brain_list():
-            set_combo_list_index(self._brainTemplate, template,
-                                 [self._brain_control])
+            safely_set_cbox(self._brainTemplate, template,
+                            [self._brain_control])
             _brain_update = True
         # Hemisphere :
         if hemisphere in ['both', 'left', 'right']:
-            set_combo_list_index(self._brainPickHemi, hemisphere,
-                                 [self._brain_control])
+            safely_set_cbox(self._brainPickHemi, hemisphere,
+                            [self._brain_control])
             _brain_update = True
         # Opacity :
-        if isinstance(alpha, float):
-            transparent = True
+        if isinstance(alpha, (int, float)):
+            self.atlas.mesh.projection('internal')
             self.atlas.mesh.set_alpha(alpha)
         # Transparent / opaque :
         if isinstance(transparent, bool):
@@ -436,7 +437,7 @@ class BrainUserMethods(object):
         volume_list : Get the list of volumes avaible.
         """
         # Set volume :
-        set_combo_list_index(self._csDiv, volume, self._fcn_crossec_change)
+        safely_set_cbox(self._csDiv, volume, [self._fcn_crossec_change])
         # Get cross-center :
         if center is not None:
             dx, dy, dz = center
@@ -446,21 +447,23 @@ class BrainUserMethods(object):
             dx, dy, dz = np.round(ipos).astype(int)
         # Set sagittal, coronal and axial sections :
         self.volume._test_cs_range(dx, dy, dz)
-        self._csSagit.setValue(dx)
-        self._csCoron.setValue(dy)
-        self._csAxial.setValue(dz)
+        safely_set_slider(self._csSagit, dx, [self._fcn_crossec_move])
+        safely_set_slider(self._csCoron, dy, [self._fcn_crossec_move])
+        safely_set_slider(self._csAxial, dz, [self._fcn_crossec_move])
         # Set colormap :
-        set_combo_list_index(self._csCmap, cmap, self._fcn_crossec_move)
+        safely_set_cbox(self._csCmap, cmap, [self._fcn_crossec_move])
         # Set split view, transparent and visible :
         self._csSplit.setChecked(split_view)
         self._csTransp.setChecked(transparent)
         self.grpSec.setChecked(visible)
         self.menuDispCrossec.setChecked(visible)
+        # Update the volume to use and split-view :
+        self._fcn_crossec_change()
         self._fcn_crossec_split()
 
     def volume_control(self, volume='Brodmann', rendering='mip',
                        cmap='OpaqueGrays', threshold=0., visible=True):
-        """
+        """Control the 3-D volume.
 
         Parameters
         ----------
@@ -469,22 +472,25 @@ class BrainUserMethods(object):
             list of volumes avaible.
         rendering : {'mip', 'translucent', 'additive', 'iso'}
             description
+        cmap : {'TransFire', 'OpaqueFire', 'TransGrays', 'OpaqueGrays'}
+            Name of the colormap to use.
+        threshold : float | 0.
+            Volume threshold for 'iso' rendering.
+        visible : bool | True
+            Display or hide the volume.
         """
         # Set volume :
         if volume in self.volume_list():
-            set_combo_list_index(self._volDiv, volume,
-                                 [self._fcn_vol3d_change])
+            safely_set_cbox(self._volDiv, volume, [self._fcn_vol3d_change])
         # Threshold :
-        disconnect_all(self._volIsoTh)
-        self._volIsoTh.setValue(threshold)
-        self._volIsoTh.valueChanged.connect(self._fcn_vol3d_change)
-        self._volIsoTh.setKeyboardTracking(False)
+        safely_set_spin(self._volIsoTh, threshold, [self._fcn_vol3d_change],
+                        False)
         # Set cmap :
-        set_combo_list_index(self._volCmap, cmap, [self._fcn_vol3d_change])
+        safely_set_cbox(self._volCmap, cmap, [self._fcn_vol3d_change])
         # Set rendering :
         if rendering in ['mip', 'translucent', 'additive', 'iso']:
-            set_combo_list_index(self._volRendering, rendering,
-                                 [self._fcn_vol3d_change])
+            safely_set_cbox(self._volRendering, rendering,
+                            [self._fcn_vol3d_change])
         # Visible :
         self.menuDispVol.setChecked(visible)
         self.grpVol.setChecked(visible)
@@ -712,10 +718,10 @@ class BrainUserMethods(object):
         self._tprojecton = project_on
         self._tcontribute = contribute
         self._tprojectas = 'repartition'
-        # Colormap control :
-        self.sources_colormap(**kwargs)
         # Run the corticale repartition :
         self._sourcesProjection()
+        # Colormap control :
+        self.sources_colormap(**kwargs)
 
     def sources_colormap(self, **kwargs):
         """Change the colormap of cortical projection / repartition.
@@ -1235,3 +1241,33 @@ class BrainUserMethods(object):
         self._cbar_item_is_enable(name)
         # Autoscale :
         self.cbqt._fcn_cbAutoscale(name=name)
+
+    def cbar_export(self, filename=None, export_only=None, get_dict=False):
+        """Export colorbars in a text file or in a dictionary.
+
+        Parameters
+        ----------
+        filename : string | None
+            Name of the text file (i.e 'name.txt'). If None, colorbars are not
+            going to be saved.
+        export_only : list | None
+            List of names for exporting the colorbar.
+        get_dict : bool | False
+            Get colorbars as a dictionary.
+
+        Returns
+        -------
+        dict_all : dict
+            Dictionary of all colorbars (only if get_dict is True)
+        """
+        dict_all = self.cbqt.cbobjs.to_dict(alldicts=True)
+        if isinstance(export_only, list):
+            config = {}
+            for k in export_only:
+                config[k] = dict_all[k]
+        else:
+            config = dict_all
+        if isinstance(filename, str):
+            save_config_json(filename, config)
+        if get_dict:
+            return config
