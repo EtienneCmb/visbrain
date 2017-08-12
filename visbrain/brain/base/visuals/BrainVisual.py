@@ -343,9 +343,9 @@ class BrainVisual(Visual):
             Index for sending alpha. Used by slices.
         """
         if index is None:
-            self._colFaces[index, -1] = np.float32(alpha)
-        else:
             self._colFaces[..., -1] = np.float32(alpha)
+        else:
+            self._colFaces[index, -1] = np.float32(alpha)
         self._coloBuff.set_data(self._colFaces)
         self.update()
 
