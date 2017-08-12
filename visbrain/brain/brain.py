@@ -336,6 +336,8 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         Get the list of objects for which the colorbar can be controlled.
     cbar_autoscale()
         Autoscale the colorbar to the best limits.
+    cbar_export()
+        Export colorbars in a text file or in a dictionary.
     """
 
     def __init__(self, *args, **kwargs):
