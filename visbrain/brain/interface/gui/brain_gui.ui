@@ -1674,7 +1674,7 @@ color</string>
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-368</y>
                 <width>351</width>
                 <height>1133</height>
                </rect>
@@ -2449,6 +2449,9 @@ type</string>
                      <widget class="QDoubleSpinBox" name="_volIsoTh">
                       <property name="decimals">
                        <number>4</number>
+                      </property>
+                      <property name="minimum">
+                       <double>0.010000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>0.999900000000000</double>
