@@ -6,16 +6,24 @@ import sys
 from vispy import scene
 import vispy.visuals.transforms as vist
 import vispy.scene.visuals as visu
-from vispy.color import get_colormaps, BaseColormap
+from vispy.color import BaseColormap
 
 from .CrossSecBase import CrossSections
 from .RoiBase import RoiBase
-from ...utils import array_to_stt
+from ...utils import array_to_stt, normalize
 
 __all__ = ('VolumeBase')
 
 
 class TransFire(BaseColormap):
+    glsl_map = """
+    vec4 translucent_fire(float t) {
+        return vec4(pow(t, 0.5), t, t*t, t*0.05);
+    }
+    """
+
+
+class OpaqueFire(BaseColormap):
     glsl_map = """
     vec4 translucent_fire(float t) {
         return vec4(pow(t, 0.5), t, t*t, max(0, t*1.05 - 0.05));
@@ -26,7 +34,7 @@ class TransFire(BaseColormap):
 class TransGrays(BaseColormap):
     glsl_map = """
     vec4 translucent_grays(float t) {
-        return vec4(t, t, t, t*0.05);
+        return vec4(t*t, t*t, t*t, t*0.05);
     }
     """
 
@@ -34,7 +42,7 @@ class TransGrays(BaseColormap):
 class OpaqueGrays(BaseColormap):
     glsl_map = """
     vec4 translucent_grays(float t) {
-        return vec4(t, t, t, max(0, t*1.05 - 0.05));
+        return vec4(t*t, t*t, t*t, max(0, t*1.05 - 0.05));
     }
     """
 
@@ -57,8 +65,9 @@ class Volume3D(object):
         self._node_vol.parent = parent
         # Colormaps :
         self._cmap_vol = cmap
-        self._cmaps = get_colormaps()
+        self._cmaps = {}
         self._cmaps['TransFire'] = TransFire()
+        self._cmaps['OpaqueFire'] = OpaqueFire()
         self._cmaps['TransGrays'] = TransGrays()
         self._cmaps['OpaqueGrays'] = OpaqueGrays()
         # Create 3-D volume :
@@ -81,7 +90,9 @@ class Volume3D(object):
         """
         # Update bol :
         if update or (self.vol3d._vol_shape == (1, 1, 1)):
-            self.vol3d.set_data(np.transpose(self.vol, (2, 1, 0)))
+            vol = self.vol.copy()
+            vol = normalize(vol)
+            self.vol3d.set_data(np.transpose(vol, (2, 1, 0)))
         if method in ['mip', 'translucent', 'additive', 'iso']:
             self.vol3d.method = method
         if method == 'iso':
