@@ -77,8 +77,11 @@ class Colorbar(uiInit):
         uiInit.__init__(self)
 
         cbobjs = CbarObjetcs()
-        if config is not None:
+        if isinstance(config, str):
             cbobjs.load(config)
+        elif isinstance(config, dict):
+            for k, i in config.items():
+                cbobjs.add_object(k, CbarBase(**i), overwrite=False)
         else:
             if 'name' in kwargs.keys():
                 name = kwargs['name']
@@ -88,6 +91,7 @@ class Colorbar(uiInit):
             obj1 = CbarBase(**kwargs)
             cbobjs.add_object(name, obj1, overwrite=False)
         self.cbqt = CbarQt(self.guiW, self.vizW, cbobjs)
+        self.cbqt._fcn_ChangeObj(clean=True)
 
     def show(self):
         """Display the graphical user interface."""
