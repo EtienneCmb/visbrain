@@ -28,41 +28,41 @@ kwargs['s_radiusmin'] = 2               # Minimum radius
 kwargs['s_radiusmax'] = 8               # Maximum radius
 kwargs['s_edgewidth'] = 0.              # Width of the edges
 
-# Add label to the colorbar :
-kwargs['cb_label'] = 'My exported colorbar !'
-kwargs['cb_fontcolor'] = 'black'
-
 # Define your monitor properties for figure exportation
 # (this configuration has been tested on a 17" laptop) :
-region = (1200, 200, 500, 600)     # Crop your figure using this region
+region = (300, -900, 700, 600)     # Crop your figure using this region
 cbzoom = 50.                       # Zoom level over the colobar canvas
 
 # Create a brain instance :
 vb = Brain(**kwargs)
 
 # First, make a basic screenshot of the scene :
-vb.screenshot('screenshot1.jpg', region=region)
+vb.screenshot('screenshot1.jpg', region=region, zoom=2000, autocrop=True)
 
 # Make a screenshot of the cortical projection :
 vb.cortical_projection()          # Run the cortical projection
 vb.sources_opacity(show=False)    # Hide sources
 vb.rotate(custom=(-160., 10.))    # Rotate the brain
-vb.light_reflection('external')   # Make the brain opaque
-vb.screenshot('screenshot2.tiff', region=region)
+vb.brain_control(transparent=False)   # Make the brain opaque
+vb.screenshot('screenshot2.tiff', region=region, autocrop=True)
 
 # Make a screenshot of ROI :
-vb.roi_control(selection=[4, 6, 40],       # Display Brodmann area 4 and 6 :
-            subdivision='brod',
-            smooth=5)
-vb.sources_colormap(cmap='Spectral_r')
-vb.cortical_repartition(radius=20.,     # Run the cortical repartition
-                        project_on='roi')
-vb.sources_opacity(show=False)           # Display sources
-vb.rotate(custom=(-210, 10.))           # Rotate the brain
-vb.brain_control(show=False)            # Hide the brain
-vb.screenshot('screenshot3.png',        # Export with transparent background and colorbar
-              region=region,
-              transparent=False, colorbar=True)
+vb.roi_control(selection=[3, 5, 32],       # Display Brodmann area 4 and 6 :
+               subdivision='Brodmann',
+               smooth=5)
+# Run the cortical repartition
+vb.cortical_repartition(radius=20., project_on='roi', clim=(1, 59),
+                        isvmin=True, vmin=7, under='gray', cmap='Spectral_r',
+                        cblabel='Roi colorbar')
+vb.cbar_select('Projection')
+vb.cbar_export('test.txt')
+vb.sources_opacity(show=False)              # Display sources
+vb.rotate(custom=(-210, 10.))               # Rotate the brain
+vb.brain_control(alpha=0.3)                # Hide the brain
+
+# Export with transparent background
+vb.screenshot('screenshot3.png', region=region, transparent=True,
+              autocrop=True)
 
 # Alternatively, you can display the GUI at the end, but it's not a necessity :
-# vb.show()
+vb.show()

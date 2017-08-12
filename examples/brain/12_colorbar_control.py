@@ -37,7 +37,7 @@ from __future__ import print_function
 
 import numpy as np
 
-from visbrain import Brain
+from visbrain import Brain, Colorbar
 
 
 """
@@ -115,5 +115,20 @@ vb.cbar_control('Connectivity', cmap='Reds', bgcolor='orange',
 Finally, set the colorbar of the projecton visible
 """
 vb.cbar_select('Projection', visible=True)
+
+"""
+Visbrain also have a Colorbar module dedicated to colorbar managment. As a
+consequence, we can use the cbar_export() to get all of the colorbars and
+open a Colorbar instance
+"""
+# Get all colorbars
+# args = vb.cbar_export(get_dict=True)
+# Save all colorbars
+# vb.cbar_export(filename='colorbar_config.txt')
+# Save only the colorbar of Pictures and Projection :
+# vb.cbar_export(filename='pic_and_proj.txt',
+#                export_only=['Pictures', 'Projection'])
+# Open the Colorbar colorbar :
+# Colorbar(config=args).show()
 
 vb.show()
