@@ -49,7 +49,7 @@ in several forms cad (press the shortcut in parenthesis):
 - As a markers cloud (m)
 - As a histogram (h)
 - As a spectrogram (s)
-- As an image (i - not avaible in this exemple -)
+- As an image (i - not available in this exemple -)
 """
 # ===================================================================
 # Display the Nd-plot panel and display the grid :
