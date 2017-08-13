@@ -179,7 +179,7 @@ class uiSources(object):
     # PROJECTION
     # =====================================================================
     def _fcn_updateProjList(self):
-        """Update the avaible projection list objects."""
+        """Update the available projection list objects."""
         self._uitProjectOn.clear()
         self._uitProjectOn.addItems(list(self._tobj.keys()))
 

@@ -48,7 +48,7 @@ class OdpltMesh(object):
                  imz=None, **kwargs):
         """Set new values to the selected plot.
 
-        Dynamic coloring are only avaible for line type plot but all of the
+        Dynamic coloring are only available for line type plot but all of the
         static color type can be applied either on line or histogram. The
         spectrogram colormap is fixed to 'viridis'.
 

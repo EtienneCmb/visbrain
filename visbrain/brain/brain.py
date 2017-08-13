@@ -281,13 +281,13 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
     brain_control()
         Control the type of brain to use.
     brain_list()
-        Get the list of avaible mesh brain templates.
+        Get the list of available mesh brain templates.
     add_mesh()
         Add a mesh to the scene.
     add_volume()
         Add a new volume to the interface.
     volume_list()
-        Get the list of volumes avaible.
+        Get the list of volumes available.
     cross_sections_control()
         Set the cross-section position.
     sources_control()

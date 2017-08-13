@@ -113,7 +113,7 @@ class ui1dPlt(object):
             # Set possible axis and index limits :
             self._1dAxInd.setMinimum(0)
             self._1dAxInd.setMaximum(self._1dplt.mesh.l-1)
-            # Define avaible axis :
+            # Define available axis :
             avai = [str(k) for k in np.arange(ndim)]
             self._1dAxX.addItems(avai)
             self._1dAxY.addItems(avai)

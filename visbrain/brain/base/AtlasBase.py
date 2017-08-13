@@ -42,7 +42,7 @@ class AtlasBase(object):
         # Find relative path to templates :
         dirfile = sys.modules[__name__].__file__.split('Atlas')[0]
         self._surf_path = os.path.join(dirfile, 'templates')
-        # Build list of templates avaible from the templates/ folder :
+        # Build list of templates available from the templates/ folder :
         self._surf_list = ['B1', 'B2', 'B3', 'roi']
         for k in os.listdir(self._surf_path):
             file, ext = os.path.splitext(k)
