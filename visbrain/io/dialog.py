@@ -18,13 +18,13 @@ def dialogSave(self, name='Save file', default='file',
     ----------
     self : class
         Class containing PyQt5 elemnets.
-    name : string, optional, (def: 'Save file')
+    name : string | 'Save file'
         Name of the saving window.
-    default : string, optional, (def: 'file')
+    default : string | 'file'
         Default name of the saved file.
-    allext : list, optional, (def: ['All files (*.*)'])
+    allext : list | ['All files (*.*)']
         String containing all the extensions. Must be a list where each
-        element is a string of type 'Ext (*.ext)'
+        element is a string of type 'Ext (.ext)'
 
     Returns
     -------
@@ -50,13 +50,13 @@ def dialogLoad(self, name='Open file', default='file',
     ----------
     self : class
         Class containing PyQt5 elemnets.
-    name : string, optional, (def: 'Save file')
+    name : string | 'Save file'
         Name of the opening window.
-    default : string, optional, (def: 'file')
+    default : string | 'file'
         Default name of the opened file.
-    allext : list, optional, (def: ['All files (*.*)'])
+    allext : list | ['All files (*.*)']
         String containing all the extensions. Must be a list where each
-        element is a string of type 'Ext (*.ext)'
+        element is a string of type 'Ext (.ext)'
 
     Returns
     -------
