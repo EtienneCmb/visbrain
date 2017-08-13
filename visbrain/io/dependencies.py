@@ -15,7 +15,7 @@ def is_mne_installed():
 def is_nibabel_installed():
     """Test if nibabel is installed."""
     try:
-        import mne
+        import nibabel
         return True
     except:
         return False
