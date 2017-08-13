@@ -5,7 +5,7 @@ order to run commands without the necessity of opening the interface. This is
 really convenient for generating a large number of pictures by looping over a
 Brain instance.
 """
-
+from PyQt5 import QtCore
 import numpy as np
 from scipy.spatial import ConvexHull
 
@@ -277,7 +277,7 @@ class BrainUserMethods(object):
 
         See also
         --------
-        brain_list : Get the list of avaible mesh brain templates.
+        brain_list : Get the list of available mesh brain templates.
         """
         _brain_update = _light_update = False
         # Template :
@@ -311,12 +311,12 @@ class BrainUserMethods(object):
             self.atlas.mesh.set_color(color=color)
 
     def brain_list(self):
-        """Get the list of avaible mesh brain templates.
+        """Get the list of available mesh brain templates.
 
         Returns
         -------
         meshes : list
-            List of avaible mesh brain templates.
+            List of available mesh brain templates.
 
         Examples
         --------
@@ -370,7 +370,7 @@ class BrainUserMethods(object):
 
         See also
         --------
-        volume_list : Get the list of volumes avaible.
+        volume_list : Get the list of volumes available.
         """
         # Add the volume :
         self.volume.add_volume(name, vol, transform=transform,
@@ -389,12 +389,12 @@ class BrainUserMethods(object):
             extend_combo_list(self._roiDiv, name, self._fcn_build_roi_lst)
 
     def volume_list(self):
-        """Get the list of volumes avaible.
+        """Get the list of volumes available.
 
         Returns
         -------
         volume_list : list
-            List of volumes avaibles.
+            List of volumes availables.
         """
         return list(self.volume._vols.keys())
 
@@ -420,7 +420,7 @@ class BrainUserMethods(object):
             the sagittal, coronal and axial sections.
         volume : string | 'Brodmann'
             Name of the volume to use. See the volume_list() method to get the
-            list of volumes avaible.
+            list of volumes available.
         split_view : bool | True
             If True, the cross-section is splitted into three images. If False,
             the cross-section is directly displayed inside the brain.
@@ -434,7 +434,7 @@ class BrainUserMethods(object):
         See also
         --------
         add_volume : Add a new volume to the interface.
-        volume_list : Get the list of volumes avaible.
+        volume_list : Get the list of volumes available.
         """
         # Set volume :
         safely_set_cbox(self._csDiv, volume, [self._fcn_crossec_change])
@@ -469,7 +469,7 @@ class BrainUserMethods(object):
         ----------
         volume : string | 'Brodmann'
             Name of the volume to use. See the volume_list() method to get the
-            list of volumes avaible.
+            list of volumes available.
         rendering : {'mip', 'translucent', 'additive', 'iso'}
             description
         cmap : {'TransFire', 'OpaqueFire', 'TransGrays', 'OpaqueGrays'}
@@ -1014,12 +1014,13 @@ class BrainUserMethods(object):
         idx = get_combo_list_index(self._roiDiv, subdivision)
         self._roiDiv.setCurrentIndex(idx)
         # Update the list of structures :
-        self._fcn_build_roi_lst()
+        self._fcn_build_roi_list()
         # Set selection :
-        self._roiToAdd.addItems(self.volume.roi_labels[selection])
+        for k in selection:
+            item = self._roiToAdd.item(k)
+            item.setCheckState(QtCore.Qt.Checked)
         # Apply selection :
-        self._struct2add = self.volume.roi_labels[selection]
-        self._fcn_apply_roi()
+        self._fcn_apply_roi_selection()
         # Add ROI to mesh list :
         self._tobj[name] = self.volume
         self._fcn_updateProjList()
@@ -1123,13 +1124,13 @@ class BrainUserMethods(object):
             either the cortical projection, use 'Projection'. And
             'Connectivity' or 'Pictures' if defined.
         """
-        avaibles = self.cbar_list()
-        if name in avaibles:
+        availables = self.cbar_list()
+        if name in availables:
             # Select the object :
             self.cbqt.select(name)
         else:
             raise ValueError(name + " cannot be controlled. Use "
-                             "either : " + ", ".join(avaibles))
+                             "either : " + ", ".join(availables))
 
     def cbar_control(self, name, **kwargs):
         """Control the colorbar of a specific object.

@@ -1674,9 +1674,9 @@ color</string>
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-368</y>
+                <y>-22</y>
                 <width>351</width>
-                <height>1133</height>
+                <height>1096</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_48">
@@ -1960,71 +1960,33 @@ type</string>
                    </layout>
                   </item>
                   <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_42">
+                   <layout class="QVBoxLayout" name="verticalLayout_27">
                     <property name="topMargin">
                      <number>0</number>
                     </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
-                    </property>
                     <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_42">
-                      <property name="topMargin">
-                       <number>0</number>
+                     <widget class="QListWidget" name="_roiToAdd">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>300</height>
+                       </size>
                       </property>
-                      <item>
-                       <widget class="QListWidget" name="_roiToSelect">
-                        <property name="minimumSize">
-                         <size>
-                          <width>0</width>
-                          <height>300</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <weight>50</weight>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="tabKeyNavigation">
-                         <bool>true</bool>
-                        </property>
-                        <property name="alternatingRowColors">
-                         <bool>true</bool>
-                        </property>
-                        <property name="selectionMode">
-                         <enum>QAbstractItemView::ExtendedSelection</enum>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QListWidget" name="_roiToAdd">
-                        <property name="minimumSize">
-                         <size>
-                          <width>0</width>
-                          <height>300</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <weight>50</weight>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
+                      <property name="font">
+                       <font>
+                        <weight>50</weight>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                     </widget>
                     </item>
                     <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_47">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_13">
                       <property name="topMargin">
                        <number>0</number>
                       </property>
                       <item>
-                       <spacer name="horizontalSpacer_48">
+                       <spacer name="horizontalSpacer_55">
                         <property name="orientation">
                          <enum>Qt::Horizontal</enum>
                         </property>
@@ -2037,11 +1999,27 @@ type</string>
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="_roiButAdd">
+                       <widget class="QPushButton" name="_roiButApply">
                         <property name="text">
-                         <string>Add</string>
+                         <string>Apply</string>
                         </property>
                        </widget>
+                      </item>
+                      <item>
+                       <spacer name="horizontalSpacer_56">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                         <enum>QSizePolicy::Fixed</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </spacer>
                       </item>
                       <item>
                        <widget class="QPushButton" name="_roiButRst">
@@ -2051,14 +2029,7 @@ type</string>
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="_roiButRm">
-                        <property name="text">
-                         <string>Remove</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <spacer name="horizontalSpacer_49">
+                       <spacer name="horizontalSpacer_8">
                         <property name="orientation">
                          <enum>Qt::Horizontal</enum>
                         </property>
@@ -2071,69 +2042,6 @@ type</string>
                        </spacer>
                       </item>
                      </layout>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_49">
-                    <property name="topMargin">
-                     <number>0</number>
-                    </property>
-                    <item>
-                     <spacer name="horizontalSpacer_55">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="_roiButApply">
-                      <property name="text">
-                       <string>Apply</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_44">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeType">
-                       <enum>QSizePolicy::Preferred</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>10</width>
-                        <height>10</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="_roiButClear">
-                      <property name="text">
-                       <string>Clear</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_56">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
                     </item>
                    </layout>
                   </item>
@@ -2623,7 +2531,7 @@ type</string>
            <item>
             <widget class="QTabWidget" name="tabWidget">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="tab_2">
               <attribute name="title">

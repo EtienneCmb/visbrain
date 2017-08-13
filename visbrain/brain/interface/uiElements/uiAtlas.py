@@ -3,6 +3,7 @@
 Make the bridge between GUI and deep functions. Add some usefull
 commands for the user
 """
+from PyQt5 import QtCore
 import numpy as np
 
 from ....utils import mpl_cmap, mpl_cmap_index
@@ -35,24 +36,14 @@ class uiAtlas(object):
         #######################################################################
         #                         REGION OF INTEREST
         #######################################################################
-        # By default, hide the remove button :
-        self._roiButRm.hide()
-        # Get plot properties :
-        self._roiDiv.currentIndexChanged.connect(self._fcn_build_roi_lst)
-        # List management :
-        self._roiToSelect.itemClicked.connect(self._fcn_select_roi_in_lst)
-        self._roiToAdd.itemClicked.connect(self._fcn_select_added_roi)
-        self._roiButAdd.clicked.connect(self._fcn_add_struct)
-        self._roiButRm.clicked.connect(self._fcn_rmv_struct)
-        self._roiButRst.clicked.connect(self._fcn_rst_struct)
-        self._struct2add = []
+        # Volume selection :
+        self._roiDiv.currentIndexChanged.connect(self._fcn_build_roi_list)
+        # Apply and reset :
+        self._roiButRst.clicked.connect(self._fcn_reset_roi_list)
+        self._roiButApply.clicked.connect(self._fcn_apply_roi_selection)
         # Internal/external projection :
         self._roiTransp.clicked.connect(self._area_light_reflection)
-        # System :
-        self._roiButApply.clicked.connect(self._fcn_apply_roi)
-        self._roiButClear.clicked.connect(self._fcn_clear_roi)
-        # Color :
-        self._fcn_build_roi_lst()
+        self._fcn_build_roi_list()
 
         #######################################################################
         #                           CROSS-SECTIONS
@@ -140,117 +131,52 @@ class uiAtlas(object):
     #                          REGION OF INTEREST
     ###########################################################################
     ###########################################################################
-    def _fcn_select_roi_in_lst(self):
-        """Trig when a structure is selected in the list.
-
-        When the user select a structure in the whole list, display the 'add'
-        button but hide the 'remove' button.
-        """
-        self._roiButAdd.show()
-        self._roiButRm.hide()
-
-    def _fcn_select_added_roi(self):
-        """Trig when a structure is selected in the added list.
-
-        When the user select a structure in the list, of selected areas,
-        hide the 'add' button but display the 'remove' button.
-        """
-        self._roiButAdd.hide()
-        self._roiButRm.show()
-
-    # ---------- Add / remove / update / reset elements to the list ----------
-    def _fcn_add_struct(self):
-        """Trig when the user click on the 'add' button.
-
-        This function will add the selected structre but only if it's not
-        already present in the list.
-        """
-        current_item = [str(k.text())
-                        for k in self._roiToSelect.selectedItems()]
-        for k in current_item:
-            if k not in self._struct2add:
-                self._struct2add.append(k)
-            self._fcn_update_list()
-
-    def _fcn_rmv_struct(self):
-        """Trig when the user click on the 'remove' button.
-
-        This function doesn't need any conditional testing because the 'remove'
-        button is only showed when a structure is displayed.
-        """
-        current_item = str(self._roiToAdd.current_item().text())
-        self._struct2add.pop(self._struct2add.index(current_item))
-        self._fcn_update_list()
-
-    def _fcn_update_list(self):
-        """Update the list of selected areas.
-
-        The list of selected areas has to be updated if the user add / remove
-        structures.
-        """
-        # Update list :
+    def _fcn_build_roi_list(self):
+        """Build a list of checkable ROIs."""
+        # Select volume :
+        self.volume.select_volume(str(self._roiDiv.currentText()))
+        # Clear widget list and add ROIs :
         self._roiToAdd.clear()
-        self._struct2add.sort()
-        self._roiToAdd.addItems(self._struct2add)
+        self._roiToAdd.addItems(self.volume.roi_labels)
+        # By default, uncheck items :
+        for num in range(self._roiToAdd.count()):
+            item = self._roiToAdd.item(num)
+            item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
+            item.setCheckState(QtCore.Qt.Unchecked)
 
-    def _fcn_rst_struct(self):
-        """Reset to default the list of selected areas.
+    def _fcn_reset_roi_list(self):
+        """Reset ROIs selection."""
+        # Unchecked all ROIs :
+        for num in range(self._roiToAdd.count()):
+            item = self._roiToAdd.item(num)
+            item.setCheckState(QtCore.Qt.Unchecked)
 
-        Just clean all selected structures.
-        """
-        self._roiToAdd.clear()
-        self._struct2add = []
-
-    def _fcn_build_roi_lst(self):
-        """Build the list of avaible structures.
-
-        The list of avaible structures depends on the choice of the atlas
-        (Brodmann or AAL). This function update the list of areas depending on
-        this choice.
-        """
-        # Get selected volume :
-        name = str(self._roiDiv.currentText())
-        self.volume.select_volume(name)
-
-        # Update list of structures :
-        self._roiToSelect.clear()
-        self._roiToSelect.addItems(self.volume.roi_labels)
-        self._fcn_rst_struct()
-
-    def _fcn_apply_roi(self):
-        """Apply the choice of structures and plot them.
-
-        This function get the list of integers preceding each areas, get the
-        vertices and finally plot.
-        """
-        # Select only the integer preceding the structure :
-        _roiToAdd = [int(k.split(':')[0]) for k in self._struct2add]
-        _roiToAdd.sort()
-
-        # Add to selected areas and plot :
-        self.volume._select_roi = self.volume.roi_values[_roiToAdd]
-        self._area_plot()
-
-    def _fcn_clear_roi(self):
-        """Clear ROI."""
-        self.volume.mesh.clean()
-        self.volume.mesh.update()
-
-    def _area_plot(self):
-        """Area Sub-plotting function."""
-        # Get smoothing :
-        self.volume._smooth_roi = self._roiSmooth.value()
-        # Plot areas and set parent :
-        self.volume.plot_roi()
-        self.volume.mesh.parent = self.volume._node
-        self._tobj['roi'] = self.volume
-        self.volume.set_roi_camera(self.view.wc.camera)
-        # Enable projection on ROI and related buttons :
-        self._uitProjectOn.model().item(1).setEnabled(True)
-        self._roiTransp.setEnabled(True)
-        self.menuDispROI.setEnabled(True)
-        self.o_Areas.setEnabled(True)
-        self._area_light_reflection()
+    def _fcn_apply_roi_selection(self):
+        """Apply ROI selection."""
+        # Get the list of selected ROIs :
+        _roiToAdd = []
+        for num in range(self._roiToAdd.count()):
+            item = self._roiToAdd.item(num)
+            if item.checkState():
+                _roiToAdd.append(num)
+        if _roiToAdd:
+            self.volume._select_roi = self.volume.roi_values[_roiToAdd]
+            # Get smoothing :
+            self.volume._smooth_roi = self._roiSmooth.value()
+            # Plot areas and set parent :
+            self.volume.plot_roi()
+            self.volume.mesh.parent = self.volume._node
+            self._tobj['roi'] = self.volume
+            self.volume.set_roi_camera(self.view.wc.camera)
+            # Enable projection on ROI and related buttons :
+            self._uitProjectOn.model().item(1).setEnabled(True)
+            self._roiTransp.setEnabled(True)
+            self.menuDispROI.setEnabled(True)
+            self.menuDispROI.setChecked(True)
+            self.o_Areas.setEnabled(True)
+            self._area_light_reflection()
+        else:
+            raise ValueError("No ROI selected.")
 
     def _area_light_reflection(self, *args):
         """Change how light is refleting onto sub-areas.
