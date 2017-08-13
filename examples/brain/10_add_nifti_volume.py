@@ -24,11 +24,11 @@ s_xyz = np.array([[29.9, -37.3, -19.3],
 # Define a Brain instance :
 vb = Brain(s_xyz=s_xyz)
 
-# Print the list of volumes avaible :
-print('Volumes avaible by default : ', vb.volume_list())
+# Print the list of volumes available :
+print('Volumes available by default : ', vb.volume_list())
 
 """
-If you don't have access to a Nifti file, download one of the volume avaible
+If you don't have access to a Nifti file, download one of the volume available
 at https://brainder.org/download/flair/.
 """
 path_to_nifti1 = os.getenv("HOME")       # Path to the Nifti file
