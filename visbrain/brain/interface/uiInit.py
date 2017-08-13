@@ -31,6 +31,7 @@ class vbShortcuts(object):
     def __init__(self, canvas):
         """Init."""
         self.sh = [('<space>', 'Brain transparency'),
+                   ('<delete>', 'Reset camera'),
                    ('0', 'Top view'),
                    ('1', 'Bottom view'),
                    ('2', 'Left view'),
@@ -38,6 +39,8 @@ class vbShortcuts(object):
                    ('4', 'Front view'),
                    ('5', 'Back view'),
                    ('b', 'Display / hide brain'),
+                   ('x', 'Display / hide cross-sections'),
+                   ('v', 'Display / hide volume'),
                    ('s', 'Display / hide sources'),
                    ('t', 'Display / hide connectivity'),
                    ('r', 'Display / hide ROI'),
@@ -50,7 +53,8 @@ class vbShortcuts(object):
                    ('CTRL + d', 'Display / hide setting panel'),
                    ('CTRL + e', 'Show the documentation'),
                    ('CTRL + t', 'Display shortcuts'),
-                   ('CTRL + n', 'Take a screenshot'),
+                   ('CTRL + n', 'Screenshot of the main canvas'),
+                   ('CTRL + n', 'Screenshot of the entire window'),
                    ('CTRL + q', 'Exit'),
                    ]
 
