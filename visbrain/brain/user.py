@@ -5,7 +5,6 @@ order to run commands without the necessity of opening the interface. This is
 really convenient for generating a large number of pictures by looping over a
 Brain instance.
 """
-from PyQt5 import QtCore
 import numpy as np
 from scipy.spatial import ConvexHull
 
@@ -1016,9 +1015,7 @@ class BrainUserMethods(object):
         # Update the list of structures :
         self._fcn_build_roi_list()
         # Set selection :
-        for k in selection:
-            item = self._roiToAdd.item(k)
-            item.setCheckState(QtCore.Qt.Checked)
+        self._fcn_set_selected_rois(selection)
         # Apply selection :
         self._fcn_apply_roi_selection()
         # Add ROI to mesh list :

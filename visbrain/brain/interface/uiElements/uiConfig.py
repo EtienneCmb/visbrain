@@ -22,6 +22,7 @@ class uiConfig(object):
                                   "Text file (*.txt);;All files (*.*)")
         if filename:
             config = {}
+
             # ----------------- VISIBLE OBJECTS -----------------
             config['SettingViz'] = self.menuDispQuickSettings.isChecked()
             config['BrainViz'] = self.menuDispBrain.isChecked()
@@ -29,10 +30,12 @@ class uiConfig(object):
             config['ConnectViz'] = self.menuDispConnect.isChecked()
             config['ROIViz'] = self.menuDispROI.isChecked()
             config['CbarViz'] = self.menuDispCbar.isChecked()
+
             # ----------------- CAMERAS -----------------
             config['CamState'] = self.view.wc.camera.get_state()
             rect = self.cbqt.cbviz._wc.camera.rect
             config['CamCbState'] = list(rect.pos) + list(rect.size)
+
             # ----------------- GUI SETTINGS -----------------
             # Background color :
             bgd = (self.bgd_red.value(), self.bgd_green.value(),
@@ -40,10 +43,33 @@ class uiConfig(object):
             config['BcgColor'] = bgd
             # Tab :
             config['CurrentTab'] = self.QuickSettings.currentIndex()
+
             # ----------------- BRAIN -----------------
+            # Brain :
             config['BrainTransp'] = self._brainTransp.isChecked()
             config['BrainHemi'] = self._brainPickHemi.currentIndex()
             config['BrainTemplate'] = self._brainTemplate.currentIndex()
+            # ROI :
+            config['RoiTransp'] = self._roiTransp.isChecked()
+            config['RoiAnat'] = self._roiDiv.currentIndex()
+            config['RoiSmooth'] = self._roiSmooth.value()
+            config['RoiStruct'] = self._fcn_get_selected_rois()
+            # Cross-sections :
+            config['CsSagit'] = self._csSagit.value()
+            config['CsCoron'] = self._csCoron.value()
+            config['CsAxial'] = self._csAxial.value()
+            config['CsDiv'] = self._csDiv.currentIndex()
+            config['CsCmap'] = self._csCmap.currentIndex()
+            config['CsTransp'] = self._csTransp.isChecked()
+            config['CsSplit'] = self._csSplit.isChecked()
+            config['CsGrp'] = self.grpSec.isChecked()
+            # Volume :
+            config['VolDiv'] = self._volDiv.currentIndex()
+            config['VolRendering'] = self._volRendering.currentIndex()
+            config['VolCmap'] = self._volCmap.currentIndex()
+            config['VolTh'] = self._volIsoTh.value()
+            config['VolGrp'] = self.grpVol.isChecked()
+
             # ----------------- SOURCES -----------------
             # Sources object :
             config['SourcesDisp'] = self._sourcesPickdisp.currentIndex()
@@ -71,6 +97,7 @@ class uiConfig(object):
             config['StsDxyz'] = (self._tsDx.value(), self._tsDy.value(),
                                  self._tsDz.value())
             config['StsColor'] = color2json(self._tsColor)
+
             # ----------------- CONNECTIVITY -----------------
             config['ConnectCby'] = self.uiConnect_colorby.currentIndex()
             config['ConnectAlp'] = self._connectStaDynTransp.currentIndex()
@@ -81,12 +108,7 @@ class uiConfig(object):
             config['ConnectBun'] = self._conBlEnable.isChecked()
             config['ConnectBunRad'] = self._conBlRadius.value()
             config['ConnectBunDxyz'] = self._conBlDxyz.value()
-            # ----------------- ROI -----------------
-            config['RoiTransp'] = self._roiTransp.isChecked()
-            config['RoiAnat'] = self._roiDiv.currentIndex()
-            config['RoiSmooth'] = self._roiSmooth.value()
-            _roiToAdd = [str(k) for k in self._struct2add]
-            config['RoiStruct'] = _roiToAdd
+
             # ----------------- CBAR -----------------
             # Visual:
             config['Cbar'] = self.cbqt.cbobjs.to_dict(alldicts=True)
@@ -139,17 +161,47 @@ class uiConfig(object):
             # Cbar :
             _try("self.menuDispCbar.setChecked(config['CbarViz'])")
             _try("self._fcn_menuCbar()")
+
             # ----------------- CAMERA -----------------
             _try("self.view.wc.camera.set_state(config['CamState'])")
             _try("self.cbqt.cbviz._wc.camera.rect=config['CamCbState']")
+
             # ----------------- BRAIN -----------------
+            # Brain :
             _try("self._brainTransp.setChecked(config['BrainTransp'])")
             _try("self._brainPickHemi.setCurrentIndex(config["
                  "'BrainHemi'])")
             _try("self._brainTemplate.setCurrentIndex(config["
                  "'BrainTemplate'])")
-            _try("self._brain_control('')")
+            _try("self._brain_control()")
             _try("self._light_reflection()")
+            # ROIs :
+            _try("self._roiTransp.setChecked(config['RoiTransp'])")
+            _try("self._roiDiv.setCurrentIndex(config['RoiAnat'])")
+            _try("self._roiSmooth.setValue(config['RoiSmooth'])")
+            _try("self._roiToAdd.clear()")
+            _try("self._fcn_build_roi_list()")
+            _try("self._fcn_set_selected_rois(config['RoiStruct'])")
+            _try("self._fcn_update_list()")
+            # Cross-sections :
+            _try("self._csSagit.setValue(config['CsSagit'])")
+            _try("self._csCoron.setValue(config['CsCoron'])")
+            _try("self._csAxial.setValue(config['CsAxial'])")
+            _try("self._csDiv.setCurrentIndex(config['CsDiv'])")
+            _try("self._csCmap.setCurrentIndex(config['CsCmap'])")
+            _try("self._csTransp.setChecked(config['CsTransp'])")
+            _try("self._csSplit.setChecked(config['CsSplit'])")
+            _try("self.grpSec.setChecked(config['CsGrp'])")
+            _try("self._fcn_crossec_change()")
+            _try("self._fcn_crossec_split()")
+            # Volume :
+            _try("self._volDiv.setCurrentIndex(config['VolDiv'])")
+            _try("self._volRendering.setCurrentIndex(config['VolRendering'])")
+            _try("self._volCmap.setCurrentIndex(config['VolCmap'])")
+            _try("self._volIsoTh.setValue(config['VolTh'])")
+            _try("self.grpVol.setChecked(config['VolGrp'])")
+            _try("self._fcn_vol3d_change()")
+
             # ----------------- SOURCES -----------------
             # Sources object :
             _try("self._sourcesPickdisp.setCurrentIndex(config["
@@ -184,6 +236,7 @@ class uiConfig(object):
             _try("self._tsDz.setValue(config['StsDxyz'][2])")
             _try("self._tsColor.setText(str(config['StsColor']))")
             _try("self._fcn_ts_update()")
+
             # ----------------- CONNECTIVITY -----------------
             _try("self.uiConnect_colorby.setCurrentIndex(config["
                  "'ConnectCby'])")
@@ -196,13 +249,7 @@ class uiConfig(object):
             _try("self._conBlEnable.setChecked(config['ConnectBun'])")
             _try("self._conBlRadius.setValue(config['ConnectBunRad'])")
             _try("self._conBlDxyz.setValue(config['ConnectBunDxyz'])")
-            # ----------------- ROI -----------------
-            _try("self._roiTransp.setChecked(config['RoiTransp'])")
-            _try("self._roiDiv.setCurrentIndex(config['RoiAnat'])")
-            _try("self._roiSmooth.setValue(config['RoiSmooth'])")
-            _try("self._roiToAdd.clear()")
-            _try("self._struct2add = config['RoiStruct']")
-            _try("self._fcn_update_list()")
+
             # ----------------- GUI SETTINGS -----------------
             # Background color :
             rgb = config['BcgColor']
@@ -213,6 +260,7 @@ class uiConfig(object):
             # Tab :
             _try("self.QuickSettings.setCurrentIndex(config["
                  "'CurrentTab'])")
+
             # ----------------- CBAR -----------------
             # Cbar visual :
             _try("self.cbqt.cbobjs.from_dict(config['Cbar'])")

@@ -29,6 +29,16 @@ The *Brain* graphical user interface is subdivided into three main parts :
    * Connect tab (*connectivity settings*)
    * Cbar tab (*colorbar properties of the selected object*)
 
+.. note::
+
+   If you want to save the current GUI state (i.e. all buttons properties) and retrieve it later, use the menu File/Save/GUI config and File/Load/GUI config or the associated *Brain* method.
+   
+   **Examples**
+      * :ref:`sphx_glr_auto_examples_brain_13_load_gui_config.py`
+
+   **API**
+      * :ref:`LoadSaveConfig`
+
 Color
 ^^^^^
 

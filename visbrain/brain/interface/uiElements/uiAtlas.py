@@ -151,14 +151,26 @@ class uiAtlas(object):
             item = self._roiToAdd.item(num)
             item.setCheckState(QtCore.Qt.Unchecked)
 
-    def _fcn_apply_roi_selection(self):
-        """Apply ROI selection."""
-        # Get the list of selected ROIs :
+    def _fcn_get_selected_rois(self):
+        """Get the list of selected ROIs."""
         _roiToAdd = []
         for num in range(self._roiToAdd.count()):
             item = self._roiToAdd.item(num)
             if item.checkState():
                 _roiToAdd.append(num)
+        return _roiToAdd
+
+    def _fcn_set_selected_rois(self, selection):
+        """Set a list of selected rois."""
+        for k in selection:
+            item = self._roiToAdd.item(k)
+            item.setCheckState(QtCore.Qt.Checked)
+
+    def _fcn_apply_roi_selection(self):
+        """Apply ROI selection."""
+        # Get the list of selected ROIs :
+        _roiToAdd = self._fcn_get_selected_rois()
+
         if _roiToAdd:
             self.volume._select_roi = self.volume.roi_values[_roiToAdd]
             # Get smoothing :

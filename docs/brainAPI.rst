@@ -39,6 +39,8 @@ Screenshot
 ++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.screenshot
 
+.. _LoadSaveConfig:
+
 Load and save GUI configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

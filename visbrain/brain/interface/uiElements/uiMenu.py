@@ -181,7 +181,10 @@ class uiMenu(object):
 
     def _fcn_menuROI(self):
         """Display/hide ROI."""
-        self.volume.mesh.visible = self.menuDispROI.isChecked()
+        try:
+            self.volume.mesh.visible = self.menuDispROI.isChecked()
+        except:
+            pass
 
     def _fcn_menuCbar(self):
         """Display/hide the colorbar."""
