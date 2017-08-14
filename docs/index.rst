@@ -99,6 +99,7 @@ Contents:
    sleep
    ndviz
    figure
+   utils
    io
    auto_examples/index.rst
    changelog_futur

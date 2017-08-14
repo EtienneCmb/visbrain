@@ -12,9 +12,14 @@ v0.3.0
 Brain module
 ~~~~~~~~~~~~
 
-* Add time-series attached to sources
-* Add small pictures attached to sources
+* Add time-series and pictures attached to sources
 * Colorbar integration improvements
+* Add volume and cross-sections
+* Enable to import new brain template and nifti volumes
+* Add XYZ source's tab to find where source's are localized
+* Improve ROI selection
+* New user methods
+* GUI and Doc improvements
 
 v0.2.9
 ^^^^^^
