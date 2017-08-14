@@ -7,7 +7,7 @@ from PyQt5 import QtWidgets
 
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    write_fig_pyqt)
+                    write_fig_pyqt, is_mne_installed)
 
 __all__ = ['uiMenu']
 
@@ -319,7 +319,8 @@ class uiMenu(object):
 
                 # Channels
                 for i, k in enumerate(self._chanChecks):
-                    self._chanChecks[i].setChecked(config['Channel_Visible'][i])
+                    self._chanChecks[i].setChecked(
+                        config['Channel_Visible'][i])
                     self._ymaxSpin[i].setValue(config['Channel_Amplitude'][i])
                 # Amplitudes :
                 _try("self._PanAllAmpMin.setValue(config['AllAmpMin'])")
@@ -419,27 +420,40 @@ class uiMenu(object):
             # Clean annotations :
             self._AnnotateTable.setRowCount(0)
             # Load the file :
-            txt = np.genfromtxt(file, delimiter=',', dtype=str)
-            self._AnnotateTable.setRowCount(txt.shape[0])
+            if isinstance(file, str):  # 'file.txt'
+                # Get starting/ending/annotation :
+                start, end, annot = np.genfromtxt(file, delimiter=',',
+                                                  dtype=str)
+            elif is_mne_installed():
+                import mne
+                if isinstance(file, mne.annotations.Annotations):
+                    start = file.onset
+                    end = file.onset + file.duration
+                    annot = file.description
+            else:
+                raise ValueError("Annotation's type not supported.")
+
+            # Fill table :
+            self._AnnotateTable.setRowCount(len(start))
             # File the table :
-            for k in range(txt.shape[0]):
+            for k, (s, e, a) in enumerate(zip(start, end, annot)):
                 # Starting index :
-                self._AnnotateTable.setItem(k, 0, QtWidgets.QTableWidgetItem(
-                    txt[k, 0]))
+                self._AnnotateTable.setItem(
+                    k, 0, QtWidgets.QTableWidgetItem(str(s)))
                 # Ending index :
-                self._AnnotateTable.setItem(k, 1, QtWidgets.QTableWidgetItem(
-                    txt[k, 1]))
+                self._AnnotateTable.setItem(
+                    k, 1, QtWidgets.QTableWidgetItem(str(e)))
                 # Text :
-                self._AnnotateTable.setItem(k, 2, QtWidgets.QTableWidgetItem(
-                    txt[k, 2]))
+                self._AnnotateTable.setItem(
+                    k, 2, QtWidgets.QTableWidgetItem(str(a)))
                 # Set the current tab to the annotation tab :
                 self.QuickSettings.setCurrentIndex(5)
 
-    ###########################################################################
-    ###########################################################################
+    ###########################################################
+    ###########################################################
     #                            DISPLAY
-    ###########################################################################
-    ###########################################################################
+    ###########################################################
+    ###########################################################
 
     def _disptog_settings(self):
         """Toggle method for display / hide the settings panel.
@@ -473,7 +487,7 @@ class uiMenu(object):
         Shortcut : P
         """
         self._slFrame.hide() if self._slFrame.isVisible(
-                                                    ) else self._slFrame.show()
+        ) else self._slFrame.show()
 
     def _disptog_timeax(self):
         """Toggle method for display / hide the time axis.

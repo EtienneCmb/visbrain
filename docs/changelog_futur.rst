@@ -6,6 +6,21 @@ Changelog and future directions
 Changelog
 ---------
 
+v0.3.0
+^^^^^^
+
+Brain module
+~~~~~~~~~~~~
+
+* Add time-series and pictures attached to sources
+* Colorbar integration improvements
+* Add volume and cross-sections
+* Enable to import new brain template and nifti volumes
+* Add XYZ source's tab to find where source's are localized
+* Improve ROI selection
+* New user methods
+* GUI and Doc improvements
+
 v0.2.9
 ^^^^^^
 
@@ -70,14 +85,12 @@ Brain
 
 * Colorbar support very low and very high values (see utils.power_of_ten) (ST)
 * Better ROI color control (ST)
-* Display time-series/2D maps attached to sources (ST)
 * Support load atlas from several extensions (LT)
 * Support adding custom ROI (LT)
 
 Sleep
 ^^^^^
 
-* Support annotations from MNE (ST)
 * Better integration of non-supported files (compatibility with MNE)  (ST)
 * Command-line control (LT)
 * De-noising (LT)

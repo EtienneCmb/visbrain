@@ -20,8 +20,11 @@ from vispy import scene
 from .AtlasBase import AtlasBase
 from .SourcesBase import SourcesBase
 from .ConnectBase import ConnectBase
-from .RoiBase import RoiBase
+from .TimeSeriesBase import TimeSeriesBase
+from .PicBase import PicBase
+from .VolumeBase import VolumeBase
 from .projection import Projections
+from ...utils import toggle_enable_tab
 
 
 class base(Projections):
@@ -33,19 +36,20 @@ class base(Projections):
     GUI has to be deactivate).
     """
 
-    def __init__(self, canvas, progressbar, **kwargs):
+    def __init__(self, canvas, parent_sp, progressbar, **kwargs):
         """Init."""
         # ---------- Initialize base ----------
         # Get progress bar :
         self.progressbar = progressbar
 
-        # Initialize brain, sources, connectivity and ROI objects :
+        # Initialize visbrain objects :
         self.atlas = AtlasBase(**kwargs)
+        self.volume = VolumeBase(parent_sp=parent_sp)
         self.sources = SourcesBase(**kwargs)
         self.connect = ConnectBase(_xyz=self.sources.xyz,
                                    c_xyz=self.sources.xyz, **kwargs)
-        self.area = RoiBase(scale_factor=self.atlas._scaleMax,
-                            name='NoneArea', select=None, color='#ab4642')
+        self.tseries = TimeSeriesBase(ts_xyz=self.sources.xyz, **kwargs)
+        self.pic = PicBase(pic_xyz=self.sources.xyz, **kwargs)
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -62,9 +66,9 @@ class base(Projections):
             self.menuDispSources.setEnabled(False)
             self.menuTransform.setEnabled(False)
             # Disable source/connect/cbar tabs :
-            self.QuickSettings.setTabEnabled(2, False)
-            self.QuickSettings.setTabEnabled(3, False)
-            self.QuickSettings.setTabEnabled(5, False)
+            toggle_enable_tab(self.QuickSettings, 'Sources', False)
+            toggle_enable_tab(self.QuickSettings, 'Connect', False)
+            toggle_enable_tab(self.QuickSettings, 'Cbar', False)
             # Disable transparency on sources :
             self.o_Sources.setEnabled(False)
             self.o_Sources.setChecked(False)
@@ -75,13 +79,21 @@ class base(Projections):
             self.o_Text.setChecked(False)
             self.grpText.setEnabled(False)
 
+        # Time-series panel :
+        if self.tseries.mesh.name == 'NoneTimeSeries':
+            self.grpTs.setEnabled(False)
+
+        # Pictures panel :
+        if self.pic.mesh.name == 'NonePic':
+            self.grpPic.setEnabled(False)
+
         # Connectivity panel:
         if self.connect.name == 'NoneConnect':
             # Disable menu :
             self.menuDispConnect.setEnabled(False)
             self.menuDispConnect.setChecked(False)
             # Disable Connect tab :
-            self.QuickSettings.setTabEnabled(3, False)
+            toggle_enable_tab(self.QuickSettings, 'Connect', False)
             self.o_Connect.setEnabled(False)
             self.o_Connect.setChecked(False)
         elif self.connect.colval is not None:
@@ -97,13 +109,16 @@ class base(Projections):
         self._vbNode = scene.Node(name='visbrain')
 
         # Make this root node the parent of others Brain objects :
-        self.atlas.mesh.parent = self._vbNode
+        self.volume.parent = self._vbNode
         self.sources.mesh.parent = self._vbNode
         self.connect.mesh.parent = self._vbNode
         self.sources.stextmesh.parent = self._vbNode
+        self.tseries.mesh.parent = self._vbNode
+        self.pic.mesh.parent = self._vbNode
+        self.atlas.mesh.parent = self._vbNode
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)
         # scene.visuals.XYZAxis(parent=self._vbNode)
 
         # Add a rescale / translate transformation to the Node :
-        self._vbNode.transform = self.atlas.transform
+        self._vbNode.transform = self.atlas.mesh._btransform

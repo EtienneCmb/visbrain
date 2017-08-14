@@ -10,7 +10,8 @@ This file contain functions to load :
 import os
 
 from .rw_utils import get_file_ext
-from .mneio import mne_is_installed, mne_read_sleep
+from .mneio import mne_read_sleep
+from .dependencies import is_mne_installed
 
 __all__ = ['switch_sleep', 'read_edf', 'read_trc', 'read_eeg', 'read_elan',
            'read_hyp']
@@ -51,7 +52,7 @@ def switch_sleep(path, *args, **kwargs):
     elif ext == '.trc':  # Micromed
         return read_trc(path, *args, **kwargs)
 
-    elif mne_is_installed() and (ext in ['.egi', '.cnt']):  # Present in MNE
+    elif is_mne_installed() and (ext in ['.egi', '.cnt']):  # Present in MNE
         return mne_read_sleep(file, ext, *args, **kwargs)
 
     else:  # None

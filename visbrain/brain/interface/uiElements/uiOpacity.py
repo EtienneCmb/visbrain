@@ -26,57 +26,38 @@ class uiOpacity(object):
         self._slmax = self.OpacitySlider.maximum()
 
         # ============================ Slice ============================
-        minfact = 1.2
         # Set maximum / minimum for each slice :
-        # Across x-axis :
-        self.xSlices.setMinimum(self.atlas.vert[..., 0].min()*minfact)
-        self.xSlices.setMaximum(self.atlas.vert[..., 0].max()*minfact)
-        self.xSlices_2.setMinimum(self.atlas.vert[..., 0].min()*minfact)
-        self.xSlices_2.setMaximum(self.atlas.vert[..., 0].max()*minfact)
-        # Across y-axis :
-        self.ySlices.setMinimum(self.atlas.vert[..., 1].min()*minfact)
-        self.ySlices.setMaximum(self.atlas.vert[..., 1].max()*minfact)
-        self.ySlices_2.setMinimum(self.atlas.vert[..., 1].min()*minfact)
-        self.ySlices_2.setMaximum(self.atlas.vert[..., 1].max()*minfact)
-        # Across z-axis :
-        self.zSlices.setMinimum(self.atlas.vert[..., 2].min()*minfact)
-        self.zSlices.setMaximum(self.atlas.vert[..., 2].max()*minfact)
-        self.zSlices_2.setMinimum(self.atlas.vert[..., 2].min()*minfact)
-        self.zSlices_2.setMaximum(self.atlas.vert[..., 2].max()*minfact)
+        self._fcn_minmax_slice()
         # Set functions :
         # Across x-axis :
-        self.xSlices.sliderMoved.connect(self._fcn_xyzSlice)
-        self.xSlices_2.sliderMoved.connect(self._fcn_xyzSlice)
+        self.xSlices.sliderMoved.connect(self._fcn_xyz_slice)
+        self.xSlices_2.sliderMoved.connect(self._fcn_xyz_slice)
         # Across y-axis :
-        self.ySlices.sliderMoved.connect(self._fcn_xyzSlice)
-        self.ySlices_2.sliderMoved.connect(self._fcn_xyzSlice)
+        self.ySlices.sliderMoved.connect(self._fcn_xyz_slice)
+        self.ySlices_2.sliderMoved.connect(self._fcn_xyz_slice)
         # Across z-axis :
-        self.zSlices.sliderMoved.connect(self._fcn_xyzSlice)
-        self.zSlices_2.sliderMoved.connect(self._fcn_xyzSlice)
+        self.zSlices.sliderMoved.connect(self._fcn_xyz_slice)
+        self.zSlices_2.sliderMoved.connect(self._fcn_xyz_slice)
 
-    def _getOpacitySlider(self, tomin=0., tomax=1.):
-        """Get and normalize the opacity slider value.
-
-        Kargs:
-            tomin: float, optional, (def: 0)
-                Set to tomin if value is under 0.
-
-            tomax: float, optional, (def: 1.)
-                Set to tomax if value is over 100.
-
-        Returns:
-            slval: float
-                The normalized slider value.
-
-            sl: float
-                The unprocessed slider value.
-        """
-        # Get opacity from the slider :
-        sl = float(self.OpacitySlider.value())
-        # Normalize this value :
-        slval = slider2opacity(sl, thmin=0.0, thmax=100.0, vmin=self._slmin,
-                               vmax=self._slmax, tomin=tomin, tomax=tomax)
-        return slval, sl
+    def _fcn_minmax_slice(self):
+        """Set minimum / maximum of slices."""
+        minfact = 1.2
+        vert = vert = self.atlas.mesh._vertFaces
+        # X-axis :
+        self.xSlices.setMinimum(vert[..., 0].min() * minfact)
+        self.xSlices.setMaximum(vert[..., 0].max() * minfact)
+        self.xSlices_2.setMinimum(vert[..., 0].min() * minfact)
+        self.xSlices_2.setMaximum(vert[..., 0].max() * minfact)
+        # Y-axis :
+        self.ySlices.setMinimum(vert[..., 1].min() * minfact)
+        self.ySlices.setMaximum(vert[..., 1].max() * minfact)
+        self.ySlices_2.setMinimum(vert[..., 1].min() * minfact)
+        self.ySlices_2.setMaximum(vert[..., 1].max() * minfact)
+        # Z-axis :
+        self.zSlices.setMinimum(vert[:, 2].min() * minfact)
+        self.zSlices.setMaximum(vert[:, 2].max() * minfact)
+        self.zSlices_2.setMinimum(vert[:, 2].min() * minfact)
+        self.zSlices_2.setMaximum(vert[:, 2].max() * minfact)
 
     def _fcn_opacity(self):
         """Change opacity of objects using the slider.
@@ -87,7 +68,7 @@ class uiOpacity(object):
         """
         # Get slider value :
         sl = float(self.OpacitySlider.value())
-        sl_01 = (sl-self._slmin)/(self._slmax-self._slmin)
+        sl_01 = (sl - self._slmin) / (self._slmax - self._slmin)
         if sl_01 < 0.05:
             sl_01, visible, deep_test = 0., False, False
         elif sl_01 > 0.95:
@@ -127,12 +108,12 @@ class uiOpacity(object):
 
         # =================== Areas opacity ===================
         if self.o_Areas.isChecked():
-            self.area.set_alpha(sl_01)
-            self.area.mesh.visible = visible
+            self.volume.set_roi_alpha(sl_01)
+            self.volume.mesh.visible = visible
 
         self.view.canvas.update()
 
-    def _fcn_xyzSlice(self):
+    def _fcn_xyz_slice(self):
         """Define slices over x, y and z axis and over different objects.
 
         The slices can be used to isolate some part of an object. Slices are
@@ -154,7 +135,7 @@ class uiOpacity(object):
             # Reset mask :
             self.atlas.mask = np.zeros_like(self.atlas.mask)
             # Find vertices to remove :
-            tohide = eval(formatstr.format(obj='self.atlas.vert'))
+            tohide = eval(formatstr.format(obj='self.atlas.mesh._vertFaces'))
             # Update mask :
             self.atlas.mask[tohide] = True
             # Get vertices and color :
@@ -162,7 +143,7 @@ class uiOpacity(object):
             # Update opacity for non-hide vertices :
             vcolor[self.atlas.mask, 3] = self.view.minOpacity
             sl = float(self.OpacitySlider.value())
-            sl_01 = (sl-self._slmin)/(self._slmax-self._slmin)
+            sl_01 = (sl - self._slmin) / (self._slmax - self._slmin)
             vcolor[~self.atlas.mask, 3] = sl_01
             self.atlas.mesh.set_color(vcolor)
 

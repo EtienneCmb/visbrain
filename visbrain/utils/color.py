@@ -391,7 +391,7 @@ def mpl_cmap(invert=False):
 
     Returns:
         cmap_lst: list
-            list of avaible matplotlib colormaps.
+            list of available matplotlib colormaps.
     """
     # Full list of colormaps :
     fullmpl = list(cm.datad.keys()) + list(cm.cmaps_listed.keys())

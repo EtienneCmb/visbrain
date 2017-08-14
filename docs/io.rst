@@ -13,7 +13,9 @@ GUI dialog
 MNE
 ---
 
-.. autofunction:: visbrain.io.mneio.mne_is_installed
+.. autofunction:: visbrain.io.dependencies.is_mne_installed
+
+.. autofunction:: visbrain.io.dependencies.is_nibabel_installed
 
 .. autofunction:: visbrain.io.mneio.mne_read_sleep
 

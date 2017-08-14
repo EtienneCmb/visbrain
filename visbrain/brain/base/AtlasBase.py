@@ -8,6 +8,7 @@
 import os
 import sys
 import numpy as np
+from warnings import warn
 
 from .visuals import BrainMesh
 
@@ -19,35 +20,48 @@ class AtlasBase(object):
     (atlas) and 'l_' (light).
     """
 
-    def __init__(self, a_color=(1., 1., 1.), a_opacity=1.,
-                 a_projection='internal', a_template='B1', a_hemisphere='both',
-                 a_vertices=None, a_faces=None, l_position=(100., 100., 100.),
-                 l_intensity=(1., 1., 1.), l_color=(1., 1., 1., 1.),
-                 l_coefAmbient=0.05, l_coefSpecular=0.5, **kwargs):
+    def __init__(self, a_color=(1., 1., 1.), a_opacity=1., a_template='B1',
+                 a_projection='internal', a_hemisphere='both',
+                 l_position=(100., 100., 100.), l_intensity=(1., 1., 1.),
+                 l_color=(1., 1., 1., 1.), l_ambient=0.05,
+                 l_specular=0.5, **kwargs):
         """Init."""
-        # Get inputs :
+        # ________________ INPUTS ________________
+        self.template = a_template
+        self.hemisphere = a_hemisphere
         self.color = a_color
         self.opacity = a_opacity
-        self.template = a_template
         self.projection = a_projection
-        self.user_vert = a_vertices
-        self.user_faces = a_faces
-        self.hemisphere = a_hemisphere
         self.sagittal, self.coronal, self.axial = (0, 0, 0)
         self.l_pos, self.l_int, self.l_col = l_position, l_intensity, l_color
-        self.l_amb, self.l_spec = l_coefAmbient, l_coefSpecular
-
-        # Needed variables :
-        self.atlaspath = os.path.join(sys.modules[__name__].__file__.split(
-                                                    'Atlas')[0], 'templates')
+        self.l_amb, self.l_spec = l_ambient, l_specular
         self._defcolor = (1., 1., 1.)
         self._scaleMax = 800.
 
-        # Initialize visualization :
-        vertices, faces, normals, color = self.load(self.template,
-                                                    self.user_vert,
-                                                    self.user_faces)
-        self.plot(vertices, faces, normals, color, a_projection, a_hemisphere)
+        # ________________ PATH & TEMPLATES ________________
+        # Find relative path to templates :
+        dirfile = sys.modules[__name__].__file__.split('Atlas')[0]
+        self._surf_path = os.path.join(dirfile, 'templates')
+        # Build list of templates available from the templates/ folder :
+        self._surf_list = ['B1', 'B2', 'B3', 'roi']
+        for k in os.listdir(self._surf_path):
+            file, ext = os.path.splitext(k)
+            if (ext == '.npz') and (file not in self._surf_list):
+                self._surf_list.append(file)
+        del self._surf_list[self._surf_list.index('roi')]
+
+        # ________________ INITIALIZE ________________
+        # Load template :
+        vertices, faces, normals, lr_index = self._load_template(self.template)
+        # Set Brain mesh :
+        self.mesh = BrainMesh(vertices, faces, normals, a_hemisphere, lr_index,
+                              l_position, l_color, l_intensity, l_ambient,
+                              l_specular, self._scaleMax, name='Brain')
+        self._nv = len(self.mesh)
+        # Opacity :
+        self.mask = np.zeros((len(self.mesh), 3), dtype=bool)
+        self.mesh.set_alpha(self.opacity)
+        self.mesh.projection(a_projection)
 
     def __len__(self):
         """Return the number of vertices."""
@@ -62,128 +76,55 @@ class AtlasBase(object):
         """Delete brain mesh."""
         self.mesh.clean()
 
-    def load(self, template='B1', vertices=None, faces=None):
+    def _load_template(self, template='B1'):
         """Load the atlas to use for the interface.
 
         Use either a default or a custom template using the vertices and
         faces inputs.
 
-        Kargs:
-            template: string, optional, (def: 'B1')
-                The template to import. Use either 'B1', 'B2' or
-                'B3'.
+        Parameters
+        ----------
+        template : string | 'B1'
+            The template to import. Use either 'B1', 'B2' or 'B3'.
 
-            vertices: ndarray, optional, (def: None)
-                Vertices to set of shape (N, 3) or (M, 3)
-
-            faces: ndarray, optional, (def: None)
-                Faces to set of shape (M, 3)
-
-        Returns:
-            vertices: ndarray
-                Vertices to set of shape (M, 3, 3)
-
-            faces: ndarray
-                Faces to set of shape (M, 3)
-
-            normals: ndarray
-                Normals per faces (needed for light) of shape (M, 3, 3)
-
-            color: ndarray
-                Brain color per faces of shape (M, 3, 4) for RGBA color
+        Returns
+        -------
+        vertices : array_like
+            Vertices to set of shape (M, 3, 3)
+        faces : array_like
+            Faces to set of shape (M, 3)
+        normals : array_like
+            Normals per faces (needed for light) of shape (M, 3, 3)
+        lr_index : int
+            Index at which to split Left and Right hemisphere.
         """
+        if template not in self._surf_list:
+            warn("No template " + template + ". B1 used instead.")
+            self.template = template = 'B1'
         # Load a default template :
-        if (vertices is None) and (faces is None):
-            if (template in ['B1', 'B2', 'B3']):
-                path = os.path.join(self.atlaspath, template + '.npz')
-                atlas = np.load(path)
-                faces, normals = atlas['faces'], atlas['a_normal']
-                vertices, color = atlas['a_position'], atlas['a_color']
-            else:
-                raise ValueError("a_template should be 'B1', 'B2' or 'B3.'")
-        # Load a user template
-        else:
-            vertices, faces, normals, color = vertices, faces, None, None
+        atlas = np.load(os.path.join(self._surf_path, template + '.npz'))
+        # Get Left/Right index :
+        lr_index = atlas['lr_index'] if 'lr_index' in atlas.keys() else None
+        return atlas['vertices'], atlas['faces'], atlas['normals'], lr_index
 
-        return vertices, faces, normals, color
+    def set_data(self, template=None, hemisphere=None):
+        """Set template and hemisphere.
 
-    def plot(self, vertices=None, faces=None, normals=None, color=None,
-             projection='internal', hemisphere='both'):
-        """Create the standard MNI brain.
-
-        Kargs:
-            vertices: ndarray, optional, (def: None)
-                Vertices to set of shape (M, 3, 3)
-
-            faces: ndarray, optional, (def: None)
-                Faces to set of shape (M, 3)
-
-            normals: ndarray, optional, (def: None)
-                The normals to set (same shape as vertices)
-
-            color: ndarray, optional, (def: None)
-                Brain color array of shape (M, 3, 4) for RGBA color
-
-            projection: string, optional, (def: 'internal')
-                Project light either inside ('internal') or outside
-                ('external') of the brain.
-
-            hemisphere: string, optional, (def: 'color')
-                Which hemisphere to plot. Use either 'both', 'left' or
-                'right'
+        Parameters
+        ----------
+        template : string
+            Name of the template to use.
+        hemisphere : {'both', 'right', 'left'}
+            Hemisphere to use.
         """
-        # Initialize mesh object :
-        self.mesh = BrainMesh(vertices=vertices, faces=faces, normals=normals,
-                              name='Brain', l_position=self.l_pos,
-                              l_intensity=self.l_int, l_color=self.l_col,
-                              l_coefAmbient=self.l_amb,
-                              l_coefSpecular=self.l_spec,
-                              scale_factor=self._scaleMax,
-                              hemisphere=hemisphere)
-        self.vert = self.mesh.get_vertices
-        self.transform = self.mesh._btransform
+        # ______________________ TEMPLATE ______________________
+        vertices, faces, normals, lr_index = self._load_template(template)
+        self.template = template
+
+        # ______________________ HEMISPHERE ______________________
+        self.hemisphere = hemisphere
+        self.mesh.set_data(vertices, faces, normals, hemisphere, lr_index)
+
+        # ______________________ VARIABLES ______________________
+        self._nv = len(self.mesh)
         self.mask = np.zeros((len(self.mesh), 3), dtype=bool)
-        self._nv = len(self.mesh)
-
-        self.mesh.set_alpha(self.opacity)
-        # Internal/external projection :
-        self.mesh.projection(projection)
-
-    def reload(self, template=None, hemisphere=None, projection=None,
-               vertices=None, faces=None):
-        """Reload an existing MNI brain.
-
-        Karg:
-            template: string, optional, (def: 'B1')
-                The template to import. Use either 'B1', 'B2' or
-                'B3'.
-
-            hemisphere: string, optional, (def: 'color')
-                Which hemisphere to plot. Use either 'both', 'left' or
-                'right'.
-
-            projection: string, optional, (def: 'internal')
-                Project light either inside ('internal') or outside
-                ('external') of the brain.
-
-            vertices: ndarray, optional, (def: None)
-                Vertices to set of shape (N, 3) or (M, 3)
-
-            faces: ndarray, optional, (def: None)
-                Faces to set of shape (M, 3)
-        """
-        if template is not None:
-            self.template = template
-        if hemisphere is not None:
-            self.hemisphere = hemisphere
-        if projection is not None:
-            self.projection = projection
-
-        # Initialize visualization :
-        vertices, faces, normals, color = self.load(self.template, vertices,
-                                                    faces)
-        self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
-                           hemisphere=hemisphere)
-        self.mesh.set_color(color=self.color)
-        self._nv = len(self.mesh)
-        self.vert = self.mesh.get_vertices

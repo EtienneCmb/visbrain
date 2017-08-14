@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets
 import vispy.scene.cameras as viscam
 
 from ....io import write_fig_canvas, dialogSave, write_fig_pyqt
+from ....utils import toggle_enable_tab
 
 __all__ = ['uiMenu']
 
@@ -35,6 +36,10 @@ class uiMenu(object):
         self.menuDispQuickSettings.triggered.connect(self._fcn_menuDispSet)
         # Brain :
         self.menuDispBrain.triggered.connect(self._fcn_menuBrain)
+        # Cross-sections :
+        self.menuDispCrossec.triggered.connect(self._fcn_menuCrossec)
+        # Volume :
+        self.menuDispVol.triggered.connect(self._fcn_menuVol)
         # Sources :
         self.menuDispSources.triggered.connect(self._fcn_menuSources)
         # Connectivity :
@@ -124,9 +129,30 @@ class uiMenu(object):
         """Display/hide the main Brain."""
         viz = self.menuDispBrain.isChecked()
         self.atlas.mesh.visible = viz
-        self.QuickSettings.setTabEnabled(1, viz)
         self.o_Brain.setEnabled(viz)
         self.o_Brain.setChecked(viz)
+
+    def _fcn_menuCrossec(self):
+        """Display/hide the Cross-sections."""
+        viz = self.menuDispCrossec.isChecked()
+        # Split view :
+        self._fcn_crossec_split()
+        # Set cross-sections visible/hide :
+        self.volume.visible_cs = viz
+        self.grpSec.setChecked(viz)
+        # Disable split view if not visible :
+        if not viz:
+            self._objsPage.setCurrentIndex(0)
+            self.view.canvas.show(True)
+        # Check (min, max) of slider :
+        self._fcn_crossec_sl_limits()
+
+    def _fcn_menuVol(self):
+        """Display/hide the volume."""
+        viz = self.menuDispVol.isChecked()
+        # Set volume visible/hide :
+        self.volume.visible_vol = viz
+        self.grpVol.setChecked(viz)
 
     def _fcn_menuSources(self):
         """Display/hide sources."""
@@ -134,7 +160,7 @@ class uiMenu(object):
         viz = self.menuDispSources.isChecked() and inn
         self.sources.mesh.visible = viz
         self.sources.stextmesh.visible = viz
-        self.q_stextshow.setChecked(viz)
+        self.grpText.setChecked(viz)
         self.toolBox.setEnabled(viz)
         self.toolBox.setEnabled(viz)
         self.groupBox_6.setEnabled(viz)
@@ -155,13 +181,22 @@ class uiMenu(object):
 
     def _fcn_menuROI(self):
         """Display/hide ROI."""
-        self.area.mesh.visible = self.menuDispROI.isChecked()
+        try:
+            self.volume.mesh.visible = self.menuDispROI.isChecked()
+        except:
+            pass
 
     def _fcn_menuCbar(self):
         """Display/hide the colorbar."""
         viz = self.menuDispCbar.isChecked()
-        self.QuickSettings.setTabEnabled(5, viz)
+        toggle_enable_tab(self.QuickSettings, 'Cbar', viz)
         self.cbpanelW.setVisible(viz)
+        # Get enabled objects :
+        cbox = self.cbqt.cbui.object
+        objs = [cbox.model().item(k).isEnabled() for k in range(cbox.count())]
+        if sum(objs) == 1:
+            # Select the name of the enabled object :
+            self.cbqt.select(cbox.itemText(objs.index(True)))
 
     ###########################################################################
     #                                ROTATION
@@ -212,8 +247,8 @@ class uiMenu(object):
         # Add camera to the mesh and to the canvas :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(camera)
-        if self.area.name == 'displayed':
-            self.area.mesh.set_camera(camera)
+        if self.volume.name_roi == 'ROI':
+            self.volume.mesh.set_camera(camera)
         self.view.wc.update()
         if camera.name == 'turntable':
             self._rotate(fixed='axial_0')

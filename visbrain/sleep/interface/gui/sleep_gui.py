@@ -1883,7 +1883,7 @@ class Ui_MainWindow(object):
 "on"))
         self._ToolRdSelected.setText(_translate("MainWindow", "Selected"))
         self._ToolRdAll.setText(_translate("MainWindow", "All"))
-        self._ToolDetectChan.setToolTip(_translate("MainWindow", "<html><head/><body><p>Pick up a channel to run the detection (only avaible with &quot;Selected&quot; option)</p></body></html>"))
+        self._ToolDetectChan.setToolTip(_translate("MainWindow", "<html><head/><body><p>Pick up a channel to run the detection (only available with &quot;Selected&quot; option)</p></body></html>"))
         self.groupBox_4.setTitle(_translate("MainWindow", "Settings"))
         self.label_26.setText(_translate("MainWindow", "Lookahead"))
         self._ToolPeakLook.setToolTip(_translate("MainWindow", "<html><head/><body><p>Minimum distance between two peaks</p></body></html>"))

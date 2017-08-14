@@ -258,8 +258,8 @@ class uiSettings(object):
         l_amb, l_spec = self.uil_AmbCoef.value(), self.uil_SpecCoef.value()
 
         self.atlas.mesh.set_light(l_position=l_pos, l_color=l_col,
-                                  l_intensity=l_int, l_coefAmbient=l_amb,
-                                  l_coefSpecular=l_spec)
+                                  l_intensity=l_int, l_ambient=l_amb,
+                                  l_specular=l_spec)
 
     def _light_Atlas2Ui(self):
         """Get light properties from the atlas and set it to the GUI.
@@ -343,7 +343,7 @@ class uiSettings(object):
         distance) at the bottom of the setting panel.
         """
         # Define and set the rotation string :
-        rotstr = 'Azimuth: {a}°, Elevation: {e}°, Distance: {d}, Scale: {s}'
+        rotstr = 'Azimuth: {a}°, Elevation: {e}°,\nDistance: {d}, Scale: {s}'
         # Get camera Azimuth / Elevation / Distance :
         a = str(self.view.wc.camera.azimuth)
         e = str(self.view.wc.camera.elevation)

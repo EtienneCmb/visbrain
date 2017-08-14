@@ -64,7 +64,8 @@ class SourcesTransform(object):
                 # Update progress bar :
                 self.progressbar.setValue(100*k/N)
                 # Find if it's inside :
-                mask[k] = self._isInside(self.atlas.vert, i, contribute=False)
+                vert = self.atlas.mesh.get_vertices
+                mask[k] = self._isInside(vert, i, contribute=False)
             # Set mask according to inside / outside :
             if select == 'inside':
                 self.sources.data.mask = np.invert(mask)
@@ -88,10 +89,10 @@ class SourcesTransform(object):
                              " or 'roi'.")
         # Project on brain surface :
         if self._tprojecton == 'brain':
-            nv, vertices = self.atlas._nv, self.atlas.vert
+            nv, vertices = self.atlas._nv, self.atlas.mesh.get_vertices
         # Project on deep areas :
         elif self._tprojecton == 'roi':
-            vertices = self.area.mesh.get_vertices
+            vertices = self.volume.mesh.get_vertices
             nv = vertices.shape[0]
 
         return vertices, nv
@@ -457,6 +458,6 @@ class SourcesTransform(object):
         elif self._tprojecton == 'roi':
             # Apply general color to the brain :
             cortmask[nnz, 0:3] = self.atlas.color
-            # cortmask[nnz, 0:3] = self.area.mesh.get_color[nnz, 0:3]
+            # cortmask[nnz, 0:3] = self.volume.mesh.get_color[nnz, 0:3]
             # Update mesh with cmap :
-            self.area.mesh.set_color(data=cortmask)
+            self.volume.mesh.set_color(data=cortmask)

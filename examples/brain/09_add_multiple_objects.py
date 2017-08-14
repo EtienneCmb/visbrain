@@ -74,8 +74,8 @@ vb.add_connect('connect_L', c_xyz=s_xyzRF, c_connect=connectL,
 # Add right / front connectivity :
 connectL = create_connect(s_xyzRB, 31., 32.)
 vb.add_connect('connect_L', c_xyz=s_xyzRB, c_connect=connectL,
-               c_cmap='plasma', c_colorby='count', c_cmap_vmin=2.,
-               c_cmap_under='gray', c_cmap_vmax=4., c_cmap_over='red',
+               c_cmap='plasma', c_colorby='count', c_vmin=2.,
+               c_under='gray', c_vmax=4., c_over='red',
                c_dynamic=(.5, 1.))
 
 

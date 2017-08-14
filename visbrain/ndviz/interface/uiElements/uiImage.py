@@ -49,7 +49,7 @@ class uiImage(object):
                 # Set possible axis and index limits :
                 self._imAxInd.setMinimum(0)
                 self._imAxInd.setMaximum(sh[self._imAxZ.currentIndex()]-1)
-            # Define avaible axis :
+            # Define available axis :
             avai = [str(k) for k in np.arange(ndim)]
             self._imAxX.addItems(avai)
             self._imAxY.addItems(avai)

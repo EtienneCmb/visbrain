@@ -496,6 +496,22 @@ Just as for the configuration file, you can use the input variable *annotation_f
   
   Sleep(annotation_file='pathto/myannotations.txt')
 
+Alternatively, you can use annotations from MNE-python and pass your annotations to the *annotation_file* variable :
+
+.. code-block:: python
+
+  import numpy as np
+  from mne import Annotations
+  from visbrain import Sleep
+
+  # Define the onset, duration and description :
+  onset = np.array([117., 256., 312.])
+  durations = np.array([5, 10, 4])
+  description = np.array(['First event', 'Second event', 'Third event'])
+  annot = Annotations(onset, durations, description)
+
+  Sleep(annotation_file=annot)
+
 
 Shortcuts
 ---------
