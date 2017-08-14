@@ -101,6 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
@@ -168,18 +169,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for visbrain.io.mneio</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Utility functions if MNE is installed.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Utility functions for MNE.&quot;&quot;&quot;</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mne_is_installed&#39;</span><span class="p">,</span> <span class="s1">&#39;mne_read_sleep&#39;</span><span class="p">]</span>
-
-
-<div class="viewcode-block" id="mne_is_installed"><a class="viewcode-back" href="../../../io.html#visbrain.io.mneio.mne_is_installed">[docs]</a><span class="k">def</span> <span class="nf">mne_is_installed</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Test if MNE is installed.&quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">mne</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mne_read_sleep&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="mne_read_sleep"><a class="viewcode-back" href="../../../io.html#visbrain.io.mneio.mne_read_sleep">[docs]</a><span class="k">def</span> <span class="nf">mne_read_sleep</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

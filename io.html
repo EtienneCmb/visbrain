@@ -182,71 +182,89 @@
 <dt id="visbrain.io.dialog.dialogSave">
 <code class="descclassname">visbrain.io.dialog.</code><code class="descname">dialogSave</code><span class="sig-paren">(</span><em>self, name=’Save file’, default=’file’, allext=[‘All files (*.*)’]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/dialog.html#dialogSave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.dialog.dialogSave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a window to save a file.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>self: class</dt>
-<dd>Class containing PyQt5 elemnets.</dd>
-</dl>
-</dd>
-<dt>Kargs:</dt>
-<dd><dl class="first last docutils">
-<dt>name: string, optional, (def: ‘Save file’)</dt>
-<dd>Name of the saving window.</dd>
-<dt>default: string, optional, (def: ‘file’)</dt>
-<dd>Default name of the saved file.</dd>
-<dt>allext: list, optional, (def: [‘All files (<em>.</em>)’])</dt>
-<dd>String containing all the extensions. Must be a list where each
-element is a string of type ‘Ext (<a href="#id1"><span class="problematic" id="id2">*</span></a>.ext)’</dd>
-</dl>
-</dd>
-<dt>Returns:</dt>
-<dd><dl class="first last docutils">
-<dt>filename: string</dt>
-<dd>Filename for saving.</dd>
-</dl>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>self</strong> : class</p>
+<blockquote>
+<div><p>Class containing PyQt5 elemnets.</p>
+</div></blockquote>
+<p><strong>name</strong> : string | ‘Save file’</p>
+<blockquote>
+<div><p>Name of the saving window.</p>
+</div></blockquote>
+<p><strong>default</strong> : string | ‘file’</p>
+<blockquote>
+<div><p>Default name of the saved file.</p>
+</div></blockquote>
+<p><strong>allext</strong> : list | [‘All files (<em>.</em>)’]</p>
+<blockquote>
+<div><p>String containing all the extensions. Must be a list where each
+element is a string of type ‘Ext (.ext)’</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote class="last">
+<div><p>Filename for saving.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="visbrain.io.dialog.dialogLoad">
 <code class="descclassname">visbrain.io.dialog.</code><code class="descname">dialogLoad</code><span class="sig-paren">(</span><em>self, name=’Open file’, default=’file’, allext=[‘All files (*.*)’]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/dialog.html#dialogLoad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.dialog.dialogLoad" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a window to load a file.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>self: class</dt>
-<dd>Class containing PyQt5 elemnets.</dd>
-</dl>
-</dd>
-<dt>Kargs:</dt>
-<dd><dl class="first last docutils">
-<dt>name: string, optional, (def: ‘Save file’)</dt>
-<dd>Name of the opening window.</dd>
-<dt>default: string, optional, (def: ‘file’)</dt>
-<dd>Default name of the opened file.</dd>
-<dt>allext: list, optional, (def: [‘All files (<em>.</em>)’])</dt>
-<dd>String containing all the extensions. Must be a list where each
-element is a string of type ‘Ext (<a href="#id3"><span class="problematic" id="id4">*</span></a>.ext)’</dd>
-</dl>
-</dd>
-<dt>Returns:</dt>
-<dd><dl class="first last docutils">
-<dt>filename: string</dt>
-<dd>Filename for opening.</dd>
-</dl>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>self</strong> : class</p>
+<blockquote>
+<div><p>Class containing PyQt5 elemnets.</p>
+</div></blockquote>
+<p><strong>name</strong> : string | ‘Save file’</p>
+<blockquote>
+<div><p>Name of the opening window.</p>
+</div></blockquote>
+<p><strong>default</strong> : string | ‘file’</p>
+<blockquote>
+<div><p>Default name of the opened file.</p>
+</div></blockquote>
+<p><strong>allext</strong> : list | [‘All files (<em>.</em>)’]</p>
+<blockquote>
+<div><p>String containing all the extensions. Must be a list where each
+element is a string of type ‘Ext (.ext)’</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote class="last">
+<div><p>Filename for opening.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="mne">
 <h2>MNE<a class="headerlink" href="#mne" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="visbrain.io.mneio.mne_is_installed">
-<code class="descclassname">visbrain.io.mneio.</code><code class="descname">mne_is_installed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/mneio.html#mne_is_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.mneio.mne_is_installed" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.io.dependencies.is_mne_installed">
+<code class="descclassname">visbrain.io.dependencies.</code><code class="descname">is_mne_installed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/dependencies.html#is_mne_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.dependencies.is_mne_installed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test if MNE is installed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="visbrain.io.dependencies.is_nibabel_installed">
+<code class="descclassname">visbrain.io.dependencies.</code><code class="descname">is_nibabel_installed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/dependencies.html#is_nibabel_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.dependencies.is_nibabel_installed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if nibabel is installed.</p>
 </dd></dl>
 
 <dl class="function">

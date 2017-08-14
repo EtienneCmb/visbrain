@@ -691,6 +691,20 @@ Just as for the configuration file, you can use the input variable <em>annotatio
 <span class="n">Sleep</span><span class="p">(</span><span class="n">annotation_file</span><span class="o">=</span><span class="s1">&#39;pathto/myannotations.txt&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Alternatively, you can use annotations from MNE-python and pass your annotations to the <em>annotation_file</em> variable :</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">Annotations</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
+
+<span class="c1"># Define the onset, duration and description :</span>
+<span class="n">onset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">117.</span><span class="p">,</span> <span class="mf">256.</span><span class="p">,</span> <span class="mf">312.</span><span class="p">])</span>
+<span class="n">durations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="n">description</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;First event&#39;</span><span class="p">,</span> <span class="s1">&#39;Second event&#39;</span><span class="p">,</span> <span class="s1">&#39;Third event&#39;</span><span class="p">])</span>
+<span class="n">annot</span> <span class="o">=</span> <span class="n">Annotations</span><span class="p">(</span><span class="n">onset</span><span class="p">,</span> <span class="n">durations</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+
+<span class="n">Sleep</span><span class="p">(</span><span class="n">annotation_file</span><span class="o">=</span><span class="n">annot</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="shortcuts">
 <h2>Shortcuts<a class="headerlink" href="#shortcuts" title="Permalink to this headline">¶</a></h2>
@@ -827,7 +841,8 @@ Just as for the configuration file, you can use the input variable <em>annotatio
 </div></blockquote>
 <p><strong>annotation_file</strong> : string | None</p>
 <blockquote>
-<div><p>Path to the annotation file (.txt, .csv)</p>
+<div><p>Path to the annotation file (.txt, .csv). Alternatively, you can pass
+an annotation instance of MNE.</p>
 </div></blockquote>
 <p><strong>data</strong> : array_like | None</p>
 <blockquote>

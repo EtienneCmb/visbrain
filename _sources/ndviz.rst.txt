@@ -20,7 +20,7 @@ Use the following command to import Ndviz :
 
 Visit this page for a set of `examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/ndviz>`_.
 
-Inputs
+API
 ------
 
 .. autoclass:: visbrain.ndviz.ndviz.Ndviz

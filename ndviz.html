@@ -102,7 +102,7 @@
 <li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Ndviz</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#shortcuts">Shortcuts</a></li>
 </ul>
 </li>
@@ -187,54 +187,73 @@
 </div>
 <p>Visit this page for a set of <a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/examples/ndviz">examples</a>.</p>
 </div>
-<div class="section" id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="visbrain.ndviz.ndviz.Ndviz">
 <em class="property">class </em><code class="descclassname">visbrain.ndviz.ndviz.</code><code class="descname">Ndviz</code><span class="sig-paren">(</span><em>data</em>, <em>sf=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/ndviz/ndviz.html#Ndviz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.ndviz.ndviz.Ndviz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signal visualization tool.</p>
 <p>This class to visualize multi-dimentional array or to inspect single
 signal in several forms (line / markers / histogram / spectrogram / image).</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>data: array</dt>
-<dd>The array to plot. It can have any dimension.</dd>
-</dl>
-</dd>
-<dt>Kargs:</dt>
-<dd><dl class="first last docutils">
-<dt>sf: float, optionam, (def: 1.)</dt>
-<dd>The sampling frequency</dd>
-<dt>nd_lw: float, optional, (def: 1.)</dt>
-<dd>Line width of each signal for the Nd-plot.</dd>
-<dt>nd_title: string, optional, (def: ‘Nd-plot’)</dt>
-<dd>Title of the Nd plot.</dd>
-<dt>nd_xlabel: string, optional, (def: ‘X axis’)</dt>
-<dd>Label of the x axis for the Nd plot.</dd>
-<dt>nd_ylabel: string, optional, (def: ‘Y axis’)</dt>
-<dd>Label of the y axis for the Nd plot.</dd>
-<dt>od_lw: float, optional, (def: 1.)</dt>
-<dd>Line width of each signal for the 1d-plot line.</dd>
-<dt>on_title: string, optional, (def: ‘1d-plot’)</dt>
-<dd>Title of the 1d plot.</dd>
-<dt>od_xlabel: string, optional, (def: ‘X axis’)</dt>
-<dd>Label of the x axis for the 1d plot.</dd>
-<dt>od_ylabel: string, optional, (def: ‘Y axis’)</dt>
-<dd>Label of the y axis for the 1d plot.</dd>
-<dt>ui_bgcolor: string/tuple, optional, (def: (.09, .09, .09))</dt>
-<dd>Background color of the main canvas.</dd>
-</dl>
-</dd>
-<dt>Example:</dt>
-<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : array</p>
+<blockquote>
+<div><p>The array to plot. It can have any dimension.</p>
+</div></blockquote>
+<p><strong>sf</strong> : float | 1.</p>
+<blockquote>
+<div><p>The sampling frequency</p>
+</div></blockquote>
+<p><strong>nd_lw</strong> : float | 1.</p>
+<blockquote>
+<div><p>Line width of each signal for the Nd-plot.</p>
+</div></blockquote>
+<p><strong>nd_title</strong> : string | ‘Nd-plot’</p>
+<blockquote>
+<div><p>Title of the Nd plot.</p>
+</div></blockquote>
+<p><strong>nd_xlabel</strong> : string | ‘X axis’</p>
+<blockquote>
+<div><p>Label of the x axis for the Nd plot.</p>
+</div></blockquote>
+<p><strong>nd_ylabel</strong> : string | ‘Y axis’</p>
+<blockquote>
+<div><p>Label of the y axis for the Nd plot.</p>
+</div></blockquote>
+<p><strong>od_lw</strong> : float | 1.</p>
+<blockquote>
+<div><p>Line width of each signal for the 1d-plot line.</p>
+</div></blockquote>
+<p><strong>on_title</strong> : string | ‘1d-plot’</p>
+<blockquote>
+<div><p>Title of the 1d plot.</p>
+</div></blockquote>
+<p><strong>od_xlabel</strong> : string | ‘X axis’</p>
+<blockquote>
+<div><p>Label of the x axis for the 1d plot.</p>
+</div></blockquote>
+<p><strong>od_ylabel</strong> : string | ‘Y axis’</p>
+<blockquote>
+<div><p>Label of the y axis for the 1d plot.</p>
+</div></blockquote>
+<p><strong>ui_bgcolor</strong> : string/tuple | (.09, .09, .09)</p>
+<blockquote class="last">
+<div><p>Background color of the main canvas.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="k">import</span> <span class="n">Ndviz</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Ndviz</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</dd>
-</dl>
 </dd></dl>
 
 </div>

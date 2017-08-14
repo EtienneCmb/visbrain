@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Add multiple objects to the scene &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="../../index.html"/>
+        <link rel="up" title="Examples" href="../index.html"/>
+        <link rel="next" title="Connect deep sources" href="04_connectivity.html"/>
+        <link rel="prev" title="Add deep sources" href="03_sources.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">I/O</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="00_brain_control.html">Brain control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_region_of_interest.html">Add Region of interest (ROI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_add_brain_template.html">Add a brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_add_time_series.html">Add time series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="07_add_pictures.html">Add pictures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_add_nifti_volume.html">Add Nifti volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_sources.html">Add deep sources</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Add multiple objects to the scene</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_connectivity.html">Connect deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#ndviz-examples">Ndviz Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+      <li>Add multiple objects to the scene</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/auto_examples/brain/09_add_multiple_objects.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="add-multiple-objects-to-the-scene">
+<span id="sphx-glr-auto-examples-brain-09-add-multiple-objects-py"></span><h1>Add multiple objects to the scene<a class="headerlink" href="#add-multiple-objects-to-the-scene" title="Permalink to this headline">¶</a></h1>
+<p>This example demonstrate how to display connectivity. To this end,
+we will define some deep sources and connect them. See 2_Sources.py
+to defined sources</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c1"># Create an empty kwargs dictionnary :</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
+<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
+<span class="n">s_xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
+
+<span class="c1"># Separate source&#39;s coodinates : in this part, first we find where sources</span>
+<span class="c1"># are in the left hemisphere, then in the right hemisphere and in front and</span>
+<span class="c1"># finally right hemisphere back :</span>
+<span class="n">s_xyzL</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">s_xyzRB</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">),</span> <span class="p">:]</span>
+<span class="n">s_xyzRF</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="p">:]</span>
+
+<span class="c1"># Function in order to create random connection dataset for each</span>
+<span class="c1"># source object :</span>
+<span class="k">def</span> <span class="nf">create_connect</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">):</span>
+    <span class="c1"># Create a random connection dataset :</span>
+    <span class="n">connect</span> <span class="o">=</span> <span class="mf">100.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">))</span>
+    <span class="c1"># Mask the connection aray :</span>
+    <span class="n">connect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="c1"># Hide lower triangle :</span>
+    <span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">tril_indices_from</span><span class="p">(</span><span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="c1"># Hide connexions that are not between min and max :</span>
+    <span class="n">connect</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">connect</span><span class="o">.</span><span class="n">data</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">,</span>
+                               <span class="n">connect</span><span class="o">.</span><span class="n">data</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="n">connect</span>
+
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
+
+<span class="c1"># ================ ADD SOURCE OBJECTS ================</span>
+<span class="c1"># Add left hemisphere sources :</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">add_sources</span><span class="p">(</span><span class="s1">&#39;sources_L&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyzL</span><span class="p">,</span> <span class="n">s_symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span>
+               <span class="n">s_color</span><span class="o">=</span><span class="s1">&#39;#ab4642&#39;</span><span class="p">,</span> <span class="n">s_edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">s_scaling</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">s_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">s_xyzL</span><span class="p">)),</span> <span class="n">s_radiusmin</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+               <span class="n">s_radiusmax</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">s_opacity</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Add right / front sources :</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">add_sources</span><span class="p">(</span><span class="s1">&#39;sources_RF&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyzRF</span><span class="p">,</span> <span class="n">s_symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">,</span>
+               <span class="n">s_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">s_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">s_xyzRF</span><span class="p">)),</span>
+               <span class="n">s_radiusmin</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">s_radiusmax</span><span class="o">=</span><span class="mf">7.</span><span class="p">,</span> <span class="n">s_opacity</span><span class="o">=.</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Add right / back sources :</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">add_sources</span><span class="p">(</span><span class="s1">&#39;sources_RB&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyzRB</span><span class="p">,</span> <span class="n">s_symbol</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span>
+               <span class="n">s_color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">s_edgewidth</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">s_scaling</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">s_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">s_xyzRB</span><span class="p">)),</span>
+               <span class="n">s_radiusmin</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">s_radiusmax</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">s_opacity</span><span class="o">=.</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="c1"># ================ ADD CONNECTIVITY OBJECTS ================</span>
+<span class="c1"># Add left hemisphere connectivity :</span>
+<span class="n">connectL</span> <span class="o">=</span> <span class="n">create_connect</span><span class="p">(</span><span class="n">s_xyzL</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">add_connect</span><span class="p">(</span><span class="s1">&#39;connect_L&#39;</span><span class="p">,</span> <span class="n">c_xyz</span><span class="o">=</span><span class="n">s_xyzL</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="n">connectL</span><span class="p">,</span>
+               <span class="n">c_cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">c_linewidth</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">c_colorby</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span>
+               <span class="n">c_dynamic</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
+
+<span class="c1"># Add right / front connectivity :</span>
+<span class="n">connectL</span> <span class="o">=</span> <span class="n">create_connect</span><span class="p">(</span><span class="n">s_xyzRF</span><span class="p">,</span> <span class="mf">31.</span><span class="p">,</span> <span class="mf">31.5</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">add_connect</span><span class="p">(</span><span class="s1">&#39;connect_L&#39;</span><span class="p">,</span> <span class="n">c_xyz</span><span class="o">=</span><span class="n">s_xyzRF</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="n">connectL</span><span class="p">,</span>
+               <span class="n">c_cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">c_colorby</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">c_linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+               <span class="n">c_dynamic</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
+
+<span class="c1"># Add right / front connectivity :</span>
+<span class="n">connectL</span> <span class="o">=</span> <span class="n">create_connect</span><span class="p">(</span><span class="n">s_xyzRB</span><span class="p">,</span> <span class="mf">31.</span><span class="p">,</span> <span class="mf">32.</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">add_connect</span><span class="p">(</span><span class="s1">&#39;connect_L&#39;</span><span class="p">,</span> <span class="n">c_xyz</span><span class="o">=</span><span class="n">s_xyzRB</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="n">connectL</span><span class="p">,</span>
+               <span class="n">c_cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">c_colorby</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">c_vmin</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+               <span class="n">c_under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">c_vmax</span><span class="o">=</span><span class="mf">4.</span><span class="p">,</span> <span class="n">c_over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+               <span class="n">c_dynamic</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
+
+
+<span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/09_add_multiple_objects.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">09_add_multiple_objects.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/09_add_multiple_objects.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">09_add_multiple_objects.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="04_connectivity.html" class="btn btn-neutral float-right" title="Connect deep sources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="03_sources.html" class="btn btn-neutral" title="Add deep sources" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

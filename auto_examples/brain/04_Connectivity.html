@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Connect deep sources &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="../../index.html"/>
+        <link rel="up" title="Examples" href="../index.html"/>
+        <link rel="next" title="Load an existing colorbar configuration file" href="../colorbar/load_existing_config.html"/>
+        <link rel="prev" title="Add multiple objects to the scene" href="09_AddMultipleObjects.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">I/O</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="00_basics.html">Basic plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_InterfaceCustomization.html">Interface customization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_DeepStructures.html">Add Region of interest (ROI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_CustomBrainTemplate.html">Use your own brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_AddTimeSeries.html">Add time series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="07_AddPictures.html">Add pictures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_Sources.html">Add deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_AddMultipleObjects.html">Add multiple objects to the scene</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Connect deep sources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#ndviz-examples">Ndviz Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+      <li>Connect deep sources</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/auto_examples/brain/04_Connectivity.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="connect-deep-sources">
+<span id="sphx-glr-auto-examples-brain-04-connectivity-py"></span><h1>Connect deep sources<a class="headerlink" href="#connect-deep-sources" title="Permalink to this headline">¶</a></h1>
+<p>This example demonstrate how to display connectivity. To this end,
+we will define some deep sources and connect them. See 2_Sources.py
+to defined sources</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c1"># Create an empty kwargs dictionnary :</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1"># ____________________________ DATA ____________________________</span>
+
+<span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
+<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
+<span class="n">s_xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Number of electrodes</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_opacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>   <span class="c1"># Sources opacity</span>
+
+<span class="c1"># Now, create some random data between [-50,50]</span>
+<span class="n">s_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">s_xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">s_data</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;crimson&#39;</span>
+
+<span class="c1"># To connect sources between them, we create a (N, N) array.</span>
+<span class="c1"># This array should be either upper or lower triangular to avoid</span>
+<span class="c1"># redondant connections.</span>
+<span class="n">c_connect</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>                 <span class="c1"># Random array of connections</span>
+<span class="n">c_connect</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">tril_indices_from</span><span class="p">(</span><span class="n">c_connect</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Set to zero inferior triangle</span>
+
+
+<span class="c1"># Because all connections are not necessary interesting,</span>
+<span class="c1"># it&#39;s possible to select only certain either using a</span>
+<span class="c1"># c_select array composed with ones and zeros, or by</span>
+<span class="c1"># masking the connection matrix.</span>
+<span class="c1"># We are giong to search vealues between umin and umax to</span>
+<span class="c1"># limit the number of connections :</span>
+<span class="n">umin</span><span class="p">,</span> <span class="n">umax</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">31</span>
+
+<span class="c1"># 1 - Using c_select (0: hide, 1: display):</span>
+<span class="n">c_select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">c_connect</span><span class="p">)</span>
+<span class="n">c_select</span><span class="p">[(</span><span class="n">c_connect</span> <span class="o">&gt;</span> <span class="n">umin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">c_connect</span> <span class="o">&lt;</span> <span class="n">umax</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># 2 - Using masking (True: hide, 1: display):</span>
+<span class="n">c_connect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">c_connect</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">c_connect</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">c_connect</span> <span class="o">&gt;</span> <span class="n">umin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">c_connect</span> <span class="o">&lt;</span> <span class="n">umax</span><span class="p">))]</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;1 and 2 equivalent :&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">c_select</span><span class="p">,</span> <span class="o">~</span><span class="n">c_connect</span><span class="o">.</span><span class="n">mask</span> <span class="o">+</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_connect&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_connect</span>
+<span class="c1"># ____________________________ SETTINGS ____________________________</span>
+
+
+<span class="c1"># Control the dynamic range of sources radius and the edge color :</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_radiusmin&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_radiusmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># &#39;white&#39;</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_edgewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># Colormap properties (for sources) :</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Spectral_r&#39;</span>                             <span class="c1"># Matplotlib colormap</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_clim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">50.</span><span class="p">,</span> <span class="mf">50.</span><span class="p">)</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_vmin&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_vmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">21</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_under&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;midnightblue&#39;</span><span class="p">,</span> <span class="s2">&quot;#e74c3c&quot;</span>
+
+<span class="c1"># Colormap properties (for connectivity) :</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gnuplot&#39;</span>                                <span class="c1"># Matplotlib colormap</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_vmin&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_vmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">umin</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">umax</span> <span class="o">-</span> <span class="mf">0.1</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_under&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_clim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">umin</span><span class="p">,</span> <span class="n">umax</span><span class="p">]</span>
+
+<span class="c1"># Finally, use c_colorby to define how connections have to be colored.</span>
+<span class="c1"># if c_colorby is &#39;count&#39;, it&#39;s the number of connections which pear node</span>
+<span class="c1"># drive the colormap. If &#39;strength&#39;, it&#39;s the connectivity strength between</span>
+<span class="c1"># two nodes.</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_colorby&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;strength&#39;</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_radiusmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c_dynamic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Atlas template and opacity :</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;a_template&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;B1&#39;</span>
+
+<span class="c1"># Set font size, color and label for the colorbar :</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cb_fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cb_fontcolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cb_label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;My colorbar label&#39;</span>
+
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/04_Connectivity.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">04_Connectivity.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/04_Connectivity.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">04_Connectivity.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../colorbar/load_existing_config.html" class="btn btn-neutral float-right" title="Load an existing colorbar configuration file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="09_AddMultipleObjects.html" class="btn btn-neutral" title="Add multiple objects to the scene" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

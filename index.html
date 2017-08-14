@@ -101,6 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
@@ -211,7 +212,7 @@
 </div>
 <div class="section" id="pyqt4-version">
 <h3>PyQt4 version<a class="headerlink" href="#pyqt4-version" title="Permalink to this headline">¶</a></h3>
-<p>Since the 0.2.8 Visbrain use the PyQt5 version. If you still use PyQt4, you should install the Visbrain version 0.2.7.</p>
+<p>Since version 0.2.8, Visbrain use the PyQt5. If you still use PyQt4, you should install the Visbrain version 0.2.7.</p>
 <p>In a terminal, create and activate a 3.5 Python environment with the correct PyQt4 version :</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>conda create --yes  -n visbrain <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5 numpy scipy pillow <span class="nv">matplotlib</span><span class="o">=</span><span class="m">1</span>.5.1 pip
 activate visbrain
@@ -232,9 +233,14 @@ activate visbrain
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brain.html#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brain.html#objects">Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brain.html#color">Color</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brain.html#main-features">Main features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#gui-description">GUI description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#mni-templates">MNI templates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#sources">Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#volume">Volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#colorbar-control">Colorbar control</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="brain.html#api">API</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="brainAPI.html">Main <em>Brain</em> class inputs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="brainAPI.html#brain-methods"><em>Brain</em> methods</a></li>
@@ -283,21 +289,28 @@ activate visbrain
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ndviz.html#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ndviz.html#inputs">Inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ndviz.html#api">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ndviz.html#shortcuts">Shortcuts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="figure.html#description">Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="figure.html#example">Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="figure.html#inputs">Inputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="figure.html#methods">Methods</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="figure.html#show">show</a></li>
-<li class="toctree-l3"><a class="reference internal" href="figure.html#save">save</a></li>
-<li class="toctree-l3"><a class="reference internal" href="figure.html#colorbar-to-axis">colorbar_to_axis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="figure.html#shared-colorbar">shared_colorbar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="figure.html#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#main-figure-class-inputs">Main <em>Figure</em> class inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#methods">Methods</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#brain-utility-functions">Brain utility functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#convert-mesh-data">Convert mesh data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#add-brain-template">Add brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#remove-brain-template">Remove brain template</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#vispy-utility-functions">VisPy utility functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a><ul>
@@ -327,12 +340,13 @@ activate visbrain
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="changelog_futur.html#changelog">Changelog</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-3-0">v0.3.0</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-2-9">v0.2.9</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-2-8">v0.2.8</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog_futur.html#future-directions">Future directions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#id3">Visbrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#id4">Visbrain</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#brain">Brain</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#sleep">Sleep</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#figure">Figure</a></li>

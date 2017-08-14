@@ -1,15 +1,8 @@
 
+.. _BrainClass:
+
 Main *Brain* class inputs
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Each object can be controlled independently, using input parameters for the *Brain* class. All possible inputs use a prefix and refer to the object itself :
-
-    * 'a(_)': atlas properties
-    * 's(_)': sources properties
-    * 'c(_)': connectivity properties
-    * 't(_)': transformations properties
-    * 'ui(_)': graphical interface properties
-    * 'l(_)': light properties
 
 .. autoclass:: visbrain.brain.brain.Brain
 
@@ -17,18 +10,14 @@ Each object can be controlled independently, using input parameters for the *Bra
 *Brain* methods
 ~~~~~~~~~~~~~~~
 
-The functions below are subdivided into several parts :
-
-* GUI functions : control the graphical user interface (display, rotation, screenshot...)
-* Brain functions : control the main brain object (color, transparency...)
-* Sources functions : control sources object (color, transparency, data...)
-* Connectivity functions : control connectivity object (color, transparency, data...)
-* ROI functions : control ROI object (selected areas, color, transparency...)
+.. ##########################################################################
+..                                    GUI
+.. ##########################################################################
 
 GUI functions and settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Set of functions for an interactive control of the graphical user interface elements. 
+Set of functions for an interactive control of the graphical user interface elements.
 
 Show graphical interface
 ++++++++++++++++++++++++
@@ -50,6 +39,8 @@ Screenshot
 ++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.screenshot
 
+.. _LoadSaveConfig:
+
 Load and save GUI configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -61,51 +52,75 @@ Save the current configuration
 ++++++++++++++++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.save_config
 
-Atlas methods
+.. ##########################################################################
+..                                    BRAIN
+.. ##########################################################################
+
+.. _BrainApi:
+
+Brain methods
 ^^^^^^^^^^^^^
 
 Set of functions for an interactive control of the main brain object. Use the methods below to define which brain template or hemisphere to display, the transparency level...
 
-.. figure::  picture/BrainObj.png
-   :align:   center
-
-   Several brain templates and control possiblities.
-
-Control
-+++++++
+Control the brain
++++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.brain_control
 
-Opacity
-+++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.brain_opacity
+List of available templates
++++++++++++++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.brain_list
 
 
-Light reflection
-++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.light_reflection
+Add mesh to the scene
++++++++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.add_mesh
 
+.. ##########################################################################
+..                       VOLUME AND CROSS-SECTIONS
+.. ##########################################################################
+
+.. _VolCrossecApi:
+
+Volume and cross-sections
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Control the volume
+++++++++++++++++++
+
+.. automethod:: visbrain.brain.user.BrainUserMethods.volume_control
+
+Add volume
+++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.add_volume
+
+Get the list of volumes
++++++++++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.volume_list
+
+Control cross-sections
+++++++++++++++++++++++
+
+.. automethod:: visbrain.brain.user.BrainUserMethods.cross_sections_control
+
+.. ##########################################################################
+..                                 SOURCES
+.. ##########################################################################
+
+.. _SourcesApi:
 
 Sources methods
 ^^^^^^^^^^^^^^^
 
 Set of functions for an interactive control of sources object. Use the methods below to pass some data to sources, to control the transparency level, to run the cortical projection / repartition...
 
-.. figure::  picture/SourcesObj.png
-   :align:   center
-
-Set data
-++++++++
-
-.. automethod:: visbrain.brain.user.BrainUserMethods.sources_data
+Control sources
++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.sources_control
 
 Opacity
 +++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.sources_opacity
-
-.. figure::  picture/ProjObj.png
-   :align:   center
-
-   Example of cortical projection.
 
 Select sources
 ++++++++++++++
@@ -123,9 +138,14 @@ Convert into convex hull
 ++++++++++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.sources_to_convex_hull
 
+.. _CortProj:
+
 Cortical projection
 +++++++++++++++++++
+
 .. automethod:: visbrain.brain.user.BrainUserMethods.cortical_projection
+
+.. _CortRepart:
 
 Cortical repartition
 ++++++++++++++++++++
@@ -135,41 +155,79 @@ Colormap
 ++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.sources_colormap
 
+.. ##########################################################################
+..                               TIME-SERIES
+.. ##########################################################################
+
+.. _TimeSeriesApi:
+
+Time-series methods
+^^^^^^^^^^^^^^^^^^^
+
+Time-series control
++++++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.time_series_control
+
+
+Add time-series
++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.add_time_series
+
+
+.. ##########################################################################
+..                                PICTURES
+.. ##########################################################################
+
+.. _PicturesApi:
+
+Pictures methods
+^^^^^^^^^^^^^^^^
+
+Pictures control
+++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.pictures_control
+
+Add pictures
+++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.add_pictures
+
+.. ##########################################################################
+..                           CONNECTIVITY
+.. ##########################################################################
+
+.. _ConnectApi:
+
 Connectivity methods
 ^^^^^^^^^^^^^^^^^^^^
 
 Set of functions for an interactive control of connectivity object. Use the methods below to pass some data to connectivity, to control the transparency level...
 
-.. figure::  picture/ConnectObj.png
-   :align:   center
-
-   Example of connectivity setup.
-
-Connectivity settings
-+++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.connect_display
+Control Connectivity
+++++++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.connect_control
 
 Add connectivity object
 +++++++++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.add_connect
 
-ROI methods
-^^^^^^^^^^^
+.. ##########################################################################
+..                                    ROI
+.. ##########################################################################
+
+.. _RoiApi:
+
+Region Of Interest (ROI) methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Set of functions for an interactive control of ROI (Region of interest) objects. Use methods below to select the ROI to display, to control the transparency level...
 
-.. figure::  picture/AreaObj.png
-   :align:   center
-
-   Example of deep-structures (AAL / Brodmann area).
+ROI control
++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.roi_control
 
 List of suported ROI
 ++++++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.roi_list
-
-Plot selection
-++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.roi_plot
 
 Opacity
 +++++++
@@ -179,12 +237,30 @@ Light reflection
 ++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.roi_light_reflection
 
+.. ##########################################################################
+..                              COLORBAR
+.. ##########################################################################
+
+.. _CbarApi:
+
 Colorbar methods
 ^^^^^^^^^^^^^^^^
 
 Colorbar control
 ++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.cbar_control
+
+Select a colorbar
++++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.cbar_select
+
+List of available colorbars
++++++++++++++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.cbar_list
+
+Export colorbar
++++++++++++++++
+.. automethod:: visbrain.brain.user.BrainUserMethods.cbar_export
 
 Auto-scaling
 ++++++++++++

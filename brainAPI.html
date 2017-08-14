@@ -100,18 +100,19 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="brain.html">Brain</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="brain.html#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brain.html#objects">Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brain.html#color">Color</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brain.html#main-features">Main features</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="brain.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Main <em>Brain</em> class inputs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#brain-methods"><em>Brain</em> methods</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#gui-functions-and-settings">GUI functions and settings</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#load-and-save-gui-configuration">Load and save GUI configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#atlas-methods">Atlas methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#brainapi">Brain methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#volume-and-cross-sections">Volume and cross-sections</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sources-methods">Sources methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#time-series-methods">Time-series methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pictures-methods">Pictures methods</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#connectivity-methods">Connectivity methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#roi-methods">ROI methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#region-of-interest-roi-methods">Region Of Interest (ROI) methods</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#colorbar-methods">Colorbar methods</a></li>
 </ul>
 </li>
@@ -124,6 +125,7 @@
 <li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
@@ -193,35 +195,51 @@
            <div itemprop="articleBody">
             
   <div class="section" id="main-brain-class-inputs">
-<h1>Main <em>Brain</em> class inputs<a class="headerlink" href="#main-brain-class-inputs" title="Permalink to this headline">¶</a></h1>
-<p>Each object can be controlled independently, using input parameters for the <em>Brain</em> class. All possible inputs use a prefix and refer to the object itself :</p>
-<blockquote>
-<div><ul class="simple">
-<li>‘a(_)’: atlas properties</li>
-<li>‘s(_)’: sources properties</li>
-<li>‘c(_)’: connectivity properties</li>
-<li>‘t(_)’: transformations properties</li>
-<li>‘ui(_)’: graphical interface properties</li>
-<li>‘l(_)’: light properties</li>
-</ul>
-</div></blockquote>
+<span id="brainclass"></span><h1>Main <em>Brain</em> class inputs<a class="headerlink" href="#main-brain-class-inputs" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="visbrain.brain.brain.Brain">
 <em class="property">class </em><code class="descclassname">visbrain.brain.brain.</code><code class="descname">Brain</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/brain.html#Brain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.brain.Brain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visualization of neuroscientic data on a standard MNI brain.</p>
+<p>The <em>Brain</em> module include several objects that can be individually
+controlled :</p>
+<ul class="simple">
+<li><strong>a_</strong> : Atlas properties</li>
+<li><strong>s_</strong> : Sources properties</li>
+<li><strong>ts_</strong> : Time-series properties</li>
+<li><strong>pic_</strong> : Pictures properties</li>
+<li><strong>c_</strong> : Connectivity properties</li>
+<li><strong>t_</strong> : Transformations properties</li>
+<li><strong>ui_</strong> : Graphical User Interface properties</li>
+<li><strong>l_</strong> : Light properties</li>
+</ul>
+<p>In addition, some objects provide an extended control of color properties.
+This is the case for source’s projection (<strong>s_</strong>), connectivity (<strong>c_</strong>)
+and pictures (<strong>pic_</strong>). Here’s the list of color properties for those
+objects :</p>
+<ul class="simple">
+<li><strong>clim</strong> : a tuple of two floats for the colorbar limits.</li>
+<li><strong>cmap</strong> : a string name of a matplotlib colormap.</li>
+<li><strong>vmin</strong> : a float for the lower threshold.</li>
+<li><strong>under</strong> : a string for color under vmin.</li>
+<li><strong>vmax</strong> : a float for the higher threshold.</li>
+<li><strong>over</strong> : a string for color over vmax.</li>
+</ul>
+<p>As an example, s_cmap, c_clim and pic_vmin respectively controlled the
+colormap of projected source’s activity, the colorbar limits of the
+connectivity and the lower threshold of pictures.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a_color</strong> : tuple | (1,1,1)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a_color</strong> : tuple | (1., 1., 1.)</p>
 <blockquote>
-<div><p>RGB colors of the MNI brain.</p>
+<div><p>RGB colors of the MNI brain (default is white).</p>
 </div></blockquote>
 <p><strong>a_opacity</strong> : int/float | 1.</p>
 <blockquote>
 <div><p>Transparency of the MNI brain. Must be between 0 and 1.</p>
 </div></blockquote>
-<p><strong>a_proj</strong> : string | ‘internal’</p>
+<p><strong>a_proj</strong> : string | {‘internal’, ‘external’}</p>
 <blockquote>
 <div><p>Turn a_proj to ‘internal’ for internal projection or ‘external’ for
 cortical rendering.</p>
@@ -230,30 +248,25 @@ cortical rendering.</p>
 <blockquote>
 <div><p>The MNI brain template to use. Switch between ‘B1’, ‘B2’ or ‘B3’</p>
 </div></blockquote>
-<p><strong>a_vertices /a_faces: ndarray | None</strong></p>
-<blockquote>
-<div><p>Specify an alternativ surface to use. Both parameters must be a 2D
-array, respectively of shapes (N_vertices, 3) and (N_faces, 3)</p>
-</div></blockquote>
-<p><strong>a_shading</strong> : string | ‘smooth’</p>
-<blockquote>
-<div><p>Shading method to use for the brain. Switch between ‘smooth’,
-‘flat’ or None.</p>
-</div></blockquote>
-<p><strong>s_xyz</strong> : ndarray | None</p>
+<p><strong>s_xyz</strong> : array_like | None</p>
 <blockquote>
 <div><p>Array of talairach or MNI coordinates to display sources
 into the brain. The shape of the array must be (N, 3) where
 ‘3’ is for (x, y, z) coordinates and N, the number of sources.</p>
 </div></blockquote>
-<p><strong>s_data: ndarray, (def, None)</strong></p>
+<p><strong>s_data</strong> : array_like | None</p>
 <blockquote>
 <div><p>Add some data to sources. As a consequence, the radius of each
 source will be a function of s_data. must be an array of shape
 (N,). If s_data is None, all sources will have the same value.
 The parameter s_data can be masked using numpy.ma module.</p>
 </div></blockquote>
-<p><strong>s_color</strong> : string/list/ndarray | ‘red’</p>
+<p><strong>s_system</strong> : string | ‘mni’</p>
+<blockquote>
+<div><p>Specify the coordinate system. Use either ‘mni’ (MNI) or ‘tal’
+(Talairach).</p>
+</div></blockquote>
+<p><strong>s_color</strong> : string/list/array_like | ‘red’</p>
 <blockquote>
 <div><p>Color of each source sphere. If s_color is a single string,
 all sphere will have the same color. If it’s‘ a list of strings,
@@ -264,12 +277,12 @@ or (N, 4) RGBA colors.</p>
 <blockquote>
 <div><p>Transparency of all sources. Must be between 0 and 1.</p>
 </div></blockquote>
-<p><strong>s_radiusmin /s_radiusmax: int/float | 5.0/10.0</strong></p>
+<p><strong>s_radiusmin / s_radiusmax</strong> : float | 5.0/10.0</p>
 <blockquote>
 <div><p>Define the minimum and maximum source’s possible radius. By default
 if all sources have the same value, the radius will be s_radiusmin.</p>
 </div></blockquote>
-<p><strong>s_edgecolor</strong> : string/list/ndarray | None</p>
+<p><strong>s_edgecolor</strong> : string/list/array_like | None</p>
 <blockquote>
 <div><p>Add an edge to sources</p>
 </div></blockquote>
@@ -279,7 +292,7 @@ if all sources have the same value, the radius will be s_radiusmin.</p>
 </div></blockquote>
 <p><strong>s_scaling</strong> : bool | True</p>
 <blockquote>
-<div><p>If set to True, marker scales when rezooming.</p>
+<div><p>If set to True, marker scales when zooming.</p>
 </div></blockquote>
 <p><strong>s_symbol</strong> : string | ‘disc’</p>
 <blockquote>
@@ -292,13 +305,13 @@ triangle_up, triangle_down, and star.</p>
 <div><p>Set text to each electrode. s_text should be an iterable object,
 composed of strings, with the same length as the number of sources.</p>
 </div></blockquote>
-<p><strong>s_textcolor</strong> : string/list/ndarray | ‘k’</p>
+<p><strong>s_textcolor</strong> : string/list/array_like | ‘k’</p>
 <blockquote>
 <div><p>A single color element for all the text</p>
 </div></blockquote>
 <p><strong>s_textsize</strong> : int | 3</p>
 <blockquote>
-<div><p>Fontsize of text elements</p>
+<div><p>Font size of text elements</p>
 </div></blockquote>
 <p><strong>s_textshift</strong> : list/tuple | (0,1,0)</p>
 <blockquote>
@@ -310,7 +323,7 @@ visibility</p>
 <div><p>Project sources activity either on surface or, if displayed,
 on deep structures.</p>
 </div></blockquote>
-<p><strong>s_mask</strong> : ndarray | None</p>
+<p><strong>s_mask</strong> : array_like | None</p>
 <blockquote>
 <div><p>Vector of boolean values, with the same length as the length of
 s_xyz. Use this parameter to mask some sources but keep it
@@ -320,24 +333,65 @@ displayed.</p>
 <blockquote>
 <div><p>Color of masked sources when projected on surface.</p>
 </div></blockquote>
-<p><strong>c_connect</strong> : ndarray | None</p>
+<p><strong>ts_data</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of data for the time-series. This array must have a shape of
+(n_sources, n_time_points).</p>
+</div></blockquote>
+<p><strong>ts_select</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of boolean values to specify which time-series to hide or to
+display.</p>
+</div></blockquote>
+<p><strong>ts_color</strong> : string/list/tuple/array_like | ‘white’</p>
+<blockquote>
+<div><p>Color of the time-series.</p>
+</div></blockquote>
+<p><strong>ts_amp</strong> : float | 6.</p>
+<blockquote>
+<div><p>Graphical amplitude of the time-series.</p>
+</div></blockquote>
+<p><strong>ts_width</strong> : float | 20.</p>
+<blockquote>
+<div><p>Graphical width of th time-series.</p>
+</div></blockquote>
+<p><strong>ts_lw</strong> : float | 1.5</p>
+<blockquote>
+<div><p>Line width of the time-series.</p>
+</div></blockquote>
+<p><strong>ts_dxyz</strong> : tuple | (0., 0., 1.)</p>
+<blockquote>
+<div><p>Offset along the (x, y, z) axis for the time-series.</p>
+</div></blockquote>
+<p><strong>pic_data</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of picture data. Must have a shape of (n_sources, n_rows, n_cols)</p>
+</div></blockquote>
+<p><strong>pic_width</strong> : float | 7.</p>
+<blockquote>
+<div><p>Width of each picture.</p>
+</div></blockquote>
+<p><strong>pic_height</strong> : float | 7.</p>
+<blockquote>
+<div><p>Height of each picture.</p>
+</div></blockquote>
+<p><strong>pic_dxyz</strong> : float | (0., 0., 1.)</p>
+<blockquote>
+<div><p>Offset along the (x, y, z) axis for the pictures.</p>
+</div></blockquote>
+<p><strong>c_connect</strong> : array_like | None</p>
 <blockquote>
 <div><p>Connections between sources. Define N sources location using s_xyz
 of shape (N, 3). Then, c_connect must be a (N, N) array defining
 each value of connection between all sources. The diagonal is going
 to be systematically ignored.</p>
 </div></blockquote>
-<p><strong>c_select</strong> : ndarray | None</p>
+<p><strong>c_select</strong> : array_like | None</p>
 <blockquote>
 <div><p>Select relevant connections do display. This array should be
 composed of 0 and 1 and must have the same shape as c_connect.
 Alternatively, set a mask to c_connect to have the same effect
 without using this parameter.</p>
-</div></blockquote>
-<p><strong>c_dynamic</strong> : tuple | None</p>
-<blockquote>
-<div><p>Control the dynamic opacity. For example, if c_dynamic=(0, 1),
-strong connections will be more opaque than weak connections.</p>
 </div></blockquote>
 <p><strong>c_colorby</strong> : string | ‘strength’</p>
 <blockquote>
@@ -346,6 +400,11 @@ be modulate by the connectivity strength. Use ‘count’ if the
 color depends on the number of connexions per node. Use ‘density’
 to define colors according to the number of line in a sphere of
 radius c_dradius.</p>
+</div></blockquote>
+<p><strong>c_dynamic</strong> : tuple | None</p>
+<blockquote>
+<div><p>Control the dynamic opacity. For example, if c_dynamic=(0, 1),
+strong connections will be more opaque than weak connections.</p>
 </div></blockquote>
 <p><strong>c_dradius</strong> : float | 30.</p>
 <blockquote>
@@ -361,15 +420,21 @@ otherwise they are going to be ignored.</p>
 </div></blockquote>
 <p><strong>c_linewidth</strong> : float | 3.0</p>
 <blockquote>
-<div><p>Linewidth of connectivity lines.</p>
+<div><p>Line width of connectivity lines.</p>
 </div></blockquote>
-<p><strong>t_radius</strong> : int/float | 10</p>
+<p><strong>t_radius</strong> : float | 10.</p>
 <blockquote>
 <div><p>The projection radius to use (depending on coordinates type)</p>
 </div></blockquote>
+<p><strong>t_contribute</strong> : bool | False</p>
+<blockquote>
+<div><p>Specify if source’s can contribute to both hemisphere during projection
+(True) or if it can only be projected on the hemisphere the source
+belong.</p>
+</div></blockquote>
 <p><strong>ui_bgcolor</strong> : string/tuple | (0.09, 0.09, 0.09)</p>
 <blockquote>
-<div><p>Backgroud color of the ui</p>
+<div><p>Background color of the ui</p>
 </div></blockquote>
 <p><strong>ui_savename</strong> : string | None</p>
 <blockquote>
@@ -382,7 +447,7 @@ otherwise they are going to be ignored.</p>
 </div></blockquote>
 <p><strong>ui_autocrop</strong> : bool | True</p>
 <blockquote>
-<div><p>Automaticaly crop figures when saving.</p>
+<div><p>Automatically crop figures when saving.</p>
 </div></blockquote>
 <p><strong>ui_resolution</strong> : float | 3000</p>
 <blockquote>
@@ -401,11 +466,11 @@ the definition of your screen must be multiplied.</p>
 <blockquote>
 <div><p>Color of the light</p>
 </div></blockquote>
-<p><strong>l_coefAmbient</strong> : float | 0.05</p>
+<p><strong>l_ambient</strong> : float | 0.05</p>
 <blockquote>
 <div><p>Coefficient for the ambient light</p>
 </div></blockquote>
-<p><strong>l_coefSpecular</strong> : float | 0.5</p>
+<p><strong>l_specular</strong> : float | 0.5</p>
 <blockquote class="last">
 <div><p>Coefficient for the specular light</p>
 </div></blockquote>
@@ -428,19 +493,131 @@ the definition of your screen must be multiplied.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>show()</strong></td>
+<td>Display the graphical user interface.</td>
+</tr>
+<tr class="row-even"><td><strong>quit()</strong></td>
+<td>Quit the interface.</td>
+</tr>
+<tr class="row-odd"><td><strong>rotate()</strong></td>
+<td>Rotate the scene elements using a predefined or a custom rotation.</td>
+</tr>
+<tr class="row-even"><td><strong>background_color()</strong></td>
+<td>Set the background color of the main canvas and the colorbar.</td>
+</tr>
+<tr class="row-odd"><td><strong>screenshot()</strong></td>
+<td>Take a screenshot of the current scene and save it as a picture.</td>
+</tr>
+<tr class="row-even"><td><strong>load_config()</strong></td>
+<td>Load a configuration file.</td>
+</tr>
+<tr class="row-odd"><td><strong>save_config()</strong></td>
+<td>Save a configuration file.</td>
+</tr>
+<tr class="row-even"><td><strong>brain_control()</strong></td>
+<td>Control the type of brain to use.</td>
+</tr>
+<tr class="row-odd"><td><strong>brain_list()</strong></td>
+<td>Get the list of available mesh brain templates.</td>
+</tr>
+<tr class="row-even"><td><strong>add_mesh()</strong></td>
+<td>Add a mesh to the scene.</td>
+</tr>
+<tr class="row-odd"><td><strong>add_volume()</strong></td>
+<td>Add a new volume to the interface.</td>
+</tr>
+<tr class="row-even"><td><strong>volume_list()</strong></td>
+<td>Get the list of volumes available.</td>
+</tr>
+<tr class="row-odd"><td><strong>cross_sections_control()</strong></td>
+<td>Set the cross-section position.</td>
+</tr>
+<tr class="row-even"><td><strong>sources_control()</strong></td>
+<td>Set data to sources and control source’s properties.</td>
+</tr>
+<tr class="row-odd"><td><strong>sources_opacity()</strong></td>
+<td>Set the level of transparency of sources.</td>
+</tr>
+<tr class="row-even"><td><strong>sources_display()</strong></td>
+<td>Select sources to display.</td>
+</tr>
+<tr class="row-odd"><td><strong>cortical_projection()</strong></td>
+<td>Project sources activity.</td>
+</tr>
+<tr class="row-even"><td><strong>cortical_repartition()</strong></td>
+<td>Get the number of contributing sources per vertex.</td>
+</tr>
+<tr class="row-odd"><td><strong>sources_colormap()</strong></td>
+<td>Change the colormap of cortical projection / repartition.</td>
+</tr>
+<tr class="row-even"><td><strong>sources_fit()</strong></td>
+<td>Force sources coordinates to fit to a selected object.</td>
+</tr>
+<tr class="row-odd"><td><strong>sources_to_convex_hull()</strong></td>
+<td>Convert a set of sources into a convex hull.</td>
+</tr>
+<tr class="row-even"><td><strong>add_sources()</strong></td>
+<td>Add a supplementar source’s object.</td>
+</tr>
+<tr class="row-odd"><td><strong>time_series_control()</strong></td>
+<td>Control time-series settings.</td>
+</tr>
+<tr class="row-even"><td><strong>add_time_series()</strong></td>
+<td>Add time-series (TS) object.</td>
+</tr>
+<tr class="row-odd"><td><strong>pictures_control()</strong></td>
+<td>Control pictures settings.</td>
+</tr>
+<tr class="row-even"><td><strong>add_pictures()</strong></td>
+<td>Add pictures object.</td>
+</tr>
+<tr class="row-odd"><td><strong>connect_control()</strong></td>
+<td>Update connectivity object.</td>
+</tr>
+<tr class="row-even"><td><strong>add_connect()</strong></td>
+<td>Add a supplementar connectivity object.</td>
+</tr>
+<tr class="row-odd"><td><strong>roi_control()</strong></td>
+<td>Select Region Of Interest (ROI) to plot.</td>
+</tr>
+<tr class="row-even"><td><strong>roi_light_reflection()</strong></td>
+<td>Change how light is reflecting onto roi.</td>
+</tr>
+<tr class="row-odd"><td><strong>roi_opacity()</strong></td>
+<td>Set the level of transparency of the deep structures.</td>
+</tr>
+<tr class="row-even"><td><strong>roi_list()</strong></td>
+<td>Get the list of supported ROI.</td>
+</tr>
+<tr class="row-odd"><td><strong>cbar_control()</strong></td>
+<td>Control the colorbar of a specific object.</td>
+</tr>
+<tr class="row-even"><td><strong>cbar_select()</strong></td>
+<td>Select and disply a colorbar.</td>
+</tr>
+<tr class="row-odd"><td><strong>cbar_list()</strong></td>
+<td>Get the list of objects for which the colorbar can be controlled.</td>
+</tr>
+<tr class="row-even"><td><strong>cbar_autoscale()</strong></td>
+<td>Autoscale the colorbar to the best limits.</td>
+</tr>
+<tr class="row-odd"><td><strong>cbar_export()</strong></td>
+<td>Export colorbars in a text file or in a dictionary.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="brain-methods">
 <h1><em>Brain</em> methods<a class="headerlink" href="#brain-methods" title="Permalink to this headline">¶</a></h1>
-<p>The functions below are subdivided into several parts :</p>
-<ul class="simple">
-<li>GUI functions : control the graphical user interface (display, rotation, screenshot…)</li>
-<li>Brain functions : control the main brain object (color, transparency…)</li>
-<li>Sources functions : control sources object (color, transparency, data…)</li>
-<li>Connectivity functions : control connectivity object (color, transparency, data…)</li>
-<li>ROI functions : control ROI object (selected areas, color, transparency…)</li>
-</ul>
 <div class="section" id="gui-functions-and-settings">
 <h2>GUI functions and settings<a class="headerlink" href="#gui-functions-and-settings" title="Permalink to this headline">¶</a></h2>
 <p>Set of functions for an interactive control of the graphical user interface elements.</p>
@@ -648,7 +825,7 @@ for futher explanations.</p>
 </div>
 </div>
 <div class="section" id="load-and-save-gui-configuration">
-<h2>Load and save GUI configuration<a class="headerlink" href="#load-and-save-gui-configuration" title="Permalink to this headline">¶</a></h2>
+<span id="loadsaveconfig"></span><h2>Load and save GUI configuration<a class="headerlink" href="#load-and-save-gui-configuration" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="load-an-existing-configuration">
 <h3>Load an existing configuration<a class="headerlink" href="#load-an-existing-configuration" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
@@ -692,18 +869,14 @@ for futher explanations.</p>
 
 </div>
 </div>
-<div class="section" id="atlas-methods">
-<h2>Atlas methods<a class="headerlink" href="#atlas-methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="brainapi">
+<span id="id1"></span><h2>Brain methods<a class="headerlink" href="#brainapi" title="Permalink to this headline">¶</a></h2>
 <p>Set of functions for an interactive control of the main brain object. Use the methods below to define which brain template or hemisphere to display, the transparency level…</p>
-<div class="figure align-center" id="id4">
-<img alt="_images/BrainObj.png" src="_images/BrainObj.png" />
-<p class="caption"><span class="caption-text">Several brain templates and control possiblities.</span></p>
-</div>
-<div class="section" id="control">
-<h3>Control<a class="headerlink" href="#control" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="control-the-brain">
+<h3>Control the brain<a class="headerlink" href="#control-the-brain" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="visbrain.brain.user.BrainUserMethods.brain_control">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">brain_control</code><span class="sig-paren">(</span><em>template=None</em>, <em>show=True</em>, <em>hemisphere=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.brain_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.brain_control" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">BrainUserMethods.</code><code class="descname">brain_control</code><span class="sig-paren">(</span><em>template=None</em>, <em>hemisphere=None</em>, <em>transparent=None</em>, <em>alpha=None</em>, <em>color=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.brain_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.brain_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control the type of brain to use.</p>
 <p>Use this method to switch between several brain templates. Then, you
 can to display selected hemisphere (left or right).</p>
@@ -716,19 +889,42 @@ can to display selected hemisphere (left or right).</p>
 <div><p>Template to use for the MNI brain. Use either ‘B1’, ‘B2’ or
 ‘B3’.</p>
 </div></blockquote>
-<p><strong>show</strong> : bool | True</p>
+<p><strong>visible</strong> : bool | True</p>
 <blockquote>
 <div><p>Show (True) or hide (False) the MNI brain.</p>
 </div></blockquote>
-<p><strong>hemisphere</strong> : string | None</p>
-<blockquote class="last">
-<div><p>Define if you want to see only ‘left’ or ‘right’hemisphere.
+<p><strong>hemisphere</strong> : {‘both’, ‘left’, ‘ritgh’}</p>
+<blockquote>
+<div><p>Define if you want to see only ‘left’ or ‘right’ hemisphere.
 Otherwise use ‘both’.</p>
+</div></blockquote>
+<p><strong>transparent</strong> : bool | None</p>
+<blockquote>
+<div><p>Set the brain transparent (True) or opaque (False).</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float | None</p>
+<blockquote>
+<div><p>Transparency level.</p>
+</div></blockquote>
+<p><strong>color</strong> : string/tuple | None</p>
+<blockquote>
+<div><p>Brain color.</p>
+</div></blockquote>
+<p><strong>visible</strong> : bool | True</p>
+<blockquote class="last">
+<div><p>Display or hide the brain.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">brain_list</span></code></dt>
+<dd>Get the list of available mesh brain templates.</dd>
+</dl>
+</div>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
@@ -741,61 +937,138 @@ Otherwise use ‘both’.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="opacity">
-<h3>Opacity<a class="headerlink" href="#opacity" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="list-of-available-templates">
+<h3>List of available templates<a class="headerlink" href="#list-of-available-templates" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
-<dt id="visbrain.brain.user.BrainUserMethods.brain_opacity">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">brain_opacity</code><span class="sig-paren">(</span><em>alpha=0.1</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.brain_opacity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.brain_opacity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the level of transparency of the brain.</p>
+<dt id="visbrain.brain.user.BrainUserMethods.brain_list">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">brain_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.brain_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.brain_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of available mesh brain templates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>alpha</strong> : float | 0.1</p>
-<blockquote>
-<div><p>Transparency level (usually between 0 and 1).</p>
-</div></blockquote>
-<p><strong>show</strong> : bool | True</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>meshes</strong> : list</p>
 <blockquote class="last">
-<div><p>Specify if the brain has be shown.</p>
+<div><p>List of available mesh brain templates.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The brain opacity is only avaible for internal projection</p>
-</div>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set transparency :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">brain_opacity</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Show the GUI :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">vb</span><span class="o">.</span><span class="n">brain_list</span><span class="p">())</span>
 </pre></div>
 </div>
 </dd></dl>
 
 </div>
-<div class="section" id="light-reflection">
-<h3>Light reflection<a class="headerlink" href="#light-reflection" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="add-mesh-to-the-scene">
+<h3>Add mesh to the scene<a class="headerlink" href="#add-mesh-to-the-scene" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
-<dt id="visbrain.brain.user.BrainUserMethods.light_reflection">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">light_reflection</code><span class="sig-paren">(</span><em>reflect_on=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.light_reflection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.light_reflection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Change how light is reflected onto the brain.</p>
-<p>This function can be used to see either the surface only (external) or
-deep voxels inside the brain (internal).</p>
+<dt id="visbrain.brain.user.BrainUserMethods.add_mesh">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">add_mesh</code><span class="sig-paren">(</span><em>name</em>, <em>vertices</em>, <em>faces</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.add_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.add_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a mesh to the scene.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>reflect_on</strong> : {‘internal’, ‘external’}</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the object to add.</p>
+</div></blockquote>
+<p><strong>vertices</strong> : array_like</p>
+<blockquote>
+<div><p>Vertices of the mesh.</p>
+</div></blockquote>
+<p><strong>faces</strong> : array_like</p>
+<blockquote>
+<div><p>Faces of the mesh.</p>
+</div></blockquote>
+<p><strong>kargs</strong> : dict | {}</p>
 <blockquote class="last">
-<div><p>Choose either between ‘internal’ or ‘external’. Inside the
-graphical interface, this can be done using the shortcut 3.</p>
+<div><p>Supplementar arguments pass to the BrainMesh class.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="volume-and-cross-sections">
+<span id="volcrossecapi"></span><h2>Volume and cross-sections<a class="headerlink" href="#volume-and-cross-sections" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="control-the-volume">
+<h3>Control the volume<a class="headerlink" href="#control-the-volume" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.volume_control">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">volume_control</code><span class="sig-paren">(</span><em>volume=’Brodmann’</em>, <em>rendering=’mip’</em>, <em>cmap=’OpaqueGrays’</em>, <em>threshold=0.0</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.volume_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.volume_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the 3-D volume.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>volume</strong> : string | ‘Brodmann’</p>
+<blockquote>
+<div><p>Name of the volume to use. See the volume_list() method to get the
+list of volumes available.</p>
+</div></blockquote>
+<p><strong>rendering</strong> : {‘mip’, ‘translucent’, ‘additive’, ‘iso’}</p>
+<blockquote>
+<div><p>description</p>
+</div></blockquote>
+<p><strong>cmap</strong> : {‘TransFire’, ‘OpaqueFire’, ‘TransGrays’, ‘OpaqueGrays’}</p>
+<blockquote>
+<div><p>Name of the colormap to use.</p>
+</div></blockquote>
+<p><strong>threshold</strong> : float | 0.</p>
+<blockquote>
+<div><p>Volume threshold for ‘iso’ rendering.</p>
+</div></blockquote>
+<p><strong>visible</strong> : bool | True</p>
+<blockquote class="last">
+<div><p>Display or hide the volume.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="add-volume">
+<h3>Add volume<a class="headerlink" href="#add-volume" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.add_volume">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">add_volume</code><span class="sig-paren">(</span><em>name</em>, <em>vol</em>, <em>transform=None</em>, <em>roi_values=None</em>, <em>roi_labels=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.add_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.add_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new volume to the interface.</p>
+<p>When a new volume is added, it can be then used in the Cross-sections,
+Volume or ROI part if the roi_values and roi_labels are not None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the cross-section object.</p>
+</div></blockquote>
+<p><strong>vol</strong> : array_like</p>
+<blockquote>
+<div><p>The 3-D volume array.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.transform | None</p>
+<blockquote>
+<div><p>The transformation to add to this volume.</p>
+</div></blockquote>
+<p><strong>roi_labels</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of strings describing the name of each ROI.</p>
+</div></blockquote>
+<p><strong>roi_values</strong> : array_like | None</p>
+<blockquote class="last">
+<div><p>Array of values describing values of each ROI.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -804,36 +1077,110 @@ graphical interface, this can be done using the shortcut 3.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><code class="xref py py-obj docutils literal"><span class="pre">brain_control</span></code></dt>
-<dd>change brain template or change hemisphere</dd>
-<dt><code class="xref py py-obj docutils literal"><span class="pre">brain_opacity</span></code></dt>
-<dd>change brain opacity</dd>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">volume_list</span></code></dt>
+<dd>Get the list of volumes available.</dd>
 </dl>
 </div>
-<p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Display the external surface :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">light_reflection</span><span class="p">(</span><span class="n">reflect_on</span><span class="o">=</span><span class="s1">&#39;external&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Show the GUI :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
+</dd></dl>
+
+</div>
+<div class="section" id="get-the-list-of-volumes">
+<h3>Get the list of volumes<a class="headerlink" href="#get-the-list-of-volumes" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.volume_list">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">volume_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.volume_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.volume_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of volumes available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>volume_list</strong> : list</p>
+<blockquote class="last">
+<div><p>List of volumes availables.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="control-cross-sections">
+<h3>Control cross-sections<a class="headerlink" href="#control-cross-sections" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.cross_sections_control">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">cross_sections_control</code><span class="sig-paren">(</span><em>pos=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>center=None</em>, <em>volume=’Brodmann’</em>, <em>split_view=True</em>, <em>transparent=True</em>, <em>cmap=’gray’</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.cross_sections_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.cross_sections_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the cross-section.</p>
+<p>The three sections (sagittal, coronal and axial) can be defined in two
+ways :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Using the _pos_ input for the use of real coordinates.</li>
+<li>Using the _center_ input to directly use slices.</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pos</strong> : array_like | (0., 0., 0.)</p>
+<blockquote>
+<div><p>The position of the center in the MNI system. This array of float
+positions is then converted into slices usng the inverse transform
+of the selected volume.</p>
+</div></blockquote>
+<p><strong>center</strong> : type | default</p>
+<blockquote>
+<div><p>Array of 3 integers corresponding respectively to the position of
+the sagittal, coronal and axial sections.</p>
+</div></blockquote>
+<p><strong>volume</strong> : string | ‘Brodmann’</p>
+<blockquote>
+<div><p>Name of the volume to use. See the volume_list() method to get the
+list of volumes available.</p>
+</div></blockquote>
+<p><strong>split_view</strong> : bool | True</p>
+<blockquote>
+<div><p>If True, the cross-section is splitted into three images. If False,
+the cross-section is directly displayed inside the brain.</p>
+</div></blockquote>
+<p><strong>transparent</strong> : bool | True</p>
+<blockquote>
+<div><p>Use transparent or opaque borders.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : string | ‘gray’</p>
+<blockquote>
+<div><p>Name of the colormap to use.</p>
+</div></blockquote>
+<p><strong>visible</strong> : bool | True</p>
+<blockquote class="last">
+<div><p>Set the cross-sections visible.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">add_volume</span></code></dt>
+<dd>Add a new volume to the interface.</dd>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">volume_list</span></code></dt>
+<dd>Get the list of volumes available.</dd>
+</dl>
 </div>
 </dd></dl>
 
 </div>
 </div>
 <div class="section" id="sources-methods">
-<h2>Sources methods<a class="headerlink" href="#sources-methods" title="Permalink to this headline">¶</a></h2>
+<span id="sourcesapi"></span><h2>Sources methods<a class="headerlink" href="#sources-methods" title="Permalink to this headline">¶</a></h2>
 <p>Set of functions for an interactive control of sources object. Use the methods below to pass some data to sources, to control the transparency level, to run the cortical projection / repartition…</p>
-<div class="figure align-center">
-<img alt="_images/SourcesObj.png" src="_images/SourcesObj.png" />
-</div>
-<div class="section" id="set-data">
-<h3>Set data<a class="headerlink" href="#set-data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="control-sources">
+<h3>Control sources<a class="headerlink" href="#control-sources" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
-<dt id="visbrain.brain.user.BrainUserMethods.sources_data">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">sources_data</code><span class="sig-paren">(</span><em>data</em>, <em>color=’#ab4652’</em>, <em>symbol=’disc’</em>, <em>radiusmin=5.0</em>, <em>radiusmax=10.0</em>, <em>edgecolor=None</em>, <em>edgewidth=0.6</em>, <em>scaling=False</em>, <em>opacity=1.0</em>, <em>mask=None</em>, <em>maskcolor=’gray’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.sources_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.sources_data" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.brain.user.BrainUserMethods.sources_control">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">sources_control</code><span class="sig-paren">(</span><em>data</em>, <em>color=’#ab4652’</em>, <em>symbol=’disc’</em>, <em>radiusmin=5.0</em>, <em>radiusmax=10.0</em>, <em>edgecolor=None</em>, <em>edgewidth=0.6</em>, <em>scaling=False</em>, <em>opacity=1.0</em>, <em>mask=None</em>, <em>maskcolor=’gray’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.sources_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.sources_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data to sources and control source’s properties.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -901,8 +1248,9 @@ displayed.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define some color :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;white&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set data and properties :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">sources_data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">radiusmin</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">radiusmax</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">edgewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">sources_control</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">radiusmin</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="n">radiusmax</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="n">edgewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Show the GUI :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -910,8 +1258,8 @@ displayed.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="id1">
-<h3>Opacity<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="opacity">
+<h3>Opacity<a class="headerlink" href="#opacity" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="visbrain.brain.user.BrainUserMethods.sources_opacity">
 <code class="descclassname">BrainUserMethods.</code><code class="descname">sources_opacity</code><span class="sig-paren">(</span><em>alpha=1.0</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.sources_opacity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.sources_opacity" title="Permalink to this definition">¶</a></dt>
@@ -943,10 +1291,6 @@ displayed.</p>
 </div>
 </dd></dl>
 
-<div class="figure align-center" id="id5">
-<img alt="_images/ProjObj.png" src="_images/ProjObj.png" />
-<p class="caption"><span class="caption-text">Example of cortical projection.</span></p>
-</div>
 </div>
 <div class="section" id="select-sources">
 <h3>Select sources<a class="headerlink" href="#select-sources" title="Permalink to this headline">¶</a></h3>
@@ -1072,7 +1416,7 @@ s_data, s_cmap, s_symbol…)</p>
 
 </div>
 <div class="section" id="cortical-projection">
-<h3>Cortical projection<a class="headerlink" href="#cortical-projection" title="Permalink to this headline">¶</a></h3>
+<span id="cortproj"></span><h3>Cortical projection<a class="headerlink" href="#cortical-projection" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="visbrain.brain.user.BrainUserMethods.cortical_projection">
 <code class="descclassname">BrainUserMethods.</code><code class="descname">cortical_projection</code><span class="sig-paren">(</span><em>radius=10.0</em>, <em>project_on=’brain’</em>, <em>contribute=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.cortical_projection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.cortical_projection" title="Permalink to this definition">¶</a></dt>
@@ -1105,6 +1449,15 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">roi_control</span></code></dt>
+<dd>add a region of interest.</dd>
+<dt><code class="xref py py-obj docutils literal"><span class="pre">sources_colormap</span></code></dt>
+<dd>Change the colormap properties.</dd>
+</dl>
+</div>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance with 10 random sources:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">s_xyz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
@@ -1116,15 +1469,11 @@ brain or ‘roi’ to project on region of interest (if defined).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>See also:</dt>
-<dd>area_plot, sources_colormap</dd>
-</dl>
 </dd></dl>
 
 </div>
 <div class="section" id="cortical-repartition">
-<h3>Cortical repartition<a class="headerlink" href="#cortical-repartition" title="Permalink to this headline">¶</a></h3>
+<span id="cortrepart"></span><h3>Cortical repartition<a class="headerlink" href="#cortical-repartition" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="visbrain.brain.user.BrainUserMethods.cortical_repartition">
 <code class="descclassname">BrainUserMethods.</code><code class="descname">cortical_repartition</code><span class="sig-paren">(</span><em>radius=10.0</em>, <em>project_on=’brain’</em>, <em>contribute=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.cortical_repartition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.cortical_repartition" title="Permalink to this definition">¶</a></dt>
@@ -1207,7 +1556,7 @@ the cortical projection or repartition).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define some random data :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set data and properties :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">sources_data</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">sources_control</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Run the cortical projection :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">cortical_projection</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set colormap proprties :</span>
@@ -1221,18 +1570,157 @@ the cortical projection or repartition).</p>
 
 </div>
 </div>
-<div class="section" id="connectivity-methods">
-<h2>Connectivity methods<a class="headerlink" href="#connectivity-methods" title="Permalink to this headline">¶</a></h2>
-<p>Set of functions for an interactive control of connectivity object. Use the methods below to pass some data to connectivity, to control the transparency level…</p>
-<div class="figure align-center" id="id6">
-<img alt="_images/ConnectObj.png" src="_images/ConnectObj.png" />
-<p class="caption"><span class="caption-text">Example of connectivity setup.</span></p>
-</div>
-<div class="section" id="connectivity-settings">
-<h3>Connectivity settings<a class="headerlink" href="#connectivity-settings" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="time-series-methods">
+<span id="timeseriesapi"></span><h2>Time-series methods<a class="headerlink" href="#time-series-methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="time-series-control">
+<h3>Time-series control<a class="headerlink" href="#time-series-control" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
-<dt id="visbrain.brain.user.BrainUserMethods.connect_display">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">connect_display</code><span class="sig-paren">(</span><em>colorby=None</em>, <em>dynamic=None</em>, <em>show=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.connect_display"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.connect_display" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.brain.user.BrainUserMethods.time_series_control">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">time_series_control</code><span class="sig-paren">(</span><em>color=None</em>, <em>lw=None</em>, <em>amp=None</em>, <em>width=None</em>, <em>dxyz=None</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.time_series_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.time_series_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control time-series settings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>color</strong> : string/list/tuple/array_like | None</p>
+<blockquote>
+<div><p>Color of the time-series.</p>
+</div></blockquote>
+<p><strong>amp</strong> : float | None</p>
+<blockquote>
+<div><p>Graphical amplitude of the time-series.</p>
+</div></blockquote>
+<p><strong>width</strong> : float | None</p>
+<blockquote>
+<div><p>Graphical width of th time-series.</p>
+</div></blockquote>
+<p><strong>lw</strong> : float | None</p>
+<blockquote>
+<div><p>Line width of the time-series.</p>
+</div></blockquote>
+<p><strong>dxyz</strong> : tuple | None</p>
+<blockquote class="last">
+<div><p>Offset along the (x, y, z) axis for the time-series.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="add-time-series">
+<h3>Add time-series<a class="headerlink" href="#add-time-series" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.add_time_series">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">add_time_series</code><span class="sig-paren">(</span><em>name</em>, <em>ts_xyz</em>, <em>ts_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.add_time_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.add_time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add time-series (TS) object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the TS object.</p>
+</div></blockquote>
+<p><strong>ts_xyz</strong> : array_like</p>
+<blockquote>
+<div><p>Array of (x, y, z) coordinates of shape (n_sources, 3).</p>
+</div></blockquote>
+<p><strong>ts_data</strong> : array_like</p>
+<blockquote>
+<div><p>Array of time-serie’s data of shape (n_sources, n_time_points).</p>
+</div></blockquote>
+<p><strong>kwargs</strong> : dict | {}</p>
+<blockquote class="last">
+<div><p>Further arguments starting with <em>ts_</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="pictures-methods">
+<span id="picturesapi"></span><h2>Pictures methods<a class="headerlink" href="#pictures-methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pictures-control">
+<h3>Pictures control<a class="headerlink" href="#pictures-control" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.pictures_control">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">pictures_control</code><span class="sig-paren">(</span><em>width=None</em>, <em>height=None</em>, <em>dxyz=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.pictures_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.pictures_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control pictures settings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>width</strong> : float | 7.</p>
+<blockquote>
+<div><p>Width of each picture.</p>
+</div></blockquote>
+<p><strong>height</strong> : float | 7.</p>
+<blockquote>
+<div><p>Height of each picture.</p>
+</div></blockquote>
+<p><strong>dxyz</strong> : float | (0., 0., 1.)</p>
+<blockquote>
+<div><p>Offset along the (x, y, z) axis for the pictures.</p>
+</div></blockquote>
+<p><strong>kwargs</strong> : dict | {}</p>
+<blockquote class="last">
+<div><p>Further arguments can be used to control the colorbar (clim, cmap,
+vmin, under, vmax, over).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="add-pictures">
+<h3>Add pictures<a class="headerlink" href="#add-pictures" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.add_pictures">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">add_pictures</code><span class="sig-paren">(</span><em>name</em>, <em>pic_xyz</em>, <em>pic_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.add_pictures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.add_pictures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add pictures object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the pictures object.</p>
+</div></blockquote>
+<p><strong>pic_xyz</strong> : array_like</p>
+<blockquote>
+<div><p>Array of (x, y, z) coordinates of shape (n_sources, 3).</p>
+</div></blockquote>
+<p><strong>pic_data</strong> : array_like</p>
+<blockquote>
+<div><p>Array of pictures data of shape (n_sources, n_rows, n_cols).</p>
+</div></blockquote>
+<p><strong>kwargs</strong> : dict | {}</p>
+<blockquote class="last">
+<div><p>Further arguments starting with <em>pic_</em>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="connectivity-methods">
+<span id="connectapi"></span><h2>Connectivity methods<a class="headerlink" href="#connectivity-methods" title="Permalink to this headline">¶</a></h2>
+<p>Set of functions for an interactive control of connectivity object. Use the methods below to pass some data to connectivity, to control the transparency level…</p>
+<div class="section" id="control-connectivity">
+<h3>Control Connectivity<a class="headerlink" href="#control-connectivity" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.connect_control">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">connect_control</code><span class="sig-paren">(</span><em>colorby=None</em>, <em>dynamic=None</em>, <em>show=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.connect_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.connect_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update connectivity object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1245,6 +1733,15 @@ to be modulate by the connectivity strength. Use ‘count’ if the
 color depends on the number of connexions per node. Use
 ‘density’to define colors according to the number of line in a
 sphere of radius c_dradius.</p>
+</div></blockquote>
+<p><strong>dynamic</strong> : tuple | None</p>
+<blockquote>
+<div><p>Control the dynamic opacity. For example, if dynamic=(0, 1),
+strong connections will be more opaque than weak connections.</p>
+</div></blockquote>
+<p><strong>show</strong> : bool | True</p>
+<blockquote>
+<div><p>Display or hide connectivity.</p>
 </div></blockquote>
 <p><strong>kwargs</strong> : dict | {}</p>
 <blockquote class="last">
@@ -1297,7 +1794,7 @@ be controled using the GUI.</p>
 </div></blockquote>
 <p><strong>kwargs</strong> : dict</p>
 <blockquote class="last">
-<div><p>Pass every further arguments starting with “c” (like c_xyz,
+<div><p>Pass every further arguments starting with <em>c_</em> (like c_xyz,
 c_connect, c_select, c_colorby…)</p>
 </div></blockquote>
 </td>
@@ -1308,56 +1805,15 @@ c_connect, c_select, c_colorby…)</p>
 
 </div>
 </div>
-<div class="section" id="roi-methods">
-<h2>ROI methods<a class="headerlink" href="#roi-methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="region-of-interest-roi-methods">
+<span id="roiapi"></span><h2>Region Of Interest (ROI) methods<a class="headerlink" href="#region-of-interest-roi-methods" title="Permalink to this headline">¶</a></h2>
 <p>Set of functions for an interactive control of ROI (Region of interest) objects. Use methods below to select the ROI to display, to control the transparency level…</p>
-<div class="figure align-center" id="id7">
-<img alt="_images/AreaObj.png" src="_images/AreaObj.png" />
-<p class="caption"><span class="caption-text">Example of deep-structures (AAL / Brodmann area).</span></p>
-</div>
-<div class="section" id="list-of-suported-roi">
-<h3>List of suported ROI<a class="headerlink" href="#list-of-suported-roi" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="roi-control">
+<h3>ROI control<a class="headerlink" href="#roi-control" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
-<dt id="visbrain.brain.user.BrainUserMethods.roi_list">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">roi_list</code><span class="sig-paren">(</span><em>subdivision=’brod’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.roi_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.roi_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the list of supported ROI.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>subdivision</strong> : str | ‘brod’</p>
-<blockquote>
-<div><p>Select the sub-division method i.e ‘brod’ (for brodmann areas)
-or ‘aal’ (Anatomical Automatic Labeling)</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>labels</strong> : list</p>
-<blockquote class="last">
-<div><p>The currently supported ROI’s labels.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get list of ROI for AAL :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lst</span> <span class="o">=</span> <span class="n">vb</span><span class="o">.</span><span class="n">roi_list</span><span class="p">(</span><span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;aal&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Print this list :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</div>
-<div class="section" id="plot-selection">
-<h3>Plot selection<a class="headerlink" href="#plot-selection" title="Permalink to this headline">¶</a></h3>
-<dl class="method">
-<dt id="visbrain.brain.user.BrainUserMethods.roi_plot">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">roi_plot</code><span class="sig-paren">(</span><em>selection=[]</em>, <em>subdivision=’brod’</em>, <em>smooth=3</em>, <em>name=’roi’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.roi_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.roi_plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select some roi to plot.</p>
+<dt id="visbrain.brain.user.BrainUserMethods.roi_control">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">roi_control</code><span class="sig-paren">(</span><em>selection=[]</em>, <em>subdivision=’Brodmann’</em>, <em>smooth=3</em>, <em>name=’roi’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.roi_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.roi_control" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select Region Of Interest (ROI) to plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1368,10 +1824,10 @@ or ‘aal’ (Anatomical Automatic Labeling)</p>
 corresponding list can be found in the graphical interface in
 the ROI tab or using the function roi_list.</p>
 </div></blockquote>
-<p><strong>subdivision</strong> : {‘brod’, ‘aal’}</p>
+<p><strong>subdivision</strong> : {‘Brodmann’, ‘AAL’}</p>
 <blockquote>
-<div><p>Select the sub-division method i.e ‘brod’ (for brodmann areas)
-or ‘aal’ (Anatomical Automatic Labeling)</p>
+<div><p>Select the sub-division method i.e ‘Brodmann’ (for brodmann areas)
+or ‘AAL’ (Anatomical Automatic Labeling)</p>
 </div></blockquote>
 <p><strong>smoth</strong> : int | 3</p>
 <blockquote>
@@ -1396,9 +1852,46 @@ or ‘aal’ (Anatomical Automatic Labeling)</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Display brodmann area 4 and 6 :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">roi_plot</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;brod&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Show the GUI :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="list-of-suported-roi">
+<h3>List of suported ROI<a class="headerlink" href="#list-of-suported-roi" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.roi_list">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">roi_list</code><span class="sig-paren">(</span><em>subdivision=’Brodmann’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.roi_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.roi_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of supported ROI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>subdivision</strong> : str | ‘Brodmann’</p>
+<blockquote>
+<div><p>Select the sub-division method i.e ‘Brodmann’ (for brodmann areas)
+or ‘AAL’ (Anatomical Automatic Labeling)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>roi_labels</strong> : array_like</p>
+<blockquote class="last">
+<div><p>The currently supported ROI’s labels.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance :</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get list of ROI for AAL :</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lst</span> <span class="o">=</span> <span class="n">vb</span><span class="o">.</span><span class="n">roi_list</span><span class="p">(</span><span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;AAL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Print this list :</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1429,6 +1922,8 @@ or ‘aal’ (Anatomical Automatic Labeling)</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Display brodmann area 4 and 6 :</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set transparency :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">roi_opacity</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Show the GUI :</span>
@@ -1438,8 +1933,8 @@ or ‘aal’ (Anatomical Automatic Labeling)</p>
 </dd></dl>
 
 </div>
-<div class="section" id="id3">
-<h3>Light reflection<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="light-reflection">
+<h3>Light reflection<a class="headerlink" href="#light-reflection" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="visbrain.brain.user.BrainUserMethods.roi_light_reflection">
 <code class="descclassname">BrainUserMethods.</code><code class="descname">roi_light_reflection</code><span class="sig-paren">(</span><em>reflect_on=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.roi_light_reflection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.roi_light_reflection" title="Permalink to this definition">¶</a></dt>
@@ -1462,7 +1957,7 @@ deep voxels inside roi (internal).</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Display brodmann area 4 and 6 :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">roi_plot</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;brod&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Display the external surface :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">roi_light_reflection</span><span class="p">(</span><span class="n">reflect_on</span><span class="o">=</span><span class="s1">&#39;internal&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Hide the brain :</span>
@@ -1476,7 +1971,7 @@ deep voxels inside roi (internal).</p>
 </div>
 </div>
 <div class="section" id="colorbar-methods">
-<h2>Colorbar methods<a class="headerlink" href="#colorbar-methods" title="Permalink to this headline">¶</a></h2>
+<span id="cbarapi"></span><h2>Colorbar methods<a class="headerlink" href="#colorbar-methods" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="colorbar-control">
 <h3>Colorbar control<a class="headerlink" href="#colorbar-control" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
@@ -1488,11 +1983,11 @@ deep voxels inside roi (internal).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string, {‘Projection’, ‘Connectivity’}</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string, {‘Projection’, ‘Connectivity’, ‘Pictures’}</p>
 <blockquote>
 <div><p>Name of the colorbar object. If you want to control the colorbar of
 either the cortical projection, use ‘Projection’. And
-‘Connectivity’ for the colormap of connectivity (if defined).</p>
+‘Connectivity’ or ‘Pictures’ if defined.</p>
 </div></blockquote>
 <p><strong>cmap</strong> : string | None</p>
 <blockquote>
@@ -1580,6 +2075,90 @@ using the over parameter.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="select-a-colorbar">
+<h3>Select a colorbar<a class="headerlink" href="#select-a-colorbar" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.cbar_select">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">cbar_select</code><span class="sig-paren">(</span><em>name</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.cbar_select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.cbar_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select and disply a colorbar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string, {‘Projection’, ‘Connectivity’, ‘Pictures’}</p>
+<blockquote>
+<div><p>Name of the colorbar object. If you want to control the colorbar of
+either the cortical projection, use ‘Projection’. And
+‘Connectivity’ or ‘Pictures’ if defined.</p>
+</div></blockquote>
+<p><strong>visible</strong> : bool | True</p>
+<blockquote class="last">
+<div><p>Set the colorbar of the object “name” visible.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="list-of-available-colorbars">
+<h3>List of available colorbars<a class="headerlink" href="#list-of-available-colorbars" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.cbar_list">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">cbar_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.cbar_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.cbar_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of objects for which the colorbar can be controlled.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>cbobjs</strong> : list</p>
+<blockquote class="last">
+<div><p>List of objects for which the colorbar can be controlled.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="export-colorbar">
+<h3>Export colorbar<a class="headerlink" href="#export-colorbar" title="Permalink to this headline">¶</a></h3>
+<dl class="method">
+<dt id="visbrain.brain.user.BrainUserMethods.cbar_export">
+<code class="descclassname">BrainUserMethods.</code><code class="descname">cbar_export</code><span class="sig-paren">(</span><em>filename=None</em>, <em>export_only=None</em>, <em>get_dict=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.cbar_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.cbar_export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export colorbars in a text file or in a dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string | None</p>
+<blockquote>
+<div><p>Name of the text file (i.e ‘name.txt’). If None, colorbars are not
+going to be saved.</p>
+</div></blockquote>
+<p><strong>export_only</strong> : list | None</p>
+<blockquote>
+<div><p>List of names for exporting the colorbar.</p>
+</div></blockquote>
+<p><strong>get_dict</strong> : bool | False</p>
+<blockquote>
+<div><p>Get colorbars as a dictionary.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dict_all</strong> : dict</p>
+<blockquote class="last">
+<div><p>Dictionary of all colorbars (only if get_dict is True)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 <div class="section" id="auto-scaling">
 <h3>Auto-scaling<a class="headerlink" href="#auto-scaling" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
@@ -1590,11 +2169,11 @@ using the over parameter.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string, {‘Projection’, ‘Connectivity’}</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string, {‘Projection’, ‘Connectivity’, ‘Pictures’}</p>
 <blockquote class="last">
 <div><p>Name of the colorbar object. If you want to control the colorbar of
 either the cortical projection, use ‘Projection’. And
-‘Connectivity’ for the colormap of connectivity (if defined).</p>
+‘Connectivity’ or ‘Pictures’ if defined.</p>
 </div></blockquote>
 </td>
 </tr>

@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Brain control &mdash; visbrain 0.2.9 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="visbrain 0.2.9 documentation" href="../../index.html"/>
+        <link rel="up" title="Examples" href="../index.html"/>
+        <link rel="next" title="Convert mesh data" href="11_convert_mesh_data.html"/>
+        <link rel="prev" title="Cross-sections and volume control" href="01_cross_sections_and_volume.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">I/O</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_cross_sections_and_volume.html">Cross-sections and volume control</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Brain control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_region_of_interest.html">Add Region of interest (ROI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_add_brain_template.html">Add a brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_add_time_series.html">Add time series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="07_add_pictures.html">Add pictures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_add_nifti_volume.html">Add Nifti volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_sources.html">Add deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_add_multiple_objects.html">Add multiple objects to the scene</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_connectivity.html">Connect deep sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#ndviz-examples">Ndviz Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+      <li>Brain control</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/auto_examples/brain/00_brain_control.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="brain-control">
+<span id="sphx-glr-auto-examples-brain-00-brain-control-py"></span><h1>Brain control<a class="headerlink" href="#brain-control" title="Permalink to this headline">¶</a></h1>
+<p>Control the brain such as the choice of the template to use, the hemisphere
+to display and transparency level. By default, Visbrain come with three
+different templates (B1, B2 and B3).</p>
+<p>This file also show how to rotate the using either predefined rotations
+(axial, sagittal or coronal) or custom rotation. Uncomment lines to be
+executed.</p>
+<p>Fixed parameters for rotation :</p>
+<blockquote>
+<div><ul class="simple">
+<li>‘axial_0’: top view</li>
+<li>‘axial_1’: bottom view</li>
+<li>‘coronal_0’: front</li>
+<li>‘coronal_1’: back view</li>
+<li>‘sagittal_0’: left view</li>
+<li>‘sagittal_1’: right view</li>
+</ul>
+</div></blockquote>
+<p>Custom rotation consist of a tuple of two floats repsectively for azimuth and
+elevation.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+
+<span class="c1"># Define the Brain instance :</span>
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Display opaque B1 :</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># vb.brain_control(template=&#39;B1&#39;, transparent=False)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Display tranparent right hemisphere of B3 :</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># vb.brain_control(template=&#39;B3&#39;, hemisphere=&#39;right&#39;, alpha=.1)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Fixed frontal view</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># vb.rotate(fixed=&#39;coronal_0&#39;)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Display transparent left hemisphere of B2</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># vb.brain_control(template=&#39;B2&#39;, hemisphere=&#39;left&#39;, alpha=.5)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Custom rotation</span>
+<span class="sd">    * azimuth=-34°</span>
+<span class="sd">    * elevation=74°</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># vb.rotate(custom=(-34, 74))  # Custom rotation</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Hide the brain</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># vb.brain_control(visible=False)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Change the color of the brain. You define three colors using :</span>
+<span class="sd">    * Matplotlib colors (&#39;red&#39;, &#39;white&#39;, &#39;slateblue&#39;...)</span>
+<span class="sd">    * RGB tuple ((1., 0., 0.), (1., 1., 1.)...)</span>
+<span class="sd">    # Hexadecimal (&#39;#ab4642&#39;...)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># vb.brain_control(color=(0.9, 0.29, 0.24))</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Change background color</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># vb.background_color(&#39;#34495e&#39;)</span>
+
+<span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/00_brain_control.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">00_brain_control.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/00_brain_control.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">00_brain_control.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="11_convert_mesh_data.html" class="btn btn-neutral float-right" title="Convert mesh data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="01_cross_sections_and_volume.html" class="btn btn-neutral" title="Cross-sections and volume control" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.2.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

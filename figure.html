@@ -104,12 +104,15 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Figure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#inputs">Inputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#methods">Methods</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#show">show</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#save">save</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#colorbar-to-axis">colorbar_to_axis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#shared-colorbar">shared_colorbar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-figure-class-inputs">Main <em>Figure</em> class inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#show">show</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#save">save</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#colorbar-to-axis">colorbar_to_axis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shared-colorbar">shared_colorbar</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -246,8 +249,10 @@
 <p class="caption"><span class="caption-text">Code above : four exported figures from the Brain module are aranged in a (2, 2) grid. Then, some have a colorbar, xlabel, ylabel. Finally, there is two shared colorbars.</span></p>
 </div>
 </div>
-<div class="section" id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="main-figure-class-inputs">
+<h3>Main <em>Figure</em> class inputs<a class="headerlink" href="#main-figure-class-inputs" title="Permalink to this headline">¶</a></h3>
 <p>First, you will need to create a Figure objects with the files to load, titles, xlabels… Then, there’s a list of embedded methods that provide further controls :</p>
 <ul class="simple">
 <li><a class="reference internal" href="#show"><span class="std std-ref">show</span></a> : display the final figure</li>
@@ -262,55 +267,74 @@
 <p>This class can be used to generate figures to be then used in a paper. For
 example, if you export 10 pictures, you may want to concatenate them in a
 (5, 2) grid and add a colorbar.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>files: str/list/tuple</dt>
-<dd>Files to load. If it’s a string, only one file will be loaded.
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>files</strong> : str/list/tuple</p>
+<blockquote>
+<div><p>Files to load. If it’s a string, only one file will be loaded.
 Otherwise, if files is a iterable object of strings (list, tuple)
-all the files will be loaded.</dd>
-</dl>
-</dd>
-<dt>Kwargs:</dt>
-<dd><dl class="first last docutils">
-<dt>path: str, optional, (def: None)</dt>
-<dd>Specify where files are located. If all files are in separate
+all the files will be loaded.</p>
+</div></blockquote>
+<p><strong>path</strong> : str | None</p>
+<blockquote>
+<div><p>Specify where files are located. If all files are in separate
 folders, use the files variable : files = [‘path1/file1.png’,
 ‘path2/file2.jpg’, …]. If all pictures are in the same folder,
-use path=’path2myfolder/’ and files=[‘file1.png’, ‘file2.jpg’, …]</dd>
-<dt>grid: tuple, optional, (def: None)</dt>
-<dd>Tuple of integers describing how to arange figures. The grid
+use path=’path2myfolder/’ and files=[‘file1.png’, ‘file2.jpg’, …]</p>
+</div></blockquote>
+<p><strong>grid</strong> : tuple | None</p>
+<blockquote>
+<div><p>Tuple of integers describing how to arange figures. The grid
 describe (n_rows, n_columns) of the final figure. If grid is None
 all pictures will be displayed on a line. For example, if 12
-pictures are loaded, grid could be (6, 2), (4, 3)…</dd>
-<dt>figtitle: str, optional, (def: None)</dt>
-<dd>Title of the entire figure.</dd>
-<dt>y: float, optional, (def: 1.02)</dt>
-<dd>Distance between top and title of each axis (if title displayed).</dd>
-<dt>titles: str/list/tuple, optional, (def: None)</dt>
-<dd>Specify the title of each figure. If titles is None, no title will
+pictures are loaded, grid could be (6, 2), (4, 3)…</p>
+</div></blockquote>
+<p><strong>figtitle</strong> : str | None</p>
+<blockquote>
+<div><p>Title of the entire figure.</p>
+</div></blockquote>
+<p><strong>y</strong> : float | 1.02</p>
+<blockquote>
+<div><p>Distance between top and title of each axis (if title displayed).</p>
+</div></blockquote>
+<p><strong>titles</strong> : str/list/tuple | None</p>
+<blockquote>
+<div><p>Specify the title of each figure. If titles is None, no title will
 be added. If titles is a string, the same title will be applied to
 all figures. If titles is a list/tuple of strings, the strings
 inside will be used to set the title of each picture independantly
-(must have the same length as files.)</dd>
-<dt>xlabels: str/list/tuple, optional, (def: None)</dt>
-<dd>Specify the x-axis label of each figure. If xlabels is None,
+(must have the same length as files.)</p>
+</div></blockquote>
+<p><strong>xlabels</strong> : str/list/tuple | None</p>
+<blockquote>
+<div><p>Specify the x-axis label of each figure. If xlabels is None,
 no label will be added. If xlabels is a string, the same label will
 be applied to all figures. If xlabels is a list/tuple of strings,
 the strings inside will be used to set the label of each picture
-independantly (must have the same length as files.)</dd>
-<dt>ylabels: str/list/tuple, optional, (def: None)</dt>
-<dd>Specify the y-axis label of each figure. If ylabels is None,
+independantly (must have the same length as files.)</p>
+</div></blockquote>
+<p><strong>ylabels</strong> : str/list/tuple | None</p>
+<blockquote>
+<div><p>Specify the y-axis label of each figure. If ylabels is None,
 no label will be added. If ylabels is a string, the same label will
 be applied to all figures. If ylabels is a list/tuple of strings,
 the strings inside will be used to set the label of each picture
-independantly (must have the same length as files.)</dd>
-<dt>figsize: tuple, optional, (def: None)</dt>
-<dd>The size of the figure. Should be a tuple of integers.</dd>
-<dt>subspace: dict, optional, (def: None)</dt>
-<dd><dl class="first last docutils">
-<dt>Control margins and the distance between subplots. Use:</dt>
-<dd><ul class="first last simple">
+independantly (must have the same length as files.)</p>
+</div></blockquote>
+<p><strong>figsize</strong> : tuple | None</p>
+<blockquote>
+<div><p>The size of the figure. Should be a tuple of integers.</p>
+</div></blockquote>
+<p><strong>subspace</strong> : dict | {‘left’: 0., ‘right’: 1., ‘bottom’: 0., ‘top’: .9,</p>
+<blockquote>
+<div><blockquote>
+<div><p>‘wspace’: 0., ‘hspace’: 0.05}</p>
+</div></blockquote>
+<p>Control margins and the distance between subplots. Use:</p>
+<blockquote>
+<div><ul class="simple">
 <li>‘left’ : The left side of the subplots of the figure</li>
 <li>‘right’ : The right side of the subplots of the figure</li>
 <li>‘bottom’ : The bottom of the subplots of the figure</li>
@@ -322,52 +346,73 @@ height.</li>
 between subplots, expressed as a fraction of the average axis
 width.</li>
 </ul>
-</dd>
-<dt>Default <span class="classifier-delimiter">:</span> <span class="classifier">{‘left’: 0., ‘right’: 1., ‘bottom’: 0., ‘top’: .9,</span></dt>
-<dd>‘wspace’: 0., ‘hspace’: 0.05}</dd>
-</dl>
-</dd>
-<dt>rmax: bool, optional, (def: True)</dt>
-<dd>Remove borders of each axis.</dd>
-<dt>fig_bgcolor: str/tuple/list, optional, (def: None)</dt>
-<dd>Background color of the figure. By default, no background is used.</dd>
-<dt>ax_bgcolor: str/tuple/list, optional, (def: None)</dt>
-<dd>Background color of each axis. If None, no background will be used.
+</div></blockquote>
+</div></blockquote>
+<p><strong>rmax</strong> : bool | True</p>
+<blockquote>
+<div><p>Remove borders of each axis.</p>
+</div></blockquote>
+<p><strong>fig_bgcolor</strong> : str/tuple/list | None</p>
+<blockquote>
+<div><p>Background color of the figure. By default, no background is used.</p>
+</div></blockquote>
+<p><strong>ax_bgcolor</strong> : str/tuple/list | None</p>
+<blockquote>
+<div><p>Background color of each axis. If None, no background will be used.
 If ax_bgcolor is a string, the same background will be used for all
 axes. Finally, use a list of colors to control the background color
 of each axis. This is a very important parameter for transparent
-pictures (like png or tiff files).</dd>
-<dt>text_color: str/tuple/list, optional, (def: ‘black’)</dt>
-<dd>Color of text elements (figure title, axes titles, x and y labels.)</dd>
-<dt>autocrop: bool, optional, (def: False)</dt>
-<dd>Specify if each picture has to be automatically cropped.</dd>
-<dt>autoresize: bool, optional, (def: False)</dt>
-<dd>Specify if all pictures have to be resized. If True, all pictures
+pictures (like png or tiff files).</p>
+</div></blockquote>
+<p><strong>text_color</strong> : str/tuple/list | ‘black’</p>
+<blockquote>
+<div><p>Color of text elements (figure title, axes titles, x and y labels.)</p>
+</div></blockquote>
+<p><strong>autocrop</strong> : bool | False</p>
+<blockquote>
+<div><p>Specify if each picture has to be automatically cropped.</p>
+</div></blockquote>
+<p><strong>autoresize</strong> : bool | False</p>
+<blockquote class="last">
+<div><p>Specify if all pictures have to be resized. If True, all pictures
 will be resized according to the minimum size along row axis. For
 further controls, define autoresize as a dictionary. Use the
 key ‘axis’ to specify if pictures have to share the same height (0)
 or width (1). Use ‘extend’ if the smallest (False) or the largest
-have to be considered as the reference.</dd>
-</dl>
-</dd>
-<dt>Methods:</dt>
-<dd><dl class="first last docutils">
-<dt>show:</dt>
-<dd>Display the final figure.</dd>
-<dt>save:</dt>
-<dd>Save the figure.</dd>
-<dt>colorbar_to_axis:</dt>
-<dd>Add a specific colorbar to a selected picture.</dd>
-</dl>
-</dd>
-</dl>
+have to be considered as the reference.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>show()</strong></td>
+<td>Display the final figure.</td>
+</tr>
+<tr class="row-even"><td><strong>save()</strong></td>
+<td>Save the figure.</td>
+</tr>
+<tr class="row-odd"><td><strong>colorbar_to_axis()</strong></td>
+<td>Add a specific colorbar to a selected picture.</td>
+</tr>
+<tr class="row-even"><td><strong>shared_colorbar()</strong></td>
+<td>Add a a colorbar shared by multiple subplots.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="methods">
-<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="show">
-<span id="id2"></span><h3>show<a class="headerlink" href="#show" title="Permalink to this headline">¶</a></h3>
+<span id="id2"></span><h4>show<a class="headerlink" href="#show" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.figure.Figure.show">
 <code class="descclassname">Figure.</code><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.show" title="Permalink to this definition">¶</a></dt>
@@ -376,7 +421,7 @@ have to be considered as the reference.</dd>
 
 </div>
 <div class="section" id="save">
-<span id="id3"></span><h3>save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
+<span id="id3"></span><h4>save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.figure.Figure.save">
 <code class="descclassname">Figure.</code><code class="descname">save</code><span class="sig-paren">(</span><em>saveas</em>, <em>dpi=300</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.save" title="Permalink to this definition">¶</a></dt>
@@ -386,11 +431,7 @@ have to be considered as the reference.</dd>
 <dd><dl class="first last docutils">
 <dt>saveas: string</dt>
 <dd>Name of the saved figure.</dd>
-</dl>
-</dd>
-<dt>Kargs:</dt>
-<dd><dl class="first last docutils">
-<dt>dpi: int, optional, (def: 300)</dt>
+<dt>dpi <span class="classifier-delimiter">:</span> <span class="classifier">int | 300</span></dt>
 <dd>The resolution of the exported figure.</dd>
 </dl>
 </dd>
@@ -399,120 +440,194 @@ have to be considered as the reference.</dd>
 
 </div>
 <div class="section" id="colorbar-to-axis">
-<span id="id4"></span><h3>colorbar_to_axis<a class="headerlink" href="#colorbar-to-axis" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h4>colorbar_to_axis<a class="headerlink" href="#colorbar-to-axis" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.figure.Figure.colorbar_to_axis">
 <code class="descclassname">Figure.</code><code class="descname">colorbar_to_axis</code><span class="sig-paren">(</span><em>toaxis</em>, <em>clim</em>, <em>cmap</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em>, <em>orientation=’vertical’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.colorbar_to_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.colorbar_to_axis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a colorbar to a particular axis.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>toaxis: int</dt>
-<dd>Integer to specify the axis to which add the colorbar.</dd>
-<dt>clim: tuple/list</dt>
-<dd>A tuple of float/int describing the limit of the colorbar.</dd>
-<dt>cmap: str</dt>
-<dd>The colormap to use (‘viridis’, ‘jet’, ‘Spectral’…)</dd>
-</dl>
-</dd>
-</dl>
-<p>Kargs:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>toaxis</strong> : int</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>vmin: float, optional, (def: None)</dt>
-<dd>Minimum threshold. See the under parameter for further details.</dd>
-<dt>under: string/tuple/list, optional, (def: ‘gray’)</dt>
-<dd>Every values bellow vmin will be set to the under color.</dd>
-<dt>vmax: float, optional, (def: None)</dt>
-<dd>Maximum threshold. See the over parameter for further details.</dd>
-<dt>over: string/tuple/list, optional, (def: ‘red’)</dt>
-<dd>Every values over vmax will be set to the over color.</dd>
-<dt>title: string, optional, (def: None)</dt>
-<dd>Title of the colorbar.</dd>
-<dt>ycb: float, optional, (def: 10.)</dt>
-<dd>Distance between the colorbar and it title (if defined).</dd>
-<dt>fz_title: int/float, optional, (def: 15)</dt>
-<dd>The fontsize of colorbar title.</dd>
-<dt>ticks: string/int/float/np.ndarray, optional, (def: ‘complete’)</dt>
-<dd>Ticks of the colorbar. This parameter is only active if clim
+<div><p>Integer to specify the axis to which add the colorbar.</p>
+</div></blockquote>
+<p><strong>clim</strong> : tuple/list</p>
+<blockquote>
+<div><p>A tuple of float/int describing the limit of the colorbar.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : str</p>
+<blockquote>
+<div><p>The colormap to use (‘viridis’, ‘jet’, ‘Spectral’…)</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Minimum threshold. See the under parameter for further details.</p>
+</div></blockquote>
+<p><strong>under</strong> : string/tuple/list | ‘gray’</p>
+<blockquote>
+<div><p>Every values bellow vmin will be set to the under color.</p>
+</div></blockquote>
+<p><strong>vmax</strong> : float | None</p>
+<blockquote>
+<div><p>Maximum threshold. See the over parameter for further details.</p>
+</div></blockquote>
+<p><strong>over</strong> : string/tuple/list | ‘red’</p>
+<blockquote>
+<div><p>Every values over vmax will be set to the over color.</p>
+</div></blockquote>
+<p><strong>title</strong> : string | None</p>
+<blockquote>
+<div><p>Title of the colorbar.</p>
+</div></blockquote>
+<p><strong>ycb</strong> : float | 10.</p>
+<blockquote>
+<div><p>Distance between the colorbar and it title (if defined).</p>
+</div></blockquote>
+<p><strong>fz_title</strong> : int/float | 15</p>
+<blockquote>
+<div><p>The fontsize of colorbar title.</p>
+</div></blockquote>
+<p><strong>ticks</strong> : string/int/float/np.ndarray | ‘complete’</p>
+<blockquote>
+<div><p>Ticks of the colorbar. This parameter is only active if clim
 is defined. Use ‘complete’ to see only the minimum,
 maximum, vmin and vmax (if defined). Use ‘minmax’ to only see
 the maximum and minimum. If ticks is a float, an linear
 interpolation between the maximum and minimum will be used.
 Finally, if ticks is a NumPy array, it will be used as colorbar
-ticks directly.</dd>
-<dt>fz_ticks: int/float, optional, (def: 10)</dt>
-<dd>Fontsize of tick labels.</dd>
-<dt>outline: bool, optional, (def: False)</dt>
-<dd>Specify if the box arround the colorbar have to be displayed.</dd>
-<dt>orientation: string, optional, (def: ‘vertical’)</dt>
-<dd>Colorbar orientation. Use either ‘vertical’ or ‘horizontal’.</dd>
-</dl>
+ticks directly.</p>
 </div></blockquote>
+<p><strong>fz_ticks</strong> : int/float | 10</p>
+<blockquote>
+<div><p>Fontsize of tick labels.</p>
+</div></blockquote>
+<p><strong>outline</strong> : bool | False</p>
+<blockquote>
+<div><p>Specify if the box arround the colorbar have to be displayed.</p>
+</div></blockquote>
+<p><strong>orientation</strong> : string | ‘vertical’</p>
+<blockquote class="last">
+<div><p>Colorbar orientation. Use either ‘vertical’ or ‘horizontal’.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">shared_colorbar</span></code></dt>
+<dd>colorbar shared by multiple subplots.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>
 <div class="section" id="shared-colorbar">
-<span id="id5"></span><h3>shared_colorbar<a class="headerlink" href="#shared-colorbar" title="Permalink to this headline">¶</a></h3>
+<span id="id5"></span><h4>shared_colorbar<a class="headerlink" href="#shared-colorbar" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.figure.Figure.shared_colorbar">
 <code class="descclassname">Figure.</code><code class="descname">shared_colorbar</code><span class="sig-paren">(</span><em>clim</em>, <em>cmap</em>, <em>position=’right’</em>, <em>height=0.5</em>, <em>width=0.02</em>, <em>pltmargin=0.02</em>, <em>figmargin=0.07</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.shared_colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.shared_colorbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a colorbar to a particular axis.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>toaxis: int</dt>
-<dd>Integer to specify the axis to which add the colorbar.</dd>
-<dt>clim: tuple/list</dt>
-<dd>A tuple of float/int describing the limit of the colorbar.</dd>
-<dt>cmap: str</dt>
-<dd>The colormap to use (‘viridis’, ‘jet’, ‘Spectral’…)</dd>
-</dl>
-</dd>
-<dt>Kargs:</dt>
-<dd><dl class="first last docutils">
-<dt>position: str, optional, (def: ‘right’)</dt>
-<dd>Position of the shared colorbar. Use either ‘left’, ‘right’,
-or ‘bottom’.</dd>
-<dt>height: float, optional, (def: .5)</dt>
-<dd>Height of the colorbar.</dd>
-<dt>width: float, optional, (def: .02)</dt>
-<dd>Width of the colorbar.</dd>
-<dt>pltmargin: float, optional, (def: .05)</dt>
-<dd>Margin between plots and the colorbar.</dd>
-<dt>figmargin: float, optional, (def: .07)</dt>
-<dd>Margin between the edge of the figure and the colorbar.</dd>
-<dt>vmin: float, optional, (def: None)</dt>
-<dd>Minimum threshold. See the under parameter for further details.</dd>
-<dt>under: string/tuple/list, optional, (def: ‘gray’)</dt>
-<dd>Every values bellow vmin will be set to the under color.</dd>
-<dt>vmax: float, optional, (def: None)</dt>
-<dd>Maximum threshold. See the over parameter for further details.</dd>
-<dt>over: string/tuple/list, optional, (def: ‘red’)</dt>
-<dd>Every values over vmax will be set to the over color.</dd>
-<dt>title: string, optional, (def: None)</dt>
-<dd>Title of the colorbar.</dd>
-<dt>ycb: float, optional, (def: 10.)</dt>
-<dd>Distance between the colorbar and it title (if defined).</dd>
-<dt>fz_title: int/float, optional, (def: 15)</dt>
-<dd>The fontsize of colorbar title.</dd>
-<dt>ticks: string/int/float/np.ndarray, optional, (def: ‘complete’)</dt>
-<dd>Ticks of the colorbar. This parameter is only active if clim
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>toaxis</strong> : int</p>
+<blockquote>
+<div><p>Integer to specify the axis to which add the colorbar.</p>
+</div></blockquote>
+<p><strong>clim</strong> : tuple/list</p>
+<blockquote>
+<div><p>A tuple of float/int describing the limit of the colorbar.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : str</p>
+<blockquote>
+<div><p>The colormap to use (‘viridis’, ‘jet’, ‘Spectral’…)</p>
+</div></blockquote>
+<p><strong>position</strong> : str | ‘right’</p>
+<blockquote>
+<div><p>Position of the shared colorbar. Use either ‘left’, ‘right’,
+or ‘bottom’.</p>
+</div></blockquote>
+<p><strong>height</strong> : float | .5</p>
+<blockquote>
+<div><p>Height of the colorbar.</p>
+</div></blockquote>
+<p><strong>width</strong> : float | .02</p>
+<blockquote>
+<div><p>Width of the colorbar.</p>
+</div></blockquote>
+<p><strong>pltmargin</strong> : float | .05</p>
+<blockquote>
+<div><p>Margin between plots and the colorbar.</p>
+</div></blockquote>
+<p><strong>figmargin</strong> : float | .07</p>
+<blockquote>
+<div><p>Margin between the edge of the figure and the colorbar.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Minimum threshold. See the under parameter for further details.</p>
+</div></blockquote>
+<p><strong>under</strong> : string/tuple/list | ‘gray’</p>
+<blockquote>
+<div><p>Every values bellow vmin will be set to the under color.</p>
+</div></blockquote>
+<p><strong>vmax</strong> : float | None</p>
+<blockquote>
+<div><p>Maximum threshold. See the over parameter for further details.</p>
+</div></blockquote>
+<p><strong>over</strong> : string/tuple/list | ‘red’</p>
+<blockquote>
+<div><p>Every values over vmax will be set to the over color.</p>
+</div></blockquote>
+<p><strong>title</strong> : string | None</p>
+<blockquote>
+<div><p>Title of the colorbar.</p>
+</div></blockquote>
+<p><strong>ycb</strong> : float | 10.</p>
+<blockquote>
+<div><p>Distance between the colorbar and it title (if defined).</p>
+</div></blockquote>
+<p><strong>fz_title</strong> : int/float | 15</p>
+<blockquote>
+<div><p>The fontsize of colorbar title.</p>
+</div></blockquote>
+<p><strong>ticks</strong> : string/int/float/np.ndarray | ‘complete’</p>
+<blockquote>
+<div><p>Ticks of the colorbar. This parameter is only active if clim
 is defined. Use ‘complete’ to see only the minimum,
 maximum, vmin and vmax (if defined). Use ‘minmax’ to only see
 the maximum and minimum. If ticks is a float, an linear
 interpolation between the maximum and minimum will be used.
 Finally, if ticks is a NumPy array, it will be used as colorbar
-ticks directly.</dd>
-<dt>fz_ticks: int/float, optional, (def: 10)</dt>
-<dd>Fontsize of tick labels.</dd>
-<dt>outline: bool, optional, (def: False)</dt>
-<dd>Specify if the box arround the colorbar have to be displayed.</dd>
+ticks directly.</p>
+</div></blockquote>
+<p><strong>fz_ticks</strong> : int/float | 10</p>
+<blockquote>
+<div><p>Fontsize of tick labels.</p>
+</div></blockquote>
+<p><strong>outline</strong> : bool | False</p>
+<blockquote class="last">
+<div><p>Specify if the box arround the colorbar have to be displayed.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">colorbar_to_axis</span></code></dt>
+<dd>add a specific colorbar to an axis.</dd>
 </dl>
-</dd>
-</dl>
+</div>
 </dd></dl>
 
+</div>
 </div>
 </div>
 </div>

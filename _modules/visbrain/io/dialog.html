@@ -101,6 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
@@ -170,8 +171,8 @@
   <h1>Source code for visbrain.io.dialog</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Dialog window for saving and loading files.</span>
 
-<span class="sd"> - dialogSave : Open a window to save a file</span>
-<span class="sd"> - dialogLoad : Open a window to load a file</span>
+<span class="sd">* dialogSave : Open a window to save a file</span>
+<span class="sd">* dialogLoad : Open a window to load a file</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QFileDialog</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -184,24 +185,22 @@
                <span class="n">allext</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;All files (*.*)&#39;</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Open a window to save a file.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        self: class</span>
-<span class="sd">            Class containing PyQt5 elemnets.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    self : class</span>
+<span class="sd">        Class containing PyQt5 elemnets.</span>
+<span class="sd">    name : string | &#39;Save file&#39;</span>
+<span class="sd">        Name of the saving window.</span>
+<span class="sd">    default : string | &#39;file&#39;</span>
+<span class="sd">        Default name of the saved file.</span>
+<span class="sd">    allext : list | [&#39;All files (*.*)&#39;]</span>
+<span class="sd">        String containing all the extensions. Must be a list where each</span>
+<span class="sd">        element is a string of type &#39;Ext (.ext)&#39;</span>
 
-<span class="sd">    Kargs:</span>
-<span class="sd">        name: string, optional, (def: &#39;Save file&#39;)</span>
-<span class="sd">            Name of the saving window.</span>
-
-<span class="sd">        default: string, optional, (def: &#39;file&#39;)</span>
-<span class="sd">            Default name of the saved file.</span>
-
-<span class="sd">        allext: list, optional, (def: [&#39;All files (*.*)&#39;])</span>
-<span class="sd">            String containing all the extensions. Must be a list where each</span>
-<span class="sd">            element is a string of type &#39;Ext (*.ext)&#39;</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        filename: string</span>
-<span class="sd">            Filename for saving.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Filename for saving.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Build all extensions :</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">allext</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
@@ -218,24 +217,22 @@
                <span class="n">allext</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;All files (*.*)&#39;</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Open a window to load a file.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        self: class</span>
-<span class="sd">            Class containing PyQt5 elemnets.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    self : class</span>
+<span class="sd">        Class containing PyQt5 elemnets.</span>
+<span class="sd">    name : string | &#39;Save file&#39;</span>
+<span class="sd">        Name of the opening window.</span>
+<span class="sd">    default : string | &#39;file&#39;</span>
+<span class="sd">        Default name of the opened file.</span>
+<span class="sd">    allext : list | [&#39;All files (*.*)&#39;]</span>
+<span class="sd">        String containing all the extensions. Must be a list where each</span>
+<span class="sd">        element is a string of type &#39;Ext (.ext)&#39;</span>
 
-<span class="sd">    Kargs:</span>
-<span class="sd">        name: string, optional, (def: &#39;Save file&#39;)</span>
-<span class="sd">            Name of the opening window.</span>
-
-<span class="sd">        default: string, optional, (def: &#39;file&#39;)</span>
-<span class="sd">            Default name of the opened file.</span>
-
-<span class="sd">        allext: list, optional, (def: [&#39;All files (*.*)&#39;])</span>
-<span class="sd">            String containing all the extensions. Must be a list where each</span>
-<span class="sd">            element is a string of type &#39;Ext (*.ext)&#39;</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        filename: string</span>
-<span class="sd">            Filename for opening.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Filename for opening.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Open the window :</span>
     <span class="n">file</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">allext</span><span class="p">)</span>

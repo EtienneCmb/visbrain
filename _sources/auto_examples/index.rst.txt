@@ -21,13 +21,13 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display deep sources using MNI coordinates. ">
+    <div class="sphx-glr-thumbcontainer" tooltip="Load a Graphical User Interface configuration file and retrieve previous session.">
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_6_RealDataExample_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_13_load_gui_config_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_6_RealDataExample.py`
+        :ref:`sphx_glr_auto_examples_brain_13_load_gui_config.py`
 
 .. raw:: html
 
@@ -37,17 +37,17 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/6_RealDataExample
+   /auto_examples/brain/13_load_gui_config
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is the most basic example to illustrate how to start a Brain instance and visualize a basi...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Control the cross-section panel and the volume. This script use a custom nifti volume downloada...">
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_0_basics_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_01_cross_sections_and_volume_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_0_basics.py`
+        :ref:`sphx_glr_auto_examples_brain_01_cross_sections_and_volume.py`
 
 .. raw:: html
 
@@ -57,17 +57,17 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/0_basics
+   /auto_examples/brain/01_cross_sections_and_volume
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Customize the GUI before loading.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Control the brain such as the choice of the template to use, the hemisphere to display and tran...">
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_1_InterfaceCustomization_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_00_brain_control_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_1_InterfaceCustomization.py`
+        :ref:`sphx_glr_auto_examples_brain_00_brain_control.py`
 
 .. raw:: html
 
@@ -77,7 +77,27 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/1_InterfaceCustomization
+   /auto_examples/brain/00_brain_control
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate how to convert mesh data to be compatible with visbrain.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_11_convert_mesh_data_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_11_convert_mesh_data.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/11_convert_mesh_data
 
 .. raw:: html
 
@@ -85,9 +105,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_5_DeepStructures_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_05_region_of_interest_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_5_DeepStructures.py`
+        :ref:`sphx_glr_auto_examples_brain_05_region_of_interest.py`
 
 .. raw:: html
 
@@ -97,17 +117,17 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/5_DeepStructures
+   /auto_examples/brain/05_region_of_interest
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Import a custom atlas and to adapt it to the software.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Add a new brain template to the interface.">
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_2_CustomBrainTemplate_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_02_add_brain_template_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_2_CustomBrainTemplate.py`
+        :ref:`sphx_glr_auto_examples_brain_02_add_brain_template.py`
 
 .. raw:: html
 
@@ -117,7 +137,67 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/2_CustomBrainTemplate
+   /auto_examples/brain/02_add_brain_template
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display time-series attached to sources. The time-series can th...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_06_add_time_series_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_06_add_time_series.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/06_add_time_series
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display small pictures attached to sources. The pictures can th...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_07_add_pictures_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_07_add_pictures.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/07_add_pictures
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Import a custom Nifti volume that can be then used in the cross-section or volume tab. To this ...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_10_add_nifti_volume_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_10_add_nifti_volume.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/10_add_nifti_volume
 
 .. raw:: html
 
@@ -125,9 +205,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_7_screenshot_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_08_screenshot_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_7_screenshot.py`
+        :ref:`sphx_glr_auto_examples_brain_08_screenshot.py`
 
 .. raw:: html
 
@@ -137,17 +217,17 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/7_screenshot
+   /auto_examples/brain/08_screenshot
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display deep sources using MNI coordinates.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Add sources to the scene. This script also illustrate most of the controls for sources. Each so...">
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_3_Sources_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_03_sources_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_3_Sources.py`
+        :ref:`sphx_glr_auto_examples_brain_03_sources.py`
 
 .. raw:: html
 
@@ -157,7 +237,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/3_Sources
+   /auto_examples/brain/03_sources
 
 .. raw:: html
 
@@ -165,9 +245,9 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_8_AddMultipleObjects_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_09_add_multiple_objects_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_8_AddMultipleObjects.py`
+        :ref:`sphx_glr_auto_examples_brain_09_add_multiple_objects.py`
 
 .. raw:: html
 
@@ -177,17 +257,17 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/8_AddMultipleObjects
+   /auto_examples/brain/09_add_multiple_objects
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display connectivity. To this end, we will define some deep sou...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Display and customize connectivity. To this end, we define some deep sources and connect them. ">
 
 .. only:: html
 
-    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_4_Connectivity_thumb.png
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_04_connectivity_thumb.png
 
-        :ref:`sphx_glr_auto_examples_brain_4_Connectivity.py`
+        :ref:`sphx_glr_auto_examples_brain_04_connectivity.py`
 
 .. raw:: html
 
@@ -197,7 +277,27 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 .. toctree::
    :hidden:
 
-   /auto_examples/brain/4_Connectivity
+   /auto_examples/brain/04_connectivity
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Control the colorbar of selected objects. The colormap of three objects can actually be control...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_12_colorbar_control_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_12_colorbar_control.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/12_colorbar_control
 .. raw:: html
 
     <div style='clear:both'></div>

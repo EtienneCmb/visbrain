@@ -101,6 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
@@ -190,107 +191,93 @@
 <span class="sd">    example, if you export 10 pictures, you may want to concatenate them in a</span>
 <span class="sd">    (5, 2) grid and add a colorbar.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        files: str/list/tuple</span>
-<span class="sd">            Files to load. If it&#39;s a string, only one file will be loaded.</span>
-<span class="sd">            Otherwise, if files is a iterable object of strings (list, tuple)</span>
-<span class="sd">            all the files will be loaded.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    files : str/list/tuple</span>
+<span class="sd">        Files to load. If it&#39;s a string, only one file will be loaded.</span>
+<span class="sd">        Otherwise, if files is a iterable object of strings (list, tuple)</span>
+<span class="sd">        all the files will be loaded.</span>
+<span class="sd">    path : str | None</span>
+<span class="sd">        Specify where files are located. If all files are in separate</span>
+<span class="sd">        folders, use the files variable : files = [&#39;path1/file1.png&#39;,</span>
+<span class="sd">        &#39;path2/file2.jpg&#39;, ...]. If all pictures are in the same folder,</span>
+<span class="sd">        use path=&#39;path2myfolder/&#39; and files=[&#39;file1.png&#39;, &#39;file2.jpg&#39;, ...]</span>
+<span class="sd">    grid : tuple | None</span>
+<span class="sd">        Tuple of integers describing how to arange figures. The grid</span>
+<span class="sd">        describe (n_rows, n_columns) of the final figure. If grid is None</span>
+<span class="sd">        all pictures will be displayed on a line. For example, if 12</span>
+<span class="sd">        pictures are loaded, grid could be (6, 2), (4, 3)...</span>
+<span class="sd">    figtitle : str | None</span>
+<span class="sd">        Title of the entire figure.</span>
+<span class="sd">    y : float | 1.02</span>
+<span class="sd">        Distance between top and title of each axis (if title displayed).</span>
+<span class="sd">    titles : str/list/tuple | None</span>
+<span class="sd">        Specify the title of each figure. If titles is None, no title will</span>
+<span class="sd">        be added. If titles is a string, the same title will be applied to</span>
+<span class="sd">        all figures. If titles is a list/tuple of strings, the strings</span>
+<span class="sd">        inside will be used to set the title of each picture independantly</span>
+<span class="sd">        (must have the same length as files.)</span>
+<span class="sd">    xlabels : str/list/tuple | None</span>
+<span class="sd">        Specify the x-axis label of each figure. If xlabels is None,</span>
+<span class="sd">        no label will be added. If xlabels is a string, the same label will</span>
+<span class="sd">        be applied to all figures. If xlabels is a list/tuple of strings,</span>
+<span class="sd">        the strings inside will be used to set the label of each picture</span>
+<span class="sd">        independantly (must have the same length as files.)</span>
+<span class="sd">    ylabels : str/list/tuple | None</span>
+<span class="sd">        Specify the y-axis label of each figure. If ylabels is None,</span>
+<span class="sd">        no label will be added. If ylabels is a string, the same label will</span>
+<span class="sd">        be applied to all figures. If ylabels is a list/tuple of strings,</span>
+<span class="sd">        the strings inside will be used to set the label of each picture</span>
+<span class="sd">        independantly (must have the same length as files.)</span>
+<span class="sd">    figsize : tuple | None</span>
+<span class="sd">        The size of the figure. Should be a tuple of integers.</span>
+<span class="sd">    subspace : dict | {&#39;left&#39;: 0., &#39;right&#39;: 1., &#39;bottom&#39;: 0., &#39;top&#39;: .9,</span>
+<span class="sd">               &#39;wspace&#39;: 0., &#39;hspace&#39;: 0.05}</span>
+<span class="sd">        Control margins and the distance between subplots. Use:</span>
 
-<span class="sd">    Kwargs:</span>
-<span class="sd">        path: str, optional, (def: None)</span>
-<span class="sd">            Specify where files are located. If all files are in separate</span>
-<span class="sd">            folders, use the files variable : files = [&#39;path1/file1.png&#39;,</span>
-<span class="sd">            &#39;path2/file2.jpg&#39;, ...]. If all pictures are in the same folder,</span>
-<span class="sd">            use path=&#39;path2myfolder/&#39; and files=[&#39;file1.png&#39;, &#39;file2.jpg&#39;, ...]</span>
+<span class="sd">            * &#39;left&#39; : The left side of the subplots of the figure</span>
+<span class="sd">            * &#39;right&#39; : The right side of the subplots of the figure</span>
+<span class="sd">            * &#39;bottom&#39; : The bottom of the subplots of the figure</span>
+<span class="sd">            * &#39;top&#39; : The top of the subplots of the figure</span>
+<span class="sd">            * &#39;hspace&#39; : The amount of height reserved for white space</span>
+<span class="sd">              between subplots, expressed as a fraction of the average axis</span>
+<span class="sd">              height.</span>
+<span class="sd">            * &#39;wspace&#39; : The amount of width reserved for blank space</span>
+<span class="sd">              between subplots, expressed as a fraction of the average axis</span>
+<span class="sd">              width.</span>
 
-<span class="sd">        grid: tuple, optional, (def: None)</span>
-<span class="sd">            Tuple of integers describing how to arange figures. The grid</span>
-<span class="sd">            describe (n_rows, n_columns) of the final figure. If grid is None</span>
-<span class="sd">            all pictures will be displayed on a line. For example, if 12</span>
-<span class="sd">            pictures are loaded, grid could be (6, 2), (4, 3)...</span>
+<span class="sd">    rmax : bool | True</span>
+<span class="sd">        Remove borders of each axis.</span>
+<span class="sd">    fig_bgcolor : str/tuple/list | None</span>
+<span class="sd">        Background color of the figure. By default, no background is used.</span>
+<span class="sd">    ax_bgcolor : str/tuple/list | None</span>
+<span class="sd">        Background color of each axis. If None, no background will be used.</span>
+<span class="sd">        If ax_bgcolor is a string, the same background will be used for all</span>
+<span class="sd">        axes. Finally, use a list of colors to control the background color</span>
+<span class="sd">        of each axis. This is a very important parameter for transparent</span>
+<span class="sd">        pictures (like png or tiff files).</span>
+<span class="sd">    text_color : str/tuple/list | &#39;black&#39;</span>
+<span class="sd">        Color of text elements (figure title, axes titles, x and y labels.)</span>
+<span class="sd">    autocrop : bool | False</span>
+<span class="sd">        Specify if each picture has to be automatically cropped.</span>
+<span class="sd">    autoresize : bool | False</span>
+<span class="sd">        Specify if all pictures have to be resized. If True, all pictures</span>
+<span class="sd">        will be resized according to the minimum size along row axis. For</span>
+<span class="sd">        further controls, define autoresize as a dictionary. Use the</span>
+<span class="sd">        key &#39;axis&#39; to specify if pictures have to share the same height (0)</span>
+<span class="sd">        or width (1). Use &#39;extend&#39; if the smallest (False) or the largest</span>
+<span class="sd">        have to be considered as the reference.</span>
 
-<span class="sd">        figtitle: str, optional, (def: None)</span>
-<span class="sd">            Title of the entire figure.</span>
-
-<span class="sd">        y: float, optional, (def: 1.02)</span>
-<span class="sd">            Distance between top and title of each axis (if title displayed).</span>
-
-<span class="sd">        titles: str/list/tuple, optional, (def: None)</span>
-<span class="sd">            Specify the title of each figure. If titles is None, no title will</span>
-<span class="sd">            be added. If titles is a string, the same title will be applied to</span>
-<span class="sd">            all figures. If titles is a list/tuple of strings, the strings</span>
-<span class="sd">            inside will be used to set the title of each picture independantly</span>
-<span class="sd">            (must have the same length as files.)</span>
-
-<span class="sd">        xlabels: str/list/tuple, optional, (def: None)</span>
-<span class="sd">            Specify the x-axis label of each figure. If xlabels is None,</span>
-<span class="sd">            no label will be added. If xlabels is a string, the same label will</span>
-<span class="sd">            be applied to all figures. If xlabels is a list/tuple of strings,</span>
-<span class="sd">            the strings inside will be used to set the label of each picture</span>
-<span class="sd">            independantly (must have the same length as files.)</span>
-
-<span class="sd">        ylabels: str/list/tuple, optional, (def: None)</span>
-<span class="sd">            Specify the y-axis label of each figure. If ylabels is None,</span>
-<span class="sd">            no label will be added. If ylabels is a string, the same label will</span>
-<span class="sd">            be applied to all figures. If ylabels is a list/tuple of strings,</span>
-<span class="sd">            the strings inside will be used to set the label of each picture</span>
-<span class="sd">            independantly (must have the same length as files.)</span>
-
-<span class="sd">        figsize: tuple, optional, (def: None)</span>
-<span class="sd">            The size of the figure. Should be a tuple of integers.</span>
-
-<span class="sd">        subspace: dict, optional, (def: None)</span>
-<span class="sd">            Control margins and the distance between subplots. Use:</span>
-<span class="sd">                * &#39;left&#39; : The left side of the subplots of the figure</span>
-<span class="sd">                * &#39;right&#39; : The right side of the subplots of the figure</span>
-<span class="sd">                * &#39;bottom&#39; : The bottom of the subplots of the figure</span>
-<span class="sd">                * &#39;top&#39; : The top of the subplots of the figure</span>
-<span class="sd">                * &#39;hspace&#39; : The amount of height reserved for white space</span>
-<span class="sd">                  between subplots, expressed as a fraction of the average axis</span>
-<span class="sd">                  height.</span>
-<span class="sd">                * &#39;wspace&#39; : The amount of width reserved for blank space</span>
-<span class="sd">                  between subplots, expressed as a fraction of the average axis</span>
-<span class="sd">                  width.</span>
-
-<span class="sd">            Default : {&#39;left&#39;: 0., &#39;right&#39;: 1., &#39;bottom&#39;: 0., &#39;top&#39;: .9,</span>
-<span class="sd">                       &#39;wspace&#39;: 0., &#39;hspace&#39;: 0.05}</span>
-
-<span class="sd">        rmax: bool, optional, (def: True)</span>
-<span class="sd">            Remove borders of each axis.</span>
-
-<span class="sd">        fig_bgcolor: str/tuple/list, optional, (def: None)</span>
-<span class="sd">            Background color of the figure. By default, no background is used.</span>
-
-<span class="sd">        ax_bgcolor: str/tuple/list, optional, (def: None)</span>
-<span class="sd">            Background color of each axis. If None, no background will be used.</span>
-<span class="sd">            If ax_bgcolor is a string, the same background will be used for all</span>
-<span class="sd">            axes. Finally, use a list of colors to control the background color</span>
-<span class="sd">            of each axis. This is a very important parameter for transparent</span>
-<span class="sd">            pictures (like png or tiff files).</span>
-
-<span class="sd">        text_color: str/tuple/list, optional, (def: &#39;black&#39;)</span>
-<span class="sd">            Color of text elements (figure title, axes titles, x and y labels.)</span>
-
-<span class="sd">        autocrop: bool, optional, (def: False)</span>
-<span class="sd">            Specify if each picture has to be automatically cropped.</span>
-
-<span class="sd">        autoresize: bool, optional, (def: False)</span>
-<span class="sd">            Specify if all pictures have to be resized. If True, all pictures</span>
-<span class="sd">            will be resized according to the minimum size along row axis. For</span>
-<span class="sd">            further controls, define autoresize as a dictionary. Use the</span>
-<span class="sd">            key &#39;axis&#39; to specify if pictures have to share the same height (0)</span>
-<span class="sd">            or width (1). Use &#39;extend&#39; if the smallest (False) or the largest</span>
-<span class="sd">            have to be considered as the reference.</span>
-
-<span class="sd">    Methods:</span>
-<span class="sd">        show:</span>
-<span class="sd">            Display the final figure.</span>
-
-<span class="sd">        save:</span>
-<span class="sd">            Save the figure.</span>
-
-<span class="sd">        colorbar_to_axis:</span>
-<span class="sd">            Add a specific colorbar to a selected picture.</span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    show()</span>
+<span class="sd">        Display the final figure.</span>
+<span class="sd">    save()</span>
+<span class="sd">        Save the figure.</span>
+<span class="sd">    colorbar_to_axis()</span>
+<span class="sd">        Add a specific colorbar to a selected picture.</span>
+<span class="sd">    shared_colorbar()</span>
+<span class="sd">        Add a a colorbar shared by multiple subplots.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">,</span>
@@ -388,8 +375,7 @@
 <span class="sd">            saveas: string</span>
 <span class="sd">                Name of the saved figure.</span>
 
-<span class="sd">        Kargs:</span>
-<span class="sd">            dpi: int, optional, (def: 300)</span>
+<span class="sd">            dpi : int | 300</span>
 <span class="sd">                The resolution of the exported figure.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span>
@@ -401,56 +387,47 @@
                          <span class="n">outline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a colorbar to a particular axis.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            toaxis: int</span>
-<span class="sd">                Integer to specify the axis to which add the colorbar.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        toaxis : int</span>
+<span class="sd">            Integer to specify the axis to which add the colorbar.</span>
+<span class="sd">        clim : tuple/list</span>
+<span class="sd">            A tuple of float/int describing the limit of the colorbar.</span>
 
-<span class="sd">            clim: tuple/list</span>
-<span class="sd">                A tuple of float/int describing the limit of the colorbar.</span>
+<span class="sd">        cmap : str</span>
+<span class="sd">            The colormap to use (&#39;viridis&#39;, &#39;jet&#39;, &#39;Spectral&#39;...)</span>
+<span class="sd">        vmin : float | None</span>
+<span class="sd">            Minimum threshold. See the under parameter for further details.</span>
+<span class="sd">        under : string/tuple/list | &#39;gray&#39;</span>
+<span class="sd">            Every values bellow vmin will be set to the under color.</span>
+<span class="sd">        vmax : float | None</span>
+<span class="sd">            Maximum threshold. See the over parameter for further details.</span>
+<span class="sd">        over : string/tuple/list | &#39;red&#39;</span>
+<span class="sd">            Every values over vmax will be set to the over color.</span>
+<span class="sd">        title : string | None</span>
+<span class="sd">            Title of the colorbar.</span>
+<span class="sd">        ycb : float | 10.</span>
+<span class="sd">            Distance between the colorbar and it title (if defined).</span>
+<span class="sd">        fz_title : int/float | 15</span>
+<span class="sd">            The fontsize of colorbar title.</span>
+<span class="sd">        ticks : string/int/float/np.ndarray | &#39;complete&#39;</span>
+<span class="sd">            Ticks of the colorbar. This parameter is only active if clim</span>
+<span class="sd">            is defined. Use &#39;complete&#39; to see only the minimum,</span>
+<span class="sd">            maximum, vmin and vmax (if defined). Use &#39;minmax&#39; to only see</span>
+<span class="sd">            the maximum and minimum. If ticks is a float, an linear</span>
+<span class="sd">            interpolation between the maximum and minimum will be used.</span>
+<span class="sd">            Finally, if ticks is a NumPy array, it will be used as colorbar</span>
+<span class="sd">            ticks directly.</span>
+<span class="sd">        fz_ticks : int/float | 10</span>
+<span class="sd">            Fontsize of tick labels.</span>
+<span class="sd">        outline : bool | False</span>
+<span class="sd">            Specify if the box arround the colorbar have to be displayed.</span>
+<span class="sd">        orientation : string | &#39;vertical&#39;</span>
+<span class="sd">            Colorbar orientation. Use either &#39;vertical&#39; or &#39;horizontal&#39;.</span>
 
-<span class="sd">            cmap: str</span>
-<span class="sd">                The colormap to use (&#39;viridis&#39;, &#39;jet&#39;, &#39;Spectral&#39;...)</span>
-
-<span class="sd">        Kargs:</span>
-
-<span class="sd">            vmin: float, optional, (def: None)</span>
-<span class="sd">                Minimum threshold. See the under parameter for further details.</span>
-
-<span class="sd">            under: string/tuple/list, optional, (def: &#39;gray&#39;)</span>
-<span class="sd">                Every values bellow vmin will be set to the under color.</span>
-
-<span class="sd">            vmax: float, optional, (def: None)</span>
-<span class="sd">                Maximum threshold. See the over parameter for further details.</span>
-
-<span class="sd">            over: string/tuple/list, optional, (def: &#39;red&#39;)</span>
-<span class="sd">                Every values over vmax will be set to the over color.</span>
-
-<span class="sd">            title: string, optional, (def: None)</span>
-<span class="sd">                Title of the colorbar.</span>
-
-<span class="sd">            ycb: float, optional, (def: 10.)</span>
-<span class="sd">                Distance between the colorbar and it title (if defined).</span>
-
-<span class="sd">            fz_title: int/float, optional, (def: 15)</span>
-<span class="sd">                The fontsize of colorbar title.</span>
-
-<span class="sd">            ticks: string/int/float/np.ndarray, optional, (def: &#39;complete&#39;)</span>
-<span class="sd">                Ticks of the colorbar. This parameter is only active if clim</span>
-<span class="sd">                is defined. Use &#39;complete&#39; to see only the minimum,</span>
-<span class="sd">                maximum, vmin and vmax (if defined). Use &#39;minmax&#39; to only see</span>
-<span class="sd">                the maximum and minimum. If ticks is a float, an linear</span>
-<span class="sd">                interpolation between the maximum and minimum will be used.</span>
-<span class="sd">                Finally, if ticks is a NumPy array, it will be used as colorbar</span>
-<span class="sd">                ticks directly.</span>
-
-<span class="sd">            fz_ticks: int/float, optional, (def: 10)</span>
-<span class="sd">                Fontsize of tick labels.</span>
-
-<span class="sd">            outline: bool, optional, (def: False)</span>
-<span class="sd">                Specify if the box arround the colorbar have to be displayed.</span>
-
-<span class="sd">            orientation: string, optional, (def: &#39;vertical&#39;)</span>
-<span class="sd">                Colorbar orientation. Use either &#39;vertical&#39; or &#39;horizontal&#39;.</span>
+<span class="sd">        See also</span>
+<span class="sd">        --------</span>
+<span class="sd">        shared_colorbar : colorbar shared by multiple subplots.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># ----------------- CHECKING -----------------</span>
         <span class="k">if</span> <span class="n">orientation</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">]:</span>
@@ -485,81 +462,68 @@
                         <span class="n">outline</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a colorbar to a particular axis.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            toaxis: int</span>
-<span class="sd">                Integer to specify the axis to which add the colorbar.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        toaxis : int</span>
+<span class="sd">            Integer to specify the axis to which add the colorbar.</span>
+<span class="sd">        clim : tuple/list</span>
+<span class="sd">            A tuple of float/int describing the limit of the colorbar.</span>
+<span class="sd">        cmap : str</span>
+<span class="sd">            The colormap to use (&#39;viridis&#39;, &#39;jet&#39;, &#39;Spectral&#39;...)</span>
+<span class="sd">        position : str | &#39;right&#39;</span>
+<span class="sd">            Position of the shared colorbar. Use either &#39;left&#39;, &#39;right&#39;,</span>
+<span class="sd">            or &#39;bottom&#39;.</span>
+<span class="sd">        height : float | .5</span>
+<span class="sd">            Height of the colorbar.</span>
+<span class="sd">        width : float | .02</span>
+<span class="sd">            Width of the colorbar.</span>
+<span class="sd">        pltmargin : float | .05</span>
+<span class="sd">            Margin between plots and the colorbar.</span>
+<span class="sd">        figmargin : float | .07</span>
+<span class="sd">            Margin between the edge of the figure and the colorbar.</span>
+<span class="sd">        vmin : float | None</span>
+<span class="sd">            Minimum threshold. See the under parameter for further details.</span>
+<span class="sd">        under : string/tuple/list | &#39;gray&#39;</span>
+<span class="sd">            Every values bellow vmin will be set to the under color.</span>
+<span class="sd">        vmax : float | None</span>
+<span class="sd">            Maximum threshold. See the over parameter for further details.</span>
+<span class="sd">        over : string/tuple/list | &#39;red&#39;</span>
+<span class="sd">            Every values over vmax will be set to the over color.</span>
+<span class="sd">        title : string | None</span>
+<span class="sd">            Title of the colorbar.</span>
+<span class="sd">        ycb : float | 10.</span>
+<span class="sd">            Distance between the colorbar and it title (if defined).</span>
+<span class="sd">        fz_title : int/float | 15</span>
+<span class="sd">            The fontsize of colorbar title.</span>
+<span class="sd">        ticks : string/int/float/np.ndarray | &#39;complete&#39;</span>
+<span class="sd">            Ticks of the colorbar. This parameter is only active if clim</span>
+<span class="sd">            is defined. Use &#39;complete&#39; to see only the minimum,</span>
+<span class="sd">            maximum, vmin and vmax (if defined). Use &#39;minmax&#39; to only see</span>
+<span class="sd">            the maximum and minimum. If ticks is a float, an linear</span>
+<span class="sd">            interpolation between the maximum and minimum will be used.</span>
+<span class="sd">            Finally, if ticks is a NumPy array, it will be used as colorbar</span>
+<span class="sd">            ticks directly.</span>
+<span class="sd">        fz_ticks : int/float | 10</span>
+<span class="sd">            Fontsize of tick labels.</span>
+<span class="sd">        outline : bool | False</span>
+<span class="sd">            Specify if the box arround the colorbar have to be displayed.</span>
 
-<span class="sd">            clim: tuple/list</span>
-<span class="sd">                A tuple of float/int describing the limit of the colorbar.</span>
-
-<span class="sd">            cmap: str</span>
-<span class="sd">                The colormap to use (&#39;viridis&#39;, &#39;jet&#39;, &#39;Spectral&#39;...)</span>
-
-<span class="sd">        Kargs:</span>
-<span class="sd">            position: str, optional, (def: &#39;right&#39;)</span>
-<span class="sd">                Position of the shared colorbar. Use either &#39;left&#39;, &#39;right&#39;,</span>
-<span class="sd">                or &#39;bottom&#39;.</span>
-
-<span class="sd">            height: float, optional, (def: .5)</span>
-<span class="sd">                Height of the colorbar.</span>
-
-<span class="sd">            width: float, optional, (def: .02)</span>
-<span class="sd">                Width of the colorbar.</span>
-
-<span class="sd">            pltmargin: float, optional, (def: .05)</span>
-<span class="sd">                Margin between plots and the colorbar.</span>
-
-<span class="sd">            figmargin: float, optional, (def: .07)</span>
-<span class="sd">                Margin between the edge of the figure and the colorbar.</span>
-
-<span class="sd">            vmin: float, optional, (def: None)</span>
-<span class="sd">                Minimum threshold. See the under parameter for further details.</span>
-
-<span class="sd">            under: string/tuple/list, optional, (def: &#39;gray&#39;)</span>
-<span class="sd">                Every values bellow vmin will be set to the under color.</span>
-
-<span class="sd">            vmax: float, optional, (def: None)</span>
-<span class="sd">                Maximum threshold. See the over parameter for further details.</span>
-
-<span class="sd">            over: string/tuple/list, optional, (def: &#39;red&#39;)</span>
-<span class="sd">                Every values over vmax will be set to the over color.</span>
-
-<span class="sd">            title: string, optional, (def: None)</span>
-<span class="sd">                Title of the colorbar.</span>
-
-<span class="sd">            ycb: float, optional, (def: 10.)</span>
-<span class="sd">                Distance between the colorbar and it title (if defined).</span>
-
-<span class="sd">            fz_title: int/float, optional, (def: 15)</span>
-<span class="sd">                The fontsize of colorbar title.</span>
-
-<span class="sd">            ticks: string/int/float/np.ndarray, optional, (def: &#39;complete&#39;)</span>
-<span class="sd">                Ticks of the colorbar. This parameter is only active if clim</span>
-<span class="sd">                is defined. Use &#39;complete&#39; to see only the minimum,</span>
-<span class="sd">                maximum, vmin and vmax (if defined). Use &#39;minmax&#39; to only see</span>
-<span class="sd">                the maximum and minimum. If ticks is a float, an linear</span>
-<span class="sd">                interpolation between the maximum and minimum will be used.</span>
-<span class="sd">                Finally, if ticks is a NumPy array, it will be used as colorbar</span>
-<span class="sd">                ticks directly.</span>
-
-<span class="sd">            fz_ticks: int/float, optional, (def: 10)</span>
-<span class="sd">                Fontsize of tick labels.</span>
-
-<span class="sd">            outline: bool, optional, (def: False)</span>
-<span class="sd">                Specify if the box arround the colorbar have to be displayed.</span>
+<span class="sd">        See also</span>
+<span class="sd">        --------</span>
+<span class="sd">        colorbar_to_axis : add a specific colorbar to an axis.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># ================ POSITION ================</span>
         <span class="k">if</span> <span class="n">position</span> <span class="o">==</span> <span class="s1">&#39;right&#39;</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">width</span> <span class="o">-</span> <span class="n">figmargin</span> <span class="o">-</span> <span class="n">pltmargin</span><span class="p">)</span>
-            <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">width</span> <span class="o">-</span> <span class="n">figmargin</span><span class="p">,</span> <span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">])</span>
+            <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">width</span> <span class="o">-</span> <span class="n">figmargin</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">])</span>
             <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;vertical&#39;</span>
         <span class="k">elif</span> <span class="n">position</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="n">figmargin</span> <span class="o">+</span> <span class="n">width</span> <span class="o">+</span> <span class="n">pltmargin</span><span class="p">)</span>
-            <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="n">figmargin</span><span class="p">,</span> <span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">])</span>
+            <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="n">figmargin</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">])</span>
             <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;vertical&#39;</span>
         <span class="k">elif</span> <span class="n">position</span> <span class="o">==</span> <span class="s1">&#39;bottom&#39;</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="n">figmargin</span> <span class="o">+</span> <span class="n">width</span> <span class="o">+</span> <span class="n">pltmargin</span><span class="p">)</span>
-            <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">figmargin</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">])</span>
+            <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">([</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figmargin</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">])</span>
             <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;horizontal&#39;</span>
 
         <span class="n">cmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_customcmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
@@ -612,7 +576,7 @@
         <span class="c1"># ================ SUBPLOTS ================</span>
         <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="c1"># --------- Display ---------</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">num</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">im</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_im</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -668,7 +632,7 @@
             <span class="n">cb</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span>
             <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">fz_ticks</span><span class="p">)</span>
             <span class="c1"># Change ticks color :</span>
-            <span class="n">tic</span> <span class="o">=</span>  <span class="s1">&#39;y&#39;</span> <span class="k">if</span> <span class="p">(</span><span class="n">orientation</span> <span class="o">==</span> <span class="s1">&#39;vertical&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;x&#39;</span>
+            <span class="n">tic</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span> <span class="k">if</span> <span class="p">(</span><span class="n">orientation</span> <span class="o">==</span> <span class="s1">&#39;vertical&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;x&#39;</span>
             <span class="n">cbytick_obj</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">getp</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="p">,</span> <span class="n">tic</span> <span class="o">+</span> <span class="s1">&#39;ticklabels&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">cbytick_obj</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">tcol</span><span class="p">)</span>
 
@@ -677,9 +641,9 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_customcmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+                    <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="c1"># Generate linearly spaced data :</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">clim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">clim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">clim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">n</span><span class="p">)</span>
         <span class="c1"># Create the colormap and apply to data :</span>
         <span class="n">sc</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
         <span class="n">data_sc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">data</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -689,7 +653,7 @@
         <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data_sc</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">vmax</span><span class="p">]</span> <span class="o">=</span> <span class="n">color2tuple</span><span class="p">(</span><span class="n">over</span><span class="p">)</span>
         <span class="c1"># Generate the colormap :</span>
-        <span class="k">return</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="n">data_sc</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="n">data_sc</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">n</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

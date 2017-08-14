@@ -101,6 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
@@ -187,7 +188,7 @@
 <span class="kn">from</span> <span class="nn">.interface.uiInit</span> <span class="k">import</span> <span class="n">vbShortcuts</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">base</span><span class="p">,</span> <span class="n">BrainCbar</span>
 <span class="kn">from</span> <span class="nn">.user</span> <span class="k">import</span> <span class="n">BrainUserMethods</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">ShortcutPopup</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">ShortcutPopup</span><span class="p">,</span> <span class="n">set_widget_size</span>
 <span class="kn">import</span> <span class="nn">sip</span>
 <span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
@@ -195,123 +196,226 @@
 <div class="viewcode-block" id="Brain"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.brain.Brain">[docs]</a><span class="k">class</span> <span class="nc">Brain</span><span class="p">(</span><span class="n">uiInit</span><span class="p">,</span> <span class="n">uiElements</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">BrainCbar</span><span class="p">,</span> <span class="n">BrainUserMethods</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Visualization of neuroscientic data on a standard MNI brain.</span>
 
+<span class="sd">    The *Brain* module include several objects that can be individually</span>
+<span class="sd">    controlled :</span>
+
+<span class="sd">    * **a_** : Atlas properties</span>
+<span class="sd">    * **s_** : Sources properties</span>
+<span class="sd">    * **ts_** : Time-series properties</span>
+<span class="sd">    * **pic_** : Pictures properties</span>
+<span class="sd">    * **c_** : Connectivity properties</span>
+<span class="sd">    * **t_** : Transformations properties</span>
+<span class="sd">    * **ui_** : Graphical User Interface properties</span>
+<span class="sd">    * **l_** : Light properties</span>
+
+<span class="sd">    In addition, some objects provide an extended control of color properties.</span>
+<span class="sd">    This is the case for source&#39;s projection (**s_**), connectivity (**c_**)</span>
+<span class="sd">    and pictures (**pic_**). Here&#39;s the list of color properties for those</span>
+<span class="sd">    objects :</span>
+
+<span class="sd">    * **clim** : a tuple of two floats for the colorbar limits.</span>
+<span class="sd">    * **cmap** : a string name of a matplotlib colormap.</span>
+<span class="sd">    * **vmin** : a float for the lower threshold.</span>
+<span class="sd">    * **under** : a string for color under vmin.</span>
+<span class="sd">    * **vmax** : a float for the higher threshold.</span>
+<span class="sd">    * **over** : a string for color over vmax.</span>
+
+<span class="sd">    As an example, s_cmap, c_clim and pic_vmin respectively controlled the</span>
+<span class="sd">    colormap of projected source&#39;s activity, the colorbar limits of the</span>
+<span class="sd">    connectivity and the lower threshold of pictures.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    a_color : tuple | (1,1,1)</span>
-<span class="sd">        RGB colors of the MNI brain.</span>
+<span class="sd">    a_color : tuple | (1., 1., 1.)</span>
+<span class="sd">        RGB colors of the MNI brain (default is white).</span>
+
 <span class="sd">    a_opacity : int/float | 1.</span>
 <span class="sd">        Transparency of the MNI brain. Must be between 0 and 1.</span>
-<span class="sd">    a_proj : string | &#39;internal&#39;</span>
+
+<span class="sd">    a_proj : string | {&#39;internal&#39;, &#39;external&#39;}</span>
 <span class="sd">        Turn a_proj to &#39;internal&#39; for internal projection or &#39;external&#39; for</span>
 <span class="sd">        cortical rendering.</span>
+
 <span class="sd">    a_template : string | &#39;B1&#39;</span>
 <span class="sd">        The MNI brain template to use. Switch between &#39;B1&#39;, &#39;B2&#39; or &#39;B3&#39;</span>
-<span class="sd">    a_vertices /a_faces: ndarray | None</span>
-<span class="sd">        Specify an alternativ surface to use. Both parameters must be a 2D</span>
-<span class="sd">        array, respectively of shapes (N_vertices, 3) and (N_faces, 3)</span>
-<span class="sd">    a_shading : string | &#39;smooth&#39;</span>
-<span class="sd">        Shading method to use for the brain. Switch between &#39;smooth&#39;,</span>
-<span class="sd">        &#39;flat&#39; or None.</span>
-<span class="sd">    s_xyz : ndarray | None</span>
+
+<span class="sd">    s_xyz : array_like | None</span>
 <span class="sd">        Array of talairach or MNI coordinates to display sources</span>
 <span class="sd">        into the brain. The shape of the array must be (N, 3) where</span>
 <span class="sd">        &#39;3&#39; is for (x, y, z) coordinates and N, the number of sources.</span>
-<span class="sd">    s_data: ndarray, (def, None)</span>
+
+<span class="sd">    s_data : array_like | None</span>
 <span class="sd">        Add some data to sources. As a consequence, the radius of each</span>
 <span class="sd">        source will be a function of s_data. must be an array of shape</span>
 <span class="sd">        (N,). If s_data is None, all sources will have the same value.</span>
 <span class="sd">        The parameter s_data can be masked using numpy.ma module.</span>
-<span class="sd">    s_color : string/list/ndarray | &#39;red&#39;</span>
+
+<span class="sd">    s_system : string | &#39;mni&#39;</span>
+<span class="sd">        Specify the coordinate system. Use either &#39;mni&#39; (MNI) or &#39;tal&#39;</span>
+<span class="sd">        (Talairach).</span>
+
+<span class="sd">    s_color : string/list/array_like | &#39;red&#39;</span>
 <span class="sd">        Color of each source sphere. If s_color is a single string,</span>
 <span class="sd">        all sphere will have the same color. If it&#39;s&#39; a list of strings,</span>
 <span class="sd">        the length must be N. Alternatively, s_color can be a (N, 3) RGB</span>
 <span class="sd">        or (N, 4) RGBA colors.</span>
+
 <span class="sd">    s_alpha : int/float | 1.0</span>
 <span class="sd">        Transparency of all sources. Must be between 0 and 1.</span>
-<span class="sd">    s_radiusmin /s_radiusmax: int/float | 5.0/10.0</span>
+
+<span class="sd">    s_radiusmin / s_radiusmax : float | 5.0/10.0</span>
 <span class="sd">        Define the minimum and maximum source&#39;s possible radius. By default</span>
 <span class="sd">        if all sources have the same value, the radius will be s_radiusmin.</span>
-<span class="sd">    s_edgecolor : string/list/ndarray | None</span>
+
+<span class="sd">    s_edgecolor : string/list/array_like | None</span>
 <span class="sd">        Add an edge to sources</span>
+
 <span class="sd">    s_edgewidth : float | 0.4</span>
 <span class="sd">        Edge width of sources</span>
+
 <span class="sd">    s_scaling : bool | True</span>
-<span class="sd">        If set to True, marker scales when rezooming.</span>
+<span class="sd">        If set to True, marker scales when zooming.</span>
+
 <span class="sd">    s_symbol : string | &#39;disc&#39;</span>
 <span class="sd">        Symbol to use for sources. Allowed style strings are: disc, arrow,</span>
 <span class="sd">        ring, clobber, square, diamond, vbar, hbar, cross, tailed_arrow, x,</span>
 <span class="sd">        triangle_up, triangle_down, and star.</span>
+
 <span class="sd">    s_text : list/tuple | None</span>
 <span class="sd">        Set text to each electrode. s_text should be an iterable object,</span>
 <span class="sd">        composed of strings, with the same length as the number of sources.</span>
-<span class="sd">    s_textcolor : string/list/ndarray | &#39;k&#39;</span>
+
+<span class="sd">    s_textcolor : string/list/array_like | &#39;k&#39;</span>
 <span class="sd">        A single color element for all the text</span>
+
 <span class="sd">    s_textsize : int | 3</span>
-<span class="sd">        Fontsize of text elements</span>
+<span class="sd">        Font size of text elements</span>
+
 <span class="sd">    s_textshift : list/tuple | (0,1,0)</span>
 <span class="sd">        Translate the text along (x, y, z) coordinates to improve text</span>
 <span class="sd">        visibility</span>
+
 <span class="sd">    s_projecton : string | &#39;surface&#39;</span>
 <span class="sd">        Project sources activity either on surface or, if displayed,</span>
 <span class="sd">        on deep structures.</span>
-<span class="sd">    s_mask : ndarray | None</span>
+
+<span class="sd">    s_mask : array_like | None</span>
 <span class="sd">        Vector of boolean values, with the same length as the length of</span>
 <span class="sd">        s_xyz. Use this parameter to mask some sources but keep it</span>
 <span class="sd">        displayed.</span>
+
 <span class="sd">    s_maskcolor : list/tuple | &#39;gray&#39;</span>
 <span class="sd">        Color of masked sources when projected on surface.</span>
-<span class="sd">    c_connect : ndarray | None</span>
+
+<span class="sd">    ts_data : array_like | None</span>
+<span class="sd">        Array of data for the time-series. This array must have a shape of</span>
+<span class="sd">        (n_sources, n_time_points).</span>
+
+<span class="sd">    ts_select : array_like | None</span>
+<span class="sd">        Array of boolean values to specify which time-series to hide or to</span>
+<span class="sd">        display.</span>
+
+<span class="sd">    ts_color : string/list/tuple/array_like | &#39;white&#39;</span>
+<span class="sd">        Color of the time-series.</span>
+
+<span class="sd">    ts_amp : float | 6.</span>
+<span class="sd">        Graphical amplitude of the time-series.</span>
+
+<span class="sd">    ts_width : float | 20.</span>
+<span class="sd">        Graphical width of th time-series.</span>
+
+<span class="sd">    ts_lw : float | 1.5</span>
+<span class="sd">        Line width of the time-series.</span>
+
+<span class="sd">    ts_dxyz : tuple | (0., 0., 1.)</span>
+<span class="sd">        Offset along the (x, y, z) axis for the time-series.</span>
+
+<span class="sd">    pic_data : array_like | None</span>
+<span class="sd">        Array of picture data. Must have a shape of (n_sources, n_rows, n_cols)</span>
+
+<span class="sd">    pic_width : float | 7.</span>
+<span class="sd">        Width of each picture.</span>
+
+<span class="sd">    pic_height : float | 7.</span>
+<span class="sd">        Height of each picture.</span>
+
+<span class="sd">    pic_dxyz : float | (0., 0., 1.)</span>
+<span class="sd">        Offset along the (x, y, z) axis for the pictures.</span>
+
+<span class="sd">    c_connect : array_like | None</span>
 <span class="sd">        Connections between sources. Define N sources location using s_xyz</span>
 <span class="sd">        of shape (N, 3). Then, c_connect must be a (N, N) array defining</span>
 <span class="sd">        each value of connection between all sources. The diagonal is going</span>
 <span class="sd">        to be systematically ignored.</span>
-<span class="sd">    c_select : ndarray | None</span>
+
+<span class="sd">    c_select : array_like | None</span>
 <span class="sd">        Select relevant connections do display. This array should be</span>
 <span class="sd">        composed of 0 and 1 and must have the same shape as c_connect.</span>
 <span class="sd">        Alternatively, set a mask to c_connect to have the same effect</span>
 <span class="sd">        without using this parameter.</span>
-<span class="sd">    c_dynamic : tuple | None</span>
-<span class="sd">        Control the dynamic opacity. For example, if c_dynamic=(0, 1),</span>
-<span class="sd">        strong connections will be more opaque than weak connections.</span>
+
 <span class="sd">    c_colorby : string | &#39;strength&#39;</span>
 <span class="sd">        Define how to color connexions. Use &#39;strength&#39; if the color has to</span>
 <span class="sd">        be modulate by the connectivity strength. Use &#39;count&#39; if the</span>
 <span class="sd">        color depends on the number of connexions per node. Use &#39;density&#39;</span>
 <span class="sd">        to define colors according to the number of line in a sphere of</span>
 <span class="sd">        radius c_dradius.</span>
+
+<span class="sd">    c_dynamic : tuple | None</span>
+<span class="sd">        Control the dynamic opacity. For example, if c_dynamic=(0, 1),</span>
+<span class="sd">        strong connections will be more opaque than weak connections.</span>
+
 <span class="sd">    c_dradius : float | 30.</span>
 <span class="sd">        Radius for the density color line method.</span>
+
 <span class="sd">    c_colval : dict | None</span>
 <span class="sd">        Define colors for a specifics values. For example, c_colval=</span>
 <span class="sd">        {1.5: &#39;red&#39;, 2.1: &#39;blue&#39;} every connexions equal to 1.5 are going</span>
 <span class="sd">        to be red and blue for 2.1. Use np.nan: &#39;gray&#39; in order to define</span>
 <span class="sd">        the color of all connexions that are not in the dictionary</span>
 <span class="sd">        otherwise they are going to be ignored.</span>
+
 <span class="sd">    c_linewidth : float | 3.0</span>
-<span class="sd">        Linewidth of connectivity lines.</span>
-<span class="sd">    t_radius : int/float | 10</span>
+<span class="sd">        Line width of connectivity lines.</span>
+
+<span class="sd">    t_radius : float | 10.</span>
 <span class="sd">        The projection radius to use (depending on coordinates type)</span>
+
+<span class="sd">    t_contribute : bool | False</span>
+<span class="sd">        Specify if source&#39;s can contribute to both hemisphere during projection</span>
+<span class="sd">        (True) or if it can only be projected on the hemisphere the source</span>
+<span class="sd">        belong.</span>
+
 <span class="sd">    ui_bgcolor : string/tuple | (0.09, 0.09, 0.09)</span>
-<span class="sd">        Backgroud color of the ui</span>
+<span class="sd">        Background color of the ui</span>
+
 <span class="sd">    ui_savename : string | None</span>
 <span class="sd">        The save name when exporting</span>
+
 <span class="sd">    ui_region : tuple | None</span>
 <span class="sd">        Crop the exportation of the main canvas to the region define by</span>
 <span class="sd">        (x, y, width, height).</span>
+
 <span class="sd">    ui_autocrop : bool | True</span>
-<span class="sd">        Automaticaly crop figures when saving.</span>
+<span class="sd">        Automatically crop figures when saving.</span>
+
 <span class="sd">    ui_resolution : float | 3000</span>
 <span class="sd">        Define the screenshot resolution by indicating the number of times</span>
 <span class="sd">        the definition of your screen must be multiplied.</span>
+
 <span class="sd">    l_position : tuple | (100., 100., 100.)</span>
 <span class="sd">        Position of the light</span>
+
 <span class="sd">    l_intensity : tuple | (1., 1., 1.)</span>
 <span class="sd">        Intensity of the light</span>
+
 <span class="sd">    l_color : tuple | (1., 1., 1., 1.)</span>
 <span class="sd">        Color of the light</span>
-<span class="sd">    l_coefAmbient : float | 0.05</span>
+
+<span class="sd">    l_ambient : float | 0.05</span>
 <span class="sd">        Coefficient for the ambient light</span>
-<span class="sd">    l_coefSpecular : float | 0.5</span>
+
+<span class="sd">    l_specular : float | 0.5</span>
 <span class="sd">        Coefficient for the specular light</span>
 
 <span class="sd">    Examples</span>
@@ -328,13 +432,90 @@
 <span class="sd">    &gt;&gt;&gt; vb = Brain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)</span>
 <span class="sd">    &gt;&gt;&gt; # Finally, display the interface :</span>
 <span class="sd">    &gt;&gt;&gt; vb.show()</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    show()</span>
+<span class="sd">        Display the graphical user interface.</span>
+<span class="sd">    quit()</span>
+<span class="sd">        Quit the interface.</span>
+<span class="sd">    rotate()</span>
+<span class="sd">        Rotate the scene elements using a predefined or a custom rotation.</span>
+<span class="sd">    background_color()</span>
+<span class="sd">        Set the background color of the main canvas and the colorbar.</span>
+<span class="sd">    screenshot()</span>
+<span class="sd">        Take a screenshot of the current scene and save it as a picture.</span>
+<span class="sd">    load_config()</span>
+<span class="sd">        Load a configuration file.</span>
+<span class="sd">    save_config()</span>
+<span class="sd">        Save a configuration file.</span>
+<span class="sd">    brain_control()</span>
+<span class="sd">        Control the type of brain to use.</span>
+<span class="sd">    brain_list()</span>
+<span class="sd">        Get the list of available mesh brain templates.</span>
+<span class="sd">    add_mesh()</span>
+<span class="sd">        Add a mesh to the scene.</span>
+<span class="sd">    add_volume()</span>
+<span class="sd">        Add a new volume to the interface.</span>
+<span class="sd">    volume_list()</span>
+<span class="sd">        Get the list of volumes available.</span>
+<span class="sd">    cross_sections_control()</span>
+<span class="sd">        Set the cross-section position.</span>
+<span class="sd">    sources_control()</span>
+<span class="sd">        Set data to sources and control source&#39;s properties.</span>
+<span class="sd">    sources_opacity()</span>
+<span class="sd">        Set the level of transparency of sources.</span>
+<span class="sd">    sources_display()</span>
+<span class="sd">        Select sources to display.</span>
+<span class="sd">    cortical_projection()</span>
+<span class="sd">        Project sources activity.</span>
+<span class="sd">    cortical_repartition()</span>
+<span class="sd">        Get the number of contributing sources per vertex.</span>
+<span class="sd">    sources_colormap()</span>
+<span class="sd">        Change the colormap of cortical projection / repartition.</span>
+<span class="sd">    sources_fit()</span>
+<span class="sd">        Force sources coordinates to fit to a selected object.</span>
+<span class="sd">    sources_to_convex_hull()</span>
+<span class="sd">        Convert a set of sources into a convex hull.</span>
+<span class="sd">    add_sources()</span>
+<span class="sd">        Add a supplementar source&#39;s object.</span>
+<span class="sd">    time_series_control()</span>
+<span class="sd">        Control time-series settings.</span>
+<span class="sd">    add_time_series()</span>
+<span class="sd">        Add time-series (TS) object.</span>
+<span class="sd">    pictures_control()</span>
+<span class="sd">        Control pictures settings.</span>
+<span class="sd">    add_pictures()</span>
+<span class="sd">        Add pictures object.</span>
+<span class="sd">    connect_control()</span>
+<span class="sd">        Update connectivity object.</span>
+<span class="sd">    add_connect()</span>
+<span class="sd">        Add a supplementar connectivity object.</span>
+<span class="sd">    roi_control()</span>
+<span class="sd">        Select Region Of Interest (ROI) to plot.</span>
+<span class="sd">    roi_light_reflection()</span>
+<span class="sd">        Change how light is reflecting onto roi.</span>
+<span class="sd">    roi_opacity()</span>
+<span class="sd">        Set the level of transparency of the deep structures.</span>
+<span class="sd">    roi_list()</span>
+<span class="sd">        Get the list of supported ROI.</span>
+<span class="sd">    cbar_control()</span>
+<span class="sd">        Control the colorbar of a specific object.</span>
+<span class="sd">    cbar_select()</span>
+<span class="sd">        Select and disply a colorbar.</span>
+<span class="sd">    cbar_list()</span>
+<span class="sd">        Get the list of objects for which the colorbar can be controlled.</span>
+<span class="sd">    cbar_autoscale()</span>
+<span class="sd">        Autoscale the colorbar to the best limits.</span>
+<span class="sd">    cbar_export()</span>
+<span class="sd">        Export colorbars in a text file or in a dictionary.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># ====================== ui Arguments ======================</span>
         <span class="c1"># Background color (for the main and the colorbar canvas) :</span>
-        <span class="n">bgcolor</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ui_bgcolor&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.098</span><span class="p">,</span> <span class="mf">0.098</span><span class="p">,</span> <span class="mf">0.098</span><span class="p">))</span>
+        <span class="n">bgcolor</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ui_bgcolor&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">))</span>
         <span class="c1"># Savename, extension and croping region (usefull for the screenshot) :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_savename</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ui_savename&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_crop</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ui_region&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -366,37 +547,41 @@
         <span class="c1"># ====================== Objects creation ======================</span>
         <span class="n">camera</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">TurntableCamera</span><span class="p">(</span><span class="n">azimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
                                         <span class="n">name</span><span class="o">=</span><span class="s1">&#39;turntable&#39;</span><span class="p">)</span>
-        <span class="n">base</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressBar</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">base</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csGrid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressBar</span><span class="p">,</span>
+                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># ====================== UI to visbrain ======================</span>
         <span class="c1"># Link UI and visbrain function :</span>
         <span class="n">uiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># ====================== Cameras ======================</span>
-        <span class="c1"># # Main camera :</span>
+        <span class="c1"># Main camera :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">camera</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_camera</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pic</span><span class="o">.</span><span class="n">set_camera</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_vbNode</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
-
-        <span class="c1"># Fixed colorbar camera :</span>
-        <span class="n">camera</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-.</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rotate</span><span class="p">(</span><span class="n">fixed</span><span class="o">=</span><span class="s1">&#39;axial&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
 
         <span class="c1"># ====================== Colorbar ======================</span>
+        <span class="c1"># Fixed colorbar camera :</span>
+        <span class="n">camera</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-.</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
         <span class="c1"># Cbar creation :</span>
         <span class="n">BrainCbar</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
         <span class="c1"># Add shortcuts on it :</span>
         <span class="n">vbShortcuts</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbviz</span><span class="o">.</span><span class="n">_canvas</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcnOnLoad</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_on_load</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_fcnOnLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_fcn_on_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Function that need to be executed on load.&quot;&quot;&quot;</span>
         <span class="c1"># Setting panel :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">QuickSettings</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_objsPage</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menuDispQuickSettings</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SettingTab</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">set_widget_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
         <span class="c1"># Display menu :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menuDispBrain</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span><span class="p">)</span>
         <span class="c1"># Sources :</span>
