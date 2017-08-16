@@ -70,9 +70,10 @@ def test_brain_user_functions():
     pass
 
     # ---------------- BRAIN CONTROL  ----------------
-    vb.brain_control(template='B3', hemisphere='right', show=False)
+    vb.brain_control(template='B3', hemisphere='right', visible=False)
     vb.brain_control(template='B2', hemisphere='left')
-    vb.brain_opacity(alpha=0.1, show=True)
+    vb.brain_control(transparent=False)
+    vb.brain_control(alpha=.7, color='black')
 
     # ---------------- ADD MESH  ----------------
     # Get convex hull :
@@ -82,8 +83,8 @@ def test_brain_user_functions():
     # ---------------- SOURCES DATA  ----------------
     # Send data :
     vb.sources_control(data=sdata, symbol='x', radiusmin=1., radiusmax=20.,
-                    color=scolor, edgecolor='orange', edgewidth=2, mask=smask,
-                    maskcolor='blue')
+                       color=scolor, edgecolor='orange', edgewidth=2,
+                       mask=smask, maskcolor='blue')
     # Set opacity :
     vb.sources_opacity(alpha=0.1, show=True)
     # Test visibility :
@@ -117,14 +118,14 @@ def test_brain_user_functions():
 
     # ---------------- ROI  ----------------
     # Add roi :
-    vb.roi_control(selection=[4, 6], subdivision='brod', smooth=5)
+    vb.roi_control(selection=[3, 5], subdivision='Brodmann', smooth=5)
     # Transparency :
     vb.roi_light_reflection('external')
     vb.roi_light_reflection('internal')
     vb.roi_opacity(alpha=0.1, show=True)
     # ROI list :
-    vb.roi_list('aal')
-    vb.roi_list('brod')
+    vb.roi_list('AAL')
+    vb.roi_list('Brodmann')
     # Projection :
     vb.cortical_projection(radius=50, project_on='roi', contribute=True,
                            **scmap)
@@ -144,4 +145,4 @@ def test_brain_user_functions():
     vb.cbar_autoscale('Connectivity')
     vb.cbar_autoscale('Projection')
 
-    vb.show()
+    # vb.show()
