@@ -29,6 +29,10 @@ install:
   - make
   - sudo make install
   - popd
+  # Builds Complete
+  - popd
+  - pwd
+  - cd ~/
   # - sudo apt-get update
   # Deactivate travis environnement :
   - deactivate
