@@ -31,8 +31,6 @@ install:
   - popd
   # Builds Complete
   - popd
-  - pwd
-  - cd ~/
   # - sudo apt-get update
   # Deactivate travis environnement :
   - deactivate
@@ -59,7 +57,9 @@ install:
   - pip install nose
   - pip install codecov
   - pip install pytest pytest-cov
+  - pwd
   - cd ../
+  - pwd
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
   - cd visbrain/
   - pip install .
