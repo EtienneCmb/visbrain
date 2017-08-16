@@ -41,7 +41,6 @@ install:
   - ar p ../libc6_2.17-0ubuntu5_amd64.deb data.tar.gz | tar zx
   - ar p ../libc6-dev_2.17-0ubuntu5_amd64.deb data.tar.gz | tar zx
   - cd -
-  - LD_LIBRARY_PATH=/tmp/libc6_2.17/lib/x86_64-linux-gnu/ /tmp/libc6_2.17/lib/x86_64-linux-gnu/ld-2.17.so bin/python
   # - sudo apt-get update
   # Deactivate travis environnement :
   - deactivate
@@ -74,6 +73,7 @@ install:
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
   - cd visbrain/
   - pip install .
+  - LD_LIBRARY_PATH=/tmp/libc6_2.17/lib/x86_64-linux-gnu/ /tmp/libc6_2.17/lib/x86_64-linux-gnu/ld-2.17.so bin/python
   # - pip install -r requirements.txt
 
 # script:
