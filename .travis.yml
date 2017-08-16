@@ -67,14 +67,11 @@ install:
 # # after_success:
 # #   - ./tools/travis-upload-wheel.sh
 script: bash build_install.sh
-
 cache:
   directories:
     - /downloads
   apt: true
-
 notifications:
     email: false
-
 after_success:
   - codecov
