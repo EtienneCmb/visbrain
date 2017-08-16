@@ -16,19 +16,19 @@ before_install:
   - sudo mkdir -p /builds
   - sudo chmod a+rw /builds
 install:
-    # Qt5
-    - sudo add-apt-repository -y ppa:beineri/opt-qt542
-    - sudo apt-get update
-    - sudo apt-get install -y qt54base
-    # Builds
-    - pushd /builds
-    # SIP
-    - tar xzf /downloads/sip.tar.gz --keep-newer-files
-    - pushd sip-4.16.5
-    - python configure.py
-    - make
-    - sudo make install
-    - popd
+  # Qt5
+  - sudo add-apt-repository -y ppa:beineri/opt-qt542
+  - sudo apt-get update
+  - sudo apt-get install -y qt54base
+  # Builds
+  - pushd /builds
+  # SIP
+  - tar xzf /downloads/sip.tar.gz --keep-newer-files
+  - pushd sip-4.16.5
+  - python configure.py
+  - make
+  - sudo make install
+  - popd
   # - sudo apt-get update
   # Deactivate travis environnement :
   - deactivate
