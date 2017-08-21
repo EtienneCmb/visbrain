@@ -6,6 +6,8 @@ Add a new brain template to the interface.
 
 As an example, download the WhiteMatter.npz file :
 https://drive.google.com/open?id=0B6vtJiCQZUBvd0xfTHJqcHg2bTA
+
+.. image:: ../../picture/picbrain/ex_add_brain_template.png
 """
 from __future__ import print_function
 import os

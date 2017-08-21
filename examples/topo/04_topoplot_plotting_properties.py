@@ -3,6 +3,8 @@ Plotting properties
 ===================
 
 Display topographic plots in a grid using several plotting properties.
+
+.. image:: ../../picture/pictopo/ex_topoplot_plotting_properties.png
 """
 import numpy as np
 from visbrain import Topo

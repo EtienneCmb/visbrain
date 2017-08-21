@@ -3,6 +3,8 @@ Basic topoplot
 ==============
 
 Basic topographic plot based on channel names.
+
+.. image:: ../../picture/pictopo/ex_basic_topoplot.png
 """
 from visbrain import Topo
 

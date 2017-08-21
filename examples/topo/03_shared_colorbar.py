@@ -8,6 +8,8 @@ If you have several topographic plot that shared the same color properties
 (such as limits, colormap...) it might be redundant to have one colorbar per
 topoplot. In that case, use the add_shared_colorbar() to have one shared
 colorbar for all subplots.
+
+.. image:: ../../picture/pictopo/ex_shared_colorbar.png
 """
 import numpy as np
 from visbrain import Topo

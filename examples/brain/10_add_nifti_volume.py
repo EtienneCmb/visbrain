@@ -7,6 +7,8 @@ volume tab. To this end, the python package nibabel must be installed and
 custom Nifti volume must be downloaded.
 When the volume is loaded into the GUI, it's accessible from the
 Brain/Cross-sections and Brain/Volume tab.
+
+.. image:: ../../picture/picbrain/ex_add_nifti.png
 """
 from __future__ import print_function
 import numpy as np

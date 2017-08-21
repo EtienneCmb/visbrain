@@ -2,7 +2,10 @@
 Plot 2D signal
 ==============
 
-This example show how to display and control a 2D signal."""
+This example show how to display and control a 2D signal.
+
+.. image:: ../../picture/picndviz/ex_2d_signals.png
+"""
 
 import numpy as np
 from visbrain import Ndviz

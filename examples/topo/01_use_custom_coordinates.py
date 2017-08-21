@@ -3,6 +3,8 @@ Use custom coordinates
 ======================
 
 Display topographic plots using custom coordinates.
+
+.. image:: ../../picture/pictopo/ex_custom_coordinates.png
 """
 import numpy as np
 from visbrain import Topo

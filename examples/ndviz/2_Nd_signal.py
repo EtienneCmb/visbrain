@@ -2,7 +2,10 @@
 Plot multidimensional signals
 =============================
 
-This example show how to display and control a ND signal."""
+This example show how to display and control a ND signal.
+
+.. image:: ../../picture/picndviz/ex_nd_signals.png
+"""
 
 import numpy as np
 from visbrain import Ndviz

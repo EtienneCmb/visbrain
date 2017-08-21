@@ -5,6 +5,8 @@ Cross-sections and volume control
 Control the cross-section panel and the volume. This script use a custom
 nifti volume downloadable at : https://brainder.org/download/flair/
 The nibabel package should also be installed.
+
+.. image:: ../../picture/picbrain/ex_crossec_and_volume.png
 """
 import os
 from visbrain import Brain

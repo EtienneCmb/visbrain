@@ -1,17 +1,10 @@
 """
-Basic topoplot
-==============
+Grid topoplot
+=============
 
 Display topographic plots into a grid.
 
-Grid disposition :
----------------------------------------
-   Topo_1   |   Topo_2   |            |
--------------------------|            |
-   Topo_3   |   Topo_4   |   Topo_6   |
--------------------------|            |
-       Topo_5            |            |
----------------------------------------
+.. image:: ../../picture/pictopo/ex_grid_topoplot.png
 """
 from visbrain import Topo
 
