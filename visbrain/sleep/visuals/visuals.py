@@ -1057,7 +1057,7 @@ class visuals(vbShortcuts):
                                  self._chan.node, self._hypCanvas.wc.scene)
 
         # =================== TOPOPLOT ===================
-        self._topo = TopoSleep(channels=self._channels,
+        self._topo = TopoSleep(channels=self._channels, margin=.2,
                                parent=self._topoCanvas.wc.scene)
         # Set camera properties :
         cameras[3].rect = self._topo.rect
