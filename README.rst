@@ -59,10 +59,8 @@ We also strongly recommend to install *pyopengl* :
 Modules
 =======
 
-.. figure::  https://github.com/EtienneCmb/visbrain/tree/develop/docs/picture/visbrain_readme.png
+.. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/visbrain_readme.png
    :align:   center
-
-Right now, four modules are implemented, with the first three coming with a modular graphical interface :
 
 * `Brain <http://visbrain.org/brain.html>`_ : visualize EEG/MEG/Intracranial data, connectivity in a standard MNI 3D brain (see `Brain examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_).
 * `Sleep <http://visbrain.org/sleep.html>`_ : visualize polysomnographic data and hypnogram edition (see `Sleep examples <http://visbrain.org/auto_examples/index.html#sleep-examples>`_).
