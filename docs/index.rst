@@ -96,9 +96,11 @@ Contents:
    :maxdepth: 3
 
    brain
-   sleep
-   ndviz
+   colorbar
    figure
+   ndviz
+   sleep
+   topo
    utils
    io
    auto_examples/index.rst

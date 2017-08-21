@@ -17,6 +17,7 @@ import sys
 import os
 
 import sphinx_rtd_theme
+from sphinx_gallery.sorting import FileNameSortKey
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -49,6 +50,7 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'auto_examples',
     'backreferences_dir': 'generated',
     'default_thumb_file': 'picture/visbrain.png',
+    'within_subsection_order': FileNameSortKey,
     }
 
 numpydoc_show_class_members = False
