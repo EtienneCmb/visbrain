@@ -6,7 +6,7 @@ import pip
 from pip.req import parse_requirements
 from optparse import Option
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
 MAINTAINER = "Etienne Combrisson"
