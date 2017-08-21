@@ -13,9 +13,7 @@ import numpy as np
 from scipy.io import loadmat
 # import os
 
-import vispy.visuals.transforms as vist
-
-from ..utils import array_to_stt
+from ..utils.transform import array_to_stt
 from .dependencies import is_nibabel_installed
 from .rw_utils import get_file_ext
 

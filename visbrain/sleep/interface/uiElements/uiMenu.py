@@ -460,7 +460,10 @@ class uiMenu(object):
 
         Shortcut : CTRL + D
         """
-        self.q_widget.setVisible(not self.q_widget.isVisible())
+        viz = self.q_widget.isVisible()
+        self.q_widget.setVisible(not viz)
+        # Set topo widget larger if settings panel hide :
+        self._topoW.setMaximumWidth(300 * (1 + .7 * viz))
 
     def _disptog_spec(self):
         """Toggle method for display / hide the spectrogram.

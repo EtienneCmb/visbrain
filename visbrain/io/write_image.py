@@ -7,7 +7,7 @@
 import numpy as np
 
 
-__all__ = ['write_fig_hyp', 'write_fig_canvas', 'write_fig_pyqt']
+__all__ = ('write_fig_hyp', 'write_fig_canvas', 'write_fig_pyqt')
 
 
 def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
@@ -15,23 +15,19 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
                           2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}):
     """Export hypnogram to a 600 dpi png figure.
 
-    Args:
-        file: str
-            Filename (with full path) to sleep dataset.
-
-        hypno: np.ndarray
-            Hypnogram vector
-
-        sf: float, optional, (def: 100.)
-            The sampling frequency of displayed elements (could be the
-            down-sampling frequency)
-
-        tstartsec: int
-            Record starting time given in seconds.
-
-    Kargs:
-        grid: boolean, optional (def False)
-            Plot X and Y grid.
+    Parameters
+    ----------
+    file : str
+        Filename (with full path) to sleep dataset.
+    hypno : array_like
+        Hypnogram vector
+    sf  : float | 100.
+        The sampling frequency of displayed elements (could be the
+        down-sampling frequency)
+    tstartsec: int
+        Record starting time given in seconds.
+    grid : boolean, optional (def False)
+        Plot X and Y grid.
     """
     import matplotlib.pyplot as plt
     import datetime
@@ -43,10 +39,10 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
     # Put REM between Wake and N1 sleep
     hypno[hypno >= 1] += 1
     hypno[hypno == 5] = 1
-    idxREM = np.where(hypno == 1)[0]
-    valREM = np.zeros(hypno.size)
-    valREM[:] = np.nan
-    valREM[idxREM] = 1
+    idx_rem = np.where(hypno == 1)[0]
+    val_rem = np.zeros(hypno.size)
+    val_rem[:] = np.nan
+    val_rem[idx_rem] = 1
 
     # Find if artefacts are present in hypno
     art = True if -1 in hypno else False
@@ -92,7 +88,7 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
     # Plot REM epochs
     remcol = 'k' if not ascolor else colors[4]
     for i in np.arange(0.6, 1, 0.01):
-        plt.plot(np.arange(len(hypno)), i * valREM, remcol, linewidth=lw)
+        plt.plot(np.arange(len(hypno)), i * val_rem, remcol, linewidth=lw)
 
     # Y-Ticks and Labels
     if art:
@@ -135,22 +131,18 @@ def write_fig_canvas(filename, canvas, resolution=3000, autocrop=False,
                      region=None):
     """Export a canvas as a figure.
 
-    Args:
-        filename: string
-            Name of the figure to export.
-
-        canvas: VisPy canvas
-            The vispy canvas to export.
-
-    Kargs:
-        resolution: int, optional, (def: 3000)
-            Coefficient to multiply the size of the canvas.
-
-        autocrop: bool, optional, (def: False)
-            Auto-cropping argument to remove useless space.
-
-        region: tuple/list, optional, (def: None)
-            The region to export.
+    Parameters
+    ----------
+    filename : string
+        Name of the figure to export.
+    canvas : VisPy canvas
+        The vispy canvas to export.
+    resolution : int | 3000
+        Coefficient to multiply the size of the canvas.
+    autocrop : bool | False
+        Auto-cropping argument to remove useless space.
+    region : tuple/list | None
+        The region to export.
     """
     from ..utils import piccrop
     import vispy
@@ -163,8 +155,8 @@ def write_fig_canvas(filename, canvas, resolution=3000, autocrop=False,
     backp_size = canvas.physical_size
 
     # Increase the physical size :
-    ratio = max((2*resolution)/backp_size[0], resolution/backp_size[1])
-    new_size = (int(backp_size[0]*ratio), int(backp_size[1]*ratio))
+    ratio = max((2 * resolution) / backp_size[0], resolution / backp_size[1])
+    new_size = (int(backp_size[0] * ratio), int(backp_size[1] * ratio))
     canvas._backend._physical_size = new_size
 
     # Render and save :
@@ -184,16 +176,17 @@ def write_fig_canvas(filename, canvas, resolution=3000, autocrop=False,
 def write_fig_pyqt(self, filename):
     """Export a GUI window as a figure.
 
-    Args:
-        self: struct
-            The self structure of the GUI window.
-
-        filename: string
-            The picture file name.
+    Parameters
+    ----------
+    self : struct
+        The self structure of the GUI window.
+    filename : string
+        The picture file name.
     """
     from PyQt5 import QtWidgets, QtCore
+
     # Screnshot function :
-    def _takeScreenShot():
+    def _take_screenshot():
         """Take the screenshot."""
         screen = QtWidgets.QApplication.primaryScreen()
         p = screen.grabWindow(0)
@@ -204,5 +197,5 @@ def write_fig_pyqt(self, filename):
         self.timerScreen = QtCore.QTimer()
         # self.timerScreen.setInterval(100)
         self.timerScreen.setSingleShot(True)
-        self.timerScreen.timeout.connect(_takeScreenShot)
+        self.timerScreen.timeout.connect(_take_screenshot)
         self.timerScreen.start(500)

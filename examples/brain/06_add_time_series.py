@@ -4,6 +4,8 @@ Add time series
 
 This example demonstrate how to display time-series attached to sources. The
 time-series can then be controlled from the GUI in the Sources/Time-series tab.
+
+.. image:: ../../picture/picbrain/ex_time_series.png
 """
 from visbrain import Brain
 import numpy as np

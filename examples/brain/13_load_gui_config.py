@@ -9,6 +9,8 @@ Load this file :
 
 * From the menu File/load/GUI config
 * Using the load_config() method
+
+.. image:: ../../picture/picbrain/ex_load_config.png
 """
 from visbrain import Brain
 

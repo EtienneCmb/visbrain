@@ -5,6 +5,8 @@ Add multiple objects to the scene
 This example demonstrate how to display connectivity. To this end,
 we will define some deep sources and connect them. See 2_Sources.py
 to defined sources
+
+.. image:: ../../picture/picbrain/ex_add_multiple_objects.png
 """
 from __future__ import print_function
 from visbrain import Brain

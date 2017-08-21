@@ -724,6 +724,51 @@ class Hypnogram(object):
 
 """
 ###############################################################################
+# TOPOPLOT
+###############################################################################
+Topoplot class that inherit from the visual TopoPlot and PrepareData for
+filetring, de-meaning...
+"""
+
+
+class TopoSleep(TopoPlot, PrepareData):
+    """Topoplot for sleep data."""
+
+    def __init__(self, **kwargs):
+        # Initialize TopoPlot and PrepareData :
+        TopoPlot.__init__(self, **kwargs)
+        PrepareData.__init__(self, axis=1)
+        # Initialize data, clim, cmap and cblabel :
+        self._data = None
+        self._clim = None
+        self._cmap = None
+        self._cblabel = None
+
+    def set_sleep_topo(self, data=None, clim=None, cmap=None, cblabel=None):
+        """Send data to TopoGraphic plot."""
+        # Data :
+        if data is None:
+            data = self._data
+        self._data = data
+        # Clim :
+        if clim is None:
+            clim = self._clim
+        self._clim = clim
+        # Cmap :
+        if cmap is None:
+            cmap = self._cmap
+        self._cmap = cmap
+        # Cblabel :
+        if cblabel is None:
+            cblabel = self._cblabel
+        self._cblabel = cblabel
+
+        if data is not None:
+            self.set_data(data, cmap=cmap, cblabel=cblabel, clim=clim)
+
+
+"""
+###############################################################################
 # INDICATORS
 ###############################################################################
 Visual indicators can be used to help the user to see in which time window the
@@ -753,7 +798,7 @@ class Indicator(object):
                 A tuple of two floats indicating where ylim start and ylim end.
         """
         tox = (xlim[0], ylim[0], -1.)
-        sc = (xlim[1]-xlim[0], ylim[1]-ylim[0], 1.)
+        sc = (xlim[1] - xlim[0], ylim[1] - ylim[0], 1.)
         # Move the square
         self.mesh.transform = vist.STTransform(translate=tox, scale=sc)
 
@@ -957,7 +1002,7 @@ class vbShortcuts(object):
                 val = self._SlVal.value()
                 step = self._SigSlStep.value()
                 win = self._SigWin.value()
-                tm, tM = (val*step, val*step+win)
+                tm, tM = (val * step, val * step + win)
                 cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
                 # Build transformation :
                 kwargs = {'center': (cursor, 0.), 'radii': (3, 15), 'mag': 10}
@@ -1012,10 +1057,12 @@ class visuals(vbShortcuts):
                                  self._chan.node, self._hypCanvas.wc.scene)
 
         # =================== TOPOPLOT ===================
-        self._topo = TopoPlot(chans=self._channels, camera=cameras[3],
-                              parent=self._topoCanvas.wc.scene)
-        self._topo.set_cmap(clim=(-1., 1.))
-        if not any(self._topo.keeponly):
+        self._topo = TopoSleep(channels=self._channels, margin=.2,
+                               parent=self._topoCanvas.wc.scene)
+        # Set camera properties :
+        cameras[3].rect = self._topo.rect
+        cameras[3].aspect = 1.
+        if not any(self._topo._keeponly):
             self.toolBox_2.setItemEnabled(2, False)
 
         # =================== SHORTCUTS ===================

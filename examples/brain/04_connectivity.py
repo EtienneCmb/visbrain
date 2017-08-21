@@ -4,6 +4,8 @@ Connect deep sources
 
 Display and customize connectivity. To this end, we define some deep sources
 and connect them.
+
+.. image:: ../../picture/picbrain/ex_connectivity.png
 """
 from __future__ import print_function
 import numpy as np

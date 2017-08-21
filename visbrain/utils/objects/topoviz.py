@@ -20,30 +20,24 @@ from ..transform import vpnormalize
 class TopoPlot(PrepareData):
     """Create a topoplot.
 
-    Kargs:
-        pixels: int, optional, (def: 32)
-            The pixels density. Must be even number.
-
-        bgcolor: tuple/array/string, optional, (def: 'black')
-            The background color.
-
-        linecolor: tuple/array/string, optional, (def: 'white')
-            The topoplot line color for the head / ear / nose.
-
-        width: float, optional, (def: 4.)
-            Line width of the head / ear / nose.
-
-        textcolor: tuple/array/string, optional, (def: 'black')
-            The textcolor of channel names.
-
-        interp: float, optional, (def: .1)
-            The image interpolation ratio.
-
-        scale: float, optional, (def: 800.)
-            The plot length (fix OpenGL bugs for small plots).
-
-        parent: vispy, optional, (def: None)
-            The parent of the topoplot.
+    Parameters:
+    -----------
+    pixels : int | 32
+        The pixels density. Must be even number.
+    bgcolor : tuple/array_like/string | 'black'
+        The background color.
+    linecolor : tuple/array_like/string | 'white'
+        The topoplot line color for the head / ear / nose.
+    width : float | 4.
+        Line width of the head / ear / nose.
+    textcolor : tuple/array_like/string | 'black'
+        The textcolor of channel names.
+    interp : float | .1
+        The image interpolation ratio.
+    scale : float | 800.
+        The plot length (fix OpenGL bugs for small plots).
+    parent : vispy | None
+        The parent of the topoplot.
     """
 
     def __init__(self, xyz=None, system='cart', unit='rad', axtheta=0, axphi=1,
@@ -87,23 +81,23 @@ class TopoPlot(PrepareData):
         self.chan.transform = vist.STTransform(translate=(0., 0., -10.))
 
         # ================== HEADSET ==================
-        csize = int(pixels/interp) if interp else pixels
+        csize = int(pixels / interp) if interp else pixels
         l = csize / 2
         # ------------- Head line -------------
-        theta = np.arange(0, 2*np.pi, 0.001)
+        theta = np.arange(0, 2 * np.pi, 0.001)
         head = np.full((len(theta), 3), -1., dtype=np.float32)
-        head[:, 0] = l*(1. + np.cos(theta))
-        head[:, 1] = l*(1. + np.sin(theta))
+        head[:, 0] = l * (1. + np.cos(theta))
+        head[:, 1] = l * (1. + np.sin(theta))
         self._head = head
         self.head.set_data(pos=head, color=self.linecolor,
                            width=self.width)
 
         # ------------- Nose -------------
         w, h = csize * 50. / 512., csize * 30. / 512.
-        nose = np.array([[l-w, 2*l-w, 2.],
-                         [l, 2*l+h, 2.],
-                         [l, 2*l+h, 2.],
-                         [l+w, 2*l-w, 2.]
+        nose = np.array([[l - w, 2 * l - w, 2.],
+                         [l, 2 * l + h, 2.],
+                         [l, 2 * l + h, 2.],
+                         [l + w, 2 * l - w, 2.]
                          ])
         self.nose.set_data(pos=nose, width=self.width, connect='segments',
                            color=self.linecolor)
@@ -113,7 +107,7 @@ class TopoPlot(PrepareData):
         yh = l + h * np.sin(theta)
         # Ear left :
         earL = np.full((len(theta), 3), 3., dtype=np.float32)
-        earL[:, 0] = 2*l + w * np.cos(theta)
+        earL[:, 0] = 2 * l + w * np.cos(theta)
         earL[:, 1] = yh
         self.earL.set_data(pos=earL, color=self.linecolor,
                            width=self.width)
@@ -178,9 +172,10 @@ class TopoPlot(PrepareData):
         # =================== CAMERA ===================
         marge = 0.
         factor = self.scale
-        self.camera.rect = (-factor-marge, -factor-marge,
-                            2*(factor+marge), 2*(factor+h+marge))
+        self.camera.rect = (-factor - marge, -factor - marge,
+                            2 * (factor + marge), 2 * (factor + h + marge))
         self.camera.aspect = 1.
+        # self.node.camera = camera
 
     def __len__(self):
         """Return the number of channels."""
@@ -214,9 +209,10 @@ class TopoPlot(PrepareData):
     def _load_chan(chan):
         """From the name of the channels, find xyz coordinates.
 
-        Args:
-            chan: list
-                List of channel names.
+        Parameters
+        ----------
+        chan : list
+            List of channel names.
         """
         # Load the coordinates template :
         path = sys.modules[__name__].__file__.split('objects')[0]
@@ -241,25 +237,23 @@ class TopoPlot(PrepareData):
     def _sphere2cart(xyz, axtheta=0, axphi=1, unit='rad'):
         """Convert spheric coordinates to cartesian.
 
-        Args:
-            xyz: np.ndarray
-                The array of spheric coordinate of shape (N, 3).
+        Parameters
+        ----------
+        xyz : array_like
+            The array of spheric coordinate of shape (N, 3).
+        axtheta : int | 0
+            Specify where is located the theta angle axis (elevation with
+            respect to z-axis)
+        axphi : int | 1
+            Specify where is located the phi angle axis (counterclockwise
+            rotation from +x in x-y plane)
+        unit : string | 'rad'
+            Specify the unit angles. Use either 'degree' or 'rad'.
 
-        Kargs:
-            axtheta: int, optional, (def: 0)
-                Specify where is located the theta angle axis (elevation with
-                respect to z-axis)
-
-            axphi: int, optional, (def: 1)
-                Specify where is located the phi angle axis (counterclockwise
-                rotation from +x in x-y plane)
-
-            unit: string, optional, (def: 'rad')
-                Specify the unit angles. Use either 'degree' or 'rad'.
-
-        Returns:
-            xyz: np.ndarray
-                The cartesian coordinates of the angle of shape (N, 3).
+        Returns
+        -------
+        xyz : array_like
+            The cartesian coordinates of the angle of shape (N, 3).
         """
         # Get theta / phi :
         theta, phi = xyz[:, 0], xyz[:, 1]
@@ -313,16 +307,17 @@ class TopoPlot(PrepareData):
     def _topoMNE(self, data):
         """Get topoplot for spheric data using MNE method.
 
-        Args:
-            xyz: np.ndarray
-                The array of converted coordinates (cartesian)
+        Parameters
+        ----------
+        xyz : array_like
+            The array of converted coordinates (cartesian)
+        data : array_like
+            Vector of data.
 
-            data: np.ndarray
-                Vector of data.
-
-        Returns:
-            image: np.ndarray
-                The topoplot image.
+        Returns
+        -------
+        image : array_like
+            The topoplot image.
         """
         # =================== GRID ===================
         xyz = self.xyz
@@ -335,12 +330,12 @@ class TopoPlot(PrepareData):
 
         # =================== TRANSFORMATION ===================
         eucl = np.sqrt(xyz[:, 0]**2 + xyz[:, 1]**2).max()
-        self.headset.transform = vpnormalize(self._head, dist=2*eucl)
+        self.headset.transform = vpnormalize(self._head, dist=2 * eucl)
         if self.onload:
-            factor = eucl*self.scale + 70.
+            factor = eucl * self.scale + 70.
             self.name.transform = vist.STTransform(translate=(0., .1, 0.))
             self.title.transform = vist.STTransform(translate=(0., 1., 0.))
-            self.camera.rect = (-factor, -factor, 2*factor, 2*factor)
+            self.camera.rect = (-factor, -factor, 2 * factor, 2 * factor)
             self.onload = False
 
         return self._griddata(pos_x, pos_y, data, Xi, Yi)
@@ -373,10 +368,11 @@ class TopoPlot(PrepareData):
     def set_data(self, sf, time, data, chans_color='white'):
         """Set data to the topoplot.
 
-        Kargs:
-            system: string, optional, (def: 'cart')
-                Coordinates system. Use 'cart' for cartesian system, 'sphere'
-                for spheric (with a theta / phi angle).
+        Parameters
+        ----------
+        system : {'cart', 'sphere'}
+            Coordinates system. Use 'cart' for cartesian system, 'sphere'
+            for spheric (with a theta / phi angle).
         """
         # =================== PREPARE ===================
         # Prepare data before plotting :
@@ -432,12 +428,12 @@ class TopoPlot(PrepareData):
                  under=None, over=None):
         """Set colorbar properties.
 
-        Kargs:
-            clim: float, optional, (def: None)
-                Minimum / Maximum of the colorbar.
-
-            cmap: string, optional, (def: 'viridis')
-                The colormap to use.
+        Parameters
+        ----------
+        clim : tuple | None
+            Minimum / Maximum of the colorbar.
+        cmap : string | 'viridis'
+            The colormap to use.
         """
         self.clim, self.cmap = clim, cmap
         self.vmin, self.under, self.vmax, self.over = vmin, under, vmax, over

@@ -82,7 +82,7 @@ class CbarVisual(CbarBase):
         # --------------------- Node ---------------------
         # Define node parent and limit node :
         self._cbNode = Node(name='Colorbar', parent=parent)
-        self._limNode = Node(name='Colorbar', parent=self._cbNode)
+        self._limNode = Node(name='Limits', parent=self._cbNode)
         # Rescale between (-1., 1.) :
         self._rsc = vist.STTransform(scale=(self._width, 2 / self._n, 1),
                                      translate=(0, -1., 0))

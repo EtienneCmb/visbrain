@@ -12,6 +12,8 @@ https://martinos.org/mne/stable/python_reference.html#reading-raw-data
 
 Required dataset at :
 https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing
+
+.. image:: ../../picture/picsleep/ex_LoadMNE.png
 """
 from mne import io
 from visbrain import Sleep

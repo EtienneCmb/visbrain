@@ -4,6 +4,8 @@ Add pictures
 
 This example demonstrate how to display small pictures attached to sources. The
 pictures can then be controlled from the GUI in the Sources/Pictures tab.
+
+.. image:: ../../picture/picbrain/ex_pictures.png
 """
 from visbrain import Brain
 import numpy as np
