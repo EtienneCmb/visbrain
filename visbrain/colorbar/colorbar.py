@@ -1,4 +1,4 @@
-
+"""Colorbar module."""
 import sys
 from PyQt5 import QtWidgets
 
@@ -11,62 +11,47 @@ from ..utils import CbarQt, CbarBase, CbarObjetcs
 class Colorbar(uiInit):
     """Display a colorbar editor.
 
-    Kargs:
-        config: string, optional, (def: None)
-            Path to a configuration file.
-
-        cmap: string, optional, (def: inferno)
-            Matplotlib colormap
-
-        clim: tuple/list, optional, (def: None)
-            Limit of the colormap. The clim parameter must be a tuple / list
-            of two float number each one describing respectively the (min, max)
-            of the colormap. Every values under clim[0] or over clim[1] will
-            peaked.
-
-        vmin: float, optional, (def: None)
-            Threshold from which every color will have the color defined using
-            the under parameter bellow.
-
-        under: tuple/string, optional, (def: 'gray')
-            Matplotlib color for values under vmin.
-
-        vmax: float, optional, (def: None)
-            Threshold from which every color will have the color defined using
-            the over parameter bellow.
-
-        over: tuple/string, optional, (def: 'red')
-            Matplotlib color for values over vmax.
-
-        cblabel: string, optional, (def: '')
-            Colorbar label.
-
-        cbtxtsz: float, optional, (def: 26.)
-            Text size of the colorbar label.
-
-        cbtxtsh: float, optional, (def: 2.3)
-            Shift for the colorbar label.
-
-        txtcolor: string, optional, (def: 'white')
-            Text color.
-
-        txtsz: float, optional, (def: 20.)
-            Text size for clim/vmin/vmax text.
-
-        txtsh: float, optional, (def: 1.2)
-            Shift for clim/vmin/vmax text.
-
-        border: bool, optional, (def: True)
-            Display colorbar borders.
-
-        limtxt: bool, optional, (def: True)
-            Display vmin/vmax text.
-
-        bgcolor: tuple/string, optional, (def: (.1, .1, .1))
-            Background color of the colorbar canvas.
-
-        ndigits: int, optional, (def: 2)
-            Number of digits for the text.
+    Parameters
+    ----------
+    config : string | None
+        Path to a configuration file.
+    cmap : string | inferno
+        Matplotlib colormap
+    clim : tuple/list | None
+        Limit of the colormap. The clim parameter must be a tuple / list
+        of two float number each one describing respectively the (min, max)
+        of the colormap. Every values under clim[0] or over clim[1] will
+        peaked.
+    vmin : float | None
+        Threshold from which every color will have the color defined using
+        the under parameter bellow.
+    under : tuple/string | 'gray'
+        Matplotlib color for values under vmin.
+    vmax : float | None
+        Threshold from which every color will have the color defined using
+        the over parameter bellow.
+    over : tuple/string | 'red'
+        Matplotlib color for values over vmax.
+    cblabel : string | ''
+        Colorbar label.
+    cbtxtsz : float | 26.
+        Text size of the colorbar label.
+    cbtxtsh : float | 2.3
+        Shift for the colorbar label.
+    txtcolor : string | 'white'
+        Text color.
+    txtsz : float | 20.
+        Text size for clim/vmin/vmax text.
+    txtsh : float | 1.2
+        Shift for clim/vmin/vmax text.
+    border : bool | True
+        Display colorbar borders.
+    limtxt : bool | True
+        Display vmin/vmax text.
+    bgcolor : tuple/string | (.1, .1, .1)
+        Background color of the colorbar canvas.
+    ndigits : int | 2
+        Number of digits for the text.
     """
 
     def __init__(self, config=None, **kwargs):

@@ -7,6 +7,8 @@ visbrain.
 
 As an example, download the Custom.npz file :
 https://drive.google.com/open?id=0B6vtJiCQZUBvVF9wWE5jRTF0dzQ
+
+.. image:: ../../picture/picbrain/ex_convert_mesh_data.png
 """
 import os
 

@@ -14,7 +14,7 @@ from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
 from ..utils import (FixedCam, load_sleepdataset, color2vb, ShortcutPopup,
-                     check_downsampling, MouseEventControl)
+                     check_downsampling, MouseEventControl, set_widget_size)
 from ..io import dialogLoad, read_hypno
 
 sip.setdestroyonexit(False)
@@ -363,6 +363,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
     def setDefaultState(self):
         """Set the default window state."""
         # ================= TAB =================
+        set_widget_size(self._app, self.q_widget, 23)
         self.QuickSettings.setCurrentIndex(0)
         self.toolBox.setCurrentIndex(1)
         self.toolBox_2.setCurrentIndex(0)

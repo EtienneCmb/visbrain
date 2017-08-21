@@ -451,19 +451,24 @@ class uiPanels(object):
         # ============== LIMITS / COLORMAP ==============
         # Get limits :
         if self._PanTopoAutoClim.isChecked():
-            cmin, cmax = None, None
+            clim = None
             self._PanTopoClimW.setEnabled(False)
         else:
             self._PanTopoClimW.setEnabled(True)
             cmin = self._PanTopoCmin.value()
             cmax = self._PanTopoCmax.value()
+            clim = (float(cmin), float(cmax))
         # Get and set colormap :
         rv = self._PanTopoRev.isChecked()
         cmap = self._PanTopoCmap.currentText() + rv * '_r'
-        # Send data :
-        self._topo.set_cmap(clim=(cmin, cmax), cmap=cmap)
 
-        # Finally, enable apply button !
+        # Send data :
+        self._topo._cmap = cmap
+        self._topo._clim = clim
+        self._topo._cblabel = dispas
+        self._topo.set_sleep_topo()
+
+        # Finally, enable apply button :
         self._PanTopoApply.setEnabled(True)
 
     def _fcn_topoApply(self):

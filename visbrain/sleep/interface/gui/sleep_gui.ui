@@ -822,13 +822,13 @@ on</string>
                        <item>
                         <widget class="QDoubleSpinBox" name="_PanTopoCmin">
                          <property name="decimals">
-                          <number>4</number>
+                          <number>2</number>
                          </property>
                          <property name="minimum">
-                          <double>-10000.000000000000000</double>
+                          <double>-1000000.000000000000000</double>
                          </property>
                          <property name="maximum">
-                          <double>10000.000000000000000</double>
+                          <double>1000000.000000000000000</double>
                          </property>
                          <property name="value">
                           <double>-1.000000000000000</double>
@@ -838,13 +838,13 @@ on</string>
                        <item>
                         <widget class="QDoubleSpinBox" name="_PanTopoCmax">
                          <property name="decimals">
-                          <number>4</number>
+                          <number>2</number>
                          </property>
                          <property name="minimum">
-                          <double>-10000.000000000000000</double>
+                          <double>-1000000.000000000000000</double>
                          </property>
                          <property name="maximum">
-                          <double>10000.000000000000000</double>
+                          <double>1000000.000000000000000</double>
                          </property>
                          <property name="value">
                           <double>1.000000000000000</double>
@@ -3426,7 +3426,7 @@ display</string>
        <widget class="QWidget" name="_topoW" native="true">
         <property name="minimumSize">
          <size>
-          <width>150</width>
+          <width>250</width>
           <height>0</height>
          </size>
         </property>

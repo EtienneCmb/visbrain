@@ -5,7 +5,9 @@ Screenshot example
 This script illustrate how to export your figures and the colorbar.
 
 The full tutorial is :
-https://etiennecmb.github.io/visbrain/vbexport.html
+http://visbrain.org/brain.html#screenshot-tutorial
+
+.. image:: ../../picture/picbrain/ex_screenshot.png
 """
 import numpy as np
 
@@ -19,7 +21,7 @@ mat = np.load('xyz_sample.npz')
 kwargs['s_xyz'], subjects = mat['xyz'], mat['subjects']
 
 # Now, create some random data between [-50,50]
-kwargs['s_data'] = np.round(100*np.random.rand(kwargs['s_xyz'].shape[0])-50)
+kwargs['s_data'] = np.round(100 * np.random.rand(kwargs['s_xyz'].shape[0]) - 50)
 kwargs['s_color'] = 'darkred'
 kwargs['s_opacity'] = .5
 
@@ -58,7 +60,7 @@ vb.cbar_select('Projection')
 vb.cbar_export('test.txt')
 vb.sources_opacity(show=False)              # Display sources
 vb.rotate(custom=(-210, 10.))               # Rotate the brain
-vb.brain_control(alpha=0.3)                # Hide the brain
+vb.brain_control(alpha=0.3)                 # Hide the brain
 
 # Export with transparent background
 vb.screenshot('screenshot3.png', region=region, transparent=True,

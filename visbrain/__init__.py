@@ -20,12 +20,14 @@ import sys
 
 # Import modules :
 from .brain import Brain
+from .colorbar import Colorbar
+from .figure import Figure
 from .ndviz import Ndviz
 from .sleep import Sleep
-from .figure import Figure
-from .colorbar import Colorbar
+from .topo import Topo
 
-__all__ = ['Brain', 'Ndviz', 'Sleep', 'Figure', 'Colorbar']
+__all__ = ['Brain', 'Colorbar', 'Figure', 'Ndviz', 'Sleep', 'Topo']
+__version__ = "0.3.1"
 
 # PyQt5 crash if an error occured. This small function fix it for all modules
 # to retrieve the PyQt4 behavior :

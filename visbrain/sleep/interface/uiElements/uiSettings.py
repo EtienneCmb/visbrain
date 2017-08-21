@@ -89,8 +89,11 @@ class uiSettings(object):
         # ---------------------------------------
         # Update topoplot if visible :
         if self._topoW.isVisible():
-            # Enable topoplot :
-            self._topo.set_data(self._sf, self._time[sl], self._data[:, sl])
+            # Prepare data before plotting :
+            data = self._topo._prepare_data(self._sf, self._data[:, sl],
+                                            self._time[sl]).mean(1)
+            # Set preprocessed sleep data :
+            self._topo.set_sleep_topo(data)
             # Update title :
             fm, fM = self._PanTopoFmin.value(), self._PanTopoFmax.value()
             dispas = self._PanTopoDisp.currentText()

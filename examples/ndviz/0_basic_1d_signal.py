@@ -2,7 +2,10 @@
 Plot a 1d signal
 ================
 
-This example show how to display and control simple 1d signal."""
+This example show how to display and control simple 1d signal.
+
+.. image:: ../../picture/picndviz/ex_basic_signal.png
+"""
 
 import numpy as np
 from visbrain import Ndviz
