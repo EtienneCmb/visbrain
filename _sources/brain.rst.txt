@@ -292,8 +292,8 @@ Keys                    Description
 4                       Front view
 5                       Back view
 b                       Display / hide the brain
-b                       Display / hide cross-sections
-b                       Display / hide volume
+x                       Display / hide cross-sections
+v                       Display / hide volume
 s                       Display / hide sources
 t                       Display / hide connectivity
 r                       Display / hide Region Of Interest (ROI)

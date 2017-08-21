@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; visbrain 0.2.9 documentation</title>
+  <title>Index &mdash; visbrain 0.3.0 documentation</title>
   
 
   
@@ -40,7 +40,7 @@
         <link rel="index" title="Index"
               href="#"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.2.9 documentation" href="index.html"/> 
+    <link rel="top" title="visbrain 0.3.0 documentation" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.2.9
+                0.3.0
               </div>
             
           
@@ -98,9 +98,11 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colorbar.html">Colorbar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="topo.html">Topo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -197,13 +199,17 @@
 </li>
       <li><a href="brainAPI.html#visbrain.brain.user.BrainUserMethods.add_mesh">add_mesh() (visbrain.brain.user.BrainUserMethods method)</a>
 </li>
+      <li><a href="brainAPI.html#visbrain.brain.user.BrainUserMethods.add_pictures">add_pictures() (visbrain.brain.user.BrainUserMethods method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="brainAPI.html#visbrain.brain.user.BrainUserMethods.add_pictures">add_pictures() (visbrain.brain.user.BrainUserMethods method)</a>
+      <li><a href="topo.html#visbrain.topo.topo.Topo.add_shared_colorbar">add_shared_colorbar() (visbrain.topo.topo.Topo method)</a>
 </li>
       <li><a href="brainAPI.html#visbrain.brain.user.BrainUserMethods.add_sources">add_sources() (visbrain.brain.user.BrainUserMethods method)</a>
 </li>
       <li><a href="brainAPI.html#visbrain.brain.user.BrainUserMethods.add_time_series">add_time_series() (visbrain.brain.user.BrainUserMethods method)</a>
+</li>
+      <li><a href="topo.html#visbrain.topo.topo.Topo.add_topoplot">add_topoplot() (visbrain.topo.topo.Topo method)</a>
 </li>
       <li><a href="brainAPI.html#visbrain.brain.user.BrainUserMethods.add_volume">add_volume() (visbrain.brain.user.BrainUserMethods method)</a>
 </li>
@@ -238,6 +244,8 @@
       <li><a href="brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_list">cbar_list() (visbrain.brain.user.BrainUserMethods method)</a>
 </li>
       <li><a href="brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_select">cbar_select() (visbrain.brain.user.BrainUserMethods method)</a>
+</li>
+      <li><a href="colorbar.html#visbrain.colorbar.colorbar.Colorbar">Colorbar (class in visbrain.colorbar.colorbar)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -396,6 +404,10 @@
       <li><a href="brainAPI.html#visbrain.brain.user.BrainUserMethods.time_series_control">time_series_control() (visbrain.brain.user.BrainUserMethods method)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="topo.html#visbrain.topo.topo.Topo">Topo (class in visbrain.topo.topo)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="V">V</h2>
@@ -460,7 +472,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.2.9',
+            VERSION:'0.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

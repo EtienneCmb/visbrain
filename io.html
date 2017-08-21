@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>I/O &mdash; visbrain 0.2.9 documentation</title>
+  <title>I/O &mdash; visbrain 0.3.0 documentation</title>
   
 
   
@@ -39,9 +39,9 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.2.9 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.0 documentation" href="index.html"/>
         <link rel="next" title="Examples" href="auto_examples/index.html"/>
-        <link rel="prev" title="Figure" href="figure.html"/> 
+        <link rel="prev" title="Utils" href="utils.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -73,7 +73,7 @@
             
             
               <div class="version">
-                0.2.9
+                0.3.0
               </div>
             
           
@@ -102,6 +102,7 @@
 <li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
 <li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">I/O</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#gui-dialog">GUI dialog</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mne">MNE</a></li>
@@ -298,36 +299,46 @@ element is a string of type ‘Ext (.ext)’</p>
 <dt id="visbrain.io.rw_config.save_config_json">
 <code class="descclassname">visbrain.io.rw_config.</code><code class="descname">save_config_json</code><span class="sig-paren">(</span><em>filename</em>, <em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/rw_config.html#save_config_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.rw_config.save_config_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save configuration file as JSON.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>filename: string</dt>
-<dd>Name of the configuration file to save.</dd>
-<dt>config: dict</dt>
-<dd>Dictionary of arguments to save.</dd>
-</dl>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>Name of the configuration file to save.</p>
+</div></blockquote>
+<p><strong>config</strong> : dict</p>
+<blockquote class="last">
+<div><p>Dictionary of arguments to save.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="visbrain.io.rw_config.load_config_json">
 <code class="descclassname">visbrain.io.rw_config.</code><code class="descname">load_config_json</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/rw_config.html#load_config_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.rw_config.load_config_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load configuration file as JSON.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>filename: string</dt>
-<dd>Name of the configuration file to load.</dd>
-</dl>
-</dd>
-<dt>Returns:</dt>
-<dd><dl class="first last docutils">
-<dt>config: dict</dt>
-<dd>Dictionary of config.</dd>
-</dl>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>Name of the configuration file to load.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>config</strong> : dict</p>
+<blockquote class="last">
+<div><p>Dictionary of config.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -337,69 +348,91 @@ element is a string of type ‘Ext (.ext)’</p>
 <dt id="visbrain.io.write_image.write_fig_hyp">
 <code class="descclassname">visbrain.io.write_image.</code><code class="descname">write_fig_hyp</code><span class="sig-paren">(</span><em>file</em>, <em>hypno</em>, <em>sf</em>, <em>tstartsec</em>, <em>grid=False</em>, <em>ascolor=False</em>, <em>colors={-1: ‘#8bbf56’</em>, <em>0: ‘#56bf8b’</em>, <em>1: ‘#aabcce’</em>, <em>2: ‘#405c79’</em>, <em>3: ‘#0b1c2c’</em>, <em>4: ‘#bf5656’}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/write_image.html#write_fig_hyp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.write_image.write_fig_hyp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export hypnogram to a 600 dpi png figure.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>file: str</dt>
-<dd>Filename (with full path) to sleep dataset.</dd>
-<dt>hypno: np.ndarray</dt>
-<dd>Hypnogram vector</dd>
-<dt>sf: float, optional, (def: 100.)</dt>
-<dd>The sampling frequency of displayed elements (could be the
-down-sampling frequency)</dd>
-<dt>tstartsec: int</dt>
-<dd>Record starting time given in seconds.</dd>
-</dl>
-</dd>
-<dt>Kargs:</dt>
-<dd><dl class="first last docutils">
-<dt>grid: boolean, optional (def False)</dt>
-<dd>Plot X and Y grid.</dd>
-</dl>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>file</strong> : str</p>
+<blockquote>
+<div><p>Filename (with full path) to sleep dataset.</p>
+</div></blockquote>
+<p><strong>hypno</strong> : array_like</p>
+<blockquote>
+<div><p>Hypnogram vector</p>
+</div></blockquote>
+<p><strong>sf</strong> : float | 100.</p>
+<blockquote>
+<div><p>The sampling frequency of displayed elements (could be the
+down-sampling frequency)</p>
+</div></blockquote>
+<p><strong>tstartsec: int</strong></p>
+<blockquote>
+<div><p>Record starting time given in seconds.</p>
+</div></blockquote>
+<p><strong>grid</strong> : boolean, optional (def False)</p>
+<blockquote class="last">
+<div><p>Plot X and Y grid.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="visbrain.io.write_image.write_fig_canvas">
 <code class="descclassname">visbrain.io.write_image.</code><code class="descname">write_fig_canvas</code><span class="sig-paren">(</span><em>filename</em>, <em>canvas</em>, <em>resolution=3000</em>, <em>autocrop=False</em>, <em>region=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/write_image.html#write_fig_canvas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.write_image.write_fig_canvas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export a canvas as a figure.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>filename: string</dt>
-<dd>Name of the figure to export.</dd>
-<dt>canvas: VisPy canvas</dt>
-<dd>The vispy canvas to export.</dd>
-</dl>
-</dd>
-<dt>Kargs:</dt>
-<dd><dl class="first last docutils">
-<dt>resolution: int, optional, (def: 3000)</dt>
-<dd>Coefficient to multiply the size of the canvas.</dd>
-<dt>autocrop: bool, optional, (def: False)</dt>
-<dd>Auto-cropping argument to remove useless space.</dd>
-<dt>region: tuple/list, optional, (def: None)</dt>
-<dd>The region to export.</dd>
-</dl>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>Name of the figure to export.</p>
+</div></blockquote>
+<p><strong>canvas</strong> : VisPy canvas</p>
+<blockquote>
+<div><p>The vispy canvas to export.</p>
+</div></blockquote>
+<p><strong>resolution</strong> : int | 3000</p>
+<blockquote>
+<div><p>Coefficient to multiply the size of the canvas.</p>
+</div></blockquote>
+<p><strong>autocrop</strong> : bool | False</p>
+<blockquote>
+<div><p>Auto-cropping argument to remove useless space.</p>
+</div></blockquote>
+<p><strong>region</strong> : tuple/list | None</p>
+<blockquote class="last">
+<div><p>The region to export.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="visbrain.io.write_image.write_fig_pyqt">
 <code class="descclassname">visbrain.io.write_image.</code><code class="descname">write_fig_pyqt</code><span class="sig-paren">(</span><em>self</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/write_image.html#write_fig_pyqt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.write_image.write_fig_pyqt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Export a GUI window as a figure.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>self: struct</dt>
-<dd>The self structure of the GUI window.</dd>
-<dt>filename: string</dt>
-<dd>The picture file name.</dd>
-</dl>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>self</strong> : struct</p>
+<blockquote>
+<div><p>The self structure of the GUI window.</p>
+</div></blockquote>
+<p><strong>filename</strong> : string</p>
+<blockquote class="last">
+<div><p>The picture file name.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -418,7 +451,7 @@ down-sampling frequency)</dd>
         <a href="auto_examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="figure.html" class="btn btn-neutral" title="Figure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral" title="Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -449,7 +482,7 @@ down-sampling frequency)</dd>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.2.9',
+            VERSION:'0.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

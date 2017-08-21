@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.io.write_image &mdash; visbrain 0.2.9 documentation</title>
+  <title>visbrain.io.write_image &mdash; visbrain 0.3.0 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.2.9 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.2.9
+                0.3.0
               </div>
             
           
@@ -98,9 +98,11 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../brain.html">Brain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../colorbar.html">Colorbar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topo.html">Topo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
@@ -178,7 +180,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;write_fig_hyp&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_canvas&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_pyqt&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;write_fig_hyp&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_canvas&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_pyqt&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="write_fig_hyp"><a class="viewcode-back" href="../../../io.html#visbrain.io.write_image.write_fig_hyp">[docs]</a><span class="k">def</span> <span class="nf">write_fig_hyp</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">hypno</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">tstartsec</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ascolor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -186,23 +188,19 @@
                           <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;#405c79&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;#0b1c2c&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;#bf5656&#39;</span><span class="p">}):</span>
     <span class="sd">&quot;&quot;&quot;Export hypnogram to a 600 dpi png figure.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        file: str</span>
-<span class="sd">            Filename (with full path) to sleep dataset.</span>
-
-<span class="sd">        hypno: np.ndarray</span>
-<span class="sd">            Hypnogram vector</span>
-
-<span class="sd">        sf: float, optional, (def: 100.)</span>
-<span class="sd">            The sampling frequency of displayed elements (could be the</span>
-<span class="sd">            down-sampling frequency)</span>
-
-<span class="sd">        tstartsec: int</span>
-<span class="sd">            Record starting time given in seconds.</span>
-
-<span class="sd">    Kargs:</span>
-<span class="sd">        grid: boolean, optional (def False)</span>
-<span class="sd">            Plot X and Y grid.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file : str</span>
+<span class="sd">        Filename (with full path) to sleep dataset.</span>
+<span class="sd">    hypno : array_like</span>
+<span class="sd">        Hypnogram vector</span>
+<span class="sd">    sf  : float | 100.</span>
+<span class="sd">        The sampling frequency of displayed elements (could be the</span>
+<span class="sd">        down-sampling frequency)</span>
+<span class="sd">    tstartsec: int</span>
+<span class="sd">        Record starting time given in seconds.</span>
+<span class="sd">    grid : boolean, optional (def False)</span>
+<span class="sd">        Plot X and Y grid.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
     <span class="kn">import</span> <span class="nn">datetime</span>
@@ -214,10 +212,10 @@
     <span class="c1"># Put REM between Wake and N1 sleep</span>
     <span class="n">hypno</span><span class="p">[</span><span class="n">hypno</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="n">hypno</span><span class="p">[</span><span class="n">hypno</span> <span class="o">==</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">idxREM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hypno</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">valREM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">hypno</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">valREM</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">valREM</span><span class="p">[</span><span class="n">idxREM</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">idx_rem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hypno</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">val_rem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">hypno</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">val_rem</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">val_rem</span><span class="p">[</span><span class="n">idx_rem</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="c1"># Find if artefacts are present in hypno</span>
     <span class="n">art</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">hypno</span> <span class="k">else</span> <span class="kc">False</span>
@@ -263,7 +261,7 @@
     <span class="c1"># Plot REM epochs</span>
     <span class="n">remcol</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">ascolor</span> <span class="k">else</span> <span class="n">colors</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hypno</span><span class="p">)),</span> <span class="n">i</span> <span class="o">*</span> <span class="n">valREM</span><span class="p">,</span> <span class="n">remcol</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">lw</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hypno</span><span class="p">)),</span> <span class="n">i</span> <span class="o">*</span> <span class="n">val_rem</span><span class="p">,</span> <span class="n">remcol</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">lw</span><span class="p">)</span>
 
     <span class="c1"># Y-Ticks and Labels</span>
     <span class="k">if</span> <span class="n">art</span><span class="p">:</span>
@@ -306,22 +304,18 @@
                      <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Export a canvas as a figure.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        filename: string</span>
-<span class="sd">            Name of the figure to export.</span>
-
-<span class="sd">        canvas: VisPy canvas</span>
-<span class="sd">            The vispy canvas to export.</span>
-
-<span class="sd">    Kargs:</span>
-<span class="sd">        resolution: int, optional, (def: 3000)</span>
-<span class="sd">            Coefficient to multiply the size of the canvas.</span>
-
-<span class="sd">        autocrop: bool, optional, (def: False)</span>
-<span class="sd">            Auto-cropping argument to remove useless space.</span>
-
-<span class="sd">        region: tuple/list, optional, (def: None)</span>
-<span class="sd">            The region to export.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        Name of the figure to export.</span>
+<span class="sd">    canvas : VisPy canvas</span>
+<span class="sd">        The vispy canvas to export.</span>
+<span class="sd">    resolution : int | 3000</span>
+<span class="sd">        Coefficient to multiply the size of the canvas.</span>
+<span class="sd">    autocrop : bool | False</span>
+<span class="sd">        Auto-cropping argument to remove useless space.</span>
+<span class="sd">    region : tuple/list | None</span>
+<span class="sd">        The region to export.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">piccrop</span>
     <span class="kn">import</span> <span class="nn">vispy</span>
@@ -334,8 +328,8 @@
     <span class="n">backp_size</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">physical_size</span>
 
     <span class="c1"># Increase the physical size :</span>
-    <span class="n">ratio</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">resolution</span><span class="p">)</span><span class="o">/</span><span class="n">backp_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">resolution</span><span class="o">/</span><span class="n">backp_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">new_size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">backp_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">ratio</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">backp_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">ratio</span><span class="p">))</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">resolution</span><span class="p">)</span> <span class="o">/</span> <span class="n">backp_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">resolution</span> <span class="o">/</span> <span class="n">backp_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">new_size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">backp_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ratio</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">backp_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ratio</span><span class="p">))</span>
     <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="n">new_size</span>
 
     <span class="c1"># Render and save :</span>
@@ -355,16 +349,17 @@
 <div class="viewcode-block" id="write_fig_pyqt"><a class="viewcode-back" href="../../../io.html#visbrain.io.write_image.write_fig_pyqt">[docs]</a><span class="k">def</span> <span class="nf">write_fig_pyqt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Export a GUI window as a figure.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        self: struct</span>
-<span class="sd">            The self structure of the GUI window.</span>
-
-<span class="sd">        filename: string</span>
-<span class="sd">            The picture file name.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    self : struct</span>
+<span class="sd">        The self structure of the GUI window.</span>
+<span class="sd">    filename : string</span>
+<span class="sd">        The picture file name.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtWidgets</span><span class="p">,</span> <span class="n">QtCore</span>
+
     <span class="c1"># Screnshot function :</span>
-    <span class="k">def</span> <span class="nf">_takeScreenShot</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">_take_screenshot</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;Take the screenshot.&quot;&quot;&quot;</span>
         <span class="n">screen</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="o">.</span><span class="n">primaryScreen</span><span class="p">()</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">screen</span><span class="o">.</span><span class="n">grabWindow</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -375,7 +370,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">timerScreen</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QTimer</span><span class="p">()</span>
         <span class="c1"># self.timerScreen.setInterval(100)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timerScreen</span><span class="o">.</span><span class="n">setSingleShot</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">timerScreen</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_takeScreenShot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timerScreen</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_take_screenshot</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timerScreen</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span></div>
 </pre></div>
 
@@ -413,7 +408,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.2.9',
+            VERSION:'0.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

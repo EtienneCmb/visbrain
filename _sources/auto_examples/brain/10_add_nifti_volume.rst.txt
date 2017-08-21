@@ -12,6 +12,8 @@ custom Nifti volume must be downloaded.
 When the volume is loaded into the GUI, it's accessible from the
 Brain/Cross-sections and Brain/Volume tab.
 
+.. image:: ../../picture/picbrain/ex_add_nifti.png
+
 
 
 .. code-block:: python

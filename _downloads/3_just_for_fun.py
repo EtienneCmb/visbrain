@@ -2,7 +2,10 @@
 Configure the uni and multi-dimensional plot
 ============================================
 
-This example show how to display and control a ND signal."""
+This example show how to display and control a ND signal.
+
+.. image:: ../../picture/picndviz/ex_just_for_fun.png
+"""
 
 import numpy as np
 from visbrain import Ndviz

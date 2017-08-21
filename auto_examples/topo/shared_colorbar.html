@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Shared colorbar &mdash; visbrain 0.3.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="visbrain 0.3.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Examples" href="../index.html"/>
+        <link rel="next" title="Plotting properties" href="topoplot_plotting_properties.html"/>
+        <link rel="prev" title="Basic topoplot" href="grid_topoplot.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io.html">I/O</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#ndviz-examples">Ndviz Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#topoplot-examples">Topoplot Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="basic_topoplot.html">Basic topoplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="grid_topoplot.html">Basic topoplot</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Shared colorbar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="topoplot_plotting_properties.html">Plotting properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="use_custom_coordinates.html">Use custom coordinates</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+      <li>Shared colorbar</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/auto_examples/topo/shared_colorbar.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="shared-colorbar">
+<span id="sphx-glr-auto-examples-topo-shared-colorbar-py"></span><h1>Shared colorbar<a class="headerlink" href="#shared-colorbar" title="Permalink to this headline">¶</a></h1>
+<p>Add a shared colorbar across topographic plot.</p>
+<p>If you have several topographic plot that shared the same color properties
+(such as limits, colormap…) it might be redundant to have one colorbar per
+topoplot. In that case, use the add_shared_colorbar() to have one shared
+colorbar for all subplots.</p>
+<img alt="../../_images/ex_shared_colorbar.png" src="../../_images/ex_shared_colorbar.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Topo</span>
+
+<span class="c1"># Create a topoplot instance :</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Topo</span><span class="p">()</span>
+
+<span class="c1"># Define the list of channels :</span>
+<span class="n">channels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">,</span> <span class="s1">&#39;Cz&#39;</span><span class="p">,</span> <span class="s1">&#39;FCz&#39;</span><span class="p">,</span> <span class="s1">&#39;CPz&#39;</span><span class="p">,</span> <span class="s1">&#39;Fz&#39;</span><span class="p">,</span> <span class="s1">&#39;Pz&#39;</span><span class="p">,</span> <span class="s1">&#39;FC1&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;FC2&#39;</span><span class="p">,</span> <span class="s1">&#39;FC3&#39;</span><span class="p">,</span> <span class="s1">&#39;FC4&#39;</span><span class="p">,</span> <span class="s1">&#39;CP3&#39;</span><span class="p">,</span> <span class="s1">&#39;CP4&#39;</span><span class="p">,</span> <span class="s1">&#39;CP1&#39;</span><span class="p">,</span> <span class="s1">&#39;CP2&#39;</span><span class="p">,</span> <span class="s1">&#39;F3&#39;</span><span class="p">,</span> <span class="s1">&#39;F4&#39;</span><span class="p">,</span> <span class="s1">&#39;P3&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;P4&#39;</span><span class="p">,</span> <span class="s1">&#39;C5&#39;</span><span class="p">,</span> <span class="s1">&#39;C6&#39;</span><span class="p">]</span>
+<span class="n">n_channels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span>
+
+<span class="c1"># Generate 4 random datasets :</span>
+<span class="n">data_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_channels</span><span class="p">)</span>
+<span class="n">data_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_channels</span><span class="p">)</span>
+<span class="n">data_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_channels</span><span class="p">)</span>
+<span class="n">data_4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_channels</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;It is more save to define one dictionnary with all of the color properties</span>
+<span class="sd">and to use the same dictionnary across all topoplots.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cmap&#39;</span><span class="p">:</span> <span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="s1">&#39;clim&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.02</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">),</span> <span class="s1">&#39;vmin&#39;</span><span class="p">:</span> <span class="o">-.</span><span class="mi">81</span><span class="p">,</span>
+          <span class="s1">&#39;under&#39;</span><span class="p">:</span> <span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="s1">&#39;vmax&#39;</span><span class="p">:</span> <span class="o">.</span><span class="mi">85</span><span class="p">,</span> <span class="s1">&#39;over&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">}</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Create the (2, 2) topoplot grid with the random datasets. The colorbar is</span>
+<span class="sd">disabled for each one of those subplots.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">add_topoplot</span><span class="p">(</span><span class="s1">&#39;Topo_1&#39;</span><span class="p">,</span> <span class="n">data_1</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">add_topoplot</span><span class="p">(</span><span class="s1">&#39;Topo_2&#39;</span><span class="p">,</span> <span class="n">data_2</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">add_topoplot</span><span class="p">(</span><span class="s1">&#39;Topo_3&#39;</span><span class="p">,</span> <span class="n">data_3</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">add_topoplot</span><span class="p">(</span><span class="s1">&#39;Topo_4&#39;</span><span class="p">,</span> <span class="n">data_4</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Finally, add the shared colorbar. This colorbar is on the last column</span>
+<span class="sd">(col=2) and take all rows (row_span=2).</span>
+
+<span class="sd">The rect input is a tuple defined by (x_start, y_start, width, heigth). This</span>
+<span class="sd">variable can be used to :</span>
+<span class="sd">    * Translate the colorbar (using x_start and y_start) to be closer to the</span>
+<span class="sd">    subplots.</span>
+<span class="sd">    * Scale the colorbar to have a nice proportion between width and heigth.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">add_shared_colorbar</span><span class="p">(</span><span class="s1">&#39;Shared&#39;</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                      <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Shared colorbar&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="c1"># Show the window :</span>
+<span class="n">t</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/shared_colorbar.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">shared_colorbar.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/shared_colorbar.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">shared_colorbar.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="topoplot_plotting_properties.html" class="btn btn-neutral float-right" title="Plotting properties" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="grid_topoplot.html" class="btn btn-neutral" title="Basic topoplot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.3.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

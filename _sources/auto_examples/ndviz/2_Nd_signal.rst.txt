@@ -8,6 +8,9 @@ Plot multidimensional signals
 
 This example show how to display and control a ND signal.
 
+.. image:: ../../picture/picndviz/ex_nd_signals.png
+
+
 
 .. code-block:: python
 

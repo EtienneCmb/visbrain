@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.colorbar.colorbar &mdash; visbrain 0.3.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../colorbar.html">Colorbar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topo.html">Topo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.colorbar.colorbar</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.colorbar.colorbar</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Colorbar module.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtWidgets</span>
+
+<span class="kn">import</span> <span class="nn">vispy.app</span> <span class="k">as</span> <span class="nn">visapp</span>
+
+<span class="kn">from</span> <span class="nn">.uiInit</span> <span class="k">import</span> <span class="n">uiInit</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">CbarQt</span><span class="p">,</span> <span class="n">CbarBase</span><span class="p">,</span> <span class="n">CbarObjetcs</span>
+
+
+<div class="viewcode-block" id="Colorbar"><a class="viewcode-back" href="../../../colorbar.html#visbrain.colorbar.colorbar.Colorbar">[docs]</a><span class="k">class</span> <span class="nc">Colorbar</span><span class="p">(</span><span class="n">uiInit</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display a colorbar editor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config : string | None</span>
+<span class="sd">        Path to a configuration file.</span>
+<span class="sd">    cmap : string | inferno</span>
+<span class="sd">        Matplotlib colormap</span>
+<span class="sd">    clim : tuple/list | None</span>
+<span class="sd">        Limit of the colormap. The clim parameter must be a tuple / list</span>
+<span class="sd">        of two float number each one describing respectively the (min, max)</span>
+<span class="sd">        of the colormap. Every values under clim[0] or over clim[1] will</span>
+<span class="sd">        peaked.</span>
+<span class="sd">    vmin : float | None</span>
+<span class="sd">        Threshold from which every color will have the color defined using</span>
+<span class="sd">        the under parameter bellow.</span>
+<span class="sd">    under : tuple/string | &#39;gray&#39;</span>
+<span class="sd">        Matplotlib color for values under vmin.</span>
+<span class="sd">    vmax : float | None</span>
+<span class="sd">        Threshold from which every color will have the color defined using</span>
+<span class="sd">        the over parameter bellow.</span>
+<span class="sd">    over : tuple/string | &#39;red&#39;</span>
+<span class="sd">        Matplotlib color for values over vmax.</span>
+<span class="sd">    cblabel : string | &#39;&#39;</span>
+<span class="sd">        Colorbar label.</span>
+<span class="sd">    cbtxtsz : float | 26.</span>
+<span class="sd">        Text size of the colorbar label.</span>
+<span class="sd">    cbtxtsh : float | 2.3</span>
+<span class="sd">        Shift for the colorbar label.</span>
+<span class="sd">    txtcolor : string | &#39;white&#39;</span>
+<span class="sd">        Text color.</span>
+<span class="sd">    txtsz : float | 20.</span>
+<span class="sd">        Text size for clim/vmin/vmax text.</span>
+<span class="sd">    txtsh : float | 1.2</span>
+<span class="sd">        Shift for clim/vmin/vmax text.</span>
+<span class="sd">    border : bool | True</span>
+<span class="sd">        Display colorbar borders.</span>
+<span class="sd">    limtxt : bool | True</span>
+<span class="sd">        Display vmin/vmax text.</span>
+<span class="sd">    bgcolor : tuple/string | (.1, .1, .1)</span>
+<span class="sd">        Background color of the colorbar canvas.</span>
+<span class="sd">    ndigits : int | 2</span>
+<span class="sd">        Number of digits for the text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="c1"># Create the app and initialize all graphical elements :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+        <span class="c1"># Initialise GUI :</span>
+        <span class="n">uiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">cbobjs</span> <span class="o">=</span> <span class="n">CbarObjetcs</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">cbobjs</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">cbobjs</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">CbarBase</span><span class="p">(</span><span class="o">**</span><span class="n">i</span><span class="p">),</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;name&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+                <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Colorbar&#39;</span>
+            <span class="n">obj1</span> <span class="o">=</span> <span class="n">CbarBase</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">cbobjs</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj1</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span> <span class="o">=</span> <span class="n">CbarQt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">guiW</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vizW</span><span class="p">,</span> <span class="n">cbobjs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">_fcn_ChangeObj</span><span class="p">(</span><span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display the graphical user interface.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
+        <span class="n">visapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

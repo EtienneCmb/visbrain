@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Colorbar &mdash; visbrain 0.3.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="visbrain 0.3.0 documentation" href="index.html"/>
+        <link rel="next" title="Figure" href="figure.html"/>
+        <link rel="prev" title="Exporting your figures" href="vbexport.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Colorbar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-class">Main class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="topo.html">Topo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Colorbar</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/colorbar.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="colorbar">
+<span id="id1"></span><h1>Colorbar<a class="headerlink" href="#colorbar" title="Permalink to this headline">¶</a></h1>
+<p><em>Colorbar</em> is a GUI based module for colorbar control.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Colorbar</span>
+</pre></div>
+</div>
+<p>Visit this page for a set of <a class="reference external" href="http://visbrain.org/auto_examples/index.html#colorbar-examples">examples</a>.</p>
+<div class="figure align-center">
+<img alt="_images/ex_open_editor1.png" src="_images/ex_open_editor1.png" />
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="main-class">
+<h3>Main class<a class="headerlink" href="#main-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="visbrain.colorbar.colorbar.Colorbar">
+<em class="property">class </em><code class="descclassname">visbrain.colorbar.colorbar.</code><code class="descname">Colorbar</code><span class="sig-paren">(</span><em>config=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/colorbar/colorbar.html#Colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.colorbar.colorbar.Colorbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a colorbar editor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>config</strong> : string | None</p>
+<blockquote>
+<div><p>Path to a configuration file.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : string | inferno</p>
+<blockquote>
+<div><p>Matplotlib colormap</p>
+</div></blockquote>
+<p><strong>clim</strong> : tuple/list | None</p>
+<blockquote>
+<div><p>Limit of the colormap. The clim parameter must be a tuple / list
+of two float number each one describing respectively the (min, max)
+of the colormap. Every values under clim[0] or over clim[1] will
+peaked.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Threshold from which every color will have the color defined using
+the under parameter bellow.</p>
+</div></blockquote>
+<p><strong>under</strong> : tuple/string | ‘gray’</p>
+<blockquote>
+<div><p>Matplotlib color for values under vmin.</p>
+</div></blockquote>
+<p><strong>vmax</strong> : float | None</p>
+<blockquote>
+<div><p>Threshold from which every color will have the color defined using
+the over parameter bellow.</p>
+</div></blockquote>
+<p><strong>over</strong> : tuple/string | ‘red’</p>
+<blockquote>
+<div><p>Matplotlib color for values over vmax.</p>
+</div></blockquote>
+<p><strong>cblabel</strong> : string | ”</p>
+<blockquote>
+<div><p>Colorbar label.</p>
+</div></blockquote>
+<p><strong>cbtxtsz</strong> : float | 26.</p>
+<blockquote>
+<div><p>Text size of the colorbar label.</p>
+</div></blockquote>
+<p><strong>cbtxtsh</strong> : float | 2.3</p>
+<blockquote>
+<div><p>Shift for the colorbar label.</p>
+</div></blockquote>
+<p><strong>txtcolor</strong> : string | ‘white’</p>
+<blockquote>
+<div><p>Text color.</p>
+</div></blockquote>
+<p><strong>txtsz</strong> : float | 20.</p>
+<blockquote>
+<div><p>Text size for clim/vmin/vmax text.</p>
+</div></blockquote>
+<p><strong>txtsh</strong> : float | 1.2</p>
+<blockquote>
+<div><p>Shift for clim/vmin/vmax text.</p>
+</div></blockquote>
+<p><strong>border</strong> : bool | True</p>
+<blockquote>
+<div><p>Display colorbar borders.</p>
+</div></blockquote>
+<p><strong>limtxt</strong> : bool | True</p>
+<blockquote>
+<div><p>Display vmin/vmax text.</p>
+</div></blockquote>
+<p><strong>bgcolor</strong> : tuple/string | (.1, .1, .1)</p>
+<blockquote>
+<div><p>Background color of the colorbar canvas.</p>
+</div></blockquote>
+<p><strong>ndigits</strong> : int | 2</p>
+<blockquote class="last">
+<div><p>Number of digits for the text.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="figure.html" class="btn btn-neutral float-right" title="Figure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="vbexport.html" class="btn btn-neutral" title="Exporting your figures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.3.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

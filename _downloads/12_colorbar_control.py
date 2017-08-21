@@ -32,6 +32,8 @@ parameters to control each colorbar :
     * limtxt : Display vmin/vmax text.
     * bgcolor : Background color of the colorbar canvas.
     * ndigits : Number of digits for the text.
+
+.. image:: ../../picture/picbrain/ex_colorbar_control.png
 """
 from __future__ import print_function
 

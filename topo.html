@@ -1,0 +1,578 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Topo &mdash; visbrain 0.3.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="visbrain 0.3.0 documentation" href="index.html"/>
+        <link rel="next" title="Utils" href="utils.html"/>
+        <link rel="prev" title="Sleep" href="sleep.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Topo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-topo-class">Main Topo class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#add-topoplot">Add topoplot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#add-shared-colorbar-topoplot">Add shared colorbar topoplot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Topo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/topo.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="topo">
+<span id="id1"></span><h1>Topo<a class="headerlink" href="#topo" title="Permalink to this headline">¶</a></h1>
+<p><em>Topo</em> is a GUI based module for topographic representations.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Topo</span>
+</pre></div>
+</div>
+<p>Visit this page for a set of <a class="reference external" href="http://visbrain.org/auto_examples/index.html#topo-examples">examples</a>.</p>
+<div class="figure align-center">
+<img alt="_images/ex_topoplot_plotting_properties1.png" src="_images/ex_topoplot_plotting_properties1.png" />
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="main-topo-class">
+<h3>Main Topo class<a class="headerlink" href="#main-topo-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="visbrain.topo.topo.Topo">
+<em class="property">class </em><code class="descclassname">visbrain.topo.topo.</code><code class="descname">Topo</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/topo/topo.html#Topo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.topo.topo.Topo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="60%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>show()</strong></td>
+<td>Display the graphical user interface.</td>
+</tr>
+<tr class="row-even"><td><strong>quit()</strong></td>
+<td>Quit the interface.</td>
+</tr>
+<tr class="row-odd"><td><strong>add_topoplot()</strong></td>
+<td>Add a subplot embedded in a subplot.</td>
+</tr>
+<tr class="row-even"><td><strong>add_shared_colorbar()</strong></td>
+<td>Add a shared colorbar across subplots.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="add-topoplot">
+<h4>Add topoplot<a class="headerlink" href="#add-topoplot" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="visbrain.topo.topo.Topo.add_topoplot">
+<code class="descclassname">Topo.</code><code class="descname">add_topoplot</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz=None</em>, <em>channels=None</em>, <em>system=’cartesian’</em>, <em>unit=’degree’</em>, <em>title=None</em>, <em>title_color=’black’</em>, <em>title_size=5.0</em>, <em>line_color=’black’</em>, <em>line_width=2.0</em>, <em>chan_size=2.0</em>, <em>chan_offset=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>chan_mark_color=’white’</em>, <em>chan_mark_symbol=’disc’</em>, <em>chan_txt_color=’black’</em>, <em>bgcolor=’white’</em>, <em>cbar=True</em>, <em>cblabel=None</em>, <em>cb_txt_size=4.0</em>, <em>levels=None</em>, <em>level_colors=’white’</em>, <em>cmap=’viridis’</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>margin=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/topo/topo.html#Topo.add_topoplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.topo.topo.Topo.add_topoplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a subplot embedded in a subplot.</p>
+<p>For now, there’s two for using coordinates to define the subplot :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Using the xyz input (must either be in cartesian or spherical
+coordinate system)</li>
+<li>Using the channel input. The Topo class contains a list of
+existing channel names and will try to identify those in the
+channels variable.</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the topographic plot.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>Array of data of shape (n_channels,).</p>
+</div></blockquote>
+<p><strong>xyz</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of source’s coordinates.</p>
+</div></blockquote>
+<p><strong>channels</strong> : list | None</p>
+<blockquote>
+<div><p>List of channel names.</p>
+</div></blockquote>
+<p><strong>system</strong> : {‘cartesian’, ‘spherical’}</p>
+<blockquote>
+<div><p>Coordinate system.</p>
+</div></blockquote>
+<p><strong>unit</strong> : {‘degree’, ‘rad’}</p>
+<blockquote>
+<div><p>If system is ‘spherical’, specify if angles are in degrees or
+radians.</p>
+</div></blockquote>
+<p><strong>title</strong> : string | None</p>
+<blockquote>
+<div><p>Title of the topoplot.</p>
+</div></blockquote>
+<p><strong>title_color</strong> : array_like/string | ‘black’</p>
+<blockquote>
+<div><p>Color for the title.</p>
+</div></blockquote>
+<p><strong>title_size</strong> : float | 20.</p>
+<blockquote>
+<div><p>Size of the title.</p>
+</div></blockquote>
+<p><strong>line_color</strong> : array_like/string | ‘black’</p>
+<blockquote>
+<div><p>Color of lines for the head, nose and eras.</p>
+</div></blockquote>
+<p><strong>line_width</strong> : float | 4.</p>
+<blockquote>
+<div><p>Line width for the head, nose and eras.</p>
+</div></blockquote>
+<p><strong>chan_size</strong> : float | 12.</p>
+<blockquote>
+<div><p>Size of channel names text.</p>
+</div></blockquote>
+<p><strong>chan_mark_color</strong> : array_like/string | ‘white’</p>
+<blockquote>
+<div><p>Color of channel markers.</p>
+</div></blockquote>
+<p><strong>chan_mark_symbol</strong> : string | ‘disc’</p>
+<blockquote>
+<div><p>Symbol to use for markers. Use disc, arrow, ring, clobber, square,
+diamond, vbar, hbar, cross, tailed_arrow, x, triangle_up,
+triangle_down, and star.</p>
+</div></blockquote>
+<p><strong>chan_txt_color</strong> : array_like/string | ‘black’</p>
+<blockquote>
+<div><p>Color of channel names.</p>
+</div></blockquote>
+<p><strong>bgcolor</strong> : array_like/string | ‘white’</p>
+<blockquote>
+<div><p>Background color.</p>
+</div></blockquote>
+<p><strong>cbar</strong> : bool | True</p>
+<blockquote>
+<div><p>Attach a colorbar to the topoplot.</p>
+</div></blockquote>
+<p><strong>cblabel</strong> : string | None</p>
+<blockquote>
+<div><p>Colorbar label.</p>
+</div></blockquote>
+<p><strong>cb_txt_size</strong> : float | 16.</p>
+<blockquote>
+<div><p>Text size for the colorbar limits and label.</p>
+</div></blockquote>
+<p><strong>levels</strong> : array_like/int | None</p>
+<blockquote>
+<div><p>The levels at which the isocurve is constructed.</p>
+</div></blockquote>
+<p><strong>level_colors</strong> : string/array_like | ‘white’</p>
+<blockquote>
+<div><p>The color to use when drawing the line. If a list is given, it
+must be of shape (Nlev), if an array is given, it must be of
+shape (Nlev, …). and provide one color per level
+(rgba, colorname). By default, all levels are whites.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : string | None</p>
+<blockquote>
+<div><p>Matplotlib colormap (like ‘viridis’, ‘inferno’…).</p>
+</div></blockquote>
+<p><strong>clim</strong> : tuple/list | None</p>
+<blockquote>
+<div><p>Colorbar limit. Every values under / over clim will
+clip.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Every values under vmin will have the color defined
+using the under parameter.</p>
+</div></blockquote>
+<p><strong>vmax</strong> : float | None</p>
+<blockquote>
+<div><p>Every values over vmin will have the color defined
+using the over parameter.</p>
+</div></blockquote>
+<p><strong>under</strong> : tuple/string | None</p>
+<blockquote>
+<div><p>Matplotlib color under vmin.</p>
+</div></blockquote>
+<p><strong>over</strong> : tuple/string | None</p>
+<blockquote>
+<div><p>Matplotlib color over vmax.</p>
+</div></blockquote>
+<p><strong>row</strong> : int | 0</p>
+<blockquote>
+<div><p>The row in which to add the widget (0 is the topmost row)</p>
+</div></blockquote>
+<p><strong>col</strong> : int | 0</p>
+<blockquote>
+<div><p>The column in which to add the widget (0 is the leftmost column)</p>
+</div></blockquote>
+<p><strong>row_span</strong> : int | 1</p>
+<blockquote>
+<div><p>The number of rows to be occupied by the topoplot.</p>
+</div></blockquote>
+<p><strong>col_span</strong> : int | 1</p>
+<blockquote>
+<div><p>The number of columns to be occupied by the topoplot.</p>
+</div></blockquote>
+<p><strong>margin</strong> : float | .05</p>
+<blockquote class="last">
+<div><p>Margin percentage between the topoplot and the edge of the subplot.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="add-shared-colorbar-topoplot">
+<h4>Add shared colorbar topoplot<a class="headerlink" href="#add-shared-colorbar-topoplot" title="Permalink to this headline">¶</a></h4>
+<dl class="method">
+<dt id="visbrain.topo.topo.Topo.add_shared_colorbar">
+<code class="descclassname">Topo.</code><code class="descname">add_shared_colorbar</code><span class="sig-paren">(</span><em>name</em>, <em>cmap=’viridis’</em>, <em>clim=(0</em>, <em>1)</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under=’gray’</em>, <em>over=’red’</em>, <em>cblabel=”</em>, <em>cbtxtsz=5.0</em>, <em>cbtxtsh=2.3</em>, <em>txtcolor=’black’</em>, <em>txtsz=3.0</em>, <em>txtsh=1.2</em>, <em>width=0.17</em>, <em>border=True</em>, <em>bw=2.0</em>, <em>limtxt=True</em>, <em>bgcolor=’white’</em>, <em>ndigits=2</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>rect=(-1.2</em>, <em>-1.2</em>, <em>2.4</em>, <em>2.4)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/topo/topo.html#Topo.add_shared_colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.topo.topo.Topo.add_shared_colorbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a shared colorbar across subplots.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cmap</strong> : string | None</p>
+<blockquote>
+<div><p>Matplotlib colormap (like ‘viridis’, ‘inferno’…).</p>
+</div></blockquote>
+<p><strong>clim</strong> : tuple/list | None</p>
+<blockquote>
+<div><p>Colorbar limit. Every values under / over clim will
+clip.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Every values under vmin will have the color defined
+using the under parameter.</p>
+</div></blockquote>
+<p><strong>vmax</strong> : float | None</p>
+<blockquote>
+<div><p>Every values over vmin will have the color defined
+using the over parameter.</p>
+</div></blockquote>
+<p><strong>under</strong> : tuple/string | None</p>
+<blockquote>
+<div><p>Matplotlib color under vmin.</p>
+</div></blockquote>
+<p><strong>over</strong> : tuple/string | None</p>
+<blockquote>
+<div><p>Matplotlib color over vmax.</p>
+</div></blockquote>
+<p><strong>cblabel</strong> : string | ”</p>
+<blockquote>
+<div><p>Colorbar label.</p>
+</div></blockquote>
+<p><strong>cbtxtsz</strong> : float | 5..</p>
+<blockquote>
+<div><p>Text size of the colorbar label.</p>
+</div></blockquote>
+<p><strong>cbtxtsh</strong> : float | 2.3</p>
+<blockquote>
+<div><p>Shift for the colorbar label.</p>
+</div></blockquote>
+<p><strong>txtcolor</strong> : string | ‘white’</p>
+<blockquote>
+<div><p>Text color.</p>
+</div></blockquote>
+<p><strong>txtsz</strong> : float | 3.</p>
+<blockquote>
+<div><p>Text size for clim/vmin/vmax text.</p>
+</div></blockquote>
+<p><strong>txtsh</strong> : float | 1.2</p>
+<blockquote>
+<div><p>Shift for clim/vmin/vmax text.</p>
+</div></blockquote>
+<p><strong>border</strong> : bool | True</p>
+<blockquote>
+<div><p>Display colorbar borders.</p>
+</div></blockquote>
+<p><strong>bw</strong> : float | 2.</p>
+<blockquote>
+<div><p>Border width.</p>
+</div></blockquote>
+<p><strong>limtxt</strong> : bool | True</p>
+<blockquote>
+<div><p>Display vmin/vmax text.</p>
+</div></blockquote>
+<p><strong>bgcolor</strong> : tuple/string | (0., 0., 0.)</p>
+<blockquote>
+<div><p>Background color of the colorbar canvas.</p>
+</div></blockquote>
+<p><strong>ndigits</strong> : int | 2</p>
+<blockquote>
+<div><p>Number of digits for the text.</p>
+</div></blockquote>
+<p><strong>row</strong> : int | 0</p>
+<blockquote>
+<div><p>The row in which to add the widget (0 is the topmost row)</p>
+</div></blockquote>
+<p><strong>col</strong> : int | 0</p>
+<blockquote>
+<div><p>The column in which to add the widget (0 is the leftmost column)</p>
+</div></blockquote>
+<p><strong>row_span</strong> : int | 1</p>
+<blockquote>
+<div><p>The number of rows to be occupied by the topoplot.</p>
+</div></blockquote>
+<p><strong>col_span</strong> : int | 1</p>
+<blockquote>
+<div><p>The number of columns to be occupied by the topoplot.</p>
+</div></blockquote>
+<p><strong>rect</strong> : tuple | (-1.2, -1.2, 2.4, 2.4)</p>
+<blockquote class="last">
+<div><p>The 2-D area on the screen to display. The rect input describe
+(x_start, y_start, x_width, y_height). This variable can be used
+to translate or scale.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sleep.html" class="btn btn-neutral" title="Sleep" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.3.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

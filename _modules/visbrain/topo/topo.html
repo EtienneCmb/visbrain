@@ -1,0 +1,509 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.topo.topo &mdash; visbrain 0.3.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../brain.html">Brain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../colorbar.html">Colorbar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../topo.html">Topo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.topo.topo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.topo.topo</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Topo class for topographic representations.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sip</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtWidgets</span>
+
+<span class="kn">import</span> <span class="nn">vispy.app</span> <span class="k">as</span> <span class="nn">visapp</span>
+<span class="kn">import</span> <span class="nn">vispy.scene.cameras</span> <span class="k">as</span> <span class="nn">viscam</span>
+<span class="kn">from</span> <span class="nn">vispy.scene</span> <span class="k">import</span> <span class="n">Node</span>
+
+<span class="kn">from</span> <span class="nn">.UiInit</span> <span class="k">import</span> <span class="n">UiInit</span>
+<span class="kn">from</span> <span class="nn">.UiElements</span> <span class="k">import</span> <span class="n">UiElements</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">TopoPlot</span><span class="p">,</span> <span class="n">set_widget_size</span><span class="p">,</span> <span class="n">CbarVisual</span>
+
+<span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Topo&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Topo"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo">[docs]</a><span class="k">class</span> <span class="nc">Topo</span><span class="p">(</span><span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Pass.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    show()</span>
+<span class="sd">        Display the graphical user interface.</span>
+<span class="sd">    quit()</span>
+<span class="sd">        Quit the interface.</span>
+<span class="sd">    add_topoplot()</span>
+<span class="sd">        Add a subplot embedded in a subplot.</span>
+<span class="sd">    add_shared_colorbar()</span>
+<span class="sd">        Add a shared colorbar across subplots.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_topos</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_topoGrid</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># ====================== App creation ======================</span>
+        <span class="c1"># Create the app and initialize all graphical elements :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+        <span class="n">UiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">UiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">set_widget_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the object name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_topos</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the object name.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_topos</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="Topo.add_topoplot"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo.add_topoplot">[docs]</a>    <span class="k">def</span> <span class="nf">add_topoplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">system</span><span class="o">=</span><span class="s1">&#39;cartesian&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">title_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">title_size</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                     <span class="n">line_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">chan_size</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">chan_offset</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span>
+                     <span class="n">chan_mark_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">chan_mark_symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span>
+                     <span class="n">chan_txt_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">cblabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cb_txt_size</span><span class="o">=</span><span class="mf">4.</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">level_colors</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                     <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col_span</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">margin</span><span class="o">=.</span><span class="mi">05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a subplot embedded in a subplot.</span>
+
+<span class="sd">        For now, there&#39;s two for using coordinates to define the subplot :</span>
+
+<span class="sd">            * Using the xyz input (must either be in cartesian or spherical</span>
+<span class="sd">              coordinate system)</span>
+<span class="sd">            * Using the channel input. The Topo class contains a list of</span>
+<span class="sd">              existing channel names and will try to identify those in the</span>
+<span class="sd">              channels variable.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : string</span>
+<span class="sd">            Name of the topographic plot.</span>
+<span class="sd">        data : array_like</span>
+<span class="sd">            Array of data of shape (n_channels,).</span>
+<span class="sd">        xyz : array_like | None</span>
+<span class="sd">            Array of source&#39;s coordinates.</span>
+<span class="sd">        channels : list | None</span>
+<span class="sd">            List of channel names.</span>
+<span class="sd">        system : {&#39;cartesian&#39;, &#39;spherical&#39;}</span>
+<span class="sd">            Coordinate system.</span>
+<span class="sd">        unit : {&#39;degree&#39;, &#39;rad&#39;}</span>
+<span class="sd">            If system is &#39;spherical&#39;, specify if angles are in degrees or</span>
+<span class="sd">            radians.</span>
+<span class="sd">        title : string | None</span>
+<span class="sd">            Title of the topoplot.</span>
+<span class="sd">        title_color : array_like/string | &#39;black&#39;</span>
+<span class="sd">            Color for the title.</span>
+<span class="sd">        title_size : float | 20.</span>
+<span class="sd">            Size of the title.</span>
+<span class="sd">        line_color : array_like/string | &#39;black&#39;</span>
+<span class="sd">            Color of lines for the head, nose and eras.</span>
+<span class="sd">        line_width : float | 4.</span>
+<span class="sd">            Line width for the head, nose and eras.</span>
+<span class="sd">        chan_size : float | 12.</span>
+<span class="sd">            Size of channel names text.</span>
+<span class="sd">        chan_mark_color : array_like/string | &#39;white&#39;</span>
+<span class="sd">            Color of channel markers.</span>
+<span class="sd">        chan_mark_symbol : string | &#39;disc&#39;</span>
+<span class="sd">            Symbol to use for markers. Use disc, arrow, ring, clobber, square,</span>
+<span class="sd">            diamond, vbar, hbar, cross, tailed_arrow, x, triangle_up,</span>
+<span class="sd">            triangle_down, and star.</span>
+<span class="sd">        chan_txt_color : array_like/string | &#39;black&#39;</span>
+<span class="sd">            Color of channel names.</span>
+<span class="sd">        bgcolor : array_like/string | &#39;white&#39;</span>
+<span class="sd">            Background color.</span>
+<span class="sd">        cbar : bool | True</span>
+<span class="sd">            Attach a colorbar to the topoplot.</span>
+<span class="sd">        cblabel : string | None</span>
+<span class="sd">            Colorbar label.</span>
+<span class="sd">        cb_txt_size : float | 16.</span>
+<span class="sd">            Text size for the colorbar limits and label.</span>
+<span class="sd">        levels : array_like/int | None</span>
+<span class="sd">            The levels at which the isocurve is constructed.</span>
+<span class="sd">        level_colors : string/array_like | &#39;white&#39;</span>
+<span class="sd">            The color to use when drawing the line. If a list is given, it</span>
+<span class="sd">            must be of shape (Nlev), if an array is given, it must be of</span>
+<span class="sd">            shape (Nlev, ...). and provide one color per level</span>
+<span class="sd">            (rgba, colorname). By default, all levels are whites.</span>
+<span class="sd">        cmap : string | None</span>
+<span class="sd">            Matplotlib colormap (like &#39;viridis&#39;, &#39;inferno&#39;...).</span>
+<span class="sd">        clim : tuple/list | None</span>
+<span class="sd">            Colorbar limit. Every values under / over clim will</span>
+<span class="sd">            clip.</span>
+<span class="sd">        vmin : float | None</span>
+<span class="sd">            Every values under vmin will have the color defined</span>
+<span class="sd">            using the under parameter.</span>
+<span class="sd">        vmax : float | None</span>
+<span class="sd">            Every values over vmin will have the color defined</span>
+<span class="sd">            using the over parameter.</span>
+<span class="sd">        under : tuple/string | None</span>
+<span class="sd">            Matplotlib color under vmin.</span>
+<span class="sd">        over : tuple/string | None</span>
+<span class="sd">            Matplotlib color over vmax.</span>
+<span class="sd">        row : int | 0</span>
+<span class="sd">            The row in which to add the widget (0 is the topmost row)</span>
+<span class="sd">        col : int | 0</span>
+<span class="sd">            The column in which to add the widget (0 is the leftmost column)</span>
+<span class="sd">        row_span : int | 1</span>
+<span class="sd">            The number of rows to be occupied by the topoplot.</span>
+<span class="sd">        col_span : int | 1</span>
+<span class="sd">            The number of columns to be occupied by the topoplot.</span>
+<span class="sd">        margin : float | .05</span>
+<span class="sd">            Margin percentage between the topoplot and the edge of the subplot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check if name is avaible :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_name_for</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;topoplot&#39;</span><span class="p">)</span>
+        <span class="c1"># Create the topoplot and set the data :</span>
+        <span class="n">topo</span> <span class="o">=</span> <span class="n">TopoPlot</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">title_color</span><span class="p">,</span>
+                        <span class="n">title_size</span><span class="p">,</span> <span class="n">line_color</span><span class="p">,</span> <span class="n">line_width</span><span class="p">,</span> <span class="n">chan_size</span><span class="p">,</span>
+                        <span class="n">chan_offset</span><span class="p">,</span> <span class="n">chan_mark_color</span><span class="p">,</span> <span class="n">chan_mark_symbol</span><span class="p">,</span>
+                        <span class="n">chan_txt_color</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">,</span> <span class="n">cbar</span><span class="p">,</span> <span class="n">cb_txt_size</span><span class="p">,</span>
+                        <span class="n">margin</span><span class="p">)</span>
+        <span class="n">topo</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">levels</span><span class="p">,</span> <span class="n">level_colors</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span>
+                      <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">,</span> <span class="n">cblabel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">topo</span>
+        <span class="c1"># Create a PanZoom camera :</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">aspect</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="n">topo</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
+        <span class="n">cam</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
+        <span class="c1"># Create a subplot and add the camera :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_topoGrid</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">add_view</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">row_span</span><span class="p">,</span>
+                                                   <span class="n">col_span</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span>
+                                                   <span class="n">camera</span><span class="o">=</span><span class="n">cam</span><span class="p">)</span>
+        <span class="c1"># Add the topoplot to the subplot :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_topoGrid</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Topo.add_shared_colorbar"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo.add_shared_colorbar">[docs]</a>    <span class="k">def</span> <span class="nf">add_shared_colorbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                            <span class="n">cbtxtsz</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">cbtxtsh</span><span class="o">=</span><span class="mf">2.3</span><span class="p">,</span> <span class="n">txtcolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                            <span class="n">txtsz</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">txtsh</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">17</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+                            <span class="n">limtxt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col_span</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Add a shared colorbar across subplots.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cmap : string | None</span>
+<span class="sd">            Matplotlib colormap (like &#39;viridis&#39;, &#39;inferno&#39;...).</span>
+<span class="sd">        clim : tuple/list | None</span>
+<span class="sd">            Colorbar limit. Every values under / over clim will</span>
+<span class="sd">            clip.</span>
+<span class="sd">        vmin : float | None</span>
+<span class="sd">            Every values under vmin will have the color defined</span>
+<span class="sd">            using the under parameter.</span>
+<span class="sd">        vmax : float | None</span>
+<span class="sd">            Every values over vmin will have the color defined</span>
+<span class="sd">            using the over parameter.</span>
+<span class="sd">        under : tuple/string | None</span>
+<span class="sd">            Matplotlib color under vmin.</span>
+<span class="sd">        over : tuple/string | None</span>
+<span class="sd">            Matplotlib color over vmax.</span>
+<span class="sd">        cblabel : string | &#39;&#39;</span>
+<span class="sd">            Colorbar label.</span>
+<span class="sd">        cbtxtsz : float | 5..</span>
+<span class="sd">            Text size of the colorbar label.</span>
+<span class="sd">        cbtxtsh : float | 2.3</span>
+<span class="sd">            Shift for the colorbar label.</span>
+<span class="sd">        txtcolor : string | &#39;white&#39;</span>
+<span class="sd">            Text color.</span>
+<span class="sd">        txtsz : float | 3.</span>
+<span class="sd">            Text size for clim/vmin/vmax text.</span>
+<span class="sd">        txtsh : float | 1.2</span>
+<span class="sd">            Shift for clim/vmin/vmax text.</span>
+<span class="sd">        border : bool | True</span>
+<span class="sd">            Display colorbar borders.</span>
+<span class="sd">        bw : float | 2.</span>
+<span class="sd">            Border width.</span>
+<span class="sd">        limtxt : bool | True</span>
+<span class="sd">            Display vmin/vmax text.</span>
+<span class="sd">        bgcolor : tuple/string | (0., 0., 0.)</span>
+<span class="sd">            Background color of the colorbar canvas.</span>
+<span class="sd">        ndigits : int | 2</span>
+<span class="sd">            Number of digits for the text.</span>
+<span class="sd">        row : int | 0</span>
+<span class="sd">            The row in which to add the widget (0 is the topmost row)</span>
+<span class="sd">        col : int | 0</span>
+<span class="sd">            The column in which to add the widget (0 is the leftmost column)</span>
+<span class="sd">        row_span : int | 1</span>
+<span class="sd">            The number of rows to be occupied by the topoplot.</span>
+<span class="sd">        col_span : int | 1</span>
+<span class="sd">            The number of columns to be occupied by the topoplot.</span>
+<span class="sd">        rect : tuple | (-1.2, -1.2, 2.4, 2.4)</span>
+<span class="sd">            The 2-D area on the screen to display. The rect input describe</span>
+<span class="sd">            (x_start, y_start, x_width, y_height). This variable can be used</span>
+<span class="sd">            to translate or scale.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check if name is avaible :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_name_for</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;colorbar&#39;</span><span class="p">)</span>
+        <span class="c1"># Create a PanZoom camera :</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="n">rect</span><span class="p">)</span>
+        <span class="n">cam</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
+        <span class="c1"># Create a subplot and add the camera :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_topoGrid</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">add_view</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">row_span</span><span class="p">,</span>
+                                                   <span class="n">col_span</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span>
+                                                   <span class="n">camera</span><span class="o">=</span><span class="n">cam</span><span class="p">)</span>
+        <span class="c1"># Get if vmin and vmax exist :</span>
+        <span class="n">isvmin</span><span class="p">,</span> <span class="n">isvmax</span> <span class="o">=</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="c1"># Create a colorbar object :</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">CbarVisual</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">isvmin</span><span class="o">=</span><span class="n">isvmin</span><span class="p">,</span>
+                          <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">isvmax</span><span class="o">=</span><span class="n">isvmax</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="n">over</span><span class="p">,</span>
+                          <span class="n">cblabel</span><span class="o">=</span><span class="n">cblabel</span><span class="p">,</span> <span class="n">cbtxtsz</span><span class="o">=</span><span class="n">cbtxtsz</span><span class="p">,</span> <span class="n">cbtxtsh</span><span class="o">=</span><span class="n">cbtxtsh</span><span class="p">,</span>
+                          <span class="n">txtcolor</span><span class="o">=</span><span class="n">txtcolor</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="n">txtsz</span><span class="p">,</span> <span class="n">txtsh</span><span class="o">=</span><span class="n">txtsh</span><span class="p">,</span>
+                          <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="n">border</span><span class="p">,</span> <span class="n">bw</span><span class="o">=</span><span class="n">bw</span><span class="p">,</span> <span class="n">limtxt</span><span class="o">=</span><span class="n">limtxt</span><span class="p">,</span>
+                          <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="n">ndigits</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cbar</span>
+        <span class="c1"># Add the colorbar to the subplot :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_topoGrid</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_check_name_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">use</span><span class="o">=</span><span class="s1">&#39;topoplot&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if the object name already exist.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;name must be a string describing the name of the&quot;</span>
+                             <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">use</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_topos</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;&#39; already exist. Use a different&quot;</span>
+                             <span class="s2">&quot; name for this &quot;</span> <span class="o">+</span> <span class="n">use</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display the graphical user interface.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
+        <span class="n">visapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

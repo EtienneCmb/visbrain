@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Load a BrainVision file &mdash; visbrain 0.2.9 documentation</title>
+  <title>Load a BrainVision file &mdash; visbrain 0.3.0 documentation</title>
   
 
   
@@ -39,10 +39,10 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.2.9 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.0 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
-        <link rel="next" title="Load ELAN files" href="load_elan.html"/>
-        <link rel="prev" title="Plot multidimensional signals" href="../ndviz/2_Nd_signal.html"/> 
+        <link rel="next" title="Load EDF file" href="load_edf.html"/>
+        <link rel="prev" title="Configure the uni and multi-dimensional plot" href="../ndviz/3_just_for_fun.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.2.9
+                0.3.0
               </div>
             
           
@@ -100,9 +100,11 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../brain.html">Brain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../colorbar.html">Colorbar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topo.html">Topo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../io.html">I/O</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
@@ -112,12 +114,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#ndviz-examples">Ndviz Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Load a BrainVision file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="load_elan.html">Load ELAN files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="load_edf.html">Load EDF file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="load_usingMNE.html">Load a file using MNE-python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="load_elan.html">Load ELAN files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="load_matlab.html">Load a Matlab file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="load_usingMNE.html">Load a file using MNE-python</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#topoplot-examples">Topoplot Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog_futur.html">Changelog and future directions</a></li>
@@ -191,6 +194,7 @@
 <p>This example demonstrate how to load a BrainVision file.</p>
 <p>Required dataset at :
 <a class="reference external" href="https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing">https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing</a></p>
+<img alt="../../_images/ex_LoadBrainVision.png" src="../../_images/ex_LoadBrainVision.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 
 <span class="n">Sleep</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="s1">&#39;sub-02.eeg&#39;</span><span class="p">,</span> <span class="n">hypno_file</span><span class="o">=</span><span class="s1">&#39;sub-02.hyp&#39;</span><span class="p">,</span>
@@ -217,10 +221,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="load_elan.html" class="btn btn-neutral float-right" title="Load ELAN files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="load_edf.html" class="btn btn-neutral float-right" title="Load EDF file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../ndviz/2_Nd_signal.html" class="btn btn-neutral" title="Plot multidimensional signals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../ndviz/3_just_for_fun.html" class="btn btn-neutral" title="Configure the uni and multi-dimensional plot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -251,7 +255,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.2.9',
+            VERSION:'0.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -9,6 +9,8 @@ Connect deep sources
 Display and customize connectivity. To this end, we define some deep sources
 and connect them.
 
+.. image:: ../../picture/picbrain/ex_connectivity.png
+
 
 
 .. code-block:: python

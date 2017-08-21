@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configure the uni and multi-dimensional plot &mdash; visbrain 0.2.9 documentation</title>
+  <title>Configure the uni and multi-dimensional plot &mdash; visbrain 0.3.0 documentation</title>
   
 
   
@@ -39,10 +39,10 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.2.9 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.0 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
-        <link rel="next" title="Plot 2D signal" href="1_2d_signal.html"/>
-        <link rel="prev" title="Generate pictures" href="../figure/0_GeneratePictures.html"/> 
+        <link rel="next" title="Load a BrainVision file" href="../sleep/load_BrainVision.html"/>
+        <link rel="prev" title="Plot multidimensional signals" href="2_Nd_signal.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.2.9
+                0.3.0
               </div>
             
           
@@ -100,9 +100,11 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../brain.html">Brain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../colorbar.html">Colorbar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../topo.html">Topo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../io.html">I/O</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
@@ -110,13 +112,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#ndviz-examples">Ndviz Examples</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Configure the uni and multi-dimensional plot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="1_2d_signal.html">Plot 2D signal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="0_basic_1d_signal.html">Plot a 1d signal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="1_2d_signal.html">Plot 2D signal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="2_Nd_signal.html">Plot multidimensional signals</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Configure the uni and multi-dimensional plot</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#topoplot-examples">Topoplot Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog_futur.html">Changelog and future directions</a></li>
@@ -188,6 +191,7 @@
   <div class="section" id="configure-the-uni-and-multi-dimensional-plot">
 <span id="sphx-glr-auto-examples-ndviz-3-just-for-fun-py"></span><h1>Configure the uni and multi-dimensional plot<a class="headerlink" href="#configure-the-uni-and-multi-dimensional-plot" title="Permalink to this headline">¶</a></h1>
 <p>This example show how to display and control a ND signal.</p>
+<img alt="../../_images/ex_just_for_fun.png" src="../../_images/ex_just_for_fun.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Ndviz</span>
 
@@ -244,10 +248,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="1_2d_signal.html" class="btn btn-neutral float-right" title="Plot 2D signal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../sleep/load_BrainVision.html" class="btn btn-neutral float-right" title="Load a BrainVision file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../figure/0_GeneratePictures.html" class="btn btn-neutral" title="Generate pictures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="2_Nd_signal.html" class="btn btn-neutral" title="Plot multidimensional signals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -278,7 +282,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.2.9',
+            VERSION:'0.3.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
