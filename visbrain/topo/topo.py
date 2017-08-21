@@ -13,6 +13,8 @@ from ..utils import TopoPlot, set_widget_size, CbarVisual
 
 sip.setdestroyonexit(False)
 
+__all__ = ('Topo')
+
 
 class Topo(UiInit, UiElements):
     """Pass.
@@ -68,10 +70,10 @@ class Topo(UiInit, UiElements):
         For now, there's two for using coordinates to define the subplot :
 
             * Using the xyz input (must either be in cartesian or spherical
-            coordinate system)
+              coordinate system)
             * Using the channel input. The Topo class contains a list of
-            existing channel names and will try to identify those in the
-            channels variable.
+              existing channel names and will try to identify those in the
+              channels variable.
 
         Parameters
         ----------
@@ -235,13 +237,13 @@ class Topo(UiInit, UiElements):
         self._check_name_for(name, 'colorbar')
         # Create a PanZoom camera :
         cam = viscam.PanZoomCamera(rect=rect)
+        cam.set_default_state()
         # Create a subplot and add the camera :
         self._topoGrid[name] = self._grid.add_view(row, col, row_span,
                                                    col_span, bgcolor=bgcolor,
                                                    camera=cam)
         # Get if vmin and vmax exist :
-        isvmin = vmin is not None
-        isvmax = vmax is not None
+        isvmin, isvmax = vmin is not None, vmax is not None
         # Create a colorbar object :
         parent = Node(name=name)
         cbar = CbarVisual(cmap=cmap, clim=clim, vmin=vmin, isvmin=isvmin,
