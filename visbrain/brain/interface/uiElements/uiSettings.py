@@ -94,7 +94,7 @@ class uiSettings(object):
     def _fcn_openDoc(self):
         """Open documentation."""
         import webbrowser
-        webbrowser.open('http://etiennecmb.github.io/visbrain/brain.html')
+        webbrowser.open('http://visbrain.org/brain.html')
 
     def _fcn_tab_changed(self):
         """Executed function when the user change the tab."""
