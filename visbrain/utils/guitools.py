@@ -426,83 +426,11 @@ def set_widget_size(app, widget, width=100., height=100.):
         raise ValueError("The width parameter must be 0 < width <= 100")
     if not 0. < height <= 100.:
         raise ValueError("The height parameter must be 0 < height <= 100")
-    # Get scren resolution :
-    s_resolution = app.desktop().screenGeometry()
-    s_width, s_height = s_resolution.width(), s_resolution.height()
+    # Get scren (width, height) :
+    s_width, s_height = get_screen_size(app)
     # Convert (width, height) into pixels :
     s_width = np.around(s_width * width / 100)
     s_height = np.around(s_height * height / 100)
     # Set maximum size to the widget :
     size = QtCore.QSize(s_width, s_height)
     widget.setMaximumSize(size)
-
-
-class GuideLines(object):
-    """Display GUI guidelines for screenshot.
-
-    Parameters
-    ----------
-    size : tuple
-        Size of the canvas.
-    parent : vispy | None
-        The guide lines parent.
-    camrange : dict | None
-        Dictionary with the camera range.
-    """
-
-    def __init__(self, size, parent=None, color='#ab4642', camrange=None):
-        """Init."""
-        raise NotImplementedError()
-        self.size = size
-        self.range = camrange
-        self.xm, self.xM = self.range['x'][0], self.range['x'][1]
-        self.ym, self.yM = self.range['y'][0], self.range['y'][1]
-        # Create line object :
-        # pos = np.zeros((2, 2), dtype=np.float32)
-        pos = np.random.rand(100, 3)
-        self.mesh = visuals.Line(pos=pos, parent=parent, connect='segments',
-                                 color=color)
-        self.mesh.visible = False
-
-    def set_data(self, crop=None):
-        """"""
-        self.xm, self.xM = self.range['x'][0], self.range['x'][1]
-        self.ym, self.yM = self.range['y'][0], self.range['y'][1]
-        # Get range :
-        # crop = (0, 0, self.size[0], self.size[1])
-        # Convert each value :
-        cropXY = self._convert(crop[0], crop[1])
-        cropHW = self._convert(crop[0] + crop[2], crop[1] + crop[3])
-        # # Build segment :
-        # segment = np.zeros((8, 3), dtype=np.float32)
-        # segment[0, :] = (cropXY[0], cropXY[1], 0.)
-        # segment[1, :] = (cropXY[0], cropHW[1], 0.)
-        # segment[2, :] = (cropXY[0], cropHW[1], 0.)
-        # segment[3, :] = (cropHW[0], cropHW[1], 0.)
-        # segment[4, :] = (cropHW[0], cropHW[1], 0.)
-        # segment[5, :] = (cropHW[0], cropXY[1], 0.)
-        # segment[6, :] = (cropHW[0], cropXY[1], 0.)
-        # segment[7, :] = (cropXY[0], cropXY[1], 0.)
-        segment = np.array([
-                           [-154., -100., 0.],
-                           [154., 100., 0.]
-                           ])
-        self.mesh.set_data(pos=segment)
-
-    def _convert(self, x, y):
-        xc = self.xm + ((self.xM - self.xm) * x / self.size[0])
-        yc = self.ym + ((self.yM - self.ym) * y / self.size[1])
-        return xc, yc
-
-    # ----------- RANGE -----------
-    @property
-    def range(self):
-        """Get the range value."""
-        return self._range
-
-    @range.setter
-    def range(self, value):
-        """Set range value."""
-        self._range = value
-        self.xm, self.xM = self.range['x'][0], self.range['x'][1]
-        self.ym, self.yM = self.range['y'][0], self.range['y'][1]
