@@ -5,6 +5,7 @@
 - write_fig_pyqt : Export a GUI window as a figure
 """
 import numpy as np
+from ..utils.color import color2vb
 
 
 __all__ = ('write_fig_hyp', 'write_fig_canvas', 'write_fig_pyqt')
@@ -127,8 +128,9 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
     plt.savefig(file, format='png', dpi=600, bbox_inches='tight')
 
 
-def write_fig_canvas(filename, canvas, resolution=3000, autocrop=False,
-                     region=None):
+def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
+                     region=None, print_size=None, unit='centimeter', dpi=300.,
+                     factor=1., bgcolor=None, transparent=False):
     """Export a canvas as a figure.
 
     Parameters
@@ -137,40 +139,115 @@ def write_fig_canvas(filename, canvas, resolution=3000, autocrop=False,
         Name of the figure to export.
     canvas : VisPy canvas
         The vispy canvas to export.
-    resolution : int | 3000
-        Coefficient to multiply the size of the canvas.
+    widget : PyQt widget | None
+        The widget parent of the canvas.
     autocrop : bool | False
         Auto-cropping argument to remove useless space.
     region : tuple/list | None
-        The region to export.
+        The region to export (x_start, y_start, width, height).
+    print_size : tuple | None
+        The desired print size. This argument should be used in association
+        with the dpi and unit inputs. print_size describe should be a tuple
+        of two floats describing (width, height) of the exported image for
+        a specific dpi level. The final image might not have the exact
+        desired size but will try instead to find a compromize
+        regarding to the proportion of width/height of the original image.
+    unit : {'centimeter', 'millimeter', 'pixel', 'inch'}
+        Unit of the printed size.
+    dpi : float | 300.
+        Dots per inch for printing the image.
+    factor : float | None
+        If you don't want to use the print_size input, factor simply
+        multiply the resolution of your screen.
+    bgcolor : array_like/string | None
+        Background color of the canvas.
+    transparent : bool | False
+        Use transparent background.
     """
     from ..utils import piccrop
-    import vispy
+    from vispy.io import imsave
 
-    # Manage size exportation. The dpi option present when creating a
-    # vispy canvas doesn't seems to work. The trick bellow increase the
-    # physical size of the canvas so that the exported figure has a
-    # high-definition :
-    # Get a copy of the actual canvas physical size :
-    backp_size = canvas.physical_size
+    # Get the size of the canvas and backend :
+    c_size = canvas.size
+    b_size = canvas._backend._physical_size
 
-    # Increase the physical size :
-    ratio = max((2 * resolution) / backp_size[0], resolution / backp_size[1])
-    new_size = (int(backp_size[0] * ratio), int(backp_size[1] * ratio))
-    canvas._backend._physical_size = new_size
+    # If the GUI is displayed, c_size and b_size should be equals. If not,
+    # and if the canvas is resizable, the canvas might have a different size
+    # because it hasn't been updated. In that case, we force the canvas to have
+    # the same size as the backend :
+    if c_size != b_size:
+        canvas.size = b_size
 
-    # Render and save :
-    if region is not None:
-        kwargs = {'region': region}
-    else:
-        kwargs = {'size': new_size}
-    img = canvas.render(**kwargs)
+    # Backup size / background color :
+    backup_size = canvas.physical_size
+    backup_bgcolor = canvas.bgcolor
+
+    # User select a desired print size with at a specific dpi :
+    if print_size is not None:
+        # Type checking :
+        if not isinstance(print_size, (tuple, list, np.ndarray)):
+            raise TypeError("The print_size must either be a tuple, list or a "
+                            "NumPy array describing the (width, height) of the"
+                            " image in " + unit)
+        # Check print size :
+        if not all([isinstance(k, (int, float)) for k in print_size]):
+            raise TypeError("print_size must be a tuple describing the "
+                            "(width, height) of the image in " + unit)
+        print_size = np.asarray(print_size)
+        # If the user select the auto-croping option, the canvas must be render
+        # before :
+        if autocrop:
+            img = canvas.render()
+            s_output = piccrop(img)[:, :, 0].shape
+        else:
+            s_output = b_size
+        # Unit conversion :
+        if unit == 'millimeter':
+            mult = 1. / (10. * 2.54)
+        elif unit == 'centimeter':
+            mult = 1. / 2.54
+        elif unit == 'pixel':
+            mult = 1. / dpi
+        elif unit == 'inch':
+            mult = 1.
+        else:
+            raise ValueError("The unit must either be 'millimeter', "
+                             "'centimeter', 'pixel' or 'inch' and not " + unit)
+        # Get the factor to apply to the canvas size. This factor is defined as
+        # the mean required float to get either the desired width/height.
+        # Note that the min or the max can also be used instead.
+        factor = np.mean(print_size * dpi * mult / np.asarray(s_output))
+
+    # Multply the original canvas size :
+    if factor is not None:
+        # Get the new width and height :
+        new_width = int(b_size[0] * factor)
+        new_height = int(b_size[1] * factor)
+        # Set it to the canvas, backend and the widget :
+        canvas._backend._vispy_set_physical_size(new_width, new_height)
+        canvas.size = (new_width, new_height)
+        if widget is not None:
+            widget.size = (new_width, new_height)
+
+    # Background color and transparency :
+    if bgcolor is not None:
+        canvas.bgcolor = color2vb(bgcolor)
+    if transparent:
+        canvas.bgcolor = [0.] * 4
+
+    # Render the canvas :
+    img = canvas.render(region=region)
+
+    # Apply auto-cropping to the image :
     if autocrop:
         img = piccrop(img)
-    vispy.io.imsave(filename, img)
+    # Save it :
+    imsave(filename, img)
 
     # Set to the canvas it's previous size :
-    canvas._backend._physical_size = backp_size
+    canvas._backend._physical_size = backup_size
+    canvas.size = backup_size
+    canvas.bgcolor = backup_bgcolor
 
 
 def write_fig_pyqt(self, filename):
