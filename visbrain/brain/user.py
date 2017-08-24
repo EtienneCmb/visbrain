@@ -15,7 +15,7 @@ from .base.TimeSeriesBase import TimeSeriesBase
 from .base.PicBase import PicBase
 from ..utils import (color2vb, AddMesh, extend_combo_list, safely_set_cbox,
                      get_combo_list_index, safely_set_spin, safely_set_slider)
-from ..io import save_config_json
+from ..io import save_config_json, write_fig_canvas
 
 __all__ = ('BrainUserMethods')
 
@@ -100,115 +100,91 @@ class BrainUserMethods(object):
         bckcolor = color2vb(color).ravel()[0:-1]
         self.view.canvas.bgcolor = bckcolor
 
-    def screenshot(self, name, region=None, zoom=None, colorbar=False,
-                   cbzoom=None, transparent=False, resolution=3000.,
-                   autocrop=False):
-        """Take a screenshot of the current scene and save it as a picture.
+    def screenshot(self, saveas, canvas='main', print_size=None, dpi=300.,
+                   unit='centimeter', factor=None, region=None, autocrop=False,
+                   bgcolor=None, transparent=False):
+        """Take a screeshot of the selected canvas.
 
-        This method try to make a high-fidelity screenshot of your scene.
-        One thing to keep in mind, is that printed picture using a transparent
-        compatible extension (like .png files) produces transparent pictures.
-        This might be quit disturbing especially using internal light
-        reflection. To solve this in your pictures, I recommand putting your
-        transparent brain picture onto a dark background (like black) and see
-        the magic happend. If you want perfectly fitting pictures, just turn
-        the autocrop parameter to True.
-        This method requires imageio or PIL (pip install pillow).
+        By default, the rendered canvas will have the size of your screen.
+        The screenshot() method provides two ways to increase to exported image
+        resolution :
+
+            * Using print_size, unit and dpi inputs : specify the size of the
+              image at a specific dpi level. For example, you might want to
+              have an (10cm, 15cm) image at 300 dpi.
+            * Using the factor input : multiply the default image size by this
+              factor. For example, if you have a (1920, 1080) monitor and if
+              factor is 2, the exported image should have a shape of
+              (3840, 2160) pixels.
 
         Parameters
         ----------
-        name : str
+        saveas : str
             The name of the file to be saved. This file must contains a
             extension like .png, .tiff, .jpg...
+        canvas : {'main', 'colorbar', 'cross-sections'}
+            The name of the canvas to render. Use 'main' to select the main
+            canvas where the brain is displayed. Use 'colorbar' to render the
+            colorbar or 'cross-sections' to render the cross-sections panel
+            (in splitted view).
+        print_size : tuple | None
+            The desired print size. This argument should be used in association
+            with the dpi and unit inputs. print_size describe should be a tuple
+            of two floats describing (width, height) of the exported image for
+            a specific dpi level. The final image might not have the exact
+            desired size but will try instead to find a compromize
+            regarding to the proportion of width/height of the original image.
+        dpi : float | 300.
+            Dots per inch for printing the image.
+        unit : {'centimeter', 'millimeter', 'pixel', 'inch'}
+            Unit of the printed size.
+        factor : float | None
+            If you don't want to use the print_size input, factor simply
+            multiply the resolution of your screen.
         region : tuple | None
-            Crop the exported picture to a specified region. Must be a
-            tuple of four integers where each one describe the region as
-            (x_start, y_start, width, height) where x_start is where
-            to start along the horizontal axis and y_start where to start
-            along the vertical axis. By default, the entire canvas is
-            rendered.
+            Select a specific region. Must be a tuple of four integers each one
+            describing (x_start, y_start, width, height).
         autocrop : bool | False
             Automaticaly crop the figure in order to have the smallest
             space between the brain and the border of the picture.
-        zoom : float | None
-            Define the zoom level over the main canvas.
-        colorbar : bool | False
-            Specify if the colorbar has to be exported too.
-        cbzoom : float | None
-            Define the zoom level over the colorbar canvas.
+        bgcolor : array_like/string | None
+            The background color of the image.
         transparent : bool | False
             Specify if the exported figure have to contains a transparent
             background.
-        resolution : float | 3000
-            Define the screenshot resolution by indicating the number of
-            times the definition of your screen must be multiplied.
 
         Examples
         --------
         >>> # Define a Brain instance :
         >>> vb = Brain()
-        >>> # Define the filename and the cropped region :
-        >>> filename, crop = 'myfile.png', (1000, 300, 570, 550)
-        >>> # Rotate the brain :
-        >>> vb.rotate('axial')
-        >>> # Take a screenshot and save it (tested on a 17" laptop) and
-        >>> # export the colorbar :
-        >>> vb.screenshot(filename, region=crop, colorbar=True)
-
-        See also
-        --------
-        background_color : change the background color
-        rotate : rotate the scene
-
-        Notes
-        -----
-        .. note:: the region argument can be quit difficult to ajust. Be
-            patient, it's possible. Don't forget that .png files contains
-            transparency. For an optimal screenshot, I recommand doing a
-            rotation before the screenshot, so that the canvas can be
-            initialized. See the
-            `tutorial <https://etiennecmb.github.io/visbrain/vbexport.html>`_
-            for futher explanations.
+        >>> # Export the main brain as a (10cm, 20cm) image at 300 dpi:
+        >>> vb.screenshot('main.png', canvas='brain', print_size=(10, 20))
         """
-        # Define the filename :
-        if isinstance(name, str):
-            self._savename = name
+        kwargs = {'print_size': print_size, 'dpi': dpi, 'factor': factor,
+                  'autocrop': autocrop, 'unit': unit, 'region': region,
+                  'bgcolor': bgcolor, 'transparent': transparent}
+        if canvas == 'main':
+            # Be sure to display the canvas :
+            self._objsPage.setCurrentIndex(0)
+            self.view.canvas.show(True)
+            canvas, widget = self.view.canvas, self.view.wc
+        elif canvas == 'colorbar':
+            # Display colorbar :
+            self.cbpanelW.setVisible(True)
+            canvas = self.cbqt.cbviz._canvas
+            widget = self.cbqt.cbviz._wc
+        elif canvas == 'cross-sections':
+            # Be sure to display the canvas :
+            self._objsPage.setCurrentIndex(1)
+            self._csView.canvas.show(True)
+            canvas = self._csView.canvas
+            widget = self._csGrid['grid']
         else:
-            raise ValueError("The name must be a string and must contains the"
-                             " extension (ex: name='myfile.png')")
+            raise ValueError("The canvas " + canvas + " doesn't exist. Use "
+                             "either 'main', 'colorbar' or 'cross-sections'")
 
-        # Define the cropped region :
-        if region is not None:
-            if isinstance(region, (tuple, list)) and (len(region) == 4):
-                self._crop = region
-            else:
-                raise ValueError("The region parameter must be a tuple of four"
-                                 " integers describing (x_start, y_start, "
-                                 "width, height)")
-        self._autocrop = autocrop
-
-        # Define screenshot resolution :
-        if isinstance(resolution, (int, float)):
-            self._uirez = float(resolution)
-
-        # Define if the colorbar has to be exported :
-        if not isinstance(colorbar, bool):
-            raise ValueError("The colorbar parameter must be a bool describing"
-                             " if the colorbar have to exported too.")
-        self._cbarexport = colorbar
-
-        # Force transparent background :
-        if transparent:
-            self.view.canvas.bgcolor = [0.] * 4
-            self.cbqt.cbviz._canvas.bgcolor = [0.] * 4
-
-        # Zoom :
-        if (zoom is not None) and isinstance(zoom, (float, int)):
-            self.view.wc.camera.scale_factor = zoom
-        if (cbzoom is not None) and isinstance(cbzoom, (float, int)):
-            self.cbqt.cbviz._wc.camera.scale_factor = cbzoom
-
-        self._fcn_screenshotCan()
+        # Render the canvas :
+        write_fig_canvas(saveas, canvas, widget, **kwargs)
 
     def quit(self):
         """Quit the interface."""
