@@ -72,11 +72,10 @@ class ScreenshotPopup(Ui_Screenshot):
         idx = int(self._ssResolution.currentIndex())
         if idx == 0:  # custom
             self._ssCustomW.setVisible(True)
-            self._ssFactor.setVisible(False)
+            self._ssFactorW.setVisible(False)
         elif idx == 1:  # factor
             self._ssCustomW.setVisible(False)
-            self._ssFactor.setVisible(True)
-            self._ssFactor.setEnabled(True)
+            self._ssFactorW.setVisible(True)
 
     def _fcn_enable_bgcolor(self):
         """Enable background color."""
