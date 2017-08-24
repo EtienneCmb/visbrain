@@ -9,16 +9,14 @@ Grouped components :
 from PyQt5 import QtWidgets
 
 from vispy import app, scene
-import vispy.scene.visuals as visu
-import vispy.visuals.transforms as vist
 
 from .gui import Ui_MainWindow
-from ...utils import color2vb
+from ...utils import color2vb, get_screen_size
 
 __all__ = ('uiInit')
 
 
-class vbShortcuts(object):
+class BrainShortcuts(object):
     """This class add some shortcuts to the main canvas of Brain.
 
     It's also use to initialize to panel of shortcuts.
@@ -58,7 +56,7 @@ class vbShortcuts(object):
                    ('CTRL + q', 'Exit'),
                    ]
 
-        # Add shortcuts to vbCanvas :
+        # Add shortcuts to BrainCanvas :
         @canvas.events.key_press.connect
         def on_key_press(event):
             """Executed function when a key is pressed on a keyboard over Brain canvas.
@@ -124,7 +122,7 @@ class vbShortcuts(object):
                 self.userRotationPanel.setVisible(True)
 
 
-class vbCanvas(object):
+class BrainCanvas(object):
     """This class is responsible of cannvas creation.
 
     The main canvas in which the brain is displayed.
@@ -135,13 +133,13 @@ class vbCanvas(object):
             which the brain is displayed and the canvas for the colorbar)
     """
 
-    def __init__(self, title='', bgcolor=(0, 0, 0)):
+    def __init__(self, title='', bgcolor=(0, 0, 0), size=(800, 600)):
         """Init."""
         # Initialize main canvas:
         self.canvas = scene.SceneCanvas(keys='interactive', show=False,
                                         dpi=600, bgcolor=bgcolor,
                                         fullscreen=True, resizable=True,
-                                        title=title)
+                                        title=title)  # , size=size)
         self.wc = self.canvas.central_widget.add_view()
         # Visualization settings. The min/maxOpacity attributes are defined
         # because it seems that OpenGL have trouble with small opacity (usually
@@ -151,7 +149,7 @@ class vbCanvas(object):
         self.maxOpacity = 10000
 
 
-class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
+class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, BrainShortcuts):
     """Group and initialize the graphical elements and interactions.
 
     Kargs:
@@ -169,16 +167,19 @@ class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
         if self._savename is not None:
             self.setWindowTitle('Brain - ' + self._savename)
 
+        # Get screen size :
+        size = get_screen_size(self._app)
+
         #######################################################################
         #                            BRAIN CANVAS
         #######################################################################
-        self.view = vbCanvas('MainCanvas', bgcolor)
+        self.view = BrainCanvas('MainCanvas', bgcolor, size)
         self.vBrain.addWidget(self.view.canvas.native)
 
         #######################################################################
         #                         CROSS-SECTIONS CANVAS
         #######################################################################
-        self._csView = vbCanvas('SplittedCrossSections', bgcolor)
+        self._csView = BrainCanvas('SplittedCrossSections', bgcolor, size)
         self._csGrid = {'grid': self._csView.canvas.central_widget.add_grid()}
         self._csGrid['Sagit'] = self._csGrid['grid'].add_view(row=0, col=0)
         self._csGrid['Coron'] = self._csGrid['grid'].add_view(row=0, col=1)
@@ -198,4 +199,4 @@ class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, vbShortcuts):
         self.bgd_blue.setValue(self.bgcolor[2])
 
         # Initialize shortcuts :
-        vbShortcuts.__init__(self, self.view.canvas)
+        BrainShortcuts.__init__(self, self.view.canvas)
