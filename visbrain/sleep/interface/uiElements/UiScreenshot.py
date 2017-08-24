@@ -11,11 +11,10 @@ class UiScreenshot(object):
     def __init__(self):
         """Init."""
         # Get the list of canvas channel names :
-        chan = [k.canvas.title for k in self._chanCanvas]
-        canvas_names = chan + ['spectrogram', 'hypnogram', 'topoplot']
+        cn = self._channels + ['spectrogram', 'hypnogram', 'topoplot']
         # Create the screenshot GUI :
         self._ssGui = ScreenshotPopup(self._fcn_run_screenshot,
-                                      canvas_names=canvas_names)
+                                      canvas_names=cn)
         # In Sleep module, disable background and transparency :
         self._ssGui._ssBgcolor.hide()
         self._ssGui._ssBgcolorChk.hide()
@@ -61,7 +60,7 @@ class UiScreenshot(object):
                 canvas = self._topoCanvas.canvas
             else:
                 # Get the index of this channel :
-                kc = self._channels.index(name.split('Canvas_')[1])
+                kc = self._channels.index(name)
                 # Force the channel to be displayed :
                 self._chanChecks[kc].setChecked(True)
                 self._fcn_chanViz()
