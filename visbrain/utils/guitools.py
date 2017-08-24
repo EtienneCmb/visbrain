@@ -3,16 +3,14 @@
 from PyQt5 import QtCore
 
 import numpy as np
-from vispy.scene import visuals
 
 from .color import color2vb, color2tuple
 
-
 __all__ = ('slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
-           'ndsubplot', 'combo', 'is_color', 'MouseEventControl', 'GuideLines',
+           'ndsubplot', 'combo', 'is_color', 'MouseEventControl',
            'disconnect_all', 'extend_combo_list', 'get_combo_list_index',
            'safely_set_cbox', 'safely_set_spin', 'safely_set_slider',
-           'toggle_enable_tab', 'set_widget_size')
+           'toggle_enable_tab', 'get_screen_size', 'set_widget_size')
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -388,6 +386,25 @@ def toggle_enable_tab(tab, name, enable=False):
     idx = names.index(name)
     # Set tab enable/disable :
     tab.setTabEnabled(idx, enable)
+
+
+def get_screen_size(app):
+    """Get screen size of an application.
+
+    Parameters
+    ----------
+    app : QtApplication
+        A PyQt application.
+
+    Returns
+    -------
+    width : int
+        Width of the application.
+    height : int
+        Height of the application.
+    """
+    resolution = app.desktop().screenGeometry()
+    return resolution.width(), resolution.height()
 
 
 def set_widget_size(app, widget, width=100., height=100.):
