@@ -1,3 +1,8 @@
+.. _ScreenshotTuto:
+
+Screenshot
+==========
+
 Exporting figures is really important, expecially if you want to use it in your research. There is two good news and a bad one :
 
 * The first good news is that, in the Brain module, you can really achieve to have beautiful HD figures.

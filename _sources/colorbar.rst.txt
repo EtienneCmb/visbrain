@@ -3,6 +3,9 @@
 Colorbar
 ========
 
+.. figure::  picture/ico/colorbar_ico.png
+   :align:   center
+
 *Colorbar* is a GUI based module for colorbar control.
 
 .. code-block:: python

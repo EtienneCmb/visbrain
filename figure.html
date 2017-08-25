@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Figure &mdash; visbrain 0.3.2 documentation</title>
+  <title>6. Figure &mdash; visbrain 0.3.2 documentation</title>
   
 
   
@@ -41,8 +41,8 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="visbrain 0.3.2 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
-        <link rel="next" title="Utils" href="utils.html"/>
-        <link rel="prev" title="Ndviz" href="ndviz.html"/> 
+        <link rel="next" title="7. Utils" href="utils.html"/>
+        <link rel="prev" title="5. Colorbar" href="colorbar.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -101,23 +101,24 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="community.html">Community</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="brain.html">Brain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html">Sleep</a></li>
-<li class="toctree-l2"><a class="reference internal" href="topo.html">Topo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="colorbar.html">Colorbar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Figure</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#api">API</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#main-figure-class-inputs">Main <em>Figure</em> class inputs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#methods">Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brain.html">1. Brain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html">2. Sleep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo.html">3. Topo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ndviz.html">4. Ndviz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. Colorbar</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">6. Figure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">6.1. Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example">6.2. Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api">6.3. API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#main-figure-class-inputs">6.3.1. Main <em>Figure</em> class inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#methods">6.3.2. Methods</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html">I/O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">7. Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html">8. I/O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vbexport.html">9. Screenshot</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -168,7 +169,7 @@
         
           <li><a href="documentation.html">Documentation</a> &raquo;</li>
         
-      <li>Figure</li>
+      <li>6. Figure</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,16 +189,19 @@
            <div itemprop="articleBody">
             
   <div class="section" id="figure">
-<span id="id1"></span><h1>Figure<a class="headerlink" href="#figure" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>6. Figure<a class="headerlink" href="#figure" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-center">
+<img alt="_images/figure_ico.png" src="_images/figure_ico.png" />
+</div>
 <div class="section" id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<h2>6.1. Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>This module can be used to arange several exported figures in a grid, to control background colors, colorbar (either one per picture or shared colorbar…)</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Figure</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<h2>6.2. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Import the Figure module :</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Figure</span>
 
@@ -254,9 +258,9 @@
 </div>
 </div>
 <div class="section" id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<h2>6.3. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="main-figure-class-inputs">
-<h3>Main <em>Figure</em> class inputs<a class="headerlink" href="#main-figure-class-inputs" title="Permalink to this headline">¶</a></h3>
+<h3>6.3.1. Main <em>Figure</em> class inputs<a class="headerlink" href="#main-figure-class-inputs" title="Permalink to this headline">¶</a></h3>
 <p>First, you will need to create a Figure objects with the files to load, titles, xlabels… Then, there’s a list of embedded methods that provide further controls :</p>
 <ul class="simple">
 <li><a class="reference internal" href="#show"><span class="std std-ref">show</span></a> : display the final figure</li>
@@ -414,9 +418,9 @@ have to be considered as the reference.</p>
 
 </div>
 <div class="section" id="methods">
-<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<h3>6.3.2. Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="show">
-<span id="id2"></span><h4>show<a class="headerlink" href="#show" title="Permalink to this headline">¶</a></h4>
+<span id="id2"></span><h4>6.3.2.1. show<a class="headerlink" href="#show" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.figure.Figure.show">
 <code class="descclassname">Figure.</code><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.show" title="Permalink to this definition">¶</a></dt>
@@ -425,7 +429,7 @@ have to be considered as the reference.</p>
 
 </div>
 <div class="section" id="save">
-<span id="id3"></span><h4>save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h4>
+<span id="id3"></span><h4>6.3.2.2. save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.figure.Figure.save">
 <code class="descclassname">Figure.</code><code class="descname">save</code><span class="sig-paren">(</span><em>saveas</em>, <em>dpi=300</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.save" title="Permalink to this definition">¶</a></dt>
@@ -444,7 +448,7 @@ have to be considered as the reference.</p>
 
 </div>
 <div class="section" id="colorbar-to-axis">
-<span id="id4"></span><h4>colorbar_to_axis<a class="headerlink" href="#colorbar-to-axis" title="Permalink to this headline">¶</a></h4>
+<span id="id4"></span><h4>6.3.2.3. colorbar_to_axis<a class="headerlink" href="#colorbar-to-axis" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.figure.Figure.colorbar_to_axis">
 <code class="descclassname">Figure.</code><code class="descname">colorbar_to_axis</code><span class="sig-paren">(</span><em>toaxis</em>, <em>clim</em>, <em>cmap</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em>, <em>orientation=’vertical’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.colorbar_to_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.colorbar_to_axis" title="Permalink to this definition">¶</a></dt>
@@ -530,7 +534,7 @@ ticks directly.</p>
 
 </div>
 <div class="section" id="shared-colorbar">
-<span id="id5"></span><h4>shared_colorbar<a class="headerlink" href="#shared-colorbar" title="Permalink to this headline">¶</a></h4>
+<span id="id5"></span><h4>6.3.2.4. shared_colorbar<a class="headerlink" href="#shared-colorbar" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.figure.Figure.shared_colorbar">
 <code class="descclassname">Figure.</code><code class="descname">shared_colorbar</code><span class="sig-paren">(</span><em>clim</em>, <em>cmap</em>, <em>position=’right’</em>, <em>height=0.5</em>, <em>width=0.02</em>, <em>pltmargin=0.02</em>, <em>figmargin=0.07</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.shared_colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.shared_colorbar" title="Permalink to this definition">¶</a></dt>
@@ -646,10 +650,10 @@ ticks directly.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="7. Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ndviz.html" class="btn btn-neutral" title="Ndviz" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="colorbar.html" class="btn btn-neutral" title="5. Colorbar" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

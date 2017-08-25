@@ -3,18 +3,31 @@
 Brain
 =====
 
+.. figure::  picture/ico/brain_ico.png
+   :align:   center
+
 .. ##########################################################################
 ..                                 DESCRIPTION
 .. ##########################################################################
+
 Description
 -----------
 
 *Brain* is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, connectivity, region of interest...
 
+.. figure::  picture/picbrain/brain_description.png
+   :align:   center
+
+Help
+~~~~
+
+If you need help with the *Brain* module, ask your questions in the dedicated `gitter Brain chat <https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+
 Main features
 ~~~~~~~~~~~~~
 
 * **GUI**
+   * Modular and responsive GUI
    * Take screenshot with controllable dpi
    * Save the GUI state (*buttons, sliders, checkbox*...) 
 * **Main brain templates**
@@ -38,19 +51,33 @@ Main features
       * Add custom ROI templates
       * Project source's activity on ROI
 
-GUI
-~~~
+Import and use Brain
+~~~~~~~~~~~~~~~~~~~~
+
+The *Brain* module can be imported as follow :
+
+.. code-block:: python
+
+    from visbrain import Brain
+
+Examples and datasets
+~~~~~~~~~~~~~~~~~~~~~
+
+Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_.
+
+GUI description
+~~~~~~~~~~~~~~~
 
 Components
 ^^^^^^^^^^
 
 The *Brain* graphical user interface is subdivided into three main parts :
 
-* **Menu** (*Save/load GUI config, take a screenshot*)
-* **Settings panel**
+* **Menu** (*Save/load GUI config, take a screenshot*...)
+* **Settings panel** (*display by default*)
 * **Main canvas** where the brain is displayed
-* **Colorbar canvas** which is hide by default
-* **Cross-sections canvas**
+* **Colorbar canvas** (*hide by default*)
+* **Cross-sections canvas** (*hide by default*)
 
 .. note::
 
@@ -61,7 +88,6 @@ The *Brain* graphical user interface is subdivided into three main parts :
 
    **API**
       * :ref:`LoadSaveConfig`
-
 
 Settings panel tabs
 ^^^^^^^^^^^^^^^^^^^
@@ -98,28 +124,18 @@ c                       Display / hide colorbar
 a                       Auto-scale colormap
 "+"                     Increase brain opacity
 "-"                     Decrease brain opacity
-CTRL+P                  Run the cortical projection
-CTRL+R                  Run the cortical repartition
-CTRL+D                  Display / hide quick settings panel
-CTRL+N                  Open screenshot GUI
-CTRL+W                  Screenshot of the entire window
-CTRL+T                  Show the shortcuts panel
-CTRL+Q                  Exit
+CTRL + p                Run the cortical projection
+CTRL + r                Run the cortical repartition
+CTRL + d                Display / hide quick settings panel
+CTRL + n                Screenshot window
+CTRL + w                Screenshot of the entire window
+CTRL + t                Show the shortcuts panel
+CTRL + q                Exit
 ==============          ==============================================
 
-Import and use Brain
-~~~~~~~~~~~~~~~~~~~~
-
-The *Brain* module can be imported as follow :
-
-.. code-block:: python
-
-    from visbrain import Brain
-
-Examples and datasets
-~~~~~~~~~~~~~~~~~~~~~
-
-Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_.
+.. ##########################################################################
+..                                 TUTORIAL
+.. ##########################################################################
 
 Tutorial
 --------
@@ -332,6 +348,9 @@ The colorbar can be controlled for individual objects including :
    **API**
       * :ref:`CbarApi`
 
+.. ##########################################################################
+..                                 API
+.. ##########################################################################
 
 API
 ---
@@ -342,16 +361,5 @@ The user functions correspond to a bundle of functions that can be used to contr
    :maxdepth: 4
 
    brainAPI
-
-
-Screenshot tutorial
--------------------
-
-See this tutorial to export your figures in a proper way in order to use them in your research / paper...
-
-.. toctree::
-   :maxdepth: 4
-
-   vbexport
 
 

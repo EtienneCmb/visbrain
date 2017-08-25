@@ -5,6 +5,7 @@ Documentation
 
 .. toctree::
     :maxdepth: 2
+    :numbered:
 
     brain
     sleep
@@ -14,3 +15,4 @@ Documentation
     figure
     utils
     io
+    vbexport
