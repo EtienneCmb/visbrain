@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Screenshot example &mdash; visbrain 0.3.0 documentation</title>
+  <title>Screenshot example &mdash; visbrain 0.3.2 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.0 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.2 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add multiple objects to the scene" href="09_add_multiple_objects.html"/>
         <link rel="prev" title="Add pictures" href="07_add_pictures.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.3.2
               </div>
             
           
@@ -99,14 +99,8 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../brain.html">Brain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../colorbar.html">Colorbar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../figure.html">Figure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ndviz.html">Ndviz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sleep.html">Sleep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../topo.html">Topo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils.html">Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../documentation.html">Documentation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="00_brain_control.html">Brain control</a></li>
@@ -200,8 +194,11 @@
             
   <div class="section" id="screenshot-example">
 <span id="sphx-glr-auto-examples-brain-08-screenshot-py"></span><h1>Screenshot example<a class="headerlink" href="#screenshot-example" title="Permalink to this headline">¶</a></h1>
-<p>This script illustrate how to export your figures and the colorbar.</p>
-<p>The full tutorial is :
+<p>Offline rendering of selected canvas.</p>
+<p>First, ou can take screenshot from the graphical interface using the menu
+File/save/screenshot. The aim of this script is more to illustrate how to
+take screenshots without opening the interface.</p>
+<p>Further explanations about screenshot and transparency can be foud here :
 <a class="reference external" href="http://visbrain.org/brain.html#screenshot-tutorial">http://visbrain.org/brain.html#screenshot-tutorial</a></p>
 <img alt="../../_images/ex_screenshot.png" src="../../_images/ex_screenshot.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -216,7 +213,7 @@
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">],</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
 
 <span class="c1"># Now, create some random data between [-50,50]</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">50.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;darkred&#39;</span>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_opacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>
 
@@ -225,44 +222,80 @@
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_radiusmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span>               <span class="c1"># Maximum radius</span>
 <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_edgewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>              <span class="c1"># Width of the edges</span>
 
-<span class="c1"># Define your monitor properties for figure exportation</span>
-<span class="c1"># (this configuration has been tested on a 17&quot; laptop) :</span>
-<span class="n">region</span> <span class="o">=</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="o">-</span><span class="mi">900</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>     <span class="c1"># Crop your figure using this region</span>
-<span class="n">cbzoom</span> <span class="o">=</span> <span class="mf">50.</span>                       <span class="c1"># Zoom level over the colobar canvas</span>
-
 <span class="c1"># Create a brain instance :</span>
 <span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="c1"># First, make a basic screenshot of the scene :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;screenshot1.jpg&#39;</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;First, make a basic screenshot of the scene.</span>
 
-<span class="c1"># Make a screenshot of the cortical projection :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">cortical_projection</span><span class="p">()</span>          <span class="c1"># Run the cortical projection</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">sources_opacity</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>    <span class="c1"># Hide sources</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">160.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">))</span>    <span class="c1"># Rotate the brain</span>
+<span class="sd">Once exported, you should notice that the image doesn&#39;t have a proper size to</span>
+<span class="sd">be used in a paper. In addition, the image have to cropped to remove</span>
+<span class="sd">unnecessary background.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;0_main_brain.jpg&#39;</span><span class="p">)</span>
+
+<span class="c1"># Run the cortical projection :</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">cortical_projection</span><span class="p">(</span><span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">10.1</span><span class="p">,</span>
+                       <span class="n">isvmin</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">41.2</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+                       <span class="n">isvmax</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">sources_opacity</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>        <span class="c1"># Hide sources</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">160.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">))</span>        <span class="c1"># Rotate the brain</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">transparent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>   <span class="c1"># Make the brain opaque</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;screenshot2.tiff&#39;</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<span class="c1"># Make a screenshot of ROI :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>       <span class="c1"># Display Brodmann area 4 and 6 :</span>
-               <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span>
-               <span class="n">smooth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="c1"># Run the cortical repartition</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">cortical_repartition</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">59</span><span class="p">),</span>
-                        <span class="n">isvmin</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span>
-                        <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Roi colorbar&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Now, we take a screenthot of the scene but this time, we used the</span>
+<span class="sd">autocrop argument to crop the image as close as possible to the brain.</span>
+
+<span class="sd">Then, we used the print_size, dpi and unit inputs to get higher resolution</span>
+<span class="sd">image.</span>
+<span class="sd">Taken together, this mean that the image should have a sufficient size to be</span>
+<span class="sd">(20 centimeters x 20 centimeters) at 300 dpi.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;1_proj_brain.tiff&#39;</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+              <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Colorbar screenshot</span>
+
+<span class="sd">The previous screenshot use the print_size input to increase the resolution.</span>
+<span class="sd">Now, we use the factor input to do the same. This input simply increase</span>
+<span class="sd">the image size proportionally.</span>
+
+<span class="sd">Start by selecting the colorbar of the cortical projection, improve the</span>
+<span class="sd">appearance and make a screenshot of it.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">cbar_select</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">)</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">cbar_export</span><span class="p">(</span><span class="s1">&#39;test.txt&#39;</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">8.</span><span class="p">,</span> <span class="n">cbtxtsz</span><span class="o">=</span><span class="mf">9.</span><span class="p">,</span>
+                <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Cortical projection&#39;</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;1_proj_colorbar.tiff&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;colorbar&#39;</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+              <span class="n">factor</span><span class="o">=</span><span class="mf">4.</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Cross-sections splitted-view screenshot</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">cross_sections_control</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">][</span><span class="mi">10</span><span class="p">,</span> <span class="p">:],</span> <span class="n">split_view</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                          <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">show_text</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;2_cross_sections.png&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;cross-sections&#39;</span><span class="p">,</span>
+              <span class="n">print_size</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;millimeter&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">600.</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">cross_sections_control</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">split_view</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Background color and transparency control of ROI screenshot</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="c1"># Run the cortical repartition</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">cortical_repartition</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">48</span><span class="p">),</span>
+                        <span class="n">isvmin</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+                        <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Roi colorbar&#39;</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">cbar_select</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">)</span>                <span class="c1"># Select the Projection colorbar</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">sources_opacity</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>              <span class="c1"># Display sources</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">210</span><span class="p">,</span> <span class="mf">10.</span><span class="p">))</span>               <span class="c1"># Rotate the brain</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>                 <span class="c1"># Hide the brain</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>             <span class="c1"># Hide the brain</span>
 
-<span class="c1"># Export with transparent background</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;screenshot3.png&#39;</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-              <span class="n">autocrop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Export ROI with a transparent background and the colorbar with a green one</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;3_roi_repartition.png&#39;</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+              <span class="n">print_size</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;inch&#39;</span><span class="p">)</span>
 
-<span class="c1"># Alternatively, you can display the GUI at the end, but it&#39;s not a necessity :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># Alternatively, you can display the GUI at the end, but it&#39;s not a necessity</span>
+<span class="c1"># vb.show()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -319,7 +352,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.0',
+            VERSION:'0.3.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

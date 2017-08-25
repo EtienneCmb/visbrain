@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.brain.user &mdash; visbrain 0.3.0 documentation</title>
+  <title>visbrain.brain.user &mdash; visbrain 0.3.2 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.2 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.3.2
               </div>
             
           
@@ -97,14 +97,8 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../brain.html">Brain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../colorbar.html">Colorbar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../topo.html">Topo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
 </ul>
@@ -188,7 +182,7 @@
 <span class="kn">from</span> <span class="nn">.base.PicBase</span> <span class="k">import</span> <span class="n">PicBase</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">color2vb</span><span class="p">,</span> <span class="n">AddMesh</span><span class="p">,</span> <span class="n">extend_combo_list</span><span class="p">,</span> <span class="n">safely_set_cbox</span><span class="p">,</span>
                      <span class="n">get_combo_list_index</span><span class="p">,</span> <span class="n">safely_set_spin</span><span class="p">,</span> <span class="n">safely_set_slider</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">save_config_json</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">save_config_json</span><span class="p">,</span> <span class="n">write_fig_canvas</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;BrainUserMethods&#39;</span><span class="p">)</span>
 
@@ -273,115 +267,91 @@
         <span class="n">bckcolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">bckcolor</span></div>
 
-<div class="viewcode-block" id="BrainUserMethods.screenshot"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                   <span class="n">cbzoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">3000.</span><span class="p">,</span>
-                   <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Take a screenshot of the current scene and save it as a picture.</span>
+<div class="viewcode-block" id="BrainUserMethods.screenshot"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
+                   <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                   <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Take a screeshot of the selected canvas.</span>
 
-<span class="sd">        This method try to make a high-fidelity screenshot of your scene.</span>
-<span class="sd">        One thing to keep in mind, is that printed picture using a transparent</span>
-<span class="sd">        compatible extension (like .png files) produces transparent pictures.</span>
-<span class="sd">        This might be quit disturbing especially using internal light</span>
-<span class="sd">        reflection. To solve this in your pictures, I recommand putting your</span>
-<span class="sd">        transparent brain picture onto a dark background (like black) and see</span>
-<span class="sd">        the magic happend. If you want perfectly fitting pictures, just turn</span>
-<span class="sd">        the autocrop parameter to True.</span>
-<span class="sd">        This method requires imageio or PIL (pip install pillow).</span>
+<span class="sd">        By default, the rendered canvas will have the size of your screen.</span>
+<span class="sd">        The screenshot() method provides two ways to increase to exported image</span>
+<span class="sd">        resolution :</span>
+
+<span class="sd">            * Using print_size, unit and dpi inputs : specify the size of the</span>
+<span class="sd">              image at a specific dpi level. For example, you might want to</span>
+<span class="sd">              have an (10cm, 15cm) image at 300 dpi.</span>
+<span class="sd">            * Using the factor input : multiply the default image size by this</span>
+<span class="sd">              factor. For example, if you have a (1920, 1080) monitor and if</span>
+<span class="sd">              factor is 2, the exported image should have a shape of</span>
+<span class="sd">              (3840, 2160) pixels.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        name : str</span>
+<span class="sd">        saveas : str</span>
 <span class="sd">            The name of the file to be saved. This file must contains a</span>
 <span class="sd">            extension like .png, .tiff, .jpg...</span>
+<span class="sd">        canvas : {&#39;main&#39;, &#39;colorbar&#39;, &#39;cross-sections&#39;}</span>
+<span class="sd">            The name of the canvas to render. Use &#39;main&#39; to select the main</span>
+<span class="sd">            canvas where the brain is displayed. Use &#39;colorbar&#39; to render the</span>
+<span class="sd">            colorbar or &#39;cross-sections&#39; to render the cross-sections panel</span>
+<span class="sd">            (in splitted view).</span>
+<span class="sd">        print_size : tuple | None</span>
+<span class="sd">            The desired print size. This argument should be used in association</span>
+<span class="sd">            with the dpi and unit inputs. print_size describe should be a tuple</span>
+<span class="sd">            of two floats describing (width, height) of the exported image for</span>
+<span class="sd">            a specific dpi level. The final image might not have the exact</span>
+<span class="sd">            desired size but will try instead to find a compromize</span>
+<span class="sd">            regarding to the proportion of width/height of the original image.</span>
+<span class="sd">        dpi : float | 300.</span>
+<span class="sd">            Dots per inch for printing the image.</span>
+<span class="sd">        unit : {&#39;centimeter&#39;, &#39;millimeter&#39;, &#39;pixel&#39;, &#39;inch&#39;}</span>
+<span class="sd">            Unit of the printed size.</span>
+<span class="sd">        factor : float | None</span>
+<span class="sd">            If you don&#39;t want to use the print_size input, factor simply</span>
+<span class="sd">            multiply the resolution of your screen.</span>
 <span class="sd">        region : tuple | None</span>
-<span class="sd">            Crop the exported picture to a specified region. Must be a</span>
-<span class="sd">            tuple of four integers where each one describe the region as</span>
-<span class="sd">            (x_start, y_start, width, height) where x_start is where</span>
-<span class="sd">            to start along the horizontal axis and y_start where to start</span>
-<span class="sd">            along the vertical axis. By default, the entire canvas is</span>
-<span class="sd">            rendered.</span>
+<span class="sd">            Select a specific region. Must be a tuple of four integers each one</span>
+<span class="sd">            describing (x_start, y_start, width, height).</span>
 <span class="sd">        autocrop : bool | False</span>
 <span class="sd">            Automaticaly crop the figure in order to have the smallest</span>
 <span class="sd">            space between the brain and the border of the picture.</span>
-<span class="sd">        zoom : float | None</span>
-<span class="sd">            Define the zoom level over the main canvas.</span>
-<span class="sd">        colorbar : bool | False</span>
-<span class="sd">            Specify if the colorbar has to be exported too.</span>
-<span class="sd">        cbzoom : float | None</span>
-<span class="sd">            Define the zoom level over the colorbar canvas.</span>
+<span class="sd">        bgcolor : array_like/string | None</span>
+<span class="sd">            The background color of the image.</span>
 <span class="sd">        transparent : bool | False</span>
 <span class="sd">            Specify if the exported figure have to contains a transparent</span>
 <span class="sd">            background.</span>
-<span class="sd">        resolution : float | 3000</span>
-<span class="sd">            Define the screenshot resolution by indicating the number of</span>
-<span class="sd">            times the definition of your screen must be multiplied.</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        &gt;&gt;&gt; # Define a Brain instance :</span>
 <span class="sd">        &gt;&gt;&gt; vb = Brain()</span>
-<span class="sd">        &gt;&gt;&gt; # Define the filename and the cropped region :</span>
-<span class="sd">        &gt;&gt;&gt; filename, crop = &#39;myfile.png&#39;, (1000, 300, 570, 550)</span>
-<span class="sd">        &gt;&gt;&gt; # Rotate the brain :</span>
-<span class="sd">        &gt;&gt;&gt; vb.rotate(&#39;axial&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; # Take a screenshot and save it (tested on a 17&quot; laptop) and</span>
-<span class="sd">        &gt;&gt;&gt; # export the colorbar :</span>
-<span class="sd">        &gt;&gt;&gt; vb.screenshot(filename, region=crop, colorbar=True)</span>
-
-<span class="sd">        See also</span>
-<span class="sd">        --------</span>
-<span class="sd">        background_color : change the background color</span>
-<span class="sd">        rotate : rotate the scene</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        .. note:: the region argument can be quit difficult to ajust. Be</span>
-<span class="sd">            patient, it&#39;s possible. Don&#39;t forget that .png files contains</span>
-<span class="sd">            transparency. For an optimal screenshot, I recommand doing a</span>
-<span class="sd">            rotation before the screenshot, so that the canvas can be</span>
-<span class="sd">            initialized. See the</span>
-<span class="sd">            `tutorial &lt;https://etiennecmb.github.io/visbrain/vbexport.html&gt;`_</span>
-<span class="sd">            for futher explanations.</span>
+<span class="sd">        &gt;&gt;&gt; # Export the main brain as a (10cm, 20cm) image at 300 dpi:</span>
+<span class="sd">        &gt;&gt;&gt; vb.screenshot(&#39;main.png&#39;, canvas=&#39;brain&#39;, print_size=(10, 20))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Define the filename :</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_savename</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;print_size&#39;</span><span class="p">:</span> <span class="n">print_size</span><span class="p">,</span> <span class="s1">&#39;dpi&#39;</span><span class="p">:</span> <span class="n">dpi</span><span class="p">,</span> <span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="n">factor</span><span class="p">,</span>
+                  <span class="s1">&#39;autocrop&#39;</span><span class="p">:</span> <span class="n">autocrop</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="n">unit</span><span class="p">,</span> <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">region</span><span class="p">,</span>
+                  <span class="s1">&#39;bgcolor&#39;</span><span class="p">:</span> <span class="n">bgcolor</span><span class="p">,</span> <span class="s1">&#39;transparent&#39;</span><span class="p">:</span> <span class="n">transparent</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">canvas</span> <span class="o">==</span> <span class="s1">&#39;main&#39;</span><span class="p">:</span>
+            <span class="c1"># Be sure to display the canvas :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_objsPage</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span>
+        <span class="k">elif</span> <span class="n">canvas</span> <span class="o">==</span> <span class="s1">&#39;colorbar&#39;</span><span class="p">:</span>
+            <span class="c1"># Display colorbar :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cbpanelW</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbviz</span><span class="o">.</span><span class="n">_canvas</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbviz</span><span class="o">.</span><span class="n">_wc</span>
+        <span class="k">elif</span> <span class="n">canvas</span> <span class="o">==</span> <span class="s1">&#39;cross-sections&#39;</span><span class="p">:</span>
+            <span class="c1"># Be sure to display the canvas :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_objsPage</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_csView</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csView</span><span class="o">.</span><span class="n">canvas</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csGrid</span><span class="p">[</span><span class="s1">&#39;grid&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The name must be a string and must contains the&quot;</span>
-                             <span class="s2">&quot; extension (ex: name=&#39;myfile.png&#39;)&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The canvas &quot;</span> <span class="o">+</span> <span class="n">canvas</span> <span class="o">+</span> <span class="s2">&quot; doesn&#39;t exist. Use &quot;</span>
+                             <span class="s2">&quot;either &#39;main&#39;, &#39;colorbar&#39; or &#39;cross-sections&#39;&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Define the cropped region :</span>
-        <span class="k">if</span> <span class="n">region</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">region</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_crop</span> <span class="o">=</span> <span class="n">region</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The region parameter must be a tuple of four&quot;</span>
-                                 <span class="s2">&quot; integers describing (x_start, y_start, &quot;</span>
-                                 <span class="s2">&quot;width, height)&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_autocrop</span> <span class="o">=</span> <span class="n">autocrop</span>
-
-        <span class="c1"># Define screenshot resolution :</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resolution</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_uirez</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">resolution</span><span class="p">)</span>
-
-        <span class="c1"># Define if the colorbar has to be exported :</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">colorbar</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The colorbar parameter must be a bool describing&quot;</span>
-                             <span class="s2">&quot; if the colorbar have to exported too.&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cbarexport</span> <span class="o">=</span> <span class="n">colorbar</span>
-
-        <span class="c1"># Force transparent background :</span>
-        <span class="k">if</span> <span class="n">transparent</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbviz</span><span class="o">.</span><span class="n">_canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
-
-        <span class="c1"># Zoom :</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">zoom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zoom</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">scale_factor</span> <span class="o">=</span> <span class="n">zoom</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">cbzoom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cbzoom</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbviz</span><span class="o">.</span><span class="n">_wc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">scale_factor</span> <span class="o">=</span> <span class="n">cbzoom</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_screenshotCan</span><span class="p">()</span></div>
+        <span class="c1"># Render the canvas :</span>
+        <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.quit"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.quit">[docs]</a>    <span class="k">def</span> <span class="nf">quit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Quit the interface.&quot;&quot;&quot;</span>
@@ -572,7 +542,8 @@
 
 <div class="viewcode-block" id="BrainUserMethods.cross_sections_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cross_sections_control">[docs]</a>    <span class="k">def</span> <span class="nf">cross_sections_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                <span class="n">volume</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">split_view</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                               <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                               <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">show_text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Control the cross-section.</span>
 
 <span class="sd">        The three sections (sagittal, coronal and axial) can be defined in two</span>
@@ -600,6 +571,8 @@
 <span class="sd">            Use transparent or opaque borders.</span>
 <span class="sd">        cmap : string | &#39;gray&#39;</span>
 <span class="sd">            Name of the colormap to use.</span>
+<span class="sd">        show_text : bool | True</span>
+<span class="sd">            Display or hide slice text.</span>
 <span class="sd">        visible : bool | True</span>
 <span class="sd">            Set the cross-sections visible.</span>
 
@@ -629,9 +602,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_csTransp</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">transparent</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grpSec</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menuDispCrossec</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
+        <span class="c1"># Show text :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_cspTxtSagit</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">show_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_cspTxtAxial</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">show_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_cspTxtCoron</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">show_text</span>
         <span class="c1"># Update the volume to use and split-view :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_crossec_change</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_crossec_split</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_crossec_split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_crossec_viz</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.volume_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.volume_control">[docs]</a>    <span class="k">def</span> <span class="nf">volume_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">rendering</span><span class="o">=</span><span class="s1">&#39;mip&#39;</span><span class="p">,</span>
                        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;OpaqueGrays&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -1478,7 +1456,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.0',
+            VERSION:'0.3.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

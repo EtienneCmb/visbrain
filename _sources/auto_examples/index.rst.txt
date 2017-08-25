@@ -185,7 +185,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This script illustrate how to export your figures and the colorbar.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Offline rendering of selected canvas.">
 
 .. only:: html
 

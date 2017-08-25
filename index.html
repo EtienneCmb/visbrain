@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Visbrain documentation &mdash; visbrain 0.3.0 documentation</title>
+  <title>Visbrain documentation &mdash; visbrain 0.3.2 documentation</title>
   
 
   
@@ -39,8 +39,8 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.0 documentation" href="#"/>
-        <link rel="next" title="Brain" href="brain.html"/> 
+    <link rel="top" title="visbrain 0.3.2 documentation" href="#"/>
+        <link rel="next" title="Community" href="community.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.3.2
               </div>
             
           
@@ -97,14 +97,8 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="colorbar.html">Colorbar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="topo.html">Topo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
 </ul>
@@ -176,11 +170,16 @@
 <div class="section" id="visbrain-documentation">
 <h1>Visbrain documentation<a class="headerlink" href="#visbrain-documentation" title="Permalink to this headline">¶</a></h1>
 <p>Visbrain is a python package dedicated to multi-purpose neuroscience visualization tools. Here is the list of the current modules :</p>
+<div class="figure align-center">
+<img alt="_images/visbrain_readme.png" src="_images/visbrain_readme.png" />
+</div>
 <ul class="simple">
-<li><a class="reference internal" href="brain.html#brain"><span class="std std-ref">Brain</span></a> : plot your data onto a 3D MNI brain control it via the graphical interface</li>
-<li><a class="reference internal" href="sleep.html#sleep"><span class="std std-ref">Sleep</span></a> : display sleep data, perform spindles / REM / peaks / slow waves / K-complex detection and live hypnogram edition</li>
-<li><a class="reference internal" href="ndviz.html#ndviz"><span class="std std-ref">Ndviz</span></a> : inspect data your n-dimentional data.</li>
-<li><a class="reference internal" href="figure.html#figure"><span class="std std-ref">Figure</span></a> : arange exported pictures in a grid, add colorbar and save a paper ready figure.</li>
+<li><a class="reference internal" href="brain.html#brain"><span class="std std-ref">Brain</span></a> : visualize EEG/MEG/Intracranial data, connectivity in a standard MNI 3D brain (see <a class="reference external" href="http://visbrain.org/auto_examples/index.html#brain-examples">Brain examples</a>).</li>
+<li><a class="reference internal" href="sleep.html#sleep"><span class="std std-ref">Sleep</span></a> : visualize polysomnographic data and hypnogram edition (see <a class="reference external" href="http://visbrain.org/auto_examples/index.html#sleep-examples">Sleep examples</a>).</li>
+<li><a class="reference internal" href="topo.html#topo"><span class="std std-ref">Topo</span></a> : display topographical maps (see <a class="reference external" href="http://visbrain.org/auto_examples/index.html#topoplot-examples">Topo examples</a>).</li>
+<li><a class="reference internal" href="ndviz.html#ndviz"><span class="std std-ref">Ndviz</span></a> : visualize multidimensional data and basic plotting forms (see <a class="reference external" href="http://visbrain.org/auto_examples/index.html#ndviz-examples">Ndviz examples</a>).</li>
+<li><a class="reference internal" href="figure.html#figure"><span class="std std-ref">Figure</span></a> : figure-layout for high-quality publication-like figures (see <a class="reference external" href="http://visbrain.org/auto_examples/index.html#figure-examples">Figure examples</a>).</li>
+<li><a class="reference internal" href="colorbar.html#colorbar"><span class="std std-ref">Colorbar</span></a> : colorbar editor (see <a class="reference external" href="http://visbrain.org/auto_examples/index.html#colorbar-examples">Colorbar examples</a>).</li>
 </ul>
 <p>See the <a class="reference internal" href="changelog_futur.html#changelogfutur"><span class="std std-ref">Changelog and future directions</span></a>.</p>
 <div class="section" id="installation">
@@ -212,20 +211,12 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="pyqt4-version">
-<h3>PyQt4 version<a class="headerlink" href="#pyqt4-version" title="Permalink to this headline">¶</a></h3>
-<p>Since version 0.2.8, Visbrain use the PyQt5. If you still use PyQt4, you should install the Visbrain version 0.2.7.</p>
-<p>In a terminal, create and activate a 3.5 Python environment with the correct PyQt4 version :</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>conda create --yes  -n visbrain <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5 numpy scipy pillow <span class="nv">matplotlib</span><span class="o">=</span><span class="m">1</span>.5.1 pip
-activate visbrain
-</pre></div>
-</div>
-<p>Then you’ll need to install the latest VisPy version from github :</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install -e git+https://github.com/vispy/vispy#egg<span class="o">=</span>vispy-dev
-</pre></div>
-</div>
-<p>Finally, install Visbrain :</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install <span class="nv">visbain</span><span class="o">==</span><span class="m">0</span>.2.7
+<div class="section" id="develop-mode">
+<h3>Develop mode<a class="headerlink" href="#develop-mode" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>git clone git@github.com:EtienneCmb/visbrain.git visbrain/
+<span class="nb">cd</span> visbrain/
+pip install -r requirements.txt
+python setup.py develop
 </pre></div>
 </div>
 </div>
@@ -234,107 +225,183 @@ activate visbrain
 <h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="brain.html#main-features">Main features</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="brain.html#gui-description">GUI description</a></li>
-<li class="toctree-l3"><a class="reference internal" href="brain.html#mni-templates">MNI templates</a></li>
-<li class="toctree-l3"><a class="reference internal" href="brain.html#sources">Sources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="brain.html#volume">Volume</a></li>
-<li class="toctree-l3"><a class="reference internal" href="brain.html#colorbar-control">Colorbar control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="community.html">Community</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="community.html#report-an-issue">Report an issue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="community.html#chat">Chat</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="brain.html#api">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="brainAPI.html">Main <em>Brain</em> class inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="brainAPI.html#brain-methods"><em>Brain</em> methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="brain.html">Brain</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#main-features">Main features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#gui-description">GUI description</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="brain.html#color">Color</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="brain.html#screenshot-tutorial">Screenshot tutorial</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="vbexport.html">Exporting your figures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vbexport.html#screenshot-function">Screenshot function</a></li>
-<li class="toctree-l3"><a class="reference internal" href="vbexport.html#transparency">Transparency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#mni-templates">MNI templates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#sources">Sources</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="brain.html#cortical-projection-and-repartition">Cortical projection and repartition</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brain.html#connect-sources">Connect sources</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brain.html#attach-time-series-and-or-pictures">Attach time-series and/or pictures</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="brain.html#shortcuts">Shortcuts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#volume">Volume</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="brain.html#cross-sections">Cross-sections</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brain.html#region-of-interest-roi">Region Of Interest (ROI)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brain.html#d-volume-rendering">3-D volume rendering</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="colorbar.html">Colorbar</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="colorbar.html#api">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="colorbar.html#main-class">Main class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brain.html#colorbar-control">Colorbar control</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="figure.html#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="figure.html#example">Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="figure.html#api">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="figure.html#main-figure-class-inputs">Main <em>Figure</em> class inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="figure.html#methods">Methods</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ndviz.html#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ndviz.html#api">API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ndviz.html#shortcuts">Shortcuts</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#import-and-use-sleep">Import and use sleep</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#examples-and-datasets">Examples and datasets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#supported-files-and-format">Supported files and format</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#data-files">Data files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#hypnogram">Hypnogram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#save-hypnogram">Save hypnogram</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#load-your-files">Load your files</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#from-the-gui">From the GUI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#from-path">From path</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#raw-data">Raw data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#using-mne-python">Using MNE-Python</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#tabs-descripion">Tabs descripion</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#panels">Panels</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#tools">Tools</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#info">Info</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#scoring">Scoring</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sleep.html#detection">Detection</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#load-and-save-the-gui-configuration">Load and save the GUI configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#annotations">Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#shortcuts">Shortcuts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#api">API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sleep.html#collaborator">Collaborator</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="topo.html">Topo</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="topo.html#api">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="topo.html#main-topo-class">Main Topo class</a></li>
-<li class="toctree-l3"><a class="reference internal" href="topo.html#methods">Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#api">API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="brainAPI.html">Main <em>Brain</em> class inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="brainAPI.html#brain-methods"><em>Brain</em> methods</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#gui-functions-and-settings">GUI functions and settings</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#load-and-save-gui-configuration">Load and save GUI configuration</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#brainapi">Brain methods</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#volume-and-cross-sections">Volume and cross-sections</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#sources-methods">Sources methods</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#time-series-methods">Time-series methods</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#pictures-methods">Pictures methods</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#connectivity-methods">Connectivity methods</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#region-of-interest-roi-methods">Region Of Interest (ROI) methods</a></li>
+<li class="toctree-l5"><a class="reference internal" href="brainAPI.html#colorbar-methods">Colorbar methods</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#brain-utility-functions">Brain utility functions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="utils.html#convert-mesh-data">Convert mesh data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="utils.html#add-brain-template">Add brain template</a></li>
-<li class="toctree-l3"><a class="reference internal" href="utils.html#remove-brain-template">Remove brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#screenshot-tutorial">Screenshot tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vbexport.html">Exporting your figures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vbexport.html#screenshot-function">Screenshot function</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="vbexport.html#name-of-your-figure">Name of your figure</a></li>
+<li class="toctree-l5"><a class="reference internal" href="vbexport.html#cropping-region">Cropping region</a></li>
+<li class="toctree-l5"><a class="reference internal" href="vbexport.html#zoom">Zoom</a></li>
+<li class="toctree-l5"><a class="reference internal" href="vbexport.html#colorbar">Colorbar</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#vispy-utility-functions">VisPy utility functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vbexport.html#transparency">Transparency</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="vbexport.html#png-files">PNG files</a></li>
+<li class="toctree-l5"><a class="reference internal" href="vbexport.html#combine-transparent-figures">Combine transparent figures</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="io.html#gui-dialog">GUI dialog</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html#mne">MNE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html#configuration-file">Configuration file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html#image">Image</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="brain.html#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="colorbar.html">Colorbar</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="colorbar.html#api">API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="colorbar.html#main-class">Main class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="figure.html">Figure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#example">Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="figure.html#api">API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="figure.html#main-figure-class-inputs">Main <em>Figure</em> class inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="figure.html#methods">Methods</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="figure.html#show">show</a></li>
+<li class="toctree-l5"><a class="reference internal" href="figure.html#save">save</a></li>
+<li class="toctree-l5"><a class="reference internal" href="figure.html#colorbar-to-axis">colorbar_to_axis</a></li>
+<li class="toctree-l5"><a class="reference internal" href="figure.html#shared-colorbar">shared_colorbar</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ndviz.html">Ndviz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ndviz.html#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ndviz.html#api">API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ndviz.html#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html">Sleep</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#import-and-use-sleep">Import and use sleep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#examples-and-datasets">Examples and datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#supported-files-and-format">Supported files and format</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#data-files">Data files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#hypnogram">Hypnogram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#save-hypnogram">Save hypnogram</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#elan-hyp-format">Elan .hyp format</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#txt-format">.txt format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#load-your-files">Load your files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#from-the-gui">From the GUI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#from-path">From path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#raw-data">Raw data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#using-mne-python">Using MNE-Python</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#tabs-descripion">Tabs descripion</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#panels">Panels</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#channels">Channels</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#spectrogram-hypnogram-time-axis">Spectrogram // hypnogram // time axis</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#topoplot">Topoplot</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#tools">Tools</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#filtering">Filtering</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#referencing">Referencing</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#info">Info</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#scoring">Scoring</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#navigation">Navigation</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#scoring-table">Scoring table</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#live-editing">Live editing</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="sleep.html#detection">Detection</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#spindles-detection">Spindles detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#rapid-eye-movements-detection">Rapid Eye Movements detection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="sleep.html#peaks-detection">Peaks detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#load-and-save-the-gui-configuration">Load and save the GUI configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#annotations">Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#shortcuts">Shortcuts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#api">API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sleep.html#collaborator">Collaborator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="topo.html">Topo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="topo.html#api">API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="topo.html#main-topo-class">Main Topo class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="topo.html#methods">Methods</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="topo.html#add-topoplot">Add topoplot</a></li>
+<li class="toctree-l5"><a class="reference internal" href="topo.html#add-shared-colorbar-topoplot">Add shared colorbar topoplot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#brain-utility-functions">Brain utility functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="utils.html#convert-mesh-data">Convert mesh data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils.html#add-brain-template">Add brain template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils.html#remove-brain-template">Remove brain template</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#vispy-utility-functions">VisPy utility functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="io.html">I/O</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="io.html#gui-dialog">GUI dialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="io.html#mne">MNE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="io.html#configuration-file">Configuration file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="io.html#image">Image</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a><ul>
@@ -360,13 +427,19 @@ activate visbrain
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="changelog_futur.html#changelog">Changelog</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-3-0">v0.3.0</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-2-9">v0.2.9</a></li>
-<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-2-8">v0.2.8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-3-2">v0.3.2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="changelog_futur.html#visbrain">Visbrain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="changelog_futur.html#brain-module">Brain module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#v0-3-0">v0.3.0</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="changelog_futur.html#id1">Brain module</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="changelog_futur.html#future-directions">Future directions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#id4">Visbrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#id2">Visbrain</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#brain">Brain</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#sleep">Sleep</a></li>
 <li class="toctree-l3"><a class="reference internal" href="changelog_futur.html#figure">Figure</a></li>
@@ -397,7 +470,7 @@ activate visbrain
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="brain.html" class="btn btn-neutral float-right" title="Brain" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="community.html" class="btn btn-neutral float-right" title="Community" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -429,7 +502,7 @@ activate visbrain
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.0',
+            VERSION:'0.3.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

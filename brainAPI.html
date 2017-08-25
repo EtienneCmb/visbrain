@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Main Brain class inputs &mdash; visbrain 0.3.0 documentation</title>
+  <title>Main Brain class inputs &mdash; visbrain 0.3.2 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.0 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.2 documentation" href="index.html"/>
         <link rel="up" title="Brain" href="brain.html"/>
         <link rel="next" title="Exporting your figures" href="vbexport.html"/>
         <link rel="prev" title="Brain" href="brain.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.3.2
               </div>
             
           
@@ -99,6 +99,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="community.html">Community</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="brain.html">Brain</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="brain.html#main-features">Main features</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="brain.html#api">API</a><ul class="current">
@@ -122,9 +123,11 @@
 <li class="toctree-l2"><a class="reference internal" href="brain.html#shortcuts">Shortcuts</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colorbar.html">Colorbar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sleep.html">Sleep</a></li>
+<li class="toctree-l1"><a class="reference internal" href="topo.html">Topo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -728,96 +731,88 @@ a matplotlib color (string) or a hexadecimal color (string).</p>
 <h3>Screenshot<a class="headerlink" href="#screenshot" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="visbrain.brain.user.BrainUserMethods.screenshot">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>name</em>, <em>region=None</em>, <em>zoom=None</em>, <em>colorbar=False</em>, <em>cbzoom=None</em>, <em>transparent=False</em>, <em>resolution=3000.0</em>, <em>autocrop=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.screenshot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.screenshot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take a screenshot of the current scene and save it as a picture.</p>
-<p>This method try to make a high-fidelity screenshot of your scene.
-One thing to keep in mind, is that printed picture using a transparent
-compatible extension (like .png files) produces transparent pictures.
-This might be quit disturbing especially using internal light
-reflection. To solve this in your pictures, I recommand putting your
-transparent brain picture onto a dark background (like black) and see
-the magic happend. If you want perfectly fitting pictures, just turn
-the autocrop parameter to True.
-This method requires imageio or PIL (pip install pillow).</p>
+<code class="descclassname">BrainUserMethods.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>canvas=’main’</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit=’centimeter’</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.screenshot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.screenshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a screeshot of the selected canvas.</p>
+<p>By default, the rendered canvas will have the size of your screen.
+The screenshot() method provides two ways to increase to exported image
+resolution :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Using print_size, unit and dpi inputs : specify the size of the
+image at a specific dpi level. For example, you might want to
+have an (10cm, 15cm) image at 300 dpi.</li>
+<li>Using the factor input : multiply the default image size by this
+factor. For example, if you have a (1920, 1080) monitor and if
+factor is 2, the exported image should have a shape of
+(3840, 2160) pixels.</li>
+</ul>
+</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : str</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>saveas</strong> : str</p>
 <blockquote>
 <div><p>The name of the file to be saved. This file must contains a
 extension like .png, .tiff, .jpg…</p>
 </div></blockquote>
+<p><strong>canvas</strong> : {‘main’, ‘colorbar’, ‘cross-sections’}</p>
+<blockquote>
+<div><p>The name of the canvas to render. Use ‘main’ to select the main
+canvas where the brain is displayed. Use ‘colorbar’ to render the
+colorbar or ‘cross-sections’ to render the cross-sections panel
+(in splitted view).</p>
+</div></blockquote>
+<p><strong>print_size</strong> : tuple | None</p>
+<blockquote>
+<div><p>The desired print size. This argument should be used in association
+with the dpi and unit inputs. print_size describe should be a tuple
+of two floats describing (width, height) of the exported image for
+a specific dpi level. The final image might not have the exact
+desired size but will try instead to find a compromize
+regarding to the proportion of width/height of the original image.</p>
+</div></blockquote>
+<p><strong>dpi</strong> : float | 300.</p>
+<blockquote>
+<div><p>Dots per inch for printing the image.</p>
+</div></blockquote>
+<p><strong>unit</strong> : {‘centimeter’, ‘millimeter’, ‘pixel’, ‘inch’}</p>
+<blockquote>
+<div><p>Unit of the printed size.</p>
+</div></blockquote>
+<p><strong>factor</strong> : float | None</p>
+<blockquote>
+<div><p>If you don’t want to use the print_size input, factor simply
+multiply the resolution of your screen.</p>
+</div></blockquote>
 <p><strong>region</strong> : tuple | None</p>
 <blockquote>
-<div><p>Crop the exported picture to a specified region. Must be a
-tuple of four integers where each one describe the region as
-(x_start, y_start, width, height) where x_start is where
-to start along the horizontal axis and y_start where to start
-along the vertical axis. By default, the entire canvas is
-rendered.</p>
+<div><p>Select a specific region. Must be a tuple of four integers each one
+describing (x_start, y_start, width, height).</p>
 </div></blockquote>
 <p><strong>autocrop</strong> : bool | False</p>
 <blockquote>
 <div><p>Automaticaly crop the figure in order to have the smallest
 space between the brain and the border of the picture.</p>
 </div></blockquote>
-<p><strong>zoom</strong> : float | None</p>
+<p><strong>bgcolor</strong> : array_like/string | None</p>
 <blockquote>
-<div><p>Define the zoom level over the main canvas.</p>
-</div></blockquote>
-<p><strong>colorbar</strong> : bool | False</p>
-<blockquote>
-<div><p>Specify if the colorbar has to be exported too.</p>
-</div></blockquote>
-<p><strong>cbzoom</strong> : float | None</p>
-<blockquote>
-<div><p>Define the zoom level over the colorbar canvas.</p>
+<div><p>The background color of the image.</p>
 </div></blockquote>
 <p><strong>transparent</strong> : bool | False</p>
-<blockquote>
+<blockquote class="last">
 <div><p>Specify if the exported figure have to contains a transparent
 background.</p>
-</div></blockquote>
-<p><strong>resolution</strong> : float | 3000</p>
-<blockquote class="last">
-<div><p>Define the screenshot resolution by indicating the number of
-times the definition of your screen must be multiplied.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><code class="xref py py-obj docutils literal"><span class="pre">background_color</span></code></dt>
-<dd>change the background color</dd>
-<dt><code class="xref py py-obj docutils literal"><span class="pre">rotate</span></code></dt>
-<dd>rotate the scene</dd>
-</dl>
-</div>
-<p class="rubric">Notes</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">the region argument can be quit difficult to ajust. Be
-patient, it’s possible. Don’t forget that .png files contains
-transparency. For an optimal screenshot, I recommand doing a
-rotation before the screenshot, so that the canvas can be
-initialized. See the
-<a class="reference external" href="https://etiennecmb.github.io/visbrain/vbexport.html">tutorial</a>
-for futher explanations.</p>
-</div>
 <p class="rubric">Examples</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define a Brain instance :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define the filename and the cropped region :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">filename</span><span class="p">,</span> <span class="n">crop</span> <span class="o">=</span> <span class="s1">&#39;myfile.png&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">570</span><span class="p">,</span> <span class="mi">550</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Rotate the brain :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="s1">&#39;axial&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Take a screenshot and save it (tested on a 17&quot; laptop) and</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># export the colorbar :</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">crop</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Export the main brain as a (10cm, 20cm) image at 300 dpi:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;main.png&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1109,7 +1104,7 @@ Volume or ROI part if the roi_values and roi_labels are not None.</p>
 <h3>Control cross-sections<a class="headerlink" href="#control-cross-sections" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="visbrain.brain.user.BrainUserMethods.cross_sections_control">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">cross_sections_control</code><span class="sig-paren">(</span><em>pos=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>center=None</em>, <em>volume=’Brodmann’</em>, <em>split_view=True</em>, <em>transparent=True</em>, <em>cmap=’gray’</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.cross_sections_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.cross_sections_control" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">BrainUserMethods.</code><code class="descname">cross_sections_control</code><span class="sig-paren">(</span><em>pos=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>center=None</em>, <em>volume=’Brodmann’</em>, <em>split_view=True</em>, <em>transparent=True</em>, <em>cmap=’gray’</em>, <em>show_text=True</em>, <em>visible=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.cross_sections_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.cross_sections_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Control the cross-section.</p>
 <p>The three sections (sagittal, coronal and axial) can be defined in two
 ways :</p>
@@ -1151,6 +1146,10 @@ the cross-section is directly displayed inside the brain.</p>
 <p><strong>cmap</strong> : string | ‘gray’</p>
 <blockquote>
 <div><p>Name of the colormap to use.</p>
+</div></blockquote>
+<p><strong>show_text</strong> : bool | True</p>
+<blockquote>
+<div><p>Display or hide slice text.</p>
 </div></blockquote>
 <p><strong>visible</strong> : bool | True</p>
 <blockquote class="last">
@@ -2229,7 +2228,7 @@ either the cortical projection, use ‘Projection’. And
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.0',
+            VERSION:'0.3.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

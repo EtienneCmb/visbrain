@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.io.write_image &mdash; visbrain 0.3.0 documentation</title>
+  <title>visbrain.io.write_image &mdash; visbrain 0.3.2 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.2 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.3.2
               </div>
             
           
@@ -97,14 +97,8 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../brain.html">Brain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../colorbar.html">Colorbar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../figure.html">Figure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ndviz.html">Ndviz</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../sleep.html">Sleep</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../topo.html">Topo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../utils.html">Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../io.html">I/O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
 </ul>
@@ -178,6 +172,7 @@
 <span class="sd">- write_fig_pyqt : Export a GUI window as a figure</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..utils.color</span> <span class="k">import</span> <span class="n">color2vb</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;write_fig_hyp&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_canvas&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_pyqt&#39;</span><span class="p">)</span>
@@ -300,8 +295,9 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="write_fig_canvas"><a class="viewcode-back" href="../../../io.html#visbrain.io.write_image.write_fig_canvas">[docs]</a><span class="k">def</span> <span class="nf">write_fig_canvas</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="write_fig_canvas"><a class="viewcode-back" href="../../../io.html#visbrain.io.write_image.write_fig_canvas">[docs]</a><span class="k">def</span> <span class="nf">write_fig_canvas</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
+                     <span class="n">factor</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Export a canvas as a figure.</span>
 
 <span class="sd">    Parameters</span>
@@ -310,40 +306,119 @@
 <span class="sd">        Name of the figure to export.</span>
 <span class="sd">    canvas : VisPy canvas</span>
 <span class="sd">        The vispy canvas to export.</span>
-<span class="sd">    resolution : int | 3000</span>
-<span class="sd">        Coefficient to multiply the size of the canvas.</span>
+<span class="sd">    widget : PyQt widget | None</span>
+<span class="sd">        The widget parent of the canvas.</span>
 <span class="sd">    autocrop : bool | False</span>
 <span class="sd">        Auto-cropping argument to remove useless space.</span>
 <span class="sd">    region : tuple/list | None</span>
-<span class="sd">        The region to export.</span>
+<span class="sd">        The region to export (x_start, y_start, width, height).</span>
+<span class="sd">    print_size : tuple | None</span>
+<span class="sd">        The desired print size. This argument should be used in association</span>
+<span class="sd">        with the dpi and unit inputs. print_size describe should be a tuple</span>
+<span class="sd">        of two floats describing (width, height) of the exported image for</span>
+<span class="sd">        a specific dpi level. The final image might not have the exact</span>
+<span class="sd">        desired size but will try instead to find a compromize</span>
+<span class="sd">        regarding to the proportion of width/height of the original image.</span>
+<span class="sd">    unit : {&#39;centimeter&#39;, &#39;millimeter&#39;, &#39;pixel&#39;, &#39;inch&#39;}</span>
+<span class="sd">        Unit of the printed size.</span>
+<span class="sd">    dpi : float | 300.</span>
+<span class="sd">        Dots per inch for printing the image.</span>
+<span class="sd">    factor : float | None</span>
+<span class="sd">        If you don&#39;t want to use the print_size input, factor simply</span>
+<span class="sd">        multiply the resolution of your screen.</span>
+<span class="sd">    bgcolor : array_like/string | None</span>
+<span class="sd">        Background color of the canvas.</span>
+<span class="sd">    transparent : bool | False</span>
+<span class="sd">        Use transparent background.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">piccrop</span>
-    <span class="kn">import</span> <span class="nn">vispy</span>
+    <span class="kn">from</span> <span class="nn">vispy.io</span> <span class="k">import</span> <span class="n">imsave</span>
 
-    <span class="c1"># Manage size exportation. The dpi option present when creating a</span>
-    <span class="c1"># vispy canvas doesn&#39;t seems to work. The trick bellow increase the</span>
-    <span class="c1"># physical size of the canvas so that the exported figure has a</span>
-    <span class="c1"># high-definition :</span>
-    <span class="c1"># Get a copy of the actual canvas physical size :</span>
-    <span class="n">backp_size</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">physical_size</span>
+    <span class="c1"># Get the size of the canvas and backend :</span>
+    <span class="n">c_size</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">b_size</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_physical_size</span>
 
-    <span class="c1"># Increase the physical size :</span>
-    <span class="n">ratio</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">resolution</span><span class="p">)</span> <span class="o">/</span> <span class="n">backp_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">resolution</span> <span class="o">/</span> <span class="n">backp_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">new_size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">backp_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ratio</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">backp_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ratio</span><span class="p">))</span>
-    <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="n">new_size</span>
+    <span class="c1"># If the GUI is displayed, c_size and b_size should be equals. If not,</span>
+    <span class="c1"># and if the canvas is resizable, the canvas might have a different size</span>
+    <span class="c1"># because it hasn&#39;t been updated. In that case, we force the canvas to have</span>
+    <span class="c1"># the same size as the backend :</span>
+    <span class="k">if</span> <span class="n">c_size</span> <span class="o">!=</span> <span class="n">b_size</span><span class="p">:</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">b_size</span>
 
-    <span class="c1"># Render and save :</span>
-    <span class="k">if</span> <span class="n">region</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">region</span><span class="p">}</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="n">new_size</span><span class="p">}</span>
-    <span class="n">img</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="c1"># Backup size / background color :</span>
+    <span class="n">backup_size</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">physical_size</span>
+    <span class="n">backup_bgcolor</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span>
+
+    <span class="c1"># User select a desired print size with at a specific dpi :</span>
+    <span class="k">if</span> <span class="n">print_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Type checking :</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">print_size</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The print_size must either be a tuple, list or a &quot;</span>
+                            <span class="s2">&quot;NumPy array describing the (width, height) of the&quot;</span>
+                            <span class="s2">&quot; image in &quot;</span> <span class="o">+</span> <span class="n">unit</span><span class="p">)</span>
+        <span class="c1"># Check print size :</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">print_size</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;print_size must be a tuple describing the &quot;</span>
+                            <span class="s2">&quot;(width, height) of the image in &quot;</span> <span class="o">+</span> <span class="n">unit</span><span class="p">)</span>
+        <span class="n">print_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">print_size</span><span class="p">)</span>
+        <span class="c1"># If the user select the auto-croping option, the canvas must be render</span>
+        <span class="c1"># before :</span>
+        <span class="k">if</span> <span class="n">autocrop</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+            <span class="n">s_output</span> <span class="o">=</span> <span class="n">piccrop</span><span class="p">(</span><span class="n">img</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s_output</span> <span class="o">=</span> <span class="n">b_size</span>
+        <span class="c1"># Unit conversion :</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;millimeter&#39;</span><span class="p">:</span>
+            <span class="n">mult</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">10.</span> <span class="o">*</span> <span class="mf">2.54</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;centimeter&#39;</span><span class="p">:</span>
+            <span class="n">mult</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="mf">2.54</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;pixel&#39;</span><span class="p">:</span>
+            <span class="n">mult</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">dpi</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;inch&#39;</span><span class="p">:</span>
+            <span class="n">mult</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The unit must either be &#39;millimeter&#39;, &quot;</span>
+                             <span class="s2">&quot;&#39;centimeter&#39;, &#39;pixel&#39; or &#39;inch&#39; and not &quot;</span> <span class="o">+</span> <span class="n">unit</span><span class="p">)</span>
+        <span class="c1"># Get the factor to apply to the canvas size. This factor is defined as</span>
+        <span class="c1"># the mean required float to get either the desired width/height.</span>
+        <span class="c1"># Note that the min or the max can also be used instead.</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">print_size</span> <span class="o">*</span> <span class="n">dpi</span> <span class="o">*</span> <span class="n">mult</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">s_output</span><span class="p">))</span>
+
+    <span class="c1"># Multply the original canvas size :</span>
+    <span class="k">if</span> <span class="n">factor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Get the new width and height :</span>
+        <span class="n">new_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">b_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
+        <span class="n">new_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">b_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
+        <span class="c1"># Set it to the canvas, backend and the widget :</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_set_physical_size</span><span class="p">(</span><span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span><span class="p">)</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">widget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span><span class="p">)</span>
+
+    <span class="c1"># Background color and transparency :</span>
+    <span class="k">if</span> <span class="n">bgcolor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">transparent</span><span class="p">:</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
+
+    <span class="c1"># Render the canvas :</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can not render the canvas. Try to decrease the &quot;</span>
+                         <span class="s2">&quot;resolution&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Apply auto-cropping to the image :</span>
     <span class="k">if</span> <span class="n">autocrop</span><span class="p">:</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">piccrop</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-    <span class="n">vispy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">imsave</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+    <span class="c1"># Save it :</span>
+    <span class="n">imsave</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
 
     <span class="c1"># Set to the canvas it&#39;s previous size :</span>
-    <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="n">backp_size</span></div>
+    <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="n">backup_size</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">backup_size</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">backup_bgcolor</span></div>
 
 
 <div class="viewcode-block" id="write_fig_pyqt"><a class="viewcode-back" href="../../../io.html#visbrain.io.write_image.write_fig_pyqt">[docs]</a><span class="k">def</span> <span class="nf">write_fig_pyqt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
@@ -408,7 +483,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.0',
+            VERSION:'0.3.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -9,7 +9,7 @@ Topo
 
     from visbrain import Topo
 
-Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.html#topo-examples>`_.
+Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.html#topoplot-examples>`_.
 
 .. figure::  picture/pictopo/ex_topoplot_plotting_properties.png
    :align:   center
