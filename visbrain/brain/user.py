@@ -375,7 +375,8 @@ class BrainUserMethods(object):
 
     def cross_sections_control(self, pos=(0., 0., 0.), center=None,
                                volume='Brodmann', split_view=True,
-                               transparent=True, cmap='gray', visible=True):
+                               transparent=True, cmap='gray', show_text=True,
+                               visible=True):
         """Control the cross-section.
 
         The three sections (sagittal, coronal and axial) can be defined in two
@@ -403,6 +404,8 @@ class BrainUserMethods(object):
             Use transparent or opaque borders.
         cmap : string | 'gray'
             Name of the colormap to use.
+        show_text : bool | True
+            Display or hide slice text.
         visible : bool | True
             Set the cross-sections visible.
 
@@ -432,9 +435,14 @@ class BrainUserMethods(object):
         self._csTransp.setChecked(transparent)
         self.grpSec.setChecked(visible)
         self.menuDispCrossec.setChecked(visible)
+        # Show text :
+        self.volume._cspTxtSagit.visible = show_text
+        self.volume._cspTxtAxial.visible = show_text
+        self.volume._cspTxtCoron.visible = show_text
         # Update the volume to use and split-view :
         self._fcn_crossec_change()
         self._fcn_crossec_split()
+        self._fcn_crossec_viz()
 
     def volume_control(self, volume='Brodmann', rendering='mip',
                        cmap='OpaqueGrays', threshold=0., visible=True):
