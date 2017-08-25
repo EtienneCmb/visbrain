@@ -193,8 +193,7 @@ class CrossSections(CrossSectionsSplit):
         Set cross-sections visible.
     """
 
-    def __init__(self, parent=None, parent_sp=None, visible=True,
-                 cmap='gray'):
+    def __init__(self, parent=None, parent_sp=None, visible=True, cmap='gray'):
         """Init."""
         CrossSectionsSplit.__init__(self, parent_sp)
         self._visible_cs = visible

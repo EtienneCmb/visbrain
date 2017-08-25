@@ -35,7 +35,7 @@ class uiMenu(object):
         # Annotations :
         self.menuSaveAnnotations.triggered.connect(self.saveAnnotationTable)
         # Screenshot :
-        self.menuSaveScreenshotEntire.triggered.connect(self.saveScreenEntire)
+        self.menuSaveScreenshot.triggered.connect(self._fcn_gui_screenshot)
 
         # _____________________________________________________________________
         #                                 LOAD
@@ -265,13 +265,9 @@ class uiMenu(object):
                 write_txt(file + '.txt', zip(staInd, endInd, annot))
 
     # ______________________ SCREENSHOT ______________________
-    def saveScreenEntire(self):
+    def _fcn_gui_screenshot(self):
         """Screenshot using the GUI."""
-        # Get filename :
-        filename = dialogSave(self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
-                              "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
-        # Screnshot function :
-        write_fig_pyqt(self, filename)
+        self.show_gui_screenshot()
 
     ###########################################################################
     ###########################################################################

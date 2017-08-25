@@ -71,7 +71,8 @@ class CbarVisual(CbarBase):
             # Define a canvas :
             self._canvas = scene.SceneCanvas(keys='interactive', show=False,
                                              resizable=True, dpi=600,
-                                             bgcolor=self._bgcolor)
+                                             bgcolor=self._bgcolor,
+                                             size=(300, 900))
             self._wc = self._canvas.central_widget.add_view()
             parent = self._wc.scene
             # Define the camera :

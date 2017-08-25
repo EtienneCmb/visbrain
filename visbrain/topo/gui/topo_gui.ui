@@ -1002,6 +1002,9 @@ offset</string>
    <property name="text">
     <string>Screenshot</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
  </widget>
  <resources/>

@@ -14,7 +14,7 @@ import vispy.app as visapp
 import vispy.scene.cameras as viscam
 
 from .interface import uiInit, uiElements
-from .interface.uiInit import vbShortcuts
+from .interface.uiInit import BrainShortcuts
 from .base import base, BrainCbar
 from .user import BrainUserMethods
 from ..utils import ShortcutPopup, set_widget_size
@@ -398,7 +398,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         # Cbar creation :
         BrainCbar.__init__(self, camera)
         # Add shortcuts on it :
-        vbShortcuts.__init__(self, self.cbqt.cbviz._canvas)
+        BrainShortcuts.__init__(self, self.cbqt.cbviz._canvas)
 
         self._fcn_on_load()
 

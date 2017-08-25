@@ -7,12 +7,13 @@ from .uiConnectivity import uiConnectivity
 from .uiOpacity import uiOpacity
 from .uiMenu import uiMenu
 from .uiConfig import uiConfig
+from .UiScreenshot import UiScreenshot
 
-__all__ = ['uiElements']
+__all__ = ('uiElements')
 
 
 class uiElements(uiSettings, uiAtlas, uiSources, uiConnectivity, uiOpacity,
-                 uiConfig, uiMenu):
+                 uiConfig, uiMenu, UiScreenshot):
     """Inherit from the diffrent ui files and initialize them."""
 
     def __init__(self):
@@ -24,3 +25,4 @@ class uiElements(uiSettings, uiAtlas, uiSources, uiConnectivity, uiOpacity,
         uiOpacity.__init__(self)
         uiConfig.__init__(self)
         uiMenu.__init__(self)
+        UiScreenshot.__init__(self)

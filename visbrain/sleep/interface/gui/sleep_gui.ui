@@ -3890,13 +3890,6 @@ display</string>
       <addaction name="menuSaveDetectAll"/>
       <addaction name="menuSaveDetectSelected"/>
      </widget>
-     <widget class="QMenu" name="menuSaveScreenshot">
-      <property name="title">
-       <string>Screenshot</string>
-      </property>
-      <addaction name="menuSaveScreenshotEntire"/>
-      <addaction name="menuSaveScreenshotSelected"/>
-     </widget>
      <addaction name="menuSaveHypnogram"/>
      <addaction name="menuSaveInfoTable"/>
      <addaction name="menuSaveScoringTable"/>
@@ -4372,6 +4365,14 @@ display</string>
   <action name="menuLoadAnnotations">
    <property name="text">
     <string>Annotations</string>
+   </property>
+  </action>
+  <action name="menuSaveScreenshot">
+   <property name="text">
+    <string>Screenshot</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>
