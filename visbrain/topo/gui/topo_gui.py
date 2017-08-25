@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/etienne/Toolbox/visbrain/visbrain/topo/gui/topo_gui.ui'
 #
-# Created by: PyQt5 UI code generator 5.8.2
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -47,6 +47,7 @@ class Ui_MainWindow(object):
         self.q_Detection = QtWidgets.QWidget()
         self.q_Detection.setObjectName("q_Detection")
         self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.q_Detection)
+        self.verticalLayout_22.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_22.setObjectName("verticalLayout_22")
         self.groupBox_3 = QtWidgets.QGroupBox(self.q_Detection)
         self.groupBox_3.setCheckable(True)
@@ -561,6 +562,7 @@ class Ui_MainWindow(object):
         self.menuSaveAnnotations.setText(_translate("MainWindow", "Annotation"))
         self.menuLoadAnnotations.setText(_translate("MainWindow", "Annotations"))
         self.menuScreenshot.setText(_translate("MainWindow", "Screenshot"))
+        self.menuScreenshot.setShortcut(_translate("MainWindow", "Ctrl+N"))
 
 
 if __name__ == "__main__":
