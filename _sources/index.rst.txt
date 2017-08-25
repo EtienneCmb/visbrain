@@ -24,7 +24,7 @@ Visbrain is a python package dedicated to multi-purpose neuroscience visualizati
 .. figure::  /picture/visbrain_readme.png
    :align:   center
 
-* :ref:`brain` : visualize EEG/MEG/Intracranial data, connectivity in a standard MNI 3D brain (see `Brain examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_).
+* :ref:`Brain` : visualize EEG/MEG/Intracranial data, connectivity in a standard MNI 3D brain (see `Brain examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_).
 * :ref:`Sleep` : visualize polysomnographic data and hypnogram edition (see `Sleep examples <http://visbrain.org/auto_examples/index.html#sleep-examples>`_).
 * :ref:`topo` : display topographical maps (see `Topo examples <http://visbrain.org/auto_examples/index.html#topoplot-examples>`_).
 * :ref:`Ndviz` : visualize multidimensional data and basic plotting forms (see `Ndviz examples <http://visbrain.org/auto_examples/index.html#ndviz-examples>`_).
@@ -84,7 +84,7 @@ Contents:
 *********
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 1
 
    community
    documentation

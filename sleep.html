@@ -40,8 +40,9 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="visbrain 0.3.2 documentation" href="index.html"/>
+        <link rel="up" title="Documentation" href="documentation.html"/>
         <link rel="next" title="Topo" href="topo.html"/>
-        <link rel="prev" title="Ndviz" href="ndviz.html"/> 
+        <link rel="prev" title="Exporting your figures" href="vbexport.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -99,68 +100,48 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="community.html">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="brain.html">Brain</a></li>
-<li class="toctree-l1"><a class="reference internal" href="colorbar.html">Colorbar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="figure.html">Figure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Sleep</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#import-and-use-sleep">Import and use sleep</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples-and-datasets">Examples and datasets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#supported-files-and-format">Supported files and format</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#data-files">Data files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hypnogram">Hypnogram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#save-hypnogram">Save hypnogram</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#elan-hyp-format">Elan .hyp format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#txt-format">.txt format</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="brain.html">Brain</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sleep</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-and-use-sleep">Import and use sleep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples-and-datasets">Examples and datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supported-files-and-format">Supported files and format</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data-files">Data files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hypnogram">Hypnogram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#save-hypnogram">Save hypnogram</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#load-your-files">Load your files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#from-the-gui">From the GUI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#from-path">From path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#raw-data">Raw data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-mne-python">Using MNE-Python</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#load-your-files">Load your files</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#from-the-gui">From the GUI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#from-path">From path</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#raw-data">Raw data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-mne-python">Using MNE-Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tabs-descripion">Tabs descripion</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#panels">Panels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tools">Tools</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#info">Info</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scoring">Scoring</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#detection">Detection</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#tabs-descripion">Tabs descripion</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#panels">Panels</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#channels">Channels</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#spectrogram-hypnogram-time-axis">Spectrogram // hypnogram // time axis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#topoplot">Topoplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-and-save-the-gui-configuration">Load and save the GUI configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#annotations">Annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shortcuts">Shortcuts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api">API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#collaborator">Collaborator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#tools">Tools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#filtering">Filtering</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#referencing">Referencing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo.html">Topo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colorbar.html">Colorbar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ndviz.html">Ndviz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="figure.html">Figure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html">I/O</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#info">Info</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scoring">Scoring</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#navigation">Navigation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#scoring-table">Scoring table</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#live-editing">Live editing</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#detection">Detection</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#spindles-detection">Spindles detection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rapid-eye-movements-detection">Rapid Eye Movements detection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#peaks-detection">Peaks detection</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#load-and-save-the-gui-configuration">Load and save the GUI configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#annotations">Annotations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#shortcuts">Shortcuts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#collaborator">Collaborator</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="topo.html">Topo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="io.html">I/O</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
 </ul>
@@ -206,6 +187,8 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="documentation.html">Documentation</a> &raquo;</li>
         
       <li>Sleep</li>
     
@@ -914,7 +897,7 @@ order into the GUI.</p>
         <a href="topo.html" class="btn btn-neutral float-right" title="Topo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ndviz.html" class="btn btn-neutral" title="Ndviz" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vbexport.html" class="btn btn-neutral" title="Exporting your figures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
