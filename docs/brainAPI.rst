@@ -6,16 +6,12 @@ Main *Brain* class inputs
 
 .. autoclass:: visbrain.brain.brain.Brain
 
-
-*Brain* methods
-~~~~~~~~~~~~~~~
-
 .. ##########################################################################
 ..                                    GUI
 .. ##########################################################################
 
 GUI functions and settings
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Set of functions for an interactive control of the graphical user interface elements.
 
@@ -42,7 +38,7 @@ Screenshot
 .. _LoadSaveConfig:
 
 Load and save GUI configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Load an existing configuration
 ++++++++++++++++++++++++++++++
@@ -59,7 +55,7 @@ Save the current configuration
 .. _BrainApi:
 
 Brain methods
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
 Set of functions for an interactive control of the main brain object. Use the methods below to define which brain template or hemisphere to display, the transparency level...
 
@@ -83,7 +79,7 @@ Add mesh to the scene
 .. _VolCrossecApi:
 
 Volume and cross-sections
-^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Control the volume
 ++++++++++++++++++
@@ -110,7 +106,7 @@ Control cross-sections
 .. _SourcesApi:
 
 Sources methods
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
 Set of functions for an interactive control of sources object. Use the methods below to pass some data to sources, to control the transparency level, to run the cortical projection / repartition...
 
@@ -162,7 +158,7 @@ Colormap
 .. _TimeSeriesApi:
 
 Time-series methods
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 Time-series control
 +++++++++++++++++++
@@ -181,7 +177,7 @@ Add time-series
 .. _PicturesApi:
 
 Pictures methods
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
 Pictures control
 ++++++++++++++++
@@ -198,7 +194,7 @@ Add pictures
 .. _ConnectApi:
 
 Connectivity methods
-^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~
 
 Set of functions for an interactive control of connectivity object. Use the methods below to pass some data to connectivity, to control the transparency level...
 
@@ -217,7 +213,7 @@ Add connectivity object
 .. _RoiApi:
 
 Region Of Interest (ROI) methods
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Set of functions for an interactive control of ROI (Region of interest) objects. Use methods below to select the ROI to display, to control the transparency level...
 
@@ -244,7 +240,7 @@ Light reflection
 .. _CbarApi:
 
 Colorbar methods
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
 Colorbar control
 ++++++++++++++++

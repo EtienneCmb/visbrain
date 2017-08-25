@@ -4,13 +4,13 @@ Documentation
 =============
 
 .. toctree::
-   :maxdepth: 5
+    :maxdepth: 2
 
-   brain
-   colorbar
-   figure
-   ndviz
-   sleep
-   topo
-   utils
-   io
+    brain
+    sleep
+    topo
+    ndviz
+    colorbar
+    figure
+    utils
+    io

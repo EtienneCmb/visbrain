@@ -103,7 +103,7 @@ Elan .hyp format
 Sleep will create a single .hyp file with 4 header rows and the values presented above for the sleep stages, with the exception that the value assigned to REM sleep will be 5 for compatibility with Elan hypnogram reader.
 
 .txt format
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
 
 Sleep will automatically create a HYPNOFILENAME_description.txt with the appropriate parameters (time, sleep stages values), therefore making it easy to reload it later.
 
