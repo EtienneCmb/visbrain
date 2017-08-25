@@ -27,7 +27,7 @@ from .sleep import Sleep
 from .topo import Topo
 
 __all__ = ['Brain', 'Colorbar', 'Figure', 'Ndviz', 'Sleep', 'Topo']
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 
 # PyQt5 crash if an error occured. This small function fix it for all modules
 # to retrieve the PyQt4 behavior :
