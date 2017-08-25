@@ -236,7 +236,11 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
         canvas.bgcolor = [0.] * 4
 
     # Render the canvas :
-    img = canvas.render(region=region)
+    try:
+        img = canvas.render(region=region)
+    except:
+        raise ValueError("Can not render the canvas. Try to decrease the "
+                         "resolution")
 
     # Apply auto-cropping to the image :
     if autocrop:
