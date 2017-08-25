@@ -3,31 +3,81 @@
 Brain
 =====
 
-*Brain* is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, connectivity, region of interest... This module can be imported as follow :
+.. figure::  picture/ico/brain_ico.png
+   :align:   center
+
+.. ##########################################################################
+..                                 DESCRIPTION
+.. ##########################################################################
+
+Description
+-----------
+
+*Brain* is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, connectivity, region of interest...
+
+.. figure::  picture/picbrain/brain_description.png
+   :align:   center
+
+Help
+~~~~
+
+If you need help with the *Brain* module, ask your questions in the dedicated `gitter Brain chat <https://gitter.im/visbrain-python/Brain?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+
+Main features
+~~~~~~~~~~~~~
+
+* **GUI**
+   * Modular and responsive GUI
+   * Take screenshot with controllable dpi
+   * Save the GUI state (*buttons, sliders, checkbox*...) 
+* **Main brain templates**
+   * Zoom, translate and rotate the brain
+   * Control the brain appearance, transparency, hemisphere...
+   * Import custom templates
+* **Sources**
+   * Add sources to the scene (EEG, MEG, intra-cranial...)
+   * Control 
+   * Connect those sources (*Connectivity* with several color properties)
+   * Project source's activity onto the surface
+* **Volume**
+   * *Brain* comes by default with the Brodmann and AAL volume
+   * Import nifti files
+   * *Cross-sections*
+      * Display brain sections
+      * Localize sources using the *cross-sections*
+   * 3-D volume using several rendering methods
+   * *Region Of Interest* (ROI)
+      * Display ROI
+      * Add custom ROI templates
+      * Project source's activity on ROI
+
+Import and use Brain
+~~~~~~~~~~~~~~~~~~~~
+
+The *Brain* module can be imported as follow :
 
 .. code-block:: python
 
     from visbrain import Brain
 
-Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_.
+Examples and datasets
+~~~~~~~~~~~~~~~~~~~~~
 
-Main features
--------------
+Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_.
 
 GUI description
 ~~~~~~~~~~~~~~~
 
+Components
+^^^^^^^^^^
+
 The *Brain* graphical user interface is subdivided into three main parts :
 
+* **Menu** (*Save/load GUI config, take a screenshot*...)
+* **Settings panel** (*display by default*)
 * **Main canvas** where the brain is displayed
-* **Menu** (*Save/load GUI config, take a screenshot*)
-* **Settings panel**
-
-   * Settings tab (*background color, object opacity and slice, light, screenshot properties*) 
-   * Brain tab (*brain template, ROI, cross-sections, volume*)
-   * Sources tab (*source's properties, text, cortical projection and repartition, time-series, pictures*)
-   * Connect tab (*connectivity settings*)
-   * Cbar tab (*colorbar properties of the selected object*)
+* **Colorbar canvas** (*hide by default*)
+* **Cross-sections canvas** (*hide by default*)
 
 .. note::
 
@@ -39,10 +89,56 @@ The *Brain* graphical user interface is subdivided into three main parts :
    **API**
       * :ref:`LoadSaveConfig`
 
-Color
-^^^^^
+Settings panel tabs
+^^^^^^^^^^^^^^^^^^^
 
-Brain can manage several types of color inputs. All possible colors can be a matplotlib color name ('olive', 'slateblue'...), an hexadecimal type ('#9b59b6', '#3498db', '#95a5a6'...*) or an array of RGB or RGBA colors ((1., 0., 0.), (.1, .1, .1)...).
+* Settings tab (*background color, object opacity and slice, light*) 
+* Brain tab (*brain template, ROI, cross-sections, volume*)
+* Sources tab (*source's properties, text, cortical projection and repartition, time-series, pictures*)
+* Connect tab (*connectivity settings*)
+* Cbar tab (*colorbar properties of the selected object*)
+
+.. _brainshortcuts:
+
+Shortcuts
+^^^^^^^^^
+
+==============          ==============================================
+Keys                    Description
+==============          ==============================================
+<space>                 Brain transparency
+<delete>                Reset camera
+0                       Top view
+1                       Bottom view
+2                       Left view
+3                       Right view
+4                       Front view
+5                       Back view
+b                       Display / hide the brain
+x                       Display / hide cross-sections
+v                       Display / hide volume
+s                       Display / hide sources
+t                       Display / hide connectivity
+r                       Display / hide Region Of Interest (ROI)
+c                       Display / hide colorbar
+a                       Auto-scale colormap
+"+"                     Increase brain opacity
+"-"                     Decrease brain opacity
+CTRL + p                Run the cortical projection
+CTRL + r                Run the cortical repartition
+CTRL + d                Display / hide quick settings panel
+CTRL + n                Screenshot window
+CTRL + w                Screenshot of the entire window
+CTRL + t                Show the shortcuts panel
+CTRL + q                Exit
+==============          ==============================================
+
+.. ##########################################################################
+..                                 TUTORIAL
+.. ##########################################################################
+
+Tutorial
+--------
 
 MNI templates
 ~~~~~~~~~~~~~
@@ -101,7 +197,7 @@ Cortical projection and repartition
 * **Cortical projection :** correspond to the projection of source's activity onto the brain (or ROI) surface.
 * **Cortical repartition :** correspond to the number of sources contributing to each vertex of the surface. This is particularly convenient to inspect how sources are distributed on the surface.
 
-Both methods use a **radius** parameter and only vertices with an euclidian distance under **radius** are going to be considered. From the GUI, those functions can be executed from the menu *Project*, from the tab *Sources/Properties/Projection*, using keyboard :ref:`BrainShortcuts` or *Brain* methods.
+Both methods use a **radius** parameter and only vertices with an euclidian distance under **radius** are going to be considered. From the GUI, those functions can be executed from the menu *Project*, from the tab *Sources/Properties/Projection*, using keyboard :ref:`brainshortcuts` or *Brain* methods.
 
 .. note::
    
@@ -252,6 +348,9 @@ The colorbar can be controlled for individual objects including :
    **API**
       * :ref:`CbarApi`
 
+.. ##########################################################################
+..                                 API
+.. ##########################################################################
 
 API
 ---
@@ -264,48 +363,3 @@ The user functions correspond to a bundle of functions that can be used to contr
    brainAPI
 
 
-Screenshot tutorial
--------------------
-
-See this tutorial to export your figures in a proper way in order to use them in your research / paper...
-
-.. toctree::
-   :maxdepth: 4
-
-   vbexport
-
-
-.. _BrainShortcuts:
-
-Shortcuts
----------
-
-==============          ==================================================================================
-Keys                    Description
-==============          ==================================================================================
-<space>                 Brain transparency
-<delete>                Reset camera
-0                       Top view
-1                       Bottom view
-2                       Left view
-3                       Right view
-4                       Front view
-5                       Back view
-b                       Display / hide the brain
-x                       Display / hide cross-sections
-v                       Display / hide volume
-s                       Display / hide sources
-t                       Display / hide connectivity
-r                       Display / hide Region Of Interest (ROI)
-c                       Display / hide colorbar
-a                       Auto-scale colormap
-"+"                     Increase brain opacity
-"-"                     Decrease brain opacity
-CTRL+P                  Run the cortical projection
-CTRL+R                  Run the cortical repartition
-CTRL+D                  Display / hide quick settings panel
-CTRL+N                  Screenshot of the main canvas
-CTRL+W                  Screenshot of the entire window
-CTRL+T                  Show the shortcuts panel
-CTRL+Q                  Exit
-==============          ==================================================================================

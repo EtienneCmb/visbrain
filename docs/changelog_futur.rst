@@ -6,6 +6,20 @@ Changelog and future directions
 Changelog
 ---------
 
+v0.3.2
+^^^^^^
+
+Visbrain
+~~~~~~~~
+
+* New topoplot module
+* Screenshots improvements (new screenshot window from the GUI)
+
+Brain module
+~~~~~~~~~~~~
+
+* Bug fixing
+
 v0.3.0
 ^^^^^^
 
@@ -20,52 +34,6 @@ Brain module
 * Improve ROI selection
 * New user methods
 * GUI and Doc improvements
-
-v0.2.9
-^^^^^^
-
-Visbrain
-~~~~~~~~
-
-* Better integration of PyQt5
-* Start grouping read/write function in I/O
-* Fix closing window when Python error occurs
-
-Brain module
-~~~~~~~~~~~~
-
-* New menu and much cleaner code and GUI
-* New colorbar with better controls
-* **Shortcuts has changed**
-* Save/load the GUI configuration either from the menu File/load or File/save or using methods *loadConfig* and *saveConfig*
-* Fix camera
-
-Sleep module
-~~~~~~~~~~~~
-
-* Support annotations
-* Enable editing/removing detections
-* Improve default topoplot state
-
-Colorbar module
-~~~~~~~~~~~~~~~
-
-* **New colorbar module** : use this new module to design colorbars and to export the configuration.
-
-v0.2.8
-^^^^^^
-
-Visbrain
-~~~~~~~~
-
-* Migration to PyQt5
-
-Sleep module
-~~~~~~~~~~~~
-
-* Enable exporting colored hypnogram
-* Bug fixing & GUI improvements
-
 
 Future directions
 -----------------

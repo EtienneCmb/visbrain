@@ -782,7 +782,6 @@ def peakdetect(sf, y_axis, x_axis=None, lookahead=200, delta=1., get='max',
     # ============== FIND MIN / MAX PEAKS ==============
     # Only detect peak if there is 'lookahead' amount of points after it
     for index, x, y in zp:
-        # print(index, x, y)
         if y > mx:
             mx = y
         if y < mn:

@@ -1,4 +1,0 @@
-MakeFigure
-	-3 Inputs: path, files, alignv (center, left, right), alignh (center, top, bottom), crop (tuple), colorbar, position (tuple: (row, col)), background, 
-	-2 Methods: render, show(), save(name, ext='.png', path='', dpi=600), (add_colorbar(group/individual)), resum (show pandas DataFrame?)
-	-1 Idea: one main panda DataFrame per picture or one for all? (file, path, Vertical alignment, Horizontal alignment, colormap args)

@@ -18,10 +18,16 @@ Visbrain
 
 **Visbrain** is an open-source python package and provides hardware accelerated visualizations mainly for neuroscientific data. It is based on top of `VisPy <http://vispy.org/>`_ and PyQt and is distributed under the 3-Clause BSD license. We also provide an on line `documentation <http://visbrain.org>`_, `examples and datasets <http://visbrain.org/auto_examples/>`_ and can also be downloaded from `PyPi <https://pypi.python.org/pypi/visbrain/>`_.
 
+Important links
+===============
+
+* Official source code repository : https://github.com/EtienneCmb/visbrain
+* Online documentation : http://visbrain.org
+* Visbrain `chat room <https://gitter.im/visbrain-python/chatroom?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+
+
 Installation
 ============
-
-Since version 0.2.8, Visbrain use PyQt5 and PyQt4 versions are no longer developed. Here, we only describe the installation of the PyQt5 version of Visbrain, but you can check the `documentation tutorial <http://visbrain.org>`_ for the installation of the older PyQt4 version.
 
 Dependencies
 ------------

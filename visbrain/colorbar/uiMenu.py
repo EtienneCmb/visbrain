@@ -1,8 +1,9 @@
 """Main class for sleep menus managment."""
 
-from ..io import dialogLoad, dialogSave, write_fig_canvas
+from ..io import write_fig_pyqt, write_fig_canvas, dialogLoad, dialogSave
+from ..utils import ScreenshotPopup
 
-__all__ = ['uiMenu']
+__all__ = ('uiMenu')
 
 
 class uiMenu(object):
@@ -35,8 +36,35 @@ class uiMenu(object):
 
     def _fcn_CbarScreenshot(self):
         """Colorbar screenshot."""
-        filename = dialogSave(self, 'Save config File', 'config',
-                              "PNG file (*.png);;JPG file (*.jpg);;TIFF file"
-                              " (*.tiff);;All files (*.*)")
-        if filename:
-            write_fig_canvas(filename, self.cbqt.cbviz._canvas, autocrop=True)
+        self.show_gui_screenshot()
+
+
+class UiScreenshot(object):
+    """Initialize the screenshot GUI and functions to apply it."""
+
+    def __init__(self):
+        """Init."""
+        canvas_names = ['main']
+        self._ssGui = ScreenshotPopup(self._fcn_run_screenshot,
+                                      canvas_names=canvas_names)
+
+    def show_gui_screenshot(self):
+        """Display the GUI screenhot."""
+        self._ssGui.show()
+
+    def _fcn_run_screenshot(self):
+        """Run the screenshot."""
+        # Get filename :
+        filename = dialogSave(self, 'Screenshot', 'screenshot', "PNG (*.PNG);;"
+                              "TIFF (*.tiff);;JPG (*.jpg);;""All files (*.*)")
+        # Get screenshot arguments :
+        kwargs = self._ssGui.to_kwargs()
+
+        if kwargs['entire']:  # Screenshot of the entire window
+            self._ssGui._ss.close()
+            write_fig_pyqt(self, filename)
+        else:  # Screenshot of selected canvas
+            # Remove unsed entries :
+            del kwargs['entire'], kwargs['canvas']
+            write_fig_canvas(filename, self.cbqt.cbviz._canvas,
+                             widget=self.cbqt.cbviz._wc, **kwargs)

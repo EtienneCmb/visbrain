@@ -30,12 +30,12 @@ def test_ico_file():
     """Test if Sleep icon is installed."""
     try:
         vbpath = get_python_lib()
-        topopath = vbpath + ",visbrain,sleep,ico,sleep.svg"
+        topopath = vbpath + ",visbrain,sleep,ico,sleep_ico.svg"
         file = os.path.join(*topopath.split(","))
         warn('Distant version passed for sleep ico file')
         assert os.path.isfile(file)
     except:
-        topopath = ",visbrain,sleep,ico,sleep.svg"
+        topopath = ",visbrain,sleep,ico,sleep_ico.svg"
         file = os.path.join(*topopath.split(","))
         warn('Local version passed for sleep ico file')
         assert os.path.isfile(file)

@@ -26,29 +26,8 @@ class uiSettings(object):
         self.QuickSettings.currentChanged.connect(self._fcn_tab_changed)
 
         # =============================================================
-        # SCREENSHOT
+        # GUI
         # =============================================================
-        # Set values :
-        self._ssResolution.setValue(self._uirez)
-        self._ssSaveAs.setPlaceholderText("myfile")
-        if self._crop is not None:
-            self._ssCropXs.setValue(self._crop[0])
-            self._ssCropYs.setValue(self._crop[1])
-            self._ssCropXe.setValue(self._crop[2])
-            self._ssCropYe.setValue(self._crop[2])
-        # Connections :
-        self._ssSaveAs.editingFinished.connect(self._screenshotSettings)
-        self._ssSaveAsExt.currentIndexChanged.connect(self._screenshotSettings)
-        self._ssCropEnable.clicked.connect(self._screenshotSettings)
-        self._ssResolution.valueChanged.connect(self._screenshotSettings)
-        self._ssCbEnable.clicked.connect(self._screenshotSettings)
-        self._ssRun.clicked.connect(self._fcn_runScreenshot)
-        self._ssAutoCrop.clicked.connect(self._screenshotSettings)
-        self._ssCropXs.valueChanged.connect(self._screenshotSettings)
-        self._ssCropYs.valueChanged.connect(self._screenshotSettings)
-        self._ssCropXe.valueChanged.connect(self._screenshotSettings)
-        self._ssCropYe.valueChanged.connect(self._screenshotSettings)
-
         # Background color :
         self.bgd_green.valueChanged.connect(self._fcn_bgd_color)
         self.bgd_red.valueChanged.connect(self._fcn_bgd_color)
@@ -94,7 +73,7 @@ class uiSettings(object):
     def _fcn_openDoc(self):
         """Open documentation."""
         import webbrowser
-        webbrowser.open('http://etiennecmb.github.io/visbrain/brain.html')
+        webbrowser.open('http://visbrain.org/brain.html')
 
     def _fcn_tab_changed(self):
         """Executed function when the user change the tab."""
@@ -108,40 +87,8 @@ class uiSettings(object):
                 self.cbqt.select('Projection')
 
     # =============================================================
-    # SCREENSHOT
+    # GUI
     # =============================================================
-    def _fcn_runScreenshot(self):
-        """Run the screenshot."""
-        # Get latest settings :
-        self._screenshotSettings()
-        # Run screenshot :
-        self._fcn_screenshotCan()
-
-    def _screenshotSettings(self):
-        """Get screenshot settings from the GUI."""
-        # ------------- MAIN CANVAS -------------
-        # Get filename :
-        file = str(self._ssSaveAs.text())
-        ext = str(self._ssSaveAsExt.currentText())
-        self._savename = file + ext
-        # Cropping :
-        self._autocrop = self._ssAutoCrop.isChecked()
-        self._ssCropEnable.setEnabled(not self._autocrop)
-
-        viz = self._ssCropEnable.isChecked()
-        crop = (self._ssCropXs.value(), self._ssCropYs.value(),
-                self._ssCropXe.value(), self._ssCropYe.value())
-        self._crop = crop if viz else None
-        self._ssCropW.setEnabled((not self._autocrop) and viz)
-        # Resolution :
-        self._uirez = float(self._ssResolution.value())
-
-        # ------------- COLORBAR CANVAS -------------
-        # Colorbar :
-        viz = self._ssCbEnable.isChecked()
-        self.menuDispCbar.setChecked(viz)
-        self._fcn_menuCbar()
-
     def _fcn_bgd_color(self):
         """Change canvas background color."""
         bgd = (self.bgd_red.value(), self.bgd_green.value(),
