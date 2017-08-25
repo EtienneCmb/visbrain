@@ -29,8 +29,6 @@ Important links
 Installation
 ============
 
-Since version 0.2.8, Visbrain use PyQt5 and PyQt4 versions are no longer developed. Here, we only describe the installation of the PyQt5 version of Visbrain, but you can check the `documentation tutorial <http://visbrain.org>`_ for the installation of the older PyQt4 version.
-
 Dependencies
 ------------
 

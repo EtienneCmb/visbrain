@@ -3,6 +3,12 @@
 Ndviz
 #####
 
+.. warning::
+   The *Ndviz* module could be divided into two separate modules : *NdSignals* et *NdImages*. 
+
+.. figure::  picture/ico/ndviz_ico.png
+   :align:   center
+
 Description
 -----------
 
