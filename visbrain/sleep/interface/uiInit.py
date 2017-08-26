@@ -89,7 +89,7 @@ class TimeAxis(object):
                 pos[:, 2] = -10
             else:
                 pos = np.full((1, 3), -10, dtype=np.float32)
-            self.markers.set_data(pos=pos, symbol='triangle_down',
+            self.markers.set_data(pos=pos, symbol='triangle_down', size=20.,
                                   face_color='#42ab46', edge_width=0.)
 
     def set_camera(self, camera):
