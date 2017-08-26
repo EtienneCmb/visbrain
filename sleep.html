@@ -117,7 +117,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#hypnogram-scoring">2.2.3. Hypnogram scoring</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#apply-semi-automatic-detection">2.2.4. Apply semi-automatic detection</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#load-and-save-the-gui-configuration">2.2.5. Load and save the GUI configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#import-annotations">2.2.6. Import annotations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#import-add-and-save-annotations">2.2.6. Import, add and save annotations</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#api">2.3. API</a></li>
@@ -487,7 +487,7 @@
 <li>Use the <em>Annotate</em> button in the ruler to annotate the entire window</li>
 <li>Double click (with left mouse button) on a canvas to add an annotation starting and finishing at the mouse cursor location.</li>
 </ul>
-<p>If you want to import / export annotations, see the <a class="reference internal" href="#import-annotation"><span class="std std-ref">Import annotations</span></a> section.</p>
+<p>If you want to import / export annotations, see the <a class="reference internal" href="#import-annotation"><span class="std std-ref">Import, add and save annotations</span></a> section.</p>
 </div>
 </div>
 <div class="section" id="shortcuts">
@@ -939,11 +939,24 @@ Alternatively, if you want to use a configuration when running <em>Sleep</em>, y
 </pre></div>
 </div>
 </div>
+<div class="section" id="import-add-and-save-annotations">
+<span id="import-annotation"></span><h3>2.2.6. Import, add and save annotations<a class="headerlink" href="#import-add-and-save-annotations" title="Permalink to this headline">¶</a></h3>
+<p><em>Sleep</em> provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.</p>
+<div class="figure align-center" id="id15">
+<img alt="_images/sleep_annotations.png" src="_images/sleep_annotations.png" />
+<p class="caption"><span class="caption-text">Annotations in Sleep. All annotations are referenced in a table in the quick settings panel (left). Each annotation is then reported in the time axis as a green triangle.</span></p>
+</div>
 <div class="section" id="import-annotations">
-<span id="import-annotation"></span><h3>2.2.6. Import annotations<a class="headerlink" href="#import-annotations" title="Permalink to this headline">¶</a></h3>
-<p><em>Sleep</em> provides a table for annotations where you can specify where the event start, finish and the text associated. In addition, there is an “Annotate” push button on the navigation bar to annotate the currently displayed window. Double clicking on a canvas is an other way to quickly add annotations.
-The list of annotations can be exported (either in .txt or .csv) or loaded from the <strong>Files</strong> menu.
-Just as for the configuration file, you can use the input variable <em>annotation_file</em> to set the pass to an existing annotation file that need to be loaded on load.</p>
+<h4>2.2.6.1. Import annotations<a class="headerlink" href="#import-annotations" title="Permalink to this headline">¶</a></h4>
+<p>If the interface is opened, load annotations from the menu <em>Files/Load/Annotations</em>. Otherwise, you can use the input variable <em>annotation_file</em> to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :</p>
+<ul class="simple">
+<li><a class="reference internal" href="#annotations-txt"><span class="std std-ref">Annotations in a text file</span></a></li>
+<li><a class="reference internal" href="#annotations-mne"><span class="std std-ref">Use MNE-Python annotations</span></a></li>
+<li><a class="reference internal" href="#annotations-mark"><span class="std std-ref">Define only markers</span></a></li>
+</ul>
+<div class="section" id="annotations-in-a-text-file">
+<span id="annotations-txt"></span><h5>2.2.6.1.1. Annotations in a text file<a class="headerlink" href="#annotations-in-a-text-file" title="Permalink to this headline">¶</a></h5>
+<p>Annotations can be defined in a <a class="reference external" href="https://drive.google.com/file/d/0B6vtJiCQZUBvSXpmS0FGZ1E4M1U/view?usp=sharing">csv file</a> or in a <a class="reference external" href="https://drive.google.com/file/d/0B6vtJiCQZUBvOENtTks1Z3NLam8/view?usp=sharing">txt file</a> file.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="c1"># Import the Sleep module:</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
@@ -951,6 +964,9 @@ Just as for the configuration file, you can use the input variable <em>annotatio
 <span class="n">Sleep</span><span class="p">(</span><span class="n">annotation_file</span><span class="o">=</span><span class="s1">&#39;pathto/myannotations.txt&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="use-mne-python-annotations">
+<span id="annotations-mne"></span><h5>2.2.6.1.2. Use MNE-Python annotations<a class="headerlink" href="#use-mne-python-annotations" title="Permalink to this headline">¶</a></h5>
 <p>Alternatively, you can use annotations from MNE-python and pass your annotations to the <em>annotation_file</em> variable :</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">Annotations</span>
@@ -964,6 +980,33 @@ Just as for the configuration file, you can use the input variable <em>annotatio
 
 <span class="n">Sleep</span><span class="p">(</span><span class="n">annotation_file</span><span class="o">=</span><span class="n">annot</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="define-only-markers">
+<span id="annotations-mark"></span><h5>2.2.6.1.3. Define only markers<a class="headerlink" href="#define-only-markers" title="Permalink to this headline">¶</a></h5>
+<p>Annotations can be seen as the combination of a time-code with a text attached to it. If you don’t need to attach text, you can only specify the time-code in seconds :</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
+
+<span class="c1"># Define the onset :</span>
+<span class="n">onset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">117.</span><span class="p">,</span> <span class="mf">256.</span><span class="p">,</span> <span class="mf">312.</span><span class="p">])</span>
+
+<span class="n">Sleep</span><span class="p">(</span><span class="n">annotation_file</span><span class="o">=</span><span class="n">onset</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="add-new-annotations">
+<h4>2.2.6.2. Add new annotations<a class="headerlink" href="#add-new-annotations" title="Permalink to this headline">¶</a></h4>
+<p>To add new annotations :</p>
+<ul class="simple">
+<li>From the ruler or from the <strong>Annotations</strong> tab of the quick settings panel, use the <strong>Annotate</strong> button to annotate the currently displayed window</li>
+<li>Double clicking on a canvas is an other way to quickly add annotations.</li>
+</ul>
+</div>
+<div class="section" id="save-annotations">
+<h4>2.2.6.3. Save annotations<a class="headerlink" href="#save-annotations" title="Permalink to this headline">¶</a></h4>
+<p>The list of annotations can be exported (either in .txt or .csv) or loaded from the <strong>Files</strong> menu.</p>
 </div>
 </div>
 </div>
