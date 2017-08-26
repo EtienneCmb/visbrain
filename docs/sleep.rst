@@ -606,12 +606,31 @@ Alternatively, if you want to use a configuration when running *Sleep*, you can 
 
 .. _import_annotation:
 
-Import annotations
-~~~~~~~~~~~~~~~~~~
+Import, add and save annotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-*Sleep* provides a table for annotations where you can specify where the event start, finish and the text associated. In addition, there is an "Annotate" push button on the navigation bar to annotate the currently displayed window. Double clicking on a canvas is an other way to quickly add annotations.
-The list of annotations can be exported (either in .txt or .csv) or loaded from the **Files** menu.
-Just as for the configuration file, you can use the input variable *annotation_file* to set the pass to an existing annotation file that need to be loaded on load.
+*Sleep* provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.
+
+.. figure::  picture/picsleep/sleep_annotations.png
+   :align:   center
+
+   Annotations in Sleep. All annotations are referenced in a table in the quick settings panel (left). Each annotation is then reported in the time axis as a green triangle.
+
+Import annotations
+^^^^^^^^^^^^^^^^^^
+
+If the interface is opened, load annotations from the menu *Files/Load/Annotations*. Otherwise, you can use the input variable *annotation_file* to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :
+
+* :ref:`annotations_txt`
+* :ref:`annotations_mne`
+* :ref:`annotations_mark`
+
+.. _annotations_txt:
+
+Annotations in a text file
+++++++++++++++++++++++++++
+
+Annotations can be defined in a `csv file <https://drive.google.com/file/d/0B6vtJiCQZUBvSXpmS0FGZ1E4M1U/view?usp=sharing>`_ or in a `txt file <https://drive.google.com/file/d/0B6vtJiCQZUBvOENtTks1Z3NLam8/view?usp=sharing>`_ file. 
 
 .. code-block:: python
 
@@ -620,6 +639,11 @@ Just as for the configuration file, you can use the input variable *annotation_f
   from visbrain import Sleep
 
   Sleep(annotation_file='pathto/myannotations.txt')
+
+.. _annotations_mne:
+
+Use MNE-Python annotations
+++++++++++++++++++++++++++
 
 Alternatively, you can use annotations from MNE-python and pass your annotations to the *annotation_file* variable :
 
@@ -636,6 +660,36 @@ Alternatively, you can use annotations from MNE-python and pass your annotations
   annot = Annotations(onset, durations, description)
 
   Sleep(annotation_file=annot)
+
+.. _annotations_mark:
+
+Define only markers
++++++++++++++++++++
+
+Annotations can be seen as the combination of a time-code with a text attached to it. If you don't need to attach text, you can only specify the time-code in seconds :
+
+.. code-block:: python
+
+  import numpy as np
+  from visbrain import Sleep
+
+  # Define the onset :
+  onset = np.array([117., 256., 312.])
+
+  Sleep(annotation_file=onset)
+
+Add new annotations
+^^^^^^^^^^^^^^^^^^^
+
+To add new annotations :
+
+* From the ruler or from the **Annotations** tab of the quick settings panel, use the **Annotate** button to annotate the currently displayed window
+* Double clicking on a canvas is an other way to quickly add annotations.
+
+Save annotations
+^^^^^^^^^^^^^^^^
+
+The list of annotations can be exported (either in .txt or .csv) or loaded from the **Files** menu.
 
 .. ##########################################################################
 .. ##########################################################################
