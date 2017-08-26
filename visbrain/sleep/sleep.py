@@ -70,10 +70,9 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
     """
 
     def __init__(self, file=None, hypno_file=None, config_file=None,
-                 annotation_file=None,
-                 data=None, channels=None, sf=None, hypno=None,
-                 downsample=100., axis=False, line='gl', hedit=False,
-                 href=['art', 'wake', 'rem', 'n1', 'n2', 'n3']):
+                 annotation_file=None, data=None, channels=None, sf=None,
+                 hypno=None, downsample=100., axis=False, line='gl',
+                 hedit=False, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3']):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
@@ -141,6 +140,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         self._file = file
         self._config_file = config_file
         self._annot_file = annotation_file
+        self._annot_mark = np.array([])
         (self._sf, self._data, self._channels, self._hypno, self._time,
          self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
                                                      downsample, time, href)
