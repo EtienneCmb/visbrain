@@ -75,62 +75,6 @@ Modules
 * `Figure <http://visbrain.org/figure.html>`_ : figure-layout for high-quality publication-like figures (see `Figure examples <http://visbrain.org/auto_examples/index.html#figure-examples>`_).
 * `Colorbar <http://visbrain.org/colorbar.html>`_ : colorbar editor (see `Colorbar examples <http://visbrain.org/auto_examples/index.html#colorbar-examples>`_).
 
-.. Brain
-.. -----
-
-.. The `Brain <http://etiennecmb.github.io/visbrain/brain.html>`_ module is primarily designed for visualizations within a 3D opaque/transparent brain and can be used for :
-
-.. * Integrate EEG/MEG/Intracranial sources/electrodes and connectivity.
-.. * Display Regions of Interest (ROI) based either on Brodmann or AAL atlases.
-.. * Project source's activity onto the brain/ROI surface.
-.. * An extended control of colors. 
-.. * Export in HD pictures with auto-cropping functionalities.
-.. * GUI or command line control.
-.. * `Brain xxamples and datasets <https://github.com/EtienneCmb/visbrain/tree/master/examples/brain>`_.
-
-.. .. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/example.png
-..    :align:   center
-
-.. Sleep
-.. -----
-
-.. `Sleep <http://etiennecmb.github.io/visbrain/sleep.html>`_ is a GUI based module for sleep data visualization and edition under Python. Main functionalities are :
-
-.. * Load BrainVision, Micromed or European Data Format. Other file formats can be loaded using `MNE Python <http://mne-tools.github.io/stable/python_reference.html?highlight=io#module-mne.io>`_ and then pass as raw data.
-.. * Visualize polysomnographic data / spectrogram / topographic maps.
-.. * Load, edit and save hypnogram data or as publication-ready figures.
-.. * Perform automatic event detections (Spindles / REM / Peaks / Slow waves / K-complex / Muscle twitches).
-.. * Signal processing tools (filtering / wavelets / power...) and re-referencing (either to a single channel, common average or bipolarization).
-.. * `Sleep examples and datasets <https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing>`_.
-
-.. .. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/Sleep_main.png
-..    :align:   center
-
-.. Ndviz
-.. -----
-
-.. `Ndviz <http://etiennecmb.github.io/visbrain/ndviz.html>`_ was designed to visualize multidimensional data and also includes basic plots :
-
-.. * Visualize large datasets into a grid.
-.. * Basic plotting forms (continuous line / cloud of points / image).
-.. * Compute histogram / spectrogram.
-.. * Swap data dimensions from the GUI.
-.. * `Ndviz examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/ndviz>`_.
-
-.. .. figure::  https://github.com/EtienneCmb/visbrain/blob/master/docs/picture/ndviz_example.png
-..    :align:   center
-
-.. Figure
-.. ------
-
-.. `Figure <http://etiennecmb.github.io/visbrain/figure.html>`_ is the only module which do not rely on a GUI or VisPy. It's a Matplotlib wrapper to simplify scientific figures production and allows :
-
-.. * Load images and grid disposition.
-.. * Add x/y labels and titles.
-.. * Simple colorbar control.
-.. * Export the final figure with dpi control.
-.. * `Figure examples <https://github.com/EtienneCmb/visbrain/tree/master/examples/figure>`_.
-
 
 Contribution
 ============
