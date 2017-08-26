@@ -408,42 +408,47 @@ class uiMenu(object):
     def loadAnnotationTable(self, *args, file=None):
         """Load annotations."""
         # Get file name :
-        if not file:
+        if file is None:
             file = dialogLoad(self, "Import annotations", '',
                               "CSV file (*.csv);;Text file (*.txt);;"
                               "All files (*.*)")
-        if file:
-            # Clean annotations :
-            self._AnnotateTable.setRowCount(0)
-            # Load the file :
-            if isinstance(file, str):  # 'file.txt'
-                # Get starting/ending/annotation :
-                start, end, annot = np.genfromtxt(file, delimiter=',',
-                                                  dtype=str)
-            elif is_mne_installed():
-                import mne
-                if isinstance(file, mne.annotations.Annotations):
-                    start = file.onset
-                    end = file.onset + file.duration
-                    annot = file.description
-            else:
-                raise ValueError("Annotation's type not supported.")
+        # Clean annotations :
+        self._AnnotateTable.setRowCount(0)
+        # Load the file :
+        if isinstance(file, str):  # 'file.txt'
+            # Get starting/ending/annotation :
+            start, end, annot = np.genfromtxt(file, delimiter=',',
+                                              dtype=str)
+        elif isinstance(file, np.ndarray):
+            start = end = file
+            annot = np.array([''] * len(start))
+        elif is_mne_installed():  # MNE annotations
+            import mne
+            if isinstance(file, mne.annotations.Annotations):
+                start = file.onset
+                end = file.onset + file.duration
+                annot = file.description
+        else:
+            raise ValueError("Annotation's type not supported.")
 
-            # Fill table :
-            self._AnnotateTable.setRowCount(len(start))
-            # File the table :
-            for k, (s, e, a) in enumerate(zip(start, end, annot)):
-                # Starting index :
-                self._AnnotateTable.setItem(
-                    k, 0, QtWidgets.QTableWidgetItem(str(s)))
-                # Ending index :
-                self._AnnotateTable.setItem(
-                    k, 1, QtWidgets.QTableWidgetItem(str(e)))
-                # Text :
-                self._AnnotateTable.setItem(
-                    k, 2, QtWidgets.QTableWidgetItem(str(a)))
-                # Set the current tab to the annotation tab :
-                self.QuickSettings.setCurrentIndex(5)
+        # Fill table :
+        self._AnnotateTable.setRowCount(len(start))
+        # File the table :
+        for k, (s, e, a) in enumerate(zip(start, end, annot)):
+            # Starting index :
+            self._AnnotateTable.setItem(
+                k, 0, QtWidgets.QTableWidgetItem(str(s)))
+            # Ending index :
+            self._AnnotateTable.setItem(
+                k, 1, QtWidgets.QTableWidgetItem(str(e)))
+            # Text :
+            self._AnnotateTable.setItem(
+                k, 2, QtWidgets.QTableWidgetItem(str(a)))
+            # Set the current tab to the annotation tab :
+            self.QuickSettings.setCurrentIndex(5)
+        # Set markers :
+        self._annot_mark = (start + end) / 2
+        self._fcn_sliderMove()
 
     ###########################################################
     ###########################################################
