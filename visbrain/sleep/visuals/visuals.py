@@ -945,10 +945,17 @@ class vbShortcuts(object):
             :event: the trigger event
             """
             # Get canvas title :
-            isSpHyp = canvas.title in ['Hypnogram', 'Spectrogram']
-            title = canvas.title if isSpHyp else canvas.title.split('_')[1]
+            is_sp_hyp = canvas.title in ['Hypnogram', 'Spectrogram']
+            title = canvas.title if is_sp_hyp else canvas.title.split('_')[1]
             # Annotate the timing :
-            cursor = self._time[-1] * event.pos[0] / canvas.size[0]
+            if is_sp_hyp:
+                cursor = self._time[-1] * event.pos[0] / canvas.size[0]
+            else:
+                val = self._SlVal.value()
+                step = self._SigSlStep.value()
+                win = self._SigWin.value()
+                tm, tM = (val * step, val * step + win)
+                cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
             # Set the current tab to the annotation tab :
             self.QuickSettings.setCurrentIndex(5)
             # Run annotation :
@@ -969,7 +976,7 @@ class vbShortcuts(object):
                 val = self._SlVal.value()
                 step = self._SigSlStep.value()
                 win = self._SigWin.value()
-                tm, tM = (val*step, val*step+win)
+                tm, tM = (val * step, val * step + win)
                 # Convert cursor in time position :
                 cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
                 # Enable/Disable magnify :
@@ -980,7 +987,7 @@ class vbShortcuts(object):
                     tm, tM = self._time.min(), self._time.max()
             # Set time position to the cursor text :
             cursor = np.round(cursor * 1000.) / 1000.
-            self._txtCursor.setText('Cursor : '+str(cursor)+' sec')
+            self._txtCursor.setText('Cursor : ' + str(cursor) + ' sec')
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
