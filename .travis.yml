@@ -35,7 +35,6 @@ install:
   # ------------------- VISPY -------------------
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
   # ------------------- VISBRAIN -------------------
-  - cd ~2
   - pip install .
 script: bash build_install.sh
 cache:
