@@ -1,28 +1,8 @@
-from __future__ import print_function
 
-import os
 import numpy as np
-from distutils.sysconfig import get_python_lib
 from warnings import warn
 
 from visbrain import Brain
-
-
-def test_brain_templates():
-    """Test if templates are installed."""
-    try:  # Test distant installation
-        vbpath = get_python_lib()
-        brainpath = vbpath + ",visbrain,brain,base,templates"
-        for k in ['B1.npz', 'B2.npz', 'B3.npz', 'roi.npz']:
-            s = brainpath + ',' + k
-            warn('Distant version passed for brain templates file')
-            assert os.path.isfile(os.path.join(*s.split(",")))
-    except:  # Test local installation
-        brainpath = ",visbrain,brain,base,templates"
-        for k in ['B1.npz', 'B2.npz', 'B3.npz', 'roi.npz']:
-            s = brainpath + ',' + k
-            warn('Local version passed for brain templates file')
-            assert os.path.isfile(os.path.join(*s.split(",")))
 
 
 # def test_brain_user_functions():
