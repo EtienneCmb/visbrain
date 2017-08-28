@@ -21,6 +21,7 @@ install:
   - sudo add-apt-repository -y ppa:beineri/opt-qt542
   - sudo apt-get update
   - sudo apt-get install -y qt54base
+  - sudo apt-get install libc6
   # Builds
   - pushd /builds
   # SIP
@@ -77,9 +78,6 @@ install:
   # ------------------- VISBRAIN -------------------
   - cd ~2
   - pip install .
-  - sudo apt-get install libc6
-  # - LD_LIBRARY_PATH=/tmp/libc6_2.17/lib/x86_64-linux-gnu/ /tmp/libc6_2.17/lib/x86_64-linux-gnu/ld-2.17.so bin/python
-  # - pip install -r requirements.txt
 
 # script:
 #   - py.test -v --cov=./
