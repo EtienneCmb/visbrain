@@ -12,6 +12,7 @@ from vispy import app, scene
 import vispy.visuals.transforms as vist
 
 from .gui import Ui_MainWindow
+from ..visuals.marker import Markers
 from ...utils import color2vb
 
 __all__ = ['uiInit']
@@ -62,7 +63,8 @@ class TimeAxis(object):
 
         # Add markers :
         pos = np.full((1, 3), -10, dtype=np.float32)
-        self.markers = scene.visuals.Markers(pos=pos, parent=self.wc.scene)
+        self.markers = Markers(pos=pos, parent=self.wc.scene)
+        self.markers.set_gl_state('translucent')
 
     def set_data(self, tox=None, width=None, time=None, unit='seconds',
                  markers=None):
