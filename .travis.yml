@@ -16,7 +16,8 @@ before_install:
   - sudo mkdir -p /builds
   - sudo chmod a+rw /builds
 install:
-  # Qt5
+  - pushd $PWD
+  # ------------------- BUILD QT -------------------
   - sudo add-apt-repository -y ppa:beineri/opt-qt542
   - sudo apt-get update
   - sudo apt-get install -y qt54base
@@ -28,9 +29,12 @@ install:
   - python configure.py
   - make
   - sudo make install
+  - dirs -v
   - popd
   # Builds Complete
   - popd
+  - dirs -v
+  # ------------------- BUILD LIBC -------------------
   - cd ../
   - mkdir tmp/
   - cd /tmp
