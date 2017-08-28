@@ -1,3 +1,3 @@
 #!/bin/bash
 source activate testenv
-nosetests --with-coverage
+py.test --cov --verbose
