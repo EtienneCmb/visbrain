@@ -30,11 +30,14 @@ install:
   - pip install nose
   - pip install codecov
   - pip install pytest pytest-cov
-  - dirs -v
-  - pwd
   # ------------------- VISPY -------------------
+  - mkdir vispy
+  - cd vispy
+  - pushd $PWD
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
+  - dirs -v
   # ------------------- VISBRAIN -------------------
+  - cd ~2
   - pip install .
 script: bash build_install.sh
 cache:
