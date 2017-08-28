@@ -29,13 +29,9 @@ install:
   - python configure.py
   - make
   - sudo make install
-  - dirs -v
-  - popd
-  # Builds Complete
-  - popd
-  - dirs -v
+  # Go back to ~/build/EtienneCmb/visbrain :
+  - cd ~2
   # ------------------- BUILD LIBC -------------------
-  - cd ../
   - mkdir tmp/
   - cd /tmp
   - wget http://launchpadlibrarian.net/137699828/libc6_2.17-0ubuntu5_amd64.deb
@@ -44,8 +40,9 @@ install:
   - cd libc6_2.17
   - ar p ../libc6_2.17-0ubuntu5_amd64.deb data.tar.gz | tar zx
   - ar p ../libc6-dev_2.17-0ubuntu5_amd64.deb data.tar.gz | tar zx
-  - cd -
-  # - sudo apt-get update
+  - dirs -v
+  - cd ~2
+  # ------------------- PYTHON ENVIRONNEMENT -------------------
   # Deactivate travis environnement :
   - deactivate
   # We do this conditionally because it saves us some downloading if the
@@ -73,9 +70,12 @@ install:
   - pip install pytest pytest-cov
   # - pwd
   # - cd ../
+  - dirs -v
   - pwd
+  # ------------------- VISPY -------------------
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
-  - cd visbrain/
+  # ------------------- VISBRAIN -------------------
+  - cd ~2
   - pip install .
   - LD_LIBRARY_PATH=/tmp/libc6_2.17/lib/x86_64-linux-gnu/ /tmp/libc6_2.17/lib/x86_64-linux-gnu/ld-2.17.so bin/python
   # - pip install -r requirements.txt
