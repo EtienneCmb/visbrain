@@ -14,34 +14,33 @@ from warnings import warn
 from .sigproc import normalize
 
 
-__all__ = ['color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
+__all__ = ('color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
            'type_coloring', 'mpl_cmap', 'color2tuple', 'mpl_cmap_index'
-           ]
+           )
 
 
-def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
+def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0):
     """Turn into a RGBA compatible color format.
 
     This function can tranform a tuple of RGB, a matplotlib color or an
     hexadecimal color into an array of RGBA colors.
 
-    Kargs:
-        color: None/tuple/string, optional, (def: None)
-            The color to use. Can either be None, or a tuple (R, G, B),
-            a matplotlib color or an hexadecimal color '#...'.
+    Parameters
+    ----------
+    color : None/tuple/string | None
+        The color to use. Can either be None, or a tuple (R, G, B),
+        a matplotlib color or an hexadecimal color '#...'.
+    default : tuple | (1,1,1)
+        The default color to use instead.
+    length : int | 1
+        The length of the output array.
+    alpha : float | 1
+        The opacity (Last digit of the RGBA tuple).
 
-        default: tuple, optional, (def: (1,1,1))
-            The default color to use instead.
-
-        length: int, optional, (def: 1)
-            The length of the output array.
-
-        alpha: float, optional, (def: 1)
-            The opacity (Last digit of the RGBA tuple).
-
-    Return:
-        vcolor: array
-            Array of RGBA colors of shape (length, 4).
+    Return
+    ------
+    vcolor : array_like
+        Array of RGBA colors of shape (length, 4).
     """
     # Default or static color :
     if (color is None) or isinstance(color, (str, tuple, list, np.ndarray)):
@@ -61,7 +60,7 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
             if color in mplcol.cnames.keys():
                 coltuple = mplcol.hex2color(mplcol.cnames[color])
             else:
-                warn("The color name "+color+" is not in the matplotlib "
+                warn("The color name " + color + " is not in the matplotlib "
                      "database. Default color will be used instead.")
                 coltuple = default
         # Hexadecimal colors :
@@ -69,13 +68,13 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
             try:
                 coltuple = mplcol.hex2color(color)
             except:
-                warn("The hexadecimal color "+color+" is not valid. "
+                warn("The hexadecimal color " + color + " is not valid. "
                      "Default color will be used instead.")
                 coltuple = default
         # Set the color :
-        vcolor = np.concatenate((np.array([list(coltuple)]*length),
-                                 alpha*np.ones((length, 1),
-                                               dtype=np.float32)), axis=1)
+        vcolor = np.concatenate((np.array([list(coltuple)] * length),
+                                 alpha * np.ones((length, 1),
+                                                 dtype=np.float32)), axis=1)
 
         return vcolor.astype(np.float32)
     else:
@@ -86,24 +85,22 @@ def color2vb(color=None, default=(1, 1, 1), length=1, alpha=1.0):
 def color2tuple(color, astype=np.float32, rmalpha=True, roundto=2):
     """Return a RGB tuple of the color.
 
-    Args:
-        color: None/tuple/string, optional, (def: None)
-            The color to use. Can either be None, or a tuple (R, G, B),
-            a matplotlib color or an hexadecimal color '#...'.
+    Parameters
+    ----------
+    color : None/tuple/string | None
+        The color to use. Can either be None, or a tuple (R, G, B),
+        a matplotlib color or an hexadecimal color '#...'.
+    astype : type | np.float32
+        The final color type.
+    rmalpha : bool | True
+        Specify if the alpha component have to be deleted.
+    roundto : int | 2
+        Number of digits per RGB.
 
-    Kargs:
-        astype: type, optional, (def: np.float32)
-            The final color type.
-
-        rmalpha: bool, optional, (def: True)
-            Specify if the alpha component have to be deleted.
-
-        roundto: int, optional, (def: 2)
-            Number of digits per RGB.
-
-    Returns:
-        coltuple: tuple
-            Tuple of colors.
+    Returns
+    -------
+    coltuple: tuple
+        Tuple of colors.
     """
     # Get the converted color :
     ccol = color2vb(color).ravel().astype(astype)
@@ -120,43 +117,36 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
                    faces_render=False):
     """Transform an array of data into colormap (array of RGBA).
 
-    Args:
-        x: array
-            Array of data
+    Parameters
+    ----------
+    x: array
+        Array of data
+    cmap : string | inferno
+        Matplotlib colormap
+    clim : tuple/list | None
+        Limit of the colormap. The clim parameter must be a tuple / list
+        of two float number each one describing respectively the (min, max)
+        of the colormap. Every values under clim[0] or over clim[1] will
+        peaked.
+    alpha : float | 1.0
+        The opacity to use. The alpha parameter must be between 0 and 1.
+    vmin : float | None
+        Threshold from which every color will have the color defined using
+        the under parameter bellow.
+    under : tuple/string | 'dimgray'
+        Matplotlib color for values under vmin.
+    vmax : float | None
+        Threshold from which every color will have the color defined using
+        the over parameter bellow.
+    over : tuple/string | 'darkred'
+        Matplotlib color for values over vmax.
+    faces_render : boll | False
+        Precise if the render should be applied to faces
 
-    Kargs:
-        cmap: string, optional, (def: inferno)
-            Matplotlib colormap
-
-        clim: tuple/list, optional, (def: None)
-            Limit of the colormap. The clim parameter must be a tuple / list
-            of two float number each one describing respectively the (min, max)
-            of the colormap. Every values under clim[0] or over clim[1] will
-            peaked.
-
-        alpha: float, optional, (def: 1.0)
-            The opacity to use. The alpha parameter must be between 0 and 1.
-
-        vmin: float, optional, (def: None)
-            Threshold from which every color will have the color defined using
-            the under parameter bellow.
-
-        under: tuple/string, optional, (def: 'dimgray')
-            Matplotlib color for values under vmin.
-
-        vmax: float, optional, (def: None)
-            Threshold from which every color will have the color defined using
-            the over parameter bellow.
-
-        over: tuple/string, optional, (def: 'darkred')
-            Matplotlib color for values over vmax.
-
-        faces_render: boll, optional, (def: False)
-            Precise if the render should be applied to faces
-
-    Return:
-        color: array
-            Array of RGBA colors
+    Returns
+    -------
+    color : array_like
+        Array of RGBA colors
     """
     # ================== Check input argument types ==================
     # Force data to be an array :
@@ -205,20 +195,20 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
 def dynamic_color(color, x, dynamic=(0.0, 1.0)):
     """Dynamic color changing.
 
-    Args:
-        color: np.ndarray
-            The color to dynamic change. color must have a shape
-            of (N, 4) RGBA colors
+    Parameters
+    ----------
+    color : array_like
+        The color to dynamic change. color must have a shape
+        of (N, 4) RGBA colors
+    x : array_like
+        Dynamic values for color. x must have a shape of (N,)
+    dynamic : tuple | (0.0, 1.0)
+        Control the dynamic of color.
 
-        x: np.ndarray
-            Dynamic values for color. x must have a shape of (N,)
-    Kargs:
-        dynamic: tuple, optional, (def: (0.0, 1.0))
-            Control the dynamic of color.
-
-    Return
-        colordyn: np.ndarray
-            Dynamic color with a shape of (N, 4)
+    Returns
+    -------
+    colordyn : array_like
+        Dynamic color with a shape of (N, 4)
     """
     x = x.ravel()
     # Check inputs types :
@@ -240,40 +230,41 @@ def dynamic_color(color, x, dynamic=(0.0, 1.0)):
 def color2faces(color, length):
     """Pass a simple color to faces shape.
 
-    Args:
-        color: RGBA tuple
-            Tuple of RGBA colors
+    Parameters
+    ----------
+    color : RGBA tuple
+        Tuple of RGBA colors
+    length : tuple
+        Length of faces
 
-        length: tuple
-            Length of faces
-
-    Return
-        colorFace: the color adapted for faces
+    Returns
+    -------
+    color_face : array_like
+        The color adapted for faces
     """
     color = color.ravel()
-    colorL = np.tile(np.array(color)[..., np.newaxis, np.newaxis],
+    colort = np.tile(np.array(color)[..., np.newaxis, np.newaxis],
                      (1, length, 3))
-    return np.transpose(colorL, (1, 2, 0))
+    return np.transpose(colort, (1, 2, 0))
 
 
 def colorclip(x, th, kind='under'):
     """Force an array to have clipping values.
 
-    Args:
-        x: np.ndarray
-            Array of data.
+    Parameters
+    ----------
+    x : array_like
+        Array of data.
+    th : float
+        The threshold to use.
+    kind : string | 'under'
+        Use eiher 'under' or 'over' for fore the array to clip for every
+        values respectively under or over th.
 
-        th: float
-            The threshold to use.
-
-    Kargs:
-        kind: string, optional, (def: 'under')
-            Use eiher 'under' or 'over' for fore the array to clip for every
-            values respectively under or over th.
-
-    Return:
-        x: np.ndarray
-            The clipping array.
+    Returns
+    -------
+    x : array_like
+        The clipping array.
     """
     if kind is 'under':
         idx = x < th
@@ -291,65 +282,54 @@ def type_coloring(color=None, n=1, data=None, rnd_dyn=(0.3, 0.9), clim=None,
     This function can be used to color a signal using random, uniform or
     dynamic colors.
 
-    Arg:
-        n: int
-            The number of color to generate.
-    Kargs:
-        color: string/tuple/array, optional, (def: None)
-            Choose how to color signals. Use None (or 'rnd', 'random') to
-            generate random colors. Use 'uniform' (see the unicolor
-            parameter) to define the same color for all signals. Use
-            'dynamic' to have a dynamic color according to data values.
-
-        n: int, optional, (def: 1)
-            The number of colors to generate in case of random or uniform
-            colors.
-
-        data: np.ndarray, optional, (def: None)
-            The data to convert into color if the color type is dynamic.
-            If this parameter is ignored, a default linear spaced vector of
-            length n will be used instead.
-
-        rnd_dyn: tuple, optional, (def: (.3, .9))
-            Define the dynamic of random color. This parameter is active
-            only if the color parameter is turned to None (or 'rnd' /
-            'random').
-
-        cmap: string, optional, (def: inferno)
-            Matplotlib colormap (parameter active for 'dyn_minmax' and
-            'dyn_time' color).
-
-        clim: tuple/list, optional, (def: None)
-            Limit of the colormap. The clim parameter must be a tuple /
-            list of two float number each one describing respectively the
-            (min, max) of the colormap. Every values under clim[0] or over
-            clim[1] will peaked (parameter active for 'dyn_minmax' and
-            'dyn_time' color).
-
-        alpha: float, optional, (def: 1.0)
-            The opacity to use. The alpha parameter must be between 0 and 1
-            (parameter active for 'dyn_minmax' and 'dyn_time' color).
-
-        vmin: float, optional, (def: None)
-            Threshold from which every color will have the color defined
-            using the under parameter bellow (parameter active for
-            'dyn_minmax' and 'dyn_time' color).
-
-        under: tuple/string, optional, (def: 'gray')
-            Matplotlib color for values under vmin (parameter active for
-            'dyn_minmax' and 'dyn_time' color).
-
-        vmax: float, optional, (def: None)
-            Threshold from which every color will have the color defined
-            using the over parameter bellow (parameter active for
-            'dyn_minmax' and 'dyn_time' color).
-
-        over: tuple/string, optional, (def: 'red')
-            Matplotlib color for values over vmax (parameter active for
-            'dyn_minmax' and 'dyn_time' color).
-
-        unicolor: tuple/string, optional, (def: 'gray')
-            The color to use in case of uniform color.
+    Parameters
+    ----------
+    n: int
+        The number of color to generate.
+    color : string/tuple/array | None
+        Choose how to color signals. Use None (or 'rnd', 'random') to
+        generate random colors. Use 'uniform' (see the unicolor
+        parameter) to define the same color for all signals. Use
+        'dynamic' to have a dynamic color according to data values.
+    n : int | 1
+        The number of colors to generate in case of random or uniform
+        colors.
+    data : array_like | None
+        The data to convert into color if the color type is dynamic.
+        If this parameter is ignored, a default linear spaced vector of
+        length n will be used instead.
+    rnd_dyn : tuple | (.3, .9)
+        Define the dynamic of random color. This parameter is active
+        only if the color parameter is turned to None (or 'rnd' /
+        'random').
+    cmap : string | 'inferno'
+        Matplotlib colormap (parameter active for 'dyn_minmax' and
+        'dyn_time' color).
+    clim : tuple/list | None
+        Limit of the colormap. The clim parameter must be a tuple /
+        list of two float number each one describing respectively the
+        (min, max) of the colormap. Every values under clim[0] or over
+        clim[1] will peaked (parameter active for 'dyn_minmax' and
+        'dyn_time' color).
+    alpha : float | 1.0
+        The opacity to use. The alpha parameter must be between 0 and 1
+        (parameter active for 'dyn_minmax' and 'dyn_time' color).
+    vmin : float | None
+        Threshold from which every color will have the color defined
+        using the under parameter bellow (parameter active for
+        'dyn_minmax' and 'dyn_time' color).
+    under : tuple/string | 'gray'
+        Matplotlib color for values under vmin (parameter active for
+        'dyn_minmax' and 'dyn_time' color).
+    vmax : float | None
+        Threshold from which every color will have the color defined
+        using the over parameter bellow (parameter active for
+        'dyn_minmax' and 'dyn_time' color).
+    over : tuple/string | 'red'
+        Matplotlib color for values over vmax (parameter active for
+        'dyn_minmax' and 'dyn_time' color).
+    unicolor : tuple/string | 'gray'
+        The color to use in case of uniform color.
     """
     # ---------------------------------------------------------------------
     # Random color :
@@ -385,11 +365,11 @@ def type_coloring(color=None, n=1, data=None, rnd_dyn=(0.3, 0.9), clim=None,
 def mpl_cmap(invert=False):
     """Get the list of matplotlib colormaps.
 
-    Kargs:
-        invert: bool, optional, (def: False)
+        invert : bool | False
             Get the list of inverted colormaps.
 
-    Returns:
+    Returns
+    -------
         cmap_lst: list
             list of available matplotlib colormaps.
     """
@@ -414,11 +394,11 @@ def mpl_cmap_index(cmap, cmaps=None):
         cmap: string
             Colormap name.
 
-    Kargs:
-        cmaps: list, optional, (def: None)
+        cmaps : list | None
             List of colormaps.
 
-    Returns:
+    Returns
+    -------
         idx: int
             Index of the colormap.
 
