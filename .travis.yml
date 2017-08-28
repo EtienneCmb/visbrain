@@ -31,13 +31,10 @@ install:
   - pip install codecov
   - pip install pytest pytest-cov
   # ------------------- VISPY -------------------
-  - mkdir vispy
-  - cd vispy
-  - pushd $PWD
+  - cd ../
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
-  - dirs -v
+  - cd visbrain/
   # ------------------- VISBRAIN -------------------
-  - cd ~2
   - pip install .
 script: bash build_install.sh
 cache:
