@@ -140,11 +140,13 @@ class HelpMenu(object):
             section_action = QtWidgets.QAction("&" + menu, self)
             # Action function :
 
-            def _fcn_open_help_section():
-                """Open the help section."""
-                webbrowser.open(url)
+            def define(url):
+                def _fcn_open_help_section():
+                    """Open the help section."""
+                    webbrowser.open(url)
+                return _fcn_open_help_section
             # Triggered function :
-            section_action.triggered.connect(_fcn_open_help_section)
+            section_action.triggered.connect(define(url))
             # Add action to the menu :
             help_section.addAction(section_action)
         # PDF documentation action :
