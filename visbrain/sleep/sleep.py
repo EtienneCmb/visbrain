@@ -13,8 +13,8 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
-from ..utils import (FixedCam, load_sleepdataset, color2vb, ShortcutPopup,
-                     check_downsampling, MouseEventControl, set_widget_size)
+from ..utils import (FixedCam, load_sleepdataset, color2vb, check_downsampling,
+                     MouseEventControl, set_widget_size)
 from ..io import dialogLoad, read_hypno
 
 sip.setdestroyonexit(False)
@@ -78,9 +78,6 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         # Create the app and initialize all graphical elements :
         self._app = QtWidgets.QApplication(sys.argv)
         uiInit.__init__(self)
-
-        # Shortcuts popup window :
-        self._shpopup = ShortcutPopup()
 
         # Set default GUI state :
         self.setDefaultState()
