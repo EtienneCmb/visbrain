@@ -3933,14 +3933,6 @@ display</string>
     <addaction name="menuDispTopo"/>
     <addaction name="menuDispZoom"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="menuShortcut"/>
-    <addaction name="menuDocumentation"/>
-    <addaction name="menuDownload_pdf_doc"/>
-   </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
      <string>Settings</string>
@@ -3950,7 +3942,6 @@ display</string>
    <addaction name="menuFiles"/>
    <addaction name="menuDisplay"/>
    <addaction name="menuSettings"/>
-   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave">
