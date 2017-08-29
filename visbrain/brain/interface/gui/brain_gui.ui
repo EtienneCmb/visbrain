@@ -101,8 +101,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>364</width>
-                <height>686</height>
+                <width>269</width>
+                <height>442</height>
                </rect>
               </property>
               <attribute name="label">
@@ -1408,7 +1408,7 @@ color</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>350</width>
+                <width>244</width>
                 <height>1096</height>
                </rect>
               </property>
@@ -4360,17 +4360,9 @@ width</string>
     <addaction name="menuCamFly"/>
     <addaction name="menuResetCam"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionShortcut"/>
-    <addaction name="actionDocumentation"/>
-   </widget>
    <addaction name="menuFiles"/>
    <addaction name="menuDisplay"/>
    <addaction name="menuTransform"/>
-   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave">

@@ -15,15 +15,7 @@ class uiSettings(object):
 
     def __init__(self):
         """Init."""
-        # =============================================================
-        # MENU & FILES
-        # =============================================================
         self.progressBar.hide()
-
-        # ------------- Help -------------
-        self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
-        self.actionDocumentation.triggered.connect(self._fcn_openDoc)
-        self.QuickSettings.currentChanged.connect(self._fcn_tab_changed)
 
         # =============================================================
         # GUI
@@ -66,15 +58,6 @@ class uiSettings(object):
     # =============================================================
     # MENU & FILE MANAGMENT
     # =============================================================
-    def _fcn_showShortPopup(self):
-        """Open shortcut window."""
-        self._shpopup.show()
-
-    def _fcn_openDoc(self):
-        """Open documentation."""
-        import webbrowser
-        webbrowser.open('http://visbrain.org/brain.html')
-
     def _fcn_tab_changed(self):
         """Executed function when the user change the tab."""
         # Get tab name :
