@@ -14,7 +14,7 @@ from .marker import Markers
 from ...utils import (array2colormap, color2vb, TopoPlot, PrepareData)
 from ...utils.sleep.event import _index_to_event
 
-__all__ = ["visuals"]
+__all__ = ("visuals")
 
 
 """

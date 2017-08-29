@@ -2,16 +2,19 @@
 from PyQt5 import QtWidgets
 import vispy.scene.cameras as viscam
 
-from ....utils import toggle_enable_tab
+from ....utils import toggle_enable_tab, HelpMenu
 
-__all__ = ['uiMenu']
+__all__ = ('uiMenu')
 
 
-class uiMenu(object):
+class uiMenu(HelpMenu):
     """Interactions with the menu."""
 
     def __init__(self):
         """Init."""
+        base = 'http://visbrain.org/brain.html'
+        sections = {'Brain': base}
+        HelpMenu.__init__(self, sections)
         # =============================================================
         # FILE
         # =============================================================

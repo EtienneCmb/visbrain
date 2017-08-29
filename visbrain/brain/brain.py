@@ -17,7 +17,7 @@ from .interface import uiInit, uiElements
 from .interface.uiInit import BrainShortcuts
 from .base import base, BrainCbar
 from .user import BrainUserMethods
-from ..utils import ShortcutPopup, set_widget_size
+from ..utils import set_widget_size
 import sip
 sip.setdestroyonexit(False)
 
@@ -363,10 +363,6 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         self._app = QtWidgets.QApplication(sys.argv)
         uiInit.__init__(self, bgcolor)
 
-        # Shortcuts popup window :
-        self._shpopup = ShortcutPopup()
-        self._shpopup.set_shortcuts(self.sh)
-
         # Set icon :
         # pathfile = sys.modules[__name__].__file__
         # path = os.path.join(*['brain', 'interface', 'gui', 'vbicon.png'])
@@ -382,6 +378,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         # ====================== UI to visbrain ======================
         # Link UI and visbrain function :
         uiElements.__init__(self)
+        self._shpopup.set_shortcuts(self.sh)
 
         # ====================== Cameras ======================
         # Main camera :

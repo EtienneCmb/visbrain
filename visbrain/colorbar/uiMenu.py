@@ -1,16 +1,19 @@
 """Main class for sleep menus managment."""
 
 from ..io import write_fig_pyqt, write_fig_canvas, dialogLoad, dialogSave
-from ..utils import ScreenshotPopup
+from ..utils import ScreenshotPopup, HelpMenu
 
 __all__ = ('uiMenu')
 
 
-class uiMenu(object):
+class uiMenu(HelpMenu):
     """Main class for sleep menus managment."""
 
     def __init__(self):
         """Init."""
+        base = 'http://visbrain.org/colorbar.html'
+        sections = {'Colorbar': base}
+        HelpMenu.__init__(self, sections, False)
         # __________ CONFIG __________
         self.menuCbarSaveConfig.triggered.connect(self._fcn_saveCbarConfig)
         self.menuCbarLoadConfig.triggered.connect(self._fcn_loadCbarConfig)
