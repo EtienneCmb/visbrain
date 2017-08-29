@@ -117,19 +117,20 @@ class HelpMenu(object):
     to download the pdf version of the documentation.
     """
 
-    def __init__(self, doc_section):
+    def __init__(self, doc_section, add_shortcuts=True):
         """Init."""
         _translate = QtCore.QCoreApplication.translate
-        # Shortcuts popup window :
-        self._shpopup = ShortcutPopup()
         # Main Help menu creation :
         help_menu = QtWidgets.QMenu('Help', self)
         self.menuBar().addMenu(help_menu)
-        # Shortcuts :
-        shortcuts = QtWidgets.QAction("&Shortcuts", self)
-        shortcuts.setShortcut(_translate("MainWindow", "Ctrl+T"))
-        shortcuts.triggered.connect(self._shpopup.show)
-        help_menu.addAction(shortcuts)
+        if add_shortcuts:
+            # Shortcuts popup window :
+            self._shpopup = ShortcutPopup()
+            # Shortcuts :
+            shortcuts = QtWidgets.QAction("&Shortcuts", self)
+            shortcuts.setShortcut(_translate("MainWindow", "Ctrl+T"))
+            shortcuts.triggered.connect(self._shpopup.show)
+            help_menu.addAction(shortcuts)
         # Help section submenu :
         help_section = QtWidgets.QMenu('Open help section about', self)
         help_menu.addMenu(help_section)
