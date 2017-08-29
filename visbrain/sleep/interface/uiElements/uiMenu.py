@@ -5,18 +5,25 @@ import numpy as np
 import os
 from PyQt5 import QtWidgets
 
+from ....utils import HelpMenu
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    write_fig_pyqt, is_mne_installed)
+                    is_mne_installed)
 
 __all__ = ['uiMenu']
 
 
-class uiMenu(object):
+class uiMenu(HelpMenu):
     """Main class for sleep menus managment."""
 
     def __init__(self):
         """Init."""
+        base = 'http://visbrain.org/sleep.html'
+        sections = {'Sleep': base,
+                    'Hypnogram scoring': base + '#hypnogram-scoring',
+                    'Detections': base + '#apply-semi-automatic-detection',
+                    'Annotations': base + '#import-add-and-save-annotations'}
+        HelpMenu.__init__(self, sections)
         # _____________________________________________________________________
         #                                 SAVE
         # _____________________________________________________________________
@@ -80,13 +87,6 @@ class uiMenu(object):
         #                               SETTINGS
         # _____________________________________________________________________
         self.menuSettingCleanHyp.triggered.connect(self.settCleanHyp)
-
-        # _____________________________________________________________________
-        #                     SHORTCUTS & DOC
-        # _____________________________________________________________________
-        self.menuShortcut.triggered.connect(self._fcn_showShortPopup)
-        self.menuDocumentation.triggered.connect(self._fcn_openDoc)
-        self.menuDownload_pdf_doc.triggered.connect(self._fcn_downloadDoc)
 
     ###########################################################################
     ###########################################################################
@@ -560,24 +560,3 @@ class uiMenu(object):
         # Update scoring table :
         self._fcn_Hypno2Score()
         self._fcn_Score2Hypno()
-
-    ###########################################################################
-    ###########################################################################
-    #                            SHORTCUT & DOC
-    ###########################################################################
-    ###########################################################################
-
-    def _fcn_showShortPopup(self):
-        """Open shortcut window."""
-        self._shpopup.show()
-
-    def _fcn_openDoc(self):
-        """Open documentation."""
-        import webbrowser
-        webbrowser.open('http://etiennecmb.github.io/visbrain/sleep.html')
-
-    def _fcn_downloadDoc(self):
-        """Open documentation."""
-        import webbrowser
-        webbrowser.open("https://drive.google.com/file/d/"
-                        "0B6vtJiCQZUBvNFJMTER3SERGUW8/view?usp=sharing")
