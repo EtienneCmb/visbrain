@@ -154,5 +154,5 @@ class HelpMenu(object):
 
     def _fcn_open_pdf_doc(self):
         """Open the pdf version of the documentation."""
-        webbrowser.open("https://drive.google.com/file/d/"
-                        "0B6vtJiCQZUBvNFJMTER3SERGUW8/view?usp=sharing")
+        webbrowser.open("https://drive.google.com/open?id=0B6vt"
+                        "JiCQZUBvdVphQWw1RFBSZW8")
