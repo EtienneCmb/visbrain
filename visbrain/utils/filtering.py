@@ -216,7 +216,7 @@ def welch_power(x, fmin, fmax, sf, window_s=30, norm=True):
         If True, return normalized band power
     """
     sf = int(sf)
-    freq_spacing = 0.1
+    freq_spacing = .1
     f_vector = np.arange(0, sf / 2 + freq_spacing, freq_spacing)
     idx_fmin = np.where(f_vector == fmin)[0][0]
     idx_fmax = np.where(f_vector == fmax)[0][0] + 1

@@ -3,32 +3,31 @@
 import numpy as np
 from scipy.signal import hilbert
 
-__all__ = ['_events_duration', '_events_removal', '_events_distance_fill',
-           '_events_mean_freq', '_event_to_index', '_index_to_event']
+__all__ = ('_events_duration', '_events_removal', '_events_distance_fill',
+           '_events_mean_freq', '_events_amplitude', '_events_to_index',
+           '_index_to_events')
 
 
 def _events_duration(index, sf):
     """Compute spindles/REM duration in ms.
 
-    Args:
-        index: np.ndarray
-            Index of events locations.
+    Parameters
+    ----------
+    index : array_like
+        Index of events locations.
+    sf : float
+        The sampling frequency.
 
-        sf: float
-            The sampling frequency.
-
-    Returns:
-        number: int
-            Number of events
-
-        duration_ms: np.ndarray
-            Duration of each event
-
-        idx_start: np.ndarray
-            Array of integers where each event begin.
-
-        idx_end: np.ndarray
-            Array of integers where each event finish.
+    Returns
+    -------
+    number : int
+        Number of events
+    duration_ms : array_like
+        Duration of each event
+    idx_start : array_like
+        Array of integers where each event begin.
+    idx_end : array_like
+        Array of integers where each event finish.
     """
     # Find boolean values where each spindle start :
     bool_break = (index[1:] - index[:-1]) != 1
@@ -36,7 +35,7 @@ def _events_duration(index, sf):
     number = bool_break.sum() + 1
     # Build starting / ending spindles index :
     idx_start = np.hstack([np.array([0]), np.where(bool_break)[0] + 1])
-    idx_stop = np.hstack((idx_start[1::], len(index)-1))
+    idx_stop = np.hstack((idx_start[1::], len(index) - 1))
     # Compute duration :
     duration_ms = np.diff(np.hstack((idx_start, idx_stop[-1]))) * (1000. / sf)
 
@@ -46,19 +45,19 @@ def _events_duration(index, sf):
 def _events_removal(idx_start, idx_stop, good_dur):
     """Remove events that do not have the good duration.
 
-    Args:
-        idx_start: np.ndarray
-            Starting indices of event.
+    Parameters
+    ----------
+    idx_start : array_like
+        Starting indices of event.
+    idx_stop : array_like
+        Ending indices of event.
+    good_dur : array_like
+        Indices of event having a proper duration.
 
-        idx_stop: np.ndarray
-            Ending indices of event.
-
-        good_dur: np.ndarray
-            Indices of event having a proper duration.
-
-    Return:
-        good_idx: np.ndarray
-            Row vector containing the extending version of indices.
+    Returns
+    -------
+    good_idx : array_like
+        Row vector containing the extending version of indices.
     """
     # Get where good duration start / end :
     start = idx_start[good_dur]
@@ -77,20 +76,20 @@ def _events_removal(idx_start, idx_stop, good_dur):
 def _events_distance_fill(index, min_distance_ms, sf):
     """Remove events that do not have the good duration.
 
-    Args:
-        index: np.ndarray
-            Indices of supra-threshold events.
+    Parameters
+    ----------
+    index : array_like
+        Indices of supra-threshold events.
+    min_distance_ms : int
+        Minimum distance (ms) between two events to consider them as two
+        distinct events
+    sf : float
+        Sampling frequency of the data (Hz)
 
-        min_distance_ms: int
-            Minimum distance (ms) between two events to consider them as two
-            distinct events
-
-        sf: float
-            Sampling frequency of the data (Hz)
-
-    Return:
-        f_index: np.ndarray
-            Filled (corrected) Indices of supra-threshold events
+    Returns
+    -------
+    f_index : array_like
+        Filled (corrected) Indices of supra-threshold events
     """
     # Convert min_distance_ms
     min_distance = min_distance_ms / 1000. * sf
@@ -112,22 +111,23 @@ def _events_distance_fill(index, min_distance_ms, sf):
 def _events_mean_freq(x, idx_sup_thr, idx_start, idx_stop, sf):
     """Remove events that do not have the good duration.
 
-    Args:
-        idx_sup_thr: np.ndarray
-                Vector of supra-threshold events
+    Parameters
+    ----------
+    x : array_like
+        Array of data of shape (N,)
+    idx_sup_thr : array_like
+        Vector of supra-threshold events
+    idx_start : array_like
+        Starting indices of event.
+    idx_stop : array_like
+        Ending indices of event.
+    sf : int
+        Sampling frequency of the data (Hz)
 
-        idx_start: np.ndarray
-            Starting indices of event.
-
-        idx_stop: np.ndarray
-            Ending indices of event.
-
-        sf: int
-            Sampling frequency of the data (Hz)
-
-    Return:
-        mfreq: np.ndarray
-            Mean frequency of each event (Hz)
+    Returns
+    -------
+    mfreq : array_like
+        Mean frequency of each event (Hz)
     """
     if x.size % 2:
         analytic = hilbert(x)
@@ -144,76 +144,80 @@ def _events_mean_freq(x, idx_sup_thr, idx_start, idx_stop, sf):
     return mfreq
 
 
-def _event_amplitude(x, idx_sup_thr, idx_start, idx_stop, sf):
-        """Find amplitude range of events.
+def _events_amplitude(x, idx_sup_thr, idx_start, idx_stop, sf):
+    """Find amplitude range of events.
 
-        Args:
-            idx_sup_thr: np.ndarray
-                Vector of supra-threshold events
+    Parameters
+    ----------
+    x : array_like
+        Array of data of shape (N,)
+    idx_sup_thr : array_like
+        Vector of supra-threshold events
+    idx_start : array_like
+        Starting indices of event.
+    idx_stop : array_like
+        Ending indices of event.
+    sf : int
+        Sampling frequency of the data (Hz)
 
-            idx_start: np.ndarray
-                Starting indices of event.
+    Returns
+    -------
+    amp_range : array_like
+        Amplitude range (max - min) of each event
+    distance_ms : array_like
+        Distance (ms) between min and max
+    """
+    amp_range = np.array([])
+    distance_ms = np.array([])
+    # Loop on each event
+    for i, j in zip(idx_start, idx_stop):
+        idx_event = np.arange(idx_sup_thr[i], idx_sup_thr[j])
+        if idx_event.size > 0:
+            amp_range = np.append(amp_range, np.ptp(x[idx_event]))
+            distance = np.abs(np.argmax(x[idx_event]) - np.argmin(
+                x[idx_event]))
+            distance_ms = np.append(distance_ms, distance / sf * 1000)
+        else:
+            amp_range = 0.
+            distance_ms = 0.
 
-            idx_stop: np.ndarray
-                Ending indices of event.
-
-            sf: int
-                Sampling frequency of the data (Hz)
-
-        Return:
-            amp_range: np.ndarray
-                Amplitude range (max - min) of each event
-
-            distance_ms: np.ndarray
-                Distance (ms) between min and max
-        """
-        amp_range = np.array([])
-        distance_ms = np.array([])
-        # Loop on each event
-        for i, j in zip(idx_start, idx_stop):
-            idx_event = np.arange(idx_sup_thr[i], idx_sup_thr[j])
-            if idx_event.size > 0:
-                amp_range = np.append(amp_range, np.ptp(x[idx_event]))
-                distance = np.abs(np.argmax(x[idx_event]) - np.argmin(
-                                                              x[idx_event]))
-                distance_ms = np.append(distance_ms, distance / sf * 1000)
-            else:
-                amp_range = 0.
-                distance_ms = 0.
-
-        return amp_range, distance_ms
+    return amp_range, distance_ms
 
 
-def _event_to_index(x):
+def _events_to_index(x):
     """Convert a continuous vector of indices into an 2D array (start, end).
 
-    Args:
-        x: np.ndarray
-            Array of indices.
+    Parameters
+    ----------
+    x : array_like
+        Array of indices.
 
-    Returns:
-        xidx: np.ndarray
-            An array of shape (n_events, 2) where the dimension 2 refer to the
-            indices where each event start and finish.
+    Returns
+    -------
+    xidx : array_like
+        An array of shape (n_events, 2) where the dimension 2 refer to the
+        indices where each event start and finish.
     """
     # Split indices where it stopped :
-    sp = np.split(x, np.where(np.diff(x) != 1)[0]+1)
+    sp = np.split(x, np.where(np.diff(x) != 1)[0] + 1)
     # Return (start, end) :
     return np.array([[k[0], k[-1]] for k in sp]).astype(int)
 
 
-def _index_to_event(x):
+def _index_to_events(x):
     """Convert a 2D (start, end) array into a continuous one.
 
-    Args:
-        x: np.ndarra
-            2D array of indicies.
+    Parameters
+    ----------
+    x : array_like
+        2D array of indicies.
 
-    Returns:
-        index: np.ndarray
-            Continuous array of indicies.
+    Returns
+    -------
+    index : array_like
+        Continuous array of indicies.
     """
     index = np.array([])
     for k in range(x.shape[0]):
-        index = np.append(index, np.arange(x[k, 0], x[k, 1]+1))
+        index = np.append(index, np.arange(x[k, 0], x[k, 1] + 1))
     return index.astype(int)

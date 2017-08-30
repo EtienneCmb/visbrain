@@ -16,10 +16,10 @@ from scipy.signal import hilbert, detrend
 from ..filtering import filt, morlet, morlet_power, welch_power
 from ..sigproc import movingaverage, derivative, tkeo
 from .event import (_events_duration, _events_removal, _events_distance_fill,
-                    _event_amplitude)
+                    _events_amplitude)
 
-__all__ = ('peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
-           'kcdetect', 'mtdetect')
+__all__ = ('kcdetect', 'spindlesdetect', 'remdetect', 'slowwavedetect',
+           'mtdetect', 'peakdetect')
 
 ###########################################################################
 # K-COMPLEX DETECTION
@@ -157,8 +157,8 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
         idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-        kc_amp, distance_ms = _event_amplitude(data, idx_sup_thr,
-                                               idx_start, idx_stop, sf)
+        kc_amp, distance_ms = _events_amplitude(data, idx_sup_thr,
+                                                idx_start, idx_stop, sf)
         good_dur = np.where(np.logical_and(duration_ms > tmin,
                                            duration_ms < tmax))[0]
 
@@ -404,9 +404,8 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
 ###########################################################################
 
 
-def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400.,
-                   fmin=.5, fmax=2., welch_win_s=12, moving_s=30,
-                   min_duration_ms=500.):
+def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
+                   fmax=2., welch_win_s=12, moving_s=30, min_duration_ms=500.):
     """Perform a Slow Wave detection.
 
     Parameters
@@ -416,8 +415,8 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400.,
     sf : float
         Downsampling frequency
     threshold : float
-        First threshold: bandwise-normalized delta power
-        Value must be between 0 and 1.
+        First threshold: bandwise-normalized delta power Value must be between
+        0 and 1.
     min_amp : float | 70.
         Secondary threshold: minimum amplitude (uV) of the raw signal.
         Slow waves are generally defined by amplitude > 70 uV.
@@ -464,8 +463,8 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400.,
 
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-        sw_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start,
-                                     idx_stop, sf)
+        sw_amp, _ = _events_amplitude(elec, idx_sup_thr, idx_start,
+                                      idx_stop, sf)
 
         good_amp = np.where(np.logical_and(sw_amp > min_amp,
                                            sw_amp < max_amp))[0]
@@ -577,8 +576,8 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
         _, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
         # Amplitude criteria
-        mt_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start, idx_stop,
-                                     sf)
+        mt_amp, _ = _events_amplitude(elec, idx_sup_thr, idx_start, idx_stop,
+                                      sf)
         good_amp = np.where(np.logical_and(mt_amp > min_amp,
                                            mt_amp < max_amp))[0]
         good_idx = _events_removal(idx_start, idx_stop, good_amp)
