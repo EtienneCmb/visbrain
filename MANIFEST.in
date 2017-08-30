@@ -5,7 +5,7 @@ include requirements.txt
 
 # Add brain templates and eeg reference file :
 recursive-include visbrain/brain/base/templates *.npz
-include visbrain/utils/topo/eegref.npz
+include visbrain/visuals/eegref.npz
 
 # Add visbrain icons :
 include visbrain/brain/brain_icon.svg

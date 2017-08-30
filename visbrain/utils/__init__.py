@@ -10,5 +10,4 @@ from .physio import *
 from .picture import *
 from .sigproc import *
 from .sleep import *
-from .topo import *
 from .transform import *

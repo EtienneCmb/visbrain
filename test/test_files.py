@@ -52,7 +52,7 @@ def test_sleep_icon():
 
 def test_topo_file():
     """Test if the topo reference file is installed."""
-    path = ['visbrain', 'utils', 'topo', 'eegref.npz']
+    path = ['visbrain', 'visuals', 'eegref.npz']
     _test_file('Topo reference file (eegref.npz)', path)
 
 

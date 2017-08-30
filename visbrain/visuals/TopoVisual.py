@@ -19,7 +19,7 @@ from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
 from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
-                     vpnormalize, vprecenter, array_project_radial_to3d)
+                     vpnormalize, vprecenter)
 from .cbar import CbarVisual
 
 __all__ = ('TopoMesh')
@@ -390,7 +390,7 @@ class TopoMesh(object):
                     pass  # all good
                 elif system == 'spherical':
                     xyz = self._spherical_to_cartesian(xyz, unit)
-                    xyz = array_project_radial_to3d(xyz)
+                    xyz = self.array_project_radial_to3d(xyz)
 
         self._xyz = xyz
         self._channels = channels
@@ -414,7 +414,7 @@ class TopoMesh(object):
         """
         ref = self._get_coordinates_from_name([x, y])[0]
         ref = self._spherical_to_cartesian(ref, unit='degree')
-        ref = array_project_radial_to3d(ref)
+        ref = self.array_project_radial_to3d(ref)
         ref_x, ref_y = ref[0, 0], ref[1, 1]
         return ref_x, ref_y
 
@@ -428,8 +428,8 @@ class TopoMesh(object):
             List of channel names.
         """
         # Load the coordinates template :
-        path_file = sys.modules[__name__].__file__.split('visuals')[0]
-        path = os.path.join(*(path_file, 'utils', 'topo', 'eegref.npz'))
+        path_file = sys.modules[__name__].__file__.split('Topo')[0]
+        path = os.path.join(*(path_file, 'eegref.npz'))
         file = np.load(path)
         nameRef, xyzRef = file['chan'], file['xyz']
         keeponly = np.ones((len(chan)), dtype=bool)
@@ -505,6 +505,22 @@ class TopoMesh(object):
                     g[mask] = 0.
                 zi[i, j] = g.dot(weights)
         return zi
+
+    @staticmethod
+    def array_project_radial_to3d(points_2d):
+        """Radial 3d projection."""
+        points_2d = np.atleast_2d(points_2d)
+        alphas = np.sqrt(np.sum(points_2d**2, -1))
+
+        betas = np.sin(alphas) / alphas
+        betas[alphas == 0] = 1
+        x = points_2d[..., 0] * betas
+        y = points_2d[..., 1] * betas
+        z = np.cos(alphas)
+
+        points_3d = np.asarray([x, y, z]).T
+
+        return points_3d
 
     # ----------- SHOW_MARKERS -----------
     @property
