@@ -184,7 +184,7 @@
 <span class="kn">from</span> <span class="nn">.interface.uiInit</span> <span class="k">import</span> <span class="n">BrainShortcuts</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">base</span><span class="p">,</span> <span class="n">BrainCbar</span>
 <span class="kn">from</span> <span class="nn">.user</span> <span class="k">import</span> <span class="n">BrainUserMethods</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">ShortcutPopup</span><span class="p">,</span> <span class="n">set_widget_size</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">set_widget_size</span>
 <span class="kn">import</span> <span class="nn">sip</span>
 <span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
@@ -530,10 +530,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
         <span class="n">uiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">)</span>
 
-        <span class="c1"># Shortcuts popup window :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shpopup</span> <span class="o">=</span> <span class="n">ShortcutPopup</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shpopup</span><span class="o">.</span><span class="n">set_shortcuts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">)</span>
-
         <span class="c1"># Set icon :</span>
         <span class="c1"># pathfile = sys.modules[__name__].__file__</span>
         <span class="c1"># path = os.path.join(*[&#39;brain&#39;, &#39;interface&#39;, &#39;gui&#39;, &#39;vbicon.png&#39;])</span>
@@ -549,6 +545,7 @@
         <span class="c1"># ====================== UI to visbrain ======================</span>
         <span class="c1"># Link UI and visbrain function :</span>
         <span class="n">uiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shpopup</span><span class="o">.</span><span class="n">set_shortcuts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">)</span>
 
         <span class="c1"># ====================== Cameras ======================</span>
         <span class="c1"># Main camera :</span>

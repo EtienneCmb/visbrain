@@ -297,8 +297,17 @@ Here's the list of supported extensions for hypnogram files :
 
    **This text file should contain the following information :**
 
-   * *Time* : the number of seconds represented by one value of the hypnogram (e.g. one value per 30 second, time = 30, one value per second, time = 1).
-   * *W, N1, N2, N3, REM, Art* : The value in your hypnogram that corresponds to stage Wakefulness, N1, N2, N3, REM and Art.
+   ==========    ======  ======================================================
+   Parameters    Values  Description
+   ==========    ======  ======================================================
+   Time          1       Hypnogram file contains one value per second
+   Wake          0       The value assigned to Wake in the hypnogram is 0
+   N1            1       The value assigned to N1 sleep in the hypnogram is 1
+   N2            2       The value assigned to N2 sleep in the hypnogram is 2
+   N3            3       The value assigned to N3 sleep in the hypnogram is 3
+   REM           4       The value assigned to REM in the hypnogram is 4
+   Artefact      \-1     The value assigned to Artefact in the hypnogram is \-1
+   ==========    ======  ======================================================
 
    Please note that Sleep uses the guidelines of *Iber et al. 2007* for sleep stage nomenclature, i.e. Wake, N1, N2, N3, REM and Artefact. If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differenciation between S3 and S4 so be sure not to overwrite your original file!
 

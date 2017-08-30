@@ -180,8 +180,8 @@
 <span class="kn">from</span> <span class="nn">.interface</span> <span class="k">import</span> <span class="n">uiInit</span><span class="p">,</span> <span class="n">uiElements</span>
 <span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">visuals</span>
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="n">Tools</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">FixedCam</span><span class="p">,</span> <span class="n">load_sleepdataset</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">ShortcutPopup</span><span class="p">,</span>
-                     <span class="n">check_downsampling</span><span class="p">,</span> <span class="n">MouseEventControl</span><span class="p">,</span> <span class="n">set_widget_size</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">FixedCam</span><span class="p">,</span> <span class="n">load_sleepdataset</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">check_downsampling</span><span class="p">,</span>
+                     <span class="n">MouseEventControl</span><span class="p">,</span> <span class="n">set_widget_size</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">dialogLoad</span><span class="p">,</span> <span class="n">read_hypno</span>
 
 <span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -245,9 +245,6 @@
         <span class="c1"># Create the app and initialize all graphical elements :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
         <span class="n">uiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-        <span class="c1"># Shortcuts popup window :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_shpopup</span> <span class="o">=</span> <span class="n">ShortcutPopup</span><span class="p">()</span>
 
         <span class="c1"># Set default GUI state :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setDefaultState</span><span class="p">()</span>
@@ -539,7 +536,7 @@
         <span class="c1"># ================= ICON =================</span>
         <span class="n">pathfile</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="vm">__file__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;sleep.py&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">app_icon</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="p">()</span>
-        <span class="n">app_icon</span><span class="o">.</span><span class="n">addFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathfile</span><span class="p">,</span> <span class="s1">&#39;sleep_icon.svg&#39;</span><span class="p">))</span>
+        <span class="n">app_icon</span><span class="o">.</span><span class="n">addFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathfile</span><span class="p">,</span> <span class="s1">&#39;ico/sleep_ico.svg&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">app_icon</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_camCreation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

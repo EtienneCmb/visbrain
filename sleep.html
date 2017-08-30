@@ -628,10 +628,49 @@
 <p class="first admonition-title">Warning</p>
 <p>There is no international gold standard for the hypnogram format yet and each lab can have its own format. To overcome problems caused by different sampling rate of hypnogram files and/or different values assigned to each sleep stages, Sleep requires that you specify these parameters in a .txt file. This text file should be in the same directory as the original hypnogram file and be named: <em>HYPNOFILENAME_description.txt</em>. Checkout this <a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/docs/Hypnogram_excerpt2_description.txt">example</a>.</p>
 <p><strong>This text file should contain the following information :</strong></p>
-<ul class="simple">
-<li><em>Time</em> : the number of seconds represented by one value of the hypnogram (e.g. one value per 30 second, time = 30, one value per second, time = 1).</li>
-<li><em>W, N1, N2, N3, REM, Art</em> : The value in your hypnogram that corresponds to stage Wakefulness, N1, N2, N3, REM and Art.</li>
-</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="9%" />
+<col width="77%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameters</th>
+<th class="head">Values</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Time</td>
+<td>1</td>
+<td>Hypnogram file contains one value per second</td>
+</tr>
+<tr class="row-odd"><td>Wake</td>
+<td>0</td>
+<td>The value assigned to Wake in the hypnogram is 0</td>
+</tr>
+<tr class="row-even"><td>N1</td>
+<td>1</td>
+<td>The value assigned to N1 sleep in the hypnogram is 1</td>
+</tr>
+<tr class="row-odd"><td>N2</td>
+<td>2</td>
+<td>The value assigned to N2 sleep in the hypnogram is 2</td>
+</tr>
+<tr class="row-even"><td>N3</td>
+<td>3</td>
+<td>The value assigned to N3 sleep in the hypnogram is 3</td>
+</tr>
+<tr class="row-odd"><td>REM</td>
+<td>4</td>
+<td>The value assigned to REM in the hypnogram is 4</td>
+</tr>
+<tr class="row-even"><td>Artefact</td>
+<td>-1</td>
+<td>The value assigned to Artefact in the hypnogram is -1</td>
+</tr>
+</tbody>
+</table>
 <p class="last">Please note that Sleep uses the guidelines of <em>Iber et al. 2007</em> for sleep stage nomenclature, i.e. Wake, N1, N2, N3, REM and Artefact. If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differenciation between S3 and S4 so be sure not to overwrite your original file!</p>
 </div>
 </div>
