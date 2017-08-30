@@ -5,7 +5,7 @@ from PyQt5 import QtWidgets
 import vispy.app as visapp
 
 from .uiInit import uiInit
-from ..utils import CbarQt, CbarBase, CbarObjetcs
+from ..visuals import CbarQt, CbarBase, CbarObjetcs
 
 
 class Colorbar(uiInit):

@@ -1,9 +1,8 @@
 """Mehods to manage interactions between the GUI and objects."""
 
-from .CbarVisual import CbarVisual
+from ...utils import color2json, mpl_cmap, mpl_cmap_index
 from .gui import CbarForm
-from ..guitools import color2json
-from ..color import mpl_cmap, mpl_cmap_index
+from .CbarVisual import CbarVisual
 
 __all__ = ['CbarQt']
 

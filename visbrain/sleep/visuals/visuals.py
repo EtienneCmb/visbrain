@@ -11,8 +11,9 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .marker import Markers
-from ...utils import (array2colormap, color2vb, TopoPlot, PrepareData)
+from ...utils import (array2colormap, color2vb, PrepareData)
 from ...utils.sleep.event import _index_to_event
+from ...visuals import TopoMesh
 
 __all__ = ("visuals")
 
@@ -726,17 +727,17 @@ class Hypnogram(object):
 ###############################################################################
 # TOPOPLOT
 ###############################################################################
-Topoplot class that inherit from the visual TopoPlot and PrepareData for
+Topoplot class that inherit from the visual TopoMesh and PrepareData for
 filetring, de-meaning...
 """
 
 
-class TopoSleep(TopoPlot, PrepareData):
+class TopoSleep(TopoMesh, PrepareData):
     """Topoplot for sleep data."""
 
     def __init__(self, **kwargs):
-        # Initialize TopoPlot and PrepareData :
-        TopoPlot.__init__(self, **kwargs)
+        # Initialize TopoMesh and PrepareData :
+        TopoMesh.__init__(self, **kwargs)
         PrepareData.__init__(self, axis=1)
         # Initialize data, clim, cmap and cblabel :
         self._data = None

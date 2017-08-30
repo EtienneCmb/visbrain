@@ -14,7 +14,8 @@ from scipy.spatial.distance import cdist
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
 
-from ...utils import color2vb, normalize, CbarArgs, tal2mni
+from ...utils import color2vb, normalize, tal2mni
+from ...visuals import CbarArgs
 
 __all__ = ['SourcesBase']
 

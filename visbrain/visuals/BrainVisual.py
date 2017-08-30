@@ -16,8 +16,8 @@ from vispy.visuals import Visual
 import vispy.visuals.transforms as vist
 from vispy.scene.visuals import create_visual_node
 
-from ....utils import (array2colormap, color2vb, vpnormalize, convert_meshdata,
-                       vispy_array)
+from ..utils import (array2colormap, color2vb, vpnormalize, convert_meshdata,
+                     vispy_array)
 
 __all__ = ['BrainMesh']
 
