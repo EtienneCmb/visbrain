@@ -57,18 +57,18 @@ vb.connect_control(show=False)
 vb.sources_display('all')
 vb.cortical_repartition(cmap='viridis', clim=(1., 6.), vmin=2., under='gray',
                         vmax=4., over='#ab4642', radius=16.)
-vb.light_reflection('external')
+vb.brain_control(transparent=False)
 vb.sources_opacity(show=False)
 vb.rotate(custom=(-125., 0.))
 vb.screenshot('repartition.jpg', autocrop=True)
 
 vb.sources_display('all')
-vb.roi_control(selection=[4, 6], subdivision='brod', smooth=5)
+vb.roi_control(selection=[4, 6], subdivision='Brodmann', smooth=5)
 vb.cortical_projection(project_on='roi', radius=12., cmap='inferno',
                        clim=(.1, .5), vmin=0., vmax=6.)
 vb.sources_display('none')
 vb.brain_control(template='B3')
-vb.light_reflection('internal')
+vb.brain_control(transparent=True)
 vb.rotate('coronal')
 vb.screenshot('roi.jpg', autocrop=True)
 

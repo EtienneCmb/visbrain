@@ -3,7 +3,9 @@ Page layout example
 ===================
 
 Arange pictures in a grid. Before running this script, make sure you generate
-pictures before using 0_GeneratePictures.py."""
+pictures before using 0_GeneratePictures.py otherwise, download the archive :
+https://drive.google.com/open?id=0B6vtJiCQZUBvRXVsN0F6ZDFuaUE
+"""
 from visbrain import Figure
 
 # Files to load :
