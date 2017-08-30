@@ -62,8 +62,8 @@ def movingaverage(x, window, sf):
     sf : int
         Downsampling frequency
     """
-    window = int(window / (1000 / sf))
-    weights = np.repeat(1.0, window) / window
+    window = int(window / (1000. / sf))
+    weights = np.repeat(1., window) / window
     sma = np.convolve(x, weights, 'same')
     return sma
 
@@ -71,7 +71,7 @@ def movingaverage(x, window, sf):
 def derivative(x, window, sf):
     """Compute first derivative of signal.
 
-       Equivalent to np.gradient function
+    Equivalent to np.gradient function
 
     Parameters
     ----------
@@ -189,8 +189,8 @@ def power_of_ten(x, e=3):
     power: int
         The power of ten to retrieve x.
     """
-    x = np.abs(x)
     sign = np.sign(x)
+    x = np.abs(x)
     stx = str(x)
     if 0 < x <= 10 ** -e:  # x is a power of e- :
         if stx.find('e-') + 1:  # Format : 'xe-y'
