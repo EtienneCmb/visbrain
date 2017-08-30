@@ -209,7 +209,7 @@
 <h2>2.1. Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>Sleep is a graphical user interface dedicated to visualization and scoring of sleep data. Sleep runs on Vispy excellent package and benefits thus from the high-performance of this latter (GPU-based computation).</p>
 <div class="figure align-center">
-<img alt="_images/Sleep_main.png" src="_images/Sleep_main.png" />
+<img alt="_images/sleep_main.png" src="_images/sleep_main.png" />
 </div>
 <div class="section" id="help">
 <h3>2.1.1. Help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h3>
@@ -333,7 +333,7 @@
 <span id="paneltab"></span><h5>2.1.5.2.1. Panels<a class="headerlink" href="#panels" title="Permalink to this headline">¶</a></h5>
 <p>Manage object visibility, channel’s amplitudes, spectrogram properties…</p>
 <div class="figure align-center">
-<img alt="_images/Sleep_topo.png" src="_images/Sleep_topo.png" />
+<img alt="_images/sleep_topo.png" src="_images/sleep_topo.png" />
 </div>
 <ul class="simple">
 <li><dl class="first docutils">
@@ -414,7 +414,7 @@
 <span id="toolstab"></span><h5>2.1.5.2.2. Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h5>
 <p>Signal processing and re-referencement tools.</p>
 <div class="figure align-center" id="id6">
-<img alt="_images/Sleep_filtering.png" src="_images/Sleep_filtering.png" />
+<img alt="_images/sleep_filtering.png" src="_images/sleep_filtering.png" />
 <p class="caption"><span class="caption-text">Bandpass filter applied across all channels and spectrogram.</span></p>
 </div>
 <ul class="simple">
@@ -442,7 +442,7 @@
 <span id="infotab"></span><h5>2.1.5.2.3. Info<a class="headerlink" href="#info" title="Permalink to this headline">¶</a></h5>
 <p>The Info panel displays recording information (name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time if you modify the hypnogram using either live edition or the Scoring panel. Sleep statistics can be exported to <strong>.csv</strong> or <strong>.txt</strong> file.</p>
 <div class="figure align-center" id="id7">
-<img alt="_images/Sleep_info.png" src="_images/Sleep_info.png" />
+<img alt="_images/sleep_info.png" src="_images/sleep_info.png" />
 <p class="caption"><span class="caption-text">Hypnogram’s informations.</span></p>
 </div>
 <ul class="simple">
@@ -698,7 +698,7 @@
 </pre></div>
 </div>
 <div class="figure align-center" id="id8">
-<img alt="_images/Sleep_open.png" src="_images/Sleep_open.png" />
+<img alt="_images/sleep_open.png" src="_images/sleep_open.png" />
 <p class="caption"><span class="caption-text">Popup window for loading your files.</span></p>
 </div>
 </div>
@@ -746,7 +746,7 @@
 <span id="id3"></span><h3>2.2.3. Hypnogram scoring<a class="headerlink" href="#hypnogram-scoring" title="Permalink to this headline">¶</a></h3>
 <p>Sleep offers three possibilities to score the hypnogram, during the <a class="reference internal" href="#navigation"><span class="std std-ref">Navigation</span></a> using shortcuts, manually using the <a class="reference internal" href="#scoretable"><span class="std std-ref">Scoring table</span></a> or in <a class="reference internal" href="#liveedit"><span class="std std-ref">Live editing</span></a>.</p>
 <div class="figure align-center" id="id9">
-<img alt="_images/Sleep_scoring.png" src="_images/Sleep_scoring.png" />
+<img alt="_images/sleep_scoring.png" src="_images/sleep_scoring.png" />
 <p class="caption"><span class="caption-text">Hypnogram scoring table.</span></p>
 </div>
 <div class="section" id="navigation">
@@ -800,7 +800,7 @@
 <p>At the end of the hypnogram, you can <strong>Add line</strong> or <strong>Remove line</strong> when a line is selected. An other interesting option is that the table is sortable (by clicking on the arrow inside the column name).</p>
 <p>Then, you can export your hypnogram in <strong>.hyp</strong>, <strong>.txt</strong> or <strong>cvs</strong>.</p>
 <div class="figure align-center" id="id10">
-<img alt="_images/Scoring_table.png" src="_images/Scoring_table.png" />
+<img alt="_images/sleep_scoring_table.png" src="_images/sleep_scoring_table.png" />
 <p class="caption"><span class="caption-text">Hypnogram scoring using the Scoring table. Manually specify where each stage start / finish and precise the stage type.</span></p>
 </div>
 </div>
@@ -816,7 +816,7 @@
 </ul>
 </div></blockquote>
 <div class="figure align-center" id="id11">
-<img alt="_images/Sleep_livedit.png" src="_images/Sleep_livedit.png" />
+<img alt="_images/sleep_livedit.png" src="_images/sleep_livedit.png" />
 <p class="caption"><span class="caption-text">Edit the hypnogram directly from the axes.</span></p>
 </div>
 </div>
@@ -860,7 +860,7 @@
 <h4>2.2.4.1. Spindles detection<a class="headerlink" href="#spindles-detection" title="Permalink to this headline">¶</a></h4>
 <p>This algorithm perform a semi-automatic detection of sleep spindles which are an essential feature of N2 sleep. Sleep spindles are defined as bursts of 12-14 Hz waves that occur for at least 0.5 seconds. They are maximally visible on central electrodes.</p>
 <div class="figure align-center" id="id12">
-<img alt="_images/Sleep_spindles.png" src="_images/Sleep_spindles.png" />
+<img alt="_images/sleep_spindles.png" src="_images/sleep_spindles.png" />
 <p class="caption"><span class="caption-text">Spindles detection on channel Cz and report on the hypnogram.</span></p>
 </div>
 <div class="admonition note">
@@ -886,7 +886,7 @@
 <h4>2.2.4.2. Rapid Eye Movements detection<a class="headerlink" href="#rapid-eye-movements-detection" title="Permalink to this headline">¶</a></h4>
 <p>This algorithm perform a semi-automatic detection of rapid eye movements (REMs, or saccades) which occur during REM sleep (hence the name). Briefly, the method identify consecutive supra-threshold samples of the first derivative of the signal (after filtering).</p>
 <div class="figure align-center" id="id13">
-<img alt="_images/Sleep_rem.png" src="_images/Sleep_rem.png" />
+<img alt="_images/sleep_rem.png" src="_images/sleep_rem.png" />
 <p class="caption"><span class="caption-text">Rapid Eye Movements (REM) detection on channel EOG1 and report on the hypnogram.</span></p>
 </div>
 <div class="admonition note">
@@ -908,7 +908,7 @@
 <h4>2.2.4.3. Peaks detection<a class="headerlink" href="#peaks-detection" title="Permalink to this headline">¶</a></h4>
 <p>Perform a peak detection.</p>
 <div class="figure align-center" id="id14">
-<img alt="_images/Sleep_peak.png" src="_images/Sleep_peak.png" />
+<img alt="_images/sleep_peak.png" src="_images/sleep_peak.png" />
 <p class="caption"><span class="caption-text">Peaks detection on ECG channel and report on the hypnogram.</span></p>
 </div>
 <div class="admonition note">

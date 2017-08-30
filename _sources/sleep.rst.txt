@@ -17,7 +17,7 @@ Description
 
 Sleep is a graphical user interface dedicated to visualization and scoring of sleep data. Sleep runs on Vispy excellent package and benefits thus from the high-performance of this latter (GPU-based computation).
 
-.. figure::  picture/Sleep_main.png
+.. figure::  picture/picsleep/sleep_main.png
    :align:   center
 
 Help
@@ -113,7 +113,7 @@ Panels
 
 Manage object visibility, channel's amplitudes, spectrogram properties...
 
-.. figure::  picture/Sleep_topo.png
+.. figure::  picture/picsleep/sleep_topo.png
    :align:   center
 
 * *Channels*
@@ -148,7 +148,7 @@ Tools
 
 Signal processing and re-referencement tools.
 
-.. figure::  picture/Sleep_filtering.png
+.. figure::  picture/picsleep/sleep_filtering.png
    :align:   center
 
    Bandpass filter applied across all channels and spectrogram.
@@ -167,7 +167,7 @@ Info
 
 The Info panel displays recording information (name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time if you modify the hypnogram using either live edition or the Scoring panel. Sleep statistics can be exported to **.csv** or **.txt** file.
 
-.. figure::  picture/Sleep_info.png
+.. figure::  picture/picsleep/sleep_info.png
    :align:   center
 
    Hypnogram's informations.
@@ -359,7 +359,7 @@ Don't send anything, just open the interface and you will have a popup window as
     Sleep().show()
 
 
-.. figure::  picture/Sleep_open.png
+.. figure::  picture/picsleep/sleep_open.png
    :align:   center
 
    Popup window for loading your files.
@@ -421,7 +421,7 @@ Hypnogram scoring
 
 Sleep offers three possibilities to score the hypnogram, during the :ref:`navigation` using shortcuts, manually using the :ref:`scoretable` or in :ref:`liveedit`.
 
-.. figure::  picture/Sleep_scoring.png
+.. figure::  picture/picsleep/sleep_scoring.png
    :align:   center
 
    Hypnogram scoring table.
@@ -464,7 +464,7 @@ At the end of the hypnogram, you can **Add line** or **Remove line** when a line
 
 Then, you can export your hypnogram in **.hyp**, **.txt** or **cvs**.
 
-.. figure::  picture/Scoring_table.png
+.. figure::  picture/picsleep/sleep_scoring_table.png
    :align:   center
 
    Hypnogram scoring using the Scoring table. Manually specify where each stage start / finish and precise the stage type.
@@ -481,7 +481,7 @@ Live editing consist of editing your hypnogram directly from the axis by adding 
   - Hover an existing point in order to select it (the point turn green)
   - Dragg the point (blue) on the diffrent hypnogram values
 
-.. figure::  picture/Sleep_livedit.png
+.. figure::  picture/picsleep/sleep_livedit.png
    :align:   center
 
    Edit the hypnogram directly from the axes.
@@ -535,7 +535,7 @@ Spindles detection
 ^^^^^^^^^^^^^^^^^^
 This algorithm perform a semi-automatic detection of sleep spindles which are an essential feature of N2 sleep. Sleep spindles are defined as bursts of 12-14 Hz waves that occur for at least 0.5 seconds. They are maximally visible on central electrodes.
 
-.. figure::  picture/Sleep_spindles.png
+.. figure::  picture/picsleep/sleep_spindles.png
    :align:   center
 
    Spindles detection on channel Cz and report on the hypnogram.
@@ -555,7 +555,7 @@ Rapid Eye Movements detection
 
 This algorithm perform a semi-automatic detection of rapid eye movements (REMs, or saccades) which occur during REM sleep (hence the name). Briefly, the method identify consecutive supra-threshold samples of the first derivative of the signal (after filtering).
 
-.. figure::  picture/Sleep_rem.png
+.. figure::  picture/picsleep/sleep_rem.png
    :align:   center
 
    Rapid Eye Movements (REM) detection on channel EOG1 and report on the hypnogram.
@@ -571,7 +571,7 @@ Peaks detection
 
 Perform a peak detection.
 
-.. figure::  picture/Sleep_peak.png
+.. figure::  picture/picsleep/sleep_peak.png
    :align:   center
 
    Peaks detection on ECG channel and report on the hypnogram.

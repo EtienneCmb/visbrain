@@ -33,7 +33,7 @@ Cropping region
 
 Specify the region of your screen to capture. This is usefull to have a fitted figure around your brain (see Figure 1)
 
-.. figure::  picture/brain_region.png
+.. figure::  picture/screenshot/sc_region.png
    :align:   center
    
    Figure 1 : Explanation of the region argument.
@@ -43,7 +43,7 @@ Zoom
 
 Specify the zoom level over the canvas.
 
-.. figure::  picture/brain_zoom.png
+.. figure::  picture/screenshot/sc_zoom.png
    :align:   center
    
    Figure 2 : Explanation of the zoom argument.
@@ -69,7 +69,7 @@ PNG files
 
 If you export your figures as a *png* file, and if the brain is transparent, don't forget that the exported figure will be **transparent too !**
 
-.. figure::  picture/brain_png.png
+.. figure::  picture/screenshot/sc_png.png
    :align:   center
    
    Figure 3 : transparent brain and *png* files.
@@ -79,7 +79,7 @@ Combine transparent figures
 
 The `Screenshot <https://etiennecmb.github.io/visbrain/vbfunctions.html#screenshot>`_ method has a *transparent* argument, which allow the user to force the background to be transparent. Using this, you can then combine several *png* transparent files to generate more complex figures (see Figure 4). For example, you can export sources with transparent background and the main bran with non-transparent background and finally superimpose figures.
 
-.. figure::  picture/brain_complex.png
+.. figure::  picture/screenshot/sc_complex.png
    :align:   center
    
    Figure 4 : combine png files to create complex scene.
