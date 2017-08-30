@@ -1,3 +1,4 @@
+"""Test utility functions."""
 import numpy as np
 from warnings import warn
 import math
@@ -11,9 +12,17 @@ from visbrain.utils.filtering import (filt, morlet, ndmorlet, morlet_power,
 from visbrain.utils.others import (vis_args, check_downsampling, vispy_array,
                                    convert_meshdata, add_brain_template,
                                    remove_brain_template)
-from visbrain.utils import (piccrop, picresize)
+from visbrain.utils.picture import (piccrop, picresize)
 from visbrain.utils.sigproc import (normalize, movingaverage, derivative, tkeo,
                                     soft_thresh, zerocrossing, power_of_ten)
+from visbrain.utils.sleep.detection import (kcdetect, spindlesdetect,
+                                            remdetect, slowwavedetect,
+                                            mtdetect, peakdetect)
+from visbrain.utils.sleep.event import (_events_duration, _events_removal,
+                                        _events_distance_fill,
+                                        _events_mean_freq, _events_amplitude,
+                                        _events_to_index, _index_to_events)
+from visbrain.utils.sleep.hypnoprocessing import (transient, sleepstats)
 from visbrain.utils.transform import (vprescale, vprecenter, vpnormalize,
                                       array_to_stt)
 
@@ -117,6 +126,142 @@ class TestColor(object):
         assert isinstance(r[0], np.int64) and not r[1]
         assert isinstance(r2[0], np.int64) and r2[1]
         assert r == r3
+
+###############################################################################
+###############################################################################
+#                                detection.py
+###############################################################################
+###############################################################################
+
+
+class TestDetections(object):
+    """Test function in detection.py."""
+
+    @staticmethod
+    def _get_eeg_dataset(n=10014, sf=100., sine=False, f=4., amp=1.,
+                         offset=0.):
+        """Generate a random eeg dataset."""
+        if sine:
+            time = np.arange(n) / sf
+            data = np.sin(3 * np.pi * f * time)
+            # data += .05 * np.random.rand(*data.shape)
+        else:
+            data = np.random.randn(n)
+        data *= amp
+        data += offset
+        return data, sf
+
+    @staticmethod
+    def _get_eeg_hypno(n=10014):
+        """Generate a random hypnogram."""
+        if n % 6:
+            n_per_seg = n / 6
+            wake = np.zeros((n_per_seg,))
+            n1 = np.ones((n_per_seg,))
+            n2 = np.full((n_per_seg,), 2)
+            n3 = np.full((n_per_seg,), 3)
+            rem = np.full((n_per_seg,), 4)
+            art = np.full((n_per_seg,), -1)
+            return np.hstack((wake, n1, n2, n3, rem, art))
+        else:
+            return np.random.randint(-1, 4, n)
+
+    def test_kcdetect(self):
+        """Test function kcdetect."""
+        # Get a dataset example :
+        data, sf = self._get_eeg_dataset()
+        hypno = self._get_eeg_hypno()
+        kcdetect(data, sf, .8, 1., hypno, True, 100, 200, .2, .6)
+
+    def test_spindlesdetect(self):
+        """Test function spindlesdetect."""
+        # Get a dataset example :
+        data, sf = self._get_eeg_dataset()
+        hypno = self._get_eeg_hypno()
+        spindlesdetect(data, sf, .1, hypno, True)
+
+    def test_remdetect(self):
+        """Test function remdetect."""
+        # Get a dataset example :
+        data, sf = self._get_eeg_dataset()
+        hypno = self._get_eeg_hypno()
+        remdetect(data, sf, hypno, True, .1)
+
+    def test_slowwavedetect(self):
+        """Test function slowwavedetect."""
+        # Get a dataset example :
+        data, sf = self._get_eeg_dataset(n=10000, sine=True, offset=300., f=.7)
+        slowwavedetect(data, sf, .8, welch_win_s=12., min_duration_ms=5.)
+
+    def test_mtdetect(self):
+        """Test function mtdetect."""
+        # Get a dataset example :
+        data, sf = self._get_eeg_dataset()
+        hypno = self._get_eeg_hypno()
+        mtdetect(data, sf, .1, hypno, True)
+
+    def test_peakdetect(self):
+        """Test function peakdetect."""
+        # Get a dataset example :
+        data, sf = self._get_eeg_dataset(n=1000, sine=True, f=4., sf=128.)
+        peakdetect(sf, data, get='min')
+        peakdetect(sf, data, get='max')
+        peakdetect(sf, data, get='minmax', threshold=.6)
+
+###############################################################################
+###############################################################################
+#                                event.py
+###############################################################################
+###############################################################################
+
+
+class TestEvent(object):
+    """Test functions in event.py."""
+
+    @staticmethod
+    def _get_index():
+        return np.array([0, 1, 2, 3, 4, 7, 8, 9, 10, 14, 15, 16, 17, 18, 19])
+
+    @staticmethod
+    def _get_data():
+        data = np.random.rand(1000)
+        idx_sup_thr = np.arange(1000)
+        idx_start = np.array([10, 40, 100])
+        idx_stop = np.array([50, 75, 200])
+        return data, idx_sup_thr, idx_start, idx_stop
+
+    def test_events_duration(self):
+        """Test function events_duration."""
+        _events_duration(self._get_index(), 100.)
+
+    def test_events_removal(self):
+        """Test function events_removal."""
+        idx_start = np.array([100, 1200, 1300])
+        idx_stop = np.array([110, 2200, 1800])
+        _events_removal(idx_start, idx_stop, [0, 1])
+
+    def test_events_distance_fill(self):
+        """Test function events_distance_fill."""
+        _events_distance_fill(self._get_index(), 200., 100.)
+
+    def test_events_mean_freq(self):
+        """Test function events_mean_freq."""
+        data, idx_sup_thr, idx_start, idx_stop = self._get_data()
+        _events_mean_freq(data, idx_sup_thr, idx_start, idx_stop, 100.)
+
+    def test_event_amplitude(self):
+        """Test function event_amplitude."""
+        data, idx_sup_thr, idx_start, idx_stop = self._get_data()
+        _events_amplitude(data, idx_sup_thr, idx_start, idx_stop, 100.)
+
+    def test_event_to_index(self):
+        """Test function event_to_index."""
+        _events_to_index(self._get_index())
+
+    def test_index_to_event(self):
+        """Test function index_to_event."""
+        idx = _events_to_index(self._get_index())
+        _index_to_events(idx)
 
 ###############################################################################
 ###############################################################################
@@ -334,6 +479,33 @@ class TestSigproc(object):
         assert np.allclose(power_of_ten(-57.), (-57., 0))
         assert np.allclose(power_of_ten(1024.), (1.024, 3))
         assert np.allclose(power_of_ten(-14517.2), (-1.45172, 4))
+
+###############################################################################
+###############################################################################
+#                                hypnoprocessing.py
+###############################################################################
+###############################################################################
+
+
+class TestHypnoprocessing(object):
+    """Test function in hypnoprocessing.py."""
+
+    def test_transient(self):
+        """Test function transient."""
+        data = np.array([0, 0, 0, 1, 1, 2, 2, 2, 3, 4, 4, 5])
+        time = np.arange(len(data)) / 2.
+        index = np.array([[0, 2], [3, 4], [5, 7], [8, 8], [9, 10], [11, 11]])
+        tr, idx, stages = transient(data)
+        assert np.array_equal(tr, [2, 4, 7, 8, 10])
+        assert np.array_equal(index, idx)
+        assert np.array_equal(stages, [0, 1, 2, 3, 4, 5])
+        _, idx_time, _ = transient(data, time)
+        assert np.array_equal(index / 2., idx_time)
+
+    def test_sleepstats(self):
+        """Test function sleepstats."""
+        hypno = np.random.randint(-1, 3, (2000,))
+        sleepstats(None, hypno, len(hypno), time_window=1.)
 
 ###############################################################################
 ###############################################################################
