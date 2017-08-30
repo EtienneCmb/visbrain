@@ -210,7 +210,7 @@ def welch_power(x, fmin, fmax, sf, window_s=30, norm=True):
         Signal
     sf : int
         Downsampling frequency
-    window_s : int, optional (def 30)
+    window_s : int | 30
         Time resolution (sec) of Welch's periodogram. Must be > 10 seconds.
     norm : boolean, optional (def True)
         If True, return normalized band power
@@ -224,7 +224,7 @@ def welch_power(x, fmin, fmax, sf, window_s=30, norm=True):
     delta_spec_norm = np.array([], dtype=float)
 
     for i in np.arange(0, len(x), window_s * sf):
-        f, Pxx_spec = welch(x[i:i + window_s * sf], sf, 'hanning',
+        f, Pxx_spec = welch(x[int(i):int(i + window_s * sf)], sf, 'hanning',
                             nperseg=sf * (1 / freq_spacing),
                             scaling='spectrum')
         mean_delta = np.mean(Pxx_spec[idx_fmin:idx_fmax, ])
