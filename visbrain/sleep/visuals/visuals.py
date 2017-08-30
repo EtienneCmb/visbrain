@@ -12,7 +12,7 @@ import vispy.visuals.transforms as vist
 
 from .marker import Markers
 from ...utils import (array2colormap, color2vb, PrepareData)
-from ...utils.sleep.event import _index_to_event
+from ...utils.sleep.event import _index_to_events
 from ...visuals import TopoMesh
 
 __all__ = ("visuals")
@@ -100,7 +100,7 @@ class Detection(object):
                                            face_color=self[k]['color'])
                 else:
                     # Get index and channel number :
-                    index = _index_to_event(self[k]['index'])
+                    index = _index_to_events(self[k]['index'])
                     z = np.full(index.shape, 2., dtype=np.float32)
                     # Build position vector :
                     pos = np.vstack((self.time[index], data[nb, index], z)).T
