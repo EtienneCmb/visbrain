@@ -1,5 +1,5 @@
 from __future__ import print_function
-from visbrain import Sleep
+# from visbrain import Sleep
 
 
 def test_instance_sleep():

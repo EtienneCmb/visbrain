@@ -192,7 +192,7 @@ def array2colormap(x, cmap='inferno', clim=None, alpha=1.0, vmin=None,
     return x_cmap.astype(np.float32)
 
 
-def dynamic_color(color, x, dynamic=(0.0, 1.0)):
+def dynamic_color(color, x, dynamic=(0., 1.)):
     """Dynamic color changing.
 
     Parameters
@@ -242,7 +242,7 @@ def color2faces(color, length):
     color_face : array_like
         The color adapted for faces
     """
-    color = color.ravel()
+    color = np.asarray(color).ravel()
     colort = np.tile(np.array(color)[..., np.newaxis, np.newaxis],
                      (1, length, 3))
     return np.transpose(colort, (1, 2, 0))
@@ -284,8 +284,6 @@ def type_coloring(color=None, n=1, data=None, rnd_dyn=(0.3, 0.9), clim=None,
 
     Parameters
     ----------
-    n: int
-        The number of color to generate.
     color : string/tuple/array | None
         Choose how to color signals. Use None (or 'rnd', 'random') to
         generate random colors. Use 'uniform' (see the unicolor
@@ -341,7 +339,7 @@ def type_coloring(color=None, n=1, data=None, rnd_dyn=(0.3, 0.9), clim=None,
     # ---------------------------------------------------------------------
     # Dynamic color :
     elif color == 'dynamic':
-        # Generate a linearly spaced vecto for None data :
+        # Generate a linearly spaced vector for None data :
         if data is None:
             data = np.arange(n)
         # Get colormap as (n, 3):
@@ -365,13 +363,15 @@ def type_coloring(color=None, n=1, data=None, rnd_dyn=(0.3, 0.9), clim=None,
 def mpl_cmap(invert=False):
     """Get the list of matplotlib colormaps.
 
-        invert : bool | False
-            Get the list of inverted colormaps.
+    Parameters
+    ----------
+    invert : bool | False
+        Get the list of inverted colormaps.
 
     Returns
     -------
-        cmap_lst: list
-            list of available matplotlib colormaps.
+    cmap_lst: list
+        list of available matplotlib colormaps.
     """
     # Full list of colormaps :
     fullmpl = list(cm.datad.keys()) + list(cm.cmaps_listed.keys())
@@ -390,20 +390,19 @@ def mpl_cmap(invert=False):
 def mpl_cmap_index(cmap, cmaps=None):
     """Find the index of a colormap.
 
-    Arg:
-        cmap: string
-            Colormap name.
-
-        cmaps : list | None
-            List of colormaps.
+    Parameters
+    ----------
+    cmap : string
+        Colormap name.
+    cmaps : list | None
+        List of colormaps.
 
     Returns
     -------
-        idx: int
-            Index of the colormap.
-
-        invert: bool
-            Boolean value indicating if it's a reversed colormap.
+    idx : int
+        Index of the colormap.
+    invert : bool
+        Boolean value indicating if it's a reversed colormap.
     """
     # Find if it's a reversed colormap :
     invert = bool(cmap.find('_r') + 1)
