@@ -5,7 +5,7 @@ from PyQt5 import QtWidgets, QtCore
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect)
-from ....utils.sleep.event import _event_to_index
+from ....utils.sleep.event import _events_to_index
 
 __all__ = ['uiDetection']
 
@@ -178,7 +178,7 @@ class uiDetection(object):
                 if method == 'Peaks':
                     index = np.c_[index, index]
                 else:
-                    index = _event_to_index(index)
+                    index = _events_to_index(index)
                 self._detect.dict[(self._channels[k], method)]['index'] = index
                 # Be sure panel is displayed :
                 if not self.canvas_isVisible(k):
