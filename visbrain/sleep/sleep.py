@@ -369,7 +369,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         # ================= ICON =================
         pathfile = sys.modules[__name__].__file__.split('sleep.py')[0]
         app_icon = QtGui.QIcon()
-        app_icon.addFile(os.path.join(pathfile, 'ico/sleep_ico.svg'))
+        app_icon.addFile(os.path.join(pathfile, 'sleep_icon.svg'))
         self.setWindowIcon(app_icon)
 
     def _camCreation(self):

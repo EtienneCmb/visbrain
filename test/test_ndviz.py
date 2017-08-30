@@ -1,4 +1,4 @@
-from visbrain import Ndviz
+# from visbrain import Ndviz
 import numpy as np
 
 def test_instance_Ndviz():
