@@ -1,10 +1,21 @@
 import numpy as np
 from warnings import warn
 
+from visbrain.utils.cameras import FixedCam
 from visbrain.utils.color import (color2vb, array2colormap, dynamic_color,
                                   color2faces, type_coloring, mpl_cmap,
                                   color2tuple, mpl_cmap_index, colorclip)
 
+###############################################################################
+###############################################################################
+#                                cameras.py
+###############################################################################
+###############################################################################
+
+
+def test_utils_fixed_camera():
+    """Test color2vb function."""
+    f = FixedCam()
 
 ###############################################################################
 ###############################################################################
@@ -12,11 +23,14 @@ from visbrain.utils.color import (color2vb, array2colormap, dynamic_color,
 ###############################################################################
 ###############################################################################
 
+
 def test_utils_color2vb():
     """Test color2vb function."""
     assert np.array_equal(color2vb(), np.array([[1., 1., 1., 1.]]))
     color2vb('green')
+    color2vb('#ab4642')
     color2vb([0.5789, 1., 0.4235], alpha=.4)
+    color2vb((0.5789, 1., 0.4235, .3), alpha=.4)
     assert color2vb((0., 1., 0.), length=10).shape == (10, 4)
     assert color2vb(np.array([0., 1., 0., .5])).ravel()[-1] == .5
 
@@ -86,10 +100,10 @@ def test_utils_mpl_cmap():
 
 def test_utils_mpl_cmap_index():
     """Test mpl_cmap_index function."""
-    mpl = mpl_cmap(True)
+    mpl = mpl_cmap()
     r = mpl_cmap_index('viridis')
     r2 = mpl_cmap_index('viridis_r')
-    r3 = mpl_cmap_index('viridis_r', mpl)
+    r3 = mpl_cmap_index('viridis', mpl)
     assert isinstance(r[0], np.int64) and not r[1]
     assert isinstance(r2[0], np.int64) and r2[1]
-    assert r2 == r3
+    assert r == r3
