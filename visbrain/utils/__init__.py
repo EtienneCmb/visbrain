@@ -1,5 +1,4 @@
 from .cameras import *
-from .cbar import *
 from .color import *
 from .filtering import *
 from .gui import *

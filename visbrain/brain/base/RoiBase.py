@@ -11,7 +11,7 @@ import warnings
 
 from vispy.geometry.isosurface import isosurface
 
-from .visuals import BrainMesh
+from ...visuals import BrainMesh
 from ...utils import array2colormap, color2vb, color2faces
 
 # warnings.filterwarnings('ignore', r'with ndim')

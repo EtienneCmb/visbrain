@@ -4,9 +4,8 @@ from vispy.scene import Node, visuals
 from vispy import scene
 import vispy.visuals.transforms as vist
 
+from ...utils import array2colormap, color2tuple, FixedCam
 from .CbarBase import CbarBase
-from ..color import array2colormap, color2tuple
-from ..cameras import FixedCam
 
 
 class CbarVisual(CbarBase):

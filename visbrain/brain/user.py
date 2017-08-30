@@ -8,7 +8,7 @@ Brain instance.
 import numpy as np
 from scipy.spatial import ConvexHull
 
-from .base.visuals import BrainMesh
+from ..visuals import BrainMesh
 from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
 from .base.TimeSeriesBase import TimeSeriesBase

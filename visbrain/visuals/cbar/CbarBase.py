@@ -1,7 +1,7 @@
 """Most basic colorbar class."""
-from ..color import color2tuple
+from ...utils import color2tuple
 
-__all__ = ['CbarArgs', 'CbarBase']
+__all__ = ('CbarArgs', 'CbarBase')
 
 
 class CbarArgs(object):

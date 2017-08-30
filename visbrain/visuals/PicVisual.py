@@ -2,7 +2,7 @@ import numpy as np
 
 from vispy import gloo, visuals, scene
 
-from ....utils import array2colormap
+from ..utils import array2colormap
 
 __all__ = ('PicMesh')
 

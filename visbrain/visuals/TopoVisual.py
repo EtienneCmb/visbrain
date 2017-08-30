@@ -18,17 +18,15 @@ from vispy import scene
 from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
-from ..color import array2colormap, color2vb, mpl_cmap
-from ..topo.projection import array_project_radial_to3d
-from ..sigproc import normalize
-from ..transform import vpnormalize, vprecenter
-from ..cbar.CbarVisual import CbarVisual
+from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
+                     vpnormalize, vprecenter, array_project_radial_to3d)
+from .cbar import CbarVisual
 
-__all__ = ('TopoPlot')
+__all__ = ('TopoMesh')
 
 
-class TopoPlot(object):
-    """Create a TopoPlot VisPy object.
+class TopoMesh(object):
+    """Create a TopoMesh VisPy object.
 
     Parameters
     ----------
@@ -430,9 +428,9 @@ class TopoPlot(object):
             List of channel names.
         """
         # Load the coordinates template :
-        path = sys.modules[__name__].__file__.split('objects')[0]
-        path = os.path.join(path, 'topo')
-        file = np.load(os.path.join(path, 'eegref.npz'))
+        path_file = sys.modules[__name__].__file__.split('visuals')[0]
+        path = os.path.join(*(path_file, 'utils', 'topo', 'eegref.npz'))
+        file = np.load(path)
         nameRef, xyzRef = file['chan'], file['xyz']
         keeponly = np.ones((len(chan)), dtype=bool)
         # Find and load xyz coordinates :
