@@ -38,16 +38,18 @@ def piccrop(im, margin=10):
     # x-axis :
     idx_x = np.where(imdiff_x != 0)[1]
     if idx_x.size:
-        x_min = max(0, idx_x.min() - margin)
-        x_max = min(imas.shape[1], idx_x.max() + margin)
+        ncols = imas.shape[1]
+        x_min = max(0, idx_x.min() - margin + 1)
+        x_max = min(min(ncols, idx_x.max() + margin + 1), ncols)
         sl_x = slice(x_min, x_max)
     else:
         sl_x = slice(None)
     # y-axis :
     idx_y = np.where(imdiff_y)[0]
     if idx_y.size:
-        y_min = max(0, idx_y.min() - margin)
-        y_max = min(imas.shape[0], idx_y.max() + margin)
+        y_min = max(0, idx_y.min() - margin + 1)
+        nrows = imas.shape[0]
+        y_max = min(min(imas.shape[0], idx_y.max() + margin + 1), nrows)
         sl_y = slice(y_min, y_max)
     else:
         sl_y = slice(None)
