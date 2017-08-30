@@ -2,8 +2,12 @@
 import numpy as np
 from warnings import warn
 
-# from visbrain import Brain
+from visbrain.brain import Brain
 
+
+# def test_brain_gui():
+#     vb = Brain()
+#     vb._app.exit()
 
 # def test_brain_user_functions():
 #     """Test brain rotation."""
