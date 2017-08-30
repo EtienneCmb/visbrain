@@ -56,7 +56,8 @@ f.shared_colorbar((-10, 10), 'inferno', fz_title=30, vmin=-7, vmax=6,
 # Add a horizontal shared colormap :
 f.shared_colorbar(cmap='magma', clim=(-17, 17), fz_title=25, vmin=-11, vmax=12,
                   under='olive', over='firebrick', position='bottom',
-                  title='Shared horizontal colorbar', fz_ticks=15, pltmargin=.1)
+                  title='Shared horizontal colorbar', fz_ticks=15,
+                  pltmargin=.1)
 
 # Save the picture :
 f.save('LayoutExample.png', dpi=600)
