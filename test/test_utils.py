@@ -23,7 +23,7 @@ from visbrain.utils.guitools import (slider2opacity, textline2color,
                                      set_widget_size)
 from visbrain.utils.others import (vis_args, check_downsampling, vispy_array,
                                    convert_meshdata, add_brain_template,
-                                   remove_brain_template)
+                                   remove_brain_template, set_if_not_none)
 from visbrain.utils.picture import (piccrop, picresize)
 from visbrain.utils.sigproc import (normalize, movingaverage, derivative, tkeo,
                                     soft_thresh, zerocrossing, power_of_ten)
@@ -615,6 +615,13 @@ class TestOthers(object):
         # Force creation of vertices, faces and normals :
         self._creation()
         remove_brain_template(self.template)
+
+    def test_set_if_not_none(self):
+        """Test function set_if_not_none."""
+        a = 5.
+        assert set_if_not_none(a, None) == 5.
+        assert set_if_not_none(a, 10., False) == 5.
+        assert set_if_not_none(a, 10.) == 10.
 
 ###############################################################################
 ###############################################################################

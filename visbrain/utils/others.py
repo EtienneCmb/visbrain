@@ -8,7 +8,7 @@ import numpy as np
 from vispy.geometry import MeshData
 
 __all__ = ('vis_args', 'check_downsampling', 'vispy_array', 'convert_meshdata',
-           'add_brain_template', 'remove_brain_template')
+           'add_brain_template', 'remove_brain_template', 'set_if_not_none')
 
 
 def vis_args(kw, prefix, ignore=[]):
@@ -199,3 +199,23 @@ def remove_brain_template(name):
         os.remove(path)
     else:
         raise ValueError("No file " + path)
+
+
+def set_if_not_none(to_set, value, cond=True):
+    """Set a variable if the value is not None.
+
+    Parameters
+    ----------
+    to_set : string
+        The variable name.
+    value : any
+        The value to set.
+    cond : bool | True
+        Additional condition.
+
+    Returns
+    -------
+    val : any
+        The value if not None else to_set
+    """
+    return value if (value is not None) and cond else to_set
