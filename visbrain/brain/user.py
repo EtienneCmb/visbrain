@@ -495,7 +495,7 @@ class BrainUserMethods(object):
     # =========================================================================
     def sources_control(self, data=None, color='#ab4652', symbol=None,
                         radiusmin=None, radiusmax=None, edgecolor='white',
-                        edgewidth=None, scaling=None, opacity=None, mask=None,
+                        edgewidth=None, scaling=None, alpha=None, mask=None,
                         maskcolor='gray'):
         """Set data to sources and control source's properties.
 
@@ -523,7 +523,7 @@ class BrainUserMethods(object):
             Edge width of sources
         scaling : bool | None
             If set to True, marker scales when rezooming.
-        opacity : int/float | None
+        alpha : int/float | None
             Transparency of all sources. Must be between 0 and 1.
         mask : ndarray | None
             Vector of boolean values, with the same length as the length of
@@ -555,7 +555,7 @@ class BrainUserMethods(object):
             s.color = color2vb(color)
             s.edgecolor = color2vb(edgecolor)
             s.edgewidth = set_if_not_none(s.edgewidth, edgewidth)
-            s.alpha = set_if_not_none(s.alpha, opacity)
+            s.alpha = set_if_not_none(s.alpha, alpha)
             s.scaling = set_if_not_none(s.scaling, scaling)
             radiusmin = 1.5 * radiusmin if radiusmin is not None else radiusmin
             radiusmax = 1.5 * radiusmax if radiusmax is not None else radiusmax
@@ -566,8 +566,8 @@ class BrainUserMethods(object):
             s.smaskcolor = color2vb(maskcolor)
 
             # Check arguments and update plot:
-            self.sources.prepare2plot()
-            self.sources.update()
+            s.prepare2plot()
+            s.update()
         else:
             raise ValueError("No sources detected. Please, add some sources "
                              "before trying to update data")
