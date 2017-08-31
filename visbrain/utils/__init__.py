@@ -4,7 +4,6 @@ from .filtering import *
 from .gui import *
 from .guitools import *
 from .memory import *
-from .objects import *
 from .others import *
 from .physio import *
 from .picture import *
