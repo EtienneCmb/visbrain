@@ -14,7 +14,8 @@ from .base.ConnectBase import ConnectBase
 from .base.TimeSeriesBase import TimeSeriesBase
 from .base.PicBase import PicBase
 from ..utils import (color2vb, extend_combo_list, safely_set_cbox,
-                     get_combo_list_index, safely_set_spin, safely_set_slider)
+                     get_combo_list_index, safely_set_spin, safely_set_slider,
+                     set_if_not_none)
 from ..io import save_config_json, write_fig_canvas
 
 __all__ = ('BrainUserMethods')
@@ -492,15 +493,15 @@ class BrainUserMethods(object):
     #                              SOURCES
     # =========================================================================
     # =========================================================================
-    def sources_control(self, data, color='#ab4652', symbol='disc',
-                        radiusmin=5., radiusmax=10., edgecolor=None,
-                        edgewidth=0.6, scaling=False, opacity=1.0, mask=None,
+    def sources_control(self, data=None, color='#ab4652', symbol=None,
+                        radiusmin=None, radiusmax=None, edgecolor='white',
+                        edgewidth=None, scaling=None, opacity=None, mask=None,
                         maskcolor='gray'):
         """Set data to sources and control source's properties.
 
         Parameters
         ----------
-        data : array_like
+        data : None
             Vector of data for each source. Le length of this vector must
             be same as the number of sources.
         color : string/list/ndarray | '#ab4652'
@@ -508,21 +509,21 @@ class BrainUserMethods(object):
             all sphere will have the same color. If it's' a list of
             strings, the length must be N. Alternatively, s_color can be a
             (N, 3) RGB or (N, 4) RGBA colors.
-        symbol : string | 'disc'
+        symbol : string | None
             Symbol to use for sources. Allowed style strings are: disc,
             arrow, ring, clobber, square, diamond, vbar, hbar, cross,
             tailed_arrow, x, triangle_up, triangle_down, and star.
-        radiusmin/radiusmax : int/float | 5.0/10.0
+        radiusmin/radiusmax : int/float | (None, None)
             Define the minimum and maximum source's possible radius. By
             default if all sources have the same value, the radius will be
             radiusmin.
-        edgecolor : string/list/ndarray | None
+        edgecolor : string/list/ndarray | 'white'
             Add an edge to sources
-        edgewidth : float | 0.4
+        edgewidth : float | None
             Edge width of sources
-        scaling : bool | True
+        scaling : bool | None
             If set to True, marker scales when rezooming.
-        opacity : int/float | 1.0
+        opacity : int/float | None
             Transparency of all sources. Must be between 0 and 1.
         mask : ndarray | None
             Vector of boolean values, with the same length as the length of
@@ -541,25 +542,28 @@ class BrainUserMethods(object):
         >>> color = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
         >>> # Set data and properties :
         >>> vb.sources_control(data=data, symbol='x', radiusmin=1.,
-        >>>                     radiusmax=20., color=color, edgecolor='orange',
-        >>>                     edgewidth=2)
+        >>>                    radiusmax=20., color=color, edgecolor='orange',
+        >>>                    edgewidth=2)
         >>> # Show the GUI :
         >>> vb.show()
         """
+        s = self.sources
         # Update only if sources are already plotted :
-        if self.sources.xyz is not None:
+        if s.xyz is not None:
             # Get inputs :
-            self.sources.data = data
-            self.sources.color = color
-            self.sources.edgecolor = color2vb(edgecolor)
-            self.sources.edgewidth = edgewidth
-            self.sources.alpha = opacity
-            self.sources.scaling = scaling
-            self.sources.radiusmin = radiusmin * 1.5
-            self.sources.radiusmax = radiusmax * 1.5
-            self.sources.symbol = symbol
-            self.sources.smask = mask
-            self.sources.smaskcolor = color2vb(maskcolor)
+            s.data = set_if_not_none(s.data, data)
+            s.color = color2vb(color)
+            s.edgecolor = color2vb(edgecolor)
+            s.edgewidth = set_if_not_none(s.edgewidth, edgewidth)
+            s.alpha = set_if_not_none(s.alpha, opacity)
+            s.scaling = set_if_not_none(s.scaling, scaling)
+            radiusmin = 1.5 * radiusmin if radiusmin is not None else radiusmin
+            radiusmax = 1.5 * radiusmax if radiusmax is not None else radiusmax
+            s.radiusmin = set_if_not_none(s.radiusmin, radiusmin)
+            s.radiusmax = set_if_not_none(s.radiusmax, radiusmax)
+            s.symbol = set_if_not_none(s.symbol, symbol)
+            s.smask = set_if_not_none(s.smask, mask)
+            s.smaskcolor = color2vb(maskcolor)
 
             # Check arguments and update plot:
             self.sources.prepare2plot()
