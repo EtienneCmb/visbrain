@@ -13,11 +13,19 @@ from .base.SourcesBase import SourcesBase
 from .base.ConnectBase import ConnectBase
 from .base.TimeSeriesBase import TimeSeriesBase
 from .base.PicBase import PicBase
-from ..utils import (color2vb, AddMesh, extend_combo_list, safely_set_cbox,
+from ..utils import (color2vb, extend_combo_list, safely_set_cbox,
                      get_combo_list_index, safely_set_spin, safely_set_slider)
 from ..io import save_config_json, write_fig_canvas
 
 __all__ = ('BrainUserMethods')
+
+
+class AddMesh(object):
+    """Add a mesh object."""
+
+    def __init__(self, mesh):
+        """Init."""
+        self.mesh = mesh
 
 
 class BrainUserMethods(object):
