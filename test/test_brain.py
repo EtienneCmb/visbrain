@@ -1,37 +1,102 @@
 
 import numpy as np
 from warnings import warn
+from PyQt5 import QtWidgets
+from visbrain import Brain
 
-from visbrain.brain import Brain
+
+class TestBrain(object):
+    def test_create_brain_instance(self):
+        """Test function brain_creation."""
+
+        app = QtWidgets.QApplication([])
+
+        #######################################################################
+        #                                 INPUTS
+        #######################################################################
+        kwargs = {}
+        # ---------------- Sources ----------------
+        # Define some random sources :
+        kwargs['s_xyz'] = np.random.randint(-20, 20, (10, 3))
+        kwargs['s_data'] = 100 * np.random.rand(10)
+        kwargs['s_color'] = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
+        kwargs['s_mask'] = np.array([True + False] + [True] * 9)
+
+        # ---------------- Connectivity ----------------
+        # Connectivity array :
+        c_connect = np.random.rand(10, 10)
+        c_connect[np.tril_indices_from(c_connect)] = 0
+        c_connect = np.ma.masked_array(c_connect, mask=True)
+        nz = np.where((c_connect > .6) & (c_connect < .7))
+        c_connect.mask[nz] = False
+        kwargs['c_connect'] = c_connect
+
+        # ---------------- VARIABLES  ----------------
+        self.vb = Brain(**kwargs)
+
+    def test_gui_control(self):
+        """Test function gui_control."""
+        pass
+
+    def test_brain_control(self):
+        """Test function brain_control."""
+        pass
+
+    def test_sources_control(self):
+        """Test function sources_control."""
+        pass
+
+    def test_connect_control(self):
+        """Test function connect_control."""
+        pass
+
+    def test_roi_control(self):
+        """Test function roi_control."""
+        pass
+
+    def test_volume_control(self):
+        """Test function volume_control."""
+        pass
+
+    def test_cros_sections_control(self):
+        """Test function cros_sections_control."""
+        pass
+
+    def test_colorbar_control(self):
+        """Test function colorbar_control."""
+        pass
 
 
-# def test_brain_gui():
-#     vb = Brain()
-#     vb._app.exit()
+# class TestColorbar(object):
+#     """docstring for TestColorbar"""
+#     def test_colorbar(self):
+#         """Test function colorbar."""
+#         cb = Colorbar()
+
 
 # def test_brain_user_functions():
 #     """Test brain rotation."""
 
-#     # ---------------- VARIABLES  ----------------
-#     kwargs = {}
-#     # Define some random sources :
-#     kwargs['s_xyz'] = np.random.randint(-20, 20, (10, 3))
-#     sdata = 100 * np.random.rand(10)
-#     scolor = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
-#     smask = np.array([True + False] + [True] * 9)
-#     scmap = {'clim': (-1, 1), 'vmin': .3, 'under': 'gray', 'vmax': .7,
-#              'over': (1., 0.5, 0.2), 'cmap': 'magma_r'}
+    # # ---------------- VARIABLES  ----------------
+    # kwargs = {}
+    # # Define some random sources :
+    # kwargs['s_xyz'] = np.random.randint(-20, 20, (10, 3))
+    # sdata = 100 * np.random.rand(10)
+    # scolor = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
+    # smask = np.array([True + False] + [True] * 9)
+    # scmap = {'clim': (-1, 1), 'vmin': .3, 'under': 'gray', 'vmax': .7,
+    #          'over': (1., 0.5, 0.2), 'cmap': 'magma_r'}
 
-#     # Connectivity array :
-#     c_connect = np.random.rand(10, 10)
-#     c_connect[np.tril_indices_from(c_connect)] = 0
-#     c_connect = np.ma.masked_array(c_connect, mask=True)
-#     nz = np.where((c_connect > .6) & (c_connect < .7))
-#     c_connect.mask[nz] = False
-#     kwargs['c_connect'] = c_connect
+    # # Connectivity array :
+    # c_connect = np.random.rand(10, 10)
+    # c_connect[np.tril_indices_from(c_connect)] = 0
+    # c_connect = np.ma.masked_array(c_connect, mask=True)
+    # nz = np.where((c_connect > .6) & (c_connect < .7))
+    # c_connect.mask[nz] = False
+    # kwargs['c_connect'] = c_connect
 
-#     # Define a Brain instance :
-#     vb = Brain(**kwargs)
+    # Define a Brain instance :
+    # vb = Brain(**kwargs)
 
 #     # ---------------- ROTATION  ----------------
 #     # Predefined rotation :
