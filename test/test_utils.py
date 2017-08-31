@@ -1,5 +1,8 @@
 """Test utility functions."""
 import numpy as np
+import pytest
+from PyQt5 import QtWidgets, QtCore
+import sys
 from warnings import warn
 import math
 
@@ -8,7 +11,16 @@ from visbrain.utils.color import (color2vb, array2colormap, dynamic_color,
                                   color2faces, type_coloring, mpl_cmap,
                                   color2tuple, mpl_cmap_index, colorclip)
 from visbrain.utils.filtering import (filt, morlet, ndmorlet, morlet_power,
-                                      welch_power)
+                                      welch_power, PrepareData)
+from visbrain.utils.gui.popup import (ShortcutPopup, ScreenshotPopup, HelpMenu)
+from visbrain.utils.guitools import (slider2opacity, textline2color,
+                                     color2json, set_spin_values, ndsubplot,
+                                     combo, is_color, MouseEventControl,
+                                     disconnect_all, extend_combo_list,
+                                     get_combo_list_index, safely_set_cbox,
+                                     safely_set_spin, safely_set_slider,
+                                     toggle_enable_tab, get_screen_size,
+                                     set_widget_size)
 from visbrain.utils.others import (vis_args, check_downsampling, vispy_array,
                                    convert_meshdata, add_brain_template,
                                    remove_brain_template)
@@ -25,6 +37,7 @@ from visbrain.utils.sleep.event import (_events_duration, _events_removal,
 from visbrain.utils.sleep.hypnoprocessing import (transient, sleepstats)
 from visbrain.utils.transform import (vprescale, vprecenter, vpnormalize,
                                       array_to_stt)
+
 
 ###############################################################################
 ###############################################################################
@@ -273,45 +286,255 @@ class TestEvent(object):
 class TestFiltering(object):
     """Test functions in filtering.py."""
 
-    def _creation(self, mean=False):
+    @staticmethod
+    def _get_data(mean=False):
         if mean:
             return np.random.rand(2000), 3., 512.
         else:
             return np.random.rand(2000), [2., 4.], 512.
 
-    def test_filt(self):
-        """Test filt function."""
+    def __iter__(self):
+        """Iterate over filtering options."""
         from itertools import product
-        x, f, sf = self._creation()
         btype = ['bandpass', 'bandstop', 'highpass', 'lowpass']
         order = [2, 3, 5]
         method = ['butterworth', 'bessel']
         way = ['filtfilt', 'lfilter']
         for k in product(btype, order, method, way):
+            yield k
+
+    def test_filt(self):
+        """Test filt function."""
+        x, f, sf = self._get_data()
+        for k in self:
             filt(sf, f, x, *k)
 
     def test_morlet(self):
         """Test morlet function."""
-        x, f, sf = self._creation(True)
+        x, f, sf = self._get_data(True)
         morlet(x, sf, f)
 
     def test_ndmorlet(self):
         """Test ndmorlet function."""
-        x, f, sf = self._creation(True)
+        x, f, sf = self._get_data(True)
         for k in [None, 'amplitude', 'phase', 'power']:
             ndmorlet(x, sf, f, get=k)
 
     def test_morlet_power(self):
         """Test morlet_power function."""
-        x, _, sf = self._creation(True)
+        x, _, sf = self._get_data(True)
         f = [1., 2., 3., 4.]
         assert morlet_power(x, f, sf, norm=False).sum(0).max() > 1.
         assert math.isclose(morlet_power(x, f, sf, norm=True).sum(0).max(), 1.)
 
     def test_welch_power(self):
         """Test welch_power function."""
-        x, f, sf = self._creation(False)
+        x, f, sf = self._get_data(False)
         welch_power(x, f[0], f[1], 50, 10.)
+
+    def test_prepare_data(self):
+        """Test class PrepareData."""
+        p = PrepareData(demean=True, detrend=True)
+        x, f, sf = self._get_data()
+        time = np.arange(len(x)) / sf
+        for k in self:
+            for i in ['filter', None, 'amplitude', 'phase', 'power']:
+                p.btype = k[0]
+                p.forder = k[1]
+                p.filt_meth = k[2]
+                p.way = k[3]
+                p.dispas = i
+                p._prepare_data(sf, x, time)
+
+
+###############################################################################
+###############################################################################
+#                                popup.py
+###############################################################################
+###############################################################################
+
+
+class TestPopup(object):
+    """Test functions in popup.py."""
+
+    def test_shortcut_popup(self):
+        """Test function ShortcutPopup."""
+        sh = [('key1', 'Action1'), ('key2', 'Action2')]
+        app = QtWidgets.QApplication([])
+        pop = ShortcutPopup()
+        pop.set_shortcuts(sh)
+        # app.quit()
+
+    def test_screenshot_popup(self):
+        """Test function ScreenshotPopup."""
+        def fcn():
+            pass
+        app = QtWidgets.QApplication([])
+        sc = ScreenshotPopup(fcn)
+        sc._fcn_select_render()
+        sc._fcn_resolution()
+        sc.to_kwargs()
+        sc._fcn_enable_bgcolor()
+        # app.quit()
+
+    def test_help_menu(self):
+        """Test function HelpMenu."""
+        warn('No test for TestPopup::test_help_menu')
+
+
+###############################################################################
+###############################################################################
+#                                guitools.py
+###############################################################################
+###############################################################################
+
+class TestGuitools(object):
+    """Test functions in guitools.py."""
+
+    @staticmethod
+    def _get_connect_function():
+        def f1():
+            pass
+        return f1
+
+    def test_slider2opacity(self):
+        """Test function slider2opacity."""
+        slider2opacity(-20.)
+        slider2opacity(200.)
+        slider2opacity(20.)
+
+    def test_textline2color(self):
+        """Test function textline2color."""
+        textline2color("'green'")
+        textline2color('green')
+        textline2color('(.1, .1, .1)')
+        textline2color('#ab4642')
+        textline2color(None)
+
+    def test_color2json(self):
+        """Test function color2json."""
+        app = QtWidgets.QApplication([])
+        line = QtWidgets.QLineEdit()
+        line.setText('green')
+        color2json(line)
+
+    def test_set_spin_values(self):
+        """Test function set_spin_values."""
+        app = QtWidgets.QApplication([])
+        n_spins = 10
+        spins = [QtWidgets.QDoubleSpinBox() for k in range(n_spins)]
+        values = np.arange(n_spins)
+        set_spin_values(spins, values)
+
+    def test_ndsubplot(self):
+        """Test function ndsubplot."""
+        ndsubplot(10, line=30)
+        ndsubplot(10, force_col=5)
+        ndsubplot(50)
+
+    def test_combo(self):
+        """Test function combo."""
+        combo(['oki', 1, 2, 1, 'ok', 'oki'], [0, 1, 2, 3, 4, 5])
+
+    def test_is_color(self):
+        """Test function is_color."""
+        is_color('green')
+        is_color('bad_color')
+        is_color("'green'", comefrom='textline')
+        is_color('(.1, .1, .1)', comefrom='textline')
+
+    def test_mouse_event_control(self):
+        """Test class MouseEventControl."""
+        class Modifier(object):
+            def __init__(self):
+                self.name = 'ctrl'
+
+        class MouseEvent(object):
+            def __init__(self):
+                self.button = 1
+                self.modifiers = [Modifier()]
+
+        mec = MouseEventControl()
+        me = MouseEvent()
+        assert mec._is_left_click(me)
+        assert mec._is_modifier(me, 'ctrl')
+        assert not mec._is_modifier(me, 'alt')
+
+    def test_disconnect_all(self):
+        """Test function disconnect_all."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        spin = QtWidgets.QDoubleSpinBox()
+        spin.valueChanged.connect(f1)
+        disconnect_all(spin)
+
+    def test_extend_combo_list(self):
+        """Test function extend_combo_list."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        cbox = QtWidgets.QComboBox()
+        cbox.currentIndexChanged.connect(f1)
+        extend_combo_list(cbox, 'NewItem', f1)
+        assert cbox.itemText(0) == 'NewItem'
+
+    def test_get_combo_list_index(self):
+        """Test function get_combo_list_index."""
+        app = QtWidgets.QApplication([])
+        cbox = QtWidgets.QComboBox()
+        extend_combo_list(cbox, 'NewItem1')
+        extend_combo_list(cbox, 'NewItem2')
+        assert get_combo_list_index(cbox, 'NewItem2') == 1
+
+    def test_safely_set_cbox(self):
+        """Test function safely_set_cbox."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        cbox = QtWidgets.QComboBox()
+        cbox.currentIndexChanged.connect(f1)
+        extend_combo_list(cbox, 'NewItem1', f1)
+        extend_combo_list(cbox, 'NewItem2', f1)
+        safely_set_cbox(cbox, 1, f1)
+        assert int(cbox.currentIndex()) == 1
+
+    def test_safely_set_spin(self):
+        """Test function safely_set_spin."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        spin = QtWidgets.QDoubleSpinBox()
+        spin.valueChanged.connect(f1)
+        safely_set_spin(spin, 2., [f1])
+        assert float(spin.value()) == 2.
+
+    def test_safely_set_slider(self):
+        """Test function safely_set_slider."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        slider = QtWidgets.QSlider()
+        slider.valueChanged.connect(f1)
+        safely_set_slider(slider, 2., [f1])
+        assert float(slider.value()) == 2.
+
+    def test_toggle_enable_tab(self):
+        """Test function toggle_enable_tab."""
+        app = QtWidgets.QApplication([])
+        _translate = QtCore.QCoreApplication.translate
+        tab = QtWidgets.QTabWidget()
+        tab_2 = QtWidgets.QWidget()
+        tab.addTab(tab_2, "")
+        tab.setTabText(tab.indexOf(tab_2), _translate("MainWindow", "TabName"))
+        toggle_enable_tab(tab, 'TabName', False)
+        assert not tab.isTabEnabled(0)
+
+    def test_get_screen_size(self):
+        """Test function get_screen_size."""
+        app = QtWidgets.QApplication([])
+        get_screen_size(app)
+
+    def test_set_widget_size(self):
+        """Test function set_widget_size."""
+        app = QtWidgets.QApplication([])
+        w = QtWidgets.QWidget()
+        set_widget_size(app, w)
 
 ###############################################################################
 ###############################################################################
