@@ -998,8 +998,8 @@ class vbShortcuts(object):
             """
             # ------------- MAGNIFY : CTRL + left click -------------
             name = canvas.title
-            isleft = self._isLeftClick(event)
-            isCtrl = self._isModifier(event, 'Control')
+            isleft = self._is_left_click(event)
+            isCtrl = self._is_modifier(event, 'Control')
             condition = bool(name.find('Canvas') + 1) and isleft and isCtrl
             if condition and not self._slMagnify.isChecked():
                 # Get channel name :

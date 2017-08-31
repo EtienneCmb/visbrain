@@ -6,7 +6,7 @@ import numpy as np
 
 from .color import color2vb, color2tuple
 
-__all__ = ('slider2opacity', 'textline2color', 'color2json', 'uiSpinValue',
+__all__ = ('slider2opacity', 'textline2color', 'color2json', 'set_spin_values',
            'ndsubplot', 'combo', 'is_color', 'MouseEventControl',
            'disconnect_all', 'extend_combo_list', 'get_combo_list_index',
            'safely_set_cbox', 'safely_set_spin', 'safely_set_slider',
@@ -35,7 +35,7 @@ def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
     color : array_like
         Array of RGBA colors
     """
-    alpha = 0.0
+    alpha = 0.
     # Linear decrease :
     if value < thmin:
         alpha = value * tomin / vmin
@@ -135,7 +135,7 @@ def is_color(color, comefrom='color'):
     return iscol
 
 
-def uiSpinValue(elements, values):
+def set_spin_values(elements, values):
     """Set a list of value to a list of elements.
 
     Parameters
@@ -228,11 +228,11 @@ def combo(lst, idx):
 class MouseEventControl(object):
     """Additional mouse control on VisPy canvas."""
 
-    def _isLeftClick(self, event):
+    def _is_left_click(self, event):
         """Return if the pressed button is the left one."""
         return event.button == 1
 
-    def _isModifier(self, event, modifier):
+    def _is_modifier(self, event, modifier):
         """Return the name of the modifier use."""
         try:
             return event.modifiers[0].name == modifier
@@ -284,7 +284,7 @@ def extend_combo_list(cbox, item, reconnect=None):
 
 
 def get_combo_list_index(cbox, name):
-    """Extend a QtComboList with a new item.
+    """Get index of an item in a combo box.
 
     Parameters
     ----------
