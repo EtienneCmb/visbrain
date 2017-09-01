@@ -1,13 +1,24 @@
 """Test Brain module and related methods."""
+import os
+import shutil
+from warnings import warn
+
 from PyQt5 import QtWidgets
 import numpy as np
 from itertools import product
-from warnings import warn
 
 from visbrain import Brain
 
-app = QtWidgets.QApplication([])
+
+# Create a tmp/ directory :
+dir_path = os.path.dirname(os.path.realpath(__file__))
+path_to_tmp = os.path.join(*(dir_path, 'tmp'))
+if not os.path.exists(path_to_tmp):
+    os.makedirs(path_to_tmp)
+
+# Create empty argument dictionary :
 kwargs = {}
+
 # ---------------- Sources ----------------
 # Define some random sources :
 kwargs['s_xyz'] = np.random.randint(-20, 20, (10, 3))
@@ -17,22 +28,23 @@ kwargs['s_mask'] = np.array([True + False] + [True] * 9)
 
 # ---------------- Connectivity ----------------
 # Connectivity array :
-c_connect = np.random.rand(10, 10)
+c_connect = np.random.randint(-10, 10, (10, 10)).astype(float)
 c_connect[np.tril_indices_from(c_connect)] = 0
 c_connect = np.ma.masked_array(c_connect, mask=True)
-nz = np.where((c_connect > .6) & (c_connect < .7))
+nz = np.where((c_connect > -5) & (c_connect < 5))
 c_connect.mask[nz] = False
 kwargs['c_connect'] = c_connect
 
 # ---------------- Time-series ----------------
-kwargs['ts_data'] = np.random.rand(10, 100)
+kwargs['ts_data'] = 100. * np.random.rand(10, 100)
 kwargs['ts_select'] = np.ones((10,), dtype=bool)
 kwargs['ts_select'][[3, 4, 7]] = False
 
 # ---------------- Pictures ----------------
-kwargs['pic_data'] = np.random.rand(10, 20, 17)
+kwargs['pic_data'] = 100. * np.random.rand(10, 20, 17)
 
-# ---------------- VARIABLES  ----------------
+# ---------------- Application  ----------------
+app = QtWidgets.QApplication([])
 vb = Brain(**kwargs)
 
 
@@ -40,7 +52,7 @@ class TestBrain(object):
     """Test brain.py."""
 
     ###########################################################################
-    #                                 GUI
+    #                                 BRAIN
     ###########################################################################
     def test_scene_rotation(self):
         """Test scene rotations/."""
@@ -54,23 +66,6 @@ class TestBrain(object):
         for k in customs:
             vb.rotate(custom=k)
 
-    def test_background_color(self):
-        """Test method background_color."""
-        vb.background_color((.1, .1, .1))
-        vb.background_color('green')
-        vb.background_color('#ab4642')
-
-    def test_screenshot(self):
-        """Test method screenshot."""
-        pass
-
-    def test_save_and_load_config(self):
-        """Test method save_and_load_config."""
-        pass
-
-    ###########################################################################
-    #                                 BRAIN
-    ###########################################################################
     def test_brain_control(self):
         """Test method brain_control."""
         template = ['B1', 'B2', 'B3']
@@ -282,3 +277,47 @@ class TestBrain(object):
                              [1., 4., 0.]])
         faces = np.array([[0, 1, 2], [0, 1, 3], [1, 2, 3]])
         vb.add_mesh('Test', vertices, faces)
+
+    ###########################################################################
+    #                                 GUI
+    ###########################################################################
+    @staticmethod
+    def _path_to_tmp(name):
+        return os.path.join(*(path_to_tmp, name))
+
+    def test_background_color(self):
+        """Test method background_color."""
+        vb.background_color('green')
+        vb.background_color('#ab4642')
+        vb.background_color((.1, .1, .1))
+
+    def test_screenshot(self):
+        """Test method screenshot."""
+        canvas = ['main', 'colorbar', 'cross-sections']
+        formats = ['.png', '.jpg', '.tiff']
+        print_size = [(5, 5), (50, 50), (1000, 1000), (2, 2)]
+        unit = ['centimeter', 'millimeter', 'pixel', 'inch']
+        # Standard screenshot :
+        for k, i in zip(canvas, formats):
+            name = self._path_to_tmp(k + '_transparent_' + i)
+            vb.screenshot(name, canvas=k, transparent=True)
+        # Test print_size and unit at 300 dpi :
+        for k, i in zip(print_size, unit):
+            name = self._path_to_tmp('main_' + i + '.jpg')
+            vb.screenshot(name, print_size=k, unit=i)
+        # Test factor :
+        name = self._path_to_tmp('main_factor.jpg')
+        vb.screenshot(name, factor=2., region=(100, 100, 1000, 1000),
+                      bgcolor='#ab4642')
+
+    def test_save_config(self):
+        """Test method save_config."""
+        vb.save_config(self._path_to_tmp('config.txt'))
+
+    def test_load_config(self):
+        """Test method load_config."""
+        vb.load_config(self._path_to_tmp('config.txt'))
+
+    def test_delete_tmp_folder(self):
+        """Delete tmp/folder."""
+        shutil.rmtree(path_to_tmp)
