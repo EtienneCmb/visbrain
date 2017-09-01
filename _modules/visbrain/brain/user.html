@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.brain.user &mdash; visbrain 0.3.2 documentation</title>
+  <title>visbrain.brain.user &mdash; visbrain 0.3.3 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.2 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.3 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.3.3
               </div>
             
           
@@ -175,16 +175,25 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">ConvexHull</span>
 
-<span class="kn">from</span> <span class="nn">.base.visuals</span> <span class="k">import</span> <span class="n">BrainMesh</span>
+<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">BrainMesh</span>
 <span class="kn">from</span> <span class="nn">.base.SourcesBase</span> <span class="k">import</span> <span class="n">SourcesBase</span>
 <span class="kn">from</span> <span class="nn">.base.ConnectBase</span> <span class="k">import</span> <span class="n">ConnectBase</span>
 <span class="kn">from</span> <span class="nn">.base.TimeSeriesBase</span> <span class="k">import</span> <span class="n">TimeSeriesBase</span>
 <span class="kn">from</span> <span class="nn">.base.PicBase</span> <span class="k">import</span> <span class="n">PicBase</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">color2vb</span><span class="p">,</span> <span class="n">AddMesh</span><span class="p">,</span> <span class="n">extend_combo_list</span><span class="p">,</span> <span class="n">safely_set_cbox</span><span class="p">,</span>
-                     <span class="n">get_combo_list_index</span><span class="p">,</span> <span class="n">safely_set_spin</span><span class="p">,</span> <span class="n">safely_set_slider</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">color2vb</span><span class="p">,</span> <span class="n">extend_combo_list</span><span class="p">,</span> <span class="n">safely_set_cbox</span><span class="p">,</span>
+                     <span class="n">get_combo_list_index</span><span class="p">,</span> <span class="n">safely_set_spin</span><span class="p">,</span> <span class="n">safely_set_slider</span><span class="p">,</span>
+                     <span class="n">set_if_not_none</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">save_config_json</span><span class="p">,</span> <span class="n">write_fig_canvas</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;BrainUserMethods&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">AddMesh</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add a mesh object.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh</span>
 
 
 <span class="k">class</span> <span class="nc">BrainUserMethods</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -651,15 +660,15 @@
     <span class="c1">#                              SOURCES</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.sources_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_control">[docs]</a>    <span class="k">def</span> <span class="nf">sources_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ab4652&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span>
-                        <span class="n">radiusmin</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">radiusmax</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">edgewidth</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="BrainUserMethods.sources_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_control">[docs]</a>    <span class="k">def</span> <span class="nf">sources_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ab4652&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">radiusmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">radiusmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                        <span class="n">edgewidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">maskcolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set data to sources and control source&#39;s properties.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        data : array_like</span>
+<span class="sd">        data : None</span>
 <span class="sd">            Vector of data for each source. Le length of this vector must</span>
 <span class="sd">            be same as the number of sources.</span>
 <span class="sd">        color : string/list/ndarray | &#39;#ab4652&#39;</span>
@@ -667,21 +676,21 @@
 <span class="sd">            all sphere will have the same color. If it&#39;s&#39; a list of</span>
 <span class="sd">            strings, the length must be N. Alternatively, s_color can be a</span>
 <span class="sd">            (N, 3) RGB or (N, 4) RGBA colors.</span>
-<span class="sd">        symbol : string | &#39;disc&#39;</span>
+<span class="sd">        symbol : string | None</span>
 <span class="sd">            Symbol to use for sources. Allowed style strings are: disc,</span>
 <span class="sd">            arrow, ring, clobber, square, diamond, vbar, hbar, cross,</span>
 <span class="sd">            tailed_arrow, x, triangle_up, triangle_down, and star.</span>
-<span class="sd">        radiusmin/radiusmax : int/float | 5.0/10.0</span>
+<span class="sd">        radiusmin/radiusmax : int/float | (None, None)</span>
 <span class="sd">            Define the minimum and maximum source&#39;s possible radius. By</span>
 <span class="sd">            default if all sources have the same value, the radius will be</span>
 <span class="sd">            radiusmin.</span>
-<span class="sd">        edgecolor : string/list/ndarray | None</span>
+<span class="sd">        edgecolor : string/list/ndarray | &#39;white&#39;</span>
 <span class="sd">            Add an edge to sources</span>
-<span class="sd">        edgewidth : float | 0.4</span>
+<span class="sd">        edgewidth : float | None</span>
 <span class="sd">            Edge width of sources</span>
-<span class="sd">        scaling : bool | True</span>
+<span class="sd">        scaling : bool | None</span>
 <span class="sd">            If set to True, marker scales when rezooming.</span>
-<span class="sd">        opacity : int/float | 1.0</span>
+<span class="sd">        alpha : int/float | None</span>
 <span class="sd">            Transparency of all sources. Must be between 0 and 1.</span>
 <span class="sd">        mask : ndarray | None</span>
 <span class="sd">            Vector of boolean values, with the same length as the length of</span>
@@ -700,29 +709,32 @@
 <span class="sd">        &gt;&gt;&gt; color = [&#39;blue&#39;] * 3 + [&#39;white&#39;] * 3 + [&#39;red&#39;] * 4</span>
 <span class="sd">        &gt;&gt;&gt; # Set data and properties :</span>
 <span class="sd">        &gt;&gt;&gt; vb.sources_control(data=data, symbol=&#39;x&#39;, radiusmin=1.,</span>
-<span class="sd">        &gt;&gt;&gt;                     radiusmax=20., color=color, edgecolor=&#39;orange&#39;,</span>
-<span class="sd">        &gt;&gt;&gt;                     edgewidth=2)</span>
+<span class="sd">        &gt;&gt;&gt;                    radiusmax=20., color=color, edgecolor=&#39;orange&#39;,</span>
+<span class="sd">        &gt;&gt;&gt;                    edgewidth=2)</span>
 <span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
 <span class="sd">        &gt;&gt;&gt; vb.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span>
         <span class="c1"># Update only if sources are already plotted :</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">xyz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">xyz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Get inputs :</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">edgecolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">edgecolor</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">edgewidth</span> <span class="o">=</span> <span class="n">edgewidth</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">opacity</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">scaling</span> <span class="o">=</span> <span class="n">scaling</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">radiusmin</span> <span class="o">=</span> <span class="n">radiusmin</span> <span class="o">*</span> <span class="mf">1.5</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">radiusmax</span> <span class="o">=</span> <span class="n">radiusmax</span> <span class="o">*</span> <span class="mf">1.5</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="n">symbol</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">smask</span> <span class="o">=</span> <span class="n">mask</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">smaskcolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">maskcolor</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">edgecolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">edgecolor</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">edgewidth</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">edgewidth</span><span class="p">,</span> <span class="n">edgewidth</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">scaling</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">scaling</span><span class="p">,</span> <span class="n">scaling</span><span class="p">)</span>
+            <span class="n">radiusmin</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">radiusmin</span> <span class="k">if</span> <span class="n">radiusmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">radiusmin</span>
+            <span class="n">radiusmax</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">radiusmax</span> <span class="k">if</span> <span class="n">radiusmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">radiusmax</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">radiusmin</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">radiusmin</span><span class="p">,</span> <span class="n">radiusmin</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">radiusmax</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">radiusmax</span><span class="p">,</span> <span class="n">radiusmax</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span> <span class="n">symbol</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">smask</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">smask</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">smaskcolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">maskcolor</span><span class="p">)</span>
 
             <span class="c1"># Check arguments and update plot:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">prepare2plot</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">prepare2plot</span><span class="p">()</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No sources detected. Please, add some sources &quot;</span>
                              <span class="s2">&quot;before trying to update data&quot;</span><span class="p">)</span></div>
@@ -1456,7 +1468,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.2',
+            VERSION:'0.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

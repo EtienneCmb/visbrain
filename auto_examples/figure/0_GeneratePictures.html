@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Generate pictures &mdash; visbrain 0.3.2 documentation</title>
+  <title>Generate pictures &mdash; visbrain 0.3.3 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.2 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.3 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Page layout example" href="1_LayoutExample.html"/>
         <link rel="prev" title="Load an existing colorbar configuration file" href="../colorbar/01_load_existing_config.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.3.3
               </div>
             
           
@@ -236,18 +236,18 @@ pictures are going to be set in a layout in the 1_LayoutExample.py script.</p>
 <span class="n">vb</span><span class="o">.</span><span class="n">sources_display</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">cortical_repartition</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
                         <span class="n">vmax</span><span class="o">=</span><span class="mf">4.</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;#ab4642&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">16.</span><span class="p">)</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">light_reflection</span><span class="p">(</span><span class="s1">&#39;external&#39;</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">transparent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">sources_opacity</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">125.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">))</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;repartition.jpg&#39;</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="n">vb</span><span class="o">.</span><span class="n">sources_display</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;brod&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">cortical_projection</span><span class="p">(</span><span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">12.</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span>
                        <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">6.</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">sources_display</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">)</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">light_reflection</span><span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">transparent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="s1">&#39;coronal&#39;</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;roi.jpg&#39;</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
@@ -308,7 +308,7 @@ pictures are going to be set in a layout in the 1_LayoutExample.py script.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.2',
+            VERSION:'0.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

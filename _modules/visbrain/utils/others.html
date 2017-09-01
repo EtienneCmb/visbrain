@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.utils.others &mdash; visbrain 0.3.2 documentation</title>
+  <title>visbrain.utils.others &mdash; visbrain 0.3.3 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.2 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.3 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.3.3
               </div>
             
           
@@ -175,7 +175,7 @@
 <span class="kn">from</span> <span class="nn">vispy.geometry</span> <span class="k">import</span> <span class="n">MeshData</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vis_args&#39;</span><span class="p">,</span> <span class="s1">&#39;check_downsampling&#39;</span><span class="p">,</span> <span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">)</span>
+           <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;set_if_not_none&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">vis_args</span><span class="p">(</span><span class="n">kw</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">[]):</span>
@@ -187,6 +187,8 @@
 <span class="sd">        The dictionary of arguments</span>
 <span class="sd">    prefix : string</span>
 <span class="sd">        The prefix to use (something like &#39;nd_&#39;, &#39;cb_&#39;...)</span>
+<span class="sd">    ignors : list | []</span>
+<span class="sd">        List of patterns to ignore.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -257,25 +259,34 @@
     <span class="k">return</span> <span class="n">data</span>
 
 
-<div class="viewcode-block" id="convert_meshdata"><a class="viewcode-back" href="../../../utils.html#visbrain.utils.others.convert_meshdata">[docs]</a><span class="k">def</span> <span class="nf">convert_meshdata</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">meshdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="convert_meshdata"><a class="viewcode-back" href="../../../utils.html#visbrain.utils.others.convert_meshdata">[docs]</a><span class="k">def</span> <span class="nf">convert_meshdata</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">meshdata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">invert_normals</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convert mesh data to be compatible with visbrain.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    vertices : array_like</span>
+<span class="sd">    vertices : array_like | None</span>
 <span class="sd">        Vertices of the template of shape (N, 3) or (N, 3, 3) if indexed by</span>
 <span class="sd">        faces.</span>
-<span class="sd">    faces : array_like</span>
+<span class="sd">    faces : array_like | None</span>
 <span class="sd">        Faces of the template of shape (M, 3)</span>
 <span class="sd">    normals : array_like | None</span>
-<span class="sd">        The normals of the template, with the same shape as vertices.</span>
+<span class="sd">        The normals to each vertex, with the same shape as vertices.</span>
 <span class="sd">    meshdata : VisPy.MeshData | None</span>
 <span class="sd">        VisPy MeshData object.</span>
 <span class="sd">    invert_normals : bool | False</span>
 <span class="sd">        If the brain appear to be black, use this parameter to invert normals.</span>
 <span class="sd">    transform : visPy.transform | None</span>
 <span class="sd">        VisPy transformation to apply to vertices ans normals.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    vertices : array_like</span>
+<span class="sd">        Vertices of shape (N, 3, 3)</span>
+<span class="sd">    faces : array_like</span>
+<span class="sd">        Faces of the template of shape (M, 3)</span>
+<span class="sd">    normals : array_like</span>
+<span class="sd">        The normals of the template, with the same shape as vertices.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Priority to meshdata :</span>
     <span class="k">if</span> <span class="n">meshdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -355,6 +366,26 @@
         <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No file &quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">set_if_not_none</span><span class="p">(</span><span class="n">to_set</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">cond</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set a variable if the value is not None.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    to_set : string</span>
+<span class="sd">        The variable name.</span>
+<span class="sd">    value : any</span>
+<span class="sd">        The value to set.</span>
+<span class="sd">    cond : bool | True</span>
+<span class="sd">        Additional condition.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    val : any</span>
+<span class="sd">        The value if not None else to_set</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">cond</span> <span class="k">else</span> <span class="n">to_set</span>
 </pre></div>
 
            </div>
@@ -391,7 +422,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.2',
+            VERSION:'0.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

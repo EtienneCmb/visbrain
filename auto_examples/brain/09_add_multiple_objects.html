@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add multiple objects to the scene &mdash; visbrain 0.3.2 documentation</title>
+  <title>Add multiple objects to the scene &mdash; visbrain 0.3.3 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.2 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.3 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add Nifti volume" href="10_add_nifti_volume.html"/>
         <link rel="prev" title="Screenshot example" href="08_screenshot.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.3.3
               </div>
             
           
@@ -197,6 +197,8 @@
 <p>This example demonstrate how to display connectivity. To this end,
 we will define some deep sources and connect them. See 2_Sources.py
 to defined sources</p>
+<p>Download source’s coordinates (xyz_sample.npz) :
+<a class="reference external" href="https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE">https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE</a></p>
 <img alt="../../_images/ex_add_multiple_objects.png" src="../../_images/ex_add_multiple_objects.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
@@ -218,7 +220,10 @@ to defined sources</p>
 
 <span class="c1"># Function in order to create random connection dataset for each</span>
 <span class="c1"># source object :</span>
+
+
 <span class="k">def</span> <span class="nf">create_connect</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create connectivity dataset.&quot;&quot;&quot;</span>
     <span class="c1"># Create a random connection dataset :</span>
     <span class="n">connect</span> <span class="o">=</span> <span class="mf">100.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">))</span>
     <span class="c1"># Mask the connection aray :</span>
@@ -230,7 +235,9 @@ to defined sources</p>
                                <span class="n">connect</span><span class="o">.</span><span class="n">data</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
     <span class="k">return</span> <span class="n">connect</span>
 
+
 <span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
+
 
 <span class="c1"># ================ ADD SOURCE OBJECTS ================</span>
 <span class="c1"># Add left hemisphere sources :</span>
@@ -328,7 +335,7 @@ to defined sources</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.2',
+            VERSION:'0.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

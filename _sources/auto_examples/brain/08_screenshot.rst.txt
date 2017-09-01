@@ -13,7 +13,10 @@ File/save/screenshot. The aim of this script is more to illustrate how to
 take screenshots without opening the interface.
 
 Further explanations about screenshot and transparency can be foud here :
-http://visbrain.org/brain.html#screenshot-tutorial
+http://visbrain.org/vbexport.html
+
+Download source's coordinates (xyz_sample.npz) :
+https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE
 
 .. image:: ../../picture/picbrain/ex_screenshot.png
 

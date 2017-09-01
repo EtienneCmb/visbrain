@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>1.3.1. Main Brain class inputs &mdash; visbrain 0.3.2 documentation</title>
+  <title>1.3.1. Main Brain class inputs &mdash; visbrain 0.3.3 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.2 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.3 documentation" href="index.html"/>
         <link rel="up" title="1. Brain" href="brain.html"/>
         <link rel="next" title="2. Sleep" href="sleep.html"/>
         <link rel="prev" title="1. Brain" href="brain.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.3.3
               </div>
             
           
@@ -1179,13 +1179,13 @@ the cross-section is directly displayed inside the brain.</p>
 <h2>1.3.6.1. Control sources<a class="headerlink" href="#control-sources" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="visbrain.brain.user.BrainUserMethods.sources_control">
-<code class="descclassname">BrainUserMethods.</code><code class="descname">sources_control</code><span class="sig-paren">(</span><em>data</em>, <em>color=’#ab4652’</em>, <em>symbol=’disc’</em>, <em>radiusmin=5.0</em>, <em>radiusmax=10.0</em>, <em>edgecolor=None</em>, <em>edgewidth=0.6</em>, <em>scaling=False</em>, <em>opacity=1.0</em>, <em>mask=None</em>, <em>maskcolor=’gray’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.sources_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.sources_control" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">BrainUserMethods.</code><code class="descname">sources_control</code><span class="sig-paren">(</span><em>data=None</em>, <em>color=’#ab4652’</em>, <em>symbol=None</em>, <em>radiusmin=None</em>, <em>radiusmax=None</em>, <em>edgecolor=’white’</em>, <em>edgewidth=None</em>, <em>scaling=None</em>, <em>alpha=None</em>, <em>mask=None</em>, <em>maskcolor=’gray’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/brain/user.html#BrainUserMethods.sources_control"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.brain.user.BrainUserMethods.sources_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data to sources and control source’s properties.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : array_like</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : None</p>
 <blockquote>
 <div><p>Vector of data for each source. Le length of this vector must
 be same as the number of sources.</p>
@@ -1197,31 +1197,31 @@ all sphere will have the same color. If it’s‘ a list of
 strings, the length must be N. Alternatively, s_color can be a
 (N, 3) RGB or (N, 4) RGBA colors.</p>
 </div></blockquote>
-<p><strong>symbol</strong> : string | ‘disc’</p>
+<p><strong>symbol</strong> : string | None</p>
 <blockquote>
 <div><p>Symbol to use for sources. Allowed style strings are: disc,
 arrow, ring, clobber, square, diamond, vbar, hbar, cross,
 tailed_arrow, x, triangle_up, triangle_down, and star.</p>
 </div></blockquote>
-<p><strong>radiusmin/radiusmax</strong> : int/float | 5.0/10.0</p>
+<p><strong>radiusmin/radiusmax</strong> : int/float | (None, None)</p>
 <blockquote>
 <div><p>Define the minimum and maximum source’s possible radius. By
 default if all sources have the same value, the radius will be
 radiusmin.</p>
 </div></blockquote>
-<p><strong>edgecolor</strong> : string/list/ndarray | None</p>
+<p><strong>edgecolor</strong> : string/list/ndarray | ‘white’</p>
 <blockquote>
 <div><p>Add an edge to sources</p>
 </div></blockquote>
-<p><strong>edgewidth</strong> : float | 0.4</p>
+<p><strong>edgewidth</strong> : float | None</p>
 <blockquote>
 <div><p>Edge width of sources</p>
 </div></blockquote>
-<p><strong>scaling</strong> : bool | True</p>
+<p><strong>scaling</strong> : bool | None</p>
 <blockquote>
 <div><p>If set to True, marker scales when rezooming.</p>
 </div></blockquote>
-<p><strong>opacity</strong> : int/float | 1.0</p>
+<p><strong>alpha</strong> : int/float | None</p>
 <blockquote>
 <div><p>Transparency of all sources. Must be between 0 and 1.</p>
 </div></blockquote>
@@ -1248,8 +1248,8 @@ displayed.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;white&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set data and properties :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">sources_control</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">radiusmin</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                    <span class="n">radiusmax</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                    <span class="n">edgewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>                   <span class="n">radiusmax</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                   <span class="n">edgewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Show the GUI :</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -2227,7 +2227,7 @@ either the cortical projection, use ‘Projection’. And
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.2',
+            VERSION:'0.3.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

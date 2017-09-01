@@ -6,6 +6,9 @@ This example demonstrate how to display connectivity. To this end,
 we will define some deep sources and connect them. See 2_Sources.py
 to defined sources
 
+Download source's coordinates (xyz_sample.npz) :
+https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE
+
 .. image:: ../../picture/picbrain/ex_add_multiple_objects.png
 """
 from __future__ import print_function
@@ -28,9 +31,12 @@ s_xyzRF = s_xyz[np.logical_and(s_xyz[:, 0] > 0, s_xyz[:, 1] > 0), :]
 
 # Function in order to create random connection dataset for each
 # source object :
+
+
 def create_connect(xyz, min, max):
+    """Create connectivity dataset."""
     # Create a random connection dataset :
-    connect = 100. * np.random.rand(len(xyz), len(xyz)) 
+    connect = 100. * np.random.rand(len(xyz), len(xyz))
     # Mask the connection aray :
     connect = np.ma.masked_array(connect, False)
     # Hide lower triangle :
@@ -40,7 +46,9 @@ def create_connect(xyz, min, max):
                                connect.data > max)] = True
     return connect
 
+
 vb = Brain()
+
 
 # ================ ADD SOURCE OBJECTS ================
 # Add left hemisphere sources :

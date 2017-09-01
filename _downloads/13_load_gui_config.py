@@ -10,6 +10,9 @@ Load this file :
 * From the menu File/load/GUI config
 * Using the load_config() method
 
+Download configuration file (config.txt) :
+https://drive.google.com/open?id=0B6vtJiCQZUBvUm9menhtUzVhS2M
+
 .. image:: ../../picture/picbrain/ex_load_config.png
 """
 from visbrain import Brain
