@@ -160,7 +160,7 @@ def read_hypno(path, npts):
                                  vector must be" + str(npts) +
                                  " (Currently : " + str(n) + ".")
 
-            return hypno
+            return hypno.astype(np.float32)
 
     except:
         warn("\nAn error ocurred while trying to load the hypnogram. An empty"
