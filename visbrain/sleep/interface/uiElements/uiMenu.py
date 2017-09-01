@@ -283,7 +283,7 @@ class uiMenu(HelpMenu):
                               "All files (*.*)")
         if filename:
             # Load the hypnogram :
-            self._hypno = read_hypno(filename, self._N).astype(np.float32)
+            self._hypno = read_hypno(filename, len(self._hypno))
             self._hyp.set_data(self._sf, self._hypno, self._time)
             # Update info table :
             self._fcn_infoUpdate()
