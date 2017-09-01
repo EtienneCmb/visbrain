@@ -410,9 +410,9 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         self._TimeAxisW.setVisible(True)
         # File to load :
         if self._config_file is not None:  # Config file
-            self.loadConfig(file=self._config_file)
-        if self._annot_file is not None:
-            self.loadAnnotationTable(file=self._annot_file)
+            self.loadConfig(filename=self._config_file)
+        if self._annot_file is not None:   # Annotation file
+            self.loadAnnotationTable(filename=self._annot_file)
 
     def show(self):
         """Display the graphical user interface."""
