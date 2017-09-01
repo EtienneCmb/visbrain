@@ -1,12 +1,13 @@
 """Create basic popup."""
 
 from PyQt5.Qt import QWidget, QRect
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
+import webbrowser
 
 from .screenshot_gui import Ui_Screenshot
 from ..guitools import textline2color
 
-__all__ = ('ShortcutPopup', 'ScreenshotPopup')
+__all__ = ('ShortcutPopup', 'ScreenshotPopup', 'HelpMenu')
 
 
 class ShortcutPopup(QWidget):
@@ -107,3 +108,53 @@ class ScreenshotPopup(Ui_Screenshot):
             kwargs['bgcolor'] = None
         kwargs['transparent'] = self._ssTransp.isChecked()
         return kwargs
+
+
+class HelpMenu(object):
+    """Help menu creation class.
+
+    This class create a help menu with a link to the documentation and a link
+    to download the pdf version of the documentation.
+    """
+
+    def __init__(self, doc_section, add_shortcuts=True):
+        """Init."""
+        _translate = QtCore.QCoreApplication.translate
+        # Main Help menu creation :
+        help_menu = QtWidgets.QMenu('Help', self)
+        self.menuBar().addMenu(help_menu)
+        if add_shortcuts:
+            # Shortcuts popup window :
+            self._shpopup = ShortcutPopup()
+            # Shortcuts :
+            shortcuts = QtWidgets.QAction("&Shortcuts", self)
+            shortcuts.setShortcut(_translate("MainWindow", "Ctrl+T"))
+            shortcuts.triggered.connect(self._shpopup.show)
+            help_menu.addAction(shortcuts)
+        # Help section submenu :
+        help_section = QtWidgets.QMenu('Open help section about', self)
+        help_menu.addMenu(help_section)
+
+        for menu, url in doc_section.items():
+            # Create action :
+            section_action = QtWidgets.QAction("&" + menu, self)
+            # Action function :
+
+            def define(url):
+                def _fcn_open_help_section():
+                    """Open the help section."""
+                    webbrowser.open(url)
+                return _fcn_open_help_section
+            # Triggered function :
+            section_action.triggered.connect(define(url))
+            # Add action to the menu :
+            help_section.addAction(section_action)
+        # PDF documentation action :
+        pdf_doc = QtWidgets.QAction("&Download doc (pdf)", self)
+        pdf_doc.triggered.connect(self._fcn_open_pdf_doc)
+        help_menu.addAction(pdf_doc)
+
+    def _fcn_open_pdf_doc(self):
+        """Open the pdf version of the documentation."""
+        webbrowser.open("https://drive.google.com/open?id=0B6vt"
+                        "JiCQZUBvdVphQWw1RFBSZW8")

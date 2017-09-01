@@ -1,7 +1,13 @@
-from visbrain import Ndviz
+"""Test Ndviz module and related methods."""
+from PyQt5 import QtWidgets
 import numpy as np
 
-def test_instance_Ndviz():
-    """Test the creation of a Ndviz instance."""
-    pass
-    # n = Ndviz(np.ones((10, 10), dtype=np.float32))
+from visbrain import Ndviz
+
+kw = {}
+kw['sf'] = 1024.
+y = np.random.rand(10, 20, 3).astype(np.float32)
+
+# ---------------- Application  ----------------
+app = QtWidgets.QApplication([])
+vb = Ndviz(y, **kw)

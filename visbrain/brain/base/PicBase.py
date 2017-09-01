@@ -1,8 +1,7 @@
 
 import vispy.scene.visuals as visu
 
-from .visuals import PicMesh
-from ...utils import CbarArgs
+from ...visuals import PicMesh, CbarArgs
 
 
 class PicBase(CbarArgs):

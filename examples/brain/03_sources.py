@@ -8,6 +8,9 @@ attach some data to sources and project this activity onto the surface
 (cortical projection). Alternatively, you can run the cortical repartition
 which is defined as the number of contributing sources per vertex.
 
+Download source's coordinates (xyz_sample.npz) :
+https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE
+
 .. image:: ../../picture/picbrain/ex_sources.png
 """
 from visbrain import Brain

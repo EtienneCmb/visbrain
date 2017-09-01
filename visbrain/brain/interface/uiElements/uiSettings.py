@@ -5,7 +5,7 @@ import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtGui import QPalette, QFont
 
-from ....utils import uiSpinValue
+from ....utils import set_spin_values
 
 __all__ = ['uiSettings']
 
@@ -15,15 +15,7 @@ class uiSettings(object):
 
     def __init__(self):
         """Init."""
-        # =============================================================
-        # MENU & FILES
-        # =============================================================
         self.progressBar.hide()
-
-        # ------------- Help -------------
-        self.actionShortcut.triggered.connect(self._fcn_showShortPopup)
-        self.actionDocumentation.triggered.connect(self._fcn_openDoc)
-        self.QuickSettings.currentChanged.connect(self._fcn_tab_changed)
 
         # =============================================================
         # GUI
@@ -66,15 +58,6 @@ class uiSettings(object):
     # =============================================================
     # MENU & FILE MANAGMENT
     # =============================================================
-    def _fcn_showShortPopup(self):
-        """Open shortcut window."""
-        self._shpopup.show()
-
-    def _fcn_openDoc(self):
-        """Open documentation."""
-        import webbrowser
-        webbrowser.open('http://visbrain.org/brain.html')
-
     def _fcn_tab_changed(self):
         """Executed function when the user change the tab."""
         # Get tab name :
@@ -214,11 +197,11 @@ class uiSettings(object):
         This function get light position / Intensity / Color / Coefficients
         from the atlas and set it to the graphical user interface.
         """
-        uiSpinValue([self.uil_posX, self.uil_posY, self.uil_posZ,
-                     self.uil_intX, self.uil_intY, self.uil_intZ,
-                     self.uil_colR, self.uil_colG, self.uil_colB,
-                     self.uil_colA, self.uil_AmbCoef, self.uil_SpecCoef],
-                    self.atlas.mesh.get_light)
+        set_spin_values([self.uil_posX, self.uil_posY, self.uil_posZ,
+                        self.uil_intX, self.uil_intY, self.uil_intZ,
+                        self.uil_colR, self.uil_colG, self.uil_colB,
+                        self.uil_colA, self.uil_AmbCoef, self.uil_SpecCoef],
+                        self.atlas.mesh.get_light)
 
     # =============================================================
     # ERROR // WARNING MESSAGES

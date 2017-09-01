@@ -13,8 +13,8 @@ import vispy.scene.cameras as viscam
 from .interface import uiInit, uiElements
 from .visuals import visuals
 from .tools import Tools
-from ..utils import (FixedCam, load_sleepdataset, color2vb, ShortcutPopup,
-                     check_downsampling, MouseEventControl, set_widget_size)
+from ..utils import (FixedCam, load_sleepdataset, color2vb, check_downsampling,
+                     MouseEventControl, set_widget_size)
 from ..io import dialogLoad, read_hypno
 
 sip.setdestroyonexit(False)
@@ -70,18 +70,14 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
     """
 
     def __init__(self, file=None, hypno_file=None, config_file=None,
-                 annotation_file=None,
-                 data=None, channels=None, sf=None, hypno=None,
-                 downsample=100., axis=False, line='gl', hedit=False,
-                 href=['art', 'wake', 'rem', 'n1', 'n2', 'n3']):
+                 annotation_file=None, data=None, channels=None, sf=None,
+                 hypno=None, downsample=100., axis=False, line='gl',
+                 hedit=False, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3']):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
         self._app = QtWidgets.QApplication(sys.argv)
         uiInit.__init__(self)
-
-        # Shortcuts popup window :
-        self._shpopup = ShortcutPopup()
 
         # Set default GUI state :
         self.setDefaultState()
@@ -141,6 +137,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         self._file = file
         self._config_file = config_file
         self._annot_file = annotation_file
+        self._annot_mark = np.array([])
         (self._sf, self._data, self._channels, self._hypno, self._time,
          self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
                                                      downsample, time, href)
@@ -372,7 +369,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         # ================= ICON =================
         pathfile = sys.modules[__name__].__file__.split('sleep.py')[0]
         app_icon = QtGui.QIcon()
-        app_icon.addFile(os.path.join(pathfile, 'ico/sleep_ico.svg'))
+        app_icon.addFile(os.path.join(pathfile, 'sleep_icon.svg'))
         self.setWindowIcon(app_icon)
 
     def _camCreation(self):
@@ -413,9 +410,9 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         self._TimeAxisW.setVisible(True)
         # File to load :
         if self._config_file is not None:  # Config file
-            self.loadConfig(file=self._config_file)
-        if self._annot_file is not None:
-            self.loadAnnotationTable(file=self._annot_file)
+            self.loadConfig(filename=self._config_file)
+        if self._annot_file is not None:   # Annotation file
+            self.loadAnnotationTable(filename=self._annot_file)
 
     def show(self):
         """Display the graphical user interface."""

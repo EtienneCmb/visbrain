@@ -8,6 +8,12 @@ This small dataset (thx to Tarek Lajnef) contains sources inside the thalamus
 and alpha power for each source. We are going to display the thalamus, then
 project the source's activity on it.
 
+Download source's coordinates (thalamus.txt) :
+https://drive.google.com/open?id=0B6vtJiCQZUBvSkEwclFlaUdJVW8
+
+Download alpha power (Px.npy):
+https://drive.google.com/open?id=0B6vtJiCQZUBvTXhVc1NvSHRxQzA
+
 .. image:: ../../picture/picbrain/ex_region_of_interest.png
 """
 from __future__ import print_function

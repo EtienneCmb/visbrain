@@ -12,6 +12,7 @@ from vispy import app, scene
 import vispy.visuals.transforms as vist
 
 from .gui import Ui_MainWindow
+from ..visuals.marker import Markers
 from ...utils import color2vb
 
 __all__ = ['uiInit']
@@ -60,7 +61,13 @@ class TimeAxis(object):
         self.mesh = scene.visuals.Image(image, name='indicator')
         self.mesh.parent = self.wc.scene
 
-    def set_data(self, tox, width, time, unit='seconds'):
+        # Add markers :
+        pos = np.full((1, 3), -10, dtype=np.float32)
+        self.markers = Markers(pos=pos, parent=self.wc.scene)
+        self.markers.set_gl_state('translucent')
+
+    def set_data(self, tox=None, width=None, time=None, unit='seconds',
+                 markers=None):
         """Move the main square."""
         # Get factor according to unit :
         if unit == 'seconds':
@@ -70,10 +77,22 @@ class TimeAxis(object):
         elif unit == 'hours':
             fact = 3660.
         # Move the square
-        self.mesh.transform = vist.STTransform(translate=tox / fact,
-                                               scale=width / fact)
-        # Update camera :
-        self.wc.camera.rect = (0, 0, (time.max() - time.min()) / fact, 1)
+        if (tox, width, time) != (None, None, None):
+            self.mesh.transform = vist.STTransform(translate=tox / fact,
+                                                   scale=width / fact)
+            # Update camera :
+            self.wc.camera.rect = (0, 0, (time.max() - time.min()) / fact, 1)
+        # Set markers :
+        if markers is not None:
+            if markers.size:
+                pos = np.zeros((len(markers), 3), dtype=np.float32)
+                pos[:, 0] = markers / fact
+                pos[:, 1] = .5
+                pos[:, 2] = -10
+            else:
+                pos = np.full((1, 3), -10, dtype=np.float32)
+            self.markers.set_data(pos=pos, symbol='triangle_down', size=20.,
+                                  face_color='#42ab46', edge_width=0.)
 
     def set_camera(self, camera):
         """Set a camera and link all objects inside."""

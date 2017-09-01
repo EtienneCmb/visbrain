@@ -17,7 +17,7 @@ Description
 
 Sleep is a graphical user interface dedicated to visualization and scoring of sleep data. Sleep runs on Vispy excellent package and benefits thus from the high-performance of this latter (GPU-based computation).
 
-.. figure::  picture/Sleep_main.png
+.. figure::  picture/picsleep/sleep_main.png
    :align:   center
 
 Help
@@ -113,7 +113,7 @@ Panels
 
 Manage object visibility, channel's amplitudes, spectrogram properties...
 
-.. figure::  picture/Sleep_topo.png
+.. figure::  picture/picsleep/sleep_topo.png
    :align:   center
 
 * *Channels*
@@ -148,7 +148,7 @@ Tools
 
 Signal processing and re-referencement tools.
 
-.. figure::  picture/Sleep_filtering.png
+.. figure::  picture/picsleep/sleep_filtering.png
    :align:   center
 
    Bandpass filter applied across all channels and spectrogram.
@@ -167,7 +167,7 @@ Info
 
 The Info panel displays recording information (name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time if you modify the hypnogram using either live edition or the Scoring panel. Sleep statistics can be exported to **.csv** or **.txt** file.
 
-.. figure::  picture/Sleep_info.png
+.. figure::  picture/picsleep/sleep_info.png
    :align:   center
 
    Hypnogram's informations.
@@ -297,8 +297,17 @@ Here's the list of supported extensions for hypnogram files :
 
    **This text file should contain the following information :**
 
-   * *Time* : the number of seconds represented by one value of the hypnogram (e.g. one value per 30 second, time = 30, one value per second, time = 1).
-   * *W, N1, N2, N3, REM, Art* : The value in your hypnogram that corresponds to stage Wakefulness, N1, N2, N3, REM and Art.
+   ==========    ======  ======================================================
+   Parameters    Values  Description
+   ==========    ======  ======================================================
+   Time          1       Hypnogram file contains one value per second
+   Wake          0       The value assigned to Wake in the hypnogram is 0
+   N1            1       The value assigned to N1 sleep in the hypnogram is 1
+   N2            2       The value assigned to N2 sleep in the hypnogram is 2
+   N3            3       The value assigned to N3 sleep in the hypnogram is 3
+   REM           4       The value assigned to REM in the hypnogram is 4
+   Artefact      \-1     The value assigned to Artefact in the hypnogram is \-1
+   ==========    ======  ======================================================
 
    Please note that Sleep uses the guidelines of *Iber et al. 2007* for sleep stage nomenclature, i.e. Wake, N1, N2, N3, REM and Artefact. If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differenciation between S3 and S4 so be sure not to overwrite your original file!
 
@@ -359,7 +368,7 @@ Don't send anything, just open the interface and you will have a popup window as
     Sleep().show()
 
 
-.. figure::  picture/Sleep_open.png
+.. figure::  picture/picsleep/sleep_open.png
    :align:   center
 
    Popup window for loading your files.
@@ -421,7 +430,7 @@ Hypnogram scoring
 
 Sleep offers three possibilities to score the hypnogram, during the :ref:`navigation` using shortcuts, manually using the :ref:`scoretable` or in :ref:`liveedit`.
 
-.. figure::  picture/Sleep_scoring.png
+.. figure::  picture/picsleep/sleep_scoring.png
    :align:   center
 
    Hypnogram scoring table.
@@ -464,7 +473,7 @@ At the end of the hypnogram, you can **Add line** or **Remove line** when a line
 
 Then, you can export your hypnogram in **.hyp**, **.txt** or **cvs**.
 
-.. figure::  picture/Scoring_table.png
+.. figure::  picture/picsleep/sleep_scoring_table.png
    :align:   center
 
    Hypnogram scoring using the Scoring table. Manually specify where each stage start / finish and precise the stage type.
@@ -481,7 +490,7 @@ Live editing consist of editing your hypnogram directly from the axis by adding 
   - Hover an existing point in order to select it (the point turn green)
   - Dragg the point (blue) on the diffrent hypnogram values
 
-.. figure::  picture/Sleep_livedit.png
+.. figure::  picture/picsleep/sleep_livedit.png
    :align:   center
 
    Edit the hypnogram directly from the axes.
@@ -535,7 +544,7 @@ Spindles detection
 ^^^^^^^^^^^^^^^^^^
 This algorithm perform a semi-automatic detection of sleep spindles which are an essential feature of N2 sleep. Sleep spindles are defined as bursts of 12-14 Hz waves that occur for at least 0.5 seconds. They are maximally visible on central electrodes.
 
-.. figure::  picture/Sleep_spindles.png
+.. figure::  picture/picsleep/sleep_spindles.png
    :align:   center
 
    Spindles detection on channel Cz and report on the hypnogram.
@@ -555,7 +564,7 @@ Rapid Eye Movements detection
 
 This algorithm perform a semi-automatic detection of rapid eye movements (REMs, or saccades) which occur during REM sleep (hence the name). Briefly, the method identify consecutive supra-threshold samples of the first derivative of the signal (after filtering).
 
-.. figure::  picture/Sleep_rem.png
+.. figure::  picture/picsleep/sleep_rem.png
    :align:   center
 
    Rapid Eye Movements (REM) detection on channel EOG1 and report on the hypnogram.
@@ -571,7 +580,7 @@ Peaks detection
 
 Perform a peak detection.
 
-.. figure::  picture/Sleep_peak.png
+.. figure::  picture/picsleep/sleep_peak.png
    :align:   center
 
    Peaks detection on ECG channel and report on the hypnogram.
@@ -606,12 +615,31 @@ Alternatively, if you want to use a configuration when running *Sleep*, you can 
 
 .. _import_annotation:
 
-Import annotations
-~~~~~~~~~~~~~~~~~~
+Import, add and save annotations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-*Sleep* provides a table for annotations where you can specify where the event start, finish and the text associated. In addition, there is an "Annotate" push button on the navigation bar to annotate the currently displayed window. Double clicking on a canvas is an other way to quickly add annotations.
-The list of annotations can be exported (either in .txt or .csv) or loaded from the **Files** menu.
-Just as for the configuration file, you can use the input variable *annotation_file* to set the pass to an existing annotation file that need to be loaded on load.
+*Sleep* provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.
+
+.. figure::  picture/picsleep/sleep_annotations.png
+   :align:   center
+
+   Annotations in Sleep. All annotations are referenced in a table in the quick settings panel (left). Each annotation is then reported in the time axis as a green triangle.
+
+Import annotations
+^^^^^^^^^^^^^^^^^^
+
+If the interface is opened, load annotations from the menu *Files/Load/Annotations*. Otherwise, you can use the input variable *annotation_file* to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :
+
+* :ref:`annotations_txt`
+* :ref:`annotations_mne`
+* :ref:`annotations_mark`
+
+.. _annotations_txt:
+
+Annotations in a text file
+++++++++++++++++++++++++++
+
+Annotations can be defined in a `csv file <https://drive.google.com/file/d/0B6vtJiCQZUBvSXpmS0FGZ1E4M1U/view?usp=sharing>`_ or in a `txt file <https://drive.google.com/file/d/0B6vtJiCQZUBvOENtTks1Z3NLam8/view?usp=sharing>`_ file. 
 
 .. code-block:: python
 
@@ -620,6 +648,11 @@ Just as for the configuration file, you can use the input variable *annotation_f
   from visbrain import Sleep
 
   Sleep(annotation_file='pathto/myannotations.txt')
+
+.. _annotations_mne:
+
+Use MNE-Python annotations
+++++++++++++++++++++++++++
 
 Alternatively, you can use annotations from MNE-python and pass your annotations to the *annotation_file* variable :
 
@@ -636,6 +669,36 @@ Alternatively, you can use annotations from MNE-python and pass your annotations
   annot = Annotations(onset, durations, description)
 
   Sleep(annotation_file=annot)
+
+.. _annotations_mark:
+
+Define only markers
++++++++++++++++++++
+
+Annotations can be seen as the combination of a time-code with a text attached to it. If you don't need to attach text, you can only specify the time-code in seconds :
+
+.. code-block:: python
+
+  import numpy as np
+  from visbrain import Sleep
+
+  # Define the onset :
+  onset = np.array([117., 256., 312.])
+
+  Sleep(annotation_file=onset)
+
+Add new annotations
+^^^^^^^^^^^^^^^^^^^
+
+To add new annotations :
+
+* From the ruler or from the **Annotations** tab of the quick settings panel, use the **Annotate** button to annotate the currently displayed window
+* Double clicking on a canvas is an other way to quickly add annotations.
+
+Save annotations
+^^^^^^^^^^^^^^^^
+
+The list of annotations can be exported (either in .txt or .csv) or loaded from the **Files** menu.
 
 .. ##########################################################################
 .. ##########################################################################

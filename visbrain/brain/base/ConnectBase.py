@@ -10,7 +10,8 @@ from warnings import warn
 
 import vispy.scene.visuals as visu
 
-from ...utils import CbarArgs, color2vb, array2colormap, normalize
+from ...utils import color2vb, array2colormap, normalize
+from ...visuals import CbarArgs
 
 
 __all__ = ['ConnectBase']

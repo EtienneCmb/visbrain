@@ -11,10 +11,11 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .marker import Markers
-from ...utils import (array2colormap, color2vb, TopoPlot, PrepareData)
-from ...utils.sleep.event import _index_to_event
+from ...utils import (array2colormap, color2vb, PrepareData)
+from ...utils.sleep.event import _index_to_events
+from ...visuals import TopoMesh
 
-__all__ = ["visuals"]
+__all__ = ("visuals")
 
 
 """
@@ -99,7 +100,7 @@ class Detection(object):
                                            face_color=self[k]['color'])
                 else:
                     # Get index and channel number :
-                    index = _index_to_event(self[k]['index'])
+                    index = _index_to_events(self[k]['index'])
                     z = np.full(index.shape, 2., dtype=np.float32)
                     # Build position vector :
                     pos = np.vstack((self.time[index], data[nb, index], z)).T
@@ -726,17 +727,17 @@ class Hypnogram(object):
 ###############################################################################
 # TOPOPLOT
 ###############################################################################
-Topoplot class that inherit from the visual TopoPlot and PrepareData for
+Topoplot class that inherit from the visual TopoMesh and PrepareData for
 filetring, de-meaning...
 """
 
 
-class TopoSleep(TopoPlot, PrepareData):
+class TopoSleep(TopoMesh, PrepareData):
     """Topoplot for sleep data."""
 
     def __init__(self, **kwargs):
-        # Initialize TopoPlot and PrepareData :
-        TopoPlot.__init__(self, **kwargs)
+        # Initialize TopoMesh and PrepareData :
+        TopoMesh.__init__(self, **kwargs)
         PrepareData.__init__(self, axis=1)
         # Initialize data, clim, cmap and cblabel :
         self._data = None
@@ -945,10 +946,17 @@ class vbShortcuts(object):
             :event: the trigger event
             """
             # Get canvas title :
-            isSpHyp = canvas.title in ['Hypnogram', 'Spectrogram']
-            title = canvas.title if isSpHyp else canvas.title.split('_')[1]
+            is_sp_hyp = canvas.title in ['Hypnogram', 'Spectrogram']
+            title = canvas.title if is_sp_hyp else canvas.title.split('_')[1]
             # Annotate the timing :
-            cursor = self._time[-1] * event.pos[0] / canvas.size[0]
+            if is_sp_hyp:
+                cursor = self._time[-1] * event.pos[0] / canvas.size[0]
+            else:
+                val = self._SlVal.value()
+                step = self._SigSlStep.value()
+                win = self._SigWin.value()
+                tm, tM = (val * step, val * step + win)
+                cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
             # Set the current tab to the annotation tab :
             self.QuickSettings.setCurrentIndex(5)
             # Run annotation :
@@ -969,7 +977,7 @@ class vbShortcuts(object):
                 val = self._SlVal.value()
                 step = self._SigSlStep.value()
                 win = self._SigWin.value()
-                tm, tM = (val*step, val*step+win)
+                tm, tM = (val * step, val * step + win)
                 # Convert cursor in time position :
                 cursor = tm + ((tM - tm) * event.pos[0] / canvas.size[0])
                 # Enable/Disable magnify :
@@ -980,7 +988,7 @@ class vbShortcuts(object):
                     tm, tM = self._time.min(), self._time.max()
             # Set time position to the cursor text :
             cursor = np.round(cursor * 1000.) / 1000.
-            self._txtCursor.setText('Cursor : '+str(cursor)+' sec')
+            self._txtCursor.setText('Cursor : ' + str(cursor) + ' sec')
 
         @canvas.events.mouse_press.connect
         def on_mouse_press(event):
@@ -990,8 +998,8 @@ class vbShortcuts(object):
             """
             # ------------- MAGNIFY : CTRL + left click -------------
             name = canvas.title
-            isleft = self._isLeftClick(event)
-            isCtrl = self._isModifier(event, 'Control')
+            isleft = self._is_left_click(event)
+            isCtrl = self._is_modifier(event, 'Control')
             condition = bool(name.find('Canvas') + 1) and isleft and isCtrl
             if condition and not self._slMagnify.isChecked():
                 # Get channel name :

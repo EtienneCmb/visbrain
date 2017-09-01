@@ -105,7 +105,8 @@ class uiSettings(object):
         # ---------------------------------------
         # Update Time indicator :
         if isIndicChecked:
-            self._TimeAxis.set_data(xlim[0], win, self._time, unit=unit)
+            self._TimeAxis.set_data(xlim[0], win, self._time, unit=unit,
+                                    markers=self._annot_mark)
 
         # ================= GUI =================
         # Update Go to :
@@ -121,7 +122,7 @@ class uiSettings(object):
 
             # Time axis :
             self._TimeAxis.set_data(xlim[0], win, np.array([xlim[0], xlim[1]]),
-                                    unit='seconds')
+                                    unit='seconds', markers=self._annot_mark)
             self._timecam.rect = (xlim[0], 0., win, 1.)
 
         # ================= TEXT INFO =================

@@ -8,7 +8,7 @@ import numpy as np
 from vispy.geometry import MeshData
 
 __all__ = ('vis_args', 'check_downsampling', 'vispy_array', 'convert_meshdata',
-           'add_brain_template', 'remove_brain_template')
+           'add_brain_template', 'remove_brain_template', 'set_if_not_none')
 
 
 def vis_args(kw, prefix, ignore=[]):
@@ -20,6 +20,8 @@ def vis_args(kw, prefix, ignore=[]):
         The dictionary of arguments
     prefix : string
         The prefix to use (something like 'nd_', 'cb_'...)
+    ignors : list | []
+        List of patterns to ignore.
 
     Returns
     -------
@@ -90,25 +92,34 @@ def vispy_array(data, dtype=np.float32):
     return data
 
 
-def convert_meshdata(vertices, faces, normals=None, meshdata=None,
+def convert_meshdata(vertices=None, faces=None, normals=None, meshdata=None,
                      invert_normals=False, transform=None):
     """Convert mesh data to be compatible with visbrain.
 
     Parameters
     ----------
-    vertices : array_like
+    vertices : array_like | None
         Vertices of the template of shape (N, 3) or (N, 3, 3) if indexed by
         faces.
-    faces : array_like
+    faces : array_like | None
         Faces of the template of shape (M, 3)
     normals : array_like | None
-        The normals of the template, with the same shape as vertices.
+        The normals to each vertex, with the same shape as vertices.
     meshdata : VisPy.MeshData | None
         VisPy MeshData object.
     invert_normals : bool | False
         If the brain appear to be black, use this parameter to invert normals.
     transform : visPy.transform | None
         VisPy transformation to apply to vertices ans normals.
+
+    Returns
+    -------
+    vertices : array_like
+        Vertices of shape (N, 3, 3)
+    faces : array_like
+        Faces of the template of shape (M, 3)
+    normals : array_like
+        The normals of the template, with the same shape as vertices.
     """
     # Priority to meshdata :
     if meshdata is not None:
@@ -188,3 +199,23 @@ def remove_brain_template(name):
         os.remove(path)
     else:
         raise ValueError("No file " + path)
+
+
+def set_if_not_none(to_set, value, cond=True):
+    """Set a variable if the value is not None.
+
+    Parameters
+    ----------
+    to_set : string
+        The variable name.
+    value : any
+        The value to set.
+    cond : bool | True
+        Additional condition.
+
+    Returns
+    -------
+    val : any
+        The value if not None else to_set
+    """
+    return value if (value is not None) and cond else to_set

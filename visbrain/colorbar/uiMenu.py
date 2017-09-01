@@ -1,34 +1,39 @@
 """Main class for sleep menus managment."""
 
 from ..io import write_fig_pyqt, write_fig_canvas, dialogLoad, dialogSave
-from ..utils import ScreenshotPopup
+from ..utils import ScreenshotPopup, HelpMenu
 
 __all__ = ('uiMenu')
 
 
-class uiMenu(object):
+class uiMenu(HelpMenu):
     """Main class for sleep menus managment."""
 
     def __init__(self):
         """Init."""
+        base = 'http://visbrain.org/colorbar.html'
+        sections = {'Colorbar': base}
+        HelpMenu.__init__(self, sections, False)
         # __________ CONFIG __________
         self.menuCbarSaveConfig.triggered.connect(self._fcn_saveCbarConfig)
         self.menuCbarLoadConfig.triggered.connect(self._fcn_loadCbarConfig)
         self.menuCbarScreenshot.triggered.connect(self._fcn_CbarScreenshot)
 
-    def _fcn_saveCbarConfig(self):
+    def _fcn_saveCbarConfig(self, *args, filename=None):
         """Save colorbar config."""
-        filename = dialogSave(self, 'Save config File', 'config',
-                              "Text file (*.txt);;All files (*.*)")
+        if filename is None:
+            filename = dialogSave(self, 'Save config File', 'config',
+                                  "Text file (*.txt);;All files (*.*)")
 
         if filename:
             self.cbqt.save(filename)
 
-    def _fcn_loadCbarConfig(self):
+    def _fcn_loadCbarConfig(self, *args, filename=None):
         """Load colorbar conf."""
-        # Open dialog box :
-        filename = dialogLoad(self, 'Load config File', 'config',
-                              "Text file (*.txt);;All files (*.*)")
+        if filename is None:
+            # Open dialog box :
+            filename = dialogLoad(self, 'Load config File', 'config',
+                                  "Text file (*.txt);;All files (*.*)")
 
         if filename:
             self.cbqt.load(filename)

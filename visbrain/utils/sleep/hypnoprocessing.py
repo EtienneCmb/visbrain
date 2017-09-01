@@ -3,31 +3,29 @@
 import numpy as np
 from os import path
 
-__all__ = ['sleepstats', 'transient']
+__all__ = ('sleepstats', 'transient')
 
 
 def transient(data, xvec=None):
     """Perform a transient detection on hypnogram.
 
-    Args:
-        data: np.ndarray
-            The hypnogram data.
+    Parameters
+    ----------
+    data : array_like
+        The hypnogram data.
+    xvec : array_like | None
+        The time vector to use. If None, np.arange(len(data)) will be used
+        instead.
 
-    Kargs:
-        xvec: np.ndarray, optional, (def: None)
-            The time vector to use. If None, np.arange(len(data)) will be used
-            instead.
-
-    Returns:
-        t: np.ndarray
-            Hypnogram's transients.
-
-        idx: np.ndarray
-            Either the transient index (as type int) if xvec is None, or the
-            converted version if xvec is not None.
-
-        stages: np.ndarray
-            The stages for each segment.
+    Returns
+    -------
+    t : array_like
+        Hypnogram's transients.
+    st : array_like
+        Either the transient index (as type int) if xvec is None, or the
+        converted version if xvec is not None.
+    stages : array_like
+        The stages for each segment.
     """
     # Transient detection :
     t = list(np.nonzero(np.abs(data[:-1] - data[1:]))[0])
@@ -46,34 +44,8 @@ def transient(data, xvec=None):
     return np.array(t), st, stages.astype(int)
 
 
-def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
+def sleepstats(file, hypno, nsamples, sf=100., sfori=1000., time_window=30.):
     """Compute sleep stats from an hypnogram vector.
-
-    Args:
-        file: str
-            Filename (with full path) to sleep dataset.
-
-        hypno: np.ndarray
-            Hypnogram vector
-
-        N: int
-            Original data shape before down-sampling.
-
-    Kargs
-        sf: float, optional, (def: 100.)
-            The sampling frequency of displayed elements (could be the
-            down-sampling frequency)
-
-        sfori: float, optional, (def: 1000.)
-            The original sampling frequency before any down-sampling.
-
-        time_window: float, optional, (def: 30.)
-            Length (seconds) of the time window on which to compute stats
-
-    Return:
-        stats: dict
-            Sleep statistics (expressed in minutes)
-
 
     Sleep statistics specifications:
     ======================================================================
@@ -101,9 +73,29 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
 
     ======================================================================
 
+    Parameters
+    ----------
+    file : str
+        Filename (with full path) to sleep dataset.
+    hypno : array_like
+        Hypnogram vector
+    nsamples : int
+        Original data shape before down-sampling.
+    sf : float | 100.
+        The sampling frequency of displayed elements (could be the
+        down-sampling frequency)
+    sfori : float | 1000.
+        The original sampling frequency before any down-sampling.
+    time_window : float | 30.
+        Length (seconds) of the time window on which to compute stats
+
+    Returns
+    -------
+    stats: dict
+        Sleep statistics (expressed in minutes)
     """
     # Get a step (integer) and resample to get one value per 30 seconds :
-    step = int(hypno.shape / np.round(N / (sfori * time_window)))
+    step = int(hypno.shape / np.round(nsamples / (sfori * time_window)))
     hypno = hypno[::step]
 
     stats = {}
@@ -146,7 +138,7 @@ def sleepstats(file, hypno, N, sf=100., sfori=1000., time_window=30.):
     stats['Sampling frequency_1'] = str(int(sfori)) + " Hz"
     stats['Down-sampling_2'] = str(int(sf)) + " Hz"
     stats['Units_3'] = 'minutes'
-    stats['Duration (TIB)_4'] = np.round(N / (sfori * 60.))
+    stats['Duration (TIB)_4'] = np.round(nsamples / (sfori * 60.))
 
     stats['SE (%)_19'] = np.round(stats['TST_18'] / stats['TDT_5'] * 100., 2)
 

@@ -1,5 +1,5 @@
 """Colorbar management for the Brain module."""
-from ...utils import CbarQt, CbarObjetcs, CbarBase
+from ...visuals import CbarQt, CbarObjetcs, CbarBase
 
 __all__ = ['BrainCbar']
 

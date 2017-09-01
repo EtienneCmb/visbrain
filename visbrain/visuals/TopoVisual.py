@@ -18,17 +18,15 @@ from vispy import scene
 from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
-from ..color import array2colormap, color2vb, mpl_cmap
-from ..topo.projection import array_project_radial_to3d
-from ..sigproc import normalize
-from ..transform import vpnormalize, vprecenter
-from ..cbar.CbarVisual import CbarVisual
+from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
+                     vpnormalize, vprecenter)
+from .cbar import CbarVisual
 
-__all__ = ('TopoPlot')
+__all__ = ('TopoMesh')
 
 
-class TopoPlot(object):
-    """Create a TopoPlot VisPy object.
+class TopoMesh(object):
+    """Create a TopoMesh VisPy object.
 
     Parameters
     ----------
@@ -392,7 +390,7 @@ class TopoPlot(object):
                     pass  # all good
                 elif system == 'spherical':
                     xyz = self._spherical_to_cartesian(xyz, unit)
-                    xyz = array_project_radial_to3d(xyz)
+                    xyz = self.array_project_radial_to3d(xyz)
 
         self._xyz = xyz
         self._channels = channels
@@ -416,7 +414,7 @@ class TopoPlot(object):
         """
         ref = self._get_coordinates_from_name([x, y])[0]
         ref = self._spherical_to_cartesian(ref, unit='degree')
-        ref = array_project_radial_to3d(ref)
+        ref = self.array_project_radial_to3d(ref)
         ref_x, ref_y = ref[0, 0], ref[1, 1]
         return ref_x, ref_y
 
@@ -430,9 +428,9 @@ class TopoPlot(object):
             List of channel names.
         """
         # Load the coordinates template :
-        path = sys.modules[__name__].__file__.split('objects')[0]
-        path = os.path.join(path, 'topo')
-        file = np.load(os.path.join(path, 'eegref.npz'))
+        path_file = sys.modules[__name__].__file__.split('Topo')[0]
+        path = os.path.join(*(path_file, 'eegref.npz'))
+        file = np.load(path)
         nameRef, xyzRef = file['chan'], file['xyz']
         keeponly = np.ones((len(chan)), dtype=bool)
         # Find and load xyz coordinates :
@@ -507,6 +505,22 @@ class TopoPlot(object):
                     g[mask] = 0.
                 zi[i, j] = g.dot(weights)
         return zi
+
+    @staticmethod
+    def array_project_radial_to3d(points_2d):
+        """Radial 3d projection."""
+        points_2d = np.atleast_2d(points_2d)
+        alphas = np.sqrt(np.sum(points_2d**2, -1))
+
+        betas = np.sin(alphas) / alphas
+        betas[alphas == 0] = 1
+        x = points_2d[..., 0] * betas
+        y = points_2d[..., 1] * betas
+        z = np.cos(alphas)
+
+        points_3d = np.asarray([x, y, z]).T
+
+        return points_3d
 
     # ----------- SHOW_MARKERS -----------
     @property

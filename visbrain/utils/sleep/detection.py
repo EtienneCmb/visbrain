@@ -16,97 +16,78 @@ from scipy.signal import hilbert, detrend
 from ..filtering import filt, morlet, morlet_power, welch_power
 from ..sigproc import movingaverage, derivative, tkeo
 from .event import (_events_duration, _events_removal, _events_distance_fill,
-                    _event_amplitude)
+                    _events_amplitude)
 
-__all__ = ['peakdetect', 'remdetect', 'spindlesdetect', 'slowwavedetect',
-           'kcdetect', 'mtdetect']
+__all__ = ('kcdetect', 'spindlesdetect', 'remdetect', 'slowwavedetect',
+           'mtdetect', 'peakdetect')
 
 ###########################################################################
 # K-COMPLEX DETECTION
 ###########################################################################
 
 
-def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
-             kc_min_amp, kc_max_amp, fMin=0.5, fMax=4, delta_thr=0.75,
-             moving_s=20, spindles_thresh=1, range_spin_sec=20,
-             kc_peak_min_distance=100, min_distance_ms=500):
+def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
+             kc_min_amp, kc_max_amp, fmin=.5, fmax=4., delta_thr=.75,
+             moving_s=20, spindles_thresh=1., range_spin_sec=20,
+             kc_peak_min_distance=100., min_distance_ms=500.):
     """Perform a K-complex detection.
 
-    Args:
-        elec: np.ndarray
-            eeg signal (preferably central electrodes)
+    Parameters
+    ----------
+    elec : array_like
+        eeg signal (preferably central electrodes)
+    sf : float
+        Downsampling frequency
+    proba_thr : float
+        Probability threshold (between 0 and 1)
+    amp_thr : float
+        Amplitude threshold
+    hypno : array_like
+        Hypnogram vector, same length as elec
+        Vector with only 0 if no hypnogram is loaded
+    nrem_only : bool
+        Perfom detection only on NREM sleep period
+    tmin : float
+        Minimum duration (ms) of K-complexes
+    tmax : float
+        Maximum duration (ms) of K-complexes
+    kc_min_amp : float
+        Minimum amplitude of K-complexes
+    kc_max_amp : float
+        Maximum amplitude of K-complexes
+    fmin : float | .5
+        High-pass cutoff frequency
+    fmax : float | 4.
+        Low-pass cutoff frequency
+    delta_thr : float | .75
+        Delta normalized power threshold. Value must be between 0 and 1.
+        0 = No thresholding by delta bandpower
+    moving_s : int | 20
+        Moving average window (sec) for smoothing of delta band power
+    spindles_thresh : float | 1.
+        Number of standard deviations to compute spindles detection
+    range_spin_sec : int | 20
+        Duration of lookahead window for spindles detection (sec)
+        Check for spindles that are comprised within -range_spin_sec/2 <
+        KC < range_spin_sec/2
+    kc_peak_min_distance : float | 100.
+        Minimum distance (ms) between the minimum and maxima of a KC
+    min_distance_ms : float | 500.
+        Minimum distance (ms) between two KCs to be considered unique.
 
-        sf: float
-            Downsampling frequency
-
-        proba_thr: float
-            Probability threshold (between 0 and 1)
-
-        amp_thr: float
-            Amplitude threshold
-
-        hypno: np.ndarray
-            Hypnogram vector, same length as elec
-            Vector with only 0 if no hypnogram is loaded
-
-        nrem_only: boolean
-            Perfom detection only on NREM sleep period
-
-        tMin: float
-            Minimum duration (ms) of K-complexes
-
-        tMax: float
-            Maximum duration (ms) of K-complexes
-
-        kc_min_amp: float
-            Minimum amplitude of K-complexes
-
-        kc_max_amp: float
-            Maximum amplitude of K-complexes
-
-    Kargs:
-        fMin: float
-            High-pass cutoff frequency
-
-        fMax: float
-            Low-pass cutoff frequency
-
-        delta_thr: float (0 - 1)
-            Delta normalized power threshold. Value must be between 0 and 1.
-            0 = No thresholding by delta bandpower
-
-        moving_s: int
-            Moving average window (sec) for smoothing of delta band power
-
-        spindles_thresh: float
-            Number of standard deviations to compute spindles detection
-
-        range_spin_sec: int
-            Duration of lookahead window for spindles detection (sec)
-            Check for spindles that are comprised within -range_spin_sec/2 <
-            KC < range_spin_sec/2
-
-        kc_peak_min_distance: float
-            Minimum distance (ms) between the minimum and maxima of a KC
-
-        min_distance_ms: float
-            Minimum distance (ms) between two KCs to be considered unique.
-
-    Return:
-        idx_kc: np.ndarray
-            Array of supra-threshold indices
-
-        number: int
-            Number of detected K-complexes
-
-        density: float
-            Number of K-complexes per minutes of data
-
-        duration_ms: float
-            Duration (ms) of each K-complex detected
+    Returns
+    -------
+    idx_kc : array_like
+        Array of supra-threshold indices
+    number : int
+        Number of detected K-complexes
+    density : float
+        Number of K-complexes per minutes of data
+    duration_ms : float
+        Duration (ms) of each K-complex detected
     """
     # Find if hypnogram is loaded :
-    hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
+    hyploaded = True if np.unique(hypno).size > 1 and nrem_only else False
 
     data = elec
     length = max(data.shape)
@@ -123,7 +104,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
 
     # MAIN DETECTION
     # Bandpass filtering
-    sig_filt = filt(sf, np.array([fMin, fMax]), data)
+    sig_filt = filt(sf, np.array([fmin, fmax]), data)
     # Taiger-Keaser energy operator
     sig_transformed = tkeo(sig_filt)
     # Initial thresholding of the TKEO's amplitude
@@ -155,7 +136,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
         proba[idx_loc_delta] += 0.1
         proba[idx_kc_spin] += 0.1
 
-        if hypLoaded:
+        if hyploaded:
             proba[np.where(hypno == -1)[0]] += -0.1
             proba[np.where(hypno == 0)[0]] += -0.2
             proba[np.where(hypno == 2)[0]] += 0
@@ -164,22 +145,22 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
             proba[np.where(hypno == 4)[0]] += -0.2
 
         # Smooth and normalize probability vector
-        proba = proba / 0.5 if hypLoaded else proba / 0.4
+        proba = proba / 0.5 if hyploaded else proba / 0.4
         proba = movingaverage(proba, sf, sf)
 
         # Keep only proba >= proba_thr (user defined threshold)
         idx_sup_thr = np.intersect1d(idx_sup_thr, np.where(
-                                        proba >= proba_thr)[0], True)
+            proba >= proba_thr)[0], True)
 
     if idx_sup_thr.size > 0:
         # K-COMPLEX MORPHOLOGY
         idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-        kc_amp, distance_ms = _event_amplitude(data, idx_sup_thr,
-                                               idx_start, idx_stop, sf)
-        good_dur = np.where(np.logical_and(duration_ms > tMin,
-                                           duration_ms < tMax))[0]
+        kc_amp, distance_ms = _events_amplitude(data, idx_sup_thr,
+                                                idx_start, idx_stop, sf)
+        good_dur = np.where(np.logical_and(duration_ms > tmin,
+                                           duration_ms < tmax))[0]
 
         good_amp = np.where(np.logical_and(kc_amp > kc_min_amp,
                                            kc_amp < kc_max_amp))[0]
@@ -207,65 +188,54 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tMin, tMax,
 # SPINDLES DETECTION
 ###########################################################################
 
-def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fMin=12.,
-                   fMax=14., tMin=500, tMax=2000,
-                   method='wavelet', min_distance_ms=500, sigma_thr=0.25):
+def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
+                   tmin=500, tmax=2000, method='wavelet', min_distance_ms=500,
+                   sigma_thr=0.25):
     """Perform a sleep spindles detection.
 
-    Args:
-        elec: np.ndarray
-            eeg signal (preferably central electrodes)
+    Parameters
+    ----------
+    elec : array_like
+        eeg signal (preferably central electrodes)
+    sf : float
+        Downsampling frequency
+    threshold : float
+        Number of standard deviation to use as threshold
+        Threshold is defined as: mean + X * std(derivative)
+    hypno : array_like
+        Hypnogram vector, same length as elec
+        Vector with only 0 if no hypnogram is loaded
+    nrem_only : bool
+        Perfom detection only on NREM sleep period
+    fmin : float | 12
+        Lower bandpass frequency
+    fmax : float | 14
+        Higher bandpass frequency
+    method: {'wavelet', 'hilbert'}
+        Method to extract complex decomposition. Use either 'hilbert' or
+        'wavelet'.
+    min_distance_ms : int | 500
+        Minimum distance (in ms) between two spindles to consider them as
+        two distinct spindles
+    sigma_thr : float | 0.25
+        Sigma band-wise normalized power threshold (between 0 and 1)
 
-        sf: float
-            Downsampling frequency
-
-        threshold: float
-            Number of standard deviation to use as threshold
-            Threshold is defined as: mean + X * std(derivative)
-
-        hypno: np.ndarray
-            Hypnogram vector, same length as elec
-            Vector with only 0 if no hypnogram is loaded
-
-        nrem_only: boolean
-            Perfom detection only on NREM sleep period
-
-    Kargs:
-        fMin: float, optional (def 12)
-            Lower bandpass frequency
-
-        fMax: float, optional (def 14)
-            Higher bandpass frequency
-
-        method: string
-            Method to extract complex decomposition. Use either 'hilbert' or
-            'wavelet'.
-
-        min_distance_ms: int, optional (def 500)
-            Minimum distance (in ms) between two spindles to consider them as
-            two distinct spindles
-
-        sigma_thr: float, optional (def 0.25)
-            Sigma band-wise normalized power threshold (between 0 and 1)
-
-    Return:
-        idx_spindles: np.ndarray
-            Array of supra-threshold indices
-
-        number: int
-            Number of detected spindles
-
-        density: float
-            Number of spindles per minutes of data
-
-        duration_ms: float
-            Duration (ms) of each spindles detected
+    Returns
+    -------
+    idx_spindles : array_like
+        Array of supra-threshold indices
+    number : int
+        Number of detected spindles
+    density : float
+        Number of spindles per minutes of data
+    duration_ms : float
+        Duration (ms) of each spindles detected
 
     """
     # Find if hypnogram is loaded :
-    hypLoaded = True if np.unique(hypno).size > 1 and nrem_only else False
+    hyploaded = True if np.unique(hypno).size > 1 and nrem_only else False
 
-    if hypLoaded:
+    if hyploaded:
         data = elec.copy()
         data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
         length = np.count_nonzero(data)
@@ -276,7 +246,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fMin=12.,
 
     # Pre-detection
     # Compute relative sigma power
-    freqs = np.array([0.5, 4., 8., fMin, fMax])
+    freqs = np.array([0.5, 4., 8., fmin, fmax])
     _, _, _, sigma_npow = morlet_power(data, freqs, sf, norm=True)
     sigma_nfpow = movingaverage(sigma_npow, sf, sf)
     idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
@@ -284,7 +254,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fMin=12.,
     # Get complex decomposition of filtered data :
     if method == 'hilbert':
         # Bandpass filter
-        data_filt = filt(sf, [fMin, fMax], data, order=4)
+        data_filt = filt(sf, [fmin, fmax], data, order=4)
         # Hilbert transform on odd-length signals is twice longer. To avoid
         # this extra time, simply set to zero padding.
         # See https://github.com/scipy/scipy/issues/6324
@@ -293,11 +263,11 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fMin=12.,
         else:
             analytic = hilbert(data_filt[:-1], len(data_filt))
     elif method == 'wavelet':
-        analytic = morlet(data, sf, np.mean([fMin, fMax]))
+        analytic = morlet(data, sf, np.mean([fmin, fmax]))
 
     amplitude = np.abs(analytic)
 
-    if hypLoaded:
+    if hyploaded:
         amplitude[idx_zero] = np.nan
 
     # Define threshold
@@ -316,8 +286,8 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fMin=12.,
                                                                sf)
 
         # Get where min_dur < spindles duration < max_dur :
-        good_dur = np.where(np.logical_and(duration_ms > tMin,
-                                           duration_ms < tMax))[0]
+        good_dur = np.where(np.logical_and(duration_ms > tmin,
+                                           duration_ms < tmax))[0]
 
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
 
@@ -337,64 +307,52 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fMin=12.,
 ###########################################################################
 
 
-def remdetect(elec, sf, hypno, rem_only, threshold, tMin=200,
-              tMax=1500, min_distance_ms=200, moving_ms=200, deriv_ms=30,
+def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
+              min_distance_ms=200, moving_ms=200, deriv_ms=30,
               amplitude_art=400):
     """Perform a rapid eye movement (REM) detection.
 
     Function to perform a semi-automatic detection of rapid eye movements
     (REM) during REM sleep.
 
-    Args:
-        elec: np.ndarray
-            EOG signal (preferably after artefact rejection using ICA)
+    Parameters
+    ----------
+    elec: array_like
+        EOG signal (preferably after artefact rejection using ICA)
+    sf: int
+        Downsampling frequency
+    hypno: array_like
+        Hypnogram vector, same length as data
+        Vector with only 0 if no hypnogram is loaded
+    rem_only: bool
+        Perfom detection only on REM sleep period
+    threshold: float
+        Number of standard deviation of the derivative signal
+        Threshold is defined as: mean + X * std(derivative)
+    tmin : int | 200
+        Minimum duration (ms) of rapid eye movement
+    tmax : int | 1500
+        Maximum duration (ms) of rapid eye movement
+    min_distance_ms : int | 200
+        Minimum distance (ms) between two saccades to consider them as two
+        distinct events.
+    moving_ms : int | 200
+        Time (ms) window of the moving average.
+    deriv_ms : int | 30
+        Time (ms) window of derivative computation
+    amplitude_art : int | 400
+        Remove extreme values from the signal
 
-        sf: int
-            Downsampling frequency
-
-       hypno: np.ndarray
-            Hypnogram vector, same length as data
-            Vector with only 0 if no hypnogram is loaded
-
-        rem_only: boolean
-            Perfom detection only on REM sleep period
-
-        threshold: float
-            Number of standard deviation of the derivative signal
-            Threshold is defined as: mean + X * std(derivative)
-
-        tMin: int, optional (def 200)
-            Minimum duration (ms) of rapid eye movement
-
-        tMax: int, optional (def 1500)
-            Maximum duration (ms) of rapid eye movement
-
-        min_distance_ms: int, optional (def 200)
-            Minimum distance (ms) between two saccades to consider them as two
-            distinct events.
-
-        moving_ms: int, optional (def 200)
-            Time (ms) window of the moving average.
-
-        deriv_ms: int, optional (def 30)
-            Time (ms) window of derivative computation
-
-        amplitude_art: int, optional (def 400 µV)
-            Remove extreme values from the signal
-
-    Return:
-        idx_sup_thr: np.ndarray
-            Array of supra-threshold indices
-
-        number: int
-            Number of detected REMs
-
-        density: float
-            Number of REMs per minute
-
-        duration_ms: float
-            Duration (ms) of each REM detected
-
+    Returns
+    -------
+    idx_sup_thr: array_like
+        Array of supra-threshold indices
+    number: int
+        Number of detected REMs
+    density: float
+        Number of REMs per minute
+    duration_ms: float
+        Duration (ms) of each REM detected
     """
     if rem_only and 4 in hypno:
         elec[(np.where(hypno < 4))] = 0
@@ -411,13 +369,13 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tMin=200,
     deriv = movingaverage(deriv, moving_ms, sf)
     # Define threshold
     if rem_only and 4 in hypno:
-        idThr = np.setdiff1d(np.arange(elec.size), idx_zero)
+        id_th = np.setdiff1d(np.arange(elec.size), idx_zero)
     else:
-        idThr = np.arange(elec.size)
+        id_th = np.arange(elec.size)
     # Remove extreme values
-    idThr = np.setdiff1d(idThr, np.where(np.abs(sm_sig) > amplitude_art)[0])
+    id_th = np.setdiff1d(id_th, np.where(np.abs(sm_sig) > amplitude_art)[0])
     # Find supra-threshold values
-    thresh = np.mean(deriv[idThr]) + threshold * np.std(deriv[idThr])
+    thresh = np.mean(deriv[id_th]) + threshold * np.std(deriv[id_th])
     idx_sup_thr = np.where(deriv > thresh)[0]
 
     if idx_sup_thr.size:
@@ -427,9 +385,9 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tMin=200,
 
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-        # Get where min_dur < REM duration < tMax
-        good_dur = np.where(np.logical_and(duration_ms > tMin,
-                                           duration_ms < tMax))[0]
+        # Get where min_dur < REM duration < tmax
+        good_dur = np.where(np.logical_and(duration_ms > tmin,
+                                           duration_ms < tmax))[0]
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
         idx_sup_thr = idx_sup_thr[good_idx]
 
@@ -446,67 +404,55 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tMin=200,
 ###########################################################################
 
 
-def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
-                   fMin=0.5, fMax=2, welch_win_s=12, moving_s=30,
-                   min_duration_ms=500):
+def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
+                   fmax=2., welch_win_s=12, moving_s=30, min_duration_ms=500.):
     """Perform a Slow Wave detection.
 
-    Args:
-        elec: np.ndarray
-            eeg signal (preferably frontal electrodes)
+    Parameters
+    ----------
+    elec : array_like
+        eeg signal (preferably frontal electrodes)
+    sf : float
+        Downsampling frequency
+    threshold : float
+        First threshold: bandwise-normalized delta power Value must be between
+        0 and 1.
+    min_amp : float | 70.
+        Secondary threshold: minimum amplitude (uV) of the raw signal.
+        Slow waves are generally defined by amplitude > 70 uV.
+    max_amp : float | 400.
+        Maximum amplitude of slow wave
+    fmin  : float | .5
+        High-pass frequency
+    fmax  : float | 2.
+        Lowpass frequency
+    welch_win_s  : int | 12
+        Time (sec) window for computation of normalized bandpower with
+        Welch's method
+    moving_s : int | 30
+        Time (sec) window of moving average to be applied on delta power
+    min_duration_ms : float | 500.
+        Minimum duration (ms) of slow waves
 
-        sf: float
-            Downsampling frequency
-
-        threshold: float
-            First threshold: bandwise-normalized delta power
-            Value must be between 0 and 1.
-
-    Kargs:
-        min_amp: float
-            Secondary threshold: minimum amplitude (µV) of the raw signal.
-            Slow waves are generally defined by amplitude > 70 µV.
-
-        max_amp: float, optional
-            Maximum amplitude of slow wave
-
-        fMin: float, optional (def 0.1)
-            High-pass frequency
-
-        fMax: float, optional (def 4.5)
-            Lowpass frequency
-
-        welch_win_s: int, optional (def 10)
-            Time (sec) window for computation of normalized bandpower with
-            Welch's method
-
-        moving_s: int, optional (30)
-            Time (sec) window of moving average to be applied on delta power
-
-        min_duration_ms: float, optional
-            Minimum duration (ms) of slow waves
-
-    Return:
-        idx_sup_thr: np.ndarray
-            Array of supra-threshold indices
-
-        number: int
-            Number of detected slow-wave
-
-        duration_ms: float
-            Duration (ms) of each slow wave period detected
-
+    Returns
+    -------
+    idx_sup_thr : array_like
+        Array of supra-threshold indices
+    number : int
+        Number of detected slow-wave
+    duration_ms : float
+        Duration (ms) of each slow wave period detected
     """
     length = max(elec.shape)
 
     # Get complex decomposition of filtered data in the main EEG freq band:
     # Using Morlet's wavelet - a bit longer
-    # freqs = np.array([fMin, fMax, 8., 12., 16.])
+    # freqs = np.array([fmin, fmax, 8., 12., 16.])
     # delta_npow, _, _, _ = morlet_power(elec, freqs, sf, norm=True)
     # delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
 
     # Using Welch's method
-    delta_nfpow = welch_power(elec, fMin, fMax, sf, welch_win_s, norm=True)
+    delta_nfpow = welch_power(elec, fmin, fmax, sf, welch_win_s, norm=True)
     delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
     delta_nfpow = movingaverage(delta_nfpow, 3 * welch_win_s * sf, sf)
 
@@ -517,8 +463,8 @@ def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
 
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
-        sw_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start,
-                                     idx_stop, sf)
+        sw_amp, _ = _events_amplitude(elec, idx_sup_thr, idx_start,
+                                      idx_stop, sf)
 
         good_amp = np.where(np.logical_and(sw_amp > min_amp,
                                            sw_amp < max_amp))[0]
@@ -541,72 +487,57 @@ def slowwavedetect(elec, sf, threshold, min_amp=70, max_amp=400,
 ###########################################################################
 
 
-def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
-             tMin=800, tMax=2500, min_distance_ms=1000,
-             welch_win_s=15, delta_thr=0.5, min_amp=10, max_amp=400):
+def mtdetect(elec, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
+             tmin=800, tmax=2500, min_distance_ms=1000, welch_win_s=15,
+             delta_thr=.5, min_amp=10, max_amp=400):
     """Perform a detection of muscle twicthes (MT).
 
     Sampling frequency must be at least 1000 Hz.
 
-    Args:
-        elec: np.ndarray
-            EMG signal
+    Parameters
+    ----------
+    elec : array_like
+        EMG signal
+    sf : float
+        Downsampling frequency
+    threshold : float
+        Number of standard deviation to use as threshold
+        Threshold is defined as: mean + X * std(hilbert envelope)
+    hypno : array_like
+        Hypnogram vector, same length as elec
+        Vector with only 0 if no hypnogram is loaded
+    rem_only : bool
+        Perfom detection only on NREM sleep period
+    fmin : float | 0.
+        Lower bandpass frequency
+    fmax : float | 50.
+        Higher bandpass frequency
+    tmin : int | 800
+        Minimum duration (ms) of MT
+    tmax : int | 2500
+        Maximum duration (ms) of MT
+    min_distance_ms : int | 1000
+        Minimum distance (in ms) between 2 MTs to consider them as
+        two distinct events
+    welch_win_s : int | 15
+        Time window (s) of Welch spectrum
+    delta_thr : float | .5
+        Threshold of delta normalized bandpower, above which detected
+        events are probably artefacts.
+    max_amp : int | 400
+        Maximum amplitude of Muscle Twitches. Above this threshold,
+        detected events are probably artefacts.
 
-        sf: float
-            Downsampling frequency
-
-        threshold: float
-            Number of standard deviation to use as threshold
-            Threshold is defined as: mean + X * std(hilbert envelope)
-
-        hypno: np.ndarray
-            Hypnogram vector, same length as elec
-            Vector with only 0 if no hypnogram is loaded
-
-        rem_only: boolean
-            Perfom detection only on NREM sleep period
-
-    Kargs:
-        fMin: float, optional (def 30)
-            Lower bandpass frequency
-
-        fMax: float, optional (def 40)
-            Higher bandpass frequency
-
-        tMin: int, optional (def 500)
-            Minimum duration (ms) of MT
-
-        tMax: int, optional (def 3000)
-            Maximum duration (ms) of MT
-
-        min_distance_ms: int, optional (def 1000)
-            Minimum distance (in ms) between 2 MTs to consider them as
-            two distinct events
-
-        welch_win_s: int, optional (def 15)
-            Time window (s) of Welch spectrum
-
-        delta_thr: float, optional (def 0.5)
-            Threshold of delta normalized bandpower, above which detected
-            events are probably artefacts.
-
-        max_amp: int, optional (def 400)
-            Maximum amplitude of Muscle Twitches. Above this threshold,
-            detected events are probably artefacts.
-
-    Return:
-        idx_sup_thr: np.ndarray
-            Array of supra-threshold indices
-
-        number: int
-            Number of detected MTs
-
-        density: float
-            Number of MTs per minutes of data
-
-        duration_ms: float
-            Duration (ms) of each MT detected
-
+    Returns
+    -------
+    idx_sup_thr : array_like
+        Array of supra-threshold indices
+    number : int
+        Number of detected MTs
+    density : float
+        Number of MTs per minutes of data
+    duration_ms : float
+        Duration (ms) of each MT detected
     """
     if rem_only and 4 in hypno:
         elec[(np.where(hypno < 4))] = 0
@@ -616,25 +547,25 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
         length = max(elec.shape)
 
     # Morlet's envelope
-    analytic = morlet(elec, sf, np.mean([fMin, fMax]))
+    analytic = morlet(elec, sf, np.mean([fmin, fmax]))
     amplitude = np.abs(analytic)
     amplitude = movingaverage(amplitude, sf, sf)
 
     # Define threshold
     if rem_only and 4 in hypno:
-        idTh = np.setdiff1d(np.arange(elec.size), idx_zero)
+        id_th = np.setdiff1d(np.arange(elec.size), idx_zero)
     else:
         # Remove period with too much delta power (N2 - N3)
         delta_nfpow = welch_power(elec, 0.5, 2, sf, welch_win_s, norm=True)
         delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
-        idTh = np.setdiff1d(np.arange(elec.size), np.where(
-                                                delta_nfpow > delta_thr)[0])
+        id_th = np.setdiff1d(np.arange(elec.size), np.where(
+            delta_nfpow > delta_thr)[0])
 
     # Remove extreme values
-    idTh = np.setdiff1d(idTh, np.where(abs(elec) > 400)[0])
+    id_th = np.setdiff1d(id_th, np.where(abs(elec) > 400)[0])
 
     # Find supra-threshold values
-    thresh = np.mean(amplitude[idTh]) + threshold * np.std(amplitude[idTh])
+    thresh = np.mean(amplitude[id_th]) + threshold * np.std(amplitude[id_th])
     idx_sup_thr = np.where(amplitude > thresh)[0]
 
     if idx_sup_thr.size:
@@ -645,16 +576,16 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fMin=0, fMax=50,
         _, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
 
         # Amplitude criteria
-        mt_amp, _ = _event_amplitude(elec, idx_sup_thr, idx_start, idx_stop,
-                                     sf)
+        mt_amp, _ = _events_amplitude(elec, idx_sup_thr, idx_start, idx_stop,
+                                      sf)
         good_amp = np.where(np.logical_and(mt_amp > min_amp,
                                            mt_amp < max_amp))[0]
         good_idx = _events_removal(idx_start, idx_stop, good_amp)
 
         # Duration criteria
         _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
-        good_dur = np.where(np.logical_and(duration_ms > tMin,
-                                           duration_ms < tMax))[0]
+        good_dur = np.where(np.logical_and(duration_ms > tmin,
+                                           duration_ms < tmax))[0]
         good_idx = _events_removal(idx_start, idx_stop, good_dur)
 
         # Keep only good events
@@ -687,51 +618,44 @@ def peakdetect(sf, y_axis, x_axis=None, lookahead=200, delta=1., get='max',
     Discovers peaks by searching for values which are surrounded by lower
     or larger values for maxima and minima respectively
 
-    Args:
-        sf: float
-            The sampling frequency.
+    Parameters
+    ----------
+    sf : float
+        The sampling frequency.
+    y_axis : array_like
+        Row vector containing the data.
+    x_axis : array_like
+        Row vector for the time axis. If omitted an index of the y_axis is
+        used.
+    lookahead : int | 200
+        Distance to look ahead from a peak candidate to determine if
+        it is the actual peak.
+        '(samples / period) / f' where '4 >= f >= 1.25' might be a good
+        value
+    delta : float | 1.
+        This specifies a minimum difference between a peak and the
+        following points, before a peak may be considered a peak. Useful
+        to hinder the function from picking up false peaks towards to end
+        of the signal. To work well delta should be set to
+        delta >= RMSnoise * 5.
+        When omitted delta function causes a 20% decrease in speed.
+        When used Correctly it can double the speed of the function
+    get : string | 'max'
+        Get either minimum values ('min'), maximum ('max') or min and max
+        ('minmax').
+    threshold : string/float | None
+        Use a threshold to ignore values. Use None for no threshold, 'auto'
+        to use the signal deviation or a float number for specific
+        threshold.
 
-        y_axis: np.ndarray
-            Row vector containing the data.
-
-        x_axis: np.ndarray
-            Row vector for the time axis. If omitted an index of the y_axis is
-            used.
-
-    Kargs:
-        lookahead: int, optional, (def: 200)
-            Distance to look ahead from a peak candidate to determine if
-            it is the actual peak.
-            '(samples / period) / f' where '4 >= f >= 1.25' might be a good
-            value
-
-        delta: float, optional, (def: 1.)
-            This specifies a minimum difference between a peak and the
-            following points, before a peak may be considered a peak. Useful
-            to hinder the function from picking up false peaks towards to end
-            of the signal. To work well delta should be set to
-            delta >= RMSnoise * 5.
-            When omitted delta function causes a 20% decrease in speed.
-            When used Correctly it can double the speed of the function
-
-        get: string, optional, (def: 'max')
-            Get either minimum values ('min'), maximum ('max') or min and max
-            ('minmax').
-
-        threshold: string/float, optional, (def: None)
-            Use a threshold to ignore values. Use None for no threshold, 'auto'
-            to use the signal deviation or a float number for specific
-            threshold.
-
-    Return:
-        index: np.ndarray
-            A row vector containing the index of maximum / minimum.
-
-        number: int
-            Number of peaks.
-
-        density: float
-            Density of peaks.
+    Returns
+    -------
+    index : array_like
+        A row vector containing the index of maximum / minimum.
+    number : int
+        Number of peaks.
+    density : float
+        Density of peaks.
     """
     # ============== CHECK DATA ==============
     if x_axis is None:

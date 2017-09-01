@@ -10,7 +10,7 @@ import sys
 import numpy as np
 from warnings import warn
 
-from .visuals import BrainMesh
+from ...visuals import BrainMesh
 
 
 class AtlasBase(object):

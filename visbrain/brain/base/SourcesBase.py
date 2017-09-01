@@ -14,9 +14,10 @@ from scipy.spatial.distance import cdist
 import vispy.scene.visuals as visu
 import vispy.visuals.transforms as vist
 
-from ...utils import color2vb, normalize, CbarArgs, tal2mni
+from ...utils import color2vb, normalize, tal2mni
+from ...visuals import CbarArgs
 
-__all__ = ['SourcesBase']
+__all__ = ('SourcesBase')
 
 
 class SourcesBase(CbarArgs):
@@ -136,13 +137,15 @@ class SourcesBase(CbarArgs):
                     self.sColor = self.sColor.T
         # Array of colors :
         elif isinstance(self.color, np.ndarray):
-            if self.nSource not in self.color.shape:
-                raise ValueError("color for sources must be a (N, 3) array "
-                                 "(for rgb) or (N, 4) for rgba.")
-            else:
+            if self.color.shape == (1, 3) or self.color.shape == (1, 4):
+                self.sColor = np.tile(self.color, (self.nSources, 1))
+            elif self.nSources in self.color.shape:
                 if (self.color.shape[1] is not 4):
                     self.color = self.color.T
                 self.sColor = self.color
+            else:
+                raise ValueError("color for sources must be a (N, 3) array "
+                                 "(for rgb) or (N, 4) for rgba.")
 
         # ======================== Check mask ========================
         # Check mask :

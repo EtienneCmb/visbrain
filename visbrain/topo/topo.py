@@ -9,7 +9,8 @@ from vispy.scene import Node
 
 from .UiInit import UiInit
 from .UiElements import UiElements
-from ..utils import TopoPlot, set_widget_size, CbarVisual
+from ..utils import set_widget_size
+from ..visuals import TopoMesh, CbarVisual
 
 sip.setdestroyonexit(False)
 
@@ -154,7 +155,7 @@ class Topo(UiInit, UiElements):
         # Check if name is avaible :
         self._check_name_for(name, 'topoplot')
         # Create the topoplot and set the data :
-        topo = TopoPlot(xyz, channels, system, unit, title, title_color,
+        topo = TopoMesh(xyz, channels, system, unit, title, title_color,
                         title_size, line_color, line_width, chan_size,
                         chan_offset, chan_mark_color, chan_mark_symbol,
                         chan_txt_color, bgcolor, cbar, cb_txt_size,

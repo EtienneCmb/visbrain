@@ -14,7 +14,7 @@ from collections import Counter
 from vispy import gloo, visuals
 from vispy.scene.visuals import create_visual_node
 
-from ....utils import array2colormap, normalize, color2vb
+from ..utils import array2colormap, normalize, color2vb
 
 
 __all__ = ['ConnectMesh']

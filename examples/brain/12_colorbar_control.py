@@ -33,6 +33,9 @@ parameters to control each colorbar :
     * bgcolor : Background color of the colorbar canvas.
     * ndigits : Number of digits for the text.
 
+Download source's coordinates (xyz_sample.npz) :
+https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE
+
 .. image:: ../../picture/picbrain/ex_colorbar_control.png
 """
 from __future__ import print_function

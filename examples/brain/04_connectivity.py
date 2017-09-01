@@ -5,6 +5,9 @@ Connect deep sources
 Display and customize connectivity. To this end, we define some deep sources
 and connect them.
 
+Download source's coordinates (xyz_sample.npz) :
+https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE
+
 .. image:: ../../picture/picbrain/ex_connectivity.png
 """
 from __future__ import print_function

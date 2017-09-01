@@ -51,9 +51,9 @@ class uiPanels(object):
         # Save all current amplitudes :
         self._PanAllAmpMax.setValue(100.)
         self._ylims = np.zeros((len(self), 2), dtype=np.float32)
+        self._fcn_updateAmpInfo()
         self._PanAllAmpMin.valueChanged.connect(self._fcn_allAmp)
         self._PanAllAmpMax.valueChanged.connect(self._fcn_allAmp)
-        self._fcn_updateAmpInfo()
 
         # =====================================================================
         # SPECTROGRAM

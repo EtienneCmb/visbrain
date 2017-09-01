@@ -1,4 +1,4 @@
-
+"""Manage colorbar of multiple objects."""
 from .CbarBase import CbarBase
 from ...io import save_config_json, load_config_json
 
@@ -33,9 +33,10 @@ class CbarObjetcs(object):
     def select(self, name):
         """Select an object.
 
-        Args:
-            name: string
-                Object name.
+        Parameters
+        ----------
+        name : string
+            Object name.
         """
         if name in self._objs.keys():
             self._selected = name
@@ -45,17 +46,15 @@ class CbarObjetcs(object):
     def add_object(self, name, obj, overwrite=True):
         """Add a colorbar object.
 
-        Args:
-            name: string
-                Name of the object.
-
-            obj: CbarBase
-                The CbarBase object to add.
-
-        Kargs:
-            overwrite: bool, optional, (def: True)
-                If a colorbar object already has the same name, define if it
-                should be overwritten.
+        Parameters
+        ----------
+        name : string
+            Name of the object.
+        obj : CbarBase
+            The CbarBase object to add.
+        overwrite : bool | True
+            If a colorbar object already has the same name, define if it
+            should be overwritten.
         """
         # Test if name is a string :
         if not isinstance(name, str):
@@ -88,9 +87,10 @@ class CbarObjetcs(object):
     def save(self, filename):
         """Save all colorbar configurations.
 
-        Args:
-            filename: string
-                Name of the file to be saved.
+        Parameters
+        ----------
+        filename : string
+            Name of the file to be saved.
         """
         # Build the configuration file :
         config = {k: i.to_dict() for k, i in self._objs.items()}
@@ -100,16 +100,14 @@ class CbarObjetcs(object):
     def load(self, filename, clean=True, select=None):
         """Load a colorbar configuration file.
 
-        Args:
-            filename: string
-                Name of the file to load.
-
-        Kargs:
-            clean: bool, optional, (def: True)
-                Specify if all objects have to be clean before.
-
-            select: string, optional, (def: None)
-                Name of the object to select on load.
+        Parameters
+        ----------
+        filename: string
+            Name of the file to load.
+        clean : bool | True
+            Specify if all objects have to be clean before.
+        select : string | None
+            Name of the object to select on load.
         """
         # Load the configuration :
         config = load_config_json(filename)

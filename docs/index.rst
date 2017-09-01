@@ -19,7 +19,7 @@
 Visbrain documentation
 ######################
 
-Visbrain is a python package dedicated to multi-purpose neuroscience visualization tools. Here is the list of the current modules :
+Visbrain is a python 3 package dedicated to multi-purpose neuroscience visualization tools. Here is the list of the current modules :
 
 .. figure::  /picture/visbrain_readme.png
    :align:   center
@@ -52,7 +52,7 @@ We also strongly recommend to install *pyopengl* :
 
 .. code-block:: shell
 
-    pip install pyopengl
+    pip install PyOpenGL PyOpenGL_accelerate
 
 PyQt5 version
 =============

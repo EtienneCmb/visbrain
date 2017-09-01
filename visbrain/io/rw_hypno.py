@@ -14,40 +14,61 @@ __all__ = ['write_hypno_txt', 'write_hypno_hyp', 'read_hypno',
            'load_hypno_hyp', 'load_hypno_txt']
 
 
-def write_hypno_txt(filename, hypno, sf, sfori, N, window=1.):
-    """Save hypnogram in txt file format (*.txt).
+def _oversample_hypnogram(hypno, n):
+    """Oversample hypnogram.
+
+    Parameters
+    ----------
+    hypno : array_like
+        Hypnogram data of shape (N,) with N < n.
+    n : int
+        The destination length.
+
+    Returns
+    -------
+    hypno : array_like
+        The hypnogram of shape (n,)
+    """
+    # Get the repetition number :
+    rep_nb = int(np.round(n / len(hypno)))
+    # Repeat hypnogram :
+    hypno = np.repeat(hypno, rep_nb)
+    npts = len(hypno)
+    # Complete (if needed) :
+    if len(hypno) != n:
+        hypno = np.append(hypno, hypno[-1] * np.ones((npts - n,)))
+    return hypno.astype(int)
+
+
+def write_hypno_txt(filename, hypno, sf, sfori, n, window=1.):
+    """Save hypnogram in txt file format (txt).
 
     Header is in file filename_description.txt
 
-    Args:
-        filename: str
-            Filename (with full path) of the file to save
-
-        hypno: np.ndarray
-            Hypnogram array, same length as data
-
-        sf: float
-            Sampling frequency of the data (after downsampling)
-
-        sfori: int
-            Original sampling rate of the raw data
-
-        N: int
-            Original number of points in the raw data
-
-    Kargs:
-        window: float, optional, (def 1)
-            Time window (second) of each point in the hypno
-            Default is one value per second
-            (e.g. window = 30 = 1 value per 30 second)
+    Parameters
+    ----------
+    filename : str
+        Filename (with full path) of the file to save
+    hypno : array_like
+        Hypnogram array, same length as data
+    sf : float
+        Sampling frequency of the data (after downsampling)
+    sfori : int
+        Original sampling rate of the raw data
+    n : int
+        Original number of points in the raw data
+    window : float | 1
+        Time window (second) of each point in the hypno
+        Default is one value per second
+        (e.g. window = 30 = 1 value per 30 second)
     """
     base = os.path.basename(filename)
     dirname = os.path.dirname(filename)
     descript = os.path.join(dirname, os.path.splitext(
-                                              base)[0] + '_description.txt')
+        base)[0] + '_description.txt')
 
     # Save hypno
-    step = int(hypno.shape / np.round(N / sfori))
+    step = int(hypno.shape / np.round(n / sfori))
     np.savetxt(filename, hypno[::step].astype(int), fmt='%s')
 
     # Save header file
@@ -56,34 +77,31 @@ def write_hypno_txt(filename, hypno, sf, sfori, N, window=1.):
     np.savetxt(descript, hdr, fmt='%s')
 
 
-def write_hypno_hyp(filename, hypno, sf, sfori, N):
-    """Save hypnogram in Elan file format (*.hyp).
+def write_hypno_hyp(filename, hypno, sf, sfori, n):
+    """Save hypnogram in Elan file format (hyp).
 
-    Args:
-        filename: str
-            Filename (with full path) of the file to save
-
-        hypno: np.ndarray
-            Hypnogram array, same length as data
-
-        sf: int
-            Sampling frequency of the data (after downsampling)
-
-        sfori: int
-            Original sampling rate of the raw data
-
-        N: int
-            Original number of points in the raw data
+    Parameters
+    ----------
+    filename : str
+        Filename (with full path) of the file to save
+    hypno : array_like
+        Hypnogram array, same length as data
+    sf : int
+        Sampling frequency of the data (after downsampling)
+    sfori : int
+        Original sampling rate of the raw data
+    n : int
+        Original number of points in the raw data
     """
     # Check data format
     sf = int(sf)
     hypno = hypno.astype(int)
     hypno[hypno == 4] = 5
-    step = int(hypno.shape / np.round(N / sfori))
+    step = int(hypno.shape / np.round(n / sfori))
 
     hdr = np.array([['time_base 1.000000'],
-                    ['sampling_period ' + str(np.round(1/sfori, 8))],
-                    ['epoch_nb ' + str(int(N / sfori))],
+                    ['sampling_period ' + str(np.round(1 / sfori, 8))],
+                    ['epoch_nb ' + str(int(n / sfori))],
                     ['epoch_list']]).flatten()
 
     # Save
@@ -104,16 +122,17 @@ def read_hypno(path, npts):
     REM:    4
     Art:    -1  (optional)
 
-    Args:
-        path: string
-            Filename (with full path) to hypnogram file.
+    Parameters
+    ----------
+    path : string
+        Filename (with full path) to hypnogram file.
+    npts : int
+        Data length.
 
-        npts: int
-            Data length.
-
-    Return:
-        hypno: np.ndarray
-            The hypnogram vector with same length as downsampled data.
+    Returns
+    -------
+    hypno : array_like
+        The hypnogram vector with same length as downsampled data.
     """
     # Test if file exist :
     assert os.path.isfile(path)
@@ -135,13 +154,13 @@ def read_hypno(path, npts):
             # Complete hypnogram if needed :
             n = len(hypno)
             if n < npts:
-                hypno = np.append(hypno, hypno[-1]*np.ones((npts-n,)))
+                hypno = np.append(hypno, hypno[-1] * np.ones((npts - n,)))
             elif n > npts:
                 raise ValueError("The length of the hypnogram \
                                  vector must be" + str(npts) +
                                  " (Currently : " + str(n) + ".")
 
-            return hypno
+            return hypno.astype(np.float32)
 
     except:
         warn("\nAn error ocurred while trying to load the hypnogram. An empty"
@@ -152,17 +171,17 @@ def read_hypno(path, npts):
 def load_hypno_hyp(path, npts):
     """Read Elan hypnogram (hyp).
 
-    Args:
-        path: str
-            Filename(with full path) to Elan .hyp file
+    Parameters
+    ----------
+    path : str
+        Filename(with full path) to Elan .hyp file
+    npts : int
+        Data length.
 
-        npts: int
-            Data length.
-
-    Return:
-        hypno: np.ndarray
-            The hypnogram vector with same length as downsampled data.
-
+    Returns
+    -------
+    hypno : array_like
+        The hypnogram vector with same length as downsampled data.
     """
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
                         dtype=None, skip_header=0)
@@ -181,7 +200,7 @@ def load_hypno_hyp(path, npts):
     hypno[hypno == 5] = 4
 
     # Get the repetition number :
-    rep = int(np.floor(npts/len(hypno)))
+    rep = int(np.floor(npts / len(hypno)))
 
     # Resample to get same number of points as in eeg file
     hypno = np.repeat(hypno, rep)
@@ -192,17 +211,17 @@ def load_hypno_hyp(path, npts):
 def load_hypno_txt(path, npts):
     """Read text files (.txt / .csv) hypnogram.
 
-    Args:
-        path: str
-            Filename(with full path) to hypnogram(.txt)
+    Parameters
+    ----------
+    path : str
+        Filename(with full path) to hypnogram(.txt)
+    npts : int
+        Data length.
 
-        npts: int
-            Data length.
-
-    Return:
-        hypno: np.ndarray
-            The hypnogram vector with same length as downsampled data.
-
+    Returns
+    -------
+    hypno : array_like
+        The hypnogram vector with same length as downsampled data.
     """
     assert os.path.isfile(path)
 
@@ -230,7 +249,7 @@ def load_hypno_txt(path, npts):
     hypno = swap_hyp_values(hypno, desc)
 
     # Get the repetition number :
-    rep = int(np.floor(npts/len(hypno)))
+    rep = int(np.floor(npts / len(hypno)))
 
     # Resample to get same number of points as in eeg file
     hypno = np.repeat(hypno, rep)
@@ -244,25 +263,26 @@ def swap_hyp_values(hypno, desc):
     Sleep stages in the hypnogram should be scored as follow
     see Iber et al. 2007
 
-    Args:
-        hypno: np.ndarray
-            The hypnogram vector
+    e.g from the DREAM bank EDF database
+    Stage   Orig. val    New val
+    W       5           0
+    N1      3           1
+    N2      2           2
+    N3      1           3
+    REM     0           4
 
-        description: str
-            Path to a .txt file containing labels and values of each sleep
-            stage separated by a space
+    Parameters
+    ----------
+    hypno : array_like
+        The hypnogram vector
+    description : str
+        Path to a .txt file containing labels and values of each sleep
+        stage separated by a space
 
-    Return:
-    hypno_s: np.ndarray
+    Returns
+    -------
+    hypno_s : array_like
         Hypnogram with swapped values
-
-        e.g from the DREAM bank EDF database
-        Stage   Orig. val    New val
-        W       5           0
-        N1      3           1
-        N2      2           2
-        N3      1           3
-        REM     0           4
     """
     # Swap values
     hypno_s = -1 * np.ones(shape=(hypno.shape), dtype=int)

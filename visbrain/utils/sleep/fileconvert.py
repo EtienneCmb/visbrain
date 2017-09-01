@@ -16,36 +16,33 @@ __all__ = ['load_sleepdataset']
 def load_sleepdataset(path, downsample=None):
     """Load a sleep dataset (elan, edf, brainvision).
 
-    Args:
-        path: string
-            Filename (with full path) to sleep dataset.
+    Parameters
+    ----------
+    path : string
+        Filename (with full path) to sleep dataset.
+    downsample : float (def 100.)
+        Downsampling frequency
 
-    Kargs:
-        downsample: float (def 100.)
-            Downsampling frequency
+    Returns
+    -------
+    sf : int
+        The sampling frequency.
+    data : array_like
+        The data organised as well (n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    N : int
+        Number of samples in the original data
+    start_time: array_like
+        Starting time of the recording (hh:mm:ss)
 
-    Return:
-        sf: int
-            The sampling frequency.
-
-        data: np.ndarray
-            The data organised as well (n_channels, n_points)
-
-        chan: list
-            The list of channel's names.
-
-        N: int
-            Number of samples in the original data
-
-        start_time: time(hh:mm:ss)
-            Starting time of the recording
-
-        Example:
-            >> > import os
-            >> >  # Define path where the file is located
-            >> > pathfile = 'mypath/'
-            >> > path = os.path.join(pathfile, 'myfile.*')
-            >> > sf, data, chan, N, start_time = load_sleepdataset(path, 100.)
+    Example
+    -------
+    >>> import os
+    >>>  # Define path where the file is located
+    >>> pathfile = 'mypath/'
+    >>> path = os.path.join(pathfile, 'myfile.*')
+    >>> sf, data, chan, N, start_time = load_sleepdataset(path, 100.)
     """
     # Test if file exist :
     assert os.path.isfile(path)
@@ -88,29 +85,25 @@ def elan2array(path, downsample=None):
 
     Elan format specs: http: // elan.lyon.inserm.fr/
 
-    Args:
-        path: str
-            Filename(with full path) to Elan .eeg file
+    Parameters
+    ----------
+    path : str
+        Filename(with full path) to Elan .eeg file
+    downsample : float | None
+        The downsampling frequency.
 
-    Kargs
-        downsample: float, optional, (def: None)
-            The downsampling frequency.
-
-    Return:
-        sf: int
-            The sampling frequency.
-
-        data: np.ndarray
-            The data organised as well(n_channels, n_points)
-
-        chan: list
-            The list of channel's names.
-
-        N: int
-            Number of samples in the original data
-
-        start_time: time(hh:mm:ss)
-            Starting time of the recording
+    Returns
+    -------
+    sf : int
+        The sampling frequency.
+    data : array_like
+        The data organised as well(n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    N : int
+        Number of samples in the original data
+    start_time : array_like
+        Starting time of the recording (hh:mm:ss)
     """
     header = path + '.ent'
 
@@ -205,29 +198,25 @@ def edf2array(path, downsample=None):
     Use phypno class for reading EDF files:
         http: // phypno.readthedocs.io / api / phypno.ioeeg.edf.html
 
-    Args:
+    Parameters
+    ----------
         path: str
             Filename(with full path) to EDF file
-
-    Kargs:
-        downsample: float, optional, (def: None)
+        downsample : float | None
             The downsampling frequency.
 
-    Return:
-        sf: int
-            The sampling frequency.
-
-        data: np.ndarray
-            The data organised as well(n_channels, n_points)
-
-        chan: list
-            The list of channel's names.
-
-        N: int
-            Number of points in the original data
-
-        start_time: time(hh:mm:ss)
-            Starting time of the recording
+    Returns
+    -------
+    sf : int
+        The sampling frequency.
+    data : array_like
+        The data organised as well(n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    N : int
+        Number of points in the original data
+    start_time: array_like
+        Starting time of the recording (hh:mm:ss)
     """
     assert os.path.isfile(path)
 
@@ -275,36 +264,33 @@ def brainvision2array(path, downsample=None):
         - Orientation: Multiplexed
         - Format: int16
 
-    Args:
-        path: str
-            Filename(with full path) to .eeg file
+    Parameters
+    ----------
+    path : str
+        Filename(with full path) to .eeg file
+    downsample : float | None
+        The downsampling frequency.
 
-    Kargs:
-        downsample: float, optional, (def: None)
-            The downsampling frequency.
+    Returns
+    -------
+    sf : float
+        The sampling frequency.
+    data : array_like
+        The data organised as well(n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    N : int
+        Number of points in the original data
+    start_time : array_like
+        Starting time of the recording (hh:mm:ss)
 
-    Return:
-        sf: float
-            The sampling frequency.
-
-        data: np.ndarray
-            The data organised as well(n_channels, n_points)
-
-        chan: list
-            The list of channel's names.
-
-        N: int
-            Number of points in the original data
-
-        start_time: time(hh:mm:ss)
-            Starting time of the recording
-
-    Example:
-        >> > import os
-        >> >  # Define path where the file is located
-        >> > pathfile = 'mypath/'
-        >> > path = os.path.join(pathfile, 'myfile.eeg')
-        >> > sf, ds, data, chan, N, start_time = brainvision2array(path)
+    Example
+    -------
+    >>> import os
+    >>>  # Define path where the file is located
+    >>> pathfile = 'mypath/'
+    >>> path = os.path.join(pathfile, 'myfile.eeg')
+    >>> sf, ds, data, chan, N, start_time = brainvision2array(path)
     """
     import re
 
@@ -362,11 +348,11 @@ def brainvision2array(path, downsample=None):
         vmrk = np.char.decode(vmrk)
         for item in vmrk:
             if 'New Segment' in item:
-                 st = re.split('\W+', item)[-1]
+                st = re.split('\W+', item)[-1]
 
         start_date = datetime.date(int(st[0:4]), int(st[4:6]), int(st[6:8]))
-        start_time = datetime.time(int(st[8:10]), int(st[10:12]), \
-                                                                int(st[12:14]))
+        start_time = datetime.time(int(st[8:10]), int(st[10:12]),
+                                   int(st[12:14]))
     else:
         start_date = datetime.date(1900, 1, 1)
         start_time = datetime.time(0, 0, 0)
@@ -400,32 +386,27 @@ def micromed2array(path, downsample=None):
     Poor man's version of micromedio.py from Neo package
     (https://pythonhosted.org/neo/)
 
-    Args:
-        path: str
-            Filename(with full path) to .trc file
+    Parameters
+    ----------
+    path : str
+        Filename(with full path) to .trc file
+    downsample : float | None
+        The downsampling frequency.
 
-    Kargs:
-        downsample: float, optional, (def: None)
-            The downsampling frequency.
-
-    Return:
-        sf: float
-            The sampling frequency.
-
-        downsample: float
-            The downsampling frequency
-
-        data: np.ndarray
-            The data organised as well(n_channels, n_points)
-
-        chan: list
-            The list of channel's names.
-
-        N: int
-            Number of samples in the original signal
-
-        start_time: time(hh:mm:ss)
-            Starting time of the recording
+    Returns
+    -------
+    sf : float
+        The sampling frequency.
+    downsample : float
+        The downsampling frequency
+    data : array_like
+        The data organised as well(n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    N : int
+        Number of samples in the original signal
+    start_time: array_like
+        Starting time of the recording (hh:mm:ss)
     """
     import struct
 
@@ -475,12 +456,12 @@ def micromed2array(path, downsample=None):
             chan = np.append(chan, f.read(6).decode('utf-8').strip())
             ground = f.read(6).decode('utf-8').strip()
             logical_min, logical_max, logic_ground_chan, physical_min, \
-                                physical_max = read_f(f, 'iiiii')
+                physical_max = read_f(f, 'iiiii')
 
             logical_ground = np.append(logical_ground, logic_ground_chan)
 
-            gain = np.append(gain, float(physical_max - physical_min) / \
-                                        float(logical_max-logical_min+1))
+            gain = np.append(gain, float(physical_max - physical_min) /
+                             float(logical_max-logical_min+1))
 
     # Multiply by gain
     m_raw = m_raw - logical_ground[:, np.newaxis]

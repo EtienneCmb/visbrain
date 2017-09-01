@@ -1,47 +1,14 @@
 language: python
+dist: trusty
 python:
   - "3.6"
-before_install:
-  # PyQt installation : https://github.com/harvimt/quamash/blob/master/.travis.yml
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  # Cached Downloads
-  - sudo mkdir -p /downloads
-  - sudo chmod a+rw /downloads
-  - if [ ! -f /downloads/sip.tar.gz ];   then curl -L -o /downloads/sip.tar.gz http://sourceforge.net/projects/pyqt/files/sip/sip-4.16.5/sip-4.16.5.tar.gz; fi
-  - if [ ! -f /downloads/pyqt5.tar.gz ]; then curl -L -o /downloads/pyqt5.tar.gz http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.4/PyQt-gpl-5.4.tar.gz; fi
-  - echo '6d01ea966a53e4c7ae5c5e48c40e49e5  /downloads/sip.tar.gz' | md5sum -c -
-  - echo '7f2eb79eaf3d7e5e7df5a4e9c8c9340e  /downloads/pyqt5.tar.gz' | md5sum -c -
-  # Builds
-  - sudo mkdir -p /builds
-  - sudo chmod a+rw /builds
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
 install:
-  # Qt5
-  - sudo add-apt-repository -y ppa:beineri/opt-qt542
-  - sudo apt-get update
-  - sudo apt-get install -y qt54base
-  # Builds
-  - pushd /builds
-  # SIP
-  - tar xzf /downloads/sip.tar.gz --keep-newer-files
-  - pushd sip-4.16.5
-  - python configure.py
-  - make
-  - sudo make install
-  - popd
-  # Builds Complete
-  - popd
-  - cd ../
-  - mkdir tmp/
-  - cd /tmp
-  - wget http://launchpadlibrarian.net/137699828/libc6_2.17-0ubuntu5_amd64.deb
-  - wget http://launchpadlibrarian.net/137699829/libc6-dev_2.17-0ubuntu5_amd64.deb
-  - mkdir libc6_2.17
-  - cd libc6_2.17
-  - ar p ../libc6_2.17-0ubuntu5_amd64.deb data.tar.gz | tar zx
-  - ar p ../libc6-dev_2.17-0ubuntu5_amd64.deb data.tar.gz | tar zx
-  - cd -
-  # - sudo apt-get update
+  - pushd $PWD
+  # ------------------- PYTHON ENVIRONNEMENT -------------------
   # Deactivate travis environnement :
   - deactivate
   # We do this conditionally because it saves us some downloading if the
@@ -62,29 +29,20 @@ install:
   # Replace dep1 dep2 ... with your dependencies
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
   - source activate testenv
-  # - pip install pyqt5
+  - pip install mne
   - pip install setuptools
   - pip install nose
+  - pip install PyOpenGL PyOpenGL_accelerate
   - pip install codecov
   - pip install pytest pytest-cov
-  # - pwd
-  # - cd ../
-  - pwd
+  # ------------------- VISPY -------------------
+  - cd ../
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
   - cd visbrain/
-  - pip install .
-  - LD_LIBRARY_PATH=/tmp/libc6_2.17/lib/x86_64-linux-gnu/ /tmp/libc6_2.17/lib/x86_64-linux-gnu/ld-2.17.so bin/python
-  # - pip install -r requirements.txt
-
-# script:
-#   - py.test -v --cov=./
-
-# # after_success:
-# #   - ./tools/travis-upload-wheel.sh
+  # ------------------- VISBRAIN -------------------
+  - pip install -e .
 script: bash build_install.sh
 cache:
-  directories:
-    - /downloads
   apt: true
 notifications:
     email: false

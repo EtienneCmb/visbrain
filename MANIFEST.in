@@ -1,7 +1,15 @@
+# Add README, LICENSE and requirements :
 include README.rst
 include LICENSE
 include requirements.txt
+
+# Add brain templates and eeg reference file :
 recursive-include visbrain/brain/base/templates *.npz
-recursive-include visbrain/utils/topo *.npz
-recursive-include visbrain/brain/ico *.svg
-recursive-include visbrain/sleep/ico *.svg
+include visbrain/visuals/eegref.npz
+
+# Add visbrain icons :
+include visbrain/brain/brain_icon.svg
+include visbrain/sleep/sleep_icon.svg
+include visbrain/topo/topo_icon.svg
+include visbrain/colorbar/colorbar_icon.svg
+include visbrain/figure/figure_icon.svg

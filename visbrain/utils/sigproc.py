@@ -11,20 +11,20 @@ __all__ = ('normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh',
 def normalize(x, tomin=0., tomax=1.):
     """Normalize the array x between tomin and tomax.
 
-    Args:
-        x: ndarray
-            The array to normalize
+    Parameters
+    ----------
+    x : array_like
+        The array to normalize
+    tomin : int/float | 0.
+        Minimum of returned array
 
-    Kargs:
-        tomin: int/float (def: 0.)
-            Minimum of returned array
+    tomax : int/float | 1.
+        Maximum of returned array
 
-        tomax: int/float (def: 1.)
-            Maximum of returned array
-
-    Return:
-        xn: ndarray
-            The normalized array
+    Returns
+    -------
+    xn : array_like
+        The normalized array
     """
     if x.size:
         x = np.float32(x)
@@ -53,19 +53,17 @@ def movingaverage(x, window, sf):
         LowpassFreq = (1 / window) * 1000
         e.g. if window = 100, LowpassFreq = 10 Hz
 
-    Args:
-        x: np.ndarray
-            Signal
-
-        window: int
-            Time (ms) window to compute moving average
-
-        sf: int
-            Downsampling frequency
-
+    Parameters
+    ----------
+    x : array_like
+        Signal
+    window : int
+        Time (ms) window to compute moving average
+    sf : int
+        Downsampling frequency
     """
-    window = int(window / (1000 / sf))
-    weights = np.repeat(1.0, window) / window
+    window = int(window / (1000. / sf))
+    weights = np.repeat(1., window) / window
     sma = np.convolve(x, weights, 'same')
     return sma
 
@@ -73,18 +71,16 @@ def movingaverage(x, window, sf):
 def derivative(x, window, sf):
     """Compute first derivative of signal.
 
-       Equivalent to np.gradient function
+    Equivalent to np.gradient function
 
-    Args:
-        x: np.ndarray
-            Signal
-
-        window: int
-            Time (ms) window to compute first derivative
-
-        sf: int
-            Downsampling frequency
-
+    Parameters
+    ----------
+    x : array_like
+        Signal
+    window : int
+        Time (ms) window to compute first derivative
+    sf : int
+        Downsampling frequency
     """
     length = x.size
     step = int(window / (1000 / sf))
@@ -101,17 +97,19 @@ def derivative(x, window, sf):
 
 
 def tkeo(x):
-    """Calculates the TKEO of a given recording by using 2 samples.
+    """Calculate the TKEO of a given recording by using 2 samples.
 
     github.com/lvanderlinden/OnsetDetective/blob/master/OnsetDetective/tkeo.py
 
-    Args:
-        x: np.ndarray
-            Row vector of data.
+    Parameters
+    ----------
+    x : array_like
+        Row vector of data.
 
-    Returns:
-        aTkeo: np.ndarray
-            Row vector containing the tkeo per sample.
+    Returns
+    -------
+    a_tkeo : array_like
+        Row vector containing the tkeo per sample.
     """
     # Create two temporary arrays of equal length, shifted 1 sample to the
     # right and left and squared:
@@ -119,8 +117,8 @@ def tkeo(x):
     j = x[2:] * x[:-2]
 
     # Calculate the difference between the two temporary arrays:
-    aTkeo = i - j
-    return aTkeo
+    a_tkeo = i - j
+    return a_tkeo
 
 
 def soft_thresh(x, thresh):
@@ -129,16 +127,17 @@ def soft_thresh(x, thresh):
     Written by Simon Lucey 2012 to solve the problem :
     arg min_{x} ||x - b||_{2}^{2} + lambda*||x||_{1}
 
-    Args:
-        x: np.ndarray
-            Data
+    Parameters
+    ----------
+    x : array_like
+        Data
+    thresh : float
+        Weighting on the l1 penalty
 
-        thresh: float
-            Weighting on the l1 penalty
-
-    Returns:
-        x_thresh: np.ndarray
-            Solution to the problem (vector with same size as x vector)
+    Returns
+    -------
+    x_thresh : array_like
+        Solution to the problem (vector with same size as x vector)
     """
     th = thresh / 2
     k = np.where(x > th)[0]
@@ -157,13 +156,15 @@ def soft_thresh(x, thresh):
 def zerocrossing(data):
     """Find zero-crossings index of a signal.
 
-    Args:
-        x: np.ndarray
-            Data
+    Parameters
+    ----------
+    x: array_like
+        Data
 
-    Returns:
-        index: np.ndarray
-            Row vector containing zero-crossing index.
+    Returns
+    -------
+    index : array_like
+        Row vector containing zero-crossing index.
     """
     pos = data > 0
     npos = ~pos
@@ -173,24 +174,23 @@ def zerocrossing(data):
 def power_of_ten(x, e=3):
     """Power of ten format.
 
-    Args:
-        x: float
-            The floating point to transform.
+    Parameters
+    ----------
+    x : float
+        The floating point to transform.
+    e : int | 2
+        If x is over 10 ** -e and bellow 10 ** e, this function doesn't
+        change the format.
 
-    Kargs:
-        e: int, optional, (def: 2)
-            If x is over 10 ** -e and bellow 10 ** e, this function doesn't
-            change the format.
-
-    Returns:
-        xtronc: float
-            The troncate version of x.
-
-        power: int
-            The power of ten to retrieve x.
+    Returns
+    -------
+    xtronc: float
+        The troncate version of x.
+    power: int
+        The power of ten to retrieve x.
     """
-    x = np.abs(x)
     sign = np.sign(x)
+    x = np.abs(x)
     stx = str(x)
     if 0 < x <= 10 ** -e:  # x is a power of e- :
         if stx.find('e-') + 1:  # Format : 'xe-y'
