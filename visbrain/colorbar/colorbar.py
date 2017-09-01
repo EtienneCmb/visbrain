@@ -56,6 +56,11 @@ class Colorbar(uiInit):
 
     def __init__(self, config=None, **kwargs):
         """Init."""
+        # Manage isvmin / isvmax :
+        if 'vmin' in list(kwargs.keys()) and (kwargs['vmin'] is not None):
+            kwargs['isvmin'] = True
+        if 'vmax' in list(kwargs.keys()) and (kwargs['vmax'] is not None):
+            kwargs['isvmax'] = True
         # Create the app and initialize all graphical elements :
         self._app = QtWidgets.QApplication(sys.argv)
         # Initialise GUI :
