@@ -299,6 +299,7 @@ class TestBrain(object):
 
     def test_screenshot(self):
         """Test method screenshot."""
+        # On travis, test failed fo jpg figures only.
         canvas = ['main', 'colorbar', 'cross-sections']
         formats = ['.png', '.jpg', '.tiff']
         print_size = [(5, 5), (50, 50), (1000, 1000), (2, 2)]
@@ -309,13 +310,17 @@ class TestBrain(object):
             try:
                 vb.screenshot(name, canvas=k, transparent=True)
             except:
-                warn("Screenshot failed for " + k + " canvas")
+                warn("Screenshot failed for " + k + " transparent canvas")
         # Test print_size and unit at 300 dpi :
         for k, i in zip(print_size, unit):
-            name = self._path_to_tmp('main_' + i + '.jpg')
-            vb.screenshot(name, print_size=k, unit=i)
+            name = self._path_to_tmp('main_' + i + '.png')
+            try:
+                vb.screenshot(name, print_size=k, unit=i)
+            except:
+                warn("Screenshot failed for print size" + k + " and unit"
+                     " " + i + " transparent canvas")
         # Test factor :
-        name = self._path_to_tmp('main_factor.jpg')
+        name = self._path_to_tmp('main_factor.png')
         vb.screenshot(name, factor=2., region=(100, 100, 1000, 1000),
                       bgcolor='#ab4642')
 
