@@ -29,7 +29,7 @@ install:
   # Replace dep1 dep2 ... with your dependencies
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
   - source activate testenv
-  # - pip install pyqt5
+  - pip install mne
   - pip install setuptools
   - pip install nose
   - pip install codecov
