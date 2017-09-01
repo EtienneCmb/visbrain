@@ -306,7 +306,10 @@ class TestBrain(object):
         # Standard screenshot :
         for k, i in zip(canvas, formats):
             name = self._path_to_tmp(k + '_transparent_' + i)
-            vb.screenshot(name, canvas=k, transparent=k == 'main')
+            try:
+                vb.screenshot(name, canvas=k, transparent=True)
+            except:
+                warn("Screenshot failed for " + k + " canvas")
         # Test print_size and unit at 300 dpi :
         for k, i in zip(print_size, unit):
             name = self._path_to_tmp('main_' + i + '.jpg')

@@ -231,7 +231,7 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
             widget.size = (new_width, new_height)
 
     # Don't use transparency for jpg files :
-    transparent = transparent if splitext(filename)[1] != '.jpg' else False
+    # transparent = transparent if splitext(filename)[1] != '.jpg' else False
     # Background color and transparency :
     if bgcolor is not None:
         canvas.bgcolor = color2vb(bgcolor, alpha=1.)
