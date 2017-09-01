@@ -95,10 +95,11 @@ class uiMenu(HelpMenu):
     ###########################################################################
 
     # ______________________ HYPNOGRAM ______________________
-    def saveHypData(self):
+    def saveHypData(self, *args, filename=None):
         """Save the hypnogram data either in a hyp or txt file."""
-        filename = dialogSave(self, 'Save File', 'hypno', "Text file (*.txt);;"
-                              "Elan file (*.hyp);;All files (*.*)")
+        if filename is None:
+            filename = dialogSave(self, 'Save File', 'hypno', "Text file ""(*"
+                                  ".txt);;Elan file (*.hyp);;All files (*.*)")
         if filename:
             file, ext = os.path.splitext(filename)
 
@@ -112,29 +113,32 @@ class uiMenu(HelpMenu):
             else:
                 raise ValueError("Not a valid extension")
 
-    def saveHypFig(self):
+    def saveHypFig(self, *args, filename=None, **kwargs):
         """Save a 600 dpi .png figure of the hypnogram."""
-        filename = dialogSave(self, 'Save Hypnogram figure', 'hypno',
-                              "PNG (*.png);;All files (*.*)")
+        if filename is None:
+            filename = dialogSave(self, 'Save Hypnogram figure', 'hypno',
+                                  "PNG (*.png);;All files (*.*)")
         if filename:
-            write_fig_hyp(filename, self._hypno, self._sf, self._toffset)
+            write_fig_hyp(filename, self._hypno, self._sf, self._toffset,
+                          **kwargs)
 
     # ______________________ STATS INFO TABLE ______________________
-    def saveInfoTable(self):
+    def saveInfoTable(self, *args, filename=None):
         """Export stat info."""
         # Get file name :
-        path = dialogSave(self, 'Save file', 'statsinfo',
-                          "CSV file (*.csv);;Text file (*.txt);;"
-                          "All files (*.*)")
-        if path:
-            file, ext = os.path.splitext(path)
+        if filename is None:
+            filename = dialogSave(self, 'Save file', 'statsinfo',
+                                  "CSV file (*.csv);;Text file (*.txt);;"
+                                  "All files (*.*)")
+        if filename:
+            file, ext = os.path.splitext(filename)
             if ext.find('csv') + 1:
                 write_csv(file + '.csv', zip(self._keysInfo, self._valInfo))
             elif ext.find('txt') + 1:
                 write_txt(file + '.txt', zip(self._keysInfo, self._valInfo))
 
     # ______________________ SCORING TABLE ______________________
-    def saveScoringTable(self):
+    def saveScoringTable(self, *args, filename=None):
         """Export score info."""
         # Read Table
         rowCount = self._scoreTable.rowCount()
@@ -144,11 +148,12 @@ class uiMenu(HelpMenu):
             endInd.append(str(self._scoreTable.item(row, 1).text()))
             stage.append(str(self._scoreTable.item(row, 2).text()))
         # Get file name :
-        path = dialogSave(self, 'Save file', 'scoring_info',
-                          "CSV file (*.csv);;Text file (*.txt);;"
-                          "All files (*.*)")
-        if path:
-            file, ext = os.path.splitext(path)
+        if filename is None:
+            filename = dialogSave(self, 'Save file', 'scoring_info',
+                                  "CSV file (*.csv);;Text file (*.txt);;"
+                                  "All files (*.*)")
+        if filename:
+            file, ext = os.path.splitext(filename)
             if ext.find('csv') + 1:
                 write_csv(file + '.csv', zip(staInd, endInd, stage))
             elif ext.find('txt') + 1:
@@ -159,16 +164,17 @@ class uiMenu(HelpMenu):
         """Activate/Deactivate the saving detection menu."""
         self.menuSaveDetections.setEnabled(bool(self._detect))
 
-    def saveAllDetect(self):
+    def saveAllDetect(self, *args, filename=None):
         """Export all detections."""
         # Get file name :
-        path = dialogSave(self, 'Save all detections', 'detections',
-                          "NumPy (*.npy);;All files (*.*)")
-        if path:
-            file = os.path.splitext(str(path))[0]
+        if filename is None:
+            filename = dialogSave(self, 'Save all detections', 'detections',
+                                  "NumPy (*.npy);;All files (*.*)")
+        if filename:
+            file = os.path.splitext(str(filename))[0]
             np.save(file + '.npy', self._detect.dict)
 
-    def saveSelectDetect(self):
+    def saveSelectDetect(self, *args, filename=None):
         """Export selected detection."""
         channel, method = self._getCurrentChanType()
         # Read Table
@@ -184,11 +190,12 @@ class uiMenu(HelpMenu):
             stage.append(str(self._DetectLocations.item(row, 3).text()))
         # Get file name :
         saveas = "locinfo" + '_' + channel + '-' + method
-        path = dialogSave(self, 'Save ' + method + ' detection', saveas,
-                          "CSV file (*.csv);;Text file (*.txt);;"
-                          "All files (*.*)")
-        if path:
-            file, ext = os.path.splitext(path)
+        if filename is None:
+            filename = dialogSave(self, 'Save ' + method + ' detection',
+                                  saveas, "CSV file (*.csv);;Text file (*.txt)"
+                                  ";;All files (*.*)")
+        if filename:
+            file, ext = os.path.splitext(filename)
             file += '_' + channel + '-' + method
             if ext.find('csv') + 1:
                 write_csv(file + '.csv', zip(staInd, endInd, duration, stage))
@@ -196,11 +203,12 @@ class uiMenu(HelpMenu):
                 write_txt(file + '.txt', zip(staInd, endInd, duration, stage))
 
     # ______________________ SLEEP GUI CONFIG ______________________
-    def saveConfig(self):
+    def saveConfig(self, *args, filename=None):
         """Save a config file (*.txt) containing several display parameters."""
         import json
-        filename = dialogSave(self, 'Save config File', 'config',
-                              "Text file (*.txt);;All files (*.*)")
+        if filename is None:
+            filename = dialogSave(self, 'Save config File', 'config',
+                                  "Text file (*.txt);;All files (*.*)")
         if filename:
             with open(filename, 'w') as f:
                 config = {}
@@ -244,7 +252,7 @@ class uiMenu(HelpMenu):
                 json.dump(config, f)
 
     # ______________________ ANNOTATION TABLE ______________________
-    def saveAnnotationTable(self):
+    def saveAnnotationTable(self, *args, filename=None):
         """Export annotation table."""
         # Read Table
         rowCount = self._AnnotateTable.rowCount()
@@ -254,11 +262,12 @@ class uiMenu(HelpMenu):
             endInd.append(str(self._AnnotateTable.item(row, 1).text()))
             annot.append(str(self._AnnotateTable.item(row, 2).text()))
         # Get file name :
-        path = dialogSave(self, 'Save annotations', 'annotations',
-                          "CSV file (*.csv);;Text file (*.txt);;"
-                          "All files (*.*)")
-        if path:
-            file, ext = os.path.splitext(path)
+        if filename is None:
+            filename = dialogSave(self, 'Save annotations', 'annotations',
+                                  "CSV file (*.csv);;Text file (*.txt);;"
+                                  "All files (*.*)")
+        if filename:
+            file, ext = os.path.splitext(filename)
             if ext.find('csv') + 1:
                 write_csv(file + '.csv', zip(staInd, endInd, annot))
             elif ext.find('txt') + 1:
@@ -275,12 +284,13 @@ class uiMenu(HelpMenu):
     ###########################################################################
     ###########################################################################
 
-    def loadHypno(self):
+    def loadHypno(self, *args, filename=None):
         """Load a hypnogram."""
         # Get filename :
-        filename = dialogLoad(self, 'Load hypnogram File', 'hypno',
-                              "Text file (*.txt);;Elan file (*.hyp);;"
-                              "All files (*.*)")
+        if filename is None:
+            filename = dialogLoad(self, 'Load hypnogram File', 'hypno',
+                                  "Text file (*.txt);;Elan file (*.hyp);;"
+                                  "All files (*.*)")
         if filename:
             # Load the hypnogram :
             self._hypno = read_hypno(filename, len(self._hypno))
@@ -291,14 +301,14 @@ class uiMenu(HelpMenu):
             self._fcn_Hypno2Score()
             self._fcn_Score2Hypno()
 
-    def loadConfig(self, *args, file=None):
+    def loadConfig(self, *args, filename=None):
         """Load a config file (*.txt) containing several display parameters."""
         import json
-        if not file:
-            file = dialogLoad(self, 'Load config File', 'config',
-                              "Text file (*.txt);;All files (*.*)")
-        if file:
-            with open(file) as f:
+        if not filename:
+            filename = dialogLoad(self, 'Load config File', 'config',
+                                  "Text file (*.txt);;All files (*.*)")
+        if filename:
+            with open(filename) as f:
                 # Load the configuration file :
                 config = json.load(f)
 
@@ -362,12 +372,13 @@ class uiMenu(HelpMenu):
                 self._fcn_chanAutoAmp()
                 self._fcn_chanSymAmp()
 
-    def loadDetectAll(self):
+    def loadDetectAll(self, *args, filename=None):
         """Load all detections."""
         # Dialog window for detection file :
-        file = dialogLoad(self, "Import detections", '',
-                          "NumPy (*.npy);;All files (*.*)")
-        self._detect.dict = np.ndarray.tolist(np.load(file))
+        if filename is None:
+            filename = dialogLoad(self, "Import detections", '',
+                                  "NumPy (*.npy);;All files (*.*)")
+        self._detect.dict = np.ndarray.tolist(np.load(filename))
         # Made canvas visbles :
         for k in self._detect:
             if self._detect[k]['index'].size:
@@ -380,17 +391,18 @@ class uiMenu(HelpMenu):
         self._locLineReport()
         self._CheckDetectMenu()
 
-    def loadDetectSelect(self):
+    def loadDetectSelect(self, *args, filename=None):
         """Load a specific detection."""
         # Get file name :
-        file = dialogLoad(self, "Import table", '',
-                          "CSV file (*.csv);;Text file (*.txt);;"
-                          "All files (*.*)")
-        if file:
+        if filename is None:
+            filename = dialogLoad(self, "Import table", '',
+                                  "CSV file (*.csv);;Text file (*.txt);;"
+                                  "All files (*.*)")
+        if filename:
             # Get channel / method from file name :
-            (chan, meth) = file.split('_')[-1].split('.')[0].split('-')
+            (chan, meth) = filename.split('_')[-1].split('.')[0].split('-')
             # Load the file :
-            (st, end) = np.genfromtxt(file, delimiter=',')[3::, 0:2].T
+            (st, end) = np.genfromtxt(filename, delimiter=',')[3::, 0:2].T
             # Sort by starting index :
             idxsort = np.argsort(st)
             st, end = st[idxsort], end[idxsort]
@@ -405,29 +417,29 @@ class uiMenu(HelpMenu):
             self._locLineReport()
             self._CheckDetectMenu()
 
-    def loadAnnotationTable(self, *args, file=None):
+    def loadAnnotationTable(self, *args, filename=None):
         """Load annotations."""
         # Get file name :
-        if file is None:
-            file = dialogLoad(self, "Import annotations", '',
-                              "CSV file (*.csv);;Text file (*.txt);;"
-                              "All files (*.*)")
+        if filename is None:
+            filename = dialogLoad(self, "Import annotations", '',
+                                  "CSV file (*.csv);;Text file (*.txt);;"
+                                  "All files (*.*)")
         # Clean annotations :
         self._AnnotateTable.setRowCount(0)
         # Load the file :
-        if isinstance(file, str):  # 'file.txt'
+        if isinstance(filename, str):  # 'file.txt'
             # Get starting/ending/annotation :
-            start, end, annot = np.genfromtxt(file, delimiter=',',
-                                              dtype=str)
-        elif isinstance(file, np.ndarray):
-            start = end = file
-            annot = np.array([''] * len(start))
+            start, end, annot = np.genfromtxt(filename, delimiter=',',
+                                              dtype=str).T
+        elif isinstance(filename, np.ndarray):
+            start = end = filename
+            annot = np.array(['enter annotations'] * len(start))
         elif is_mne_installed():  # MNE annotations
             import mne
-            if isinstance(file, mne.annotations.Annotations):
-                start = file.onset
-                end = file.onset + file.duration
-                annot = file.description
+            if isinstance(filename, mne.annotations.Annotations):
+                start = filename.onset
+                end = filename.onset + filename.duration
+                annot = filename.description
         else:
             raise ValueError("Annotation's type not supported.")
 
@@ -447,7 +459,8 @@ class uiMenu(HelpMenu):
             # Set the current tab to the annotation tab :
             self.QuickSettings.setCurrentIndex(5)
         # Set markers :
-        self._annot_mark = (start + end) / 2
+        middle = (start.astype(np.float32) + end.astype(np.float32)) / 2
+        self._annot_mark = middle
         self._fcn_sliderMove()
 
     ###########################################################
