@@ -13,8 +13,6 @@ from visbrain import Brain
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
-if not os.path.exists(path_to_tmp):
-    os.makedirs(path_to_tmp)
 
 # Create empty argument dictionary :
 kwargs = {}
@@ -50,6 +48,18 @@ vb = Brain(**kwargs)
 
 class TestBrain(object):
     """Test brain.py."""
+
+    ###########################################################################
+    #                                 SETTINGS
+    ###########################################################################
+    def test_create_tmp_folder(self):
+        """Create tmp folder."""
+        if not os.path.exists(path_to_tmp):
+            os.makedirs(path_to_tmp)
+
+    @staticmethod
+    def _path_to_tmp(name):
+        return os.path.join(*(path_to_tmp, name))
 
     ###########################################################################
     #                                 BRAIN
@@ -281,10 +291,6 @@ class TestBrain(object):
     ###########################################################################
     #                                 GUI
     ###########################################################################
-    @staticmethod
-    def _path_to_tmp(name):
-        return os.path.join(*(path_to_tmp, name))
-
     def test_background_color(self):
         """Test method background_color."""
         vb.background_color('green')

@@ -11,8 +11,6 @@ from visbrain import Sleep
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
-if not os.path.exists(path_to_tmp):
-    os.makedirs(path_to_tmp)
 
 # Create a random dataset :
 sf, nelec, npts = 1000., 8, 100000
@@ -31,6 +29,18 @@ sp = Sleep(file=file, hypno_file=hypno_file, data=data, channels=channels,
 
 class TestSleep(object):
     """Test sleep.py."""
+
+    ###########################################################################
+    #                                 SETTINGS
+    ###########################################################################
+    def test_create_tmp_folder(self):
+        """Create tmp folder."""
+        if not os.path.exists(path_to_tmp):
+            os.makedirs(path_to_tmp)
+
+    @staticmethod
+    def _path_to_tmp(name):
+        return os.path.join(*(path_to_tmp, name))
 
     ###########################################################################
     #                                    GUI
@@ -55,10 +65,6 @@ class TestSleep(object):
     # ###########################################################################
     # #                                SAVE
     # ###########################################################################
-    @staticmethod
-    def _path_to_tmp(name):
-        return os.path.join(*(path_to_tmp, name))
-
     def test_save_hyp_data(self):
         """Test saving hypnogram data."""
         sp.saveHypData(filename=self._path_to_tmp('hyp_data.txt'))
