@@ -60,7 +60,7 @@ We also strongly recommend to install *pyopengl* :
 
 .. code-block:: shell
 
-    pip install pyopengl
+    pip install PyOpenGL PyOpenGL_accelerate
 
 Modules
 =======
