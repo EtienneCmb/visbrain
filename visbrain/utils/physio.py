@@ -377,6 +377,7 @@ def find_roi(xyz, r=5., nearest=True):
                 if aal:
                     info[k, 1] = aal_label[aal - 1]
         else:
-            print('BAD')
+            pass
+            # print('BAD')
 
-    print(info)
+    # print(info)
