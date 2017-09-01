@@ -32,6 +32,7 @@ install:
   - pip install mne
   - pip install setuptools
   - pip install nose
+  - pip install pyopengl
   - pip install codecov
   - pip install pytest pytest-cov
   # ------------------- VISPY -------------------
