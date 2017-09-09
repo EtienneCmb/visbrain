@@ -79,5 +79,6 @@ setup(
                  'Intended Audience :: Education',
                  'Intended Audience :: Developers',
                  'Topic :: Scientific/Engineering :: Visualization',
-                 "Programming Language :: Python :: 3.5"
+                 "Programming Language :: Python :: 3.5",
+                 "Programming Language :: Python :: 3.6"
                  ])
