@@ -67,12 +67,20 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
     href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
         List of sleep stages. This list can be used to changed the display
         order into the GUI.
+    preload : bool | False
+        Preload data into memory. For large datasets, turn this parameter to
+        True.
+    use_mne : bool | False
+        Force to load the file using mne.io functions.
+    kwargs_mne : dict | {}
+        Dictionary to pass to the mne.io loading function.
     """
 
     def __init__(self, file=None, hypno_file=None, config_file=None,
                  annotation_file=None, data=None, channels=None, sf=None,
                  hypno=None, downsample=100., axis=False, line='gl',
-                 hedit=False, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3']):
+                 hedit=False, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
+                 preload=False, use_mne=False, kwargs_mne={}):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
