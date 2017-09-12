@@ -8,38 +8,219 @@ This file contain functions to load :
 - Hypnogram (*.hyp)
 """
 import os
+import numpy as np
+import datetime
+from warnings import warn
 
 from .rw_utils import get_file_ext
-from .mneio import mne_read_sleep
+from .rw_hypno import read_hypno
+from .dialog import dialogLoad
+from .mneio import mne_switch
 from .dependencies import is_mne_installed
+from ..utils import check_downsampling, vispy_array
 
-__all__ = ['switch_sleep', 'read_edf', 'read_trc', 'read_eeg', 'read_elan',
-           'read_hyp']
+__all__ = ('ReadSleepData')
 
 
-def switch_sleep(path, *args, **kwargs):
+class ReadSleepData(object):
+    """Main class for reading sleep data.
+
+    Parameters
+    ----------
+    """
+
+    def __init__(self, data, channels, sf, hypno, href, preload, use_mne,
+                 downsample, kwargs_mne):
+        """Init."""
+        # ========================== DOWN-SAMPLNG ==========================
+        # Get the down-smapling factor :
+        if isinstance(downsample, (int, float)):
+            # Check down-sampling :
+            downsample = check_downsampling(sf, downsample)
+            dsf = int(np.round(sf / downsample))
+        else:
+            dsf = 1
+
+        # ========================== LOAD DATA ==========================
+        # Dialog window if data is None :
+        if data is None:
+            data = dialogLoad(self, "Open dataset", '',
+                              "BrainVision/Elan (*.eeg);;EDF (*.edf);;"
+                              "Micromed (*.trc);;BDF (*.bdf);;EGI (*.egi);;"
+                              "MFF (*.mff);;CNT (*.cnt);;All files (*.*)")
+            upath = os.path.split(data)[0]
+
+        if isinstance(data, str):  # file is defined
+            # ---------- USE SLEEP or MNE ----------
+            # Find file extension :
+            file, ext = get_file_ext(data)
+            # Force to use MNE if preload is False :
+            use_mne = True if not preload else use_mne
+            # Get if the file has to be loaded using Sleep or MNE python :
+            use_mne = True if ext not in ['.eeg', '.edf', '.trc'] else use_mne
+
+            if not is_mne_installed() and use_mne:
+                raise IOError("To load the file, MNE-python should be "
+                              "installed.")
+
+            # ---------- LOAD THE FILE----------
+            if use_mne:  # Load using MNE functions
+                kwargs_mne['preload'] = preload
+                mne_switch(file, ext, **kwargs_mne)
+            else:  # Load using Sleep functions
+                (sf, data, channels, n, offset) = sleep_switch(file, ext, dsf)
+        elif isinstance(data, np.ndarray):  # array of data is defined
+            if not isinstance(sf, (int, float)):
+                raise ValueError("When passing raw data, the sampling "
+                                 "frequency parameter, sf, must either be an "
+                                 "integer or a float.")
+            file = None
+        else:
+            raise IOError("The data should either be a string which refer to "
+                          "the path of a file or an array of raw data of shape"
+                          " (n_electrodes, n_time_points).")
+
+        # ========================== LOAD HYPNOGRAM ==========================
+        # Dialog window for hypnogram :
+        if hypno is None:
+            hypno = dialogLoad(self, "Open hypnogram", upath,
+                               "Elan (*.hyp);;Text file (*.txt);;"
+                               "CSV file (*.csv);;All files (*.*)")
+        hypno = read_hypno(hypno, n)
+
+        # ========================== CHECKING ==========================
+        nchan = len(channels)
+        # Check sampling frequency :
+        if not isinstance(sf, (int, float)):
+            raise ValueError("The sampling frequency must be a float number "
+                             "(e.g. 1024., 512., etc)")
+        sf = float(sf)
+        # Check data shape :
+        if data.ndim is not 2:
+            raise ValueError("The data must be a 2D array")
+        if (data.shape[0] is not nchan) and (nchan in data.shape):
+            warn("Organize data array as (n_channels, n_time_points) is more "
+                 "memory efficient")
+            data = data.T
+        # Get data length :
+        npts = data.shape[1]
+        # Channels checking :
+        if nchan not in data.shape:
+            raise ValueError("Incorrect data shape. The number of channels "
+                             "(" + str(nchan) + ') can not be found.')
+        # href checking :
+        absref = ['art', 'wake', 'n1', 'n2', 'n3', 'rem']
+        absint = [-1, 0, 1, 2, 3, 4]
+        if href is None:
+            href = absref
+        elif (href is not None) and isinstance(href, list):
+            # Force lower case :
+            href = [k.lower() for k in href]
+            # Check that all stage are present :
+            for k in absref:
+                if k not in href:
+                    raise ValueError(k + " not found in href.")
+            # Force capitalize :
+            href = [k.capitalize() for k in href]
+            href[href.index('Rem')] = 'REM'
+        else:
+            raise ValueError("The href parameter must be a list of string and"
+                             " must contain 'art', 'wake', 'n1', 'n2', 'n3' "
+                             "and 'rem'")
+        # Conversion variable :
+        absref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
+        conv = {absint[absref.index(k)]: absint[i] for i, k in enumerate(href)}
+        # Check hypnogram and format to float32 :
+        if hypno is None:
+            hypno = np.zeros((npts,), dtype=np.float32)
+        else:
+            n = len(hypno)
+            # Check hypno values :
+            if (hypno.min() < -1.) or (hypno.max() > 4) or (n != npts):
+                warn("\nHypnogram values must be comprised between -1 and 4 "
+                     "(see Iber et al. 2007). Use:\n-1 -> Art (optional)\n 0 "
+                     "-> Wake\n 1 -> N1\n 2 -> N2\n 3 -> N4\n 4 -> REM\nEmpty "
+                     "hypnogram will be used instead")
+                hypno = np.zeros((npts,), dtype=np.float32)
+        # Define time vector if needed :
+        if time is None:
+            time = np.arange(npts, dtype=np.float32) / sf
+        # Clean channel names :
+        patterns = ['eeg', 'EEG']
+        chanc = []
+        for k in channels:
+            # Remove informations after . :
+            k = k.split('.')[0]
+            # Exclude patterns :
+            for i in patterns:
+                k = k.replace(i, '')
+            # Remove space :
+            k = k.replace(' ', '')
+            k = k.strip()
+            chanc.append(k)
+
+        # ========================== DOWN-SAMPLING ==========================
+        if isinstance(downsample, (int, float)):
+            # Find frequency ratio :
+            fratio = int(round(sf / downsample))
+            # Select time, data and hypno points :
+            data = data[:, ::fratio]
+            time = time[::fratio]
+            hypno = hypno[::fratio]
+            # Replace sampling frequency :
+            sf = float(downsample)
+
+        # =========================== SCALING =============================
+        # Check amplitude of the data and if necessary apply re-scaling
+        if np.abs(np.ptp(data, 0).mean()) < 0.1:
+            data *= 1e6
+
+        # ========================== CONVERSION ===========================
+        # Convert data and hypno to be contiguous and float 32 (for vispy):
+        self._data = vispy_array(data)
+        self._hypno = vispy_array(hypno)
+
+        return sf, data, chanc, hypno, time, href, conv
+
+        # return file
+
+
+def sleep_switch(file, ext, dsf):
     """Switch between sleep data files.
 
-    Args:
-        path: string
-            Full path to the filename.
+    Parameters
+    ----------
+    file : string
+        Path to the file to load.
+    ext : string
+        Extension name (e.g. '.eeg')
+    dsf : int
+        Down-sampling factor.
 
-        arg: tuple
-            Further arguments.
-
-    Kargs:
-        kargs: dict, optional, (def: {})
-            Further optional arguments.
+    Returns
+    -------
+    sf : float
+        The sampling frequency.
+    downsample : float
+        The downsampling frequency
+    data : array_like
+        The data organised as well(n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    n : int
+        Number of samples before down-sampling.
+    start_time: array_like
+        Starting time of the recording (hh:mm:ss)
     """
-    # Find file extension :
-    file, ext = get_file_ext(path)
+    # Get full path :
+    path = file + ext
 
     if ext == '.eeg':  # BrainVision // ELAN
         if os.path.isfile(file + '.ent'):  # ELAN
-            return read_elan(path, *args, **kwargs)
+            return read_elan(path, dsf)
 
         elif os.path.isfile(file + '.vhdr'):  # BrainVision
-            return read_eeg(path, *args, **kwargs)
+            return read_eeg(path, dsf)
 
         else:  # None :
             raise ValueError("No header file found in this directory. You "
@@ -47,38 +228,332 @@ def switch_sleep(path, *args, **kwargs):
                              "(BrainVision)")
 
     elif ext == '.edf':  # European Data Format
-        return read_edf(path, *args, **kwargs)
+        return read_edf(path, dsf)
 
     elif ext == '.trc':  # Micromed
-        return read_trc(path, *args, **kwargs)
-
-    elif is_mne_installed() and (ext in ['.egi', '.cnt']):  # Present in MNE
-        return mne_read_sleep(file, ext, *args, **kwargs)
+        return read_trc(path, dsf)
 
     else:  # None
         raise ValueError("*" + ext + " files are currently not supported.")
 
+
+###############################################################################
+###############################################################################
+#                               LOAD FILES
+###############################################################################
+###############################################################################
 
 def read_edf():
     """Read data from a European Data Format (edf) file."""
     pass
 
 
-def read_trc():
-    """Read data from a Micromed (trc) file."""
+def read_trc(path, dsf):
+    """Read data from a Micromed (trc) file (version 4).
+
+    Poor man's version of micromedio.py from Neo package
+    (https://pythonhosted.org/neo/)
+
+    Parameters
+    ----------
+    path : str
+        Filename(with full path) to .trc file
+    dsf : int
+        Down-sampling factor.
+
+    Returns
+    -------
+    sf : float
+        The sampling frequency.
+    downsample : float
+        The downsampling frequency
+    data : array_like
+        The data organised as well(n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    n : int
+        Number of samples before down-sampling.
+    start_time: array_like
+        Starting time of the recording (hh:mm:ss)
+    """
+    import struct
+
+    def read_f(f, fmt):
+        return struct.unpack(fmt, f.read(struct.calcsize(fmt)))
+
+    with open(path, 'rb') as f:
+        # Read header
+        f.seek(175, 0)
+        header_version, = read_f(f, 'b')
+        assert header_version == 4
+
+        f.seek(138, 0)
+        data_start_offset, n_chan, _, sf, nbytes = read_f(f, 'IHHHH')
+
+        f.seek(128, 0)
+        day, month, year, hour, minute, sec = read_f(f, 'bbbbbb')
+        start_time = datetime.time(hour, minute, sec)
+
+        # Raw data
+        f.seek(data_start_offset, 0)
+        m_raw = np.fromstring(f.read(), dtype='u' + str(nbytes))
+        m_raw = m_raw.reshape((int(m_raw.size / n_chan), n_chan)).transpose()
+
+        # Read label / gain
+        gain = []
+        chan = []
+        logical_ground = []
+        data = np.empty(shape=m_raw.shape, dtype=np.float32)
+
+        f.seek(176, 0)
+        zone_names = ['ORDER', 'LABCOD']
+        zones = {}
+        for zname in zone_names:
+            zname2, pos, length = read_f(f, '8sII')
+            zones[zname] = zname2, pos, length
+
+        zname2, pos, length = zones['ORDER']
+        f.seek(pos, 0)
+        code = np.fromfile(f, dtype='u2', count=n_chan)
+
+        for c in range(n_chan):
+            zname2, pos, length = zones['LABCOD']
+            f.seek(pos + code[c] * 128 + 2, 0)
+
+            chan = np.append(chan, f.read(6).decode('utf-8').strip())
+            logical_min, logical_max, logic_ground_chan, physical_min, \
+                physical_max = read_f(f, 'iiiii')
+
+            logical_ground = np.append(logical_ground, logic_ground_chan)
+
+            gain = np.append(gain, float(physical_max - physical_min) /
+                             float(logical_max - logical_min + 1))
+
+    # Multiply by gain
+    m_raw = m_raw - logical_ground[:, np.newaxis]
+    data = m_raw * gain[:, np.newaxis].astype(np.float32)
+
+    # Get original signal length :
+    n = data.shape[1]
+
+    return sf, data[:, ::dsf], list(chan), n, start_time
+
+
+def read_eeg(path, dsf):
+    """Read data from a BrainVision (eeg) file.
+
+    Poor man's version of https: // gist.github.com / breuderink / 6266871
+
+    Assumes that data are saved with the following parameters:
+        - Data format: Binary
+        - Orientation: Multiplexed
+        - Format: int16
+
+    Parameters
+    ----------
+    path : str
+        Filename(with full path) to .eeg file
+    dsf : int
+        Down-sampling factor.
+
+    Returns
+    -------
+    sf : float
+        The sampling frequency.
+    data : array_like
+        The data organised as well(n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    n : int
+        Number of points before down-sampling.
+    start_time : array_like
+        Starting time of the recording (hh:mm:ss)
+    """
+    import re
+
+    assert os.path.splitext(path)[1] == '.eeg'
+
+    header = os.path.splitext(path)[0] + '.vhdr'
+    marker = os.path.splitext(path)[0] + '.vmrk'
+
+    assert os.path.isfile(path)
+    assert os.path.isfile(header)
+
+    # Read header
+    ent = np.genfromtxt(header, delimiter='\n', usecols=[0],
+                        dtype=None, skip_header=0)
+
+    ent = np.char.decode(ent, "utf-8")
+
+    for item in ent:
+        if 'NumberOfChannels=' in item:
+            n_chan = int(re.findall('\d+', item)[0])
+        elif 'SamplingInterval=' in item:
+            si = float(re.findall("[-+]?\d*\.\d+|\d+", item)[0])
+            sf = 1 / (si * 0.000001)
+        elif 'DataFormat' in item:
+            data_format = item.split('=')[1]
+        elif 'BinaryFormat' in item:
+            binary_format = item.split('=')[1]
+        elif 'DataOrientation' in item:
+            data_orient = item.split('=')[1]
+
+    # Check binary format
+    assert "BINARY" in data_format
+    assert "INT_16" in binary_format
+    assert "MULTIPLEXED" in data_orient
+
+    # Extract channel labels and resolution
+    start_label = np.array(np.where(np.char.find(ent, 'Ch1=') == 0)).min()
+    chan = {}
+    resolution = np.empty(shape=n_chan)
+
+    for i, j in enumerate(range(start_label, start_label + n_chan)):
+        chan[i] = re.split('\W+', ent[j])[1]
+        resolution[i] = float(ent[j].split(",")[2])
+
+    chan = np.array(list(chan.values())).flatten()
+
+    # Read marker file (if present) to extract recording time
+    if os.path.isfile(marker):
+        vmrk = np.genfromtxt(marker, delimiter='\n', usecols=[0],
+                             dtype=None, skip_header=0)
+
+        vmrk = np.char.decode(vmrk)
+        for item in vmrk:
+            if 'New Segment' in item:
+                st = re.split('\W+', item)[-1]
+
+        start_time = datetime.time(int(st[8:10]), int(st[10:12]),
+                                   int(st[12:14]))
+    else:
+        start_time = datetime.time(0, 0, 0)
+
+    with open(path, 'rb') as f:
+        raw = f.read()
+        size = int(len(raw) / 2)
+
+        ints = np.ndarray((n_chan, int(size / n_chan)),
+                          dtype='<i2', order='F', buffer=raw)
+
+        data = np.float32(np.diag(resolution)).dot(ints)
+
+    # Get original signal length :
+    n = data.shape[1]
+
+    return sf, data[:, ::dsf], list(chan), n, start_time
+
+
+def read_elan(path, dsf):
+    """Read data from a ELAN (eeg) file.
+
+    Elan format specs: http: // elan.lyon.inserm.fr/
+
+    Parameters
+    ----------
+    path : str
+        Filename(with full path) to Elan .eeg file
+    dsf : int
+        Down-sampling factor.
+
+    Returns
+    -------
+    sf : int
+        The sampling frequency.
+    data : array_like
+        The data organised as well(n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    n : int
+        Number of samples before down-sampling.
+    start_time : array_like
+        Starting time of the recording (hh:mm:ss)
+    """
+    header = path + '.ent'
+
+    assert os.path.isfile(path)
+    assert os.path.isfile(header)
+
+    # Read .ent file
+    ent = np.genfromtxt(header, delimiter='\n', usecols=[0],
+                        dtype=None, skip_header=0)
+
+    ent = np.char.decode(ent)
+
+    # eeg file version
+    eeg_version = ent[0]
+
+    if eeg_version == 'V2':
+        nb_oct = 2
+        formread = '>i2'
+    elif eeg_version == 'V3':
+        nb_oct = 4
+        formread = '>i4'
+
+    # Sampling rate
+    sf = 1. / float(ent[8])
+
+    # Record starting time
+    if ent[4] != "No time":
+        hour, minutes, sec = ent[4].split(':')
+        start_time = datetime.time(int(hour), int(minutes), int(sec))
+        day, month, year = ent[3].split(':')
+    else:
+        start_time = datetime.time(0, 0, 0)
+
+    # Channels
+    nb_chan = np.int(ent[9])
+    nb_chan = nb_chan
+
+    # Last 2 channels do not contain data
+    nb_chan_data = nb_chan - 2
+    chan_list = np.arange(0, nb_chan_data)
+    chan = ent[10:10 + nb_chan_data]
+
+    # Gain
+    gain = np.zeros(nb_chan)
+    offset1 = 9 + 3 * nb_chan
+    offset2 = 9 + 4 * nb_chan
+    offset3 = 9 + 5 * nb_chan
+    offset4 = 9 + 6 * nb_chan
+
+    for i in np.arange(1, nb_chan + 1):
+
+        min_an = float(ent[offset1 + i])
+        max_an = float(ent[offset2 + i])
+        min_num = float(ent[offset3 + i])
+        max_num = float(ent[offset4 + i])
+
+        gain[i - 1] = (max_an - min_an) / (max_num - min_num)
+
+    # Load memmap
+    nb_bytes = os.path.getsize(path)
+    nb_samples = int(nb_bytes / (nb_oct * nb_chan))
+
+    m_raw = np.memmap(path, dtype=formread, mode='r',
+                      shape=(nb_chan, nb_samples), order={'F'})
+
+    # Get original signal length :
+    n = m_raw.shape[1]
+
+    # Multiply by gain :
+    data = m_raw[chan_list, ::dsf] * \
+        gain[chan_list][..., np.newaxis].astype(np.float32)
+
+    return sf, downsample, data, list(chan), n, start_time
+
+###############################################################################
+###############################################################################
+#                               LOAD HyPNOGRAM
+###############################################################################
+###############################################################################
+
+
+def hypno_switch():
+    """"""
     pass
 
 
-def read_eeg():
-    """Read data from a BrainVision (eeg) file."""
-    pass
-
-
-def read_elan():
-    """Read data from a ELAN (eeg) file."""
-    pass
-
-
-def read_hyp():
+def read_hyp(path, dsf):
     """Read data from a hypnogram (hyp) file."""
     pass
