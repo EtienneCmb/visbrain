@@ -3,15 +3,17 @@
 - write_hypno_txt : as text file
 - write_hypno_hyp : as hyp file
 - read_hypno : read either *.hyp or *.txt hypnogram data
-- load_hypno_hyp : load *.hyp hypnogram data
-- load_hypno_txt : load *.txt hypnogram data
+- read_hypno_hyp : load *.hyp hypnogram data
+- read_hypno_txt : load *.txt hypnogram data
 """
 import numpy as np
 import os
 from warnings import warn
 
-__all__ = ['write_hypno_txt', 'write_hypno_hyp', 'read_hypno',
-           'load_hypno_hyp', 'load_hypno_txt']
+from ..utils import vispy_array
+
+__all__ = ('write_hypno_txt', 'write_hypno_hyp', 'read_hypno',
+           'read_hypno_hyp', 'read_hypno_txt')
 
 
 def _oversample_hypnogram(hypno, n):
@@ -134,41 +136,34 @@ def read_hypno(path, npts):
     hypno : array_like
         The hypnogram vector with same length as downsampled data.
     """
-    # Test if file exist :
-    assert os.path.isfile(path)
+    if isinstance(path, str):
+        # Test if file exist :
+        assert os.path.isfile(path)
 
-    # Extract file extension :
-    file, ext = os.path.splitext(path)
+        # Extract file extension :
+        file, ext = os.path.splitext(path)
 
-    # Try loading file :
-    try:
-        if ext in ['.hyp', '.txt', '.csv']:
-            # ----------- ELAN -----------
-            if ext == '.hyp':
-                hypno = load_hypno_hyp(path, npts)
+        # Load the hypnogram :
+        if ext == '.hyp':  # ELAN
+            hypno = read_hypno_hyp(path, npts)
+        elif ext in ['.txt', '.csv']:  # TXT / CSV
+            hypno = read_hypno_txt(path, npts)
+    else:
+        hypno = np.zeros((npts,), dtype=np.float32)
 
-            # ----------- TXT / CSV -----------
-            elif ext in ['.txt', '.csv']:
-                hypno = load_hypno_txt(path, npts)
+    # Complete hypnogram if needed :
+    n = len(hypno)
+    if n < npts:
+        hypno = np.append(hypno, hypno[-1] * np.ones((npts - n,)))
+    elif n > npts:
+        raise ValueError("The length of the hypnogram \
+                         vector must be" + str(npts) +
+                         " (Currently : " + str(n) + ".")
 
-            # Complete hypnogram if needed :
-            n = len(hypno)
-            if n < npts:
-                hypno = np.append(hypno, hypno[-1] * np.ones((npts - n,)))
-            elif n > npts:
-                raise ValueError("The length of the hypnogram \
-                                 vector must be" + str(npts) +
-                                 " (Currently : " + str(n) + ".")
-
-            return hypno.astype(np.float32)
-
-    except:
-        warn("\nAn error ocurred while trying to load the hypnogram. An empty"
-             " one will be used instead.")
-        return None
+    return vispy_array(hypno)
 
 
-def load_hypno_hyp(path, npts):
+def read_hypno_hyp(path, npts):
     """Read Elan hypnogram (hyp).
 
     Parameters
@@ -208,7 +203,7 @@ def load_hypno_hyp(path, npts):
     return hypno
 
 
-def load_hypno_txt(path, npts):
+def read_hypno_txt(path, npts):
     """Read text files (.txt / .csv) hypnogram.
 
     Parameters
