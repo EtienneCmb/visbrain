@@ -1,12 +1,13 @@
 """Utility functions for MNE."""
 
-__all__ = ['mne_read_sleep']
+__all__ = ('mne_switch')
 
 
-def mne_read_sleep(file, ext, *args, **kwargs):
+def mne_switch(file, ext, *args, **kwargs):
     """Read sleep datasets using mne.io.
 
-    Args:
+    Parameters
+    ----------
         file: string
             Filename.
 
@@ -20,14 +21,14 @@ def mne_read_sleep(file, ext, *args, **kwargs):
         kargs: dict, optional, (def: {})
             Further optional arguments.
     """
-    from mne.io import (read_raw_egi, read_raw_cnt)
-    raise ValueError("ASSURER COMPATIBILITE MNE")
+    from mne import io
 
     # Get full path :
     path = file + ext
 
-    if ext == '.egi':  # EGI
-        return read_raw_egi(path, *args, **kwargs)
-
+    if ext in ['.edf', '.bdf']:  # EDF / BDF
+        raw = io.read_raw_edf(path, *args, **kwargs)
+    elif ext == ['.egi', '.mff']:  # EGI / MFF
+        raw = io.read_raw_egi(path, *args, **kwargs)
     elif ext == '.cnt':  # EGI
-        return read_raw_cnt(path, *args, **kwargs)
+        raw = io.read_raw_cnt(path, *args, **kwargs)
