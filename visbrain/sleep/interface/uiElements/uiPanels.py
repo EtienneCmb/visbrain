@@ -337,7 +337,7 @@ class uiPanels(object):
 
     def _fcn_updateAmpInfo(self):
         """Update informations about amplitudes."""
-        self._get_dataInfo()
+        self._get_data_info()
         self._PanAllAmpMin.setMinimum(self['min'].min())
         self._PanAllAmpMin.setMaximum(self['max'].max())
         self._PanAllAmpMax.setMinimum(self['min'].min())

@@ -80,7 +80,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         uiInit.__init__(self)
 
         # Set default GUI state :
-        self.setDefaultState()
+        self._set_default_state()
 
         # Mouse control :
         MouseEventControl.__init__(self)
@@ -179,14 +179,14 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         self._mtsym = 'star'
         self._peaksym = 'disc'
         # Get some data info (min / max / std / mean)
-        self._get_dataInfo()
+        self._get_data_info()
 
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
         uiElements.__init__(self)
 
         # ====================== CAMERAS ======================
-        self._camCreation()
+        self._cam_creation()
 
         # ====================== OBJECTS CREATION ======================
         visuals.__init__(self)
@@ -195,7 +195,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         Tools.__init__(self)
 
         # ====================== FUNCTIONS ON LOAD ======================
-        self._fcnsOnCreation()
+        self._fcns_on_creation()
 
     def __len__(self):
         """Return the number of channels."""
@@ -351,13 +351,13 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
     ###########################################################################
     # SUB-FONCTIONS
     ###########################################################################
-    def _get_dataInfo(self):
+    def _get_data_info(self):
         """Get some info about data (min, max, std, mean, dist)."""
         self._datainfo = {'min': self._data.min(1), 'max': self._data.max(1),
                           'std': self._data.std(1), 'mean': self._data.mean(1),
                           'dist': self._data.max(1) - self._data.min(1)}
 
-    def setDefaultState(self):
+    def _set_default_state(self):
         """Set the default window state."""
         # ================= TAB =================
         set_widget_size(self._app, self.q_widget, 23)
@@ -372,7 +372,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         app_icon.addFile(os.path.join(pathfile, 'sleep_icon.svg'))
         self.setWindowIcon(app_icon)
 
-    def _camCreation(self):
+    def _cam_creation(self):
         """Create a set of cameras."""
         # ------------------- Channels -------------------
         self._chanCam = []
@@ -395,7 +395,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         self._allCams = (self._chanCam, self._speccam, self._hypcam,
                          self._topocam, self._timecam)
 
-    def _fcnsOnCreation(self):
+    def _fcns_on_creation(self):
         """Applied on creation."""
         self._fcn_sliderMove()
         self._chanChecks[0].setChecked(True)

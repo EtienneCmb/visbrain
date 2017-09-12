@@ -322,7 +322,7 @@ class uiSettings(object):
         from ...visuals import visuals
         from ...tools import Tools
         uiElements.__init__(self)
-        self._camCreation()
+        self._cam_creation()
         visuals.__init__(self)
         Tools.__init__(self)
-        self._fcnsOnCreation()
+        self._fcns_on_creation()
