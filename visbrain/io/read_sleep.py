@@ -591,7 +591,7 @@ def read_elan(path, downsample):
 
     # Last 2 channels do not contain data
     nb_chan_data = nb_chan - 2
-    chan_list = slice(nb_chan)
+    chan_list = slice(nb_chan_data)
     chan = ent[10:10 + nb_chan_data]
 
     # Gain
