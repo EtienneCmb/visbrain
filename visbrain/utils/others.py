@@ -83,7 +83,7 @@ def get_dsf(downsample, sf):
     """
     if all([isinstance(k, (int, float)) for k in (downsample, sf)]):
         # Check down-sampling :
-        # downsample = check_downsampling(sf, downsample)
+        downsample = downsample#check_downsampling(sf, downsample)
         return int(np.round(sf / downsample))
     else:
         return 1
