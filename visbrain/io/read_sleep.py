@@ -19,7 +19,7 @@ from .mneio import mne_switch
 from .dependencies import is_mne_installed
 from ..utils import check_downsampling, vispy_array
 
-__all__ = ('ReadSleepData')
+__all__ = ['ReadSleepData']
 
 
 class ReadSleepData(object):
@@ -34,7 +34,7 @@ class ReadSleepData(object):
         """Init."""
         # ========================== DOWN-SAMPLNG ==========================
         # Get the down-smapling factor :
-        if isinstance(downsample, (int, float)):
+        if all([isinstance(k, (int, float)) for k in (downsample, sf)]):
             # Check down-sampling :
             downsample = check_downsampling(sf, downsample)
             dsf = int(np.round(sf / downsample))
@@ -49,6 +49,8 @@ class ReadSleepData(object):
                               "Micromed (*.trc);;BDF (*.bdf);;EGI (*.egi);;"
                               "MFF (*.mff);;CNT (*.cnt);;All files (*.*)")
             upath = os.path.split(data)[0]
+        else:
+            upath = ''
 
         if isinstance(data, str):  # file is defined
             # ---------- USE SLEEP or MNE ----------
@@ -63,18 +65,38 @@ class ReadSleepData(object):
                 raise IOError("To load the file, MNE-python should be "
                               "installed.")
 
-            # ---------- LOAD THE FILE----------
+            # ---------- LOAD THE FILE ----------
             if use_mne:  # Load using MNE functions
                 kwargs_mne['preload'] = preload
                 mne_switch(file, ext, **kwargs_mne)
             else:  # Load using Sleep functions
                 (sf, data, channels, n, offset) = sleep_switch(file, ext, dsf)
+
+            time = np.arange(n) / sf
+            self._file = file
+            self._N = n
+            self._sfori = sf
+            self._toffset = offset.hour * 3600 + offset.minute * 60 + \
+                offset.second
+
+            # ---------- SAMPLING FREQUENCY ----------
+            # Data are downsampled on load. Change sampling frequency :
+            if downsample is not None:
+                time = time[::dsf]
+                sf = downsample
+                downsample = None
+
         elif isinstance(data, np.ndarray):  # array of data is defined
             if not isinstance(sf, (int, float)):
                 raise ValueError("When passing raw data, the sampling "
                                  "frequency parameter, sf, must either be an "
                                  "integer or a float.")
-            file = None
+            self._file = None
+            downsample = check_downsampling(sf, downsample)
+            self._N = data.shape[1]
+            self._sfori = sf
+            self._toffset = 0.
+            time = np.arange(self._N) / sf
         else:
             raise IOError("The data should either be a string which refer to "
                           "the path of a file or an array of raw data of shape"
@@ -86,28 +108,42 @@ class ReadSleepData(object):
             hypno = dialogLoad(self, "Open hypnogram", upath,
                                "Elan (*.hyp);;Text file (*.txt);;"
                                "CSV file (*.csv);;All files (*.*)")
-        hypno = read_hypno(hypno, n)
+        hypno = read_hypno(hypno, self._N)
 
         # ========================== CHECKING ==========================
-        nchan = len(channels)
+        # ---------- DATA ----------
+        # Check data shape :
+        if data.ndim is not 2:
+            raise ValueError("The data must be a 2D array")
+        nchan, npts = data.shape
+
+        # ---------- CHANNELS ----------
+        if (channels is None) or (len(channels) != nchan):
+            warn("The number of channels must be " + str(nchan) + ". Default "
+                 "channel names will be used instead.")
+            channels = ['chan' + str(k) for k in range(nchan)]
+        # Clean channel names :
+        patterns = ['eeg', 'EEG']
+        chanc = []
+        for c in channels:
+            # Remove informations after . :
+            c = c.split('.')[0]
+            # Exclude patterns :
+            for i in patterns:
+                c = c.replace(i, '')
+            # Remove space :
+            c = c.replace(' ', '')
+            c = c.strip()
+            chanc.append(c)
+
+        # ---------- SAMPLING FREQUENCY ----------
         # Check sampling frequency :
         if not isinstance(sf, (int, float)):
             raise ValueError("The sampling frequency must be a float number "
                              "(e.g. 1024., 512., etc)")
         sf = float(sf)
-        # Check data shape :
-        if data.ndim is not 2:
-            raise ValueError("The data must be a 2D array")
-        if (data.shape[0] is not nchan) and (nchan in data.shape):
-            warn("Organize data array as (n_channels, n_time_points) is more "
-                 "memory efficient")
-            data = data.T
-        # Get data length :
-        npts = data.shape[1]
-        # Channels checking :
-        if nchan not in data.shape:
-            raise ValueError("Incorrect data shape. The number of channels "
-                             "(" + str(nchan) + ') can not be found.')
+
+        # ---------- STAGE ORDER ----------
         # href checking :
         absref = ['art', 'wake', 'n1', 'n2', 'n3', 'rem']
         absint = [-1, 0, 1, 2, 3, 4]
@@ -130,7 +166,8 @@ class ReadSleepData(object):
         # Conversion variable :
         absref = ['Art', 'Wake', 'N1', 'N2', 'N3', 'REM']
         conv = {absint[absref.index(k)]: absint[i] for i, k in enumerate(href)}
-        # Check hypnogram and format to float32 :
+
+        # ---------- HYPNOGRAM ----------
         if hypno is None:
             hypno = np.zeros((npts,), dtype=np.float32)
         else:
@@ -142,47 +179,37 @@ class ReadSleepData(object):
                      "-> Wake\n 1 -> N1\n 2 -> N2\n 3 -> N4\n 4 -> REM\nEmpty "
                      "hypnogram will be used instead")
                 hypno = np.zeros((npts,), dtype=np.float32)
+
+        # ---------- TIME ----------
         # Define time vector if needed :
         if time is None:
             time = np.arange(npts, dtype=np.float32) / sf
-        # Clean channel names :
-        patterns = ['eeg', 'EEG']
-        chanc = []
-        for k in channels:
-            # Remove informations after . :
-            k = k.split('.')[0]
-            # Exclude patterns :
-            for i in patterns:
-                k = k.replace(i, '')
-            # Remove space :
-            k = k.replace(' ', '')
-            k = k.strip()
-            chanc.append(k)
 
-        # ========================== DOWN-SAMPLING ==========================
+        # ---------- DOWN-SAMPLING ----------
         if isinstance(downsample, (int, float)):
             # Find frequency ratio :
-            fratio = int(round(sf / downsample))
+            dsf = int(round(sf / downsample))
             # Select time, data and hypno points :
-            data = data[:, ::fratio]
-            time = time[::fratio]
-            hypno = hypno[::fratio]
+            data = data[:, ::dsf]
+            time = time[::dsf]
+            hypno = hypno[::dsf]
             # Replace sampling frequency :
             sf = float(downsample)
 
-        # =========================== SCALING =============================
+        # ---------- SCALING ----------
         # Check amplitude of the data and if necessary apply re-scaling
         if np.abs(np.ptp(data, 0).mean()) < 0.1:
             data *= 1e6
 
-        # ========================== CONVERSION ===========================
+        # ---------- CONVERSION ----------=
         # Convert data and hypno to be contiguous and float 32 (for vispy):
         self._data = vispy_array(data)
         self._hypno = vispy_array(hypno)
-
-        return sf, data, chanc, hypno, time, href, conv
-
-        # return file
+        self._time = vispy_array(time)
+        self._channels = chanc
+        self._href = href
+        self._hconv = conv
+        self._sf = sf
 
 
 def sleep_switch(file, ext, dsf):
@@ -216,7 +243,7 @@ def sleep_switch(file, ext, dsf):
     path = file + ext
 
     if ext == '.eeg':  # BrainVision // ELAN
-        if os.path.isfile(file + '.ent'):  # ELAN
+        if os.path.isfile(path + '.ent'):  # ELAN
             return read_elan(path, dsf)
 
         elif os.path.isfile(file + '.vhdr'):  # BrainVision
@@ -243,9 +270,58 @@ def sleep_switch(file, ext, dsf):
 ###############################################################################
 ###############################################################################
 
-def read_edf():
-    """Read data from a European Data Format (edf) file."""
-    pass
+def read_edf(path, dsf):
+    """Read data from a European Data Format (edf) file.
+
+    Use phypno class for reading EDF files:
+        http: // phypno.readthedocs.io / api / phypno.ioeeg.edf.html
+
+    Parameters
+    ----------
+    path: str
+        Filename(with full path) to EDF file
+    dsf : int
+        Down-sampling factor.
+
+    Returns
+    -------
+    sf : int
+        The sampling frequency.
+    data : array_like
+        The data organised as well(n_channels, n_points)
+    chan : list
+        The list of channel's names.
+    n : int
+        Number of points in the original data
+    start_time: array_like
+        Starting time of the recording (hh:mm:ss)
+    """
+    assert os.path.isfile(path)
+
+    from ..utils.sleep.edf import Edf
+
+    edf = Edf(path)
+
+    # Return header informations
+    _, start_time, sf, chan, n_samples, _ = edf.return_hdr()
+    start_time = start_time.time()
+
+    # Keep only data channels (e.g excludes marker chan)
+    freqs = np.unique(edf.hdr['n_samples_per_record'])
+    sf = freqs.max()
+
+    if len(freqs) != 1:
+        bad_chans = np.where(edf.hdr['n_samples_per_record'] < sf)
+        chan = np.delete(chan, bad_chans)
+
+    # Load all samples of selected channels
+    np.seterr(divide='ignore', invalid='ignore')
+    data = edf.return_dat(chan, 0, n_samples)
+
+    # Get original signal length :
+    n = data.shape[1]
+
+    return float(sf), data[:, ::dsf], list(chan), n, start_time
 
 
 def read_trc(path, dsf):
@@ -540,20 +616,4 @@ def read_elan(path, dsf):
     data = m_raw[chan_list, ::dsf] * \
         gain[chan_list][..., np.newaxis].astype(np.float32)
 
-    return sf, downsample, data, list(chan), n, start_time
-
-###############################################################################
-###############################################################################
-#                               LOAD HyPNOGRAM
-###############################################################################
-###############################################################################
-
-
-def hypno_switch():
-    """"""
-    pass
-
-
-def read_hyp(path, dsf):
-    """Read data from a hypnogram (hyp) file."""
-    pass
+    return sf, data, list(chan), n, start_time
