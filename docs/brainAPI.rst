@@ -4,7 +4,52 @@
 Main *Brain* class inputs
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: visbrain.brain.brain.Brain
+.. currentmodule:: visbrain.brain.brain
+
+.. autoclass:: Brain
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~Brain.show
+        ~visbrain.brain.user.BrainUserMethods.quit
+        ~visbrain.brain.user.BrainUserMethods.rotate
+        ~visbrain.brain.user.BrainUserMethods.background_color
+        ~visbrain.brain.user.BrainUserMethods.screenshot
+        ~visbrain.brain.user.BrainUserMethods.load_config
+        ~visbrain.brain.user.BrainUserMethods.save_config
+        ~visbrain.brain.user.BrainUserMethods.brain_control
+        ~visbrain.brain.user.BrainUserMethods.brain_list
+        ~visbrain.brain.user.BrainUserMethods.add_mesh
+        ~visbrain.brain.user.BrainUserMethods.volume_control
+        ~visbrain.brain.user.BrainUserMethods.add_volume
+        ~visbrain.brain.user.BrainUserMethods.volume_list
+        ~visbrain.brain.user.BrainUserMethods.cross_sections_control
+        ~visbrain.brain.user.BrainUserMethods.sources_control
+        ~visbrain.brain.user.BrainUserMethods.sources_opacity
+        ~visbrain.brain.user.BrainUserMethods.sources_display
+        ~visbrain.brain.user.BrainUserMethods.add_sources
+        ~visbrain.brain.user.BrainUserMethods.sources_fit
+        ~visbrain.brain.user.BrainUserMethods.sources_to_convex_hull
+        ~visbrain.brain.user.BrainUserMethods.cortical_projection
+        ~visbrain.brain.user.BrainUserMethods.cortical_repartition
+        ~visbrain.brain.user.BrainUserMethods.sources_colormap
+        ~visbrain.brain.user.BrainUserMethods.time_series_control
+        ~visbrain.brain.user.BrainUserMethods.add_time_series
+        ~visbrain.brain.user.BrainUserMethods.pictures_control
+        ~visbrain.brain.user.BrainUserMethods.add_pictures
+        ~visbrain.brain.user.BrainUserMethods.connect_control
+        ~visbrain.brain.user.BrainUserMethods.add_connect
+        ~visbrain.brain.user.BrainUserMethods.roi_control
+        ~visbrain.brain.user.BrainUserMethods.roi_list
+        ~visbrain.brain.user.BrainUserMethods.roi_opacity
+        ~visbrain.brain.user.BrainUserMethods.roi_light_reflection
+        ~visbrain.brain.user.BrainUserMethods.cbar_control
+        ~visbrain.brain.user.BrainUserMethods.cbar_select
+        ~visbrain.brain.user.BrainUserMethods.cbar_list
+        ~visbrain.brain.user.BrainUserMethods.cbar_export
+        ~visbrain.brain.user.BrainUserMethods.cbar_autoscale
+
 
 .. ##########################################################################
 ..                                    GUI

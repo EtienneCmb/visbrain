@@ -17,7 +17,7 @@ MNE
 
 .. autofunction:: visbrain.io.dependencies.is_nibabel_installed
 
-.. autofunction:: visbrain.io.mneio.mne_read_sleep
+.. autofunction:: visbrain.io.mneio.mne_switch
 
 Configuration file
 ------------------

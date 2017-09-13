@@ -711,14 +711,16 @@ API
 
 Here is the list of default Sleep inputs :
 
-.. autoclass:: visbrain.sleep.sleep.Sleep
-  :members:
+.. currentmodule:: visbrain.sleep.sleep
 
-  .. automethod:: show
+.. autoclass:: Sleep
 
-.. automethod:: visbrain.sleep.sleep.Sleep.show
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~Sleep.show
 
 Collaborator
 ------------
 
-Sleep is developped in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_.
+Sleep is developed in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_.

@@ -84,11 +84,6 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
 
     .. deprecated:: 0.3.4
         Use :func:`show` instead.
-
-    Methods
-    -------
-    show()
-        Display graphical user interface.
     """
 
     def __init__(self, data=None, hypno=None, config_file=None,
