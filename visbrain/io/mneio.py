@@ -1,9 +1,12 @@
 """Utility functions for MNE."""
+import numpy as np
+import datetime
+from ..utils import get_dsf
 
 __all__ = ['mne_switch']
 
 
-def mne_switch(file, ext, *args, **kwargs):
+def mne_switch(file, ext, downsample, *args, preload=True, **kwargs):
     """Read sleep datasets using mne.io.
 
     Parameters
@@ -26,9 +29,23 @@ def mne_switch(file, ext, *args, **kwargs):
     # Get full path :
     path = file + ext
 
-    if ext in ['.edf', '.bdf']:  # EDF / BDF
+    # Preload :
+    if preload is False:
+        preload = 'temp.dat'
+    kwargs['preload'] = preload
+
+    if ext.lower() in ['.edf', '.bdf']:  # EDF / BDF
         raw = io.read_raw_edf(path, *args, **kwargs)
-    elif ext == ['.egi', '.mff']:  # EGI / MFF
+    elif ext.lower() == ['.egi', '.mff']:  # EGI / MFF
         raw = io.read_raw_egi(path, *args, **kwargs)
-    elif ext == '.cnt':  # EGI
+    elif ext.lower() == '.cnt':  # CNT
         raw = io.read_raw_cnt(path, *args, **kwargs)
+
+    sf = np.round(raw.info['sfreq'])
+    dsf = get_dsf(downsample, sf)
+    channels = raw.info['ch_names']
+    data = raw._data
+    n = data.shape[1]
+    start_time = datetime.time(0, 0, 0)  #raw.info['meas_date']
+
+    return sf, data[:, ::dsf], channels, n, start_time
