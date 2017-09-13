@@ -7,8 +7,9 @@ import numpy as np
 
 from vispy.geometry import MeshData
 
-__all__ = ('vis_args', 'check_downsampling', 'vispy_array', 'convert_meshdata',
-           'add_brain_template', 'remove_brain_template', 'set_if_not_none')
+__all__ = ('vis_args', 'check_downsampling', 'get_dsf',
+           'vispy_array', 'convert_meshdata', 'add_brain_template',
+           'remove_brain_template', 'set_if_not_none')
 
 
 def vis_args(kw, prefix, ignore=[]):
@@ -68,6 +69,24 @@ def check_downsampling(sf, ds):
              "not a multiple of the sampling frequency (" + str(sf) + "hz) is"
              " not recommanded. A " + str(ds) + "hz will be used instead.")
     return ds
+
+
+def get_dsf(downsample, sf):
+    """Get the downsampling factor.
+
+    Parameters
+    ----------
+    downsample : float
+        The down-sampling frequency.
+    sf : float
+        The sampling frequency
+    """
+    if all([isinstance(k, (int, float)) for k in (downsample, sf)]):
+        # Check down-sampling :
+        # downsample = check_downsampling(sf, downsample)
+        return int(np.round(sf / downsample))
+    else:
+        return 1
 
 
 def vispy_array(data, dtype=np.float32):
