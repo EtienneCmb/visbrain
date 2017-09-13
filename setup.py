@@ -83,5 +83,5 @@ setup(
                  ],
     entry_points='''
         [console_scripts]
-        visbrain_sleep=visbrain.cli.sleep_cli:cli
+        visbrain_sleep=visbrain.cli:cli_sleep
     ''')
