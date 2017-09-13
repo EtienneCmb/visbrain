@@ -17,12 +17,11 @@ sf, nelec, npts = 1000., 8, 100000
 data = 10. * np.random.rand(nelec, npts)
 channels = ['Cz', 'Fz', 'C1', 'C2', 'C3', 'C4', 'F1', 'other']
 hypno = np.random.randint(-1, 3, (npts,))
-file, hypno_file = None, None
 onset = np.array([100, 2000, 5000])
 
 # Create Sleep application :
 app = QtWidgets.QApplication([])
-sp = Sleep(file=file, hypno_file=hypno_file, data=data, channels=channels,
+sp = Sleep(data=data, channels=channels,
            sf=sf, downsample=100., hypno=hypno, axis=False, hedit=True,
            annotation_file=onset)
 
