@@ -15,12 +15,13 @@ from .visuals import visuals
 from .tools import Tools
 from ..utils import (FixedCam, load_sleepdataset, color2vb, check_downsampling,
                      MouseEventControl, set_widget_size)
-from ..io import dialogLoad, read_hypno
+from ..io import dialogLoad, ReadSleepData
 
 sip.setdestroyonexit(False)
 
 
-class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
+class Sleep(ReadSleepData, uiInit, visuals, uiElements, Tools,
+            MouseEventControl):
     """Visualize and edit sleep data.
 
     Use this module to :
@@ -36,6 +37,8 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
 
     Parameters
     ----------
+    data : string, array_like | None
+        Array of data of shape (n_channels, n_pts)
     file : string | None
         Path to the data file (.eeg, .trc or .edf).
     hypno_file : string | None
@@ -45,8 +48,6 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
     annotation_file : string | None
         Path to the annotation file (.txt, .csv). Alternatively, you can pass
         an annotation instance of MNE.
-    data : array_like | None
-        Array of data of shape (n_channels, n_pts)
     channels : list | None
         List of channel names. The length of this list must be n_channels.
     sf : float | None
@@ -67,7 +68,7 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
     href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
         List of sleep stages. This list can be used to changed the display
         order into the GUI.
-    preload : bool | False
+    preload : bool | True
         Preload data into memory. For large datasets, turn this parameter to
         True.
     use_mne : bool | False
@@ -76,11 +77,11 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         Dictionary to pass to the mne.io loading function.
     """
 
-    def __init__(self, file=None, hypno_file=None, config_file=None,
-                 annotation_file=None, data=None, channels=None, sf=None,
-                 hypno=None, downsample=100., axis=False, line='gl',
+    def __init__(self, data=None, hypno=None, config_file=None,
+                 annotation_file=None, channels=None, sf=None,
+                 downsample=100., axis=False, line='gl',
                  hedit=False, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
-                 preload=False, use_mne=False, kwargs_mne={}):
+                 preload=True, use_mne=False, kwargs_mne={}):
         """Init."""
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
@@ -94,61 +95,62 @@ class Sleep(uiInit, visuals, uiElements, Tools, MouseEventControl):
         MouseEventControl.__init__(self)
 
         # ====================== LOAD FILE ======================
-        # Load file and convert if needed :
-        if not all([k is not None for k in [data, channels, sf]]):
-            # --------------- Qt Dialog ---------------
-            if (file is None) or not isinstance(file, str):
-                # Dialog window for the main dataset :
-                file = dialogLoad(self, "Open dataset", '',
-                                  "BrainVision/Elan (*.eeg);;Edf (*.edf);;"
-                                  "Micromed (*.trc);;All files (*.*)")
-                # Get the user path :
-                upath = os.path.split(file)[0]
-                # Dialog window for hypnogram :
-                hypno_file = dialogLoad(self, "Open hypnogram", upath,
-                                        "Elan (*.hyp);;Text file (*.txt);;"
-                                        "CSV file (*.csv);;All files (*.*)")
+        ReadSleepData.__init__(self, data, channels, sf, hypno, href, preload,
+                               use_mne, downsample, kwargs_mne)
+        # # Load file and convert if needed :
+        # if not all([k is not None for k in [data, channels, sf]]):
+        #     # --------------- Qt Dialog ---------------
+        #     if (file is None) or not isinstance(file, str):
+        #         # Dialog window for the main dataset :
+        #         file = dialogLoad(self, "Open dataset", '',
+        #                           "BrainVision/Elan (*.eeg);;Edf (*.edf);;"
+        #                           "Micromed (*.trc);;All files (*.*)")
+        #         # Get the user path :
+        #         upath = os.path.split(file)[0]
+        #         # Dialog window for hypnogram :
+        #         hypno_file = dialogLoad(self, "Open hypnogram", upath,
+        #                                 "Elan (*.hyp);;Text file (*.txt);;"
+        #                                 "CSV file (*.csv);;All files (*.*)")
 
-            # Load dataset :
-            sf, downsample, data, channels, N, start_time = load_sleepdataset(
-                file, downsample)
-            npts = data.shape[1]
-            # Build the time vector :
-            time = np.arange(N) / sf
-            self._N = N
-            self._sfori = sf
-            self._toffset = start_time.hour * 3600 + \
-                start_time.minute * 60 + start_time.second
+        #     # Load dataset :
+        #     sf, downsample, data, channels, N, start_time = load_sleepdataset(
+        #         file, downsample)
+        #     npts = data.shape[1]
+        #     # Build the time vector :
+        #     time = np.arange(N) / sf
+        #     self._N = N
+        #     self._sfori = sf
+        #     self._toffset = start_time.hour * 3600 + \
+        #         start_time.minute * 60 + start_time.second
 
-            # Load hypnogram :
-            if hypno_file:
-                # Load the hypnogram :
-                hypno = read_hypno(hypno_file, npts)
+        #     # Load hypnogram :
+        #     if hypno_file:
+        #         # Load the hypnogram :
+        #         hypno = read_hypno(hypno_file, npts)
 
-            # Change the sampling frequency if down-sample :
-            if downsample is not None:
-                time = time[::int(np.round(sf / downsample))]
-                sf = downsample
-                downsample = None
+        #     # Change the sampling frequency if down-sample :
+        #     if downsample is not None:
+        #         time = time[::int(np.round(sf / downsample))]
+        #         sf = downsample
+        #         downsample = None
 
-        # Data and sf are givin as an input :
-        elif (data is not None) and (sf is not None):
-            # Check down-sampling :
-            downsample = check_downsampling(sf, downsample)
-            self._N = data.shape[1]
-            self._sfori = sf
-            self._toffset = 0
-            time = np.arange(self._N) / sf
+        # # Data and sf are givin as an input :
+        # elif (data is not None) and (sf is not None):
+        #     # Check down-sampling :
+        #     downsample = check_downsampling(sf, downsample)
+        #     self._N = data.shape[1]
+        #     self._sfori = sf
+        #     self._toffset = 0
+        #     time = np.arange(self._N) / sf
 
         # ====================== VARIABLES ======================
         # Check all data :
-        self._file = file
         self._config_file = config_file
         self._annot_file = annotation_file
         self._annot_mark = np.array([])
-        (self._sf, self._data, self._channels, self._hypno, self._time,
-         self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
-                                                     downsample, time, href)
+        # (self._sf, self._data, self._channels, self._hypno, self._time,
+        #  self._href, self._hconv) = self._check_data(sf, data, channels, hypno,
+        #                                              downsample, time, href)
         self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
         self._enabhypedit = hedit
