@@ -1,6 +1,6 @@
 """Utility functions for MNE."""
 
-__all__ = ('mne_switch')
+__all__ = ['mne_switch']
 
 
 def mne_switch(file, ext, *args, **kwargs):
