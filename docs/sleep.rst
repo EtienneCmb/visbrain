@@ -104,7 +104,7 @@ Sleep provide five settings tabs :
 * :ref:`infotab` : Sleep statistics and record basic infos
 * :ref:`scoringtab` : a scoring table that can be used to edit the hypnogram
 * :ref:`detectiontab` : Automatic detection of sleep spindles, rapid eye movements (REMs), slow waves, K-complexes (KCs) and peaks
-* :ref:`annotationtab` : annotate 
+* :ref:`annotationtab` : annotate
 
 .. _paneltab:
 
@@ -220,7 +220,7 @@ Sleep comes with a bundle of shortcuts that can be used to speed up your product
 Keys                    Description
 ===================     =======================================================
 mouse wheel             Move the current window
-double left click       Add annotation under mouse cursor 
+double left click       Add annotation under mouse cursor
 \-                      Decrease amplitude
 \+                      Increase amplitude
 a                       Insert Artefact in the hypnogram
@@ -639,7 +639,7 @@ If the interface is opened, load annotations from the menu *Files/Load/Annotatio
 Annotations in a text file
 ++++++++++++++++++++++++++
 
-Annotations can be defined in a `csv file <https://drive.google.com/file/d/0B6vtJiCQZUBvSXpmS0FGZ1E4M1U/view?usp=sharing>`_ or in a `txt file <https://drive.google.com/file/d/0B6vtJiCQZUBvOENtTks1Z3NLam8/view?usp=sharing>`_ file. 
+Annotations can be defined in a `csv file <https://drive.google.com/file/d/0B6vtJiCQZUBvSXpmS0FGZ1E4M1U/view?usp=sharing>`_ or in a `txt file <https://drive.google.com/file/d/0B6vtJiCQZUBvOENtTks1Z3NLam8/view?usp=sharing>`_ file.
 
 .. code-block:: python
 
@@ -712,6 +712,11 @@ API
 Here is the list of default Sleep inputs :
 
 .. autoclass:: visbrain.sleep.sleep.Sleep
+  :members:
+
+  .. automethod:: show
+
+.. automethod:: visbrain.sleep.sleep.Sleep.show
 
 Collaborator
 ------------

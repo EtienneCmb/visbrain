@@ -41,6 +41,7 @@ extensions = [
     'numpydoc',
     'sphinx_gallery.gen_gallery',
 ]
+    # , 'sphinx.ext.napoleon'
 #     'sphinx.ext.githubpages',
 
 sphinx_gallery_conf = {
