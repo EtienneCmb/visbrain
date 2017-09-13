@@ -24,7 +24,7 @@ class uiScoring(object):
     ##########################################################################
     def _fcn_Hypno2Score(self):
         """Update hypno table from hypno data."""
-        self._hypno = self._hyp.GUI2hyp()
+        self._hypno = self._hyp.gui_to_hyp()
         # Avoid updating data while setting cell :
         self._scoreSet = False
         items = ['Wake', 'N1', 'N2', 'N3', 'REM', 'Art']

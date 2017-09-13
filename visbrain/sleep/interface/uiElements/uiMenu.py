@@ -529,9 +529,10 @@ class uiMenu(HelpMenu):
 
     def _disptog_indic(self):
         """Toggle method for display / hide the time indicators."""
-        self._specInd.mesh.visible = self.menuDispIndic.isChecked()
-        self._hypInd.mesh.visible = self.menuDispIndic.isChecked()
-        self._TimeAxis.mesh.visible = self.menuDispIndic.isChecked()
+        viz = self.menuDispIndic.isChecked()
+        self._specInd.mesh.visible = viz
+        self._hypInd.mesh.visible = viz
+        self._TimeAxis.mesh.visible = viz
         self._fcn_sliderMove()
 
     def _disptog_zoom(self):

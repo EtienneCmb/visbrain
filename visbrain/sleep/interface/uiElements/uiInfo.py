@@ -20,7 +20,7 @@ class uiInfo(object):
         """Complete the table sleep info."""
         # Get sleep info :
         win = self._infoTime.value()
-        stats = sleepstats(self._file, self._hyp.GUI2hyp(), self._N,
+        stats = sleepstats(self._file, self._hyp.gui_to_hyp(), self._N,
                            sf=self._sf, sfori=self._sfori,
                            time_window=win)
         self._keysInfo = ['Window'] + [''] * len(stats)
