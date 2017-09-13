@@ -80,4 +80,8 @@ setup(
                  'Intended Audience :: Developers',
                  'Topic :: Scientific/Engineering :: Visualization',
                  "Programming Language :: Python :: 3.5"
-                 ])
+                 ],
+    entry_points='''
+        [console_scripts]
+        visbrain_sleep=visbrain.cli.sleep_cli:cli
+    ''')
