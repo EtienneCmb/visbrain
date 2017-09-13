@@ -17,7 +17,7 @@ from .rw_hypno import read_hypno
 from .dialog import dialogLoad
 from .mneio import mne_switch
 from .dependencies import is_mne_installed
-from ..utils import check_downsampling, vispy_array
+from ..utils import check_downsampling, get_dsf, vispy_array, id
 
 __all__ = ['ReadSleepData']
 
@@ -32,15 +32,6 @@ class ReadSleepData(object):
     def __init__(self, data, channels, sf, hypno, href, preload, use_mne,
                  downsample, kwargs_mne):
         """Init."""
-        # ========================== DOWN-SAMPLNG ==========================
-        # Get the down-smapling factor :
-        if all([isinstance(k, (int, float)) for k in (downsample, sf)]):
-            # Check down-sampling :
-            downsample = check_downsampling(sf, downsample)
-            dsf = int(np.round(sf / downsample))
-        else:
-            dsf = 1
-
         # ========================== LOAD DATA ==========================
         # Dialog window if data is None :
         if data is None:
@@ -68,9 +59,12 @@ class ReadSleepData(object):
             # ---------- LOAD THE FILE ----------
             if use_mne:  # Load using MNE functions
                 kwargs_mne['preload'] = preload
-                mne_switch(file, ext, **kwargs_mne)
+                (sf, data, channels, n, offset) = mne_switch(file, ext,
+                                                             downsample,
+                                                             **kwargs_mne)
             else:  # Load using Sleep functions
-                (sf, data, channels, n, offset) = sleep_switch(file, ext, dsf)
+                (sf, data, channels, n, offset) = sleep_switch(file, ext,
+                                                               downsample)
 
             time = np.arange(n) / sf
             self._file = file
@@ -82,6 +76,7 @@ class ReadSleepData(object):
             # ---------- SAMPLING FREQUENCY ----------
             # Data are downsampled on load. Change sampling frequency :
             if downsample is not None:
+                dsf = get_dsf(downsample, sf)
                 time = time[::dsf]
                 sf = downsample
                 downsample = None
@@ -108,7 +103,11 @@ class ReadSleepData(object):
             hypno = dialogLoad(self, "Open hypnogram", upath,
                                "Elan (*.hyp);;Text file (*.txt);;"
                                "CSV file (*.csv);;All files (*.*)")
-        hypno = read_hypno(hypno, self._N)
+            hypno = None if hypno == '' else hypno
+        if isinstance(hypno, str):
+            hypno = read_hypno(hypno, data.shape[1])
+        if isinstance(hypno, np.ndarray) and len(hypno) == n:
+            hypno = hypno[::dsf]
 
         # ========================== CHECKING ==========================
         # ---------- DATA ----------
@@ -188,7 +187,7 @@ class ReadSleepData(object):
         # ---------- DOWN-SAMPLING ----------
         if isinstance(downsample, (int, float)):
             # Find frequency ratio :
-            dsf = int(round(sf / downsample))
+            dsf = get_dsf(downsample, sf)
             # Select time, data and hypno points :
             data = data[:, ::dsf]
             time = time[::dsf]
@@ -212,7 +211,7 @@ class ReadSleepData(object):
         self._sf = sf
 
 
-def sleep_switch(file, ext, dsf):
+def sleep_switch(file, ext, downsample):
     """Switch between sleep data files.
 
     Parameters
@@ -221,8 +220,8 @@ def sleep_switch(file, ext, dsf):
         Path to the file to load.
     ext : string
         Extension name (e.g. '.eeg')
-    dsf : int
-        Down-sampling factor.
+    downsample : int
+        Down-sampling frequency.
 
     Returns
     -------
@@ -244,10 +243,10 @@ def sleep_switch(file, ext, dsf):
 
     if ext == '.eeg':  # BrainVision // ELAN
         if os.path.isfile(path + '.ent'):  # ELAN
-            return read_elan(path, dsf)
+            return read_elan(path, downsample)
 
         elif os.path.isfile(file + '.vhdr'):  # BrainVision
-            return read_eeg(path, dsf)
+            return read_eeg(path, downsample)
 
         else:  # None :
             raise ValueError("No header file found in this directory. You "
@@ -255,10 +254,10 @@ def sleep_switch(file, ext, dsf):
                              "(BrainVision)")
 
     elif ext == '.edf':  # European Data Format
-        return read_edf(path, dsf)
+        return read_edf(path, downsample)
 
     elif ext == '.trc':  # Micromed
-        return read_trc(path, dsf)
+        return read_trc(path, downsample)
 
     else:  # None
         raise ValueError("*" + ext + " files are currently not supported.")
@@ -270,7 +269,7 @@ def sleep_switch(file, ext, dsf):
 ###############################################################################
 ###############################################################################
 
-def read_edf(path, dsf):
+def read_edf(path, downsample):
     """Read data from a European Data Format (edf) file.
 
     Use phypno class for reading EDF files:
@@ -280,8 +279,8 @@ def read_edf(path, dsf):
     ----------
     path: str
         Filename(with full path) to EDF file
-    dsf : int
-        Down-sampling factor.
+    downsample : int
+        Down-sampling frequency.
 
     Returns
     -------
@@ -321,10 +320,13 @@ def read_edf(path, dsf):
     # Get original signal length :
     n = data.shape[1]
 
+    # Get down-sample factor :
+    dsf = get_dsf(downsample, float(sf))
+
     return float(sf), data[:, ::dsf], list(chan), n, start_time
 
 
-def read_trc(path, dsf):
+def read_trc(path, downsample):
     """Read data from a Micromed (trc) file (version 4).
 
     Poor man's version of micromedio.py from Neo package
@@ -334,8 +336,8 @@ def read_trc(path, dsf):
     ----------
     path : str
         Filename(with full path) to .trc file
-    dsf : int
-        Down-sampling factor.
+    downsample : int
+        Down-sampling frequency.
 
     Returns
     -------
@@ -412,10 +414,13 @@ def read_trc(path, dsf):
     # Get original signal length :
     n = data.shape[1]
 
+    # Get down-sample factor :
+    dsf = get_dsf(downsample, float(sf))
+
     return sf, data[:, ::dsf], list(chan), n, start_time
 
 
-def read_eeg(path, dsf):
+def read_eeg(path, downsample):
     """Read data from a BrainVision (eeg) file.
 
     Poor man's version of https: // gist.github.com / breuderink / 6266871
@@ -429,8 +434,8 @@ def read_eeg(path, dsf):
     ----------
     path : str
         Filename(with full path) to .eeg file
-    dsf : int
-        Down-sampling factor.
+    downsample : int
+        Down-sampling frequency.
 
     Returns
     -------
@@ -517,10 +522,13 @@ def read_eeg(path, dsf):
     # Get original signal length :
     n = data.shape[1]
 
+    # Get down-sample factor :
+    dsf = get_dsf(downsample, float(sf))
+
     return sf, data[:, ::dsf], list(chan), n, start_time
 
 
-def read_elan(path, dsf):
+def read_elan(path, downsample):
     """Read data from a ELAN (eeg) file.
 
     Elan format specs: http: // elan.lyon.inserm.fr/
@@ -529,8 +537,8 @@ def read_elan(path, dsf):
     ----------
     path : str
         Filename(with full path) to Elan .eeg file
-    dsf : int
-        Down-sampling factor.
+    downsample : int
+        Down-sampling frequency.
 
     Returns
     -------
@@ -583,7 +591,7 @@ def read_elan(path, dsf):
 
     # Last 2 channels do not contain data
     nb_chan_data = nb_chan - 2
-    chan_list = np.arange(0, nb_chan_data)
+    chan_list = slice(nb_chan)
     chan = ent[10:10 + nb_chan_data]
 
     # Gain
@@ -601,6 +609,8 @@ def read_elan(path, dsf):
         max_num = float(ent[offset4 + i])
 
         gain[i - 1] = (max_an - min_an) / (max_num - min_num)
+    if gain.dtype != np.float32:
+        gain = gain.astype(np.float32, copy=False)
 
     # Load memmap
     nb_bytes = os.path.getsize(path)
@@ -612,8 +622,11 @@ def read_elan(path, dsf):
     # Get original signal length :
     n = m_raw.shape[1]
 
+    # Get down-sample factor :
+    dsf = get_dsf(downsample, float(sf))
+
     # Multiply by gain :
     data = m_raw[chan_list, ::dsf] * \
-        gain[chan_list][..., np.newaxis].astype(np.float32)
+        gain[chan_list][..., np.newaxis]
 
     return sf, data, list(chan), n, start_time
