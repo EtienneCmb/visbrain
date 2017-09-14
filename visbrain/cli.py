@@ -1,4 +1,5 @@
 """Command-line control of visbrain."""
+from __future__ import print_function
 import click
 from visbrain import Sleep
 from visbrain.io import (write_fig_hyp, read_hypno, oversample_hypno, write_csv)
@@ -9,6 +10,9 @@ import numpy as np
 ###############################################################################
 #                                  SLEEP
 ###############################################################################
+
+# -------------------- SLEEP GUI --------------------
+
 
 @click.command()
 @click.option('-d', '--data', default=None,
@@ -50,6 +54,9 @@ def cli_sleep(data, hypno, config_file, annotation_file, downsample, use_mne,
     if show:
         s.show()
 
+# -------------------- HYPNOGRAM TO FIGURE --------------------
+
+
 @click.command()
 @click.option('-h', '--hypno', default=None,
               help='Name of the hypnogram file to load (with extension).',
@@ -58,16 +65,16 @@ def cli_sleep(data, hypno, config_file, annotation_file, downsample, use_mne,
               help='Add X and Y grids to figure. Default is False.',
               type=bool)
 @click.option('-c', '--color', default=False,
-              help='Plot in black or white (False) or in color (True). Default is False.',
+              help='Get colored figure. Default is False (black and white).',
               type=bool)
 @click.option('-o', '--outfile', default=None,
               help='Output filename (with extension).',
               type=click.Path(exists=False))
 @click.option('--dpi', default=300,
-              help='Dots per inches. Larger dpi will result in larger figure resolution. Default is 300.',
+              help='Dots per inches (resolution). Default is 300.',
               type=int)
 def cli_fig_hyp(hypno, grid, color, outfile, dpi):
-    """Create hypnogram figure from hypnogram file"""
+    """Create hypnogram figure from hypnogram file."""
     # File conversion :
     if hypno is not None:
         hypno = click.format_filename(hypno)
