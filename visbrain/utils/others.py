@@ -71,7 +71,7 @@ def check_downsampling(sf, ds):
     return ds
 
 
-def get_dsf(downsample, sf):
+def get_dsf(downsample, sf, check_ds=True):
     """Get the downsampling factor.
 
     Parameters
@@ -80,13 +80,14 @@ def get_dsf(downsample, sf):
         The down-sampling frequency.
     sf : float
         The sampling frequency
+    check_ds : bool | True
+        Check the down-sampling frequency.
     """
     if all([isinstance(k, (int, float)) for k in (downsample, sf)]):
-        # Check down-sampling :
-        downsample = downsample#check_downsampling(sf, downsample)
-        return int(np.round(sf / downsample))
+        downsample = check_downsampling(sf, downsample)
+        return int(np.round(sf / downsample)), downsample
     else:
-        return 1
+        return 1, downsample
 
 
 def vispy_array(data, dtype=np.float32):
