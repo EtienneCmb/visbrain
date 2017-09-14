@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 from ....utils import HelpMenu
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    oversample_hypno, is_mne_installed)
+                    is_mne_installed, annotations_to_array)
 
 __all__ = ['uiMenu']
 
@@ -427,22 +427,7 @@ class uiMenu(HelpMenu):
                                   "All files (*.*)")
         # Clean annotations :
         self._AnnotateTable.setRowCount(0)
-        # Load the file :
-        if isinstance(filename, str):  # 'file.txt'
-            # Get starting/ending/annotation :
-            start, end, annot = np.genfromtxt(filename, delimiter=',',
-                                              dtype=str).T
-        elif isinstance(filename, np.ndarray):
-            start = end = filename
-            annot = np.array(['enter annotations'] * len(start))
-        elif is_mne_installed():  # MNE annotations
-            import mne
-            if isinstance(filename, mne.annotations.Annotations):
-                start = filename.onset
-                end = filename.onset + filename.duration
-                annot = filename.description
-        else:
-            raise ValueError("Annotation's type not supported.")
+        start, end, annot = annotations_to_array(filename)
 
         # Fill table :
         self._AnnotateTable.setRowCount(len(start))

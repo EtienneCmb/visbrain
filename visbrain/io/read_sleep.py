@@ -18,6 +18,7 @@ from .dialog import dialogLoad
 from .mneio import mne_switch
 from .dependencies import is_mne_installed
 from ..utils import get_dsf, vispy_array
+from ..io import merge_annotations
 
 __all__ = ['ReadSleepData']
 
@@ -30,7 +31,7 @@ class ReadSleepData(object):
     """
 
     def __init__(self, data, channels, sf, hypno, href, preload, use_mne,
-                 downsample, kwargs_mne, anot):
+                 downsample, kwargs_mne, annotations):
         """Init."""
         # ========================== LOAD DATA ==========================
         # Dialog window if data is None :
@@ -65,7 +66,7 @@ class ReadSleepData(object):
             else:  # Load using Sleep functions
                 args = sleep_switch(file, ext, downsample)
             # Get output arguments :
-            (sf, downsample, dsf, data, channels, n, offset, anot) = args
+            (sf, downsample, dsf, data, channels, n, offset, annot) = args
 
         elif isinstance(data, np.ndarray):  # array of data is defined
             if not isinstance(sf, (int, float)):
@@ -84,7 +85,7 @@ class ReadSleepData(object):
 
         # Keep variables :
         self._file = file
-        self._annot_file = anot
+        self._annot_file = np.c_[merge_annotations(annotations, annot)]
         self._N = n
         self._sfori = float(sf)
         self._toffset = offset.hour * 3600 + offset.minute * 60 + \
