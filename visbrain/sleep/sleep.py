@@ -42,9 +42,10 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
         Hypnogram data. Should be a raw vector of shape (n_pts,)
     config_file : string | None
         Path to the configuration file (.txt)
-    annotation_file : string | None
+    annotations : string | None
         Path to the annotation file (.txt, .csv). Alternatively, you can pass
-        an annotation instance of MNE.
+        an annotation instance of MNE or simply an (N,) array describing
+        the onset.
     channels : list | None
         List of channel names. The length of this list must be n_channels.
     sf : float | None
@@ -88,9 +89,9 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
     """
 
     def __init__(self, data=None, hypno=None, config_file=None,
-                 annotation_file=None, channels=None, sf=None,
-                 downsample=100., axis=False, line='gl',
-                 hedit=False, href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
+                 annotations=None, channels=None, sf=None, downsample=100.,
+                 axis=False, line='gl', hedit=False,
+                 href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
                  preload=True, use_mne=False, kwargs_mne={}):
         """Init."""
         # ====================== APP CREATION ======================
@@ -107,7 +108,7 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
         # ====================== LOAD FILE ======================
         ReadSleepData.__init__(self, data, channels, sf, hypno, href, preload,
                                use_mne, downsample, kwargs_mne,
-                               annotation_file)
+                               annotations)
 
         # ====================== VARIABLES ======================
         # Check all data :
