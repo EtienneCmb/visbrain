@@ -44,10 +44,10 @@ def mne_switch(file, ext, downsample, *args, preload=True, **kwargs):
         raw = io.read_raw_brainvision(path, *args, **kwargs)
 
     sf = np.round(raw.info['sfreq'])
-    dsf = get_dsf(downsample, sf)
+    dsf, downsample = get_dsf(downsample, sf)
     channels = raw.info['ch_names']
     data = raw._data
     n = data.shape[1]
     start_time = datetime.time(0, 0, 0)  #raw.info['meas_date']
 
-    return sf, data[:, ::dsf], channels, n, start_time
+    return sf, downsample, dsf, data[:, ::dsf], channels, n, start_time
