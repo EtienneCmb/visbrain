@@ -23,7 +23,7 @@ import numpy as np
 @click.option('-c', '--config_file', default=None,
               help='Path to a configuration file.',
               type=click.Path(exists=True))
-@click.option('-a', '--annotation_file', default=None,
+@click.option('-a', '--annotations', default=None,
               help='Path to an annotation file.',
               type=click.Path(exists=True))
 @click.option('--downsample', default=100.,
@@ -35,7 +35,7 @@ import numpy as np
               help='Preload data in memory. Default is True', type=bool)
 @click.option('--show', default=True,
               help='Display GUI. Default is True', type=bool)
-def cli_sleep(data, hypno, config_file, annotation_file, downsample, use_mne,
+def cli_sleep(data, hypno, config_file, annotations, downsample, use_mne,
               preload, show):
     """Open Sleep using command-line."""
     # File conversion :
@@ -45,11 +45,11 @@ def cli_sleep(data, hypno, config_file, annotation_file, downsample, use_mne,
         hypno = click.format_filename(hypno)
     if config_file is not None:
         config_file = click.format_filename(config_file)
-    if annotation_file is not None:
-        annotation_file = click.format_filename(annotation_file)
+    if annotations is not None:
+        annotations = click.format_filename(annotations)
     s = Sleep(data=data, hypno=hypno, downsample=downsample,
               use_mne=use_mne, preload=preload, config_file=config_file,
-              annotation_file=annotation_file)
+              annotations=annotations)
     if show:
         s.show()
 
