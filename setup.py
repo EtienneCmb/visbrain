@@ -84,4 +84,5 @@ setup(
     entry_points='''
         [console_scripts]
         visbrain_sleep=visbrain.cli:cli_sleep
+        visbrain_fig_hyp=visbrain.cli:cli_fig_hyp
     ''')

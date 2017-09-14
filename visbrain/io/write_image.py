@@ -13,9 +13,9 @@ __all__ = ('write_fig_hyp', 'write_fig_canvas', 'write_fig_pyqt')
 
 
 def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
-                  colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
+                  dpi=600, colors={-1: '#8bbf56', 0: '#56bf8b', 1: '#aabcce',
                           2: '#405c79', 3: '#0b1c2c', 4: '#bf5656'}):
-    """Export hypnogram to a 600 dpi png figure.
+    """Export hypnogram to a high-res png figure.
 
     Parameters
     ----------
@@ -23,13 +23,17 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
         Filename (with full path) to sleep dataset.
     hypno : array_like
         Hypnogram vector
-    sf  : float | 100.
+    sf  : float
         The sampling frequency of displayed elements (could be the
         down-sampling frequency)
     tstartsec: int
         Record starting time given in seconds.
     grid : boolean, optional (def False)
         Plot X and Y grid.
+    ascolor : boolean, optional (def False)
+        Plot in color
+    dpi  : int, optional (def 600)
+        Dots per inches
     """
     import matplotlib.pyplot as plt
     import datetime
@@ -126,7 +130,7 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
     ax.spines['bottom'].set_smart_bounds(True)
 
     # Save as 600 dpi .png
-    plt.savefig(file, format='png', dpi=600, bbox_inches='tight')
+    plt.savefig(file, format='png', dpi=dpi, bbox_inches='tight')
 
 
 def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
