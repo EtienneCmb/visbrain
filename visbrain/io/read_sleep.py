@@ -86,12 +86,15 @@ class ReadSleepData(object):
                 raise ValueError("When passing raw data, the sampling "
                                  "frequency parameter, sf, must either be an "
                                  "integer or a float.")
+            self._N = data.shape[1]
+            time = np.arange(self._N) / sf
+            if isinstance(downsample, (int, float)):
+                # Find frequency ratio :
+                dsf = get_dsf(downsample, sf)
             self._file = None
             downsample = check_downsampling(sf, downsample)
-            self._N = data.shape[1]
             self._sfori = sf
             self._toffset = 0.
-            time = np.arange(self._N) / sf
         else:
             raise IOError("The data should either be a string which refer to "
                           "the path of a file or an array of raw data of shape"

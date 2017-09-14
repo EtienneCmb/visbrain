@@ -40,6 +40,8 @@ def mne_switch(file, ext, downsample, *args, preload=True, **kwargs):
         raw = io.read_raw_egi(path, *args, **kwargs)
     elif ext.lower() == '.cnt':  # CNT
         raw = io.read_raw_cnt(path, *args, **kwargs)
+    elif ext.lower() == '.eeg':  # BrainVision
+        raw = io.read_raw_brainvision(path, *args, **kwargs)
 
     sf = np.round(raw.info['sfreq'])
     dsf = get_dsf(downsample, sf)
