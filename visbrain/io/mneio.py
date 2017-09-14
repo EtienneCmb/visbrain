@@ -59,7 +59,7 @@ def mne_switch(file, ext, downsample, preload=True, **kwargs):
         raw = io.read_raw_brainvision(path, **kwargs)
 
     raw.pick_types(meg=True, eeg=True, ecg=True, emg=True) # Remove stim lines
-    sf = np.round(raw.info['sfreq'])
+    sf = raw.info['sfreq']
     dsf, downsample = get_dsf(downsample, sf)
     channels = raw.info['ch_names']
     data = raw._data
