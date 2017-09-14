@@ -41,6 +41,7 @@ extensions = [
     'numpydoc',
     'sphinx.ext.autosummary',
     'sphinx_gallery.gen_gallery',
+    'sphinx_click.ext',
 ]
     # , 'sphinx.ext.napoleon'
 #     'sphinx.ext.githubpages',
