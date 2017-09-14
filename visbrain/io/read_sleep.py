@@ -100,9 +100,9 @@ class ReadSleepData(object):
         # 1 - Case hypnogram is a file (*.hyp / *.txt / *.csv)
         if isinstance(hypno, str):
             hypno, _ = read_hypno(hypno)
-            # Resample to downsampled data
-            hypno = oversample_hypno(hypno, data.shape[1])
-        # 2 - Case hypnogram is a np.array of length similar to data
+            # Oversample then downsample :
+            hypno = oversample_hypno(hypno, self._N)[::dsf]
+        # 2 - Case hypnogram is a np.array of length similar to data :
         if isinstance(hypno, np.ndarray) and len(hypno) == n:
             hypno = hypno[::dsf]
 
