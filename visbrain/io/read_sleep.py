@@ -125,11 +125,12 @@ class ReadSleepData(object):
                  "channel names will be used instead.")
             channels = ['chan' + str(k) for k in range(nchan)]
         # Clean channel names :
-        patterns = ['eeg', 'EEG']
+        patterns = ['eeg', 'EEG', 'ref']
         chanc = []
         for c in channels:
             # Remove informations after . :
             c = c.split('.')[0]
+            c = c.split('-')[0]
             # Exclude patterns :
             for i in patterns:
                 c = c.replace(i, '')
@@ -178,7 +179,7 @@ class ReadSleepData(object):
         # ---------- SCALING ----------
         # Check amplitude of the data and if necessary apply re-scaling
         if np.abs(np.ptp(data, 0).mean()) < 0.1:
-            warn("")
+            warn("Wrong data amplitude for Sleep software.")
             data *= 1e6
 
         # ---------- CONVERSION ----------=
