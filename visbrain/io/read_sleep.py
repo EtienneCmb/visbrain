@@ -36,9 +36,10 @@ class ReadSleepData(object):
         # Dialog window if data is None :
         if data is None:
             data = dialogLoad(self, "Open dataset", '',
-                              "BrainVision/Elan (*.eeg);;EDF (*.edf);;"
-                              "Micromed (*.trc);;BDF (*.bdf);;EGI (*.egi);;"
-                              "MFF (*.mff);;CNT (*.cnt);;All files (*.*)")
+                              "BrainVision (*.vhdr);;EDF (*.edf);;"
+                              "GDF (*.gdf);;BDF (*.bdf);;Elan (*.eeg);;"
+                              "EGI (*.egi);;MFF (*.mff);;CNT (*.cnt);;"
+                              "Micromed (*.trc);;EEGLab (*.set)")
             upath = os.path.split(data)[0]
         else:
             upath = ''
@@ -50,7 +51,7 @@ class ReadSleepData(object):
             # Force to use MNE if preload is False :
             use_mne = True if not preload else use_mne
             # Get if the file has to be loaded using Sleep or MNE python :
-            use_mne = True if ext not in ['.eeg', '.edf', '.trc'] else use_mne
+            use_mne = True if ext not in ['.eeg', '.vhdr', '.edf', '.trc'] else use_mne
 
             if not is_mne_installed() and use_mne:
                 raise IOError("To load the file, MNE-python should be "
@@ -212,17 +213,11 @@ def sleep_switch(file, ext, downsample):
     # Get full path :
     path = file + ext
 
-    if ext == '.eeg':  # BrainVision // ELAN
-        if os.path.isfile(path + '.ent'):  # ELAN
-            return read_elan(path, downsample)
+    if ext == '.vhdr':  # BrainVision
+        return read_eeg(path, downsample)
 
-        elif os.path.isfile(file + '.vhdr'):  # BrainVision
-            return read_eeg(path, downsample)
-
-        else:  # None :
-            raise ValueError("No header file found in this directory. You "
-                             "should have a *.ent (ELAN) or *.vhdr "
-                             "(BrainVision)")
+    if ext == '.eeg':  # Elan
+        return read_elan(path, downsample)
 
     elif ext == '.edf':  # European Data Format
         return read_edf(path, downsample)
@@ -394,7 +389,7 @@ def read_trc(path, downsample):
 
 
 def read_eeg(path, downsample):
-    """Read data from a BrainVision (eeg) file.
+    """Read data from a BrainVision (*.vhdr) file.
 
     Poor man's version of https: // gist.github.com / breuderink / 6266871
 
@@ -406,7 +401,8 @@ def read_eeg(path, downsample):
     Parameters
     ----------
     path : str
-        Filename(with full path) to .eeg file
+        Filename(with full path) to .vhdr file. Data file must be in the
+        same directory.
     downsample : int
         Down-sampling frequency.
 
@@ -425,22 +421,23 @@ def read_eeg(path, downsample):
     """
     import re
 
-    assert os.path.splitext(path)[1] == '.eeg'
-
-    header = os.path.splitext(path)[0] + '.vhdr'
-    marker = os.path.splitext(path)[0] + '.vmrk'
-
     assert os.path.isfile(path)
-    assert os.path.isfile(header)
 
     # Read header
-    ent = np.genfromtxt(header, delimiter='\n', usecols=[0],
+    ent = np.genfromtxt(path, delimiter='\n', usecols=[0],
                         dtype=None, skip_header=0)
 
     ent = np.char.decode(ent, "utf-8")
 
     for item in ent:
-        if 'NumberOfChannels=' in item:
+        if 'DataFile=' in item:
+            data_file = item.split('=')[1]
+            data_path = os.path.dirname(path) + data_file
+            assert os.path.isfile(data_path)
+        elif 'MarkerFile=' in item:
+            marker_file = item.split('=')[1]
+            marker_path = os.path.dirname(path) + marker_file
+        elif 'NumberOfChannels=' in item:
             n_chan = int(re.findall('\d+', item)[0])
         elif 'SamplingInterval=' in item:
             si = float(re.findall("[-+]?\d*\.\d+|\d+", item)[0])
@@ -469,8 +466,8 @@ def read_eeg(path, downsample):
     chan = np.array(list(chan.values())).flatten()
 
     # Read marker file (if present) to extract recording time
-    if os.path.isfile(marker):
-        vmrk = np.genfromtxt(marker, delimiter='\n', usecols=[0],
+    if os.path.isfile(marker_path):
+        vmrk = np.genfromtxt(marker_path, delimiter='\n', usecols=[0],
                              dtype=None, skip_header=0)
 
         vmrk = np.char.decode(vmrk)
@@ -483,7 +480,7 @@ def read_eeg(path, downsample):
     else:
         start_time = datetime.time(0, 0, 0)
 
-    with open(path, 'rb') as f:
+    with open(data_path, 'rb') as f:
         raw = f.read()
         size = int(len(raw) / 2)
 

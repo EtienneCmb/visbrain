@@ -75,10 +75,10 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
     Notes
     -----
     .. note::
-        * Supported polysomnographic files : by default, Sleep support .eeg
-          (BrainVision and Elan), .trc (Micromed) and .edf (European Data
+        * Supported polysomnographic files : by default, Sleep support .vhdr
+          (BrainVision), .eeg (Elan), .trc (Micromed) and .edf (European Data
           Format). If mne-python is installed, this default list of supported
-          files is extended to .cnt, .egi, .mff, .edf and .bdf.
+          files is extended to .cnt, .egi, .mff, .edf, .bdf, .gdf, .set, .vhdr.
         * Supproted hypnogram files : by default, Sleep support .txt, .csv and
           .hyp hypnogram files.
 
