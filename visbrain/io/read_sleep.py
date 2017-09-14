@@ -97,14 +97,15 @@ class ReadSleepData(object):
                                "Elan (*.hyp);;Text file (*.txt);;"
                                "CSV file (*.csv);;All files (*.*)")
             hypno = None if hypno == '' else hypno
-        # 1 - Case hypnogram is a file (*.hyp / *.txt / *.csv)
-        if isinstance(hypno, str):
+        if isinstance(hypno, str):  # (*.hyp / *.txt / *.csv)
             hypno, _ = read_hypno(hypno)
             # Oversample then downsample :
             hypno = oversample_hypno(hypno, self._N)[::dsf]
-        # 2 - Case hypnogram is a np.array of length similar to data :
-        if isinstance(hypno, np.ndarray) and len(hypno) == n:
+        if isinstance(hypno, np.ndarray) and len(hypno) == n:  # array_like
             hypno = hypno[::dsf]
+        else:
+            raise ValueError("Then length of the hypnogram must be the same "
+                             "as raw data")
 
         # ========================== CHECKING ==========================
         # ---------- DATA ----------
