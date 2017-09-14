@@ -41,9 +41,8 @@ def oversample_hypno(hypno, n):
     if npts < n:
         hypno = np.append(hypno, hypno[-1] * np.ones((n - npts)))
     elif n > npts:
-        raise ValueError("The length of the hypnogram \
-                         vector must be" + str(n) +
-                         " (Currently : " + str(npts) + ".")
+        raise ValueError("The length of the hypnogram  vector must "
+                         "be " + str(n) + " (Currently : " + str(npts) + ".")
 
     return hypno.astype(int)
 
