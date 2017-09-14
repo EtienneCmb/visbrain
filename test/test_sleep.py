@@ -23,7 +23,7 @@ onset = np.array([100, 2000, 5000])
 app = QtWidgets.QApplication([])
 sp = Sleep(data=data, channels=channels,
            sf=sf, downsample=100., hypno=hypno, axis=False, hedit=True,
-           annotation=onset)
+           annotations=onset)
 
 
 class TestSleep(object):
