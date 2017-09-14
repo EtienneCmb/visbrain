@@ -8,12 +8,11 @@
 """
 import numpy as np
 import os
-from warnings import warn
 
 from ..utils import vispy_array
 
-__all__ = ('oversample_hypno', 'write_hypno_txt', 'write_hypno_hyp', 'read_hypno',
-           'read_hypno_hyp', 'read_hypno_txt')
+__all__ = ('oversample_hypno', 'write_hypno_txt', 'write_hypno_hyp',
+           'read_hypno', 'read_hypno_hyp', 'read_hypno_txt')
 
 
 def oversample_hypno(hypno, n):
