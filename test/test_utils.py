@@ -1,8 +1,6 @@
 """Test utility functions."""
 import numpy as np
-import pytest
 from PyQt5 import QtWidgets, QtCore
-import sys
 from warnings import warn
 import math
 
