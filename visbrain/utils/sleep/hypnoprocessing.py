@@ -135,8 +135,8 @@ def sleepstats(file, hypno, nsamples, sf=100., sfori=1000., time_window=30.):
 
     # Add global informations
     stats['Filename_0'] = path.basename(file) if file is not None else ''
-    stats['Sampling frequency_1'] = str(int(sfori)) + " Hz"
-    stats['Down-sampling_2'] = str(int(sf)) + " Hz"
+    stats['Sampling frequency_1'] = str(sfori) + " Hz"
+    stats['Down-sampling_2'] = str(sf) + " Hz"
     stats['Units_3'] = 'minutes'
     stats['Duration (TIB)_4'] = np.round(nsamples / (sfori * 60.))
 
