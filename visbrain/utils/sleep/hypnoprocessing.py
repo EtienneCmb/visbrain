@@ -3,7 +3,7 @@
 import numpy as np
 from os import path
 
-__all__ = ('sleepstats', 'transient')
+__all__ = ('sleepstats', 'transient', 'batch_sleepstats')
 
 
 def transient(data, xvec=None):
@@ -149,5 +149,63 @@ def sleepstats(file, hypno, nsamples, sf=100., sfori=1000., time_window=30.):
     # stats['%N2_21'] = stats['N2_7'] / stats['TDT_3'] * 100.
     # stats['%N3_22'] = stats['N3_8'] / stats['TDT_3'] * 100.
     # stats['%REM_23'] = stats['REM_9'] / stats['TDT_3'] * 100.
+
+    return stats
+
+def batch_sleepstats(hypno, sf_hyp=1.):
+    """Compute sleep stats from an hypnogram vector.
+
+    Parameters
+    ----------
+    hypno : array_like
+        Hypnogram vector
+    sf : float
+        The sampling frequency of displayed elements (could be the
+        down-sampling frequency)
+
+    Returns
+    -------
+    stats: dict
+        Sleep statistics (expressed in minutes)
+    """
+
+    stats = {}
+    tov = np.nan
+
+    stats['Duration (TIB)_2'] = len(hypno)
+    stats['TDT_3'] = np.where(hypno != 0)[0].max() if np.nonzero(
+        hypno)[0].size else tov
+
+    # Duration of each sleep stages
+    stats['Art_4'] = hypno[hypno == -1].size
+    stats['W_5'] = hypno[hypno == 0].size
+    stats['N1_6'] = hypno[hypno == 1].size
+    stats['N2_7'] = hypno[hypno == 2].size
+    stats['N3_8'] = hypno[hypno == 3].size
+    stats['REM_9'] = hypno[hypno == 4].size
+
+    # Sleep stage latencies
+    stats['LatN1_10'] = np.where(hypno == 1)[0].min() if 1 in hypno else tov
+    stats['LatN2_11'] = np.where(hypno == 2)[0].min() if 2 in hypno else tov
+    stats['LatN3_12'] = np.where(hypno == 3)[0].min() if 3 in hypno else tov
+    stats['LatREM_13'] = np.where(hypno == 4)[0].min() if 4 in hypno else tov
+
+    if not np.isnan(stats['LatN1_10']) and not np.isnan(stats['TDT_3']):
+        hypno_s = hypno[stats['LatN1_10']:stats['TDT_3']]
+
+        stats['SPT_14'] = hypno_s.size
+        stats['WASO_15'] = hypno_s[hypno_s == 0].size
+        stats['TST_16'] = stats['SPT_14'] - stats['WASO_15']
+    else:
+        stats['SPT_14'] = tov
+        stats['WASO_15'] = tov
+        stats['TST_16'] = tov
+
+    # Convert to minutes
+    for key, value in stats.items():
+        stats[key] = value / (60 / sf_hyp)
+
+    stats['Units_1'] = 'minutes'
+    stats['SE (%)_17'] = np.round(stats['TST_16'] / stats['TDT_3'] * 100., 2)
 
     return stats

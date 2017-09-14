@@ -1,7 +1,8 @@
 """Command-line control of visbrain."""
 import click
 from visbrain import Sleep
-from visbrain.io import (write_fig_hyp, read_hypno, oversample_hypno)
+from visbrain.io import (write_fig_hyp, read_hypno, oversample_hypno, write_csv)
+from visbrain.utils import batch_sleepstats
 import os.path
 import numpy as np
 
@@ -87,3 +88,45 @@ def cli_fig_hyp(hypno, grid, color, outfile, dpi):
     # Create figure
     write_fig_hyp(outfile, hypno, sf=sf_hyp, tstartsec=0, grid=grid, ascolor=color, dpi=dpi)
     print('Hypnogram figure saved to:', outfile)
+
+
+@click.command()
+@click.option('-h', '--hypno', default=None,
+              help='Name of the hypnogram file to load (with extension).',
+              type=click.Path(exists=True))
+@click.option('-o', '--outfile', default=None,
+              help='Output filename (with extension *.txt / *.csv).',
+              type=click.Path(exists=False))
+def cli_sleep_stats(hypno, outfile):
+    """Compute and export sleep statistics from hypnogram file"""
+    # File conversion :
+    if hypno is not None:
+        hypno_path = click.format_filename(hypno)
+    if outfile is not None:
+        outfile = click.format_filename(outfile)
+        ext = os.path.splitext(outfile)[1][1:].strip().lower()
+        if ext == '':
+            outfile = outfile + '.csv'
+    else:
+        outfile = hypno_path + '.csv'
+    # Load hypnogram
+    hypno, sf_hyp = read_hypno(hypno_path)
+    if sf_hyp < 1:
+        time_base = 1 / sf_hyp
+        hypno = oversample_hypno(hypno, len(hypno) * time_base)
+        sf_hyp = 1
+
+    stats = batch_sleepstats(hypno, sf_hyp=sf_hyp)
+    stats['File_0'] = hypno_path
+    print('\nSLEEP STATS\n===========')
+    keys, val = [''] * len(stats), [''] * len(stats)
+    # Fill table :
+    for num, (k, v) in enumerate(stats.items()):
+        # Get keys and row :
+        key, r = k.split('_')
+        print(key, '\t', str(v))
+        # Remember variables :
+        keys[int(r)] = key
+        val[int(r)] = str(v)
+    write_csv(outfile, zip(keys, val))
+    print('===========\nCSV file saved to:', outfile)
