@@ -83,7 +83,8 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
           .hyp hypnogram files.
 
     .. deprecated:: 0.3.4
-        Use :func:`show` instead.
+        Input arguments `file` and `hypno_file` has been deprecated in 0.3.4
+        release. Use instead the `data` and `hypno` inputs.
     """
 
     def __init__(self, data=None, hypno=None, config_file=None,
