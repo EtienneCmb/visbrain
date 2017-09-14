@@ -51,7 +51,8 @@ class ReadSleepData(object):
             # Force to use MNE if preload is False :
             use_mne = True if not preload else use_mne
             # Get if the file has to be loaded using Sleep or MNE python :
-            use_mne = True if ext not in ['.eeg', '.vhdr', '.edf', '.trc'] else use_mne
+            sleep_ext = ['.eeg', '.vhdr', '.edf', '.trc']
+            use_mne = True if ext not in sleep_ext else use_mne
 
             if not is_mne_installed() and use_mne:
                 raise IOError("To load the file, MNE-python should be "
