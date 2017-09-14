@@ -34,15 +34,18 @@ def mne_switch(file, ext, downsample, *args, preload=True, **kwargs):
         preload = 'temp.dat'
     kwargs['preload'] = preload
 
-    if ext.lower() in ['.edf', '.bdf']:  # EDF / BDF
+    if ext.lower() in ['.edf', '.bdf', '.gdf']:  # EDF / BDF / GDF
         raw = io.read_raw_edf(path, *args, **kwargs)
+    elif ext.lower == '.set':   # EEGLAB
+        raw = io.read_raw_eeglab(path, *args, **kwargs)
     elif ext.lower() == ['.egi', '.mff']:  # EGI / MFF
         raw = io.read_raw_egi(path, *args, **kwargs)
     elif ext.lower() == '.cnt':  # CNT
         raw = io.read_raw_cnt(path, *args, **kwargs)
-    elif ext.lower() == '.eeg':  # BrainVision
+    elif ext.lower() == '.vhdr':  # BrainVision
         raw = io.read_raw_brainvision(path, *args, **kwargs)
 
+    raw.pick_types(meg=True, eeg=True, ecg=True, emg=True) # Remove stim lines
     sf = np.round(raw.info['sfreq'])
     dsf, downsample = get_dsf(downsample, sf)
     channels = raw.info['ch_names']

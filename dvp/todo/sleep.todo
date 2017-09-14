@@ -66,6 +66,7 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
+	-5 Refaire fonction lecture BrainVision pour lire directement le header file (*.vhdr) et etre consistent avec MNE
 	-4 Transferer fileconvert.py -> visbrain.io/read_sleep
 	-4 Regrouper fonctions de fileconvert.py dans une classe Sleep.io ?
 	-2 Scorage automatique du sommeil à partir propriete spectrale + detection auto
