@@ -57,6 +57,8 @@ def mne_switch(file, ext, downsample, preload=True, **kwargs):
         raw = io.read_raw_cnt(path, **kwargs)
     elif ext.lower() == '.vhdr':  # BrainVision
         raw = io.read_raw_brainvision(path, **kwargs)
+    else:
+        raise IOError("File not supported by mne-python.")
 
     raw.pick_types(meg=True, eeg=True, ecg=True, emg=True)  # Remove stim lines
     sf = raw.info['sfreq']
