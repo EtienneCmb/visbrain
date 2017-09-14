@@ -30,7 +30,7 @@ class ReadSleepData(object):
     """
 
     def __init__(self, data, channels, sf, hypno, href, preload, use_mne,
-                 downsample, kwargs_mne):
+                 downsample, kwargs_mne, anot):
         """Init."""
         # ========================== LOAD DATA ==========================
         # Dialog window if data is None :
@@ -65,7 +65,7 @@ class ReadSleepData(object):
             else:  # Load using Sleep functions
                 args = sleep_switch(file, ext, downsample)
             # Get output arguments :
-            (sf, downsample, dsf, data, channels, n, offset) = args
+            (sf, downsample, dsf, data, channels, n, offset, anot) = args
 
         elif isinstance(data, np.ndarray):  # array of data is defined
             if not isinstance(sf, (int, float)):
@@ -84,6 +84,7 @@ class ReadSleepData(object):
 
         # Keep variables :
         self._file = file
+        self._annot_file = anot
         self._N = n
         self._sfori = float(sf)
         self._toffset = offset.hour * 3600 + offset.minute * 60 + \
@@ -216,6 +217,8 @@ def sleep_switch(file, ext, downsample):
         Number of time points before down-sampling.
     start_time : datetime.time
         The time offset.
+    annotations : array_like
+        Array of annotations.
     """
     # Get full path :
     path = file + ext
@@ -265,8 +268,10 @@ def read_edf(path, downsample):
         The list of channel's names.
     n : int
         Number of points in the original data
-    start_time: array_like
+    start_time : array_like
         Starting time of the recording (hh:mm:ss)
+    annotations : array_like
+        Array of annotations.
     """
     assert os.path.isfile(path)
 
@@ -295,9 +300,10 @@ def read_edf(path, downsample):
 
     # Get down-sample factor :
     sf = float(sf)
+    chan = list(chan)
     dsf, downsample = get_dsf(downsample, sf)
 
-    return sf, downsample, dsf, data[:, ::dsf], list(chan), n, start_time
+    return sf, downsample, dsf, data[:, ::dsf], chan, n, start_time, None
 
 
 def read_trc(path, downsample):
@@ -325,8 +331,10 @@ def read_trc(path, downsample):
         The list of channel's names.
     n : int
         Number of samples before down-sampling.
-    start_time: array_like
+    start_time : array_like
         Starting time of the recording (hh:mm:ss)
+    annotations : array_like
+        Array of annotations.
     """
     import struct
 
@@ -389,10 +397,11 @@ def read_trc(path, downsample):
     n = data.shape[1]
 
     # Get down-sample factor :
-    sf = sf = float(sf)
+    sf = float(sf)
+    chan = list(chan)
     dsf, downsample = get_dsf(downsample, sf)
 
-    return sf, downsample, dsf, data[:, ::dsf], list(chan), n, start_time
+    return sf, downsample, dsf, data[:, ::dsf], chan, n, start_time, None
 
 
 def read_eeg(path, downsample):
@@ -425,6 +434,8 @@ def read_eeg(path, downsample):
         Number of points before down-sampling.
     start_time : array_like
         Starting time of the recording (hh:mm:ss)
+    annotations : array_like
+        Array of annotations.
     """
     import re
 
@@ -439,11 +450,11 @@ def read_eeg(path, downsample):
     for item in ent:
         if 'DataFile=' in item:
             data_file = item.split('=')[1]
-            data_path = os.path.dirname(path) + data_file
+            data_path = os.path.join(os.path.dirname(path), data_file)
             assert os.path.isfile(data_path)
         elif 'MarkerFile=' in item:
             marker_file = item.split('=')[1]
-            marker_path = os.path.dirname(path) + marker_file
+            marker_path = os.path.join(os.path.dirname(path), marker_file)
         elif 'NumberOfChannels=' in item:
             n_chan = int(re.findall('\d+', item)[0])
         elif 'SamplingInterval=' in item:
@@ -519,9 +530,10 @@ def read_eeg(path, downsample):
 
     # Get down-sample factor :
     sf = float(sf)
+    chan = list(chan)
     dsf, downsample = get_dsf(downsample, sf)
 
-    return sf, downsample, dsf, data[:, ::dsf], list(chan), n, start_time
+    return sf, downsample, dsf, data[:, ::dsf], chan, n, start_time, None
 
 
 def read_elan(path, downsample):
@@ -548,6 +560,8 @@ def read_elan(path, downsample):
         Number of samples before down-sampling.
     start_time : array_like
         Starting time of the recording (hh:mm:ss)
+    annotations : array_like
+        Array of annotations.
     """
     header = path + '.ent'
 
@@ -620,10 +634,11 @@ def read_elan(path, downsample):
 
     # Get down-sample factor :
     sf = float(sf)
+    chan = list(chan)
     dsf, downsample = get_dsf(downsample, sf)
 
     # Multiply by gain :
     data = m_raw[chan_list, ::dsf] * \
         gain[chan_list][..., np.newaxis]
 
-    return sf, downsample, dsf, data, list(chan), n, start_time
+    return sf, downsample, dsf, data, chan, n, start_time, None

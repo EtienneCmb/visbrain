@@ -58,12 +58,13 @@ def mne_switch(file, ext, downsample, preload=True, **kwargs):
     elif ext.lower() == '.vhdr':  # BrainVision
         raw = io.read_raw_brainvision(path, **kwargs)
 
-    raw.pick_types(meg=True, eeg=True, ecg=True, emg=True) # Remove stim lines
+    raw.pick_types(meg=True, eeg=True, ecg=True, emg=True)  # Remove stim lines
     sf = raw.info['sfreq']
     dsf, downsample = get_dsf(downsample, sf)
     channels = raw.info['ch_names']
     data = raw._data
     n = data.shape[1]
-    start_time = datetime.time(0, 0, 0)  #raw.info['meas_date']
+    start_time = datetime.time(0, 0, 0)  # raw.info['meas_date']
+    anot = raw.annotations
 
-    return sf, downsample, dsf, data[:, ::dsf], channels, n, start_time
+    return sf, downsample, dsf, data[:, ::dsf], channels, n, start_time, anot
