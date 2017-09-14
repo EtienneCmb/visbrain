@@ -475,9 +475,27 @@ def read_eeg(path, downsample):
         for item in vmrk:
             if 'New Segment' in item:
                 st = re.split('\W+', item)[-1]
-
-        start_time = datetime.time(int(st[8:10]), int(st[10:12]),
+                start_time = datetime.time(int(st[8:10]), int(st[10:12]),
                                    int(st[12:14]))
+            else:
+                start_time = datetime.time(0, 0, 0)
+
+        #     # Extract annotations
+        #     onsets = np.array([], dtype=int)
+        #     durations = np.array([], dtype=int)
+        #     descriptions = np.array([], dtype=int)
+        #     if 'Mk' in item and ';' not in item:
+        #         onsets = np.append(onsets, int(
+        #                     re.sub(r'\s', '', item).split(',')[2]))
+        #         durations = np.append(durations, int(
+        #                         re.sub(r'\s', '', item).split(',')[3]))
+        #         descriptions = np.append(descriptions, re.sub(
+        #                         r'\s', '', item).split(',')[1])
+        #
+        # # Convert to MNE format annotations
+        # from mne import Annotations
+        # annot = Annotations(onsets, durations, descriptions)
+
     else:
         start_time = datetime.time(0, 0, 0)
 
