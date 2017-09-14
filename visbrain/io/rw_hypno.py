@@ -169,7 +169,7 @@ def read_hypno_hyp(path):
     -------
     hypno : array_like
         The hypnogram vector in its original length.
-    sf_hyp: float
+    sf_hyp : float
         The hypnogram original sampling frequency (Hz)
     """
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
@@ -203,8 +203,7 @@ def read_hypno_txt(path):
     -------
     hypno : array_like
         The hypnogram vector in its original length.
-
-    sf_hyp: float
+    sf_hyp : float
         The hypnogram original sampling frequency (Hz)
     """
     assert os.path.isfile(path)
@@ -270,28 +269,20 @@ def swap_hyp_values(hypno, desc):
 
     if 'Art' in desc:
         hypno_s[hypno == desc['Art']] = -1
-
     if 'Nde' in desc:
         hypno_s[hypno == desc['Nde']] = -1
-
     if 'Mt' in desc:
         hypno_s[hypno == desc['Mt']] = -1
-
     if 'W' in desc:
         hypno_s[hypno == desc['W']] = 0
-
     if 'N1' in desc:
         hypno_s[hypno == desc['N1']] = 1
-
     if 'N2' in desc:
         hypno_s[hypno == desc['N2']] = 2
-
     if 'N3' in desc:
         hypno_s[hypno == desc['N3']] = 3
-
     if 'N4' in desc:
         hypno_s[hypno == desc['N4']] = 3
-
     if 'REM' in desc:
         hypno_s[hypno == desc['REM']] = 4
 
