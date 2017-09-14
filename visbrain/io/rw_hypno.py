@@ -237,12 +237,6 @@ def read_hypno_txt(path):
 
     hypno = swap_hyp_values(hypno, desc)
 
-    # # Get the repetition number :
-    # rep = int(np.floor(npts / len(hypno)))
-    #
-    # # Resample to get same number of points as in eeg file
-    # hypno = np.repeat(hypno, rep)
-
     return hypno, sf_hyp
 
 
