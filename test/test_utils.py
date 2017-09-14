@@ -576,8 +576,8 @@ class TestOthers(object):
 
     def test_get_dsf(self):
         """Test function get_dsf."""
-        assert get_dsf(100, 1000.) == 10
-        assert get_dsf(100, None) == 1
+        assert get_dsf(100, 1000.) == (10, 100.)
+        assert get_dsf(100, None) == (1, 100.)
 
     def test_vispy_array(self):
         """Test vispy_array function."""
