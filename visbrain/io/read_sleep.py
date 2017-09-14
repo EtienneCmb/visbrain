@@ -195,17 +195,19 @@ def sleep_switch(file, ext, downsample):
     Returns
     -------
     sf : float
-        The sampling frequency.
+        The original sampling-frequency.
     downsample : float
-        The downsampling frequency
+        The down-sampling frequency used.
+    dsf : int
+        The down-sampling factor.
     data : array_like
-        The data organised as well(n_channels, n_points)
-    chan : list
-        The list of channel's names.
+        The raw data of shape (n_channels, n_points)
+    channels : list
+        List of channel names.
     n : int
-        Number of samples before down-sampling.
-    start_time: array_like
-        Starting time of the recording (hh:mm:ss)
+        Number of time points before down-sampling.
+    start_time : datetime.time
+        The time offset.
     """
     # Get full path :
     path = file + ext
