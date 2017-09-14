@@ -17,7 +17,7 @@ from .rw_hypno import read_hypno
 from .dialog import dialogLoad
 from .mneio import mne_switch
 from .dependencies import is_mne_installed
-from ..utils import check_downsampling, get_dsf, vispy_array, id
+from ..utils import get_dsf, vispy_array
 
 __all__ = ['ReadSleepData']
 
@@ -59,46 +59,35 @@ class ReadSleepData(object):
             # ---------- LOAD THE FILE ----------
             if use_mne:  # Load using MNE functions
                 kwargs_mne['preload'] = preload
-                (sf, data, channels, n, offset) = mne_switch(file, ext,
-                                                             downsample,
-                                                             **kwargs_mne)
+                args = mne_switch(file, ext, downsample, **kwargs_mne)
             else:  # Load using Sleep functions
-                (sf, data, channels, n, offset) = sleep_switch(file, ext,
-                                                               downsample)
-
-            time = np.arange(n) / sf
-            self._file = file
-            self._N = n
-            self._sfori = sf
-            self._toffset = offset.hour * 3600 + offset.minute * 60 + \
-                offset.second
-
-            # ---------- SAMPLING FREQUENCY ----------
-            # Data are downsampled on load. Change sampling frequency :
-            if downsample is not None:
-                dsf = get_dsf(downsample, sf)
-                time = time[::dsf]
-                sf = downsample
-                downsample = None
+                args = sleep_switch(file, ext, downsample)
+            # Get output arguments :
+            (sf, downsample, dsf, data, channels, n, offset) = args
 
         elif isinstance(data, np.ndarray):  # array of data is defined
             if not isinstance(sf, (int, float)):
                 raise ValueError("When passing raw data, the sampling "
                                  "frequency parameter, sf, must either be an "
                                  "integer or a float.")
-            self._N = data.shape[1]
-            time = np.arange(self._N) / sf
-            if isinstance(downsample, (int, float)):
-                # Find frequency ratio :
-                dsf = get_dsf(downsample, sf)
-            self._file = None
-            downsample = check_downsampling(sf, downsample)
-            self._sfori = sf
-            self._toffset = 0.
+            file = None
+            offset = datetime.time(0, 0, 0)
+            dsf, downsample = get_dsf(downsample, sf)
+            n = data.shape[1]
+            data = data[:, ::dsf]
         else:
             raise IOError("The data should either be a string which refer to "
                           "the path of a file or an array of raw data of shape"
                           " (n_electrodes, n_time_points).")
+
+        # Keep variables :
+        self._file = file
+        self._N = n
+        self._sfori = float(sf)
+        self._toffset = offset.hour * 3600 + offset.minute * 60 + \
+            offset.second
+        time = np.arange(n)[::dsf] / sf
+        self._sf = float(downsample) if downsample is not None else float(sf)
 
         # ========================== LOAD HYPNOGRAM ==========================
         # Dialog window for hypnogram :
@@ -138,13 +127,6 @@ class ReadSleepData(object):
             c = c.strip()
             chanc.append(c)
 
-        # ---------- SAMPLING FREQUENCY ----------
-        # Check sampling frequency :
-        if not isinstance(sf, (int, float)):
-            raise ValueError("The sampling frequency must be a float number "
-                             "(e.g. 1024., 512., etc)")
-        sf = float(sf)
-
         # ---------- STAGE ORDER ----------
         # href checking :
         absref = ['art', 'wake', 'n1', 'n2', 'n3', 'rem']
@@ -182,25 +164,10 @@ class ReadSleepData(object):
                      "hypnogram will be used instead")
                 hypno = np.zeros((npts,), dtype=np.float32)
 
-        # ---------- TIME ----------
-        # Define time vector if needed :
-        if time is None:
-            time = np.arange(npts, dtype=np.float32) / sf
-
-        # ---------- DOWN-SAMPLING ----------
-        if isinstance(downsample, (int, float)):
-            # Find frequency ratio :
-            dsf = get_dsf(downsample, sf)
-            # Select time, data and hypno points :
-            data = data[:, ::dsf]
-            time = time[::dsf]
-            hypno = hypno[::dsf]
-            # Replace sampling frequency :
-            sf = float(downsample)
-
         # ---------- SCALING ----------
         # Check amplitude of the data and if necessary apply re-scaling
         if np.abs(np.ptp(data, 0).mean()) < 0.1:
+            warn("")
             data *= 1e6
 
         # ---------- CONVERSION ----------=
@@ -211,7 +178,6 @@ class ReadSleepData(object):
         self._channels = chanc
         self._href = href
         self._hconv = conv
-        self._sf = sf
 
 
 def sleep_switch(file, ext, downsample):
@@ -324,9 +290,10 @@ def read_edf(path, downsample):
     n = data.shape[1]
 
     # Get down-sample factor :
-    dsf = get_dsf(downsample, float(sf))
+    sf = float(sf)
+    dsf, downsample = get_dsf(downsample, sf)
 
-    return float(sf), data[:, ::dsf], list(chan), n, start_time
+    return sf, downsample, dsf, data[:, ::dsf], list(chan), n, start_time
 
 
 def read_trc(path, downsample):
@@ -418,9 +385,10 @@ def read_trc(path, downsample):
     n = data.shape[1]
 
     # Get down-sample factor :
-    dsf = get_dsf(downsample, float(sf))
+    sf = sf = float(sf)
+    dsf, downsample = get_dsf(downsample, sf)
 
-    return sf, data[:, ::dsf], list(chan), n, start_time
+    return sf, downsample, dsf, data[:, ::dsf], list(chan), n, start_time
 
 
 def read_eeg(path, downsample):
@@ -526,9 +494,10 @@ def read_eeg(path, downsample):
     n = data.shape[1]
 
     # Get down-sample factor :
-    dsf = get_dsf(downsample, float(sf))
+    sf = float(sf)
+    dsf, downsample = get_dsf(downsample, sf)
 
-    return sf, data[:, ::dsf], list(chan), n, start_time
+    return sf, downsample, dsf, data[:, ::dsf], list(chan), n, start_time
 
 
 def read_elan(path, downsample):
@@ -626,10 +595,11 @@ def read_elan(path, downsample):
     n = m_raw.shape[1]
 
     # Get down-sample factor :
-    dsf = get_dsf(downsample, float(sf))
+    sf = float(sf)
+    dsf, downsample = get_dsf(downsample, sf)
 
     # Multiply by gain :
     data = m_raw[chan_list, ::dsf] * \
         gain[chan_list][..., np.newaxis]
 
-    return sf, data, list(chan), n, start_time
+    return sf, downsample, dsf, data, list(chan), n, start_time
