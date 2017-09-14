@@ -152,6 +152,7 @@ def sleepstats(file, hypno, nsamples, sf=100., sfori=1000., time_window=30.):
 
     return stats
 
+
 def batch_sleepstats(hypno, sf_hyp=1.):
     """Compute sleep stats from an hypnogram vector.
 
@@ -168,7 +169,6 @@ def batch_sleepstats(hypno, sf_hyp=1.):
     stats: dict
         Sleep statistics (expressed in minutes)
     """
-
     stats = {}
     tov = np.nan
 
@@ -207,6 +207,5 @@ def batch_sleepstats(hypno, sf_hyp=1.):
 
     stats['SE'] = np.round(stats['TST'] / stats['TDT'] * 100., 2)
     stats['Units'] = 'minutes'
-
 
     return stats
