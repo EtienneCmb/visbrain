@@ -6,18 +6,17 @@ from visbrain import Sleep
 #                                  SLEEP
 ###############################################################################
 
-
 @click.command()
-@click.option('--data', default=None,
+@click.option('-d', '--data', default=None,
               help='Name of the  polysomnographic file to load.',
               type=click.Path(exists=True))
-@click.option('--hypno', default=None,
+@click.option('-h', '--hypno', default=None,
               help='Name of the hypnogram file to load.',
               type=click.Path(exists=True))
-@click.option('--config_file', default=None,
+@click.option('-c', '--config_file', default=None,
               help='Path to a configuration file.',
               type=click.Path(exists=True))
-@click.option('--annotation_file', default=None,
+@click.option('-a', '--annotation_file', default=None,
               help='Path to an annotation file.',
               type=click.Path(exists=True))
 @click.option('--downsample', default=100.,
