@@ -13,7 +13,7 @@ import datetime
 from warnings import warn
 
 from .rw_utils import get_file_ext
-from .rw_hypno import read_hypno
+from .rw_hypno import (read_hypno, oversample_hypno)
 from .dialog import dialogLoad
 from .mneio import mne_switch
 from .dependencies import is_mne_installed
@@ -97,8 +97,12 @@ class ReadSleepData(object):
                                "Elan (*.hyp);;Text file (*.txt);;"
                                "CSV file (*.csv);;All files (*.*)")
             hypno = None if hypno == '' else hypno
+        # 1 - Case hypnogram is a file (*.hyp / *.txt / *.csv)
         if isinstance(hypno, str):
-            hypno = read_hypno(hypno, data.shape[1])
+            hypno, _ = read_hypno(hypno)
+            # Resample to downsampled data
+            hypno = oversample_hypno(hypno, data.shape[1])
+        # 2 - Case hypnogram is a np.array of length similar to data
         if isinstance(hypno, np.ndarray) and len(hypno) == n:
             hypno = hypno[::dsf]
 

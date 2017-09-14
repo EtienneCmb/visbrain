@@ -1,7 +1,7 @@
 """Command-line control of visbrain."""
 import click
 from visbrain import Sleep
-from visbrain.io import (write_fig_hyp, read_hypno)
+from visbrain.io import (write_fig_hyp, read_hypno, oversample_hypno)
 import os.path
 import numpy as np
 
@@ -51,7 +51,7 @@ def cli_sleep(data, hypno, config_file, annotation_file, downsample, use_mne,
 
 @click.command()
 @click.option('-h', '--hypno', default=None,
-              help='Name of the hypnogram file (*.hyp) to load (with extension).',
+              help='Name of the hypnogram file to load (with extension).',
               type=click.Path(exists=True))
 @click.option('-g', '--grid', default=False,
               help='Add X and Y grids to figure. Default is False.',
@@ -70,8 +70,6 @@ def cli_fig_hyp(hypno, grid, color, outfile, dpi):
     # File conversion :
     if hypno is not None:
         hypno = click.format_filename(hypno)
-        ext = os.path.splitext(hypno)[1][1:].strip().lower()
-        assert(ext == 'hyp')
     if outfile is not None:
         outfile = click.format_filename(outfile)
         ext = os.path.splitext(outfile)[1][1:].strip().lower()
@@ -80,17 +78,12 @@ def cli_fig_hyp(hypno, grid, color, outfile, dpi):
     else:
         outfile = hypno + '.png'
     # Load hypnogram
-    hyp = np.genfromtxt(hypno, delimiter='\n', usecols=[0],
-                        dtype=None, skip_header=0)
-    hyp = np.char.decode(hyp)
-    # Sampling rate of hypnogram files
-    sf = float(hyp[0].split()[1])
-    # Extract hypnogram values
-    hypval = np.array(hyp[4:], dtype=np.int)
-    # Replace values according to Iber et al 2007
-    hypval[hypval == -2] = -1
-    hypval[hypval == 4] = 3
-    hypval[hypval == 5] = 4
+    hypno, sf_hyp = read_hypno(hypno)
+    # Bad cases (e.g. EDF files from DreamBank.net)
+    if sf_hyp < 1:
+        time_base = 1 / sf_hyp
+        hypno = oversample_hypno(hypno, len(hypno) * time_base)
+        sf_hyp = 1
     # Create figure
-    write_fig_hyp(outfile, hypval, sf=sf, tstartsec=0, grid=grid, ascolor=color, dpi=dpi)
+    write_fig_hyp(outfile, hypno, sf=sf_hyp, tstartsec=0, grid=grid, ascolor=color, dpi=dpi)
     print('Hypnogram figure saved to:', outfile)
