@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 from ....utils import HelpMenu
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    is_mne_installed, annotations_to_array)
+                    is_mne_installed, annotations_to_array, oversample_hypno)
 
 __all__ = ['uiMenu']
 
@@ -294,7 +294,7 @@ class uiMenu(HelpMenu):
         if filename:
             # Load the hypnogram :
             self._hypno, _ = read_hypno(filename)
-            self._hypno = oversample_hypno(self._hypno, self._data.shape[1])
+            self._hypno = oversample_hypno(self._hypno, self._N)[::self._dsf]
             self._hyp.set_data(self._sf, self._hypno, self._time)
             # Update info table :
             self._fcn_infoUpdate()

@@ -87,6 +87,7 @@ class ReadSleepData(object):
         self._file = file
         self._annot_file = np.c_[merge_annotations(annotations, annot)]
         self._N = n
+        self._dsf = dsf
         self._sfori = float(sf)
         self._toffset = offset.hour * 3600 + offset.minute * 60 + \
             offset.second
