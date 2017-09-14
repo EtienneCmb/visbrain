@@ -106,12 +106,12 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
 
         # ====================== LOAD FILE ======================
         ReadSleepData.__init__(self, data, channels, sf, hypno, href, preload,
-                               use_mne, downsample, kwargs_mne)
+                               use_mne, downsample, kwargs_mne,
+                               annotation_file)
 
         # ====================== VARIABLES ======================
         # Check all data :
         self._config_file = config_file
-        self._annot_file = annotation_file
         self._annot_mark = np.array([])
         self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
