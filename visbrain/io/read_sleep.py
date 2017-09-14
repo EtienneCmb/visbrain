@@ -73,7 +73,7 @@ class ReadSleepData(object):
                 raise ValueError("When passing raw data, the sampling "
                                  "frequency parameter, sf, must either be an "
                                  "integer or a float.")
-            file = None
+            file = annot = None
             offset = datetime.time(0, 0, 0)
             dsf, downsample = get_dsf(downsample, sf)
             n = data.shape[1]
