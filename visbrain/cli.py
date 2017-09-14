@@ -2,10 +2,10 @@
 from __future__ import print_function
 import click
 from visbrain import Sleep
-from visbrain.io import (write_fig_hyp, read_hypno, oversample_hypno, write_csv)
+from visbrain.io import (write_fig_hyp, read_hypno, oversample_hypno,
+                         write_csv)
 from visbrain.utils import batch_sleepstats
 import os.path
-import numpy as np
 
 ###############################################################################
 #                                  SLEEP
@@ -38,7 +38,7 @@ import numpy as np
               help='Display GUI. Default is True', type=bool)
 def cli_sleep(data, hypno, config_file, annotations, downsample, use_mne,
               preload, show):
-    """Open Sleep using command-line."""
+    """Open the graphical user interface of Sleep."""
     # File conversion :
     if data is not None:
         data = click.format_filename(data)
@@ -93,9 +93,12 @@ def cli_fig_hyp(hypno, grid, color, outfile, dpi):
         hypno = oversample_hypno(hypno, len(hypno) * time_base)
         sf_hyp = 1
     # Create figure
-    write_fig_hyp(outfile, hypno, sf=sf_hyp, tstartsec=0, grid=grid, ascolor=color, dpi=dpi)
+    write_fig_hyp(outfile, hypno, sf=sf_hyp, tstartsec=0, grid=grid,
+                  ascolor=color, dpi=dpi)
     print('Hypnogram figure saved to:', outfile)
 
+
+# -------------------- SLEEP STATS --------------------
 
 @click.command()
 @click.option('-h', '--hypno', default=None,
@@ -105,7 +108,23 @@ def cli_fig_hyp(hypno, grid, color, outfile, dpi):
               help='Output filename (with extension - *.csv).',
               type=click.Path(exists=False))
 def cli_sleep_stats(hypno, outfile):
-    """Compute sleep statistics from hypnogram file and export them in .csv"""
+    """Compute sleep statistics from hypnogram file and export them in csv.
+
+    Sleep statistics specifications:
+
+    * Time in Bed (TIB) : total duration of the hypnogram.
+    * Total Dark Time (TDT) : duration of the hypnogram from beginning
+      to last period of sleep.
+    * Sleep Period Time (SPT) : duration from first to last period of sleep.
+    * Wake After Sleep Onset (WASO) : duration of wake periods within SPT
+    * Sleep Efficiency (SE) : TST / TDT * 100 (%).
+    * Total Sleep Time (TST) : SPT - WASO.
+    * W, N1, N2, N3 and REM: sleep stages duration.
+    * % (W, ... REM) : sleep stages duration expressed in percentages of TDT.
+    * Latencies: latencies of sleep stages from the beginning of the record.
+
+    (All values except SE and percentages are expressed in minutes)
+    """
     # File conversion :
     if hypno is not None:
         hypno_path = click.format_filename(hypno)
