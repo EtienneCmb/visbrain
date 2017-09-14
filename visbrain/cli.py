@@ -95,10 +95,10 @@ def cli_fig_hyp(hypno, grid, color, outfile, dpi):
               help='Name of the hypnogram file to load (with extension).',
               type=click.Path(exists=True))
 @click.option('-o', '--outfile', default=None,
-              help='Output filename (with extension *.txt / *.csv).',
+              help='Output filename (with extension - *.csv).',
               type=click.Path(exists=False))
 def cli_sleep_stats(hypno, outfile):
-    """Compute and export sleep statistics from hypnogram file"""
+    """Compute sleep statistics from hypnogram file and export them in .csv"""
     # File conversion :
     if hypno is not None:
         hypno_path = click.format_filename(hypno)
@@ -117,16 +117,14 @@ def cli_sleep_stats(hypno, outfile):
         sf_hyp = 1
 
     stats = batch_sleepstats(hypno, sf_hyp=sf_hyp)
-    stats['File_0'] = hypno_path
+    stats['File'] = hypno_path
     print('\nSLEEP STATS\n===========')
     keys, val = [''] * len(stats), [''] * len(stats)
     # Fill table :
     for num, (k, v) in enumerate(stats.items()):
-        # Get keys and row :
-        key, r = k.split('_')
-        print(key, '\t', str(v))
+        print(k, '\t', str(v))
         # Remember variables :
-        keys[int(r)] = key
-        val[int(r)] = str(v)
+        keys[int(num)] = k
+        val[int(num)] = str(v)
     write_csv(outfile, zip(keys, val))
     print('===========\nCSV file saved to:', outfile)

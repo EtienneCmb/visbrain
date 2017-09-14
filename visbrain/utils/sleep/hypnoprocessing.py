@@ -172,40 +172,41 @@ def batch_sleepstats(hypno, sf_hyp=1.):
     stats = {}
     tov = np.nan
 
-    stats['Duration (TIB)_2'] = len(hypno)
-    stats['TDT_3'] = np.where(hypno != 0)[0].max() if np.nonzero(
+    stats['TIB'] = len(hypno)
+    stats['TDT'] = np.where(hypno != 0)[0].max() if np.nonzero(
         hypno)[0].size else tov
 
     # Duration of each sleep stages
-    stats['Art_4'] = hypno[hypno == -1].size
-    stats['W_5'] = hypno[hypno == 0].size
-    stats['N1_6'] = hypno[hypno == 1].size
-    stats['N2_7'] = hypno[hypno == 2].size
-    stats['N3_8'] = hypno[hypno == 3].size
-    stats['REM_9'] = hypno[hypno == 4].size
+    stats['Art'] = hypno[hypno == -1].size
+    stats['W'] = hypno[hypno == 0].size
+    stats['N1'] = hypno[hypno == 1].size
+    stats['N2'] = hypno[hypno == 2].size
+    stats['N3'] = hypno[hypno == 3].size
+    stats['REM'] = hypno[hypno == 4].size
 
     # Sleep stage latencies
-    stats['LatN1_10'] = np.where(hypno == 1)[0].min() if 1 in hypno else tov
-    stats['LatN2_11'] = np.where(hypno == 2)[0].min() if 2 in hypno else tov
-    stats['LatN3_12'] = np.where(hypno == 3)[0].min() if 3 in hypno else tov
-    stats['LatREM_13'] = np.where(hypno == 4)[0].min() if 4 in hypno else tov
+    stats['LatN1'] = np.where(hypno == 1)[0].min() if 1 in hypno else tov
+    stats['LatN2'] = np.where(hypno == 2)[0].min() if 2 in hypno else tov
+    stats['LatN3'] = np.where(hypno == 3)[0].min() if 3 in hypno else tov
+    stats['LatREM'] = np.where(hypno == 4)[0].min() if 4 in hypno else tov
 
-    if not np.isnan(stats['LatN1_10']) and not np.isnan(stats['TDT_3']):
-        hypno_s = hypno[stats['LatN1_10']:stats['TDT_3']]
+    if not np.isnan(stats['LatN1']) and not np.isnan(stats['TDT']):
+        hypno_s = hypno[stats['LatN1']:stats['TDT']]
 
-        stats['SPT_14'] = hypno_s.size
-        stats['WASO_15'] = hypno_s[hypno_s == 0].size
-        stats['TST_16'] = stats['SPT_14'] - stats['WASO_15']
+        stats['SPT'] = hypno_s.size
+        stats['WASO'] = hypno_s[hypno_s == 0].size
+        stats['TST'] = stats['SPT'] - stats['WASO']
     else:
-        stats['SPT_14'] = tov
-        stats['WASO_15'] = tov
-        stats['TST_16'] = tov
+        stats['SPT'] = tov
+        stats['WASO'] = tov
+        stats['TST'] = tov
 
     # Convert to minutes
     for key, value in stats.items():
         stats[key] = value / (60 / sf_hyp)
 
-    stats['Units_1'] = 'minutes'
-    stats['SE (%)_17'] = np.round(stats['TST_16'] / stats['TDT_3'] * 100., 2)
+    stats['SE'] = np.round(stats['TST'] / stats['TDT'] * 100., 2)
+    stats['Units'] = 'minutes'
+
 
     return stats
