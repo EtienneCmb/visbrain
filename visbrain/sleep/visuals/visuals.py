@@ -415,6 +415,7 @@ class Spectrogram(PrepareData):
         # Create a vispy image object :
         self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram',
                                         parent=parent)
+        self.mesh.transform = vist.STTransform()
 
     def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.,
                  fstart=.5, fend=20., contraste=.5):
@@ -481,7 +482,8 @@ class Spectrogram(PrepareData):
         fact = (freq.max() - freq.min()) / len(freq)
         sc = (tM / mesh.shape[1], fact, 1)
         tr = [0., freq.min(), 0.]
-        self.mesh.transform = vist.STTransform(scale=sc, translate=tr)
+        self.mesh.transform.translate = tr
+        self.mesh.transform.scale = sc
         # Update object :
         self.mesh.update()
         # Get camera rectangle :
@@ -780,6 +782,7 @@ class Indicator(object):
         image = color2vb('gray', alpha=alpha)[np.newaxis, ...]
         self.mesh = scene.visuals.Image(data=image, name=name,
                                         parent=parent)
+        self.mesh.transform = vist.STTransform()
         self.mesh.visible = visible
 
     def set_data(self, xlim, ylim):
@@ -795,7 +798,8 @@ class Indicator(object):
         tox = (xlim[0], ylim[0], -1.)
         sc = (xlim[1] - xlim[0], ylim[1] - ylim[0], 1.)
         # Move the square
-        self.mesh.transform = vist.STTransform(translate=tox, scale=sc)
+        self.mesh.transform.translate = tox
+        self.mesh.transform.scale = sc
 
     def clean(self):
         """Clean indicators."""
