@@ -54,7 +54,7 @@ class uiSettings(object):
         val = self._SlVal.value()
         step = self._SigSlStep.value()
         win = self._SigWin.value()
-        xlim = (val*step, val*step+win)
+        xlim = (val * step, val * step + win)
         iszoom = self.menuDispZoom.isChecked()
         unit = str(self._slRules.currentText())
         # Find closest time index :
@@ -75,15 +75,15 @@ class uiSettings(object):
                             ylim=self._ylims)
 
         # ---------------------------------------
-        isIndicChecked = self.menuDispIndic.isChecked()
+        is_indic_checked = self.menuDispIndic.isChecked()
         # Update spectrogram indicator :
-        if isIndicChecked and not iszoom:
+        if is_indic_checked and not iszoom:
             ylim = (self._PanSpecFstart.value(), self._PanSpecFend.value())
             self._specInd.set_data(xlim=xlim, ylim=ylim)
 
         # ---------------------------------------
         # Update hypnogram indicator :
-        if isIndicChecked and not iszoom:
+        if is_indic_checked and not iszoom:
             self._hypInd.set_data(xlim=xlim, ylim=(-6., 2.))
 
         # ---------------------------------------
@@ -97,29 +97,29 @@ class uiSettings(object):
             # Update title :
             fm, fM = self._PanTopoFmin.value(), self._PanTopoFmax.value()
             dispas = self._PanTopoDisp.currentText()
-            txt = 'Mean '+dispas+' in\n['+str(fm)+';'+str(fM)+'hz]'
+            txt = 'Mean ' + dispas + ' in\n[' + str(fm) + ';' + str(fM) + 'hz]'
             self._topoTitle.setText(txt)
             self._topoTitle.setStyleSheet("QLabel {color: " +
                                           hypcol + ";}")
 
         # ---------------------------------------
         # Update Time indicator :
-        if isIndicChecked:
+        if is_indic_checked:
             self._TimeAxis.set_data(xlim[0], win, self._time, unit=unit,
                                     markers=self._annot_mark)
 
         # ================= GUI =================
         # Update Go to :
-        self._SlGoto.setValue(val*step)
+        self._SlGoto.setValue(val * step)
 
         # ================= ZOOMING =================
         if iszoom:
+            xlim_diff = xlim[1] - xlim[0]
             # Histogram :
-            self._hypcam.rect = (xlim[0], -5, xlim[1]-xlim[0], 7.)
+            self._hypcam.rect = (xlim[0], -5, xlim_diff, 7.)
             # Spectrogram :
-            self._speccam.rect = (xlim[0], self._spec.freq[0], xlim[1]-xlim[0],
+            self._speccam.rect = (xlim[0], self._spec.freq[0], xlim_diff,
                                   self._spec.freq[-1] - self._spec.freq[0])
-
             # Time axis :
             self._TimeAxis.set_data(xlim[0], win, np.array([xlim[0], xlim[1]]),
                                     unit='seconds', markers=self._annot_mark)
@@ -130,9 +130,9 @@ class uiSettings(object):
         if self._slAbsTime.isChecked():
             xlim = np.asarray(xlim) + self._toffset
             start = str(datetime.datetime.utcfromtimestamp(
-                                                       xlim[0])).split(' ')[1]
+                xlim[0])).split(' ')[1]
             stend = str(datetime.datetime.utcfromtimestamp(
-                                                       xlim[1])).split(' ')[1]
+                xlim[1])).split(' ')[1]
             txt = "Window : [ " + start + " ; " + stend + " ] || Sleep " + \
                 "stage : " + stage
         else:
@@ -143,7 +143,7 @@ class uiSettings(object):
                 fact = 60.
             elif unit == 'hours':
                 fact = 3600.
-            xconv = np.round((1000*xlim[0]/fact, 1000*xlim[1]/fact))/1000
+            xconv = np.round(1000. * np.array(xlim) / fact) / 1000.
             # Format string :
             txt = self._slTxtFormat.format(start=str(xconv[0]),
                                            end=str(xconv[1]), unit=unit,
@@ -158,7 +158,7 @@ class uiSettings(object):
         for k in self._hypYLabels:
             k.setStyleSheet("QLabel")
         self._hypYLabels[hypconv + 1].setStyleSheet("QLabel {color: " +
-                                                    hypcol+";}")
+                                                    hypcol + ";}")
 
     def _fcn_sliderSettings(self):
         """Function applied to change slider settings."""
