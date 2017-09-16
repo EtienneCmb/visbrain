@@ -5,7 +5,7 @@ from itertools import product
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from ..visuals import GridSignalsMesh
+from ..visuals import GridSignalMesh
 from ..utils import color2vb, vispy_array, PrepareData
 
 __all__ = ('Visuals')
@@ -333,7 +333,7 @@ class Visuals(object):
 
         # ========================== GRID ==========================
         if self._enable_grid:  # don't create grid for 1-D signals
-            self._grid = GridSignalsMesh(data.astype(np.float32), 1024)
+            self._grid = GridSignalMesh(data.astype(np.float32), 1024)
             self._grid.parent = parent_grid
 
         # ========================== SIGNAL ==========================
