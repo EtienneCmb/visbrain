@@ -25,10 +25,24 @@ class UiSignals(object):
         self._sig_nbins.valueChanged.connect(self._fcn_set_signal)
         self._sig_size.valueChanged.connect(self._fcn_set_signal)
         self._sig_symbol.currentIndexChanged.connect(self._fcn_set_signal)
+        # Prepare data :
+        self._sig_demean.clicked.connect(self._fcn_set_signal)
+        self._sig_detrend.clicked.connect(self._fcn_set_signal)
+        self._sig_filt.clicked.connect(self._fcn_set_signal)
+        self._sig_disp.currentIndexChanged.connect(self._fcn_set_signal)
+        self._sig_filter.currentIndexChanged.connect(self._fcn_set_signal)
+        self._sig_fmin.valueChanged.connect(self._fcn_set_signal)
+        self._sig_fmax.valueChanged.connect(self._fcn_set_signal)
+        self._sig_meth.currentIndexChanged.connect(self._fcn_set_signal)
+        self._sig_order.valueChanged.connect(self._fcn_set_signal)
         # Amplitudes :
         self._sig_amp.clicked.connect(self._fcn_signal_amp)
         self._sig_amp_min.valueChanged.connect(self._fcn_signal_amp)
         self._sig_amp_max.valueChanged.connect(self._fcn_signal_amp)
+        # Threshold :
+        self._sig_th.clicked.connect(self._fcn_set_signal)
+        self._sig_th_min.valueChanged.connect(self._fcn_set_signal)
+        self._sig_th_max.valueChanged.connect(self._fcn_set_signal)
         # Previous // Next :
         self._sig_prev.clicked.connect(self._fcn_prev_index)
         self._sig_next.clicked.connect(self._fcn_next_index)
@@ -72,9 +86,7 @@ class UiSignals(object):
     ###########################################################################
     def _fcn_set_signal(self, *args, force=False):
         """Set signal."""
-        # Index :
-        index = int(self._sig_index.value())
-        # Form and color :
+        # =================== FORM AND COLOR ===================
         form_bck = self._signal.form
         form = str(self._sig_form.currentText())
         form_index = int(self._sig_form.currentIndex())
@@ -82,19 +94,44 @@ class UiSignals(object):
         color = textline2color(str(self._sig_color.text()))[0]
         # Enable amplitude control only for line // marker :
         self._sig_amp.setEnabled(form in ['line', 'marker'])
-        # Line / marker / histogram :
+
+        # =================== LINE / MARKER / HISTOGRAM ===================
         lw = float(self._sig_lw.value())
         nbins = int(self._sig_nbins.value())
         size = float(self._sig_size.value())
         symbol = str(self._sig_symbol.currentText())
-        # Set data :
+
+        # =================== THRESHOLD ===================
+        thm = (self._sig_th_min.value(), self._sig_th_max.value())
+        th = thm if self._sig_th.isChecked() else None
+
+        # =================== PREPARE DATA ===================
+        prep = self._signal._prep
+        # Get demean // detrend // filtering :
+        dem, det = self._sig_demean.isChecked(), self._sig_detrend.isChecked()
+        filt = self._sig_filt.isChecked()
+        # Get if camera nee update :
+        filt_cam = (prep.demean == dem) or (prep.detrend == det) or (
+            prep.filt == filt)
+        # Set prepare data parameters :
+        prep.demean, prep.detrend, prep.filt = dem, det, filt
+        prep.dispas = str(self._sig_disp.currentText())
+        prep.btype = str(self._sig_filter.currentText())
+        prep.fstart = float(self._sig_fmin.value())
+        prep.fend = float(self._sig_fmax.value())
+        prep.filt_meth = str(self._sig_meth.currentText())
+        prep.forder = int(self._sig_order.value())
+
+        # =================== SET DATA // TEXT===================
+        index = int(self._sig_index.value())
         self._signal.set_data(self._data, index, color, lw, nbins, symbol,
-                              size, form)
-        if force or (form != form_bck):
+                              size, form, th)
+        self._txt_shape.setText(str(self._signal))
+
+        # =================== CAMERA ===================
+        if force or (form != form_bck) or filt_cam:
             self._sig_amp.setChecked(False)
             self.update_cameras(update='signal')
-        # Set text :
-        self._txt_shape.setText(str(self._signal))
 
     def _fcn_prev_index(self):
         """Go to previous index."""
@@ -114,8 +151,7 @@ class UiSignals(object):
             rect = list(self._signal.rect)
             # Get (min, max) amplitudes :
             minmax = (self._sig_amp_min.value(), self._sig_amp_max.value())
-            rect[1] = .95 * minmax[0]
-            rect[-1] = 1.05 * (minmax[1] - minmax[0])
+            rect[1], rect[-1] = minmax[0], minmax[1] - minmax[0]
             self.update_cameras(s_rect=rect, update='signal')
         else:
             self.update_cameras(update='signal')

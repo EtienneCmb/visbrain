@@ -306,7 +306,7 @@ class GridShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
-        self._sh_grid = [('n', 'TEst grid'),
+        self._sh_grid = [('n', 'Test grid'),
                          ]
 
         @canvas.events.key_press.connect
@@ -328,25 +328,10 @@ class SignalShortcuts(object):
         """Init."""
         self._sh_sig = [('n', 'Go to the next signal'),
                         ('b', 'Go to the previous signal'),
-                        ('-', 'Decrease amplitude'),
-                        ('+', 'Increase amplitude'),
-                        ('s', 'Display / hide spectrogram'),
-                        ('t', 'Display / hide topoplot'),
-                        ('h', 'Display / hide hypnogram'),
-                        ('p', 'Display / hide navigation bar'),
-                        ('x', 'Display / hide time axis'),
-                        ('g', 'Display / hide time grid'),
-                        ('z', 'Enable / disable zooming'),
-                        ('i', 'Enable / disable indicators'),
-                        ('a', 'Scoring: set current window to Art (-1)'),
-                        ('w', 'Scoring: set current window to Wake (0)'),
-                        ('1', 'Scoring: set current window to N1 (1)'),
-                        ('2', 'Scoring: set current window to N2 (2)'),
-                        ('3', 'Scoring: set current window to N3 (3)'),
-                        ('r', 'Scoring: set current window to REM (4)'),
+                        ('s', 'Display / hide signal'),
+                        ('g', 'Display / hide grid'),
+                        ('<delete>', 'Reset the camera'),
                         ('Double clik', 'Insert annotation'),
-                        ('CTRL + Num', 'Display the channel Num'),
-                        ('CTRL + s', 'Save hypnogram'),
                         ('CTRL + t', 'Display shortcuts'),
                         ('CTRL + e', 'Display documentation'),
                         ('CTRL + d', 'Display / hide setting panel'),
