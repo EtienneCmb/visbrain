@@ -25,8 +25,10 @@ from .figure import Figure
 from .ndviz import Ndviz
 from .sleep import Sleep
 from .topo import Topo
+from .gridsignals import GridSignals
 
-__all__ = ['Brain', 'Colorbar', 'Figure', 'Ndviz', 'Sleep', 'Topo']
+__all__ = ['Brain', 'Colorbar', 'Figure', 'Ndviz', 'Sleep', 'Topo',
+           'GridSignals']
 __version__ = "0.3.3"
 
 # PyQt5 crash if an error occured. This small function fix it for all modules
