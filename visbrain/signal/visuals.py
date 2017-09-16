@@ -24,7 +24,8 @@ class SignalAnnotations(object):
         self._annot_mark = scene.visuals.Markers(pos=pos, parent=parent)
         self._annot_mark.visible = False
         # Create text for annotations :
-        self._annot_text = scene.visuals.Text(parent=parent, anchor_x='left')
+        self._annot_text = scene.visuals.Text(parent=parent, anchor_x='left',
+                                              bold=True, font_size=14.)
         tr = (self._time.max() - self._time.min()) / 200.
         self._annot_text.transform = vist.STTransform(translate=(tr, 0., 0.))
         self._annot_text.visible = False
@@ -65,6 +66,7 @@ class SignalAnnotations(object):
         if row is not None:
             self._annotations_txt[signal][row] = text
             self._annot_text.text = text
+            self._annot_text.color = color2vb('#ab4642')
 
     def select_annotation(self, signal, coord):
         """Select an annotation."""
@@ -74,6 +76,7 @@ class SignalAnnotations(object):
         if is_coord:
             # Set text and position to scene.visuals.Text() :
             self._annot_text.text = self._annotations_txt[signal][row]
+            self._annot_text.color = color2vb('#ab4642')
             self._annot_text.pos = np.append(coord, -20).astype(np.float32)
         # Set text visible / hide :
         self._annot_text.visible = is_coord
