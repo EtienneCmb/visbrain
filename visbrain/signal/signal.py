@@ -14,13 +14,13 @@ from ..utils import (set_widget_size, toggle_enable_tab, safely_set_cbox,
 
 sip.setdestroyonexit(False)
 
-__all__ = ('GridSignals')
+__all__ = ('Signal')
 
 
-class GridSignals(UiInit, UiElements, Visuals):
+class Signal(UiInit, UiElements, Visuals):
     """Signal inspection module (data mining).
 
-    The GridSignals module can be used to relatively large datasets of
+    The Signal module can be used to relatively large datasets of
     time-series. Two layout are provided :
 
     * Grid layout : visualize all of the signals into a grid.
@@ -36,7 +36,12 @@ class GridSignals(UiInit, UiElements, Visuals):
     time : array_like | None
         Time vector to use. If None, the time vector is inferred using the axis
         input.
-        Title of the axis (signal layout).
+    sf : float | 1.
+        Sampling frequency.
+    enable_grid : bool | True
+        Enable or disable the grid. If False, the grid is not computed and not
+        accessible from the GUI. The grid requires more memory RAM. It could be
+        turn to False for very large datasets.
     form : {'line', 'marker', 'histogram'}
         Plotting type.
     color : array_like/string/tuple | 'black'
@@ -51,6 +56,8 @@ class GridSignals(UiInit, UiElements, Visuals):
         Number of bins for the histogram (form='histogram')
     parent : VisPy.parent | None
         Parent of the mesh.
+    title : string | None
+        Title of the axis (signal layout).
     xlabel : string | None
         Label for the x-axis (signal layout).
     ylabel : string | None
@@ -69,13 +76,15 @@ class GridSignals(UiInit, UiElements, Visuals):
         Display the grid layout.
     display_signal : bool | True
         Display the signal layout.
-    title : string | None
     """
 
-    def __init__(self, data, axis=-1, time=None, form='line', color='black',
-                 lw=2., symbol='disc', size=10., nbins=10, display_grid=True,
-                 display_signal=True, **kwargs):
+    def __init__(self, data, axis=-1, time=None, sf=1., enable_grid=True,
+                 form='line', color='black', lw=2., symbol='disc', size=10.,
+                 nbins=10, display_grid=True, display_signal=True, **kwargs):
         """Init."""
+        self._enable_grid = enable_grid
+        display_grid = bool(display_grid * self._enable_grid)
+
         # ==================== APP CREATION ====================
         self._app = QtWidgets.QApplication(sys.argv)
         UiInit.__init__(self, **kwargs)
@@ -87,16 +96,15 @@ class GridSignals(UiInit, UiElements, Visuals):
             raise TypeError("data must be an NumPy array with less than three "
                             "dimensions.")
         if data.ndim == 1:  # disable grid for 1-D array
-            display_grid = False
-            self.actionGrid.setEnabled(False)
+            display_grid = self._enable_grid = False
             toggle_enable_tab(self.QuickSettings, 'Grid', False)
         self._data = data.astype(np.float32, copy=False)
 
         # ==================== VISUALS ====================
         grid_parent = self._grid_canvas.wc.scene
         signal_parent = self._signal_canvas.wc.scene
-        Visuals.__init__(self, data, time, axis, form, color, lw, symbol, size,
-                         nbins, grid_parent, signal_parent)
+        Visuals.__init__(self, data, time, sf, axis, form, color, lw, symbol,
+                         size, nbins, grid_parent, signal_parent)
 
         # ==================== CAMERA ====================
         grid_rect = (0, 0, 1, 1)  # self._grid.rect
@@ -131,35 +139,49 @@ class GridSignals(UiInit, UiElements, Visuals):
         self.actionGrid.setChecked(display_grid)
         self.actionSignal.setChecked(display_signal)
 
+        self._fcn_on_creation()
+
         # ==================== USER <-> GUI ====================
         UiElements.__init__(self, **kwargs)
 
-        self._fcn_on_creation()
+        # ==================== SHORTCUTS ====================
+        self._shpopup.set_shortcuts(self._sh_grid + self._sh_sig)
 
     def _fcn_on_creation(self):
         """Run on GUI creation."""
         # Settings :
-        self.QuickSettings.setCurrentIndex(0)
+        self.QuickSettings.setCurrentIndex(0 + bool(self._enable_grid - 1))
         set_widget_size(self._app, self.q_widget, 23)
         # Fix index limits :
         self._sig_index.setMinimum(0)
         self._sig_index.setMaximum(len(self._signal._allidx) - 1)
         # Fix amplitude limits :
-        self._sig_amp_min.setMinimum(self._data.min())
-        self._sig_amp_min.setMaximum(self._data.max())
-        self._sig_amp_min.setValue(self._data.min())
-        self._sig_amp_max.setMinimum(self._data.min())
-        self._sig_amp_max.setMaximum(self._data.max())
-        self._sig_amp_max.setValue(self._data.max())
+        d_min, d_max = self._data.min(), self._data.max()
+        step = (d_max - d_min) / 100.
+        self._sig_amp_min.setMinimum(d_min)
+        self._sig_amp_min.setMaximum(d_max)
+        self._sig_amp_min.setValue(d_min)
+        self._sig_amp_min.setSingleStep(step)
+        self._sig_amp_max.setMinimum(d_min)
+        self._sig_amp_max.setMaximum(d_max)
+        self._sig_amp_max.setValue(d_max)
+        self._sig_amp_max.setSingleStep(step)
+        # Fix amplitude limits :
+        self._sig_th_min.setMinimum(d_min)
+        self._sig_th_min.setMaximum(d_max)
+        self._sig_th_min.setValue(d_min)
+        self._sig_th_min.setSingleStep(step)
+        self._sig_th_max.setMinimum(d_min)
+        self._sig_th_max.setMaximum(d_max)
+        self._sig_th_max.setValue(d_max)
+        self._sig_th_max.setSingleStep(step)
         # Display / hide grid and signal :
         self._fcn_menu_disp_grid()
         self._fcn_menu_disp_signal()
         # Set signal data :
         self._fcn_set_signal(force=True)
-        # Add shortcuts :
-        _sh_grid = [(k[0], k[1] + ' (on grid canvas)') for k in self._sh_grid]
-        _sh_sig = [(k[0], k[1] + ' (on signal canvas)') for k in self._sh_sig]
-        self._shpopup.set_shortcuts(_sh_grid + _sh_sig)
+        # Update cameras :
+        self.update_cameras()
 
     def update_cameras(self, g_rect=None, s_rect=None, update='both'):
         """Update cameras."""
@@ -169,11 +191,11 @@ class GridSignals(UiInit, UiElements, Visuals):
             update_grid, update_signal = False, True
         elif update == 'grid':
             update_grid, update_signal = True, False
-        if update_grid:  # Grid
+        if update_grid and hasattr(self, '_grid'):  # Grid
             g_rect = self._grid.rect if g_rect is None else g_rect
-            # self._grid_canvas.camera.rect = g_rect
-            # self._grid_canvas.update()
-            # self._grid_canvas.set_default_state()
+            self._grid_canvas.camera.rect = g_rect
+            self._grid_canvas.update()
+            self._grid_canvas.set_default_state()
         if update_signal:  # Signal
             s_rect = self._signal.rect if s_rect is None else s_rect
             self._signal_canvas.camera.rect = s_rect
