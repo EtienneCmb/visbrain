@@ -5,7 +5,8 @@ from itertools import product
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from ..utils import color2vb, vispy_array
+from ..visuals import GridSignalsMesh
+from ..utils import color2vb, vispy_array, PrepareData
 
 __all__ = ('Visuals')
 
@@ -108,6 +109,8 @@ class SignalVisual(SignalAnnotations):
     ----------
     time : array_like
         Time vector of shape (N,)
+    sf : float
+        The sampling frequency.
     sh : tuple
         Shape of the 2-D array.
     form : {'line', 'marker', 'histogram'}
@@ -126,11 +129,12 @@ class SignalVisual(SignalAnnotations):
         Parent of the mesh.
     """
 
-    def __init__(self, time, sh, axis, form='line', color='black', lw=2.,
+    def __init__(self, time, sf, sh, axis, form='line', color='black', lw=2.,
                  symbol='o', size=10., nbins=10, parent=None):
         """Init."""
         self.form = form
         self._time = time
+        self._sf = sf
         self._axis = axis
         self._index = 0  # selected index of the 3-d array
         self._allidx = list(product(range(sh[0]), range(sh[1])))
@@ -140,19 +144,20 @@ class SignalVisual(SignalAnnotations):
         self.symbol = symbol
         self.size = size
         self.rect = (0., 0., 1., 1.)
+        self._prep = PrepareData()
 
         # Create visuals :
         pos = np.random.rand(2, 2)
         posh = np.random.rand(2,)
-        self._line = scene.visuals.Line(pos=pos, color=self.color, name='line',
-                                        parent=parent, width=lw)
-        self._mark = scene.visuals.Markers(pos=pos, face_color=self.color,
-                                           symbol=symbol, size=size,
-                                           edge_width=0., name='marker',
+        self._th = scene.visuals.Line(pos=pos, name='threshold', width=lw,
+                                      parent=parent)
+        self._line = scene.visuals.Line(pos=pos, name='line', parent=parent,
+                                        width=lw)
+        self._mark = scene.visuals.Markers(pos=pos, name='marker',
                                            parent=parent)
-        self._hist = scene.visuals.Histogram(data=posh, bins=nbins,
-                                             color=self.color, orientation='h',
+        self._hist = scene.visuals.Histogram(data=posh, orientation='h',
                                              parent=parent, name='histogram')
+        self._th.visible = False
 
         # Initialize annotations :
         SignalAnnotations.__init__(self, parent)
@@ -164,7 +169,7 @@ class SignalVisual(SignalAnnotations):
         return '(' + ', '.join(lst) + ')'
 
     def set_data(self, data, index, color=None, lw=None, nbins=None,
-                 symbol=None, size=None, form='line', amp=None):
+                 symbol=None, size=None, form='line', th=None):
         """Set data to the plot.
 
         Parameters
@@ -185,6 +190,8 @@ class SignalVisual(SignalAnnotations):
             Number of bins for the histogram (form='histogram')
         form : {'line', 'marker', 'histogram'}
             Plotting type.
+        th : tuple | None
+            Tuple of floats for line thresholding.
         """
         # Update variable :
         self.form = form
@@ -202,8 +209,9 @@ class SignalVisual(SignalAnnotations):
         else:
             raise ValueError("index is greater than possible indices.")
 
-        # Convert data to be compatible with VisPy :
-        _data = vispy_array(data[idx])
+        # Convert data to be compatible with VisPy and prepare data :
+        data_c = vispy_array(data[idx]).copy()
+        _data = self._prep._prepare_data(self._sf, data_c, self._time)
 
         # Set data :
         if form in ['line', 'marker']:  # line and marker
@@ -211,7 +219,22 @@ class SignalVisual(SignalAnnotations):
             pos = np.c_[self._time, _data]
             # Send position :
             if form == 'line':
-                self._line.set_data(pos, width=self.lw, color=self.color)
+                # Threshold :
+                is_th = isinstance(th, (tuple, list, np.ndarray))
+                col = color2vb(self.color, length=len(_data))
+                if is_th:
+                    # Build threshold segments :
+                    t_min, t_max = self._time.min(), self._time.max()
+                    pos_th = np.vstack(([t_min, th[0]], [t_max, th[0]],
+                                        [t_min, th[1]], [t_max, th[1]]))
+                    self._th.set_data(pos_th, connect='segments',
+                                      color=color2vb('#ab4642'))
+                    # Build line color :
+                    col = color2vb(self.color, length=len(_data))
+                    cond = np.logical_or(_data < th[0], _data > th[1])
+                    col[cond, :] = color2vb('#ab4642')
+                self._th.visible = is_th
+                self._line.set_data(pos, width=self.lw, color=col)
                 self._line.update()
             else:
                 self._mark.set_data(pos, face_color=self.color,
@@ -221,8 +244,9 @@ class SignalVisual(SignalAnnotations):
             # Get camera rectangle :
             t_min, t_max = self._time.min(), self._time.max()
             d_min, d_max = _data.min(), _data.max()
-            self.rect = (t_min, .95 * d_min, t_max - t_min,
-                         1.05 * (d_max - d_min))
+            off = .05 * (d_max - d_min)
+            self.rect = (t_min, d_min - off, t_max - t_min,
+                         d_max - d_min + 2 * off)
         elif form == 'histogram':  # histogram
             # Compute the mesh :
             mesh = scene.visuals.Histogram(_data, self.nbins)
@@ -252,7 +276,8 @@ class SignalVisual(SignalAnnotations):
             c = self.get_event_coord(name)
             z = np.full((c.shape[0],), -10.)
             c = np.c_[c, z].astype(np.float32)
-            self._annot_mark.set_data(c, face_color='red')
+            self._annot_mark.set_data(c, face_color=color2vb('#ab4642'),
+                                      edge_width=0., size=13)
         self._annot_mark.visible = is_annotated
         self._annot_text.visible = is_annotated
 
@@ -281,8 +306,8 @@ class Visuals(object):
     ----------
     """
 
-    def __init__(self, data, time, axis, form, color, lw, symbol, size, nbins,
-                 parent_grid, parent_signal):
+    def __init__(self, data, time, sf, axis, form, color, lw, symbol, size,
+                 nbins, parent_grid, parent_signal):
         """Init."""
         # ========================== CHECK ==========================
         # ----------- AXIS -----------
@@ -292,27 +317,28 @@ class Visuals(object):
         axis = data.ndim - 1 if axis == -1 else axis
         # ----------- TIME -----------
         if time is None:
-            time = np.arange(data.shape[axis])
+            time = np.arange(data.shape[axis]) / sf
         if (time.ndim > 1 and len(time)) > data.shape[axis]:
             raise ValueError("The length of the time vector must be the same "
                              "as the one specified by axis (" + str(axis
                                                                     ) + ")")
         # ----------- DATA -----------
-        is_grid = data.ndim < 2
         if data.ndim == 1:  # 1-d data
             data = data.reshape(1, 1, -1)
             axis = data.ndim - 1
         elif data.ndim == 2:  # 2-d data
             data = data[np.newaxis, ...]
             axis += 1
+        self._data = data.astype(np.float32)
 
         # ========================== GRID ==========================
-        if is_grid:  # don't create grid for 1-D signals
-            pass
+        if self._enable_grid:  # don't create grid for 1-D signals
+            self._grid = GridSignalsMesh(data.astype(np.float32), 1024)
+            self._grid.parent = parent_grid
 
         # ========================== SIGNAL ==========================
         sh_2d = tuple(k for i, k in enumerate(data.shape) if i != axis)
-        self._signal = SignalVisual(time, sh_2d, axis, form=form,
+        self._signal = SignalVisual(time, sf, sh_2d, axis, form=form,
                                     color=color, lw=lw, symbol=symbol,
                                     size=size, nbins=nbins,
                                     parent=parent_signal)
