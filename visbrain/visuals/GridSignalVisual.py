@@ -95,6 +95,8 @@ class GridSignalVisual(visuals.Visual):
         self.set_gl_state('translucent', depth_test=True, cull_face=False,
                           blend=True, blend_func=('src_alpha',
                                                   'one_minus_src_alpha'))
+        self.scale = (1., 1.)
+        self.space = 1.
         self._draw_mode = 'line_strip'
 
         # --------------------------------------------------------------------
@@ -113,7 +115,7 @@ class GridSignalVisual(visuals.Visual):
     # SET DATA
     # ========================================================================
     # ========================================================================
-    def set_data(self, data, sf, axis=None, color='random', space=2,
+    def set_data(self, data, sf, axis=None, color='random', space=2.,
                  play=False, force_col=None, rnd_dyn=(.3, .9), demean=True,
                  cmap='viridis', clim=None, vmin=None, under='gray', vmax=None,
                  over='red', laps=1, scale=(1., 1.), unicolor='gray',
@@ -440,27 +442,6 @@ class GridSignalVisual(visuals.Visual):
         if ind:
             self._time_laps(ind)
 
-    def set_space(self, space=2):
-        """Set space between plots.
-
-        Kargs:
-            space: int, optional, (def: 2)
-                The space between each plot. I recommand using a space >= 2.
-        """
-        self._space = float(space)
-        self.shared_program.vert['u_space'] = self._space
-
-    def set_scale(self, scale=(1., 1.)):
-        """Signal scaling along the (x, y) axis.
-
-        Kargs:
-            scale: tuple, optional, (def: (1., 1.))
-                Tuple of float indicating respectively the scaling along the
-                (x, y) axis.
-        """
-        self._uscale = scale
-        self.shared_program.vert['u_scale'] = scale
-
     def set_camera(self, camera):
         """Set a camera to the mesh.
 
@@ -531,6 +512,35 @@ class GridSignalVisual(visuals.Visual):
     # PROPERTIES
     # ========================================================================
     # ========================================================================
+    # ----------- SCALE -----------
+    @property
+    def scale(self):
+        """Get the scale value."""
+        return self._scale
+
+    @scale.setter
+    def scale(self, value):
+        """Set scale value."""
+        if isinstance(value, tuple):
+            self._uscale = value
+            self._scale = value
+            self.shared_program.vert['u_scale'] = value
+            self.update()
+
+    # ----------- SPACE -----------
+    @property
+    def space(self):
+        """Get the space value."""
+        return self._space
+
+    @space.setter
+    def space(self, value):
+        """Set space value."""
+        if isinstance(value, float):
+            self._space = value
+            self.shared_program.vert['u_space'] = value
+            self.update()
+
     # ----------- DIM -----------
     @property
     def dim(self):

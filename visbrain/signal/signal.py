@@ -1,4 +1,4 @@
-""""""
+"""Signal module."""
 import sip
 import sys
 from PyQt5 import QtWidgets
@@ -95,9 +95,10 @@ class Signal(UiInit, UiElements, Visuals):
         if not isinstance(data, np.ndarray) or (data.ndim > 3):
             raise TypeError("data must be an NumPy array with less than three "
                             "dimensions.")
-        if data.ndim == 1:  # disable grid for 1-D array
+        if data.ndim == 1 or not self._enable_grid:  # disable grid
             display_grid = self._enable_grid = False
             toggle_enable_tab(self.QuickSettings, 'Grid', False)
+            self.actionGrid.setEnabled(False)
         self._data = data.astype(np.float32, copy=False)
 
         # ==================== VISUALS ====================
@@ -134,6 +135,8 @@ class Signal(UiInit, UiElements, Visuals):
         safely_set_cbox(self._sig_symbol, symbol)  # marker
 
         # ------------- Settings -------------
+        bgcolor = kwargs.get('bgcolor', 'white')
+        self._set_bgcolor.setText(str(color2tuple(bgcolor, astype=float)))
 
         # ------------- Menu -------------
         self.actionGrid.setChecked(display_grid)
@@ -150,7 +153,7 @@ class Signal(UiInit, UiElements, Visuals):
     def _fcn_on_creation(self):
         """Run on GUI creation."""
         # Settings :
-        self.QuickSettings.setCurrentIndex(0 + bool(self._enable_grid - 1))
+        self.QuickSettings.setCurrentIndex(0)
         set_widget_size(self._app, self.q_widget, 23)
         # Fix index limits :
         self._sig_index.setMinimum(0)
