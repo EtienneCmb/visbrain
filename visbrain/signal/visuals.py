@@ -140,7 +140,6 @@ class SignalVisual(SignalAnnotations):
         self._sf = sf
         self._axis = axis
         self._index = 0  # selected index of the 3-d array
-        self._allidx = list(product(range(sh[0]), range(sh[1])))
         self.color = color2vb(color)
         self.lw = lw
         self.nbins = nbins
@@ -148,6 +147,13 @@ class SignalVisual(SignalAnnotations):
         self.size = size
         self.rect = (0., 0., 1., 1.)
         self._prep = PrepareData()
+        # Build navigation index :
+        if len(sh) in [2, 3]:
+            sh = list(sh)
+            del sh[axis]
+            self._navidx = list(product(*tuple(range(k) for k in sh)))
+        else:
+            self._navidx = [[]]
 
         # Create visuals :
         pos = np.random.rand(2, 2)
@@ -167,7 +173,7 @@ class SignalVisual(SignalAnnotations):
 
     def __str__(self):
         """String representation of the currently selected index."""
-        lst = [str(k) for k in self._allidx[self._index]]
+        lst = [str(k) for k in self._navidx[self._index]]
         lst.insert(self._axis, ':')
         return '(' + ', '.join(lst) + ')'
 
@@ -206,11 +212,11 @@ class SignalVisual(SignalAnnotations):
         self.size = size if size is not None else self.size
 
         # Get data index :
-        if index < len(self._allidx):
-            idx = list(self._allidx[index])
+        if data.ndim == 1:
+            idx = slice(None)
+        elif data.ndim in [2, 3]:
+            idx = list(self._navidx[index])
             idx.insert(self._axis, slice(None))
-        else:
-            raise ValueError("index is greater than possible indices.")
 
         # Convert data to be compatible with VisPy and prepare data :
         data_c = vispy_array(data[idx]).copy()
@@ -288,13 +294,13 @@ class SignalVisual(SignalAnnotations):
         """Get index of a signal.
 
         This method turn a '(k, n, :)' string into an index used by the
-        instance _allidx.
+        instance _navidx.
         """
         # Process signal :
         signal = signal.replace(', :', '').replace(':, ', '')[1:-1]
         # Find index :
         idx = tuple(int(k) for k in signal.split(', '))
-        return self._allidx.index(idx)
+        return self._navidx.index(idx)
 
     def _visibility(self):
         self._line.visible = self.form == 'line'
@@ -325,23 +331,14 @@ class Visuals(object):
             raise ValueError("The length of the time vector must be the same "
                              "as the one specified by axis (" + str(axis
                                                                     ) + ")")
-        # ----------- DATA -----------
-        if data.ndim == 1:  # 1-d data
-            data = data.reshape(1, 1, -1)
-            axis = data.ndim - 1
-        elif data.ndim == 2:  # 2-d data
-            data = data[np.newaxis, ...]
-            axis += 1
-        self._data = data.astype(np.float32)
 
         # ========================== GRID ==========================
         if self._enable_grid:  # don't create grid for 1-D signals
-            self._grid = GridSignalMesh(data.astype(np.float32), 1024)
+            self._grid = GridSignalMesh(data, axis=axis, sf=sf)
             self._grid.parent = parent_grid
 
         # ========================== SIGNAL ==========================
-        sh_2d = tuple(k for i, k in enumerate(data.shape) if i != axis)
-        self._signal = SignalVisual(time, sf, sh_2d, axis, form=form,
+        self._signal = SignalVisual(time, sf, data.shape, axis, form=form,
                                     color=color, lw=lw, symbol=symbol,
                                     size=size, nbins=nbins,
                                     parent=parent_signal)
