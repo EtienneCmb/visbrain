@@ -424,7 +424,7 @@ def read_eeg(path, downsample, read_markers=False):
         same directory.
     downsample : int
         Down-sampling frequency.
-    read_markers : boolean, optional (default False)
+    read_markers : bool | False
         Import markers from the .vmrk files as annotations
 
     Returns
