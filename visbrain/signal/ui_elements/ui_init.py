@@ -314,6 +314,24 @@ class GridShortcuts(object):
             """Executed function when a key is pressed."""
             pass
 
+        @canvas.events.mouse_double_click.connect
+        def on_mouse_double_click(event):
+            """Executed function when double click mouse over canvas."""
+            n_rows, n_cols = self._grid._g_size
+            rect = self._grid_canvas.camera.rect
+            w_cols, w_rows = self._grid_canvas.canvas.size
+            # Get camera limits :
+            bottom, height = rect.bottom, rect.height
+            left, width = rect.left, rect.width
+            x, y = event.pos
+            # Pass in the camera system [-1, 1]:
+            x_cam = (width * (x / w_cols) + left) + 1.
+            y_cam = (height * (w_rows - y) / w_rows) + bottom + 1.
+            # Get signal location :
+            x_loc = int(np.ceil((n_cols / 2.) * x_cam) - 1.)
+            y_loc = int(abs(np.ceil((n_rows / 2.) * y_cam) - n_rows))
+
+
 
 class SignalShortcuts(object):
     """Add shortcuts to grid canvas.
