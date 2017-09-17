@@ -27,8 +27,8 @@ class uiInfo(object):
         stats['Sampling frequency'] = str(self._sfori) + " Hz"
         stats['Down-sampling'] = str(self._sf) + " Hz"
 
-        self._keysInfo = ['Window'] + [''] * len(stats)
-        self._valInfo = [str(win)] + [''] * len(stats)
+        self._keysInfo = [''] * len(stats)
+        self._valInfo = [''] * len(stats)
         # Check line number:
         self._infoTable.setRowCount(len(stats))
         # Fill table :
