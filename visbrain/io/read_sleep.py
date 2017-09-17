@@ -3,7 +3,7 @@
 This file contain functions to load :
 - European Data Format (*.edf)
 - Micromed (*.trc)
-- BrainVision (*.eeg)
+- BrainVision (*.vhdr)
 - ELAN (*.eeg)
 - Hypnogram (*.hyp)
 """
@@ -407,7 +407,7 @@ def read_trc(path, downsample):
     return sf, downsample, dsf, data[:, ::dsf], chan, n, start_time, None
 
 
-def read_eeg(path, downsample):
+def read_eeg(path, downsample, read_markers=False):
     """Read data from a BrainVision (*.vhdr) file.
 
     Poor man's version of https: // gist.github.com / breuderink / 6266871
@@ -424,6 +424,8 @@ def read_eeg(path, downsample):
         same directory.
     downsample : int
         Down-sampling frequency.
+    read_markers : boolean, optional (default False)
+        Import markers from the .vmrk files as annotations
 
     Returns
     -------
@@ -492,6 +494,7 @@ def read_eeg(path, downsample):
                              dtype=None, skip_header=0)
 
         vmrk = np.char.decode(vmrk)
+        # Read start-time
         for item in vmrk:
             if 'New Segment' in item:
                 st = re.split('\W+', item)[-1]
@@ -500,21 +503,22 @@ def read_eeg(path, downsample):
             else:
                 start_time = datetime.time(0, 0, 0)
 
-            # Extract annotations
-            onsets = np.array([], dtype=int)
-            durations = np.array([], dtype=int)
-            descriptions = np.array([], dtype=int)
-            if 'Mk' in item and ';' not in item:
-                onsets = np.append(onsets, int(
-                    re.sub(r'\s', '', item).split(',')[2]))
-                durations = np.append(durations, int(
-                    re.sub(r'\s', '', item).split(',')[3]))
-                descriptions = np.append(descriptions, re.sub(
-                    r'\s', '', item).split(',')[1])
-                anot = np.c_[onsets, durations, descriptions]
-    else:
-        start_time = datetime.time(0, 0, 0)
-        anot = None
+        # Read markers
+        if read_markers:
+            onsets = np.array([], dtype=float)
+            durations = np.array([], dtype=float)
+            descriptions = np.array([], dtype=str)
+            for item in vmrk:
+                if 'Mk' in item and ';' not in item:
+                    onsets = np.append(onsets, int(
+                        re.sub(r'\s', '', item).split(',')[2]))
+                    durations = np.append(durations, int(
+                        re.sub(r'\s', '', item).split(',')[3]))
+                    descriptions = np.append(descriptions, re.sub(
+                        r'\s', '', item).split(',')[1])
+                    anot = np.c_[onsets, durations, descriptions]
+        else:
+            anot = None
 
     with open(data_path, 'rb') as f:
         raw = f.read()
