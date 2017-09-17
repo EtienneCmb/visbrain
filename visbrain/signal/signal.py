@@ -157,7 +157,7 @@ class Signal(UiInit, UiElements, Visuals):
         set_widget_size(self._app, self.q_widget, 23)
         # Fix index limits :
         self._sig_index.setMinimum(0)
-        self._sig_index.setMaximum(len(self._signal._allidx) - 1)
+        self._sig_index.setMaximum(len(self._signal._navidx) - 1)
         # Fix amplitude limits :
         d_min, d_max = self._data.min(), self._data.max()
         step = (d_max - d_min) / 100.
