@@ -1,7 +1,6 @@
 """Hypnogram related functions."""
 
 import numpy as np
-from os import path
 
 __all__ = ('transient', 'sleepstats')
 
