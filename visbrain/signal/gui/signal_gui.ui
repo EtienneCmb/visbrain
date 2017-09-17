@@ -78,7 +78,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -97,9 +97,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-136</y>
-                <width>346</width>
-                <height>996</height>
+                <y>0</y>
+                <width>360</width>
+                <height>823</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -109,6 +109,12 @@
                   <string>Axis and label</string>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_2">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
                   <item>
                    <layout class="QGridLayout" name="gridLayout">
                     <property name="topMargin">
@@ -330,6 +336,12 @@ color</string>
                   <string>Plotting form</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_6">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
                   <item row="0" column="1">
                    <widget class="Line" name="line_12">
                     <property name="orientation">
@@ -425,6 +437,12 @@ color</string>
                      <bool>false</bool>
                     </property>
                     <layout class="QHBoxLayout" name="horizontalLayout_3">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
                      <item>
                       <layout class="QGridLayout" name="gridLayout_5">
                        <item row="0" column="1">
@@ -511,6 +529,12 @@ color</string>
                          <bool>false</bool>
                         </property>
                         <layout class="QVBoxLayout" name="verticalLayout_10">
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
                          <item>
                           <layout class="QGridLayout" name="gridLayout_7">
                            <item row="1" column="0">
@@ -652,346 +676,6 @@ color</string>
                          </size>
                         </property>
                        </spacer>
-                      </item>
-                      <item row="3" column="0" colspan="3">
-                       <widget class="QGroupBox" name="groupBox_2">
-                        <property name="title">
-                         <string>Signal processing</string>
-                        </property>
-                        <layout class="QVBoxLayout" name="verticalLayout_11">
-                         <item>
-                          <layout class="QHBoxLayout" name="horizontalLayout">
-                           <property name="topMargin">
-                            <number>0</number>
-                           </property>
-                           <item>
-                            <widget class="QCheckBox" name="_sig_demean">
-                             <property name="text">
-                              <string>Demean</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QCheckBox" name="_sig_detrend">
-                             <property name="text">
-                              <string>Detrend</string>
-                             </property>
-                            </widget>
-                           </item>
-                          </layout>
-                         </item>
-                         <item>
-                          <widget class="QGroupBox" name="_sig_filt">
-                           <property name="title">
-                            <string>Filtering</string>
-                           </property>
-                           <property name="checkable">
-                            <bool>true</bool>
-                           </property>
-                           <property name="checked">
-                            <bool>false</bool>
-                           </property>
-                           <layout class="QGridLayout" name="gridLayout_4">
-                            <item row="4" column="2">
-                             <spacer name="horizontalSpacer_2">
-                              <property name="orientation">
-                               <enum>Qt::Horizontal</enum>
-                              </property>
-                              <property name="sizeHint" stdset="0">
-                               <size>
-                                <width>40</width>
-                                <height>20</height>
-                               </size>
-                              </property>
-                             </spacer>
-                            </item>
-                            <item row="1" column="1">
-                             <widget class="Line" name="line_7">
-                              <property name="orientation">
-                               <enum>Qt::Vertical</enum>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="2" column="0">
-                             <widget class="QLabel" name="label_8">
-                              <property name="font">
-                               <font>
-                                <italic>true</italic>
-                               </font>
-                              </property>
-                              <property name="text">
-                               <string>Frequency</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="0" column="2">
-                             <widget class="QComboBox" name="_sig_disp">
-                              <item>
-                               <property name="text">
-                                <string>filter</string>
-                               </property>
-                              </item>
-                              <item>
-                               <property name="text">
-                                <string>amplitude</string>
-                               </property>
-                              </item>
-                              <item>
-                               <property name="text">
-                                <string>power</string>
-                               </property>
-                              </item>
-                              <item>
-                               <property name="text">
-                                <string>phase</string>
-                               </property>
-                              </item>
-                             </widget>
-                            </item>
-                            <item row="1" column="0">
-                             <widget class="QLabel" name="label_7">
-                              <property name="font">
-                               <font>
-                                <italic>true</italic>
-                               </font>
-                              </property>
-                              <property name="text">
-                               <string>Filter
-type</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="1" column="2">
-                             <widget class="QComboBox" name="_sig_filter">
-                              <item>
-                               <property name="text">
-                                <string>bandpass</string>
-                               </property>
-                              </item>
-                              <item>
-                               <property name="text">
-                                <string>bandstop</string>
-                               </property>
-                              </item>
-                              <item>
-                               <property name="text">
-                                <string>lowpass</string>
-                               </property>
-                              </item>
-                              <item>
-                               <property name="text">
-                                <string>highpass</string>
-                               </property>
-                              </item>
-                             </widget>
-                            </item>
-                            <item row="2" column="2">
-                             <layout class="QGridLayout" name="gridLayout_10">
-                              <item row="1" column="1">
-                               <widget class="Line" name="line_37">
-                                <property name="orientation">
-                                 <enum>Qt::Vertical</enum>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="0" column="0">
-                               <widget class="QLabel" name="label_10">
-                                <property name="font">
-                                 <font>
-                                  <italic>true</italic>
-                                 </font>
-                                </property>
-                                <property name="text">
-                                 <string>Fmin</string>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="0" column="2">
-                               <widget class="QDoubleSpinBox" name="_sig_fmin">
-                                <property name="minimum">
-                                 <double>0.010000000000000</double>
-                                </property>
-                                <property name="maximum">
-                                 <double>10000.000000000000000</double>
-                                </property>
-                                <property name="value">
-                                 <double>8.000000000000000</double>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="1" column="2">
-                               <widget class="QDoubleSpinBox" name="_sig_fmax">
-                                <property name="minimum">
-                                 <double>0.010000000000000</double>
-                                </property>
-                                <property name="maximum">
-                                 <double>10000.000000000000000</double>
-                                </property>
-                                <property name="value">
-                                 <double>13.000000000000000</double>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="0" column="1">
-                               <widget class="Line" name="line_13">
-                                <property name="orientation">
-                                 <enum>Qt::Vertical</enum>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="1" column="0">
-                               <widget class="QLabel" name="label_11">
-                                <property name="font">
-                                 <font>
-                                  <italic>true</italic>
-                                 </font>
-                                </property>
-                                <property name="text">
-                                 <string>Fmax</string>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="2" column="2">
-                               <spacer name="horizontalSpacer_22">
-                                <property name="orientation">
-                                 <enum>Qt::Horizontal</enum>
-                                </property>
-                                <property name="sizeHint" stdset="0">
-                                 <size>
-                                  <width>40</width>
-                                  <height>0</height>
-                                 </size>
-                                </property>
-                               </spacer>
-                              </item>
-                             </layout>
-                            </item>
-                            <item row="0" column="0">
-                             <widget class="QLabel" name="label_5">
-                              <property name="font">
-                               <font>
-                                <italic>true</italic>
-                               </font>
-                              </property>
-                              <property name="text">
-                               <string>Display</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="3" column="2">
-                             <layout class="QGridLayout" name="gridLayout_25">
-                              <item row="1" column="1">
-                               <widget class="Line" name="line_50">
-                                <property name="orientation">
-                                 <enum>Qt::Vertical</enum>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="1" column="2">
-                               <widget class="QSpinBox" name="_sig_order">
-                                <property name="value">
-                                 <number>1</number>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="1" column="0">
-                               <widget class="QLabel" name="label_49">
-                                <property name="font">
-                                 <font>
-                                  <italic>true</italic>
-                                 </font>
-                                </property>
-                                <property name="text">
-                                 <string>Order</string>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="0" column="2">
-                               <widget class="QComboBox" name="_sig_meth">
-                                <item>
-                                 <property name="text">
-                                  <string>butterworth</string>
-                                 </property>
-                                </item>
-                                <item>
-                                 <property name="text">
-                                  <string>bessel</string>
-                                 </property>
-                                </item>
-                               </widget>
-                              </item>
-                              <item row="0" column="1">
-                               <widget class="Line" name="line_51">
-                                <property name="orientation">
-                                 <enum>Qt::Vertical</enum>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="0" column="0">
-                               <widget class="QLabel" name="label_57">
-                                <property name="font">
-                                 <font>
-                                  <italic>true</italic>
-                                 </font>
-                                </property>
-                                <property name="text">
-                                 <string>Method</string>
-                                </property>
-                               </widget>
-                              </item>
-                              <item row="2" column="2">
-                               <spacer name="horizontalSpacer_27">
-                                <property name="orientation">
-                                 <enum>Qt::Horizontal</enum>
-                                </property>
-                                <property name="sizeHint" stdset="0">
-                                 <size>
-                                  <width>40</width>
-                                  <height>0</height>
-                                 </size>
-                                </property>
-                               </spacer>
-                              </item>
-                             </layout>
-                            </item>
-                            <item row="0" column="1">
-                             <widget class="Line" name="line_5">
-                              <property name="orientation">
-                               <enum>Qt::Vertical</enum>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="3" column="0">
-                             <widget class="QLabel" name="label_42">
-                              <property name="font">
-                               <font>
-                                <italic>true</italic>
-                               </font>
-                              </property>
-                              <property name="text">
-                               <string>Settings</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="3" column="1">
-                             <widget class="Line" name="line_43">
-                              <property name="orientation">
-                               <enum>Qt::Vertical</enum>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="2" column="1">
-                             <widget class="Line" name="line_11">
-                              <property name="orientation">
-                               <enum>Qt::Vertical</enum>
-                              </property>
-                             </widget>
-                            </item>
-                           </layout>
-                          </widget>
-                         </item>
-                        </layout>
-                       </widget>
                       </item>
                      </layout>
                     </widget>
@@ -1236,6 +920,12 @@ type</string>
                   <string>Scale and space</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_29">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
                   <item row="0" column="1">
                    <widget class="Line" name="line_52">
                     <property name="orientation">
@@ -1324,6 +1014,12 @@ type</string>
                   <string>Color</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_3">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
                   <item row="0" column="2">
                    <widget class="QComboBox" name="_grid_ctype">
                     <item>
@@ -1403,6 +1099,12 @@ type</string>
               <string>Color</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_17">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
               <item row="0" column="1">
                <widget class="Line" name="line_20">
                 <property name="orientation">
@@ -1427,6 +1129,352 @@ type</string>
                 <property name="placeholderText">
                  <string>black, #ab4642, (0, 0, 0)...</string>
                 </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="title">
+              <string>Signal processing</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_11">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QCheckBox" name="_sig_demean">
+                  <property name="text">
+                   <string>Demean</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="_sig_detrend">
+                  <property name="text">
+                   <string>Detrend</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="_sig_filt">
+                <property name="title">
+                 <string>Filtering</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_4">
+                 <item row="4" column="2">
+                  <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="Line" name="line_7">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_8">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Frequency</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QComboBox" name="_sig_disp">
+                   <item>
+                    <property name="text">
+                     <string>filter</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>amplitude</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>power</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>phase</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_7">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Filter
+type</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QComboBox" name="_sig_filter">
+                   <item>
+                    <property name="text">
+                     <string>bandpass</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>bandstop</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>lowpass</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>highpass</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <layout class="QGridLayout" name="gridLayout_10">
+                   <item row="1" column="1">
+                    <widget class="Line" name="line_37">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_10">
+                     <property name="font">
+                      <font>
+                       <italic>true</italic>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Fmin</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="2">
+                    <widget class="QDoubleSpinBox" name="_sig_fmin">
+                     <property name="minimum">
+                      <double>0.010000000000000</double>
+                     </property>
+                     <property name="maximum">
+                      <double>10000.000000000000000</double>
+                     </property>
+                     <property name="value">
+                      <double>8.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QDoubleSpinBox" name="_sig_fmax">
+                     <property name="minimum">
+                      <double>0.010000000000000</double>
+                     </property>
+                     <property name="maximum">
+                      <double>10000.000000000000000</double>
+                     </property>
+                     <property name="value">
+                      <double>13.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="Line" name="line_13">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="label_11">
+                     <property name="font">
+                      <font>
+                       <italic>true</italic>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Fmax</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="2">
+                    <spacer name="horizontalSpacer_22">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_5">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Display</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <layout class="QGridLayout" name="gridLayout_25">
+                   <item row="1" column="1">
+                    <widget class="Line" name="line_50">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QSpinBox" name="_sig_order">
+                     <property name="value">
+                      <number>1</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="label_49">
+                     <property name="font">
+                      <font>
+                       <italic>true</italic>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Order</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="2">
+                    <widget class="QComboBox" name="_sig_meth">
+                     <item>
+                      <property name="text">
+                       <string>butterworth</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>bessel</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="Line" name="line_51">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_57">
+                     <property name="font">
+                      <font>
+                       <italic>true</italic>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Method</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="2">
+                    <spacer name="horizontalSpacer_27">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="Line" name="line_5">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_42">
+                   <property name="font">
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Settings</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="Line" name="line_43">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="Line" name="line_11">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
