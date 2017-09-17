@@ -739,7 +739,7 @@ class TestHypnoprocessing(object):
     def test_sleepstats(self):
         """Test function sleepstats."""
         hypno = np.random.randint(-1, 3, (2000,))
-        sleepstats(None, hypno, len(hypno), time_window=1.)
+        sleepstats(hypno, 100.)
 
 ###############################################################################
 ###############################################################################
