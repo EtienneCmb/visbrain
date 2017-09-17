@@ -23,8 +23,11 @@ def get_file_ext(path):
     ext : string
         Extension of the file.
     """
-    # Test if file exist :
-    assert os.path.isfile(path)
+    # Test if the path exist and if it is a file (not a directory):
+    if not os.path.isfile(path):
+        # If it is a directory, check if it is a mff directory
+        if path[-3:].lower() != "mff":
+            raise ValueError("The provided path (" + path + ") is not valid.")
     # Find file extension :
     file, ext = os.path.splitext(path)
     # Be sure to be in lowercase :
