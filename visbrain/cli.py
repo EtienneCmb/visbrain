@@ -4,7 +4,7 @@ import click
 from visbrain import Sleep
 from visbrain.io import (write_fig_hyp, read_hypno, oversample_hypno,
                          write_csv)
-from visbrain.utils import batch_sleepstats
+from visbrain.utils import sleepstats
 import os.path
 
 ###############################################################################
@@ -105,7 +105,8 @@ def cli_fig_hyp(hypno, grid, color, outfile, dpi):
               help='Name of the hypnogram file to load (with extension).',
               type=click.Path(exists=True))
 @click.option('-o', '--outfile', default=None,
-              help='Output filename (with extension - *.csv).',
+              help='Output filename (with extension - *.csv). If None, sleep \
+              statistics will only be displayed and not saved into a file',
               type=click.Path(exists=False))
 def cli_sleep_stats(hypno, outfile):
     """Compute sleep statistics from hypnogram file and export them in csv.
@@ -130,11 +131,11 @@ def cli_sleep_stats(hypno, outfile):
         hypno_path = click.format_filename(hypno)
     if outfile is not None:
         outfile = click.format_filename(outfile)
+        # Check extension
         ext = os.path.splitext(outfile)[1][1:].strip().lower()
         if ext == '':
             outfile = outfile + '.csv'
-    else:
-        outfile = hypno_path + '.csv'
+
     # Load hypnogram
     hypno, sf_hyp = read_hypno(hypno_path)
     if sf_hyp < 1:
@@ -142,7 +143,8 @@ def cli_sleep_stats(hypno, outfile):
         hypno = oversample_hypno(hypno, len(hypno) * time_base)
         sf_hyp = 1
 
-    stats = batch_sleepstats(hypno, sf_hyp=sf_hyp)
+    # Get sleep stats
+    stats = sleepstats(hypno, sf_hyp=sf_hyp)
     stats['File'] = hypno_path
     print('\nSLEEP STATS\n===========')
     keys, val = [''] * len(stats), [''] * len(stats)
@@ -152,5 +154,6 @@ def cli_sleep_stats(hypno, outfile):
         # Remember variables :
         keys[int(num)] = k
         val[int(num)] = str(v)
-    write_csv(outfile, zip(keys, val))
-    print('===========\nCSV file saved to:', outfile)
+    if outfile is not None:
+        write_csv(outfile, zip(keys, val))
+        print('===========\nCSV file saved to:', outfile)

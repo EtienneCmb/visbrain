@@ -3,6 +3,7 @@
 from PyQt5 import QtWidgets
 
 from ....utils import sleepstats
+from os import path
 
 __all__ = ['uiInfo']
 
@@ -18,23 +19,24 @@ class uiInfo(object):
 
     def _fcn_infoUpdate(self):
         """Complete the table sleep info."""
-        # Get sleep info :
-        win = self._infoTime.value()
-        stats = sleepstats(self._file, self._hyp.gui_to_hyp(), self._N,
-                           sf=self._sf, sfori=self._sfori,
-                           time_window=win)
+        # Get sleep stats :
+        stats = sleepstats(self._hyp.gui_to_hyp(), self._sf)
+
+        # Add global informations to stats dict
+        stats['Filename'] = path.basename(self._file) if self._file is not None else ''
+        stats['Sampling frequency'] = str(self._sfori) + " Hz"
+        stats['Down-sampling'] = str(self._sf) + " Hz"
+
         self._keysInfo = ['Window'] + [''] * len(stats)
         self._valInfo = [str(win)] + [''] * len(stats)
         # Check line number:
         self._infoTable.setRowCount(len(stats))
         # Fill table :
         for num, (k, v) in enumerate(stats.items()):
-            # Get keys and row :
-            key, r = k.split('_')
             # Add keys :
-            self._infoTable.setItem(int(r), 0, QtWidgets.QTableWidgetItem(key))
+            self._infoTable.setItem(int(num), 0, QtWidgets.QTableWidgetItem(k))
             # Add values :
-            self._infoTable.setItem(int(r), 1, QtWidgets.QTableWidgetItem(str(v)))
+            self._infoTable.setItem(int(num), 1, QtWidgets.QTableWidgetItem(str(v)))
             # Remember variables :
-            self._keysInfo[int(r) + 1] = key
-            self._valInfo[int(r) + 1] = str(v)
+            self._keysInfo[int(num)] = k
+            self._valInfo[int(num)] = str(v)
