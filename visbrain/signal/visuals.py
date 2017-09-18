@@ -5,7 +5,7 @@ from itertools import product
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from ..visuals import GridSignalMesh
+from ..visuals import GridSignalMesh, TFmapsMesh
 from ..utils import color2vb, vispy_array, PrepareData
 
 __all__ = ('Visuals')
@@ -166,6 +166,7 @@ class SignalVisual(SignalAnnotations):
                                            parent=parent)
         self._hist = scene.visuals.Histogram(data=posh, orientation='h',
                                              parent=parent, name='histogram')
+        self._tf = TFmapsMesh(parent=parent)
         self._th.visible = False
 
         # Initialize annotations :
@@ -197,7 +198,7 @@ class SignalVisual(SignalAnnotations):
             Marker size (form='marker').
         nbins : int | None
             Number of bins for the histogram (form='histogram')
-        form : {'line', 'marker', 'histogram'}
+        form : {'line', 'marker', 'histogram', 'tf'}
             Plotting type.
         th : tuple | None
             Tuple of floats for line thresholding.
@@ -272,6 +273,9 @@ class SignalVisual(SignalAnnotations):
             self.rect = (t_min, d_min, t_max - t_min, d_max - d_min)
             # Update object :
             self._hist.update()
+        elif form == 'tf':  # time-frequency map
+            self._tf.set_data(_data, self._sf, cmap='viridis')
+            self.rect = self._tf.rect
 
         # Hide non form elements :
         self._visibility()

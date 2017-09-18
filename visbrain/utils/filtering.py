@@ -137,6 +137,9 @@ def ndmorlet(x, sf, f, axis=0, get=None, width=7.0):
         Frequency vector of shape (2,)
     axis : integer | 0
         Specify the axis where is located the time dimension
+    get : {None, 'amplitude', 'phase', 'power'}
+        Specify if the amplitude, phase or power of the filtered signal have to
+        be returned or only the filtered signal.
     width : float | 7.0
         Width of the wavelet
 

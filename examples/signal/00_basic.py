@@ -2,10 +2,10 @@ import numpy as np
 from visbrain import Signal
 
 kwargs = {'xlabel': 'xlabel', 'ylabel': 'ylabel', 'title': 'title',
-          'display_grid': True, 'color': 'darkgray', 'symbol': 'x',
+          'display_grid': False, 'color': 'darkgray', 'symbol': 'x',
           'title_font_size': 20, 'axis_font_size': 18, 'tick_font_size': 8,
           'axis_color': 'blue', 'bgcolor': 'white', 'enable_grid': True,
-          'display_signal': False}
+          'display_signal': True, 'annotations': '/home/etienne/annotations.txt'}
 
 case = 4
 
