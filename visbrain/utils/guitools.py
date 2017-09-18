@@ -151,7 +151,7 @@ def set_spin_values(elements, values):
     [k.setValue(i) for k, i in zip(elements, values)]
 
 
-def ndsubplot(n, line=4, force_col=None, max_rows=100):
+def ndsubplot(n, line=4, force_col=None, max_rows=100, max_on_line=True):
     """Get the optimal number of rows / columns for a given integer.
 
     Parameters
@@ -164,6 +164,8 @@ def ndsubplot(n, line=4, force_col=None, max_rows=100):
         Force the number of columns.
     max_rows : int | 10
         Maximum number of rows.
+    max_on_line : bool | True
+        Force to have the maximum set for lines.
 
     Returns
     -------
@@ -195,6 +197,9 @@ def ndsubplot(n, line=4, force_col=None, max_rows=100):
                 nrows = int(n / ncols)
             else:
                 nrows, ncols = 1, n
+
+    if max_on_line and nrows < ncols:
+        nrows, ncols = (ncols, nrows)
 
     return nrows, ncols
 
