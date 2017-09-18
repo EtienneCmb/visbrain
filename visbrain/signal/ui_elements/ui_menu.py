@@ -1,4 +1,4 @@
-""""""
+"""Manu interaction."""
 from ...utils import ScreenshotPopup, HelpMenu
 from ...io import dialogSave, write_fig_pyqt, write_fig_canvas
 
@@ -11,8 +11,8 @@ class UiMenu(HelpMenu):
     def __init__(self):
         """Init."""
         # Help menu :
-        base = 'http://visbrain.org/colorbar.html'
-        sections = {'GridSignals': base}
+        base = 'http://visbrain.org/signal.html'
+        sections = {'Signal': base}
         HelpMenu.__init__(self, sections, True)
         # # Display :
         self.actionQSP.triggered.connect(self._fcn_menu_disp_qsp)
