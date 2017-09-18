@@ -1,4 +1,5 @@
 """Signal module."""
+import os
 import sip
 import sys
 from PyQt5 import QtWidgets
@@ -76,11 +77,14 @@ class Signal(UiInit, UiElements, Visuals):
         Display the grid layout.
     display_signal : bool | True
         Display the signal layout.
+    annotations : str | None
+        Path to an annotation file.
     """
 
     def __init__(self, data, axis=-1, time=None, sf=1., enable_grid=True,
                  form='line', color='black', lw=2., symbol='disc', size=10.,
-                 nbins=10, display_grid=True, display_signal=True, **kwargs):
+                 nbins=10, display_grid=True, display_signal=True,
+                 annotations=None, **kwargs):
         """Init."""
         self._enable_grid = enable_grid
         display_grid = bool(display_grid * self._enable_grid)
@@ -114,8 +118,6 @@ class Signal(UiInit, UiElements, Visuals):
         self._signal_canvas.camera = viscam.PanZoomCamera(rect=sig_rect)
 
         # ==================== UI INIT ====================
-        # ------------- Grid -------------
-
         # ------------- Signal -------------
         # Signal and axis color :
         self._sig_color.setText(str(color2tuple(color, astype=float)))
@@ -149,6 +151,11 @@ class Signal(UiInit, UiElements, Visuals):
 
         # ==================== SHORTCUTS ====================
         self._shpopup.set_shortcuts(self._sh_grid + self._sh_sig)
+
+        # ------------- Annotations -------------
+        if annotations is not None:
+            assert os.path.isfile(annotations)
+            self._fcn_load_annotations(filename=annotations)
 
     def _fcn_on_creation(self):
         """Run on GUI creation."""
