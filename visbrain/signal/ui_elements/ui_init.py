@@ -411,10 +411,6 @@ class SignalShortcuts(object):
                 t, d = np.around((t, d), decimals=2)
             # Add annotation :
             self._annotate_event(str(self._signal), (t, d))
-            self.QuickSettings.setCurrentIndex(3)
-            self._signal.add_annotations(str(self._signal), (t, d))
-            self._signal.update_annotations(str(self._signal))
-            self._signal.select_annotation(str(self._signal), (t, d))
 
 
 class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):

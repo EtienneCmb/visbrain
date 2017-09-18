@@ -26,11 +26,11 @@ class SignalAnnotations(object):
         # Create text for annotations :
         self._annot_text = scene.visuals.Text(parent=parent, anchor_x='left',
                                               bold=True, font_size=14.)
-        tr = (self._time.max() - self._time.min()) / 200.
+        tr = (self._time.max() - self._time.min()) / 100.
         self._annot_text.transform = vist.STTransform(translate=(tr, 0., 0.))
         self._annot_text.visible = False
 
-    def add_annotations(self, signal, coord, text='Enter your annotation'):
+    def add_annotations(self, signal, coord, text='Enter annotation'):
         """Add new annotation.
 
         Parameters
@@ -280,6 +280,7 @@ class SignalVisual(SignalAnnotations):
         self.update_annotations(str(self))
 
     def update_annotations(self, name):
+        """Update annotations."""
         is_annotated = self.is_event_annotated(name)
         if is_annotated:
             c = self.get_event_coord(name)
@@ -289,6 +290,12 @@ class SignalVisual(SignalAnnotations):
                                       edge_width=0., size=13)
         self._annot_mark.visible = is_annotated
         self._annot_text.visible = is_annotated
+
+    def clean_annotations(self):
+        """Clean annotations."""
+        self._annot_mark.set_data(pos=np.random.rand(1, 2))
+        self._annotations = {}
+        self._annotations_txt = {}
 
     def _get_signal_index(self, signal):
         """Get index of a signal.

@@ -78,7 +78,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>2</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -1313,7 +1313,12 @@ type</string>
              </property>
              <column>
               <property name="text">
-               <string>Coordinates</string>
+               <string>Time</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Amplitude</string>
               </property>
              </column>
              <column>
@@ -1509,11 +1514,18 @@ type</string>
     </property>
     <widget class="QMenu" name="menuSave">
      <property name="title">
-      <string>save</string>
+      <string>Save</string>
      </property>
-     <addaction name="actionAnnotations"/>
+     <addaction name="saveAnnotations"/>
+    </widget>
+    <widget class="QMenu" name="menuLoad">
+     <property name="title">
+      <string>Load</string>
+     </property>
+     <addaction name="loadAnnotations"/>
     </widget>
     <addaction name="menuSave"/>
+    <addaction name="menuLoad"/>
     <addaction name="menuScreenshot"/>
    </widget>
    <widget class="QMenu" name="menuDisplay">
@@ -1992,7 +2004,12 @@ type</string>
     <string>Ctrl+D</string>
    </property>
   </action>
-  <action name="actionAnnotations">
+  <action name="saveAnnotations">
+   <property name="text">
+    <string>Annotations</string>
+   </property>
+  </action>
+  <action name="loadAnnotations">
    <property name="text">
     <string>Annotations</string>
    </property>
