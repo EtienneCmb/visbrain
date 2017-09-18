@@ -1,6 +1,8 @@
 """"""
 import numpy as np
 from PyQt5 import QtWidgets
+from warnings import warn
+
 from vispy import app, scene
 
 from ..gui import Ui_MainWindow
@@ -329,8 +331,22 @@ class GridShortcuts(object):
             y_cam = (height * (w_rows - y) / w_rows) + bottom + 1.
             # Get signal location :
             x_loc = int(np.ceil((n_cols / 2.) * x_cam) - 1.)
-            y_loc = int(abs(np.ceil((n_rows / 2.) * y_cam) - n_rows))
-
+            y_loc = int(abs(np.ceil((n_rows / 2.) * y_cam) - 1))
+            y_loc, x_loc = self._grid._convert_row_cols(y_loc, x_loc)
+            # String conversion :
+            if self._data.ndim == 2:
+                lst = [str(x_loc)]
+            elif self._data.ndim == 3:
+                lst = [str(y_loc), str(x_loc)]
+            lst.insert(self._signal._axis, ':')
+            st = '(' + ', '.join(lst) + ')'
+            # Try to set the signal
+            try:
+                # Get signal index :
+                index = self._signal._get_signal_index(st)
+                self._safely_set_index(index, True, True)
+            except:
+                warn("No signal found at this position.")
 
 
 class SignalShortcuts(object):
