@@ -345,6 +345,9 @@ class GridShortcuts(object):
                 # Get signal index :
                 index = self._signal._get_signal_index(st)
                 self._safely_set_index(index, True, True)
+                if not self.actionSignal.isChecked():
+                    self.actionSignal.setChecked(True)
+                    self._fcn_menu_disp_signal()
             except:
                 warn("No signal found at this position.")
 
