@@ -1,4 +1,4 @@
-""""""
+"""VisPy canvas initialization."""
 import numpy as np
 from PyQt5 import QtWidgets
 from warnings import warn
@@ -308,7 +308,8 @@ class GridShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
-        self._sh_grid = [('n', 'Test grid'),
+        self._sh_grid = [('Double clik (grid canvas)', "Enlarge signal "
+                          "under the mouse cursor"),
                          ]
 
         @canvas.events.key_press.connect
@@ -363,14 +364,13 @@ class SignalShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
-        self._sh_sig = [('n', 'Go to the next signal'),
-                        ('b', 'Go to the previous signal'),
-                        ('s', 'Display / hide signal'),
+        self._sh_sig = [('n (signal canvas)', 'Go to the next signal'),
+                        ('b (signal canvas)', 'Go to the previous signal'),
+                        ('Double clik (signal canvas)', 'Insert annotation'),
                         ('g', 'Display / hide grid'),
+                        ('s', 'Display / hide signal'),
                         ('<delete>', 'Reset the camera'),
-                        ('Double clik', 'Insert annotation'),
                         ('CTRL + t', 'Display shortcuts'),
-                        ('CTRL + e', 'Display documentation'),
                         ('CTRL + d', 'Display / hide setting panel'),
                         ('CTRL + n', 'Take a screenshot'),
                         ('CTRL + q', 'Close Sleep graphical interface'),
