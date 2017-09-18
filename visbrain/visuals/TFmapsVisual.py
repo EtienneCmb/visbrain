@@ -1,4 +1,4 @@
-""""""
+"""Time-frequency maps visual base class."""
 import numpy as np
 
 import vispy.visuals.transforms as vist
@@ -48,8 +48,8 @@ class TFmapsMesh(object):
         """Return the number of time points."""
         return self._n
 
-    def set_data(self, data, sf, f_min=1., f_max=200., f_step=2.,
-                 baseline=None, **kwargs):
+    def set_data(self, data, sf, f_min=1., f_max=160., f_step=2.,
+                 baseline=None, normalize=None, **kwargs):
         """Set data to the time frequency map.
 
         Parameters
@@ -85,6 +85,8 @@ class TFmapsMesh(object):
         # Compute TF :
         for i, k in enumerate(freqs):
             tf[i, :] = np.square(np.abs(morlet(data, sf, k)))
+        # Normalize TF :
+        tf -= tf.mean(axis=1, keepdims=True)
         # Downsample large images :
         if len(self) > self._n_limits:
             downsample = int(np.round(len(self) / self._n_limits))
