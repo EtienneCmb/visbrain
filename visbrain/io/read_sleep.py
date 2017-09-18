@@ -8,6 +8,7 @@ This file contain functions to load :
 - Hypnogram (*.hyp)
 """
 import os
+import io
 import numpy as np
 import datetime
 from warnings import warn
@@ -344,7 +345,7 @@ def read_trc(path, downsample):
     def read_f(f, fmt):
         return struct.unpack(fmt, f.read(struct.calcsize(fmt)))
 
-    with open(path, 'rb') as f:
+    with io.open(path, 'rb') as f:
         # Read header
         f.seek(175, 0)
         header_version, = read_f(f, 'b')
@@ -443,6 +444,7 @@ def read_eeg(path, downsample, read_markers=False):
         Array of annotations.
     """
     import re
+    print('IM INNNNN read_eeg')
 
     assert os.path.isfile(path)
 
@@ -520,7 +522,7 @@ def read_eeg(path, downsample, read_markers=False):
         else:
             anot = None
 
-    with open(data_path, 'rb') as f:
+    with io.open(data_path, 'rb') as f:
         raw = f.read()
         size = int(len(raw) / 2)
 
