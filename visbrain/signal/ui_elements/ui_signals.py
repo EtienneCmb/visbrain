@@ -1,5 +1,5 @@
 """Interactions between user and Signal tab of QuickSettings."""
-from ...utils import textline2color
+from ...utils import textline2color, safely_set_spin
 
 __all__ = ('UiSignals')
 
@@ -25,16 +25,6 @@ class UiSignals(object):
         self._sig_nbins.valueChanged.connect(self._fcn_set_signal)
         self._sig_size.valueChanged.connect(self._fcn_set_signal)
         self._sig_symbol.currentIndexChanged.connect(self._fcn_set_signal)
-        # Prepare data :
-        self._sig_demean.clicked.connect(self._fcn_set_signal)
-        self._sig_detrend.clicked.connect(self._fcn_set_signal)
-        self._sig_filt.clicked.connect(self._fcn_set_signal)
-        self._sig_disp.currentIndexChanged.connect(self._fcn_set_signal)
-        self._sig_filter.currentIndexChanged.connect(self._fcn_set_signal)
-        self._sig_fmin.valueChanged.connect(self._fcn_set_signal)
-        self._sig_fmax.valueChanged.connect(self._fcn_set_signal)
-        self._sig_meth.currentIndexChanged.connect(self._fcn_set_signal)
-        self._sig_order.valueChanged.connect(self._fcn_set_signal)
         # Amplitudes :
         self._sig_amp.clicked.connect(self._fcn_signal_amp)
         self._sig_amp_min.valueChanged.connect(self._fcn_signal_amp)
@@ -105,23 +95,6 @@ class UiSignals(object):
         thm = (self._sig_th_min.value(), self._sig_th_max.value())
         th = thm if self._sig_th.isChecked() else None
 
-        # =================== PREPARE DATA ===================
-        prep = self._signal._prep
-        # Get demean // detrend // filtering :
-        dem, det = self._sig_demean.isChecked(), self._sig_detrend.isChecked()
-        filt = self._sig_filt.isChecked()
-        # Get if camera nee update :
-        filt_cam = (prep.demean == dem) or (prep.detrend == det) or (
-            prep.filt == filt)
-        # Set prepare data parameters :
-        prep.demean, prep.detrend, prep.filt = dem, det, filt
-        prep.dispas = str(self._sig_disp.currentText())
-        prep.btype = str(self._sig_filter.currentText())
-        prep.fstart = float(self._sig_fmin.value())
-        prep.fend = float(self._sig_fmax.value())
-        prep.filt_meth = str(self._sig_meth.currentText())
-        prep.forder = int(self._sig_order.value())
-
         # =================== SET DATA // TEXT===================
         index = int(self._sig_index.value())
         self._signal.set_data(self._data, index, color, lw, nbins, symbol,
@@ -129,17 +102,23 @@ class UiSignals(object):
         self._txt_shape.setText(str(self._signal))
 
         # =================== CAMERA ===================
-        if force or (form != form_bck) or filt_cam:
+        if force or (form != form_bck):
             self._sig_amp.setChecked(False)
             self.update_cameras(update='signal')
 
+    def _safely_set_index(self, value, update_signal=False, force=False):
+        """Set without trigger."""
+        safely_set_spin(self._sig_index, value, [self._fcn_set_signal])
+        if update_signal:
+            self._fcn_set_signal(force=force)
+
     def _fcn_prev_index(self):
         """Go to previous index."""
-        self._sig_index.setValue(int(self._sig_index.value()) - 1)
+        self._safely_set_index(int(self._sig_index.value()) - 1, True, True)
 
     def _fcn_next_index(self):
         """Go to next index."""
-        self._sig_index.setValue(int(self._sig_index.value()) + 1)
+        self._safely_set_index(int(self._sig_index.value()) + 1, True, True)
 
     ###########################################################################
     #                            AMPLITUDE
