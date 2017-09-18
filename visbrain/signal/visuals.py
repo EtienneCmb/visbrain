@@ -317,6 +317,7 @@ class SignalVisual(SignalAnnotations):
         self._line.visible = self.form == 'line'
         self._mark.visible = self.form == 'marker'
         self._hist.visible = self.form == 'histogram'
+        self._tf.visible = self.form == 'tf'
 
 
 class Visuals(object):

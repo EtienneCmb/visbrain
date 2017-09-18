@@ -25,8 +25,8 @@ elif case == 3:  # 3-D axis=0
     data[13, 5, :] = np.arange(4000)
     axis = -1
 elif case == 4:  # 3-D axis=1, large
-    data = 100 * np.random.randn(7, 4000, 20) + 100.
-    data[5, :, 13] = np.arange(4000) + 2
+    data = 100 * np.random.randn(7, 10000, 20) + 100.
+    data[5, :, 13] = np.arange(10000) + 2
     axis = 1
 elif case == 5:  # 3-D axis=1, small
     data = 100 * np.random.randn(20, 4000, 7) + 100.
