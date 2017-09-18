@@ -30,6 +30,7 @@ install:
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
   - source activate testenv
   - pip install mne
+  - pip install nibabel
   - pip install setuptools
   - pip install nose
   - pip install PyOpenGL PyOpenGL_accelerate

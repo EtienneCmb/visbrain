@@ -2,11 +2,13 @@
 
 import numpy as np
 from re import findall
+from scipy.signal import savgol_filter, detrend
+from scipy.stats import zscore
 import os
 import sys
 
 __all__ = ('find_non_eeg', 'rereferencing', 'bipolarization', 'commonaverage',
-           'tal2mni', 'mni2tal', 'find_roi')
+           'tal2mni', 'mni2tal', 'find_roi', 'generate_signal')
 
 
 def find_non_eeg(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
@@ -381,3 +383,61 @@ def find_roi(xyz, r=5., nearest=True):
             # print('BAD')
 
     # print(info)
+
+def generate_signal(sf, dur_sec, n_sines=10000, freq_band=[0.5, 4, 8, 12, 18, 50]):
+    """Generate a random EEG-like signal.
+
+    Parameters
+    ----------
+    sf : float
+        The sampling frequency
+    dur_sec : float
+        The duration of the signal in sec
+    freq_band: list, optional (default [0.5, 4, 8, 12, 18, 50] )
+        Limits (Hz) of frequencies bands
+    n_sines : int, optional (default 1000)
+        The number of averaged sines
+
+    Returns
+    -------
+    signal : array
+        An EEG-like random signal
+    """
+    N = dur_sec * sf    # Number of points
+    t = np.arange(N) / sf  # Time vector
+    freq_band = np.array(freq_band)
+
+    # Define weighted non-linear vector for frequency band
+    w = np.logspace(0, 1, num=(freq_band.size-1), base=0.1) * n_sines
+    w = np.round((w / (w.sum() / n_sines)))
+    l = freq_band[:-1] # Lower limits
+    u = freq_band[1::] # Upper limits
+    weight_vector = np.array([])
+    for i in np.arange(l.size):
+        weight_vector = np.append(weight_vector, np.linspace(l[i], u[i], w[i]))
+    weight_vector = np.sort(weight_vector)
+
+    # Generate sines
+    weighted_sines = np.random.normal(0, 1, N)
+    sin_param = 2 * np.pi * weight_vector
+    sines = np.outer(weighted_sines * np.ones(N), np.sin(sin_param))
+
+    # Sum sines and center around 0
+    signal = zscore(np.sum(sines, axis=1))
+
+    # Apply Savitzky-Golay filter
+    #  - Args = (x, window_length, polyorder)
+    #  - higher window_length result in more smoothed signal
+    #  - lower polyorder result in more smoothed (less peak) signal
+    wl = 1/6 # Window length (fraction of sf)
+    odd_sf = int(np.ceil(wl * sf) // 2 * 2 + 1) # Ensure that sf is odd)
+    signal = savgol_filter(detrend(signal), odd_sf, 1)
+
+    # Optional: plot
+    # import matplotlib.pyplot as plt
+    # plt.plot(t, signal)
+    # plt.xlabel('Time [sec]')
+    # plt.ylim([-2, 2])
+    # plt.xlim([0, dur_sec])
+
+    return signal

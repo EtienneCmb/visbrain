@@ -39,8 +39,11 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
     'numpydoc',
+    'sphinx.ext.autosummary',
     'sphinx_gallery.gen_gallery',
+    'sphinx_click.ext',
 ]
+    # , 'sphinx.ext.napoleon'
 #     'sphinx.ext.githubpages',
 
 sphinx_gallery_conf = {
@@ -106,7 +109,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 #default_role = None
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
-#add_function_parentheses = True
+add_function_parentheses = False
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).

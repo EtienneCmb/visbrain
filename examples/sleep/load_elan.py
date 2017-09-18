@@ -10,5 +10,6 @@ https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing
 .. image:: ../../picture/picsleep/ex_LoadElan.png
 """
 from visbrain import Sleep
-Sleep(file='s101_sleep.eeg', hypno_file='s101_hypno.hyp',
+
+Sleep(data='s101_sleep.eeg', hypno='s101_hypno.hyp',
       config_file='s101_config.txt').show()

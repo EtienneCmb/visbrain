@@ -110,7 +110,7 @@ class HypnoEdition(object):
                 - Set data to marker object.
             """
             # Get latest data version :
-            data = -hypno_obj.GUI2hyp()
+            data = -hypno_obj.gui_to_hyp()
             # Get cursor position :
             cpos = _get_cursor(event.pos, not self.keep)
             # Get closest marker :
@@ -143,13 +143,13 @@ class HypnoEdition(object):
                                             edge_color='white')
                     # Stream inv-converted hypno data :
                     posh = self.pos.copy()
-                    posh[self.keep_idx, 1] = hypno_obj.pos2GUIinv(cpos)[0, 1]
+                    posh[self.keep_idx, 1] = hypno_obj.pos_to_gui_inv(cpos)[0, 1]
                     xtpos = np.abs(time-posh[self.keep_idx, 0]).argmin()
                     data[xtpos:xtnext+1] = cpos[0, 1]
                     hypno_obj.set_data(sf, -data, time)
                     # Temporaly turn dragged point to color_dragge :
                     cbackup[self.keep_idx, :] = self.color_dragge
-                    self.pos[self.keep_idx, 1] = hypno_obj.pos2GUI(cpos)[0, 1]
+                    self.pos[self.keep_idx, 1] = hypno_obj.pos_to_gui(cpos)[0, 1]
             else:
                 cpos = self.convert(cpos)
                 # Display moving point :
@@ -160,7 +160,7 @@ class HypnoEdition(object):
                 # If cursor close to marker, hide it and set to color_active :
                 else:
                     pos = self.pos
-                    # pos = hypno_obj.pos2GUI(self.pos)
+                    # pos = hypno_obj.pos_to_gui(self.pos)
                 # Convert position :
                 # Set new data to marker :
                 hypno_obj.edit.set_data(pos=pos, face_color=color, size=size,
@@ -204,7 +204,7 @@ class HypnoEdition(object):
             # Get y position :
             if force:
                 # Force cursor to be on the hypnogram :
-                val = -hypno_obj.GUI2hyp()[np.abs(time - cursor).argmin()]
+                val = -hypno_obj.gui_to_hyp()[np.abs(time - cursor).argmin()]
             else:
                 # Return converted y axis :
                 val = (yaxis[0]-yaxis[1]) * pos[1] / canvas.size[1] + yaxis[1]
@@ -260,7 +260,7 @@ class HypnoEdition(object):
         # =================== UTILS FUNCTIONS ===================
         def data_update(hypno_obj):
             """Get latest data version."""
-            data = -hypno_obj.GUI2hyp()
+            data = -hypno_obj.gui_to_hyp()
             time = hypno_obj.mesh.pos[hypno_obj.sl, 0]
             return data, time
 
@@ -274,7 +274,7 @@ class HypnoEdition(object):
         self.event = MouseEmulation()
 
         # ============ MARKERS POSITION ============
-        self.convert = hypno_obj.pos2GUI
+        self.convert = hypno_obj.pos_to_gui
         self._transient(data, time)
 
         # ============ COLOR ============

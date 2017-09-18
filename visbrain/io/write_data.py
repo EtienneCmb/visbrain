@@ -30,12 +30,12 @@ def write_mat():
 def write_txt(file, data):
     """Write data as a text (txt) file.
 
-    Args:
-        file: string
-            File name for saving file.
-
-        data: list
-            List of data to save to the txt file.
+    Parameters
+    ----------
+    file : string
+        File name for saving file.
+    data : list
+        List of data to save to the txt file.
     """
     # Open file :
     ofile = open(file, 'w')
@@ -47,12 +47,12 @@ def write_txt(file, data):
 def write_csv(file, data):
     """Write data as a CSV (csv) file.
 
-    Args:
-        file: string
-            File name for saving file.
-
-        data: list
-            List of data to save to the csv file.
+    Parameters
+    ----------
+    file : string
+        File name for saving file.
+    data : list
+        List of data to save to the csv file.
     """
     import csv
     with open(file, 'w') as csvfile:

@@ -1,8 +1,6 @@
 """Test utility functions."""
 import numpy as np
-import pytest
 from PyQt5 import QtWidgets, QtCore
-import sys
 from warnings import warn
 import math
 
@@ -21,9 +19,10 @@ from visbrain.utils.guitools import (slider2opacity, textline2color,
                                      safely_set_spin, safely_set_slider,
                                      toggle_enable_tab, get_screen_size,
                                      set_widget_size)
-from visbrain.utils.others import (vis_args, check_downsampling, vispy_array,
-                                   convert_meshdata, add_brain_template,
-                                   remove_brain_template, set_if_not_none)
+from visbrain.utils.others import (vis_args, check_downsampling, get_dsf,
+                                   vispy_array, convert_meshdata,
+                                   add_brain_template, remove_brain_template,
+                                   set_if_not_none)
 from visbrain.utils.picture import (piccrop, picresize)
 from visbrain.utils.sigproc import (normalize, movingaverage, derivative, tkeo,
                                     soft_thresh, zerocrossing, power_of_ten)
@@ -573,6 +572,11 @@ class TestOthers(object):
         """Test check_downsampling function."""
         assert check_downsampling(1000., 100.) == 100.
 
+    def test_get_dsf(self):
+        """Test function get_dsf."""
+        assert get_dsf(100, 1000.) == (10, 100.)
+        assert get_dsf(100, None) == (1, 100.)
+
     def test_vispy_array(self):
         """Test vispy_array function."""
         mat = np.random.randint(0, 10, (10, 30))
@@ -735,7 +739,7 @@ class TestHypnoprocessing(object):
     def test_sleepstats(self):
         """Test function sleepstats."""
         hypno = np.random.randint(-1, 3, (2000,))
-        sleepstats(None, hypno, len(hypno), time_window=1.)
+        sleepstats(hypno, 100.)
 
 ###############################################################################
 ###############################################################################

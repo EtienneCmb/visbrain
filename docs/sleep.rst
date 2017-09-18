@@ -33,7 +33,7 @@ Main features
     * Take screenshot with controllable dpi
     * Save the GUI state (*buttons, sliders, checkbox*...)
 * **Load standard electro physiological files**
-    * Default supported files : **.eeg** (*BrainVision V1 and 2, ELAN*), **.trc**, **.edf**
+    * Default supported files : **.vhdr** (*BrainVision V1 and 2, ELAN*), **.trc**, **.edf**
     * Pass raw data (and use MNE-python to load other non-supported files)
     * Supported extensions for hypnogram files : **.txt**, **.csv**, **.hyp** or directly use raw data.
 * **Display**
@@ -104,7 +104,7 @@ Sleep provide five settings tabs :
 * :ref:`infotab` : Sleep statistics and record basic infos
 * :ref:`scoringtab` : a scoring table that can be used to edit the hypnogram
 * :ref:`detectiontab` : Automatic detection of sleep spindles, rapid eye movements (REMs), slow waves, K-complexes (KCs) and peaks
-* :ref:`annotationtab` : annotate 
+* :ref:`annotationtab` : annotate
 
 .. _paneltab:
 
@@ -220,7 +220,7 @@ Sleep comes with a bundle of shortcuts that can be used to speed up your product
 Keys                    Description
 ===================     =======================================================
 mouse wheel             Move the current window
-double left click       Add annotation under mouse cursor 
+double left click       Add annotation under mouse cursor
 \-                      Decrease amplitude
 \+                      Increase amplitude
 a                       Insert Artefact in the hypnogram
@@ -270,18 +270,28 @@ Sleep support by default several data formats for both electrophysiological and 
 Data files
 ^^^^^^^^^^
 
-Here’s the list of currently supported extensions for data files:
+Here’s the list of currently supported extensions for data files :
 
-* BrainVision (**.eeg**) version 1 and 2
-* Micromed (**.trc**) version 4
-* European Data Format (**.edf**)
-* `ELAN <http://elan.lyon.inserm.fr>`_ (**.eeg**)
+* **.vhdr** (BrainVision version 1 and 2)
+* **.trc** (Micromed version 4)
+* **.edf** (European Data Format)
+* **.eeg** (`ELAN <http://elan.lyon.inserm.fr>`_)
+
+If MNE-python is installed, this list of supported files is extended to :
+
+ * **.bdf**
+ * **.gdf**
+ * **.egi**
+ * **.mff**
+ * **.set** (EEGLAB)
+ * **.cnt**
+ * **.vhdr**
 
 .. note::
-   File formats above are the ones natively supported by Sleep, but you can also use `MNE Python package <http://martinos.org/mne/stable/>`_ to load several other file formats or directly pass raw data (NumPy array).
+   If you have a file that is currently not supported, *Sleep* also provide the ability to directly pass raw data (NumPy array).
 
 .. warning::
-   Sleep applies an automatic downsampling to 100 Hz upon loading. You can change this value with the “downsample” argument of Sleep (command-line only) or directly in the file sleep.py.
+   Sleep applies an automatic downsampling to (100 Hz by default) upon loading. You can change this value with the “downsample” argument of Sleep.
 
 Hypnogram
 ^^^^^^^^^
@@ -390,7 +400,7 @@ Instead of leaving inputs arguments empty, send the path to the data :
     hfile = '/home/perso/hypno.hyp'
     # You're not forced to give a hypnogram. If you prefer to start from a fresh empty one, use :
     # hfile = None or ignore passing this argument.
-    Sleep(file=dfile, hypno_file=hfile).show()
+    Sleep(data=dfile, hypno=hfile).show()
 
 .. _loadfromraw:
 
@@ -628,7 +638,7 @@ Import, add and save annotations
 Import annotations
 ^^^^^^^^^^^^^^^^^^
 
-If the interface is opened, load annotations from the menu *Files/Load/Annotations*. Otherwise, you can use the input variable *annotation_file* to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :
+If the interface is opened, load annotations from the menu *Files/Load/Annotations*. Otherwise, you can use the input variable *annotations* to set the path to an existing annotation file that need to be loaded. There is several ways to define annotations :
 
 * :ref:`annotations_txt`
 * :ref:`annotations_mne`
@@ -639,7 +649,7 @@ If the interface is opened, load annotations from the menu *Files/Load/Annotatio
 Annotations in a text file
 ++++++++++++++++++++++++++
 
-Annotations can be defined in a `csv file <https://drive.google.com/file/d/0B6vtJiCQZUBvSXpmS0FGZ1E4M1U/view?usp=sharing>`_ or in a `txt file <https://drive.google.com/file/d/0B6vtJiCQZUBvOENtTks1Z3NLam8/view?usp=sharing>`_ file. 
+Annotations can be defined in a `csv file <https://drive.google.com/file/d/0B6vtJiCQZUBvSXpmS0FGZ1E4M1U/view?usp=sharing>`_ or in a `txt file <https://drive.google.com/file/d/0B6vtJiCQZUBvOENtTks1Z3NLam8/view?usp=sharing>`_ file.
 
 .. code-block:: python
 
@@ -647,14 +657,14 @@ Annotations can be defined in a `csv file <https://drive.google.com/file/d/0B6vt
   # Import the Sleep module:
   from visbrain import Sleep
 
-  Sleep(annotation_file='pathto/myannotations.txt')
+  Sleep(annotations='pathto/myannotations.txt')
 
 .. _annotations_mne:
 
 Use MNE-Python annotations
 ++++++++++++++++++++++++++
 
-Alternatively, you can use annotations from MNE-python and pass your annotations to the *annotation_file* variable :
+Alternatively, you can use annotations from MNE-python and pass your annotations to the *annotations* variable :
 
 .. code-block:: python
 
@@ -668,7 +678,7 @@ Alternatively, you can use annotations from MNE-python and pass your annotations
   description = np.array(['First event', 'Second event', 'Third event'])
   annot = Annotations(onset, durations, description)
 
-  Sleep(annotation_file=annot)
+  Sleep(annotations=annot)
 
 .. _annotations_mark:
 
@@ -685,7 +695,7 @@ Annotations can be seen as the combination of a time-code with a text attached t
   # Define the onset :
   onset = np.array([117., 256., 312.])
 
-  Sleep(annotation_file=onset)
+  Sleep(annotations=onset)
 
 Add new annotations
 ^^^^^^^^^^^^^^^^^^^
@@ -702,6 +712,14 @@ The list of annotations can be exported (either in .txt or .csv) or loaded from 
 
 .. ##########################################################################
 .. ##########################################################################
+..                             COMMANDE-LINE
+.. ##########################################################################
+.. ##########################################################################
+
+
+
+.. ##########################################################################
+.. ##########################################################################
 ..                                 API
 .. ##########################################################################
 .. ##########################################################################
@@ -709,11 +727,42 @@ The list of annotations can be exported (either in .txt or .csv) or loaded from 
 API
 ---
 
+Sleep class
+~~~~~~~~~~~
+
 Here is the list of default Sleep inputs :
 
-.. autoclass:: visbrain.sleep.sleep.Sleep
+.. currentmodule:: visbrain.sleep.sleep
 
-Collaborator
-------------
+.. autoclass:: Sleep
 
-Sleep is developped in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_.
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~Sleep.show
+
+Command line
+~~~~~~~~~~~~
+
+In addition to use Python script, you can also use the following command-lines from a terminal :
+
+* :ref:`cli_visbrain_sleep` : open the graphical user interface of Sleep.
+* :ref:`cli_visbrain_fig_hyp` : export a hypnogram file (**.txt**, **.csv** or **.hyp**) into a high definition colored or black and white image.
+* :ref:`cli_visbrain_sleep_stats` : Compute sleep statistics from hypnogram file and export them in csv.
+
+.. _cli_visbrain_sleep:
+.. click:: visbrain.cli:cli_sleep
+   :prog: visbrain_sleep
+
+.. _cli_visbrain_fig_hyp:
+.. click:: visbrain.cli:cli_fig_hyp
+   :prog: visbrain_fig_hyp
+
+.. _cli_visbrain_sleep_stats:
+.. click:: visbrain.cli:cli_sleep_stats
+   :prog: visbrain_sleep_stats
+
+Collaborators
+-------------
+
+Sleep is developed in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_ and `Christian O Reilly <http://bluebrain.epfl.ch/page-143249-en.html>`_.

@@ -3,18 +3,19 @@
 - write_hypno_txt : as text file
 - write_hypno_hyp : as hyp file
 - read_hypno : read either *.hyp or *.txt hypnogram data
-- load_hypno_hyp : load *.hyp hypnogram data
-- load_hypno_txt : load *.txt hypnogram data
+- read_hypno_hyp : load *.hyp hypnogram data
+- read_hypno_txt : load *.txt hypnogram data
 """
 import numpy as np
 import os
-from warnings import warn
 
-__all__ = ['write_hypno_txt', 'write_hypno_hyp', 'read_hypno',
-           'load_hypno_hyp', 'load_hypno_txt']
+from ..utils import vispy_array
+
+__all__ = ('oversample_hypno', 'write_hypno_txt', 'write_hypno_hyp',
+           'read_hypno', 'read_hypno_hyp', 'read_hypno_txt')
 
 
-def _oversample_hypnogram(hypno, n):
+def oversample_hypno(hypno, n):
     """Oversample hypnogram.
 
     Parameters
@@ -30,13 +31,19 @@ def _oversample_hypnogram(hypno, n):
         The hypnogram of shape (n,)
     """
     # Get the repetition number :
-    rep_nb = int(np.round(n / len(hypno)))
+    rep_nb = float(np.floor(n / len(hypno)))
+
     # Repeat hypnogram :
     hypno = np.repeat(hypno, rep_nb)
     npts = len(hypno)
-    # Complete (if needed) :
-    if len(hypno) != n:
-        hypno = np.append(hypno, hypno[-1] * np.ones((npts - n,)))
+
+    # Check size
+    if npts < n:
+        hypno = np.append(hypno, hypno[-1] * np.ones((n - npts)))
+    elif n > npts:
+        raise ValueError("The length of the hypnogram  vector must "
+                         "be " + str(n) + " (Currently : " + str(npts) + ".")
+
     return hypno.astype(int)
 
 
@@ -109,7 +116,7 @@ def write_hypno_hyp(filename, hypno, sf, sfori, n):
     np.savetxt(filename, export, fmt='%s')
 
 
-def read_hypno(path, npts):
+def read_hypno(path):
     """Load hypnogram file.
 
     Sleep stages in the hypnogram should be scored as follow
@@ -126,13 +133,14 @@ def read_hypno(path, npts):
     ----------
     path : string
         Filename (with full path) to hypnogram file.
-    npts : int
-        Data length.
 
     Returns
     -------
     hypno : array_like
-        The hypnogram vector with same length as downsampled data.
+        The hypnogram vector in its original length.
+
+    sf_hyp: float
+        The hypnogram original sampling frequency (Hz)
     """
     # Test if file exist :
     assert os.path.isfile(path)
@@ -140,56 +148,37 @@ def read_hypno(path, npts):
     # Extract file extension :
     file, ext = os.path.splitext(path)
 
-    # Try loading file :
-    try:
-        if ext in ['.hyp', '.txt', '.csv']:
-            # ----------- ELAN -----------
-            if ext == '.hyp':
-                hypno = load_hypno_hyp(path, npts)
+    # Load the hypnogram :
+    if ext == '.hyp':  # ELAN
+        hypno, sf_hyp = read_hypno_hyp(path)
+    elif ext in ['.txt', '.csv']:  # TXT / CSV
+        hypno, sf_hyp = read_hypno_txt(path)
 
-            # ----------- TXT / CSV -----------
-            elif ext in ['.txt', '.csv']:
-                hypno = load_hypno_txt(path, npts)
-
-            # Complete hypnogram if needed :
-            n = len(hypno)
-            if n < npts:
-                hypno = np.append(hypno, hypno[-1] * np.ones((npts - n,)))
-            elif n > npts:
-                raise ValueError("The length of the hypnogram \
-                                 vector must be" + str(npts) +
-                                 " (Currently : " + str(n) + ".")
-
-            return hypno.astype(np.float32)
-
-    except:
-        warn("\nAn error ocurred while trying to load the hypnogram. An empty"
-             " one will be used instead.")
-        return None
+    return vispy_array(hypno), sf_hyp
 
 
-def load_hypno_hyp(path, npts):
+def read_hypno_hyp(path):
     """Read Elan hypnogram (hyp).
 
     Parameters
     ----------
     path : str
         Filename(with full path) to Elan .hyp file
-    npts : int
-        Data length.
 
     Returns
     -------
     hypno : array_like
-        The hypnogram vector with same length as downsampled data.
+        The hypnogram vector in its original length.
+    sf_hyp : float
+        The hypnogram original sampling frequency (Hz)
     """
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
                         dtype=None, skip_header=0)
 
     hyp = np.char.decode(hyp)
 
-    # Sampling rate of original .eeg file
-    # sf = 1 / float(hyp[1].split()[1])
+    # Get sampling frequency of hypnogram
+    sf_hyp = 1 / float(hyp[0].split()[1])
 
     # Extract hypnogram values
     hypno = np.array(hyp[4:], dtype=np.int)
@@ -199,29 +188,23 @@ def load_hypno_hyp(path, npts):
     hypno[hypno == 4] = 3
     hypno[hypno == 5] = 4
 
-    # Get the repetition number :
-    rep = int(np.floor(npts / len(hypno)))
-
-    # Resample to get same number of points as in eeg file
-    hypno = np.repeat(hypno, rep)
-
-    return hypno
+    return hypno, sf_hyp
 
 
-def load_hypno_txt(path, npts):
+def read_hypno_txt(path):
     """Read text files (.txt / .csv) hypnogram.
 
     Parameters
     ----------
     path : str
         Filename(with full path) to hypnogram(.txt)
-    npts : int
-        Data length.
 
     Returns
     -------
     hypno : array_like
-        The hypnogram vector with same length as downsampled data.
+        The hypnogram vector in its original length.
+    sf_hyp : float
+        The hypnogram original sampling frequency (Hz)
     """
     assert os.path.isfile(path)
 
@@ -232,8 +215,11 @@ def load_hypno_txt(path, npts):
 
     # Load header file
     labels = np.genfromtxt(header, dtype=str, delimiter=" ", usecols=0)
-    values = np.genfromtxt(header, dtype=int, delimiter=" ", usecols=1)
+    values = np.genfromtxt(header, dtype=float, delimiter=" ", usecols=1)
     desc = {label: row for label, row in zip(labels, values)}
+
+    # Get sampling frequency of hypnogram
+    sf_hyp = 1 / float(desc['time'])
 
     # Load hypnogram file
     hyp = np.genfromtxt(path, delimiter='\n', usecols=[0],
@@ -248,13 +234,7 @@ def load_hypno_txt(path, npts):
 
     hypno = swap_hyp_values(hypno, desc)
 
-    # Get the repetition number :
-    rep = int(np.floor(npts / len(hypno)))
-
-    # Resample to get same number of points as in eeg file
-    hypno = np.repeat(hypno, rep)
-
-    return hypno
+    return hypno, sf_hyp
 
 
 def swap_hyp_values(hypno, desc):
@@ -289,28 +269,20 @@ def swap_hyp_values(hypno, desc):
 
     if 'Art' in desc:
         hypno_s[hypno == desc['Art']] = -1
-
     if 'Nde' in desc:
         hypno_s[hypno == desc['Nde']] = -1
-
     if 'Mt' in desc:
         hypno_s[hypno == desc['Mt']] = -1
-
     if 'W' in desc:
         hypno_s[hypno == desc['W']] = 0
-
     if 'N1' in desc:
         hypno_s[hypno == desc['N1']] = 1
-
     if 'N2' in desc:
         hypno_s[hypno == desc['N2']] = 2
-
     if 'N3' in desc:
         hypno_s[hypno == desc['N3']] = 3
-
     if 'N4' in desc:
         hypno_s[hypno == desc['N4']] = 3
-
     if 'REM' in desc:
         hypno_s[hypno == desc['REM']] = 4
 

@@ -11,5 +11,5 @@ https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing
 """
 from visbrain import Sleep
 
-Sleep(file='excerpt2.edf', hypno_file='Hypnogram_excerpt2.txt',
+Sleep(data='excerpt2.edf', hypno='Hypnogram_excerpt2.txt',
       config_file='excerpt2_config.txt').show()

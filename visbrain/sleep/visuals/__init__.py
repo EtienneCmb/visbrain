@@ -1,4 +1,4 @@
 """
 """
-from .visuals import visuals
+from .visuals import Visuals
 from .marker import Markers

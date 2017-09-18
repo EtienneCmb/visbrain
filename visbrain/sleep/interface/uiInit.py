@@ -58,7 +58,8 @@ class TimeAxis(object):
 
         # Add a square indicator :
         image = color2vb(indic_color)[np.newaxis, ...]
-        self.mesh = scene.visuals.Image(image, name='indicator')
+        self.mesh = scene.visuals.Image(image, name='Time indicator')
+        self.mesh.transform = vist.STTransform()
         self.mesh.parent = self.wc.scene
 
         # Add markers :
@@ -78,8 +79,8 @@ class TimeAxis(object):
             fact = 3660.
         # Move the square
         if (tox, width, time) != (None, None, None):
-            self.mesh.transform = vist.STTransform(translate=tox / fact,
-                                                   scale=width / fact)
+            self.mesh.transform.translate = tox / fact
+            self.mesh.transform.scale = width / fact
             # Update camera :
             self.wc.camera.rect = (0, 0, (time.max() - time.min()) / fact, 1)
         # Set markers :

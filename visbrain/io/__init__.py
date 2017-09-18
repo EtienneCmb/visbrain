@@ -1,4 +1,5 @@
 """Load read and write functions."""
+from .read_annotations import *
 from .read_data import *
 from .read_sleep import *
 from .write_table import *

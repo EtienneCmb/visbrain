@@ -50,7 +50,16 @@ API
 Main Topo class
 ~~~~~~~~~~~~~~~
 
-.. autoclass:: visbrain.topo.topo.Topo
+.. currentmodule:: visbrain.topo.topo
+
+.. autoclass:: Topo
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~Topo.show
+        ~Topo.add_topoplot
+        ~Topo.add_shared_colorbar
 
 Methods
 ~~~~~~~

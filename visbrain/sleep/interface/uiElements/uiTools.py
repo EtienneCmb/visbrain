@@ -103,7 +103,7 @@ class uiTools(object):
         # ____________________ Update ____________________
         aM = np.argmax(consider)
         # Update data info :
-        self._get_dataInfo()
+        self._get_data_info()
 
         # Update and clear detections :
         self._DetectLocations.setRowCount(0)
