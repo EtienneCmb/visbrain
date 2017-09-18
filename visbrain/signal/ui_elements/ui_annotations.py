@@ -1,6 +1,8 @@
 """Signal annotations."""
 from PyQt5 import QtWidgets
 
+from ...utils import safely_set_spin
+
 __all__ = ('UiAnnotations')
 
 
@@ -44,8 +46,7 @@ class UiAnnotations(object):
             idx_sig = self._signal._get_signal_index(signal)
             # Update plot only if needed :
             if idx_sig != self._signal._index:
-                self._sig_index.setValue(idx_sig)
-                # self._fcn_set_signal()
+                self._safely_set_index(idx_sig - 1, True, True)
             # Finally, select annotations :
             self._signal.select_annotation(signal, coord)
 
