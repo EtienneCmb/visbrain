@@ -195,6 +195,7 @@ class Ui_MainWindow(object):
         self._sig_form.addItem("")
         self._sig_form.addItem("")
         self._sig_form.addItem("")
+        self._sig_form.addItem("")
         self.gridLayout_6.addWidget(self._sig_form, 0, 2, 1, 1)
         self.label_9 = QtWidgets.QLabel(self.groupBox_5)
         font = QtGui.QFont()
@@ -859,7 +860,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuDisplay.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.QuickSettings.setCurrentIndex(2)
+        self.QuickSettings.setCurrentIndex(0)
         self._PlottingForm.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -889,6 +890,7 @@ class Ui_MainWindow(object):
         self._sig_form.setItemText(0, _translate("MainWindow", "line"))
         self._sig_form.setItemText(1, _translate("MainWindow", "marker"))
         self._sig_form.setItemText(2, _translate("MainWindow", "histogram"))
+        self._sig_form.setItemText(3, _translate("MainWindow", "tf"))
         self.label_9.setText(_translate("MainWindow", "Signal"))
         self._sig_color.setPlaceholderText(_translate("MainWindow", "black, #ab4642, (0, 0, 0)..."))
         self._sig_amp.setTitle(_translate("MainWindow", "Amplitude"))

@@ -102,3 +102,15 @@ class TFmapsMesh(object):
         self._image.transform.scale = sc
         self._image.transform.translate = tr
         self.rect = (time[0], f_min, t_max - t_min, fr_max - fr_min)
+
+    # ----------- VISIBLE -----------
+    @property
+    def visible(self):
+        """Get the visible value."""
+        return self._visible
+
+    @visible.setter
+    def visible(self, value):
+        """Set visible value."""
+        self._visible = value
+        self._image.visible = value
