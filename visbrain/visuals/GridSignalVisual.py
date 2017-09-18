@@ -6,12 +6,11 @@ https://github.com/vispy/vispy/blob/master/examples/demo/gloo/realtime_signals.p
 """
 
 import numpy as np
-from scipy.signal import detrend as dtrd
 
 from vispy import gloo, visuals
 from vispy.scene.visuals import create_visual_node
 
-from visbrain.utils import color2vb, vispy_array, PrepareData
+from visbrain.utils import color2vb, vispy_array, PrepareData, ndsubplot
 
 
 __all__ = ('GridSignalMesh')
@@ -78,12 +77,6 @@ class GridSignalVisual(visuals.Visual):
         Space between subplots.
     scale : tuple | (1., 1.)
         Tuple descigin the scaling along the x and y-axis.
-    demean : bool | True
-        Remove the mean.
-    detrend : bool | False
-        Remove the linear trend.
-    normalize : bool | True
-        Normalize the grid data.
     """
 
     def __len__(self):
@@ -91,7 +84,7 @@ class GridSignalVisual(visuals.Visual):
         return self._n
 
     def __init__(self, data, axis=-1, sf=1., color='random', space=2.,
-                 scale=(1., 1.), demean=True, detrend=False, normalize=True):
+                 scale=(1., 1.)):
         """Init."""
         # =========================== CHECKING ===========================
         assert isinstance(data, np.ndarray) and (data.ndim <= 3)
@@ -99,7 +92,6 @@ class GridSignalVisual(visuals.Visual):
         assert isinstance(sf, (int, float))
         assert isinstance(space, (int, float))
         assert isinstance(scale, (tuple, list)) and len(scale) == 2
-        assert all([isinstance(k, bool) for k in (demean, detrend, normalize)])
 
         # =========================== VISUALS ===========================
         visuals.Visual.__init__(self, vertex_shader, fragment_shader)
@@ -115,9 +107,6 @@ class GridSignalVisual(visuals.Visual):
         self._n = self._sh[axis]
         self._axis = axis
         self._sf = sf
-        self._demean = demean
-        self._detrend = detrend
-        self._normalize = normalize
         self._color = color
         self.scale = scale
         self.space = space
@@ -138,11 +127,10 @@ class GridSignalVisual(visuals.Visual):
         self.shared_program.vert['u_n'] = len(self)
 
         # Set data :
-        self.set_data(data, axis, color, demean, detrend, normalize)
+        self.set_data(data, axis, color)
         self.freeze()
 
-    def set_data(self, data=None, axis=None, color=None, demean=None,
-                 detrend=None, normalize=None):
+    def set_data(self, data=None, axis=None, color=None):
         """Set data to the grid of signals.
 
         Parameters
@@ -157,19 +145,14 @@ class GridSignalVisual(visuals.Visual):
             Space between subplots.
         scale : tuple | None
             Tuple descigin the scaling along the x and y-axis.
-        demean : bool | None
-            Remove the mean.
-        detrend : bool | None
-            Remove the linear trend.
-        normalize : bool | None
-            Normalize the grid data.
         """
         rnd_dyn = (.2, .8)  # random color range
         # ====================== CHECKING ======================
         # Axis :
         axis = axis if isinstance(axis, int) else self._axis
         axis = len(self._sh) - 1 if axis == -1 else axis
-        self._transpose = axis != len(self._sh) - 1
+
+        # ====================== CHECKING ======================
         # Data :
         if isinstance(data, np.ndarray):
             # -------------- (n_rows, n_cols, n_time) --------------
@@ -188,24 +171,41 @@ class GridSignalVisual(visuals.Visual):
                     axis = data.ndim - 1
                 g_size = (data.shape[0], data.shape[1])
 
-            # -------------- (n_rows * n_cols, n_timeindex) --------------
-            data = np.reshape(data, (np.array(g_size).prod(), len(self)))
+            # -------------- Signals index --------------
+            m = np.prod(list(data.shape)[0:-1])
+            sig_index = np.arange(m).reshape(*g_size)
+
+            # -------------- Optimal 2-D --------------
+            force_2d = True
+            self._ori_shape = list(data.shape)[0:-1]
+            if force_2d:
+                opt_rows, opt_cols = ndsubplot(m)
+                data = data.reshape(opt_rows, opt_cols, len(self))
+                sig_index = sig_index.reshape(opt_rows, opt_cols)
+                g_size = (opt_rows, opt_cols)
+            self._opt_shape = list(data.shape)[0:-1]
+            self._sig_index = np.flipud(sig_index)
+
+            # -------------- (n_rows * n_cols, n_time) --------------
+            data = np.reshape(data, (m, len(self)), order='F')
 
             # -------------- Prepare --------------
+            # Force demean / detrend of _prep :
+            self._prep.demean, self._prep.detrend = False, False
             data = self._prep._prepare_data(self._sf, data, 0)
-            if detrend is not None:
-                data = dtrd(data, axis=-1)
-            d_mean = np.mean(data, axis=-1, keepdims=True) if demean else 0.
-            d_max = (data - d_mean).max() if normalize else 1.
+            # Demean and normalize :
+            kw = {'axis': -1, 'keepdims': True}
+            data -= data.mean(**kw)
+            data /= data.max(**kw)
 
             # -------------- Index --------------
-            n_rows, n_cols, m, n = *g_size, np.array(g_size).prod(), len(self)
+            (n_rows, n_cols), n = g_size, len(self)
             index = np.c_[np.repeat(np.repeat(np.arange(n_cols), n_rows), n),
                           np.repeat(np.tile(np.arange(n_rows), n_cols), n),
                           np.tile(np.arange(n), m)].astype(np.float32)
 
             # -------------- Buffer --------------
-            self._dbuffer.set_data(vispy_array((data - d_mean) / d_max))
+            self._dbuffer.set_data(vispy_array(data))
             self._ibuffer.set_data(vispy_array(index))
             self.shared_program.vert['u_size'] = g_size
             self._g_size = g_size
@@ -231,11 +231,15 @@ class GridSignalVisual(visuals.Visual):
         self._ibuffer.delete()
         self._cbuffer.delete()
 
-    # ========================================================================
-    # ========================================================================
-    # PLOTTING SUB-FUNCTIONS
-    # ========================================================================
-    # ========================================================================
+    def _convert_row_cols(self, row, col):
+        """Convert row and col according to the optimal grid."""
+        try:
+            index = self._sig_index[row, col]
+            idx = np.where(self._sig_index.reshape(*self._ori_shape) == index)
+            return idx[0][0], idx[1][0]
+        except:
+            return row, col
+
     def _prepare_transforms(self, view):
         """Call for the first rendering."""
         tr = view.transforms
@@ -284,14 +288,6 @@ class GridSignalVisual(visuals.Visual):
     @property
     def rect(self):
         return (-1., -1., self._space, self._space)
-
-    # ----------- SIZE -----------
-    @property
-    def size(self):
-        """Get the size value."""
-        r, c = self._g_size
-        print(r, c)
-        return (c, r) if self._transpose else (r, c)
 
     # ----------- COLOR -----------
     @property
