@@ -27,7 +27,7 @@ def write_mat():
     pass
 
 
-def write_txt(file, data):
+def write_txt(file, data, delimiter=', '):
     """Write data as a text (txt) file.
 
     Parameters
@@ -40,11 +40,11 @@ def write_txt(file, data):
     # Open file :
     ofile = open(file, 'w')
     for k in data:
-        ofile.write("%s\n" % ', '.join(k))
+        ofile.write("%s\n" % delimiter.join(k))
     return
 
 
-def write_csv(file, data):
+def write_csv(file, data, delimiter=','):
     """Write data as a CSV (csv) file.
 
     Parameters
@@ -56,7 +56,7 @@ def write_csv(file, data):
     """
     import csv
     with open(file, 'w') as csvfile:
-        writer = csv.writer(csvfile, dialect='excel', delimiter=',')
+        writer = csv.writer(csvfile, dialect='excel', delimiter=delimiter)
         for k in data:
             writer.writerow(k)
     return
