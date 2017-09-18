@@ -78,7 +78,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -376,6 +376,11 @@ color</string>
                     <item>
                      <property name="text">
                       <string>histogram</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>tf</string>
                      </property>
                     </item>
                    </widget>
