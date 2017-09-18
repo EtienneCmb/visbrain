@@ -1,6 +1,11 @@
 """Manu interaction."""
+import os
+import numpy as np
+from PyQt5 import QtWidgets
+
 from ...utils import ScreenshotPopup, HelpMenu
-from ...io import dialogSave, write_fig_pyqt, write_fig_canvas
+from ...io import (dialogSave, dialogLoad, write_fig_pyqt, write_fig_canvas,
+                   write_csv, write_txt)
 
 __all__ = ('UiMenu', 'UiScreenshot')
 
@@ -14,11 +19,60 @@ class UiMenu(HelpMenu):
         base = 'http://visbrain.org/signal.html'
         sections = {'Signal': base}
         HelpMenu.__init__(self, sections, True)
-        # # Display :
+        # Save :
+        self.saveAnnotations.triggered.connect(self._fcn_save_annotations)
+        self.loadAnnotations.triggered.connect(self._fcn_load_annotations)
+        # Display :
         self.actionQSP.triggered.connect(self._fcn_menu_disp_qsp)
         self.actionGrid.triggered.connect(self._fcn_menu_disp_grid)
         self.actionSignal.triggered.connect(self._fcn_menu_disp_signal)
         self.menuScreenshot.triggered.connect(self._fcn_menu_disp_screenshot)
+
+    def _fcn_save_annotations(self, *args, filename=None):
+        """Save annotations."""
+        # Read Table
+        rowCount = self._annot_table.rowCount()
+        time, amp, signal, text = [], [], [], []
+        for row in range(rowCount):
+            time.append(self._annot_table.item(row, 0).text())
+            amp.append(self._annot_table.item(row, 1).text())
+            signal.append(self._annot_table.item(row, 2).text())
+            text.append(self._annot_table.item(row, 3).text())
+        # Get file name :
+        if filename is None:
+            filename = dialogSave(self, 'Save annotations', 'annotations',
+                                  "CSV file (*.csv);;Text file (*.txt);;"
+                                  "All files (*.*)")
+        if filename:
+            kw = {'delimiter': '_'}
+            file, ext = os.path.splitext(filename)
+            if ext.find('csv') + 1:
+                write_csv(file + '.csv', zip(time, amp, signal, text), **kw)
+            elif ext.find('txt') + 1:
+                write_txt(file + '.txt', zip(time, amp, signal, text), **kw)
+
+    def _fcn_load_annotations(self, *args, filename=None):
+        """Load annotations."""
+        # Get file name :
+        if filename is None:
+            filename = dialogLoad(self, "Import annotations", '',
+                                  "CSV file (*.csv);;Text file (*.txt);;"
+                                  "All files (*.*)")
+        # Clean annotations :
+        self._annot_table.setRowCount(0)
+        # Load the file :
+        if isinstance(filename, str):  # 'file.txt'
+            # Get starting/ending/annotation :
+            time, amp, signal, text = np.genfromtxt(filename, delimiter='_',
+                                                    dtype=str).T
+            coords = np.c_[time, amp].astype(float)
+
+        # Fill table :
+        self._signal.clean_annotations()
+        self._annot_table.setRowCount(0)
+        # File the table :
+        for k in range(len(signal)):
+            self._annotate_event(signal[k], coords[k, :], text=text[k])
 
     def _fcn_menu_disp_qsp(self):
         """Display quick settings panel."""
