@@ -444,7 +444,6 @@ def read_eeg(path, downsample, read_markers=False):
         Array of annotations.
     """
     import re
-    print('IM INNNNN read_eeg')
 
     assert os.path.isfile(path)
 
