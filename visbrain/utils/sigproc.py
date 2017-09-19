@@ -5,7 +5,7 @@ from warnings import warn
 
 
 __all__ = ('normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh',
-           'zerocrossing', 'power_of_ten')
+           'zerocrossing', 'power_of_ten', 'averaging', 'normalization')
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -214,3 +214,125 @@ def power_of_ten(x, e=3):
             return (sign * x) / (10 ** (k - 1)), k - 1
     else:
         return sign * x, 0
+
+
+def averaging(ts, n_window, axis=-1, overlap=0., window='flat'):
+    """Take the mean of a np.ndarray.
+
+    Parameters
+    ----------
+    ts : array_like
+        Array of data to take the mean.
+    n_window : int
+        Number of sample per window.
+    axis : int | -1
+        Axis along which take the mean. By default, the last axis.
+    overlap : float | None
+        Overlap of successive window (0 <= overlap < 1). By default, no overlap
+        is performed.
+    window : {'flat', 'hanning', 'hamming', 'bartlett', 'blackman'}
+        description
+
+    Returns
+    -------
+    average : array_like
+        The averaged signal.
+    """
+    # Checking :
+    assert isinstance(ts, np.ndarray)
+    assert isinstance(axis, int) and axis <= ts.ndim - 1
+    assert isinstance(n_window, int) and n_window < ts.shape[axis]
+    assert isinstance(overlap, (float, int)) and 0. <= overlap < 1.
+    assert window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']
+
+    # Get axis :
+    npts = ts.shape[axis]
+    axis = npts - 1 if axis == -1 else axis
+
+    # Get overlap step in samples :
+    n_overlap = int(np.round(n_window * (1. - overlap)))
+
+    # Build the index vector :
+    ind = np.c_[np.arange(0, npts - n_window, n_overlap),
+                np.arange(n_window, npts, n_overlap)]
+    ind = np.vstack((ind, [npts - 1 - n_window, npts - 1]))  # add last window
+    n_ind = ind.shape[0]
+
+    # Get the window :
+    if window == 'flat':  # moving average
+        win = np.ones(n_window, 'd')
+    else:
+        win = eval('np.' + window + '(n_window)')
+
+    rsh = tuple(1 if i != axis else -1 for i in range(ts.ndim))
+    win = win.reshape(*rsh)
+
+    # Define the averaging array :
+    av_shape = tuple(k if i != axis else n_ind for i, k in enumerate(ts.shape))
+    average = np.zeros(av_shape, dtype=float)
+
+    # Compute averaging :
+    sl_ts = [slice(None)] * ts.ndim
+    sl_av = sl_ts.copy()
+    for k in range(n_ind):
+        sl_ts[axis] = slice(ind[k, 0], ind[k, 1])
+        sl_av[axis] = slice(k, k + 1)
+        average[sl_av] += (ts[sl_ts] * win).mean(axis=axis, keepdims=True)
+
+    return average
+
+
+def normalization(data, axis=-1, norm=None, baseline=None):
+    """Data normalization.
+
+    Parameters
+    ----------
+    data : array_like
+        Array of data.
+    axis : int | -1
+        Array along which to perform the normalization.
+    norm : int | None
+        The normalization type. Use :
+            * 0 : no normalization
+            * 1 : subtract the mean
+            * 2 : divide by the mean
+            * 3 : subtract then divide by the mean
+            * 4 : subtract the mean then divide by deviation
+    baseline : tuple | None
+        Baseline period to consider. If None, the entire signal is used.
+
+    Returns
+    -------
+    data_n : array_like
+        The normalized array.
+    """
+    assert isinstance(data, np.ndarray)
+    # assert norm in [None, ]
+
+    # Take data in baseline (if defined) :
+    if (baseline is not None) and (len(baseline) == 2):
+        sl = [slice(None)] * data.ndim
+        sl[axis] = slice()
+        _data = data[sl]
+    else:
+        _data = None
+
+    if norm in [0, None]:  # don't normalize
+        return data
+    elif norm in [1, 2, 3, 4]:
+        kw = {'axis': axis, 'keepdims': True}
+        d_m = _data.mean(**kw) if _data is not None else data.mean(**kw)
+        if norm == 1:  # subtract the mean
+            data -= d_m
+        elif norm == 2:  # divide by the mean
+            d_m[d_m == 0] = 1.
+            data /= d_m
+        elif norm == 3:  # subtract then divide by the mean
+            data -= d_m
+            d_m[d_m == 0] = 1.
+            data /= d_m
+        elif norm == 4:  # z-score
+            d_std = _data.mean(**kw) if _data is not None else data.mean(**kw)
+            d_std[d_std == 0] = 1.
+            data -= d_m
+            data /= d_std
