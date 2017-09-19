@@ -61,6 +61,9 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
         plateforms.
     hedit : bool | False
         Enable the drag and drop hypnogram edition.
+    use_tf : bool | False
+        Specify if the spectrogram has to be replaced by a time-frequency map
+        using morlet's wavelets.
     href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
         List of sleep stages. This list can be used to changed the display
         order into the GUI.
@@ -90,7 +93,7 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
 
     def __init__(self, data=None, hypno=None, config_file=None,
                  annotations=None, channels=None, sf=None, downsample=100.,
-                 axis=False, line='gl', hedit=False,
+                 axis=False, line='gl', hedit=False, use_tf=False,
                  href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
                  preload=True, use_mne=False, kwargs_mne={}):
         """Init."""
@@ -117,6 +120,7 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
         self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
         self._enabhypedit = hedit
+        self._use_tf = use_tf
         # ---------- Default line width ----------
         self._linemeth = line
         self._lw = 1.
