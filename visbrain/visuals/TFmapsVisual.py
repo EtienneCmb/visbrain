@@ -51,7 +51,7 @@ class TFmapsMesh(CbarBase):
         return self._n
 
     def set_data(self, data, sf, f_min=1., f_max=160., f_step=1.,
-                 baseline=None, norm=3, contrast=None, n_window=None,
+                 baseline=None, norm=3, contrast=.1, n_window=None,
                  overlap=0., window='flat', **kwargs):
         """Set data to the time frequency map.
 
@@ -104,14 +104,18 @@ class TFmapsMesh(CbarBase):
             downsample = int(np.round(tf.shape[1] / self._n_limits))
             tf = tf[:, ::downsample]
 
-        # ======================= COLOR =======================
+        # ======================= CLIM // CMAP =======================
         # Get contrast (if defined) :
-        if isinstance(contrast, (int, float)):
+        self._clim = kwargs.get('clim', None)
+        if isinstance(contrast, (int, float)) and (self._clim is None):
             self._clim = (tf.min() * contrast, tf.max() * contrast)
-        else:
-            self._clim = kwargs.get('clim', None)
+        if self._clim is None:
+            self._clim = (tf.min(), tf.max())
         kwargs['clim'] = self._clim
-        # Get then set color :
+        # Cmap :
+        self._cmap = kwargs.get('cmap', 'viridis')
+
+        # ======================= COLOR =======================
         cmap = array2colormap(tf, **kwargs)
         self._image.set_data(vispy_array(cmap))
 
