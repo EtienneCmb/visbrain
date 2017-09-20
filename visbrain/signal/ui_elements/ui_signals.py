@@ -1,5 +1,7 @@
 """Interactions between user and Signal tab of QuickSettings."""
-from ...utils import textline2color, safely_set_spin
+import numpy as np
+
+from ...utils import textline2color, safely_set_spin, mpl_cmap, safely_set_cbox
 
 __all__ = ('UiSignals')
 
@@ -9,6 +11,7 @@ class UiSignals(object):
 
     def __init__(self):
         """Init."""
+        self._previous_form = 'line'
         # Axis :
         self._axis_color.editingFinished.connect(self._fcn_axis_color)
         self._sig_title.textChanged.connect(self._fcn_axis_title)
@@ -25,15 +28,24 @@ class UiSignals(object):
         self._sig_nbins.valueChanged.connect(self._fcn_set_signal)
         self._sig_size.valueChanged.connect(self._fcn_set_signal)
         self._sig_symbol.currentIndexChanged.connect(self._fcn_set_signal)
-        self._sig_norm.currentIndexChanged.connect(self._fcn_display_apply_tf)
-        self._sig_baseline.clicked.connect(self._fcn_display_apply_tf)
-        self._sig_base_start.valueChanged.connect(self._fcn_display_apply_tf)
-        self._sig_base_end.valueChanged.connect(self._fcn_display_apply_tf)
-        self._sig_averaging.clicked.connect(self._fcn_display_apply_tf)
-        self._sig_av_win.valueChanged.connect(self._fcn_display_apply_tf)
-        self._sig_av_overlap.valueChanged.connect(self._fcn_display_apply_tf)
+        self._sig_norm.currentIndexChanged.connect(self._fcn_disp_apply_tf)
+        self._sig_baseline.clicked.connect(self._fcn_disp_apply_tf)
+        self._sig_base_start.valueChanged.connect(self._fcn_disp_apply_tf)
+        self._sig_base_end.valueChanged.connect(self._fcn_disp_apply_tf)
+        self._sig_averaging.clicked.connect(self._fcn_disp_apply_tf)
+        self._sig_av_win.valueChanged.connect(self._fcn_disp_apply_tf)
+        self._sig_av_overlap.valueChanged.connect(self._fcn_disp_apply_tf)
         self._sig_tf_apply.clicked.connect(self._fcn_set_signal)
         self._sig_tf_interp.currentIndexChanged.connect(self._fcn_set_tfinterp)
+        self._sig_tf_cmap.addItems(mpl_cmap())
+        safely_set_cbox(self._sig_tf_cmap, 'viridis')
+        self._sig_tf_cmap.currentIndexChanged.connect(self._fcn_disp_apply_tf)
+        self._sig_tf_rev.clicked.connect(self._fcn_disp_apply_tf)
+        self._sig_tf_clim.clicked.connect(self._fcn_disp_apply_tf)
+        self._sig_climin.valueChanged.connect(self._fcn_disp_apply_tf)
+        self._sig_climax.valueChanged.connect(self._fcn_disp_apply_tf)
+        self._sig_nperseg.valueChanged.connect(self._fcn_set_signal)
+        self._sig_noverlap.valueChanged.connect(self._fcn_set_signal)
         # Amplitudes :
         self._sig_amp.clicked.connect(self._fcn_signal_amp)
         self._sig_amp_min.valueChanged.connect(self._fcn_signal_amp)
@@ -95,7 +107,7 @@ class UiSignals(object):
         # Enable amplitude control only for line // marker :
         self._sig_amp.setEnabled(form in ['line', 'marker'])
 
-        # =================== LINE / MARKER / HISTOGRAM ===================
+        # ================== LINE / MARKER / HISTOGRAM / TF ==================
         lw = float(self._sig_lw.value())
         nbins = int(self._sig_nbins.value())
         size = float(self._sig_size.value())
@@ -108,6 +120,14 @@ class UiSignals(object):
         is_averaging = self._sig_averaging.isChecked()
         window = None if not is_averaging else self._sig_av_win.value()
         overlap = float(self._sig_av_overlap.value())
+        is_clim = self._sig_tf_clim.isChecked()
+        _clim = (self._sig_climin.value(), self._sig_climax.value())
+        clim = _clim if is_clim else None
+        cmap = str(self._sig_tf_cmap.currentText())
+        cmap += '_r' * self._sig_tf_rev.isChecked()
+        interpolation = str(self._sig_tf_interp.currentText())
+        nperseg = int(self._sig_nperseg.value())
+        noverlap = int(self._sig_noverlap.value())
 
         # =================== THRESHOLD ===================
         thm = (self._sig_th_min.value(), self._sig_th_max.value())
@@ -116,7 +136,8 @@ class UiSignals(object):
         # =================== SET DATA // TEXT===================
         index = int(self._sig_index.value())
         self._signal.set_data(self._data, index, color, lw, nbins, symbol,
-                              size, form, th, norm, window, overlap, baseline)
+                              size, form, th, norm, window, overlap, baseline,
+                              clim, cmap, interpolation, nperseg, noverlap)
         self._txt_shape.setText(str(self._signal))
 
         # =================== CAMERA ===================
@@ -131,24 +152,32 @@ class UiSignals(object):
         title = self._signal_canvas._titleObj
         xaxis = self._signal_canvas.xaxis
         is_form = form in ['tf']
-        if is_form:
+        if is_form and (self._previous_form != form):
             self._signal_canvas.grid.add_widget(cbar, row=1, col=2)
             self._signal_canvas.grid.resize_widget(main, 1, 1)
             self._signal_canvas.grid.resize_widget(xaxis, 1, 1)
             self._signal_canvas.grid.resize_widget(title, 1, 2)
-        else:
+        elif not is_form:
             self._signal_canvas.grid.remove_widget(cbar)
             self._signal_canvas.grid.resize_widget(main, 1, 2)
             self._signal_canvas.grid.resize_widget(xaxis, 1, 2)
             self._signal_canvas.grid.resize_widget(title, 1, 3)
 
-        # =================== CBAR ===================
+        # =================== CLIM // CBAR ===================
         self._signal_canvas.wc_cbar.visible = is_form
         if form == 'tf':
+            # Fix clim (min, max):
+            clim_max = abs(np.max(self._signal._tf._clim))
+            self._sig_climin.setMinimum(-clim_max)
+            self._sig_climin.setMaximum(clim_max)
+            self._sig_climax.setMinimum(-clim_max)
+            self._sig_climax.setMaximum(clim_max)
+            # Colorbar upate :
             self._cbar_update(self._signal._tf)
         self._signal_canvas.update()
+        self._previous_form = form
 
-    def _fcn_display_apply_tf(self):
+    def _fcn_disp_apply_tf(self):
         """Display the apply TF button."""
         self._sig_tf_apply.setEnabled(True)
 
@@ -174,6 +203,7 @@ class UiSignals(object):
         """Update signal colorbar."""
         self._signal_canvas.cbar.clim = obj._clim
         self._signal_canvas.cbar.cblabel = obj._cblabel
+        self._signal_canvas.cbar.cmap = obj._cmap
 
     ###########################################################################
     #                            AMPLITUDE
