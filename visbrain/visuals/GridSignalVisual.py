@@ -287,7 +287,7 @@ class GridSignalVisual(visuals.Visual):
     # ----------- RECT -----------
     @property
     def rect(self):
-        return (-1., -1., self._space, self._space)
+        return (-1.05, -1.1, self._space + .1, self._space + .2)
 
     # ----------- COLOR -----------
     @property
