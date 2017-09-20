@@ -25,6 +25,15 @@ class UiSignals(object):
         self._sig_nbins.valueChanged.connect(self._fcn_set_signal)
         self._sig_size.valueChanged.connect(self._fcn_set_signal)
         self._sig_symbol.currentIndexChanged.connect(self._fcn_set_signal)
+        self._sig_norm.currentIndexChanged.connect(self._fcn_display_apply_tf)
+        self._sig_baseline.clicked.connect(self._fcn_display_apply_tf)
+        self._sig_base_start.valueChanged.connect(self._fcn_display_apply_tf)
+        self._sig_base_end.valueChanged.connect(self._fcn_display_apply_tf)
+        self._sig_averaging.clicked.connect(self._fcn_display_apply_tf)
+        self._sig_av_win.valueChanged.connect(self._fcn_display_apply_tf)
+        self._sig_av_overlap.valueChanged.connect(self._fcn_display_apply_tf)
+        self._sig_tf_apply.clicked.connect(self._fcn_set_signal)
+        self._sig_tf_interp.currentIndexChanged.connect(self._fcn_set_tfinterp)
         # Amplitudes :
         self._sig_amp.clicked.connect(self._fcn_signal_amp)
         self._sig_amp_min.valueChanged.connect(self._fcn_signal_amp)
@@ -90,6 +99,14 @@ class UiSignals(object):
         nbins = int(self._sig_nbins.value())
         size = float(self._sig_size.value())
         symbol = str(self._sig_symbol.currentText())
+        norm = int(self._sig_norm.currentIndex())
+        is_baseline = self._sig_baseline.isChecked()
+        _baseline = (int(self._sig_base_start.value()),
+                     int(self._sig_base_end.value()))
+        baseline = None if not is_baseline else _baseline
+        is_averaging = self._sig_averaging.isChecked()
+        window = None if not is_averaging else self._sig_av_win.value()
+        overlap = float(self._sig_av_overlap.value())
 
         # =================== THRESHOLD ===================
         thm = (self._sig_th_min.value(), self._sig_th_max.value())
@@ -98,13 +115,22 @@ class UiSignals(object):
         # =================== SET DATA // TEXT===================
         index = int(self._sig_index.value())
         self._signal.set_data(self._data, index, color, lw, nbins, symbol,
-                              size, form, th)
+                              size, form, th, norm, window, overlap, baseline)
         self._txt_shape.setText(str(self._signal))
 
         # =================== CAMERA ===================
         if force or (form != form_bck):
             self._sig_amp.setChecked(False)
             self.update_cameras(update='signal')
+        self._sig_tf_apply.setEnabled(False)
+
+    def _fcn_display_apply_tf(self):
+        """Display the apply TF button."""
+        self._sig_tf_apply.setEnabled(True)
+
+    def _fcn_set_tfinterp(self):
+        """Set interpolation method."""
+        self._signal._tf.interpolation = self._sig_tf_interp.currentText()
 
     def _safely_set_index(self, value, update_signal=False, force=False):
         """Set without trigger."""
