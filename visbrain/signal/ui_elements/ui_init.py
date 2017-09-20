@@ -5,6 +5,7 @@ from warnings import warn
 
 from vispy import app, scene
 
+from ...visuals import CbarVisual
 from ..gui import Ui_MainWindow
 from ...utils import color2vb
 
@@ -61,7 +62,8 @@ class VisbrainCanvas(object):
                  title_font_size=15., axis_font_size=12., axis_color='black',
                  tick_font_size=10., color='black', name=None, x_height_max=80,
                  y_width_max=80, axis_label_margin=50, tick_label_margin=5,
-                 rpad=20., bgcolor='white', cargs={}, xargs={}, yargs={}):
+                 rpad=20., bgcolor='white', add_cbar=False, cargs={}, xargs={},
+                 yargs={}, cbargs={}):
         """Init."""
         self._axis = axis
 
@@ -103,13 +105,21 @@ class VisbrainCanvas(object):
             self.xaxis.height_max = x_height_max
             grid.add_widget(self.xaxis, row=2, col=1)
 
-            # ----------- RIGHT PADDING -----------
-            self._rpad = grid.add_widget(row=1, col=2, row_span=1)
-            self._rpad.width_max = rpad
-
             # ----------- MAIN -----------
-            self.wc = grid.add_view(row=1, col=1, border_color=axcol)
+            self.wc = grid.add_view(row=1, col=1)
             self.grid = grid
+
+            # ----------- CBAR -----------
+            rpad_col = 0
+            if add_cbar:
+                self.wc_cbar = grid.add_view(row=1, col=2)
+                self.wc_cbar.width_max = 150.
+                self.cbar = CbarVisual(width=.2, parent=self.wc_cbar.scene)
+                rpad_col += 1
+
+            # ----------- RIGHT PADDING -----------
+            self._rpad = grid.add_widget(row=1, col=2 + rpad_col, row_span=1)
+            self._rpad.width_max = rpad
 
         else:  # Ignore axis
             self.wc = self.canvas.central_widget.add_view()
@@ -117,9 +127,11 @@ class VisbrainCanvas(object):
     def update(self):
         """Update canvas."""
         self.canvas.update()
+        self.wc.update()
         if self._axis:
             self.xaxis.axis._update_subvisuals()
             self.yaxis.axis._update_subvisuals()
+            self.grid.update()
 
     def set_default_state(self):
         """Set the default state of the camera."""
@@ -239,8 +251,6 @@ class VisbrainCanvas(object):
             self.yaxis.axis.tick_color = col
             self.yaxis.axis._text.color = col
             self.yaxis.axis._axis_label.color = col
-            # Border :
-            self.wc.border_color = col
             self.update()
 
     # ----------- TITLE_FONT_SIZE -----------
@@ -427,7 +437,8 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
         self._grid_canvas = VisbrainCanvas(axis=False, name='Grid',
                                            cargs=cargs)
         self._signal_canvas = VisbrainCanvas(axis=True, name='Signal',
-                                             cargs=cargs, **kwargs)
+                                             cargs=cargs, add_cbar=True,
+                                             **kwargs)
 
         # Add canvas to layout :
         self._GridLayout.addWidget(self._grid_canvas.canvas.native)
