@@ -10,7 +10,8 @@ import vispy.scene.cameras as viscam
 
 from .ui_elements import UiElements, UiInit
 from .visuals import Visuals
-from ..utils import (set_widget_size, safely_set_cbox, color2tuple, color2vb)
+from ..utils import (set_widget_size, safely_set_cbox, color2tuple, color2vb,
+                     get_screen_size)
 
 sip.setdestroyonexit(False)
 
@@ -78,12 +79,15 @@ class Signal(UiInit, UiElements, Visuals):
         Display the signal layout.
     annotations : str | None
         Path to an annotation file.
+    line_rendering : {'gl', 'agg'}
+        Specify the line rendering method. Use 'gl' for a fast but lower
+        quality lines and 'agg', looks better but slower.
     """
 
     def __init__(self, data, axis=-1, time=None, sf=1., enable_grid=True,
                  form='line', color='black', lw=1., symbol='disc', size=10.,
                  nbins=10, display_grid=True, display_signal=True,
-                 annotations=None, **kwargs):
+                 annotations=None, line_rendering='gl', **kwargs):
         """Init."""
         self._enable_grid = enable_grid
         display_grid = bool(display_grid * self._enable_grid)
@@ -108,7 +112,8 @@ class Signal(UiInit, UiElements, Visuals):
         grid_parent = self._grid_canvas.wc.scene
         signal_parent = self._signal_canvas.wc.scene
         Visuals.__init__(self, data, time, sf, axis, form, color, lw, symbol,
-                         size, nbins, grid_parent, signal_parent)
+                         size, nbins, line_rendering, grid_parent,
+                         signal_parent)
 
         # ==================== CAMERA ====================
         grid_rect = (0, 0, 1, 1)
@@ -170,6 +175,10 @@ class Signal(UiInit, UiElements, Visuals):
         # Settings :
         self.QuickSettings.setCurrentIndex(0)
         set_widget_size(self._app, self.q_widget, 23)
+        # Fix proportion of canvas :
+        # w, g = get_screen_size(self._app)
+        # self._signal_canvas.wc.width_max = w / 2
+        # self._grid_canvas.wc.width_max = w / 2
         # Fix index limits :
         self._sig_index.setMinimum(0)
         self._sig_index.setMaximum(len(self._signal._navidx) - 1)
