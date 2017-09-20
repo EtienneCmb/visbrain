@@ -141,8 +141,8 @@ class Signal(UiInit, UiElements, Visuals):
         # ------------- Cbar -------------
         self._signal_canvas.cbar.txtcolor = ax_color
         self._signal_canvas.cbar.border = False
-        self._signal_canvas.cbar.cbtxtsz = 10.
-        self._signal_canvas.cbar.txtsz = 10.
+        self._signal_canvas.cbar.cbtxtsz = 15.
+        self._signal_canvas.cbar.txtsz = 12.
 
         # ------------- Settings -------------
         bgcolor = kwargs.get('bgcolor', 'white')
