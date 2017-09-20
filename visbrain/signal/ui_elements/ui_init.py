@@ -435,7 +435,7 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
         # Canvas creation :
         cargs = {'size': (300, 300)}
         self._grid_canvas = VisbrainCanvas(axis=False, name='Grid',
-                                           cargs=cargs)
+                                           cargs=cargs, **kwargs)
         self._signal_canvas = VisbrainCanvas(axis=True, name='Signal',
                                              cargs=cargs, add_cbar=True,
                                              **kwargs)
