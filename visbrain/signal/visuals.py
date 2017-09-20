@@ -1,5 +1,6 @@
 """Visual object creation."""
 import numpy as np
+from scipy.signal import welch
 from itertools import product
 
 from vispy import scene
@@ -146,7 +147,7 @@ class SignalVisual(SignalAnnotations):
         self.symbol = symbol
         self.size = size
         self.rect = (0., 0., 1., 1.)
-        self._prep = PrepareData()
+        self._prep = PrepareData(way='filtfilt')
         # Build navigation index :
         if len(sh) in [2, 3]:
             sh = list(sh)
@@ -179,7 +180,8 @@ class SignalVisual(SignalAnnotations):
         return '(' + ', '.join(lst) + ')'
 
     def set_data(self, data, index, color=None, lw=None, nbins=None,
-                 symbol=None, size=None, form='line', th=None):
+                 symbol=None, size=None, form='line', th=None, norm=None,
+                 window=None, overlap=0., baseline=None):
         """Set data to the plot.
 
         Parameters
@@ -202,6 +204,14 @@ class SignalVisual(SignalAnnotations):
             Plotting type.
         th : tuple | None
             Tuple of floats for line thresholding.
+        norm : int | None
+            Normalization method for (form='tf').
+        window : tuple | None
+            Averaging window (form='tf').
+        overlap : float | 0.
+            Overlap between successive windows (form='tf').
+        baseline : tuple | None
+            Baseline period for the normalization (form='tf').
         """
         # Update variable :
         self.form = form
@@ -224,14 +234,20 @@ class SignalVisual(SignalAnnotations):
         _data = self._prep._prepare_data(self._sf, data_c, self._time)
 
         # Set data :
-        if form in ['line', 'marker']:  # line and marker
+        if form in ['line', 'marker', 'psd']:  # line and marker
             # Get position array :
             pos = np.c_[self._time, _data]
             # Send position :
-            if form == 'line':
+            if form in ['line', 'psd']:
+                if form == 'psd':
+                    fmax = self._sf / 4.
+                    f, pxx = welch(_data, self._sf)
+                    f_minmax = abs(f - fmax)
+                    fidx = np.where(f_minmax == f_minmax.min())[0][0]
+                    pos = np.c_[f[:-fidx], pxx[:-fidx]]
                 # Threshold :
                 is_th = isinstance(th, (tuple, list, np.ndarray))
-                col = color2vb(self.color, length=len(_data))
+                col = color2vb(self.color, length=pos.shape[0])
                 if is_th:
                     # Build threshold segments :
                     t_min, t_max = self._time.min(), self._time.max()
@@ -252,8 +268,8 @@ class SignalVisual(SignalAnnotations):
                                     edge_width=0.)
                 self._mark.update()
             # Get camera rectangle :
-            t_min, t_max = self._time.min(), self._time.max()
-            d_min, d_max = _data.min(), _data.max()
+            t_min, t_max = pos[:, 0].min(), pos[:, 0].max()
+            d_min, d_max = pos[:, 1].min(), pos[:, 1].max()
             off = .05 * (d_max - d_min)
             self.rect = (t_min, d_min - off, t_max - t_min,
                          d_max - d_min + 2 * off)
@@ -274,7 +290,10 @@ class SignalVisual(SignalAnnotations):
             # Update object :
             self._hist.update()
         elif form == 'tf':  # time-frequency map
-            self._tf.set_data(_data, self._sf, cmap='viridis')
+            self._tf.set_data(_data, self._sf, cmap='viridis', contrast=.1,
+                              norm=norm, baseline=baseline, n_window=window,
+                              overlap=overlap, window='hanning')
+            self._tf.interpolation = 'bilinear'
             self.rect = self._tf.rect
 
         # Hide non form elements :
@@ -314,7 +333,7 @@ class SignalVisual(SignalAnnotations):
         return self._navidx.index(idx)
 
     def _visibility(self):
-        self._line.visible = self.form == 'line'
+        self._line.visible = self.form in ['line', 'psd']
         self._mark.visible = self.form == 'marker'
         self._hist.visible = self.form == 'histogram'
         self._tf.visible = self.form == 'tf'
