@@ -313,7 +313,7 @@ def normalization(data, axis=-1, norm=None, baseline=None):
     # Take data in baseline (if defined) :
     if (baseline is not None) and (len(baseline) == 2):
         sl = [slice(None)] * data.ndim
-        sl[axis] = slice()
+        sl[axis] = slice(baseline[0], baseline[1])
         _data = data[sl]
     else:
         _data = None
@@ -374,7 +374,7 @@ def smoothing(x, n_window=10, window='hanning'):
 
     s = np.r_[2 * x[0] - x[n_window:1:-1], x, 2 * x[-1] - x[-1:-n_window:-1]]
     if window == 'flat':  # Moving average
-        w = np.ones((n_window,), float)
+        w = np.ones((n_window,))
     else:
         w = eval('np.' + window + '(n_window)')
 
