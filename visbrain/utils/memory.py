@@ -26,7 +26,7 @@ def arrays_share_data(x, y):
     return get_data_base(x) is get_data_base(y)
 
 
-def code_timer(previous=0., verbose=True, prefix=''):
+def code_timer(previous=0., verbose=True, prefix='', unit='s'):
     """Time code execution.
 
     Parameters
@@ -37,11 +37,15 @@ def code_timer(previous=0., verbose=True, prefix=''):
         Print time difference.
     prefix : string | ''
         Prefix to add before printing.
+    unit : string | 's'
+        Use either 's', 'ms' 'us'.
     """
     from time import time
+    assert unit in ['s', 'ms', 'us']
 
+    fact = 1. if unit == 's' else 10e3 if unit == 'ms' else 10e6
     current = time()
     st = abs(current - previous)
     if verbose:
-        print(prefix, st)
+        print(prefix, st * fact, '(' + unit + ')')
     return current
