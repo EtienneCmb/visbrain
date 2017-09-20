@@ -196,7 +196,7 @@ class GridSignalVisual(visuals.Visual):
             # Demean and normalize :
             kw = {'axis': -1, 'keepdims': True}
             data -= data.mean(**kw)
-            data /= data.max(**kw)
+            data /= np.abs(data).max(**kw)
 
             # -------------- Index --------------
             (n_rows, n_cols), n = g_size, len(self)
