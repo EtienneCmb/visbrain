@@ -173,6 +173,7 @@ class UiSignals(object):
     def _cbar_update(self, obj):
         """Update signal colorbar."""
         self._signal_canvas.cbar.clim = obj._clim
+        self._signal_canvas.cbar.cblabel = obj._cblabel
 
     ###########################################################################
     #                            AMPLITUDE
