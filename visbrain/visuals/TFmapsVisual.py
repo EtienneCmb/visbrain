@@ -4,14 +4,15 @@ import numpy as np
 import vispy.visuals.transforms as vist
 from vispy.scene.visuals import Image
 
-from visbrain.utils import (morlet, array2colormap, vispy_array, averaging,
-                            normalization)
+from ..visuals import CbarBase
+from ..utils import (morlet, array2colormap, vispy_array, averaging,
+                     normalization)
 
 
 __all__ = ('TFmapsMesh')
 
 
-class TFmapsMesh(object):
+class TFmapsMesh(CbarBase):
     """Visual class for time-frequency maps.
 
     Parameters
@@ -34,6 +35,7 @@ class TFmapsMesh(object):
 
     def __init__(self, parent=None, interpolation='nearest'):
         """Init."""
+        CbarBase.__init__(self)
         # Visualization of large images can occur GL bugs. So we fix a limit
         # number of time points :
         self._n_limits = 4000
@@ -42,8 +44,6 @@ class TFmapsMesh(object):
         self._image = Image(parent=parent, interpolation=interpolation)
         self._image.transform = vist.STTransform()
         self._image.set_data(pos)
-        # Set data :
-        # self.set_data(*args, **kwargs)
 
     def __len__(self):
         """Return the number of time points."""
@@ -106,10 +106,10 @@ class TFmapsMesh(object):
         # ======================= COLOR =======================
         # Get contrast (if defined) :
         if isinstance(contrast, (int, float)):
-            clim = (tf.min() * contrast, tf.max() * contrast)
+            self._clim = (tf.min() * contrast, tf.max() * contrast)
         else:
-            clim = kwargs.get('title', None)
-        kwargs['clim'] = clim
+            self._clim = kwargs.get('clim', None)
+        kwargs['clim'] = self._clim
         # Get then set color :
         cmap = array2colormap(tf, **kwargs)
         self._image.set_data(vispy_array(cmap))
