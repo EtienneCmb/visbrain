@@ -10,7 +10,7 @@ import vispy.scene.cameras as viscam
 
 from .ui_elements import UiElements, UiInit
 from .visuals import Visuals
-from ..utils import (set_widget_size, safely_set_cbox, color2tuple)
+from ..utils import (set_widget_size, safely_set_cbox, color2tuple, color2vb)
 
 sip.setdestroyonexit(False)
 
@@ -122,7 +122,8 @@ class Signal(UiInit, UiElements, Visuals):
         # ------------- Signal -------------
         # Signal and axis color :
         self._sig_color.setText(str(color2tuple(color, astype=float)))
-        self._axis_color.setText(str(kwargs.get('axis_color', 'black')))
+        ax_color = kwargs.get('axis_color', color2vb('black'))
+        self._axis_color.setText(str(ax_color))
         # Title, labels and ticks :
         self._sig_title.setText(kwargs.get('title', ''))
         self._sig_title_fz.setValue(kwargs.get('title_font_size', 15.))
@@ -136,6 +137,12 @@ class Signal(UiInit, UiElements, Visuals):
         self._sig_nbins.setValue(nbins)  # histogram
         self._sig_size.setValue(size)  # marker
         safely_set_cbox(self._sig_symbol, symbol)  # marker
+
+        # ------------- Cbar -------------
+        self._signal_canvas.cbar.txtcolor = ax_color
+        self._signal_canvas.cbar.border = False
+        self._signal_canvas.cbar.cbtxtsz = 10.
+        self._signal_canvas.cbar.txtsz = 10.
 
         # ------------- Settings -------------
         bgcolor = kwargs.get('bgcolor', 'white')
