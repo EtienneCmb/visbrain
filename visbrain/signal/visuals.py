@@ -290,7 +290,7 @@ class SignalVisual(SignalAnnotations):
             # Update object :
             self._hist.update()
         elif form == 'tf':  # time-frequency map
-            self._tf.set_data(_data, self._sf, cmap='viridis', contrast=.1,
+            self._tf.set_data(_data, self._sf, cmap='viridis', contrast=.5,
                               norm=norm, baseline=baseline, n_window=window,
                               overlap=overlap, window='hanning')
             self._tf.interpolation = 'bilinear'
