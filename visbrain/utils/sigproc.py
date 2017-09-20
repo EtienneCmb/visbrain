@@ -5,7 +5,8 @@ from warnings import warn
 
 
 __all__ = ('normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh',
-           'zerocrossing', 'power_of_ten', 'averaging', 'normalization')
+           'zerocrossing', 'power_of_ten', 'averaging', 'normalization',
+           'smoothing')
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -336,3 +337,46 @@ def normalization(data, axis=-1, norm=None, baseline=None):
             d_std[d_std == 0] = 1.
             data -= d_m
             data /= d_std
+
+
+def smoothing(x, n_window=10, window='hanning'):
+    """Smooth the data using a window with requested size.
+
+    This method is based on the convolution of a scaled window with the signal.
+    The signal is prepared by introducing reflected copies of the signal
+    (with the window size) in both ends so that transient parts are minimized
+    in the begining and end part of the output signal.
+
+    Parameters
+    ----------
+    x : array_like
+        1-D array to smooth.
+    n_window : int | 10
+        Window length.
+    window : string, array_like | 'hanning'
+        Use either 'flat', 'hanning', 'hamming', 'bartlett', 'blackman' or pass
+        a numpy array of length n_window.
+
+    Returns
+    -------
+        The smoothed signal
+    """
+    assert isinstance(x, np.ndarray) and x.ndim == 1
+    assert len(x) > n_window
+    assert isinstance(window, (str, np.ndarray))
+    if isinstance(window, str):
+        assert window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']
+    elif isinstance(window, np.ndarray):
+        assert len(window) == n_window
+
+    if n_window < 3:
+        return x
+
+    s = np.r_[2 * x[0] - x[n_window:1:-1], x, 2 * x[-1] - x[-1:-n_window:-1]]
+    if window == 'flat':  # Moving average
+        w = np.ones((n_window,), float)
+    else:
+        w = eval('np.' + window + '(n_window)')
+
+    y = np.convolve(w / w.sum(), s, mode='same')
+    return y[n_window - 1:-n_window + 1]
