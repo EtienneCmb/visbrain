@@ -1,14 +1,16 @@
 """Group of functions for physiological processing."""
-
-import numpy as np
 from re import findall
-from scipy.signal import savgol_filter, detrend
-from scipy.stats import zscore
 import os
 import sys
 
+import numpy as np
+from itertools import product
+from scipy.stats import zscore
+
+from .sigproc import smoothing
+
 __all__ = ('find_non_eeg', 'rereferencing', 'bipolarization', 'commonaverage',
-           'tal2mni', 'mni2tal', 'find_roi', 'generate_signal')
+           'tal2mni', 'mni2tal', 'find_roi', 'generate_eeg')
 
 
 def find_non_eeg(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
@@ -370,53 +372,52 @@ def find_roi(xyz, r=5., nearest=True):
     # print(info)
 
 
-def generate_signal(sf, npts, n_sines=1000, freq_band=[.5, 4, 8, 12, 18, 50]):
-    """Generate a random EEG-like signal.
+def generate_eeg(sf=512., n_pts=1000, n_channels=1, n_trials=1, n_sines=100,
+                 f_min=.5, f_max=160., smooth=50, noise=10):
+    """Generate random eeg signals.
 
     Parameters
     ----------
-    sf : float
+    sf : float | 512.
         The sampling frequency
-    npts : float
-        The duration of the signal in sec
-    freq_band: list, optional (default [0.5, 4, 8, 12, 18, 50] )
-        Limits (Hz) of frequencies bands
-    n_sines : int, optional (default 1000)
-        The number of averaged sines
+    n_pts : int | 1000
+        The number of time points.
+    n_channels : int | 1
+        Number of channels
+    n_trials : int | 1
+        Number of trials
+    n_sines : int | 100
+        Number of sines composing each epoch.
+    f_min : float | .5
+        Minimum frequency for sines.
+    f_max : float | 160.
+        Maximum frequency for sines.
+    smooth : float | 50.
+        The smoothing factor. Use larger smoothing to reduce high frequencies.
+    noise : float | 10.
+        Noise level.
 
     Returns
     -------
-    signal : array
-        An EEG-like random signal
+    data : array_like
+        Dataset as a (n_channels, n_trials, n_pts) array.
+    time : array_like
+        A (n_pts,) vector containing time values.
     """
-    freq_band = np.array(freq_band)
+    n_pts += 100  # edge effect compensation
+    signal = np.zeros((n_channels, n_trials, n_pts), dtype=float)
+    time = np.arange(n_pts).reshape(-1, 1) / sf
+    f_sines = np.linspace(f_min, f_max, num=n_sines, endpoint=True)
+    phy = np.random.uniform(0., 2. * np.pi, (n_pts, n_sines))
+    sines = np.sin(2. * np.pi * f_sines.reshape(1, -1) * time + phy)
+    amp_log = np.logspace(0, 1, n_sines, base=.1)
 
-    # Define weighted non-linear vector for frequency band (simulate the 1/f
-    # behavior)
-    w = np.logspace(0., 1., num=(len(freq_band) - 1), base=.1) * n_sines
-    w = np.round((w / (w.sum() / n_sines)))
-    l = freq_band[:-1]   # Lower limits
-    u = freq_band[1::]   # Upper limits
-
-    weight_vector = np.array([])
-    for i in np.arange(l.size):
-        weight_vector = np.append(weight_vector, np.linspace(l[i], u[i], w[i]))
-    weight_vector = np.sort(weight_vector)
-
-    # Generate sines
-    weighted_sines = np.random.normal(0, 1, npts)
-    sin_param = 2 * np.pi * weight_vector
-    sines = np.outer(weighted_sines * np.ones(npts), np.sin(sin_param))
-
-    # Sum sines and center around 0
-    signal = zscore(np.sum(sines, axis=1))
-
-    # Apply Savitzky-Golay filter
-    # - Args = (x, window_length, polyorder)
-    # - higher window_length result in more smoothed signal
-    # - lower polyorder result in more smoothed (less peak) signal
-    wl = 1 / 6  # Window length (fraction of sf)
-    odd_sf = int(np.ceil(wl * sf) // 2 * 2 + 1)  # Ensure that sf is odd)
-    signal = savgol_filter(detrend(signal), odd_sf, 1)
-
-    return signal
+    for k, i in product(range(n_channels), range(n_trials)):
+        amp = amp_log * np.random.normal(0., 1., n_sines)
+        sig = smoothing(np.dot(sines, amp), smooth, 'hanning')
+        sig += np.random.randn(*sig.shape) / (noise * sig.std())
+        signal[k, i] = sig
+    signal = zscore(signal, -1)
+    signal = signal[..., 50:-50]
+    time = time[50:-50]
+    return np.squeeze(signal), time
