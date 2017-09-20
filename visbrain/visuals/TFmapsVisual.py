@@ -36,6 +36,7 @@ class TFmapsMesh(CbarBase):
     def __init__(self, parent=None, interpolation='nearest'):
         """Init."""
         CbarBase.__init__(self)
+        self._cblabel = 'Time-frequency map'
         # Visualization of large images can occur GL bugs. So we fix a limit
         # number of time points :
         self._n_limits = 4000
