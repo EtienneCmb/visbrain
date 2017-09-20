@@ -102,6 +102,7 @@ class Signal(UiInit, UiElements, Visuals):
             display_grid = self._enable_grid = False
             self.actionGrid.setEnabled(False)
         self._data = data.astype(np.float32, copy=False)
+        self._axis = axis
 
         # ==================== VISUALS ====================
         grid_parent = self._grid_canvas.wc.scene
@@ -166,6 +167,7 @@ class Signal(UiInit, UiElements, Visuals):
         # Fix amplitude limits :
         d_min, d_max = self._data.min(), self._data.max()
         step = (d_max - d_min) / 100.
+        n = self._data.shape[self._axis]
         self._sig_amp_min.setMinimum(d_min)
         self._sig_amp_min.setMaximum(d_max)
         self._sig_amp_min.setValue(d_min)
@@ -174,6 +176,9 @@ class Signal(UiInit, UiElements, Visuals):
         self._sig_amp_max.setMaximum(d_max)
         self._sig_amp_max.setValue(d_max)
         self._sig_amp_max.setSingleStep(step)
+        self._sig_av_win.setMaximum(n)
+        self._sig_base_start.setMaximum(n)
+        self._sig_base_end.setMaximum(n)
         # Fix amplitude limits :
         self._sig_th_min.setMinimum(d_min)
         self._sig_th_min.setMaximum(d_max)
