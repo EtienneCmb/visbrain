@@ -10,8 +10,7 @@ import vispy.scene.cameras as viscam
 
 from .ui_elements import UiElements, UiInit
 from .visuals import Visuals
-from ..utils import (set_widget_size, toggle_enable_tab, safely_set_cbox,
-                     color2tuple)
+from ..utils import (set_widget_size, safely_set_cbox, color2tuple)
 
 sip.setdestroyonexit(False)
 
@@ -47,7 +46,7 @@ class Signal(UiInit, UiElements, Visuals):
         Plotting type.
     color : array_like/string/tuple | 'black'
         Color of the plot.
-    lw : float | 2.
+    lw : float | 1.
         Line width (form='line').
     symbol : string | 'o'
         Marker symbol (form='marker').
@@ -82,7 +81,7 @@ class Signal(UiInit, UiElements, Visuals):
     """
 
     def __init__(self, data, axis=-1, time=None, sf=1., enable_grid=True,
-                 form='line', color='black', lw=2., symbol='disc', size=10.,
+                 form='line', color='black', lw=1., symbol='disc', size=10.,
                  nbins=10, display_grid=True, display_signal=True,
                  annotations=None, **kwargs):
         """Init."""
@@ -101,7 +100,6 @@ class Signal(UiInit, UiElements, Visuals):
                             "dimensions.")
         if data.ndim == 1 or not self._enable_grid:  # disable grid
             display_grid = self._enable_grid = False
-            toggle_enable_tab(self.QuickSettings, 'Grid', False)
             self.actionGrid.setEnabled(False)
         self._data = data.astype(np.float32, copy=False)
 
