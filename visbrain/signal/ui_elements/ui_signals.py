@@ -53,6 +53,7 @@ class UiSignals(object):
         """Set axis color."""
         col = textline2color(str(self._axis_color.text()))[1]
         self._signal_canvas.axis_color = col
+        self._signal_canvas.cbar.txtcolor = col
 
     # ------------ TITLE ------------
     def _fcn_axis_title(self):
@@ -124,6 +125,29 @@ class UiSignals(object):
             self.update_cameras(update='signal')
         self._sig_tf_apply.setEnabled(False)
 
+        # =================== RESIZE ===================
+        main = self._signal_canvas.wc
+        cbar = self._signal_canvas.wc_cbar
+        title = self._signal_canvas._titleObj
+        xaxis = self._signal_canvas.xaxis
+        is_form = form in ['tf']
+        if is_form:
+            self._signal_canvas.grid.add_widget(cbar, row=1, col=2)
+            self._signal_canvas.grid.resize_widget(main, 1, 1)
+            self._signal_canvas.grid.resize_widget(xaxis, 1, 1)
+            self._signal_canvas.grid.resize_widget(title, 1, 2)
+        else:
+            self._signal_canvas.grid.remove_widget(cbar)
+            self._signal_canvas.grid.resize_widget(main, 1, 2)
+            self._signal_canvas.grid.resize_widget(xaxis, 1, 2)
+            self._signal_canvas.grid.resize_widget(title, 1, 3)
+
+        # =================== CBAR ===================
+        self._signal_canvas.wc_cbar.visible = is_form
+        if form == 'tf':
+            self._cbar_update(self._signal._tf)
+        self._signal_canvas.update()
+
     def _fcn_display_apply_tf(self):
         """Display the apply TF button."""
         self._sig_tf_apply.setEnabled(True)
@@ -145,6 +169,10 @@ class UiSignals(object):
     def _fcn_next_index(self):
         """Go to next index."""
         self._safely_set_index(int(self._sig_index.value()) + 1, True, True)
+
+    def _cbar_update(self, obj):
+        """Update signal colorbar."""
+        self._signal_canvas.cbar.clim = obj._clim
 
     ###########################################################################
     #                            AMPLITUDE
