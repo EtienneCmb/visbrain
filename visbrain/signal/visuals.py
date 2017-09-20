@@ -129,12 +129,16 @@ class SignalVisual(SignalAnnotations):
         Marker size (form='marker').
     nbins : int | 10
         Number of bins for the histogram (form='histogram')
+    line_rendering : {'gl', 'agg'}
+        Specify the line rendering method. Use 'gl' for a fast but lower
+        quality lines and 'agg', looks better but slower.
     parent : VisPy.parent | None
         Parent of the mesh.
     """
 
     def __init__(self, time, sf, sh, axis, form='line', color='black', lw=2.,
-                 symbol='o', size=10., nbins=10, parent=None):
+                 symbol='o', size=10., nbins=10, line_rendering='gl',
+                 parent=None):
         """Init."""
         self.form = form
         self._time = time
@@ -162,7 +166,7 @@ class SignalVisual(SignalAnnotations):
         self._th = scene.visuals.Line(pos=pos, name='threshold', width=lw,
                                       parent=parent)
         self._line = scene.visuals.Line(pos=pos, name='line', parent=parent,
-                                        width=lw)
+                                        width=lw, method=line_rendering)
         self._mark = scene.visuals.Markers(pos=pos, name='marker',
                                            parent=parent)
         self._hist = scene.visuals.Histogram(data=posh, orientation='h',
@@ -181,7 +185,9 @@ class SignalVisual(SignalAnnotations):
 
     def set_data(self, data, index, color=None, lw=None, nbins=None,
                  symbol=None, size=None, form='line', th=None, norm=None,
-                 window=None, overlap=0., baseline=None):
+                 window=None, overlap=0., baseline=None, clim=None,
+                 cmap='viridis', interpolation='gaussian', nperseg=256,
+                 noverlap=128):
         """Set data to the plot.
 
         Parameters
@@ -241,10 +247,13 @@ class SignalVisual(SignalAnnotations):
             if form in ['line', 'psd']:
                 if form == 'psd':
                     fmax = self._sf / 4.
-                    f, pxx = welch(_data, self._sf)
-                    f_minmax = abs(f - fmax)
-                    fidx = np.where(f_minmax == f_minmax.min())[0][0]
-                    pos = np.c_[f[:-fidx], pxx[:-fidx]]
+                    f, pxx = welch(_data, self._sf, nperseg=nperseg,
+                                   noverlap=noverlap)
+                    f_sf4 = abs(f - fmax)
+                    f_1 = abs(f - 1.)
+                    fidx_sf4 = np.where(f_sf4 == f_sf4.min())[0][0]
+                    fidx_1 = np.where(f_1 == f_1.min())[0][0]
+                    pos = np.c_[f[fidx_1:-fidx_sf4], pxx[fidx_1:-fidx_sf4]]
                 # Threshold :
                 is_th = isinstance(th, (tuple, list, np.ndarray))
                 col = color2vb(self.color, length=pos.shape[0])
@@ -290,10 +299,10 @@ class SignalVisual(SignalAnnotations):
             # Update object :
             self._hist.update()
         elif form == 'tf':  # time-frequency map
-            self._tf.set_data(_data, self._sf, cmap='viridis', contrast=.5,
+            self._tf.set_data(_data, self._sf, cmap=cmap, contrast=.5,
                               norm=norm, baseline=baseline, n_window=window,
-                              overlap=overlap, window='hanning')
-            self._tf.interpolation = 'bilinear'
+                              overlap=overlap, window='hanning', clim=clim)
+            self._tf.interpolation = interpolation
             self.rect = self._tf.rect
 
         # Hide non form elements :
@@ -347,7 +356,7 @@ class Visuals(object):
     """
 
     def __init__(self, data, time, sf, axis, form, color, lw, symbol, size,
-                 nbins, parent_grid, parent_signal):
+                 nbins, line_rendering, parent_grid, parent_signal):
         """Init."""
         # ========================== CHECK ==========================
         # ----------- AXIS -----------
@@ -372,4 +381,5 @@ class Visuals(object):
         self._signal = SignalVisual(time, sf, data.shape, axis, form=form,
                                     color=color, lw=lw, symbol=symbol,
                                     size=size, nbins=nbins,
+                                    line_rendering=line_rendering,
                                     parent=parent_signal)
