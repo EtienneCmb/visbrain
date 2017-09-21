@@ -1,5 +1,6 @@
 """Test utility functions."""
 import numpy as np
+from itertools import product
 from PyQt5 import QtWidgets, QtCore
 from warnings import warn
 import math
@@ -29,7 +30,8 @@ from visbrain.utils.physio import (find_non_eeg, rereferencing, bipolarization,
                                    generate_eeg)
 from visbrain.utils.picture import (piccrop, picresize)
 from visbrain.utils.sigproc import (normalize, movingaverage, derivative, tkeo,
-                                    soft_thresh, zerocrossing, power_of_ten)
+                                    soft_thresh, zerocrossing, power_of_ten,
+                                    averaging, normalization, smoothing)
 from visbrain.utils.sleep.detection import (kcdetect, spindlesdetect,
                                             remdetect, slowwavedetect,
                                             mtdetect, peakdetect)
@@ -298,7 +300,6 @@ class TestFiltering(object):
 
     def __iter__(self):
         """Iterate over filtering options."""
-        from itertools import product
         btype = ['bandpass', 'bandstop', 'highpass', 'lowpass']
         order = [2, 3, 5]
         method = ['butterworth', 'bessel']
@@ -807,6 +808,38 @@ class TestSigproc(object):
         assert np.allclose(power_of_ten(-57.), (-57., 0))
         assert np.allclose(power_of_ten(1024.), (1.024, 3))
         assert np.allclose(power_of_ten(-14517.2), (-1.45172, 4))
+
+    def test_averaging(self):
+        """Test function averaging."""
+        data = np.random.rand(57, 103, 154)
+        # Test axis
+        for x in [0, 1, 2, -1]:
+            ts_out = averaging(data, 5, axis=x, overlap=.5)
+            assert ts_out.shape[x] < data.shape[x]
+        # Test window :
+        window = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']
+        for w in window:
+            averaging(data, 5, axis=-1, overlap=.5, window=w)
+
+    def test_normalization(self):
+        """Test function normalization."""
+        data = np.random.rand(10, 20)
+        # Test the different normalizations using a baseline or not :
+        for norm, base in product(range(5), [None, (2, 7)]):
+            normalization(data, -1, norm, base)
+
+    def test_smoothing(self):
+        """Test function smoothing."""
+        # Test small vector :
+        x_3 = np.array([0, 1, 2])
+        assert np.array_equal(smoothing(x_3, n_window=1), x_3)
+        # Test windows :
+        x_n = np.arange(127)
+        window = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']
+        for w in window:
+            x_ns = smoothing(x_n, window=w)
+            assert len(x_ns) == len(x_n)
+
 
 ###############################################################################
 ###############################################################################
