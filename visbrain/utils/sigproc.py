@@ -4,9 +4,8 @@ import numpy as np
 from warnings import warn
 
 
-__all__ = ('normalize', 'movingaverage', 'derivative', 'tkeo', 'soft_thresh',
-           'zerocrossing', 'power_of_ten', 'averaging', 'normalization',
-           'smoothing')
+__all__ = ('normalize', 'derivative', 'tkeo', 'zerocrossing', 'power_of_ten',
+           'averaging', 'normalization', 'smoothing')
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -45,28 +44,6 @@ def normalize(x, tomin=0., tomax=1.):
             return x
     else:
         return x
-
-
-def movingaverage(x, window, sf):
-    """Perform a moving average.
-
-    Equivalent to a lowpass filter where lowpass frequency is defined by:
-        LowpassFreq = (1 / window) * 1000
-        e.g. if window = 100, LowpassFreq = 10 Hz
-
-    Parameters
-    ----------
-    x : array_like
-        Signal
-    window : int
-        Time (ms) window to compute moving average
-    sf : int
-        Downsampling frequency
-    """
-    window = int(window / (1000. / sf))
-    weights = np.repeat(1., window) / window
-    sma = np.convolve(x, weights, 'same')
-    return sma
 
 
 def derivative(x, window, sf):
@@ -120,38 +97,6 @@ def tkeo(x):
     # Calculate the difference between the two temporary arrays:
     a_tkeo = i - j
     return a_tkeo
-
-
-def soft_thresh(x, thresh):
-    """Function to solve soft thresholding problem.
-
-    Written by Simon Lucey 2012 to solve the problem :
-    arg min_{x} ||x - b||_{2}^{2} + lambda*||x||_{1}
-
-    Parameters
-    ----------
-    x : array_like
-        Data
-    thresh : float
-        Weighting on the l1 penalty
-
-    Returns
-    -------
-    x_thresh : array_like
-        Solution to the problem (vector with same size as x vector)
-    """
-    th = thresh / 2
-    k = np.where(x > th)[0]
-    # First find elements that are larger than the threshold
-    x_thresh = np.zeros(x.shape)
-    x_thresh[k] = x[k] - th
-    # Next find elements that are less than abs
-    k = np.where(abs(x) <= th)[0]
-    x_thresh[k] = 0
-    #  Finally find elements that are less than -th
-    k = np.where(x < -th)
-    x_thresh[k] = x[k] + th
-    return x_thresh
 
 
 def zerocrossing(data):
@@ -361,6 +306,7 @@ def smoothing(x, n_window=10, window='hanning'):
     -------
         The smoothed signal
     """
+    n_window = int(n_window)
     assert isinstance(x, np.ndarray) and x.ndim == 1
     assert len(x) > n_window
     assert isinstance(window, (str, np.ndarray))

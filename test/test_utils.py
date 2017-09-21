@@ -29,9 +29,9 @@ from visbrain.utils.physio import (find_non_eeg, rereferencing, bipolarization,
                                    commonaverage, tal2mni, mni2tal,
                                    generate_eeg)
 from visbrain.utils.picture import (piccrop, picresize)
-from visbrain.utils.sigproc import (normalize, movingaverage, derivative, tkeo,
-                                    soft_thresh, zerocrossing, power_of_ten,
-                                    averaging, normalization, smoothing)
+from visbrain.utils.sigproc import (normalize, derivative, tkeo, zerocrossing,
+                                    power_of_ten, averaging, normalization,
+                                    smoothing)
 from visbrain.utils.sleep.detection import (kcdetect, spindlesdetect,
                                             remdetect, slowwavedetect,
                                             mtdetect, peakdetect)
@@ -778,11 +778,6 @@ class TestSigproc(object):
         mat_n = normalize(mat, -10., 14.)
         assert (mat_n.min() == -10.) and (mat_n.max() == 14.)
 
-    def test_movingaverage(self):
-        """Test function movingaverage."""
-        x, window, sf = np.random.rand(2000), 10., 512.
-        movingaverage(x, window, sf)
-
     def test_derivative(self):
         """Test function derivative."""
         x, window, sf = np.random.rand(2000), 10., 512.
@@ -792,11 +787,6 @@ class TestSigproc(object):
         """Test function tkeo."""
         x = np.random.rand(2000)
         tkeo(x)
-
-    def test_soft_thresh(self):
-        """Test function soft_thresh."""
-        x = np.random.rand(2000)
-        soft_thresh(x, .1)
 
     def test_zerocrossing(self):
         """Test function zerocrossing."""
