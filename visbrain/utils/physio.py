@@ -79,7 +79,8 @@ def rereferencing(data, chans, reference, to_ignore=None):
     # Find if some channels have to be ignored :
     if to_ignore is None:
         sl = slice(nchan)
-    else:
+    elif isinstance(to_ignore, (tuple, list, np.ndarray)):
+        to_ignore = np.asarray(to_ignore)
         sl = np.arange(nchan)[~to_ignore]
         consider[to_ignore] = False
     # Re-reference data :
@@ -101,7 +102,7 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
     chans : list
         List of channel names of length nchan.
     to_ignore : list | None
-        List of channels to ignore in the re-referencing.
+        List of channels to ignore in the bipolarization.
     sep : string | '.'
         Separator to simplify electrode names by removing undesired name
         after the sep. For example, if channel = ['h1.025', 'h2.578']
@@ -138,7 +139,8 @@ def bipolarization(data, chans, to_ignore=None, sep='.'):
     # Find if some channels have to be ignored :
     if to_ignore is None:
         sl = range(nchan)
-    else:
+    elif isinstance(to_ignore, (tuple, list, np.ndarray)):
+        to_ignore = np.asarray(to_ignore)
         sl = np.arange(nchan)[~to_ignore]
         consider[to_ignore] = False
 
