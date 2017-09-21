@@ -248,7 +248,7 @@ def averaging(ts, n_window, axis=-1, overlap=0., window='flat'):
 
     # Get axis :
     npts = ts.shape[axis]
-    axis = npts - 1 if axis == -1 else axis
+    axis = ts.ndim - 1 if axis == -1 else axis
 
     # Get overlap step in samples :
     n_overlap = int(np.round(n_window * (1. - overlap)))
