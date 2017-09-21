@@ -34,7 +34,7 @@ Main features
     * Save the GUI state (*buttons, sliders, checkbox*...)
 * **Load standard electro physiological files**
     * Default supported files : **.vhdr** (BrainVision V1 and 2), **.edf** (European Data Format), **.trc** (Micromed), **.eeg** (ELAN)
-    * Pass raw data, or use MNE-python to load other non natively-supported files (click `here <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_ to see a list)
+    * Pass raw data, or use MNE-python to load other `non natively supported files <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_
     * Supported extensions for hypnogram files : **.txt**, **.csv**, **.hyp** or directly use raw data.
 * **Display**
     * Polysomnographic data (*with individual amplitude control*)
@@ -291,7 +291,7 @@ If MNE-python is installed, this list is extended to (see `also <https://martino
     If MNE-python is installed on your computer, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore strongly recommand to `install MNE-python <https://martinos.org/mne/stable/index.html>`_.
 
 .. note::
-   If you have a file format that is currently not supported, *Sleep* also provide the ability to directly pass raw data (NumPy array). Please click `here <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ for an example of how to load a Matlab file and then pass the data directly to Sleep.
+   If you have a file format that is currently not supported, *Sleep* also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to `to load a Matlab <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ file and then pass the data directly to Sleep.
 
 .. warning::
    Sleep applies an automatic downsampling to (100 Hz by default) upon loading. You can change this value with the “downsample” argument of Sleep.
