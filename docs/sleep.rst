@@ -15,7 +15,7 @@ Sleep
 Description
 -----------
 
-Sleep is a graphical user interface dedicated to visualization and scoring of sleep data. Sleep runs on Vispy excellent package and benefits thus from the high-performance of this latter (GPU-based computation).
+Sleep is a graphical user interface dedicated to visualization and scoring of sleep data. Sleep runs on `Vispy <http://vispy.org/>`_ excellent package and benefits thus from the high-performance of this latter (GPU-based computation).
 
 .. figure::  picture/picsleep/sleep_main.png
    :align:   center
@@ -33,8 +33,8 @@ Main features
     * Take screenshot with controllable dpi
     * Save the GUI state (*buttons, sliders, checkbox*...)
 * **Load standard electro physiological files**
-    * Default supported files : **.vhdr** (*BrainVision V1 and 2, ELAN*), **.trc**, **.edf**
-    * Pass raw data (and use MNE-python to load other non-supported files)
+    * Default supported files : **.vhdr** (BrainVision V1 and 2), **.edf** (European Data Format), **.trc** (Micromed), **.eeg** (ELAN)
+    * Pass raw data, or use MNE-python to load other non natively-supported files (click `here <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_ to see a list)
     * Supported extensions for hypnogram files : **.txt**, **.csv**, **.hyp** or directly use raw data.
 * **Display**
     * Polysomnographic data (*with individual amplitude control*)
@@ -43,10 +43,10 @@ Main features
     * Topoplot
 * **Hypnogram**
     * Load, edit and save
-    * Real-time computation of sleep parameters
+    * Real-time computation of sleep statistics
     * Export the hypnogram as a color or black-and-white traditional figure
 * **Semi-automatic detection and signal processing functions**
-    * Implemented methods : sleep spindles, K-complexes, slow waves, rapid eye movements, muscle twitches or peak detection (*each detection comes with additional and controllable parameters*)
+    * Implemented methods : sleep spindles, K-complexes, slow waves, rapid eye movements, muscle twitches and peak detection (*each detection comes with additional and controllable parameters*)
     * Can be performed either on single or multiple channels
     * Detections are reported on the hypnogram and inside a table
     * Signal processing tools such as de-mean, de-trend and filtering
@@ -82,14 +82,14 @@ The *Sleep* interface is divided into N parts :
     * One canvas for the spectrogram
     * One canvas for the hypnogram
     * One canvas for the time axis
-    * One canvas for the topoplot (*hide by default*)
+    * One canvas for the topoplot (*hidden by default*)
 * **Ruler** :
     * *Go to* : go to the time location of your choice
     * *Window* : length of the displayed time window
     * *Slider step* : step between each consecutive window
     * *Rule* : display unit in second, minute or hours
     * *Grid* : display the grid on the hypnogram and channel plot
-    * *Magnify* : improve plot lisibility (better for small time events). Alternatively, click on the plot of your choice for increasing lisibility directly.
+    * *Magnify* : apply a zoom on the signal (e.g. useful to examine short events such as spindles). Alternatively, you can use CTRL + click at any time to zoom on a specific signal and time point.
 * **Settings panel** : for all setting controls, functions to run... See the section :ref:`sleep_settings_panel` for a description of each tab.
 
 .. _sleep_settings_panel:
@@ -100,11 +100,11 @@ Settings panel tabs
 Sleep provide five settings tabs :
 
 * :ref:`paneltab` : manage object visibility, channel's amplitudes, spectrogram properties...
-* :ref:`toolstab` : a bundle of signal processing tools (like *filtering*)
-* :ref:`infotab` : Sleep statistics and record basic infos
+* :ref:`toolstab` : a bundle of signal processing tools (*e.g filtering, re-referencing*)
+* :ref:`infotab` : sleep statistics and basic infos on the EEG recording
 * :ref:`scoringtab` : a scoring table that can be used to edit the hypnogram
-* :ref:`detectiontab` : Automatic detection of sleep spindles, rapid eye movements (REMs), slow waves, K-complexes (KCs) and peaks
-* :ref:`annotationtab` : annotate
+* :ref:`detectiontab` : automatic detection of sleep spindles, rapid eye movements (REMs), slow waves, K-complexes (KCs) and peaks
+* :ref:`annotationtab` : manage annotations
 
 .. _paneltab:
 
@@ -123,17 +123,17 @@ Manage object visibility, channel's amplitudes, spectrogram properties...
     * Control the amplitude :
         * Per channel
         * By setting all amplitudes at once
-        * Use symetric amplitudes (-M, +M)
+        * Use symmetric amplitudes (-M, +M)
         * Use automatic amplitude (each amplitude fit to the (minimum, maximum) of the current displayed window)
 * *Spectrogram*
     * Control spectrogram looking and properties
-        * the channel on whichs compute spectrogram
+        * the channel on which compute spectrogram
         * tarting and ending frequencies
         * time length window and overlap
         * colormap
     * Display and zoom
         * Show / hide spectrogram, hypnogram, time axis
-        * Display / hide visual indicators refering to the current time window
+        * Display / hide visual indicators referring to the current time window
         * Zoom : when zooming, the axis will fit to the time window according to the (window, step) parameters defined in the ruler
 * **Topoplot**
     * Display and properties
@@ -146,7 +146,7 @@ Manage object visibility, channel's amplitudes, spectrogram properties...
 Tools
 +++++
 
-Signal processing and re-referencement tools.
+Signal processing and re-referencing tools.
 
 .. figure::  picture/picsleep/sleep_filtering.png
    :align:   center
@@ -156,21 +156,21 @@ Signal processing and re-referencement tools.
 * Signal processing (*apply in real time*)
     * Apply de-meaning and de-trending
     * filtering* and re-referencing which are applied directly on the signal and spectrogram (see image below).
-* Re-referencement
+* Re-referencing
     * Common average
-    * Bipolarization (for intracranial data)
+    * Bipolarization (for intra-cranial EEG data)
 
 .. _infotab:
 
 Info
 ++++
 
-The Info panel displays recording information (name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time if you modify the hypnogram using either live edition or the Scoring panel. Sleep statistics can be exported to **.csv** or **.txt** file.
+The Info panel displays the recording infos (e.g. name and downsampling frequency) as well as the main sleep statistics computed with the hypnogram (see specs below). These values are adjusted in real-time when you edit the hypnogram. Sleep statistics can be exported to **.csv** or **.txt** file.
 
 .. figure::  picture/picsleep/sleep_info.png
    :align:   center
 
-   Hypnogram's informations.
+   Sleep statistics.
 
 * File properties
     * Sampling frequency
@@ -190,7 +190,7 @@ The Info panel displays recording information (name and downsampling frequency) 
 Scoring
 +++++++
 
-This tab contains the scoring table i.e. where each stage start and finish. For further informations about how to score your hypnogram see : :ref:`hypnogram_scoring`
+This tab contains the scoring table, i.e. where each stage start and finish. For further informations about how to score your hypnogram see : :ref:`hypnogram_scoring`
 
 .. _detectiontab:
 
@@ -204,7 +204,7 @@ Perform semi-automatic detection. For a full tutorial about detections see : :re
 Annotations
 +++++++++++
 
-Add annotations (where it start, finish and the text). To quickly add annotations :
+Add and edit annotations (annotations are defined by a start and end point, as well as an optional text marker). To quickly add annotations :
 
 * Use the *Annotate* button in the ruler to annotate the entire window
 * Double click (with left mouse button) on a canvas to add an annotation starting and finishing at the mouse cursor location.
@@ -223,12 +223,12 @@ mouse wheel             Move the current window
 double left click       Add annotation under mouse cursor
 \-                      Decrease amplitude
 \+                      Increase amplitude
-a                       Insert Artefact in the hypnogram
-w                       Insert Wake stage in the hypnogram
-1                       Insert N1 stage in the hypnogram
-2                       Insert N2 stage in the hypnogram
-3                       Insert N3 stage in the hypnogram
-r                       Insert REM stage in the hypnogram
+a                       Score the current epoch as Artefact
+w                       Score the current epoch as Wake
+1                       Score the current epoch as N1
+2                       Score the current epoch as N2
+3                       Score the current epoch as N3
+r                       Score the current epoch as REM
 b                       Previous window
 n                       Next window
 s                       Display / hide spectrogram
@@ -240,7 +240,7 @@ g                       Display / hide grid
 z                       Enable / disable zoom
 i                       Enable / disable indicators
 CTRL + Num              Display / hide the channel Num [0, 9]
-CTR + left click        On a channel canvas, magnify signal under mouse location
+CTRL + left click       On a channel canvas, magnify signal under mouse location
 CTRL + d                Display quick settings panel
 CTRL + s                Save hypnogram
 CTRL + n                Screenshot window
@@ -270,14 +270,14 @@ Sleep support by default several data formats for both electrophysiological and 
 Data files
 ^^^^^^^^^^
 
-Here’s the list of currently supported extensions for data files :
+Here’s the list of natively supported file formats :
 
 * **.vhdr** (BrainVision version 1 and 2)
-* **.trc** (Micromed version 4)
 * **.edf** (European Data Format)
+* **.trc** (Micromed version 4)
 * **.eeg** (`ELAN <http://elan.lyon.inserm.fr>`_)
 
-If MNE-python is installed, this list of supported files is extended to :
+If MNE-python is installed, this list is extended to (see `also <https://martinos.org/mne/dev/manual/io.html#importing-eeg-data>`_):
 
  * **.bdf**
  * **.gdf**
@@ -285,10 +285,13 @@ If MNE-python is installed, this list of supported files is extended to :
  * **.mff**
  * **.set** (EEGLAB)
  * **.cnt**
- * **.vhdr**
+ * **.vhdr** (*BrainVision files can be loaded using either the native library of Sleep or using MNE*)
 
 .. note::
-   If you have a file that is currently not supported, *Sleep* also provide the ability to directly pass raw data (NumPy array).
+    If MNE-python is installed on your computer, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore strongly recommand to `install MNE-python <https://martinos.org/mne/stable/index.html>`_.
+
+.. note::
+   If you have a file format that is currently not supported, *Sleep* also provide the ability to directly pass raw data (NumPy array). Please click `here <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ for an example of how to load a Matlab file and then pass the data directly to Sleep.
 
 .. warning::
    Sleep applies an automatic downsampling to (100 Hz by default) upon loading. You can change this value with the “downsample” argument of Sleep.
@@ -319,7 +322,7 @@ Here's the list of supported extensions for hypnogram files :
    Artefact      \-1     The value assigned to Artefact in the hypnogram is \-1
    ==========    ======  ======================================================
 
-   Please note that Sleep uses the guidelines of *Iber et al. 2007* for sleep stage nomenclature, i.e. Wake, N1, N2, N3, REM and Artefact. If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differenciation between S3 and S4 so be sure not to overwrite your original file!
+   Please note that Sleep uses the guidelines of *Iber et al. 2007* for sleep stage nomenclature, i.e. Wake, N1, N2, N3, REM and Artefact. If your hypnogram includes both NREM-S3 and NREM-S4 sleep stages you can add “N4” categories with the corresponding values in the description file. However, keep in mind that S3 and S4 will be merged into N3 during the import to the Sleep module. That also means that if you load and then save your hypnogram in Sleep, you will loose differentiation between S3 and S4 so be sure not to overwrite your original file!
 
 
 Save hypnogram
@@ -398,8 +401,8 @@ Instead of leaving inputs arguments empty, send the path to the data :
     dfile = '/home/perso/myfile.eeg'
     # File for the hypogram :
     hfile = '/home/perso/hypno.hyp'
-    # You're not forced to give a hypnogram. If you prefer to start from a fresh empty one, use :
-    # hfile = None or ignore passing this argument.
+    # If you prefer to start with an empty hypnogram, just pass :
+    # hfile = None
     Sleep(data=dfile, hypno=hfile).show()
 
 .. _loadfromraw:
@@ -450,7 +453,7 @@ Sleep offers three possibilities to score the hypnogram, during the :ref:`naviga
 Navigation
 ^^^^^^^^^^
 
-This is probably the most usefull editing method. While you are navigating across time, simply press on your keyboard to insert a sleep stage. Use the key below :
+This is probably the most useful editing method. While you are navigating across time, simply press on your keyboard to insert a sleep stage. Use the key below :
 
 ==============          =================
 Keys                    Description
@@ -466,7 +469,7 @@ r                       REM stage
 After pressing one of those keys, data coming from the next window will be prompted automatically so that you can continue scoring.
 
 .. warning::
-   If no canvas are selected the shortcuts might be not working. Simply click on a canvas (on a channel / spectrogram / histogam) before starting to score to avoid this issue.
+   If no canvas are selected the shortcuts might be not working. Simply click on a canvas (on a channel / spectrogram / hypnogram) before starting to score to avoid this issue.
 
 .. _scoretable:
 
@@ -498,7 +501,7 @@ Live editing consist of editing your hypnogram directly from the axis by adding 
   - Your cursor is red. Existing points are set in gray.
   - Double click on the hypnogram to add points
   - Hover an existing point in order to select it (the point turn green)
-  - Dragg the point (blue) on the diffrent hypnogram values
+  - Drag the point (blue) on the different hypnogram values
 
 .. figure::  picture/picsleep/sleep_livedit.png
    :align:   center
@@ -712,7 +715,7 @@ The list of annotations can be exported (either in .txt or .csv) or loaded from 
 
 .. ##########################################################################
 .. ##########################################################################
-..                             COMMANDE-LINE
+..                             COMMAND-LINE
 .. ##########################################################################
 .. ##########################################################################
 
@@ -744,7 +747,7 @@ Here is the list of default Sleep inputs :
 Command line
 ~~~~~~~~~~~~
 
-In addition to use Python script, you can also use the following command-lines from a terminal :
+In addition to using Python script, you can also use the following command-lines from a terminal :
 
 * :ref:`cli_visbrain_sleep` : open the graphical user interface of Sleep.
 * :ref:`cli_visbrain_fig_hyp` : export a hypnogram file (**.txt**, **.csv** or **.hyp**) into a high definition colored or black and white image.
@@ -766,3 +769,9 @@ Collaborators
 -------------
 
 Sleep is developed in collaboration with `Raphael Vallat <https://raphaelvallat.github.io/>`_ and `Christian O Reilly <http://bluebrain.epfl.ch/page-143249-en.html>`_.
+
+Publications
+-------------
+
+Please reference Sleep using its dedicated article in `Frontiers in Neuroinformatics <http://journal.frontiersin.org/article/10.3389/fninf.2017.00060/full>`_.
+Please let us know if you used or plan to use Sleep in any upcoming publications !
