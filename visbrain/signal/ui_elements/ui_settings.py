@@ -13,21 +13,29 @@ class UiSettings(object):
         self._set_bgcolor.editingFinished.connect(self._fcn_set_bgcolor)
         # Filtering :
         # Prepare data :
-        self._sig_demean.clicked.connect(self._fcn_set_filtering)
-        self._sig_detrend.clicked.connect(self._fcn_set_filtering)
+        self._sig_filt_apply.clicked.connect(self._fcn_set_filtering)
         self._sig_filt.clicked.connect(self._fcn_set_filtering)
-        self._sig_disp.currentIndexChanged.connect(self._fcn_set_filtering)
-        self._sig_filter.currentIndexChanged.connect(self._fcn_set_filtering)
-        self._sig_fmin.valueChanged.connect(self._fcn_set_filtering)
-        self._sig_fmax.valueChanged.connect(self._fcn_set_filtering)
-        self._sig_meth.currentIndexChanged.connect(self._fcn_set_filtering)
-        self._sig_order.valueChanged.connect(self._fcn_set_filtering)
+        self._sig_demean.clicked.connect(self._fcn_display_apply)
+        self._sig_detrend.clicked.connect(self._fcn_display_apply)
+        self._sig_disp.currentIndexChanged.connect(self._fcn_display_apply)
+        self._sig_filter.currentIndexChanged.connect(self._fcn_display_apply)
+        self._sig_fmin.valueChanged.connect(self._fcn_display_apply)
+        self._sig_fmax.valueChanged.connect(self._fcn_display_apply)
+        self._sig_meth.currentIndexChanged.connect(self._fcn_display_apply)
+        self._sig_order.valueChanged.connect(self._fcn_display_apply)
 
     def _fcn_set_bgcolor(self):
         """Change background color."""
         bgcolor = textline2color(str(self._set_bgcolor.text()))[1]
         self._grid_canvas.bgcolor = bgcolor
         self._signal_canvas.bgcolor = bgcolor
+
+    ###########################################################################
+    #                               FILTERING
+    ###########################################################################
+    def _fcn_display_apply(self):
+        """Enable 'apply' button for filtering."""
+        self._sig_filt_apply.setEnabled(True)
 
     def _fcn_set_filtering(self):
         """Filt the data."""
@@ -40,6 +48,7 @@ class UiSettings(object):
         # Signal :
         force = self._set_filtering_to_object(self._signal._prep)  # signal
         self._fcn_set_signal(force=force)
+        self._sig_filt_apply.setEnabled(False)
 
     def _set_filtering_to_object(self, prep):
         # Get demean // detrend // filtering :

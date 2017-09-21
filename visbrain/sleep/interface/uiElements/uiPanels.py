@@ -87,10 +87,13 @@ class uiPanels(object):
         self._PanSpecStep.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecFstart.valueChanged.connect(self._fcn_specCompat)
         self._PanSpecFend.valueChanged.connect(self._fcn_specCompat)
-        self._PanSpecCon.valueChanged.connect(self._fcn_specSetData)
-        self._PanSpecCmap.currentIndexChanged.connect(self._fcn_specSetData)
-        self._PanSpecChan.currentIndexChanged.connect(self._fcn_specSetData)
-        self._PanSpecCmapInv.clicked.connect(self._fcn_specSetData)
+        self._PanSpecCon.valueChanged.connect(self._fcn_specCompat)
+        self._PanSpecCmap.currentIndexChanged.connect(self._fcn_specCompat)
+        self._PanSpecChan.currentIndexChanged.connect(self._fcn_specCompat)
+        self._PanSpecMethod.currentIndexChanged.connect(self._fcn_specCompat)
+        self._PanSpecCmapInv.clicked.connect(self._fcn_specCompat)
+        self._PanSpecNorm.currentIndexChanged.connect(self._fcn_specCompat)
+        self._PanSpecInterp.currentIndexChanged.connect(self._fcn_spec_interp)
 
         # =====================================================================
         # HYPNOGRAM
@@ -406,12 +409,18 @@ class uiPanels(object):
         nfft, over = self._PanSpecNfft.value(), self._PanSpecStep.value()
         # Get starting / ending frequency :
         fstart, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()
-        # Get contraste :
-        contraste = self._PanSpecCon.value()
+        # Get contrast :
+        contrast = self._PanSpecCon.value()
         # Get colormap :
         cmap = str(self._PanSpecCmap.currentText())
         # Get channel to get spectrogram :
         chan = self._PanSpecChan.currentIndex()
+        # Use spectrogram / tf :
+        self._spec._use_tf = int(self._PanSpecMethod.currentIndex() == 1)
+        # Interpolation :
+        interp = str(self._PanSpecInterp.currentText())
+        # Normalization :
+        norm = int(self._PanSpecNorm.currentIndex())
         # Get reversed colormap :
         if self._PanSpecCmapInv.isChecked():
             cmap += '_r'
@@ -419,7 +428,8 @@ class uiPanels(object):
         # Set data :
         self._spec.set_data(self._sf, self._data[chan, ...], self._time,
                             nfft=nfft, overlap=over, fstart=fstart, fend=fend,
-                            cmap=cmap, contraste=contraste)
+                            cmap=cmap, contrast=contrast, interp=interp,
+                            norm=norm)
         # Set apply button disable :
         self._PanSpecApply.setEnabled(False)
 
@@ -429,12 +439,20 @@ class uiPanels(object):
         nfft, _ = self._PanSpecNfft.value(), self._PanSpecStep.value()
         # Get starting / ending frequency :
         _, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()
+        # Enable / disable normalization :
+        use_tf = int(self._PanSpecMethod.currentIndex() == 1)
+        self._PanSpecNormW.setEnabled(use_tf)
 
         self._PanSpecStep.setMaximum(nfft * .99)
         self._PanSpecFend.setMaximum(self._sf / 2)
         self._PanSpecFstart.setMaximum(fend - 0.99)
         # Set apply button enable :
         self._PanSpecApply.setEnabled(True)
+
+    def _fcn_spec_interp(self):
+        """Change the 2-D interpolation method."""
+        # Interpolation :
+        self._spec.interp = str(self._PanSpecInterp.currentText())
 
     # =====================================================================
     # TOPOPLOT

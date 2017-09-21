@@ -196,7 +196,7 @@ class GridSignalVisual(visuals.Visual):
             # Demean and normalize :
             kw = {'axis': -1, 'keepdims': True}
             data -= data.mean(**kw)
-            data /= data.max(**kw)
+            data /= np.abs(data).max(**kw)
 
             # -------------- Index --------------
             (n_rows, n_cols), n = g_size, len(self)
@@ -287,7 +287,7 @@ class GridSignalVisual(visuals.Visual):
     # ----------- RECT -----------
     @property
     def rect(self):
-        return (-1., -1., self._space, self._space)
+        return (-1.05, -1.1, self._space + .1, self._space + .2)
 
     # ----------- COLOR -----------
     @property

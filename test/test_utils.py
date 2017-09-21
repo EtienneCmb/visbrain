@@ -1,5 +1,6 @@
 """Test utility functions."""
 import numpy as np
+from itertools import product
 from PyQt5 import QtWidgets, QtCore
 from warnings import warn
 import math
@@ -19,13 +20,18 @@ from visbrain.utils.guitools import (slider2opacity, textline2color,
                                      safely_set_spin, safely_set_slider,
                                      toggle_enable_tab, get_screen_size,
                                      set_widget_size)
+from visbrain.utils.memory import arrays_share_data, id, code_timer
 from visbrain.utils.others import (vis_args, check_downsampling, get_dsf,
                                    vispy_array, convert_meshdata,
                                    add_brain_template, remove_brain_template,
                                    set_if_not_none)
+from visbrain.utils.physio import (find_non_eeg, rereferencing, bipolarization,
+                                   commonaverage, tal2mni, mni2tal,
+                                   generate_eeg)
 from visbrain.utils.picture import (piccrop, picresize)
-from visbrain.utils.sigproc import (normalize, movingaverage, derivative, tkeo,
-                                    soft_thresh, zerocrossing, power_of_ten)
+from visbrain.utils.sigproc import (normalize, derivative, tkeo, zerocrossing,
+                                    power_of_ten, averaging, normalization,
+                                    smoothing)
 from visbrain.utils.sleep.detection import (kcdetect, spindlesdetect,
                                             remdetect, slowwavedetect,
                                             mtdetect, peakdetect)
@@ -46,7 +52,7 @@ from visbrain.utils.transform import (vprescale, vprecenter, vpnormalize,
 
 
 class TestCamera(object):
-    """Test function in camera.py."""
+    """Test functions in camera.py."""
 
     def test_fixed_camera(self):
         """Test fixed_camera function."""
@@ -60,7 +66,7 @@ class TestCamera(object):
 
 
 class TestColor(object):
-    """Test function in color.py."""
+    """Test functions in color.py."""
 
     def test_color2vb(self):
         """Test color2vb function."""
@@ -147,7 +153,7 @@ class TestColor(object):
 
 
 class TestDetections(object):
-    """Test function in detection.py."""
+    """Test functions in detection.py."""
 
     @staticmethod
     def _get_eeg_dataset(n=10014, sf=100., sine=False, f=4., amp=1.,
@@ -294,7 +300,6 @@ class TestFiltering(object):
 
     def __iter__(self):
         """Iterate over filtering options."""
-        from itertools import product
         btype = ['bandpass', 'bandstop', 'highpass', 'lowpass']
         order = [2, 3, 5]
         method = ['butterworth', 'bessel']
@@ -535,6 +540,33 @@ class TestGuitools(object):
         w = QtWidgets.QWidget()
         set_widget_size(app, w)
 
+
+###############################################################################
+###############################################################################
+#                                memory.py
+###############################################################################
+###############################################################################
+
+
+class TestMemory(object):
+    """Test functions in memory.py."""
+
+    def test_id(self):
+        """Test function id."""
+        a = b = np.arange(10)
+        assert id(b) == id(a)
+
+    def test_arrays_share_data(self):
+        """Test function arrays_share_data."""
+        a = b = np.arange(10)
+        assert arrays_share_data(a, b)
+
+    def test_code_timer(self):
+        """Test function code_timer."""
+        start = code_timer(verbose=False)
+        code_timer(start, unit='ms')
+        code_timer(start, unit='us')
+
 ###############################################################################
 ###############################################################################
 #                                others.py
@@ -629,13 +661,76 @@ class TestOthers(object):
 
 ###############################################################################
 ###############################################################################
+#                                physio.py
+###############################################################################
+###############################################################################
+
+
+class TestPhysio(object):
+    """Test functions in physio.py."""
+
+    @staticmethod
+    def _generate_eeg_dataset(data_type='eeg'):
+        """Generate an EEG dataset to test re-referencing functions."""
+        data = np.random.rand(4, 100)
+        if data_type == 'eeg':
+            data = np.random.rand(4, 100)
+            channels = ['Cz', 'Pz', 'Fz', 'EOG']
+        elif data_type == 'intra':
+            channels = ['m1.132', 'm2.134', 'm3.45', 'i1.32']
+        return data, channels, [False, False, False, True]
+
+    @staticmethod
+    def _generate_coordinates():
+        """Generate random xyz coordinates."""
+        return np.random.rand(50, 3)
+
+    def test_find_non_eeg(self):
+        """Test function find_non_eeg."""
+        bool_vec = find_non_eeg(['cz', 'eog', 'emg'])
+        assert np.array_equal(bool_vec, (False, True, True))
+
+    def test_rereferencing(self):
+        """Test function rereferencing."""
+        data, channels, ignore = self._generate_eeg_dataset('eeg')
+        data_r, chan_r, consider = rereferencing(data, channels, 1, ignore)
+        assert chan_r == ['Cz-Pz', 'Pz', 'Fz-Pz', 'EOG']
+
+    def test_bipolarization(self):
+        """Test function bipolarization."""
+        data, channels, ignore = self._generate_eeg_dataset('intra')
+        data_r, chan_r, consider = bipolarization(data, channels, ignore)
+        assert chan_r == ['m1', 'm2-m1', 'm3-m2', 'i1']
+
+    def test_commonaverage(self):
+        """Test function commonaverage."""
+        data, channels, ignore = self._generate_eeg_dataset('eeg')
+        data_r, chan_r, consider = commonaverage(data, channels, ignore)
+        assert chan_r == ['Cz-m', 'Pz-m', 'Fz-m', 'EOG']
+
+    def test_tal2mni(self):
+        """Test function tal2mni."""
+        xyz = self._generate_coordinates()
+        tal2mni(xyz)
+
+    def test_mni2tal(self):
+        """Test function mni2tal."""
+        xyz = self._generate_coordinates()
+        mni2tal(xyz)
+
+    def test_generate_eeg(self):
+        """Test function generate_eeg."""
+        generate_eeg(n_pts=1000)
+
+###############################################################################
+###############################################################################
 #                                picture.py
 ###############################################################################
 ###############################################################################
 
 
 class TestPicture(object):
-    """Test function in picture.py."""
+    """Test functions in picture.py."""
 
     def _compare_shapes(self, im, shapes):
         im_shapes = [k.shape for k in im]
@@ -675,18 +770,13 @@ class TestPicture(object):
 
 
 class TestSigproc(object):
-    """Test function in sigproc.py."""
+    """Test functions in sigproc.py."""
 
     def test_normalize(self):
         """Test normalize function."""
         mat = np.random.rand(10, 20)
         mat_n = normalize(mat, -10., 14.)
         assert (mat_n.min() == -10.) and (mat_n.max() == 14.)
-
-    def test_movingaverage(self):
-        """Test function movingaverage."""
-        x, window, sf = np.random.rand(2000), 10., 512.
-        movingaverage(x, window, sf)
 
     def test_derivative(self):
         """Test function derivative."""
@@ -697,11 +787,6 @@ class TestSigproc(object):
         """Test function tkeo."""
         x = np.random.rand(2000)
         tkeo(x)
-
-    def test_soft_thresh(self):
-        """Test function soft_thresh."""
-        x = np.random.rand(2000)
-        soft_thresh(x, .1)
 
     def test_zerocrossing(self):
         """Test function zerocrossing."""
@@ -714,6 +799,38 @@ class TestSigproc(object):
         assert np.allclose(power_of_ten(1024.), (1.024, 3))
         assert np.allclose(power_of_ten(-14517.2), (-1.45172, 4))
 
+    def test_averaging(self):
+        """Test function averaging."""
+        data = np.random.rand(57, 103, 154)
+        # Test axis
+        for x in [0, 1, 2, -1]:
+            ts_out = averaging(data, 5, axis=x, overlap=.5)
+            assert ts_out.shape[x] < data.shape[x]
+        # Test window :
+        window = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']
+        for w in window:
+            averaging(data, 5, axis=-1, overlap=.5, window=w)
+
+    def test_normalization(self):
+        """Test function normalization."""
+        data = np.random.rand(10, 20)
+        # Test the different normalizations using a baseline or not :
+        for norm, base in product(range(5), [None, (2, 7)]):
+            normalization(data, -1, norm, base)
+
+    def test_smoothing(self):
+        """Test function smoothing."""
+        # Test small vector :
+        x_3 = np.array([0, 1, 2])
+        assert np.array_equal(smoothing(x_3, n_window=1), x_3)
+        # Test windows :
+        x_n = np.arange(127)
+        window = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']
+        for w in window:
+            x_ns = smoothing(x_n, window=w)
+            assert len(x_ns) == len(x_n)
+
+
 ###############################################################################
 ###############################################################################
 #                                hypnoprocessing.py
@@ -722,7 +839,7 @@ class TestSigproc(object):
 
 
 class TestHypnoprocessing(object):
-    """Test function in hypnoprocessing.py."""
+    """Test functions in hypnoprocessing.py."""
 
     def test_transient(self):
         """Test function transient."""
@@ -749,27 +866,37 @@ class TestHypnoprocessing(object):
 
 
 class TestTransform(object):
-    """Test function in transform.py."""
+    """Test functions in transform.py."""
+
+    @staticmethod
+    def _test_vpmean(mat, tr):
+        """Test if the center of (x, y, z) is [0., 0., 0.]."""
+        assert np.array_equal(tr.map(mat).mean(0), [0., 0., 0., 1.])
+
+    @staticmethod
+    def _test_vpdist(mat, tr, dist):
+        """Test if Peak to Peak along (x, y, z) is equal to dist."""
+        mat_ptp = np.round(np.ptp(tr.map(mat), axis=0))
+        assert np.array_equal(mat_ptp, [float(dist)] * 3 + [0.])
 
     def test_vprescale(self):
         """Test function vprescale."""
-        mat = np.random.rand(10, 3)
-        tr = vprescale(mat, dist=10.)
-        assert np.abs(tr.map(mat).max()) - 10. < 2.
+        mat = np.arange(30).reshape(10, 3)
+        dist = 100.
+        self._test_vpdist(mat, vprescale(mat, dist=dist), dist)
 
     def test_vprecenter(self):
         """Test function vprecenter."""
-        mat = np.random.rand(10, 3) + 100.
-        tr = vprecenter(mat)
-        assert np.all(tr.map(mat).mean() < 1.)
+        mat = np.arange(30).reshape(10, 3)
+        self._test_vpmean(mat, vprecenter(mat))
 
     def test_vpnormalize(self):
         """Test function vpnormalize."""
-        mat = np.random.rand(10, 3) + 100.
-        tr = vpnormalize(mat, dist=5.)
-        mat_n = tr.map(mat)
-        assert np.all(mat_n.mean() < 1.)
-        assert np.abs(mat_n.max() - 2.5) < 2.
+        mat = np.arange(30).reshape(10, 3)
+        dist = 5.
+        tr = vpnormalize(mat, dist=dist)
+        self._test_vpmean(mat, tr)
+        self._test_vpdist(mat, tr, dist)
 
     def test_array_to_stt(self):
         """Test function array_to_stt."""

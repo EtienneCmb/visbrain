@@ -10,8 +10,8 @@ import vispy.scene.cameras as viscam
 
 from .ui_elements import UiElements, UiInit
 from .visuals import Visuals
-from ..utils import (set_widget_size, toggle_enable_tab, safely_set_cbox,
-                     color2tuple)
+from ..utils import (set_widget_size, safely_set_cbox, color2tuple, color2vb,
+                     get_screen_size)
 
 sip.setdestroyonexit(False)
 
@@ -43,11 +43,11 @@ class Signal(UiInit, UiElements, Visuals):
         Enable or disable the grid. If False, the grid is not computed and not
         accessible from the GUI. The grid requires more memory RAM. It could be
         turn to False for very large datasets.
-    form : {'line', 'marker', 'histogram'}
+    form : {'line', 'marker', 'histogram', 'tf', 'psd'}
         Plotting type.
     color : array_like/string/tuple | 'black'
         Color of the plot.
-    lw : float | 2.
+    lw : float | 1.
         Line width (form='line').
     symbol : string | 'o'
         Marker symbol (form='marker').
@@ -79,12 +79,15 @@ class Signal(UiInit, UiElements, Visuals):
         Display the signal layout.
     annotations : str | None
         Path to an annotation file.
+    line_rendering : {'gl', 'agg'}
+        Specify the line rendering method. Use 'gl' for a fast but lower
+        quality lines and 'agg', looks better but slower.
     """
 
     def __init__(self, data, axis=-1, time=None, sf=1., enable_grid=True,
-                 form='line', color='black', lw=2., symbol='disc', size=10.,
+                 form='line', color='black', lw=1., symbol='disc', size=10.,
                  nbins=10, display_grid=True, display_signal=True,
-                 annotations=None, **kwargs):
+                 annotations=None, line_rendering='gl', **kwargs):
         """Init."""
         self._enable_grid = enable_grid
         display_grid = bool(display_grid * self._enable_grid)
@@ -101,27 +104,31 @@ class Signal(UiInit, UiElements, Visuals):
                             "dimensions.")
         if data.ndim == 1 or not self._enable_grid:  # disable grid
             display_grid = self._enable_grid = False
-            toggle_enable_tab(self.QuickSettings, 'Grid', False)
             self.actionGrid.setEnabled(False)
         self._data = data.astype(np.float32, copy=False)
+        self._axis = axis
 
         # ==================== VISUALS ====================
         grid_parent = self._grid_canvas.wc.scene
         signal_parent = self._signal_canvas.wc.scene
         Visuals.__init__(self, data, time, sf, axis, form, color, lw, symbol,
-                         size, nbins, grid_parent, signal_parent)
+                         size, nbins, line_rendering, grid_parent,
+                         signal_parent)
 
         # ==================== CAMERA ====================
-        grid_rect = (0, 0, 1, 1)  # self._grid.rect
+        grid_rect = (0, 0, 1, 1)
         sig_rect = self._signal.rect
+        cb_rect = (-.05, -2, .8, 4.)
         self._grid_canvas.camera = viscam.PanZoomCamera(rect=grid_rect)
         self._signal_canvas.camera = viscam.PanZoomCamera(rect=sig_rect)
+        self._signal_canvas.wc_cbar.camera = viscam.PanZoomCamera(rect=cb_rect)
 
         # ==================== UI INIT ====================
         # ------------- Signal -------------
         # Signal and axis color :
         self._sig_color.setText(str(color2tuple(color, astype=float)))
-        self._axis_color.setText(str(kwargs.get('axis_color', 'black')))
+        ax_color = kwargs.get('axis_color', color2vb('black'))
+        self._axis_color.setText(str(ax_color))
         # Title, labels and ticks :
         self._sig_title.setText(kwargs.get('title', ''))
         self._sig_title_fz.setValue(kwargs.get('title_font_size', 15.))
@@ -135,6 +142,12 @@ class Signal(UiInit, UiElements, Visuals):
         self._sig_nbins.setValue(nbins)  # histogram
         self._sig_size.setValue(size)  # marker
         safely_set_cbox(self._sig_symbol, symbol)  # marker
+
+        # ------------- Cbar -------------
+        self._signal_canvas.cbar.txtcolor = ax_color
+        self._signal_canvas.cbar.border = False
+        self._signal_canvas.cbar.cbtxtsz = 15.
+        self._signal_canvas.cbar.txtsz = 12.
 
         # ------------- Settings -------------
         bgcolor = kwargs.get('bgcolor', 'white')
@@ -162,12 +175,17 @@ class Signal(UiInit, UiElements, Visuals):
         # Settings :
         self.QuickSettings.setCurrentIndex(0)
         set_widget_size(self._app, self.q_widget, 23)
+        # Fix proportion of canvas :
+        # w, g = get_screen_size(self._app)
+        # self._signal_canvas.wc.width_max = w / 2
+        # self._grid_canvas.wc.width_max = w / 2
         # Fix index limits :
         self._sig_index.setMinimum(0)
         self._sig_index.setMaximum(len(self._signal._navidx) - 1)
         # Fix amplitude limits :
         d_min, d_max = self._data.min(), self._data.max()
         step = (d_max - d_min) / 100.
+        n = self._data.shape[self._axis]
         self._sig_amp_min.setMinimum(d_min)
         self._sig_amp_min.setMaximum(d_max)
         self._sig_amp_min.setValue(d_min)
@@ -176,6 +194,9 @@ class Signal(UiInit, UiElements, Visuals):
         self._sig_amp_max.setMaximum(d_max)
         self._sig_amp_max.setValue(d_max)
         self._sig_amp_max.setSingleStep(step)
+        self._sig_av_win.setMaximum(n)
+        self._sig_base_start.setMaximum(n)
+        self._sig_base_end.setMaximum(n)
         # Fix amplitude limits :
         self._sig_th_min.setMinimum(d_min)
         self._sig_th_min.setMaximum(d_max)

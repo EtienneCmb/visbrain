@@ -20,7 +20,7 @@ def vprescale(obj, dist=1.):
     Returns
     -------
     rescale : vispy.transformations
-        The rescaling transformation.
+        VisPy transformation to rescale.
     """
     # Get minimum / maximum trough last dimension :
     dim = tuple(np.arange(obj.ndim - 1, dtype=int))
@@ -39,7 +39,7 @@ def vprecenter(obj):
     Returns
     -------
     recenter : vispy.transformations
-        Vis py transformation to recenter object.
+        VisPy transformation to recenter.
     """
     # Check object :
     if not isinstance(obj, np.ndarray) or obj.shape[-1] not in [2, 3]:
@@ -66,7 +66,7 @@ def vpnormalize(obj, dist=1.):
     Returns
     -------
     normalize : vispy.transformations
-        The normalize transformation.
+        VisPy transformation to normalize.
     """
     # Prepare the transformation chain :
     t = ChainTransform()

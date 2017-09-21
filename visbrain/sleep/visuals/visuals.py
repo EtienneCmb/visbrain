@@ -13,7 +13,7 @@ import vispy.visuals.transforms as vist
 from .marker import Markers
 from ...utils import (array2colormap, color2vb, PrepareData)
 from ...utils.sleep.event import _index_to_events
-from ...visuals import TopoMesh
+from ...visuals import TopoMesh, TFmapsMesh
 
 __all__ = ("Visuals")
 
@@ -403,7 +403,7 @@ class Spectrogram(PrepareData):
     color, new frequency / time range, new settings...
     """
 
-    def __init__(self, camera, parent=None, fcn=None):
+    def __init__(self, camera, parent=None, fcn=None, use_tf=False):
         # Initialize PrepareData :
         PrepareData.__init__(self, axis=0)
 
@@ -411,14 +411,17 @@ class Spectrogram(PrepareData):
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
         self._fcn = fcn
+        self._use_tf = use_tf
 
-        # Create a vispy image object :
-        self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram',
-                                        parent=parent)
+        # Time-frequency map
+        self.tf = TFmapsMesh(parent=parent)
+        # Spectrogram
+        self.mesh = scene.visuals.Image(np.zeros((2, 2)),
+                                        name='spectrogram', parent=parent)
         self.mesh.transform = vist.STTransform()
 
     def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.,
-                 fstart=.5, fend=20., contraste=.5):
+                 fstart=.5, fend=20., contrast=.5, interp='nearest', norm=0):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
@@ -437,58 +440,78 @@ class Spectrogram(PrepareData):
         nfft : float | 30.
             Number of fft points for the spectrogram (in seconds).
         overlap : float | .5
-            Time overlap for the spectrogram (in seconds).
+            Ovelap proprotion (0 <= overlap <1).
         fstart : float | .5
             Frequency from which the spectrogram have to start.
         fend : float | 20.
             Frequency from which the spectrogram have to finish.
-        contraste : float | .5
-            Contraste of the colormap.
+        contrast : float | .5
+            Contrast of the colormap.
+        interp : string | 'nearest'
+            Interpolation method.
+        norm : int | 0
+            Normalization method for TF.
         """
-        # =================== CONVERSION ===================
-        nperseg = int(round(nfft * sf))
-        overlap = int(round(overlap * sf))
-
         # =================== PREPARE DATA ===================
         # Prepare data (only if needed)
         if self:
             data = self._prepare_data(sf, data.copy(), time)
 
-        # =================== COMPUTE ===================
-        # Compute the spectrogram :
-        freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
-                                           noverlap=overlap, window='hamming')
-        mesh = 20 * np.log10(mesh)
+        nperseg = int(round(nfft * sf))
 
-        # =================== FREQUENCY SELECTION ===================
-        # Find where freq is [fstart, fend] :
-        f = [0., 0.]
-        f[0] = np.abs(freq - fstart).argmin() if fstart else 0
-        f[1] = np.abs(freq - fend).argmin() if fend else len(freq)
-        # Build slicing and select frequency vector :
-        sls = slice(f[0], f[1] + 1)
-        freq = freq[sls]
-        self._fstart, self._fend = freq[0], freq[-1]
+        # =================== TF // SPECTRO ===================
+        if self._use_tf:
+            self.tf.set_data(data, sf, f_min=fstart, f_max=fend, cmap=cmap,
+                             contrast=contrast, n_window=nperseg,
+                             overlap=overlap, window='hamming', norm=norm)
+            self.tf._image.interpolation = interp
+            self.rect = self.tf.rect
+            self.freq = self.tf.freqs
+        else:
+            # =================== CONVERSION ===================
+            overlap = int(round(overlap * nperseg))
 
-        # =================== COLOR ===================
-        # Get clim :
-        clim = (contraste * mesh.min(), contraste * mesh.max())
-        # Turn mesh into color array for selected frequencies:
-        self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap, clim=clim))
+            # =================== COMPUTE ===================
+            # Compute the spectrogram :
+            freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
+                                               noverlap=overlap,
+                                               window='hamming')
+            mesh = 20 * np.log10(mesh)
 
-        # =================== TRANSFORM ===================
-        tm, tM = time.min(), time.max()
-        # Re-scale the mesh for fitting in time / frequency :
-        fact = (freq.max() - freq.min()) / len(freq)
-        sc = (tM / mesh.shape[1], fact, 1)
-        tr = [0., freq.min(), 0.]
-        self.mesh.transform.translate = tr
-        self.mesh.transform.scale = sc
-        # Update object :
-        self.mesh.update()
-        # Get camera rectangle :
-        self.rect = (tm, freq.min(), tM - tm, freq.max() - freq.min())
-        self.freq = freq
+            # =================== FREQUENCY SELECTION ===================
+            # Find where freq is [fstart, fend] :
+            f = [0., 0.]
+            f[0] = np.abs(freq - fstart).argmin() if fstart else 0
+            f[1] = np.abs(freq - fend).argmin() if fend else len(freq)
+            # Build slicing and select frequency vector :
+            sls = slice(f[0], f[1] + 1)
+            freq = freq[sls]
+            self._fstart, self._fend = freq[0], freq[-1]
+
+            # =================== COLOR ===================
+            # Get clim :
+            clim = (contrast * mesh.min(), contrast * mesh.max())
+            # Turn mesh into color array for selected frequencies:
+            self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap,
+                                              clim=clim))
+            self.mesh.interpolation = interp
+
+            # =================== TRANSFORM ===================
+            tm, tM = time.min(), time.max()
+            # Re-scale the mesh for fitting in time / frequency :
+            fact = (freq.max() - freq.min()) / len(freq)
+            sc = (tM / mesh.shape[1], fact, 1)
+            tr = [0., freq.min(), 0.]
+            self.mesh.transform.translate = tr
+            self.mesh.transform.scale = sc
+            # Update object :
+            self.mesh.update()
+            # Get camera rectangle :
+            self.rect = (tm, freq.min(), tM - tm, freq.max() - freq.min())
+            self.freq = freq
+        # Visibility :
+        self.mesh.visible = not self._use_tf
+        self.tf.visible = self._use_tf
 
     def clean(self):
         """Clean indicators."""
@@ -508,6 +531,21 @@ class Spectrogram(PrepareData):
         """Set rect value."""
         self._rect = value
         self._camera.rect = value
+
+    # ----------- INTERP -----------
+    @property
+    def interp(self):
+        """Get the interp value."""
+        return self._interp
+
+    @interp.setter
+    def interp(self, value):
+        """Set interp value."""
+        self._interp = value
+        self.mesh.interpolation = value
+        self.mesh.update()
+        self.tf.interpolation = value
+        self.tf.update()
 
 
 class Hypnogram(object):
@@ -1041,7 +1079,8 @@ class Visuals(CanvasShortcuts):
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
         self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
-                                 parent=self._specCanvas.wc.scene)
+                                 parent=self._specCanvas.wc.scene,
+                                 use_tf=self._use_tf)
         self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
         # Create a visual indicator for spectrogram :
         self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
