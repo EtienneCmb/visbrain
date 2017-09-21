@@ -1,9 +1,10 @@
 """Test Sleep module and related methods."""
 import os
 import shutil
-from warnings import warn
 
 import numpy as np
+from vispy.app.canvas import MouseEvent, KeyEvent
+from vispy.util.keys import Key
 from PyQt5 import QtWidgets
 
 from visbrain import Sleep
@@ -61,9 +62,9 @@ class TestSleep(object):
         # Go to :
         sp._fcn_annotateGoto()
 
-    # ###########################################################################
-    # #                                SAVE
-    # ###########################################################################
+    ###########################################################################
+    #                                SAVE
+    ###########################################################################
     def test_save_hyp_data(self):
         """Test saving hypnogram data."""
         sp.saveHypData(filename=self._path_to_tmp('hyp_data.txt'))
@@ -141,6 +142,76 @@ class TestSleep(object):
     def test_load_config(self):
         """Test load config."""
         sp.loadConfig(filename=self._path_to_tmp('config.txt'))
+
+    ###########################################################################
+    #                             SHORTCUTS
+    ###########################################################################
+
+    @staticmethod
+    def _key_pressed(canvas, ktype='key_press', key='', **kwargs):
+        """Test VisPy KeyEvent."""
+        k = KeyEvent(ktype, text=key, **kwargs)
+        eval('canvas.events.' + ktype + '(k)')
+
+    @staticmethod
+    def _mouse_event(canvas, etype='mouse_press', **kwargs):
+        """Test a VisPy mouse event."""
+        e = MouseEvent(etype, **kwargs)
+        eval('canvas.events.' + etype + '(e)')
+
+    def test_key_window(self):
+        """Test key for next // previous window."""
+        self._key_pressed(sp._chanCanvas[0].canvas, key='n')
+        self._key_pressed(sp._chanCanvas[0].canvas, key='b')
+
+    def test_key_amplitude(self):
+        """Test key for increase // decrease amplitude."""
+        self._key_pressed(sp._chanCanvas[0].canvas, key='+')
+        self._key_pressed(sp._chanCanvas[0].canvas, key='-')
+
+    def test_key_staging(self):
+        """Test key staging."""
+        self._key_pressed(sp._chanCanvas[0].canvas, key='w')  # Wake
+        self._key_pressed(sp._chanCanvas[0].canvas, key='r')  # REM
+        self._key_pressed(sp._chanCanvas[0].canvas, key='1')  # N1
+        self._key_pressed(sp._chanCanvas[0].canvas, key='2')  # N2
+        self._key_pressed(sp._chanCanvas[0].canvas, key='3')  # N3
+        self._key_pressed(sp._chanCanvas[0].canvas, key='a')  # Art
+
+    def test_key_grid(self):
+        """Test display hide grid."""
+        self._key_pressed(sp._chanCanvas[0].canvas, key='g')  # On
+        self._key_pressed(sp._chanCanvas[0].canvas, key='g')  # Off
+
+    def test_key_magnify(self):
+        """Test magnify."""
+        self._key_pressed(sp._chanCanvas[0].canvas, key='m')  # On
+        self._key_pressed(sp._chanCanvas[0].canvas, key='m')  # Off
+
+    def test_mouse_move(self):
+        """Test mouse move."""
+        for k in [sp._chanCanvas[0], sp._specCanvas, sp._hypCanvas]:
+            self._mouse_event(k.canvas, etype='mouse_move', pos=(50, 100))
+
+    def test_mouse_press(self):
+        """Test mouse press."""
+        self._mouse_event(sp._chanCanvas[0].canvas, etype='mouse_press',
+                          pos=(50, 100), modifiers=[Key('Control')], button=1)
+
+    def test_mouse_double_click(self):
+        """Test mouse double click."""
+        for k in [sp._chanCanvas[0], sp._specCanvas, sp._hypCanvas]:
+            self._mouse_event(k.canvas, etype='mouse_double_click',
+                              pos=(50, 100))
+
+    def test_mouse_release(self):
+        """Test mouse release."""
+        self._mouse_event(sp._chanCanvas[0].canvas, etype='mouse_release',
+                          pos=(50, 100))
+
+    ###########################################################################
+    #                          DELETE TMP FOLDER
+    ###########################################################################
 
     def test_delete_tmp_folder(self):
         """Delete tmp/folder."""
