@@ -19,10 +19,14 @@ from visbrain.utils.guitools import (slider2opacity, textline2color,
                                      safely_set_spin, safely_set_slider,
                                      toggle_enable_tab, get_screen_size,
                                      set_widget_size)
+from visbrain.utils.memory import arrays_share_data, id, code_timer
 from visbrain.utils.others import (vis_args, check_downsampling, get_dsf,
                                    vispy_array, convert_meshdata,
                                    add_brain_template, remove_brain_template,
                                    set_if_not_none)
+from visbrain.utils.physio import (find_non_eeg, rereferencing, bipolarization,
+                                   commonaverage, tal2mni, mni2tal,
+                                   generate_eeg)
 from visbrain.utils.picture import (piccrop, picresize)
 from visbrain.utils.sigproc import (normalize, movingaverage, derivative, tkeo,
                                     soft_thresh, zerocrossing, power_of_ten)
@@ -46,7 +50,7 @@ from visbrain.utils.transform import (vprescale, vprecenter, vpnormalize,
 
 
 class TestCamera(object):
-    """Test function in camera.py."""
+    """Test functions in camera.py."""
 
     def test_fixed_camera(self):
         """Test fixed_camera function."""
@@ -60,7 +64,7 @@ class TestCamera(object):
 
 
 class TestColor(object):
-    """Test function in color.py."""
+    """Test functions in color.py."""
 
     def test_color2vb(self):
         """Test color2vb function."""
@@ -147,7 +151,7 @@ class TestColor(object):
 
 
 class TestDetections(object):
-    """Test function in detection.py."""
+    """Test functions in detection.py."""
 
     @staticmethod
     def _get_eeg_dataset(n=10014, sf=100., sine=False, f=4., amp=1.,
@@ -535,6 +539,33 @@ class TestGuitools(object):
         w = QtWidgets.QWidget()
         set_widget_size(app, w)
 
+
+###############################################################################
+###############################################################################
+#                                memory.py
+###############################################################################
+###############################################################################
+
+
+class TestMemory(object):
+    """Test functions in memory.py."""
+
+    def test_id(self):
+        """Test function id."""
+        a = b = np.arange(10)
+        assert id(b) == id(a)
+
+    def test_arrays_share_data(self):
+        """Test function arrays_share_data."""
+        a = b = np.arange(10)
+        assert arrays_share_data(a, b)
+
+    def test_code_timer(self):
+        """Test function code_timer."""
+        start = code_timer(verbose=False)
+        code_timer(start, unit='ms')
+        code_timer(start, unit='us')
+
 ###############################################################################
 ###############################################################################
 #                                others.py
@@ -629,13 +660,76 @@ class TestOthers(object):
 
 ###############################################################################
 ###############################################################################
+#                                physio.py
+###############################################################################
+###############################################################################
+
+
+class TestPhysio(object):
+    """Test functions in physio.py."""
+
+    @staticmethod
+    def _generate_eeg_dataset(data_type='eeg'):
+        """Generate an EEG dataset to test re-referencing functions."""
+        data = np.random.rand(4, 100)
+        if data_type == 'eeg':
+            data = np.random.rand(4, 100)
+            channels = ['Cz', 'Pz', 'Fz', 'EOG']
+        elif data_type == 'intra':
+            channels = ['m1.132', 'm2.134', 'm3.45', 'i1.32']
+        return data, channels, [False, False, False, True]
+
+    @staticmethod
+    def _generate_coordinates():
+        """Generate random xyz coordinates."""
+        return np.random.rand(50, 3)
+
+    def test_find_non_eeg(self):
+        """Test function find_non_eeg."""
+        bool_vec = find_non_eeg(['cz', 'eog', 'emg'])
+        assert np.array_equal(bool_vec, (False, True, True))
+
+    def test_rereferencing(self):
+        """Test function rereferencing."""
+        data, channels, ignore = self._generate_eeg_dataset('eeg')
+        data_r, chan_r, consider = rereferencing(data, channels, 1, ignore)
+        assert chan_r == ['Cz-Pz', 'Pz', 'Fz-Pz', 'EOG']
+
+    def test_bipolarization(self):
+        """Test function bipolarization."""
+        data, channels, ignore = self._generate_eeg_dataset('intra')
+        data_r, chan_r, consider = bipolarization(data, channels, ignore)
+        assert chan_r == ['m1', 'm2-m1', 'm3-m2', 'i1']
+
+    def test_commonaverage(self):
+        """Test function commonaverage."""
+        data, channels, ignore = self._generate_eeg_dataset('eeg')
+        data_r, chan_r, consider = commonaverage(data, channels, ignore)
+        assert chan_r == ['Cz-m', 'Pz-m', 'Fz-m', 'EOG']
+
+    def test_tal2mni(self):
+        """Test function tal2mni."""
+        xyz = self._generate_coordinates()
+        tal2mni(xyz)
+
+    def test_mni2tal(self):
+        """Test function mni2tal."""
+        xyz = self._generate_coordinates()
+        mni2tal(xyz)
+
+    def test_generate_eeg(self):
+        """Test function generate_eeg."""
+        generate_eeg(n_pts=1000)
+
+###############################################################################
+###############################################################################
 #                                picture.py
 ###############################################################################
 ###############################################################################
 
 
 class TestPicture(object):
-    """Test function in picture.py."""
+    """Test functions in picture.py."""
 
     def _compare_shapes(self, im, shapes):
         im_shapes = [k.shape for k in im]
@@ -675,7 +769,7 @@ class TestPicture(object):
 
 
 class TestSigproc(object):
-    """Test function in sigproc.py."""
+    """Test functions in sigproc.py."""
 
     def test_normalize(self):
         """Test normalize function."""
@@ -722,7 +816,7 @@ class TestSigproc(object):
 
 
 class TestHypnoprocessing(object):
-    """Test function in hypnoprocessing.py."""
+    """Test functions in hypnoprocessing.py."""
 
     def test_transient(self):
         """Test function transient."""
@@ -749,7 +843,7 @@ class TestHypnoprocessing(object):
 
 
 class TestTransform(object):
-    """Test function in transform.py."""
+    """Test functions in transform.py."""
 
     def test_vprescale(self):
         """Test function vprescale."""
