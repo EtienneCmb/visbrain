@@ -43,7 +43,7 @@ class Signal(UiInit, UiElements, Visuals):
         Enable or disable the grid. If False, the grid is not computed and not
         accessible from the GUI. The grid requires more memory RAM. It could be
         turn to False for very large datasets.
-    form : {'line', 'marker', 'histogram'}
+    form : {'line', 'marker', 'histogram', 'tf', 'psd'}
         Plotting type.
     color : array_like/string/tuple | 'black'
         Color of the plot.

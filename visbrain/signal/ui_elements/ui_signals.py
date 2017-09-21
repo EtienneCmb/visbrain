@@ -18,7 +18,7 @@ class UiSignals(object):
         self._sig_title_fz.valueChanged.connect(self._fcn_axis_title_fz)
         self._sig_xlab.textChanged.connect(self._fcn_axis_xlab)
         self._sig_ylab.textChanged.connect(self._fcn_axis_ylab)
-        self._sig_lab_fz.valueChanged.connect(self._fcn_axis_xlab_fz)
+        self._sig_lab_fz.valueChanged.connect(self._fcn_axis_lab_fz)
         self._sig_ticks_fz.valueChanged.connect(self._fcn_axis_ticks_fz)
         # Signal :
         self._sig_index.valueChanged.connect(self._fcn_set_signal)
@@ -85,7 +85,7 @@ class UiSignals(object):
         """Set y-label of the axis."""
         self._signal_canvas.ylabel = str(self._sig_ylab.text())
 
-    def _fcn_axis_xlab_fz(self):
+    def _fcn_axis_lab_fz(self):
         """Set xlabel font-size."""
         self._signal_canvas.axis_font_size = self._sig_lab_fz.value()
 
