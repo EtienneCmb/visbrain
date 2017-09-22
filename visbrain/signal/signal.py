@@ -12,6 +12,7 @@ from .ui_elements import UiElements, UiInit
 from .visuals import Visuals
 from ..utils import (set_widget_size, safely_set_cbox, color2tuple, color2vb,
                      mpl_cmap)
+from ..io import write_fig_canvas
 # get_screen_size
 
 sip.setdestroyonexit(False)
@@ -121,6 +122,7 @@ class Signal(UiInit, UiElements, Visuals):
                  annot_color='#2ecc71', line_rendering='gl', **kwargs):
         """Init."""
         self._enable_grid = enable_grid
+        self._previous_form = form
         display_grid = bool(display_grid * self._enable_grid)
 
         # ==================== APP CREATION ====================
@@ -225,6 +227,11 @@ class Signal(UiInit, UiElements, Visuals):
             assert os.path.isfile(annotations)
             self._fcn_load_annotations(filename=annotations)
 
+    def __iter__(self):
+        """Iterate over signal dimension."""
+        for k in range(len(self._signal._navidx) - 1):
+            yield k
+
     def _fix_elements_limits(self):
         """Fiw the upper and lower limits of some elements."""
         # Fix index limits :
@@ -293,9 +300,47 @@ class Signal(UiInit, UiElements, Visuals):
             self._signal_canvas.set_default_state()
             self._signal_canvas.update()
 
-    def screenshot(self):
-        """Take a screenshot of the scene."""
-        pass
+    def screenshot(self, filename='screenshot.png', canvas='signal',
+                   autocrop=False, region=None, print_size=None,
+                   unit='centimeter', dpi=300., factor=1., bgcolor=None,
+                   transparent=False):
+        """Take a screenshot of the scene.
+
+        Parameters
+        ----------
+        filename : string | 'screenshot.png'
+            Name and path of the screenshot file.
+        canvas : {'signal', 'grid'}
+            Canvas to capture.
+        autocrop : bool | False
+            Auto-cropping argument to remove useless space.
+        region : tuple/list | None
+            The region to export (x_start, y_start, width, height).
+        print_size : tuple | None
+            The desired print size. This argument should be used in association
+            with the dpi and unit inputs. print_size describe should be a tuple
+            of two floats describing (width, height) of the exported image for
+            a specific dpi level. The final image might not have the exact
+            desired size but will try instead to find a compromize
+            regarding to the proportion of width/height of the original image.
+        unit : {'centimeter', 'millimeter', 'pixel', 'inch'}
+            Unit of the printed size.
+        dpi : float | 300.
+            Dots per inch for printing the image.
+        factor : float | None
+            If you don't want to use the print_size input, factor simply
+            multiply the resolution of your screen.
+        bgcolor : array_like/string | None
+            Background color of the canvas.
+        transparent : bool | False
+            Use transparent background.
+        """
+        if canvas == 'signal':
+            c, w = self._signal_canvas.canvas, self._SignalWidget
+        elif canvas == 'grid':
+            c, w = self._grid_canvas.canvas, self._GridWidget
+        write_fig_canvas(filename, c, w, autocrop, region, print_size, unit,
+                         dpi, factor, bgcolor, transparent)
 
     def set_xlim(self, xstart, xend):
         """Fix limits of the x-axis.
@@ -324,6 +369,21 @@ class Signal(UiInit, UiElements, Visuals):
         self._signal_canvas.camera.rect.bottom = ystart
         self._signal_canvas.camera.rect.top = yend
         self._signal_canvas.update()
+
+    def set_signal_index(self, index):
+        """Set the index of the signal."""
+        self._safely_set_index(index, True, True)
+
+    def set_signal_form(self, form='line'):
+        """Set plotting method.
+
+        Parameters
+        ----------
+        form : {'line', 'marker', 'histogram', 'tf', 'psd'}
+            Plotting form.
+        """
+        idx = ['line', 'marker', 'histogram', 'tf', 'psd'].index(form)
+        self._sig_form.setCurrentIndex(idx)
 
     def show(self):
         """Display the graphical user interface."""
