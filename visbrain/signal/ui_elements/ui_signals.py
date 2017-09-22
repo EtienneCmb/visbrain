@@ -37,8 +37,6 @@ class UiSignals(object):
         self._sig_av_overlap.valueChanged.connect(self._fcn_disp_apply_tf)
         self._sig_tf_apply.clicked.connect(self._fcn_set_signal)
         self._sig_tf_interp.currentIndexChanged.connect(self._fcn_set_tfinterp)
-        self._sig_tf_cmap.addItems(mpl_cmap())
-        safely_set_cbox(self._sig_tf_cmap, 'viridis')
         self._sig_tf_cmap.currentIndexChanged.connect(self._fcn_disp_apply_tf)
         self._sig_tf_rev.clicked.connect(self._fcn_disp_apply_tf)
         self._sig_tf_clim.clicked.connect(self._fcn_disp_apply_tf)

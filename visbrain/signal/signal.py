@@ -11,7 +11,8 @@ import vispy.scene.cameras as viscam
 from .ui_elements import UiElements, UiInit
 from .visuals import Visuals
 from ..utils import (set_widget_size, safely_set_cbox, color2tuple, color2vb,
-                     get_screen_size)
+                     mpl_cmap)
+# get_screen_size
 
 sip.setdestroyonexit(False)
 
@@ -47,14 +48,40 @@ class Signal(UiInit, UiElements, Visuals):
         Plotting type.
     color : array_like/string/tuple | 'black'
         Color of the plot.
-    lw : float | 1.
-        Line width (form='line').
-    symbol : string | 'o'
-        Marker symbol (form='marker').
-    size : float | 10.
-        Marker size (form='marker').
-    nbins : int | 10
-        Number of bins for the histogram (form='histogram')
+    line_lw : float | 1.
+        Line width (form in ['line', 'psd']).
+    marker_symbol : string | 'o'
+        Marker symbol.
+    marker_size : float | 10.
+        Marker size.
+    hist_nbins : int | 10
+        Number of bins for the histogram.
+    tf_norm : int | 0
+        Time-frequency normalization. If tf_baseline is not defined, the mean
+        and deviation are deduced using the entire trial. Use :
+
+            * 0 : No normalization
+            * 1 : Subtract the mean
+            * 2 : Divide by the mean
+            * 3 : Subtract then divide by the mean
+            * 4 : Z-score
+    tf_baseline : tuple | None
+        Baseline to used for the normalization. Must be a tuple of two integers
+        (starting, ending) time index.
+    tf_interp : string | 'gaussian'
+        Time-frequency interpolation method.
+    tf_cmap : string | 'viridis'
+        Time-frequency colormap.
+    tf_av_window : int | None
+        Length of the window to apply a time averaging.
+    tf_av_overlap : float | 0.
+        Overlap between successive time window. Default 0. means no overlap.
+    tf_clim : tuple | None
+        Colorbar limits to use for the tim-frequency map.
+    psd_nperseg : int | 256
+        Length of each segment (scipy.signal.welch).
+    psd_noverlap : int | 128
+        Number of points to overlap between segments (scipy.signal.welch).
     parent : VisPy.parent | None
         Parent of the mesh.
     title : string | None
@@ -85,9 +112,13 @@ class Signal(UiInit, UiElements, Visuals):
     """
 
     def __init__(self, data, axis=-1, time=None, sf=1., enable_grid=True,
-                 form='line', color='black', lw=1., symbol='disc', size=10.,
-                 nbins=10, display_grid=True, display_signal=True,
-                 annotations=None, line_rendering='gl', **kwargs):
+                 form='line', color='black', line_lw=1., marker_symbol='disc',
+                 marker_size=10., hist_nbins=10, tf_norm=0, tf_baseline=None,
+                 tf_interp='gaussian', tf_cmap='viridis', tf_av_window=None,
+                 tf_av_overlap=0., tf_clim=None, psd_nperseg=256,
+                 psd_noverlap=128, display_grid=True, display_signal=True,
+                 annotations=None, annot_txtsz=18., annot_marksz=16.,
+                 annot_color='#2ecc71', line_rendering='gl', **kwargs):
         """Init."""
         self._enable_grid = enable_grid
         display_grid = bool(display_grid * self._enable_grid)
@@ -111,9 +142,8 @@ class Signal(UiInit, UiElements, Visuals):
         # ==================== VISUALS ====================
         grid_parent = self._grid_canvas.wc.scene
         signal_parent = self._signal_canvas.wc.scene
-        Visuals.__init__(self, data, time, sf, axis, form, color, lw, symbol,
-                         size, nbins, line_rendering, grid_parent,
-                         signal_parent)
+        Visuals.__init__(self, data, time, sf, axis, line_rendering,
+                         grid_parent, signal_parent)
 
         # ==================== CAMERA ====================
         grid_rect = (0, 0, 1, 1)
@@ -124,6 +154,7 @@ class Signal(UiInit, UiElements, Visuals):
         self._signal_canvas.wc_cbar.camera = viscam.PanZoomCamera(rect=cb_rect)
 
         # ==================== UI INIT ====================
+        self._fix_elements_limits()
         # ------------- Signal -------------
         # Signal and axis color :
         self._sig_color.setText(str(color2tuple(color, astype=float)))
@@ -138,10 +169,29 @@ class Signal(UiInit, UiElements, Visuals):
         self._sig_ticks_fz.setValue(kwargs.get('tick_font_size', 8.))
         # Signal properties :
         safely_set_cbox(self._sig_form, form)
-        self._sig_lw.setValue(lw)  # line
-        self._sig_nbins.setValue(nbins)  # histogram
-        self._sig_size.setValue(size)  # marker
-        safely_set_cbox(self._sig_symbol, symbol)  # marker
+        self._sig_lw.setValue(line_lw)  # line
+        self._sig_nbins.setValue(hist_nbins)  # histogram
+        self._sig_size.setValue(marker_size)  # marker
+        safely_set_cbox(self._sig_symbol, marker_symbol)  # marker
+        self._sig_norm.setCurrentIndex(tf_norm)
+        safely_set_cbox(self._sig_tf_interp, tf_interp)
+        self._sig_tf_rev.setChecked(bool(tf_cmap.find('_r') + 1))
+        self._sig_tf_cmap.addItems(mpl_cmap())
+        safely_set_cbox(self._sig_tf_cmap, tf_cmap.replace('_r', ''))
+        if (tf_baseline is not None) and (len(tf_baseline) == 2):
+            self._sig_baseline.setChecked(True)
+            self._sig_base_start.setValue(tf_baseline[0])
+            self._sig_base_end.setValue(tf_baseline[1])
+        if isinstance(tf_av_window, int):
+            self._sig_averaging.setChecked(True)
+            self._sig_av_win.setValue(tf_av_window)
+            self._sig_av_overlap.setValue(tf_av_overlap)
+        if (tf_clim is not None) and (len(tf_clim) == 2):
+            self._sig_tf_clim.setChecked(True)
+            self._sig_climin.setValue(tf_clim[0])
+            self._sig_climax.setValue(tf_clim[1])
+        self._sig_nperseg.setValue(psd_nperseg)
+        self._sig_noverlap.setValue(psd_noverlap)
 
         # ------------- Cbar -------------
         self._signal_canvas.cbar.txtcolor = ax_color
@@ -152,6 +202,11 @@ class Signal(UiInit, UiElements, Visuals):
         # ------------- Settings -------------
         bgcolor = kwargs.get('bgcolor', 'white')
         self._set_bgcolor.setText(str(color2tuple(bgcolor, astype=float)))
+
+        # ------------- Annotations -------------
+        self._annot_txtsz.setValue(annot_txtsz)
+        self._annot_marksz.setValue(annot_marksz)
+        self._annot_color.setText(str(color2tuple(annot_color, astype=float)))
 
         # ------------- Menu -------------
         self.actionGrid.setChecked(display_grid)
@@ -170,15 +225,8 @@ class Signal(UiInit, UiElements, Visuals):
             assert os.path.isfile(annotations)
             self._fcn_load_annotations(filename=annotations)
 
-    def _fcn_on_creation(self):
-        """Run on GUI creation."""
-        # Settings :
-        self.QuickSettings.setCurrentIndex(0)
-        set_widget_size(self._app, self.q_widget, 23)
-        # Fix proportion of canvas :
-        # w, g = get_screen_size(self._app)
-        # self._signal_canvas.wc.width_max = w / 2
-        # self._grid_canvas.wc.width_max = w / 2
+    def _fix_elements_limits(self):
+        """Fiw the upper and lower limits of some elements."""
         # Fix index limits :
         self._sig_index.setMinimum(0)
         self._sig_index.setMaximum(len(self._signal._navidx) - 1)
@@ -206,11 +254,23 @@ class Signal(UiInit, UiElements, Visuals):
         self._sig_th_max.setMaximum(d_max)
         self._sig_th_max.setValue(d_max)
         self._sig_th_max.setSingleStep(step)
+
+    def _fcn_on_creation(self):
+        """Run on GUI creation."""
+        # Settings :
+        self.QuickSettings.setCurrentIndex(0)
+        set_widget_size(self._app, self.q_widget, 23)
+        # Fix proportion of canvas :
+        # w, g = get_screen_size(self._app)
+        # self._signal_canvas.wc.width_max = w / 2
+        # self._grid_canvas.wc.width_max = w / 2
         # Display / hide grid and signal :
         self._fcn_menu_disp_grid()
         self._fcn_menu_disp_signal()
         # Set signal data :
         self._fcn_set_signal(force=True)
+        # Annotations :
+        self._fcn_annot_appear()
         # Update cameras :
         self.update_cameras()
 
@@ -236,6 +296,34 @@ class Signal(UiInit, UiElements, Visuals):
     def screenshot(self):
         """Take a screenshot of the scene."""
         pass
+
+    def set_xlim(self, xstart, xend):
+        """Fix limits of the x-axis.
+
+        Parameters
+        ----------
+        xstart : float
+            Starting point of the x-axis.
+        xend : float
+            Ending point of the x-axis
+        """
+        self._signal_canvas.camera.rect.left = xstart
+        self._signal_canvas.camera.rect.right = xend
+        self._signal_canvas.update()
+
+    def set_ylim(self, ystart, yend):
+        """Fix limits of the y-axis.
+
+        Parameters
+        ----------
+        ystart : float
+            Starting point of the y-axis.
+        yend : float
+            Ending point of the y-axis
+        """
+        self._signal_canvas.camera.rect.bottom = ystart
+        self._signal_canvas.camera.rect.top = yend
+        self._signal_canvas.update()
 
     def show(self):
         """Display the graphical user interface."""

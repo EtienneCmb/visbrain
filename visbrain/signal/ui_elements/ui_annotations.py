@@ -1,5 +1,8 @@
 """Signal annotations."""
 from PyQt5 import QtWidgets
+import numpy as np
+
+from ...utils import textline2color
 
 __all__ = ('UiAnnotations')
 
@@ -9,15 +12,23 @@ class UiAnnotations(object):
 
     def __init__(self):
         """Init."""
+        # Table :
         self._annot_table.itemSelectionChanged.connect(self._fcn_annot_goto)
-        # Table edited :
         self._annot_table.cellChanged.connect(self._fcn_text_edited)
+        # Appearance :
+        self._annot_txtsz.valueChanged.connect(self._fcn_annot_appear)
+        self._annot_marksz.valueChanged.connect(self._fcn_annot_appear)
+        self._annot_color.editingFinished.connect(self._fcn_annot_appear)
+        self._annot_viz.clicked.connect(self._fcn_annot_appear)
 
     def _annotate_event(self, signal, coord, text="Enter annotation"):
         """Annotate event."""
         self.QuickSettings.setCurrentIndex(2)
+        self._annot_viz.setChecked(True)
         self._annot_table.setRowCount(self._annot_table.rowCount() + 1)
         rw = self._annot_table.rowCount() - 1
+        # Be sure to have latest text appearance properties :
+        self._fcn_annot_appear()
         # Add annotation :
         self._annot_table.setItem(rw, 0, QtWidgets.QTableWidgetItem(
             str(coord[0])))
@@ -66,3 +77,17 @@ class UiAnnotations(object):
             signal = self._annot_table.item(row, 2).text()
             text = self._annot_table.item(row, 3).text()
             self._signal.set_text(signal, coord, text)
+
+    def _fcn_annot_appear(self):
+        """Control annotations appearance."""
+        pos = self._signal._annot_mark._data['a_position']
+        self._signal._annot_mark._data = np.array([])
+        color = textline2color(self._annot_color.text())[1]
+        self._signal._annot_text.font_size = self._annot_txtsz.value()
+        self._signal._annot_text.color = color
+        self._signal._annot_mark.set_data(pos=pos, face_color=color,
+                                          size=self._annot_marksz.value(),
+                                          edge_width=0.)
+        self._signal._annot_text.update()
+        self._signal._annot_text.visible = self._annot_viz.isChecked()
+        self._signal._annot_mark.visible = self._annot_viz.isChecked()

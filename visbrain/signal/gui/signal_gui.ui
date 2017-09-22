@@ -97,9 +97,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-72</y>
-                <width>394</width>
-                <height>895</height>
+                <y>-84</y>
+                <width>405</width>
+                <height>907</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -129,107 +129,6 @@
                       </property>
                       <property name="text">
                        <string>title</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="label_29">
-                      <property name="font">
-                       <font>
-                        <italic>true</italic>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>ticks</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="2">
-                     <layout class="QGridLayout" name="gridLayout_2">
-                      <item row="0" column="0">
-                       <widget class="QLabel" name="label_21">
-                        <property name="font">
-                         <font>
-                          <italic>true</italic>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>Text</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="label_22">
-                        <property name="font">
-                         <font>
-                          <italic>true</italic>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>Font
-size</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QLineEdit" name="_sig_title">
-                        <property name="placeholderText">
-                         <string>Title for the signal layout</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QDoubleSpinBox" name="_sig_title_fz">
-                        <property name="decimals">
-                         <number>1</number>
-                        </property>
-                        <property name="minimum">
-                         <double>0.100000000000000</double>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="Line" name="line_3">
-                      <property name="orientation">
-                       <enum>Qt::Vertical</enum>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="label_3">
-                      <property name="font">
-                       <font>
-                        <italic>true</italic>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>label</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="2">
-                     <widget class="QDoubleSpinBox" name="_sig_ticks_fz">
-                      <property name="decimals">
-                       <number>1</number>
-                      </property>
-                      <property name="minimum">
-                       <double>0.100000000000000</double>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="Line" name="line_4">
-                      <property name="orientation">
-                       <enum>Qt::Vertical</enum>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="2">
-                     <widget class="QLineEdit" name="_axis_color">
-                      <property name="placeholderText">
-                       <string>black, #ab4642, (0, 0, 0)...</string>
                       </property>
                      </widget>
                     </item>
@@ -298,6 +197,23 @@ size</string>
                       </item>
                      </layout>
                     </item>
+                    <item row="3" column="1">
+                     <widget class="Line" name="line_10">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2">
+                     <widget class="QDoubleSpinBox" name="_sig_ticks_fz">
+                      <property name="decimals">
+                       <number>1</number>
+                      </property>
+                      <property name="minimum">
+                       <double>0.100000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="3" column="0">
                      <widget class="QLabel" name="label_20">
                       <property name="font">
@@ -311,6 +227,90 @@ color</string>
                       </property>
                      </widget>
                     </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_29">
+                      <property name="font">
+                       <font>
+                        <italic>true</italic>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>ticks</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_3">
+                      <property name="font">
+                       <font>
+                        <italic>true</italic>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>label</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2">
+                     <widget class="QLineEdit" name="_axis_color">
+                      <property name="placeholderText">
+                       <string>black, #ab4642, (0, 0, 0)...</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <layout class="QGridLayout" name="gridLayout_2">
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_21">
+                        <property name="font">
+                         <font>
+                          <italic>true</italic>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Text</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QLabel" name="label_22">
+                        <property name="font">
+                         <font>
+                          <italic>true</italic>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Font
+size</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QLineEdit" name="_sig_title">
+                        <property name="placeholderText">
+                         <string>Title for the signal layout</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QDoubleSpinBox" name="_sig_title_fz">
+                        <property name="decimals">
+                         <number>1</number>
+                        </property>
+                        <property name="minimum">
+                         <double>0.100000000000000</double>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="Line" name="line_4">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="2" column="1">
                      <widget class="Line" name="line_21">
                       <property name="orientation">
@@ -318,10 +318,37 @@ color</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="1">
-                     <widget class="Line" name="line_10">
+                    <item row="1" column="1">
+                     <widget class="Line" name="line_3">
                       <property name="orientation">
                        <enum>Qt::Vertical</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_9">
+                      <property name="font">
+                       <font>
+                        <italic>true</italic>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Signal
+color</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="Line" name="line_9">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="2">
+                     <widget class="QLineEdit" name="_sig_color">
+                      <property name="placeholderText">
+                       <string>black, #ab4642, (0, 0, 0)...</string>
                       </property>
                      </widget>
                     </item>
@@ -491,32 +518,13 @@ color</string>
                     </property>
                    </spacer>
                   </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_9">
-                    <property name="font">
-                     <font>
-                      <italic>true</italic>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Signal</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="Line" name="line_9">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="4" column="0" colspan="3">
                    <widget class="QStackedWidget" name="_PlottingForm">
                     <property name="frameShape">
                      <enum>QFrame::NoFrame</enum>
                     </property>
                     <property name="currentIndex">
-                     <number>4</number>
+                     <number>3</number>
                     </property>
                     <widget class="QWidget" name="line">
                      <layout class="QGridLayout" name="gridLayout_9">
@@ -1327,7 +1335,14 @@ color</string>
                           </widget>
                          </item>
                          <item>
-                          <widget class="QDoubleSpinBox" name="_sig_climin"/>
+                          <widget class="QDoubleSpinBox" name="_sig_climin">
+                           <property name="minimum">
+                            <double>-1000000000.000000000000000</double>
+                           </property>
+                           <property name="maximum">
+                            <double>1000000000.000000000000000</double>
+                           </property>
+                          </widget>
                          </item>
                          <item>
                           <spacer name="horizontalSpacer_23">
@@ -1365,7 +1380,14 @@ color</string>
                           </widget>
                          </item>
                          <item>
-                          <widget class="QDoubleSpinBox" name="_sig_climax"/>
+                          <widget class="QDoubleSpinBox" name="_sig_climax">
+                           <property name="minimum">
+                            <double>-1000000000.000000000000000</double>
+                           </property>
+                           <property name="maximum">
+                            <double>1000000000.000000000000000</double>
+                           </property>
+                          </widget>
                          </item>
                          <item>
                           <spacer name="horizontalSpacer_24">
@@ -1519,13 +1541,6 @@ color</string>
                       </item>
                      </layout>
                     </widget>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QLineEdit" name="_sig_color">
-                    <property name="placeholderText">
-                     <string>black, #ab4642, (0, 0, 0)...</string>
-                    </property>
                    </widget>
                   </item>
                  </layout>
@@ -2027,6 +2042,114 @@ type</string>
                <string>Text</string>
               </property>
              </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="_annot_viz">
+             <property name="title">
+              <string>Appearance</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_18">
+              <item row="1" column="1">
+               <widget class="Line" name="line_33">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLineEdit" name="_annot_color">
+                <property name="placeholderText">
+                 <string>black, #ab4642, (0, 0, 0)...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_35">
+                <property name="font">
+                 <font>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Text size</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QDoubleSpinBox" name="_annot_txtsz">
+                <property name="decimals">
+                 <number>1</number>
+                </property>
+                <property name="minimum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>500.000000000000000</double>
+                </property>
+                <property name="value">
+                 <double>14.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="Line" name="line_35">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="Line" name="line_32">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_38">
+                <property name="font">
+                 <font>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Marker size</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_40">
+                <property name="font">
+                 <font>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Color</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QDoubleSpinBox" name="_annot_marksz">
+                <property name="minimum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>500.000000000000000</double>
+                </property>
+                <property name="value">
+                 <double>13.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>

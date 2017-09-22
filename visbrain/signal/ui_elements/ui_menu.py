@@ -1,7 +1,6 @@
 """Manu interaction."""
 import os
 import numpy as np
-from PyQt5 import QtWidgets
 
 from ...utils import ScreenshotPopup, HelpMenu
 from ...io import (dialogSave, dialogLoad, write_fig_pyqt, write_fig_canvas,
@@ -122,5 +121,4 @@ class UiScreenshot(object):
             elif kwargs['canvas'] == 'Signal':
                 c = self._signal_canvas.canvas
             del kwargs['entire'], kwargs['canvas']
-            w = None
-            write_fig_canvas(filename, c, widget=w, **kwargs)
+            write_fig_canvas(filename, c, widget=None, **kwargs)

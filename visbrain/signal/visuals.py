@@ -21,13 +21,13 @@ class SignalAnnotations(object):
         self._annotations = {}
         self._annotations_txt = {}
         # Create markers for annotations :
-        pos = np.random.rand(2, 2)
+        pos = np.random.rand(2, 3)
         self._annot_mark = scene.visuals.Markers(pos=pos, parent=parent)
         self._annot_mark.visible = False
         # Create text for annotations :
         self._annot_text = scene.visuals.Text(parent=parent, anchor_x='left',
                                               bold=True, font_size=14.)
-        tr = (self._time.max() - self._time.min()) / 100.
+        tr = (self._time.max() - self._time.min()) / 50.
         self._annot_text.transform = vist.STTransform(translate=(tr, 0., 0.))
         self._annot_text.visible = False
 
@@ -67,7 +67,6 @@ class SignalAnnotations(object):
         if row is not None:
             self._annotations_txt[signal][row] = text
             self._annot_text.text = text
-            self._annot_text.color = color2vb('#ab4642')
 
     def select_annotation(self, signal, coord):
         """Select an annotation."""
@@ -77,7 +76,6 @@ class SignalAnnotations(object):
         if is_coord:
             # Set text and position to scene.visuals.Text() :
             self._annot_text.text = self._annotations_txt[signal][row]
-            self._annot_text.color = color2vb('#ab4642')
             self._annot_text.pos = np.append(coord, -20).astype(np.float32)
         # Set text visible / hide :
         self._annot_text.visible = is_coord
@@ -136,8 +134,7 @@ class SignalVisual(SignalAnnotations):
         Parent of the mesh.
     """
 
-    def __init__(self, time, sf, sh, axis, form='line', color='black', lw=2.,
-                 symbol='o', size=10., nbins=10, line_rendering='gl',
+    def __init__(self, time, sf, sh, axis, form='line', line_rendering='gl',
                  parent=None):
         """Init."""
         self.form = form
@@ -145,11 +142,6 @@ class SignalVisual(SignalAnnotations):
         self._sf = sf
         self._axis = axis
         self._index = 0  # selected index of the 3-d array
-        self.color = color2vb(color)
-        self.lw = lw
-        self.nbins = nbins
-        self.symbol = symbol
-        self.size = size
         self.rect = (0., 0., 1., 1.)
         self._prep = PrepareData(way='filtfilt')
         # Build navigation index :
@@ -163,10 +155,9 @@ class SignalVisual(SignalAnnotations):
         # Create visuals :
         pos = np.random.rand(2, 2)
         posh = np.random.rand(2,)
-        self._th = scene.visuals.Line(pos=pos, name='threshold', width=lw,
-                                      parent=parent)
+        self._th = scene.visuals.Line(pos=pos, name='threshold', parent=parent)
         self._line = scene.visuals.Line(pos=pos, name='line', parent=parent,
-                                        width=lw, method=line_rendering)
+                                        method=line_rendering)
         self._mark = scene.visuals.Markers(pos=pos, name='marker',
                                            parent=parent)
         self._hist = scene.visuals.Histogram(data=posh, orientation='h',
@@ -183,8 +174,8 @@ class SignalVisual(SignalAnnotations):
         lst.insert(self._axis, ':')
         return '(' + ', '.join(lst) + ')'
 
-    def set_data(self, data, index, color=None, lw=None, nbins=None,
-                 symbol=None, size=None, form='line', th=None, norm=None,
+    def set_data(self, data, index, color='black', lw=2., nbins=10,
+                 symbol='disc', size=10., form='line', th=None, norm=None,
                  window=None, overlap=0., baseline=None, clim=None,
                  cmap='viridis', interpolation='gaussian', nperseg=256,
                  noverlap=128):
@@ -222,11 +213,7 @@ class SignalVisual(SignalAnnotations):
         # Update variable :
         self.form = form
         self._index = index
-        self.color = color if color is not None else self.color
-        self.lw = lw if lw is not None else self.lw
-        self.nbins = nbins if nbins is not None else self.nbins
-        self.symbol = symbol if symbol is not None else self.symbol
-        self.size = size if size is not None else self.size
+        color = color2vb(color)
 
         # Get data index :
         if data.ndim == 1:
@@ -256,7 +243,7 @@ class SignalVisual(SignalAnnotations):
                     pos = np.c_[f[fidx_1:-fidx_sf4], pxx[fidx_1:-fidx_sf4]]
                 # Threshold :
                 is_th = isinstance(th, (tuple, list, np.ndarray))
-                col = color2vb(self.color, length=pos.shape[0])
+                col = color2vb(color, length=pos.shape[0])
                 if is_th:
                     # Build threshold segments :
                     t_min, t_max = self._time.min(), self._time.max()
@@ -269,12 +256,11 @@ class SignalVisual(SignalAnnotations):
                     cond = np.logical_or(_data < th[0], _data > th[1])
                     col[cond, :] = color2vb('#ab4642')
                 self._th.visible = is_th
-                self._line.set_data(pos, width=self.lw, color=col)
+                self._line.set_data(pos, width=lw, color=col)
                 self._line.update()
             else:
-                self._mark.set_data(pos, face_color=self.color,
-                                    symbol=self.symbol, size=self.size,
-                                    edge_width=0.)
+                self._mark.set_data(pos, face_color=color, symbol=symbol,
+                                    size=size, edge_width=0.)
                 self._mark.update()
             # Get camera rectangle :
             t_min, t_max = pos[:, 0].min(), pos[:, 0].max()
@@ -284,14 +270,14 @@ class SignalVisual(SignalAnnotations):
                          d_max - d_min + 2 * off)
         elif form == 'histogram':  # histogram
             # Compute the mesh :
-            mesh = scene.visuals.Histogram(_data, self.nbins)
+            mesh = scene.visuals.Histogram(_data, nbins)
             # Get the vertices and faces of the mesh :
             vert = mesh.mesh_data.get_vertices()
             faces = mesh.mesh_data.get_faces()
             # Pass vertices and faces to the histogram :
             self._hist.set_data(vert, faces, color=color)
             # Compute the histogram :
-            raw, xvec = np.histogram(_data, self.nbins)
+            raw, xvec = np.histogram(_data, nbins)
             # Get camera rectangle :
             t_min, t_max = xvec.min(), xvec.max()
             d_min, d_max = 0.9 * raw[np.nonzero(raw)].min(), 1.01 * raw.max()
@@ -318,14 +304,16 @@ class SignalVisual(SignalAnnotations):
             c = self.get_event_coord(name)
             z = np.full((c.shape[0],), -10.)
             c = np.c_[c, z].astype(np.float32)
-            self._annot_mark.set_data(c, face_color=color2vb('#ab4642'),
-                                      edge_width=0., size=13)
+            msize = self._annot_mark._data['a_size'][0]
+            mcolor = self._annot_mark._data['a_bg_color'][0, :]
+            self._annot_mark.set_data(c, face_color=mcolor, edge_width=0.,
+                                      size=msize)
         self._annot_mark.visible = is_annotated
         self._annot_text.visible = is_annotated
 
     def clean_annotations(self):
         """Clean annotations."""
-        self._annot_mark.set_data(pos=np.random.rand(1, 2))
+        self._annot_mark.set_data(pos=np.random.rand(2, 2))
         self._annotations = {}
         self._annotations_txt = {}
 
@@ -355,8 +343,8 @@ class Visuals(object):
     ----------
     """
 
-    def __init__(self, data, time, sf, axis, form, color, lw, symbol, size,
-                 nbins, line_rendering, parent_grid, parent_signal):
+    def __init__(self, data, time, sf, axis, line_rendering, parent_grid,
+                 parent_signal):
         """Init."""
         # ========================== CHECK ==========================
         # ----------- AXIS -----------
@@ -378,8 +366,6 @@ class Visuals(object):
             self._grid.parent = parent_grid
 
         # ========================== SIGNAL ==========================
-        self._signal = SignalVisual(time, sf, data.shape, axis, form=form,
-                                    color=color, lw=lw, symbol=symbol,
-                                    size=size, nbins=nbins,
+        self._signal = SignalVisual(time, sf, data.shape, axis,
                                     line_rendering=line_rendering,
                                     parent=parent_signal)
