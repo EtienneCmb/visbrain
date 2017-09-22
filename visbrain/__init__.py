@@ -10,9 +10,10 @@ Right now, visbrain contains five modules :
 * Brain : visualize EEG/MEG/Intracranial data and connectivity in a standard
   MNI 3D brain.
 * Sleep : visualize polysomnographic data and hypnogram edition.
-* Ndviz : visualize multidimensional data and basic plotting forms.
+* Signal : data mining module for signal inspection.
 * Figure : figure-layout for high-quality publication-like figures.
 * Colorbar : a colorbar editor
+* Topo : topographic representations
 
 See etiennecmb.github.io/visbrain for a complete and step-by step documentation
 """
@@ -22,13 +23,11 @@ import sys
 from .brain import Brain
 from .colorbar import Colorbar
 from .figure import Figure
-from .ndviz import Ndviz
 from .sleep import Sleep
 from .topo import Topo
 from .signal import Signal
 
-__all__ = ['Brain', 'Colorbar', 'Figure', 'Ndviz', 'Sleep', 'Topo',
-           'Signal']
+__all__ = ['Brain', 'Colorbar', 'Figure', 'Sleep', 'Topo', 'Signal']
 __version__ = "0.3.3"
 
 # PyQt5 crash if an error occured. This small function fix it for all modules

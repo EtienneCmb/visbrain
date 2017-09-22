@@ -29,9 +29,9 @@ def test_import_sleep():
     from visbrain import Sleep
 
 
-def test_import_ndviz():
-    """Import the Ndviz module."""
-    from visbrain import Ndviz
+def test_import_signal():
+    """Import the Signal module."""
+    from visbrain import Signal
 
 
 def test_import_figure():
@@ -42,3 +42,8 @@ def test_import_figure():
 def test_import_topo():
     """Import the Topo module."""
     from visbrain import Topo
+
+
+def test_import_topo():
+    """Import the Topo module."""
+    from visbrain import Colorbar
