@@ -22,8 +22,12 @@ data, _ = generate_eeg(sf=sf, n_pts=n_pts, n_trials=n_trials, smooth=200,
 """Define a dictionary with interface customization entries
 """
 kwargs = {'xlabel': 'xlabel', 'ylabel': 'ylabel', 'title': 'title',
-          'color': 'lightgray', 'symbol': 'x', 'title_font_size': 20,
-          'axis_font_size': 18, 'tick_font_size': 8, 'axis_color': 'white',
-          'bgcolor': (.1, .1, .1), 'form': 'marker'}
+          'color': 'lightgray', 'marker_symbol': 'x', 'title_font_size': 20,
+          'hist_nbins': 100, 'line_lw': 2.5, 'tf_norm': 3,
+          'tf_interp': 'nearest', 'tf_cmap': 'Spectral_r',
+          'tf_baseline': (250, 750), 'tf_av_window': 100, 'tf_av_overlap': .5,
+          'tf_clim': (-.5, .5), 'axis_font_size': 18, 'tick_font_size': 8,
+          'axis_color': 'white', 'bgcolor': (.1, .1, .1), 'form': 'marker'}
 
-Signal(data, sf=sf, axis=-1, **kwargs).show()
+sg = Signal(data, sf=sf, axis=-1, **kwargs)
+sg.show()
