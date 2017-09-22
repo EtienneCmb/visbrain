@@ -10,7 +10,7 @@ Documentation
     brain
     sleep
     topo
-    ndviz
+    signal
     colorbar
     figure
     utils

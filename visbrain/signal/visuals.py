@@ -252,7 +252,7 @@ class SignalVisual(SignalAnnotations):
                     self._th.set_data(pos_th, connect='segments',
                                       color=color2vb('#ab4642'))
                     # Build line color :
-                    col = color2vb(self.color, length=len(_data))
+                    col = color2vb(color, length=len(_data))
                     cond = np.logical_or(_data < th[0], _data > th[1])
                     col[cond, :] = color2vb('#ab4642')
                 self._th.visible = is_th
