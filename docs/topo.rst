@@ -47,8 +47,8 @@ Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.
 API
 ---
 
-Main Topo class
-~~~~~~~~~~~~~~~
+Topo class
+~~~~~~~~~~
 
 .. currentmodule:: visbrain.topo.topo
 
