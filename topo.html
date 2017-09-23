@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. Topo &mdash; visbrain 0.3.3 documentation</title>
+  <title>4. Topo &mdash; visbrain 0.3.3 documentation</title>
   
 
   
@@ -41,8 +41,8 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="visbrain 0.3.3 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
-        <link rel="next" title="4. Ndviz" href="ndviz.html"/>
-        <link rel="prev" title="2. Sleep" href="sleep.html"/> 
+        <link rel="next" title="5. Colorbar" href="colorbar.html"/>
+        <link rel="prev" title="3. Signal" href="signal.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -103,27 +103,26 @@
 <li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="brain.html">1. Brain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sleep.html">2. Sleep</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">3. Topo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#description">3.1. Description</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#help">3.1.1. Help</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#main-features">3.1.2. Main features</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#import-and-use-topo">3.1.3. Import and use Topo</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examples-and-datasets">3.1.4. Examples and datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="signal.html">3. Signal</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4. Topo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">4.1. Description</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#help">4.1.1. Help</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#main-features">4.1.2. Main features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#import-and-use-topo">4.1.3. Import and use Topo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples-and-datasets">4.1.4. Examples and datasets</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#api">3.2. API</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#main-topo-class">3.2.1. Main Topo class</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#methods">3.2.2. Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api">4.2. API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#topo-class">4.2.1. Topo class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#methods">4.2.2. Methods</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="ndviz.html">4. Ndviz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. Colorbar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="figure.html">6. Figure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">7. Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html">8. I/O</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vbexport.html">9. Screenshot</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -174,7 +173,7 @@
         
           <li><a href="documentation.html">Documentation</a> &raquo;</li>
         
-      <li>3. Topo</li>
+      <li>4. Topo</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -194,22 +193,22 @@
            <div itemprop="articleBody">
             
   <div class="section" id="topo">
-<span id="id1"></span><h1>3. Topo<a class="headerlink" href="#topo" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>4. Topo<a class="headerlink" href="#topo" title="Permalink to this headline">¶</a></h1>
 <div class="figure align-center">
 <img alt="_images/topo_ico.png" src="_images/topo_ico.png" />
 </div>
 <div class="section" id="description">
-<h2>3.1. Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<h2>4.1. Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p><em>Topo</em> is a GUI based module for topographic representations.</p>
 <div class="figure align-center">
 <img alt="_images/ex_topoplot_plotting_properties1.png" src="_images/ex_topoplot_plotting_properties1.png" />
 </div>
 <div class="section" id="help">
-<h3>3.1.1. Help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h3>
+<h3>4.1.1. Help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h3>
 <p>If you need help with the <em>Topo</em> module, ask your questions in the dedicated <a class="reference external" href="https://gitter.im/visbrain-python/Topo?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">gitter Topo chat</a></p>
 </div>
 <div class="section" id="main-features">
-<h3>3.1.2. Main features<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h3>
+<h3>4.1.2. Main features<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><dl class="first docutils">
 <dt><strong>Display topographic map</strong></dt>
@@ -233,42 +232,39 @@
 </ul>
 </div>
 <div class="section" id="import-and-use-topo">
-<h3>3.1.3. Import and use Topo<a class="headerlink" href="#import-and-use-topo" title="Permalink to this headline">¶</a></h3>
+<h3>4.1.3. Import and use Topo<a class="headerlink" href="#import-and-use-topo" title="Permalink to this headline">¶</a></h3>
 <p>The <em>Topo</em> module can be imported as follow :</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Topo</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="examples-and-datasets">
-<h3>3.1.4. Examples and datasets<a class="headerlink" href="#examples-and-datasets" title="Permalink to this headline">¶</a></h3>
+<h3>4.1.4. Examples and datasets<a class="headerlink" href="#examples-and-datasets" title="Permalink to this headline">¶</a></h3>
 <p>Visit this page for a set of <a class="reference external" href="http://visbrain.org/auto_examples/index.html#topoplot-examples">examples</a>.</p>
 </div>
 </div>
 <div class="section" id="api">
-<h2>3.2. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="main-topo-class">
-<h3>3.2.1. Main Topo class<a class="headerlink" href="#main-topo-class" title="Permalink to this headline">¶</a></h3>
+<h2>4.2. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="topo-class">
+<h3>4.2.1. Topo class<a class="headerlink" href="#topo-class" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="visbrain.topo.topo.Topo">
 <em class="property">class </em><code class="descclassname">visbrain.topo.topo.</code><code class="descname">Topo</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/topo/topo.html#Topo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.topo.topo.Topo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass.</p>
+<dd><p>Display topographic representation.</p>
 <p class="rubric">Methods</p>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="40%" />
-<col width="60%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>show()</strong></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">show</span></code>()</td>
 <td>Display the graphical user interface.</td>
 </tr>
-<tr class="row-even"><td><strong>quit()</strong></td>
-<td>Quit the interface.</td>
-</tr>
-<tr class="row-odd"><td><strong>add_topoplot()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.topo.topo.Topo.add_topoplot" title="visbrain.topo.topo.Topo.add_topoplot"><code class="xref py py-obj docutils literal"><span class="pre">add_topoplot</span></code></a>(name,&nbsp;data[,&nbsp;xyz,&nbsp;channels,&nbsp;…])</td>
 <td>Add a subplot embedded in a subplot.</td>
 </tr>
-<tr class="row-even"><td><strong>add_shared_colorbar()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.topo.topo.Topo.add_shared_colorbar" title="visbrain.topo.topo.Topo.add_shared_colorbar"><code class="xref py py-obj docutils literal"><span class="pre">add_shared_colorbar</span></code></a>(name[,&nbsp;cmap,&nbsp;clim,&nbsp;…])</td>
 <td>Add a shared colorbar across subplots.</td>
 </tr>
 </tbody>
@@ -277,9 +273,9 @@
 
 </div>
 <div class="section" id="methods">
-<h3>3.2.2. Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<h3>4.2.2. Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="add-topoplot">
-<h4>3.2.2.1. Add topoplot<a class="headerlink" href="#add-topoplot" title="Permalink to this headline">¶</a></h4>
+<h4>4.2.2.1. Add topoplot<a class="headerlink" href="#add-topoplot" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.topo.topo.Topo.add_topoplot">
 <code class="descclassname">Topo.</code><code class="descname">add_topoplot</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz=None</em>, <em>channels=None</em>, <em>system=’cartesian’</em>, <em>unit=’degree’</em>, <em>title=None</em>, <em>title_color=’black’</em>, <em>title_size=5.0</em>, <em>line_color=’black’</em>, <em>line_width=2.0</em>, <em>chan_size=2.0</em>, <em>chan_offset=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>chan_mark_color=’white’</em>, <em>chan_mark_symbol=’disc’</em>, <em>chan_txt_color=’black’</em>, <em>bgcolor=’white’</em>, <em>cbar=True</em>, <em>cblabel=None</em>, <em>cb_txt_size=4.0</em>, <em>levels=None</em>, <em>level_colors=’white’</em>, <em>cmap=’viridis’</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>margin=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/topo/topo.html#Topo.add_topoplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.topo.topo.Topo.add_topoplot" title="Permalink to this definition">¶</a></dt>
@@ -443,7 +439,7 @@ using the over parameter.</p>
 
 </div>
 <div class="section" id="add-shared-colorbar-topoplot">
-<h4>3.2.2.2. Add shared colorbar topoplot<a class="headerlink" href="#add-shared-colorbar-topoplot" title="Permalink to this headline">¶</a></h4>
+<h4>4.2.2.2. Add shared colorbar topoplot<a class="headerlink" href="#add-shared-colorbar-topoplot" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.topo.topo.Topo.add_shared_colorbar">
 <code class="descclassname">Topo.</code><code class="descname">add_shared_colorbar</code><span class="sig-paren">(</span><em>name</em>, <em>cmap=’viridis’</em>, <em>clim=(0</em>, <em>1)</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under=’gray’</em>, <em>over=’red’</em>, <em>cblabel=”</em>, <em>cbtxtsz=5.0</em>, <em>cbtxtsh=2.3</em>, <em>txtcolor=’black’</em>, <em>txtsz=3.0</em>, <em>txtsh=1.2</em>, <em>width=0.17</em>, <em>border=True</em>, <em>bw=2.0</em>, <em>limtxt=True</em>, <em>bgcolor=’white’</em>, <em>ndigits=2</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>rect=(-1.2</em>, <em>-1.2</em>, <em>2.4</em>, <em>2.4)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/topo/topo.html#Topo.add_shared_colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.topo.topo.Topo.add_shared_colorbar" title="Permalink to this definition">¶</a></dt>
@@ -566,10 +562,10 @@ to translate or scale.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="ndviz.html" class="btn btn-neutral float-right" title="4. Ndviz" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="colorbar.html" class="btn btn-neutral float-right" title="5. Colorbar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sleep.html" class="btn btn-neutral" title="2. Sleep" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="signal.html" class="btn btn-neutral" title="3. Signal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

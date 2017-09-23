@@ -180,9 +180,9 @@
 
 
 <div class="viewcode-block" id="write_fig_hyp"><a class="viewcode-back" href="../../../io.html#visbrain.io.write_image.write_fig_hyp">[docs]</a><span class="k">def</span> <span class="nf">write_fig_hyp</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">hypno</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">tstartsec</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ascolor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">colors</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;#8bbf56&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;#56bf8b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;#aabcce&#39;</span><span class="p">,</span>
-                          <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;#405c79&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;#0b1c2c&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;#bf5656&#39;</span><span class="p">}):</span>
-    <span class="sd">&quot;&quot;&quot;Export hypnogram to a 600 dpi png figure.</span>
+                  <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;#8bbf56&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;#56bf8b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;#aabcce&#39;</span><span class="p">,</span>
+                                   <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;#405c79&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;#0b1c2c&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;#bf5656&#39;</span><span class="p">}):</span>
+    <span class="sd">&quot;&quot;&quot;Export hypnogram to a high-res png figure.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -190,13 +190,20 @@
 <span class="sd">        Filename (with full path) to sleep dataset.</span>
 <span class="sd">    hypno : array_like</span>
 <span class="sd">        Hypnogram vector</span>
-<span class="sd">    sf  : float | 100.</span>
+<span class="sd">    sf : float</span>
 <span class="sd">        The sampling frequency of displayed elements (could be the</span>
 <span class="sd">        down-sampling frequency)</span>
-<span class="sd">    tstartsec: int</span>
+<span class="sd">    tstartsec : int</span>
 <span class="sd">        Record starting time given in seconds.</span>
-<span class="sd">    grid : boolean, optional (def False)</span>
+<span class="sd">    grid : bool | False</span>
 <span class="sd">        Plot X and Y grid.</span>
+<span class="sd">    ascolor : bool | False</span>
+<span class="sd">        Plot in color</span>
+<span class="sd">    dpi : int | 600</span>
+<span class="sd">        Dots per inches</span>
+<span class="sd">    color : dict | {}</span>
+<span class="sd">        Color for each sleep stage. Default is : {-1: &#39;#8bbf56&#39;, 0: &#39;#56bf8b&#39;,</span>
+<span class="sd">        1: &#39;#aabcce&#39;, 2: &#39;#405c79&#39;, 3: &#39;#0b1c2c&#39;, 4: &#39;#bf5656&#39;}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
     <span class="kn">import</span> <span class="nn">datetime</span>
@@ -293,7 +300,7 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_smart_bounds</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Save as 600 dpi .png</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span></div>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="write_fig_canvas"><a class="viewcode-back" href="../../../io.html#visbrain.io.write_image.write_fig_canvas">[docs]</a><span class="k">def</span> <span class="nf">write_fig_canvas</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>

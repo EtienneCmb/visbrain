@@ -404,21 +404,25 @@ Examples demonstrating figure layout.
 
     <div style='clear:both'></div>
 
-Ndviz Examples
---------------
+Signal Examples
+---------------
 
-Examples demonstrating basic plotting of multi-dimensional data.
+Examples demonstrating how to use the Signal module.
+
+.. contents:: Contents
+   :local:
+   :depth: 2
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control simple 1d signal.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot a basic vector. Then, you can visualize this vector as a continuous line, markers, histogr...">
 
 .. only:: html
 
-    .. figure:: /auto_examples/ndviz/images/thumb/sphx_glr_0_basic_1d_signal_thumb.png
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_00_1d_signal_thumb.png
 
-        :ref:`sphx_glr_auto_examples_ndviz_0_basic_1d_signal.py`
+        :ref:`sphx_glr_auto_examples_signal_00_1d_signal.py`
 
 .. raw:: html
 
@@ -428,17 +432,17 @@ Examples demonstrating basic plotting of multi-dimensional data.
 .. toctree::
    :hidden:
 
-   /auto_examples/ndviz/0_basic_1d_signal
+   /auto_examples/signal/00_1d_signal
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control a 2D signal.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Dispose a two dimensional array of data into a grid.">
 
 .. only:: html
 
-    .. figure:: /auto_examples/ndviz/images/thumb/sphx_glr_1_2d_signal_thumb.png
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_01_2d_signals_thumb.png
 
-        :ref:`sphx_glr_auto_examples_ndviz_1_2d_signal.py`
+        :ref:`sphx_glr_auto_examples_signal_01_2d_signals.py`
 
 .. raw:: html
 
@@ -448,17 +452,17 @@ Examples demonstrating basic plotting of multi-dimensional data.
 .. toctree::
    :hidden:
 
-   /auto_examples/ndviz/1_2d_signal
+   /auto_examples/signal/01_2d_signals
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control a ND signal.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot and inspect a 3D array of data.">
 
 .. only:: html
 
-    .. figure:: /auto_examples/ndviz/images/thumb/sphx_glr_2_Nd_signal_thumb.png
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_02_3d_signals_thumb.png
 
-        :ref:`sphx_glr_auto_examples_ndviz_2_Nd_signal.py`
+        :ref:`sphx_glr_auto_examples_signal_02_3d_signals.py`
 
 .. raw:: html
 
@@ -468,17 +472,17 @@ Examples demonstrating basic plotting of multi-dimensional data.
 .. toctree::
    :hidden:
 
-   /auto_examples/ndviz/2_Nd_signal
+   /auto_examples/signal/02_3d_signals
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example show how to display and control a ND signal.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Use custom color, font size...">
 
 .. only:: html
 
-    .. figure:: /auto_examples/ndviz/images/thumb/sphx_glr_3_just_for_fun_thumb.png
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_04_interface_customization_thumb.png
 
-        :ref:`sphx_glr_auto_examples_ndviz_3_just_for_fun.py`
+        :ref:`sphx_glr_auto_examples_signal_04_interface_customization.py`
 
 .. raw:: html
 
@@ -488,7 +492,47 @@ Examples demonstrating basic plotting of multi-dimensional data.
 .. toctree::
    :hidden:
 
-   /auto_examples/ndviz/3_just_for_fun
+   /auto_examples/signal/04_interface_customization
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Import annotations from a text file and annotate trials.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_05_annotations_thumb.png
+
+        :ref:`sphx_glr_auto_examples_signal_05_annotations.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/signal/05_annotations
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Export all of the time-frequency maps, psd of a dataset.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_06_screenshot_thumb.png
+
+        :ref:`sphx_glr_auto_examples_signal_06_screenshot.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/signal/06_screenshot
 .. raw:: html
 
     <div style='clear:both'></div>

@@ -1,0 +1,1014 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>vispy.app.canvas &mdash; visbrain 0.3.3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.3 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>vispy.app.canvas</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for vispy.app.canvas</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Copyright (c) 2015, Vispy Development Team.</span>
+<span class="c1"># Distributed under the (new) BSD License. See LICENSE.txt for more info.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">sleep</span>
+
+<span class="kn">from</span> <span class="nn">..util.event</span> <span class="k">import</span> <span class="n">EmitterGroup</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">WarningEmitter</span>
+<span class="kn">from</span> <span class="nn">..util.ptime</span> <span class="k">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">..util.dpi</span> <span class="k">import</span> <span class="n">get_dpi</span>
+<span class="kn">from</span> <span class="nn">..util</span> <span class="k">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">util_config</span>
+<span class="kn">from</span> <span class="nn">..ext.six</span> <span class="k">import</span> <span class="n">string_types</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">use_app</span>
+<span class="kn">from</span> <span class="nn">..gloo.context</span> <span class="k">import</span> <span class="p">(</span><span class="n">GLContext</span><span class="p">,</span> <span class="n">set_current_canvas</span><span class="p">,</span> <span class="n">forget_canvas</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..gloo</span> <span class="k">import</span> <span class="n">FrameBuffer</span><span class="p">,</span> <span class="n">RenderBuffer</span>
+
+
+<span class="c1"># todo: add functions for asking about current mouse/keyboard state</span>
+<span class="c1"># todo: add hover enter/exit events</span>
+<span class="c1"># todo: add focus events</span>
+
+
+<span class="k">class</span> <span class="nc">Canvas</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a GUI element with an OpenGL context</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    title : str</span>
+<span class="sd">        The widget title</span>
+<span class="sd">    size : (width, height)</span>
+<span class="sd">        The size of the window.</span>
+<span class="sd">    position : (x, y)</span>
+<span class="sd">        The position of the window in screen coordinates.</span>
+<span class="sd">    show : bool</span>
+<span class="sd">        Whether to show the widget immediately. Default False.</span>
+<span class="sd">    autoswap : bool</span>
+<span class="sd">        Whether to swap the buffers automatically after a draw event.</span>
+<span class="sd">        Default True. If True, the ``swap_buffers`` Canvas method will</span>
+<span class="sd">        be called last (by default) by the ``canvas.draw`` event handler.</span>
+<span class="sd">    app : Application | str</span>
+<span class="sd">        Give vispy Application instance to use as a backend.</span>
+<span class="sd">        (vispy.app is used by default.) If str, then an application</span>
+<span class="sd">        using the chosen backend (e.g., &#39;pyglet&#39;) will be created.</span>
+<span class="sd">        Note the canvas application can be accessed at ``canvas.app``.</span>
+<span class="sd">    create_native : bool</span>
+<span class="sd">        Whether to create the widget immediately. Default True.</span>
+<span class="sd">    vsync : bool</span>
+<span class="sd">        Enable vertical synchronization.</span>
+<span class="sd">    resizable : bool</span>
+<span class="sd">        Allow the window to be resized.</span>
+<span class="sd">    decorate : bool</span>
+<span class="sd">        Decorate the window. Default True.</span>
+<span class="sd">    fullscreen : bool | int</span>
+<span class="sd">        If False, windowed mode is used (default). If True, the default</span>
+<span class="sd">        monitor is used. If int, the given monitor number is used.</span>
+<span class="sd">    config : dict</span>
+<span class="sd">        A dict with OpenGL configuration options, which is combined</span>
+<span class="sd">        with the default configuration options and used to initialize</span>
+<span class="sd">        the context. See ``canvas.context.config`` for possible</span>
+<span class="sd">        options.</span>
+<span class="sd">    shared : Canvas | GLContext | None</span>
+<span class="sd">        An existing canvas or context to share OpenGL objects with.</span>
+<span class="sd">    keys : str | dict | None</span>
+<span class="sd">        Default key mapping to use. If &#39;interactive&#39;, escape and F11 will</span>
+<span class="sd">        close the canvas and toggle full-screen mode, respectively.</span>
+<span class="sd">        If dict, maps keys to functions. If dict values are strings,</span>
+<span class="sd">        they are assumed to be ``Canvas`` methods, otherwise they should</span>
+<span class="sd">        be callable.</span>
+<span class="sd">    parent : widget-object</span>
+<span class="sd">        The parent widget if this makes sense for the used backend.</span>
+<span class="sd">    dpi : float | None</span>
+<span class="sd">        Resolution in dots-per-inch to use for the canvas. If dpi is None,</span>
+<span class="sd">        then the value will be determined by querying the global config first,</span>
+<span class="sd">        and then the operating system.</span>
+<span class="sd">    always_on_top : bool</span>
+<span class="sd">        If True, try to create the window in always-on-top mode.</span>
+<span class="sd">    px_scale : int &gt; 0</span>
+<span class="sd">        A scale factor to apply between logical and physical pixels in addition</span>
+<span class="sd">        to the actual scale factor determined by the backend. This option</span>
+<span class="sd">        allows the scale factor to be adjusted for testing.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The `Canvas` receives the following events:</span>
+
+<span class="sd">        * initialize</span>
+<span class="sd">        * resize</span>
+<span class="sd">        * draw</span>
+<span class="sd">        * mouse_press</span>
+<span class="sd">        * mouse_release</span>
+<span class="sd">        * mouse_double_click</span>
+<span class="sd">        * mouse_move</span>
+<span class="sd">        * mouse_wheel</span>
+<span class="sd">        * key_press</span>
+<span class="sd">        * key_release</span>
+<span class="sd">        * stylus</span>
+<span class="sd">        * touch</span>
+<span class="sd">        * close</span>
+
+<span class="sd">    The ordering of the mouse_double_click, mouse_press, and mouse_release</span>
+<span class="sd">    events are not guaranteed to be consistent between backends. Only certain</span>
+<span class="sd">    backends natively support double-clicking (currently Qt and WX); on other</span>
+<span class="sd">    backends, they are detected manually with a fixed time delay.</span>
+<span class="sd">    This can cause problems with accessibility, as increasing the OS detection</span>
+<span class="sd">    time or using a dedicated double-click button will not be respected.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;VisPy canvas&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">),</span> <span class="n">position</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">autoswap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">create_native</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">vsync</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">resizable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">decorate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fullscreen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shared</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">always_on_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">px_scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">px_scale</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;size must be a 2-element list&#39;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fullscreen</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;fullscreen must be bool or int&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Initialize some values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_autoswap</span> <span class="o">=</span> <span class="n">autoswap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fps</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basetime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fps_callback</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fps_window</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_px_scale</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">px_scale</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dpi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dpi</span> <span class="o">=</span> <span class="n">util_config</span><span class="p">[</span><span class="s1">&#39;dpi&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dpi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dpi</span> <span class="o">=</span> <span class="n">get_dpi</span><span class="p">(</span><span class="n">raise_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dpi</span> <span class="o">=</span> <span class="n">dpi</span>
+
+        <span class="c1"># Create events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EmitterGroup</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                                   <span class="n">initialize</span><span class="o">=</span><span class="n">Event</span><span class="p">,</span>
+                                   <span class="n">resize</span><span class="o">=</span><span class="n">ResizeEvent</span><span class="p">,</span>
+                                   <span class="n">draw</span><span class="o">=</span><span class="n">DrawEvent</span><span class="p">,</span>
+                                   <span class="n">mouse_press</span><span class="o">=</span><span class="n">MouseEvent</span><span class="p">,</span>
+                                   <span class="n">mouse_release</span><span class="o">=</span><span class="n">MouseEvent</span><span class="p">,</span>
+                                   <span class="n">mouse_double_click</span><span class="o">=</span><span class="n">MouseEvent</span><span class="p">,</span>
+                                   <span class="n">mouse_move</span><span class="o">=</span><span class="n">MouseEvent</span><span class="p">,</span>
+                                   <span class="n">mouse_wheel</span><span class="o">=</span><span class="n">MouseEvent</span><span class="p">,</span>
+                                   <span class="n">key_press</span><span class="o">=</span><span class="n">KeyEvent</span><span class="p">,</span>
+                                   <span class="n">key_release</span><span class="o">=</span><span class="n">KeyEvent</span><span class="p">,</span>
+                                   <span class="n">stylus</span><span class="o">=</span><span class="n">Event</span><span class="p">,</span>
+                                   <span class="n">touch</span><span class="o">=</span><span class="n">Event</span><span class="p">,</span>
+                                   <span class="n">close</span><span class="o">=</span><span class="n">Event</span><span class="p">)</span>
+
+        <span class="c1"># Deprecated paint emitter</span>
+        <span class="n">emitter</span> <span class="o">=</span> <span class="n">WarningEmitter</span><span class="p">(</span><span class="s1">&#39;Canvas.events.paint and Canvas.on_paint are &#39;</span>
+                                 <span class="s1">&#39;deprecated; use Canvas.events.draw and &#39;</span>
+                                 <span class="s1">&#39;Canvas.on_draw instead.&#39;</span><span class="p">,</span>
+                                 <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;draw&#39;</span><span class="p">,</span>
+                                 <span class="n">event_class</span><span class="o">=</span><span class="n">DrawEvent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">paint</span><span class="o">=</span><span class="n">emitter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">paint</span><span class="p">)</span>
+
+        <span class="c1"># Get app instance</span>
+        <span class="k">if</span> <span class="n">app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">use_app</span><span class="p">(</span><span class="n">call_reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">Application</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">app</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid value for app </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">app</span><span class="p">)</span>
+
+        <span class="c1"># Check shared and context</span>
+        <span class="k">if</span> <span class="n">shared</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shared</span><span class="p">,</span> <span class="n">Canvas</span><span class="p">):</span>
+            <span class="n">shared</span> <span class="o">=</span> <span class="n">shared</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">shared</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shared</span><span class="p">,</span> <span class="n">GLContext</span><span class="p">):</span>
+            <span class="n">shared</span> <span class="o">=</span> <span class="n">shared</span><span class="o">.</span><span class="n">shared</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;shared must be a Canvas, not </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">shared</span><span class="p">))</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;config must be a dict, not </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">config</span><span class="p">))</span>
+
+        <span class="c1"># Create new context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_context</span> <span class="o">=</span> <span class="n">GLContext</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">shared</span><span class="p">)</span>
+
+        <span class="c1"># Deal with special keys</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+
+        <span class="c1"># store arguments that get set on Canvas init</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
+                      <span class="n">vsync</span><span class="o">=</span><span class="n">vsync</span><span class="p">,</span> <span class="n">resizable</span><span class="o">=</span><span class="n">resizable</span><span class="p">,</span> <span class="n">decorate</span><span class="o">=</span><span class="n">decorate</span><span class="p">,</span>
+                      <span class="n">fullscreen</span><span class="o">=</span><span class="n">fullscreen</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_context</span><span class="p">,</span>
+                      <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">always_on_top</span><span class="o">=</span><span class="n">always_on_top</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="c1"># Create widget now (always do this *last*, after all err checks)</span>
+        <span class="k">if</span> <span class="n">create_native</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_native</span><span class="p">()</span>
+
+            <span class="c1"># Now we&#39;re ready to become current</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_current</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s1">&#39;--vispy-fps&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">measure_fps</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">create_native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create the native widget if not already done so. If the widget</span>
+<span class="sd">        is already created, this function does nothing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># Make sure that the app is active</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">native</span>
+        <span class="c1"># Instantiate the backend with the right class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">backend_module</span><span class="o">.</span><span class="n">CanvasBackend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_kwargs</span><span class="p">)</span>
+        <span class="c1"># self._backend = set by BaseCanvasBackend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_kwargs</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Clean up</span>
+
+        <span class="c1"># Connect to draw event (append to the end)</span>
+        <span class="c1"># Process GLIR commands at each paint event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">flush_commands</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autoswap</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;swap_buffers&#39;</span><span class="p">),</span>
+                                     <span class="n">ref</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">keys</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">keys</span> <span class="o">!=</span> <span class="s1">&#39;interactive&#39;</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;keys, if string, must be &quot;interactive&quot;, &#39;</span>
+                                     <span class="s1">&#39;not </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">keys</span><span class="p">,))</span>
+
+                <span class="k">def</span> <span class="nf">toggle_fs</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fullscreen</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullscreen</span>
+                <span class="n">keys</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">escape</span><span class="o">=</span><span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="n">F11</span><span class="o">=</span><span class="n">toggle_fs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;keys must be a dict, str, or None&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># ensure all are callable</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">keys</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+                    <span class="n">new_val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">new_val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;value </span><span class="si">%s</span><span class="s1"> is not an attribute of &#39;</span>
+                                         <span class="s1">&#39;Canvas&#39;</span> <span class="o">%</span> <span class="n">val</span><span class="p">)</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">new_val</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Entry for key </span><span class="si">%s</span><span class="s1"> is not callable&#39;</span> <span class="o">%</span> <span class="n">key</span><span class="p">)</span>
+                <span class="c1"># convert to lower-case representation</span>
+                <span class="n">keys</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_keys_check</span> <span class="o">=</span> <span class="n">keys</span>
+
+            <span class="k">def</span> <span class="nf">keys_check</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">use_name</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">use_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys_check</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_keys_check</span><span class="p">[</span><span class="n">use_name</span><span class="p">]()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">key_press</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">keys_check</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The OpenGL context of the native widget</span>
+
+<span class="sd">        It gives access to OpenGL functions to call on this canvas object,</span>
+<span class="sd">        and to the shared context namespace.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_context</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The vispy Application instance on which this Canvas is based.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The native widget object on which this Canvas is based.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_get_native_canvas</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dpi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The physical resolution of the canvas in dots per inch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dpi</span>
+
+    <span class="nd">@dpi</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">dpi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dpi</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dpi</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Connect a function to an event</span>
+
+<span class="sd">        The name of the function</span>
+<span class="sd">        should be on_X, with X the name of the event (e.g. &#39;on_draw&#39;).</span>
+
+<span class="sd">        This method is typically used as a decorator on a function</span>
+<span class="sd">        definition for an event handler.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fun : callable</span>
+<span class="sd">            The function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get and check name</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">fun</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;on_&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;When connecting a function based on its name, &#39;</span>
+                             <span class="s1">&#39;the name should start with &quot;on_&quot;&#39;</span><span class="p">)</span>
+        <span class="n">eventname</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+        <span class="c1"># Get emitter</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">emitter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="n">eventname</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Event &quot;</span><span class="si">%s</span><span class="s1">&quot; not available on this canvas.&#39;</span> <span class="o">%</span>
+                <span class="n">eventname</span><span class="p">)</span>
+        <span class="c1"># Connect</span>
+        <span class="n">emitter</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fun</span><span class="p">)</span>
+
+    <span class="c1"># ---------------------------------------------------------------- size ---</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The size of canvas/window &quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_get_size</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_px_scale</span><span class="p">,</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_px_scale</span><span class="p">)</span>
+
+    <span class="nd">@size</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_set_size</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_px_scale</span><span class="p">,</span>
+                                             <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_px_scale</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">physical_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The physical size of the canvas/window, which may differ from the</span>
+<span class="sd">        size property on backends that expose HiDPI &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_get_physical_size</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pixel_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The ratio between the number of logical pixels, or &#39;points&#39;, and</span>
+<span class="sd">        the physical pixels on the device. In most cases this will be 1.0,</span>
+<span class="sd">        but on certain backends this will be greater than 1. This should be</span>
+<span class="sd">        used as a scaling factor when writing your own visualisations</span>
+<span class="sd">        with gloo (make a copy and multiply all your logical pixel values</span>
+<span class="sd">        by it). When writing Visuals or SceneGraph visualisations, this value</span>
+<span class="sd">        is exposed as `TransformSystem.px_scale`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">physical_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fullscreen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_get_fullscreen</span><span class="p">()</span>
+
+    <span class="nd">@fullscreen</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">fullscreen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fullscreen</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_set_fullscreen</span><span class="p">(</span><span class="n">fullscreen</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------ position ---</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The position of canvas/window relative to screen &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_get_position</span><span class="p">()</span>
+
+    <span class="nd">@position</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_set_position</span><span class="p">(</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># --------------------------------------------------------------- title ---</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The title of canvas/window &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_title</span>
+
+    <span class="nd">@title</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="c1"># ----------------------------------------------------------------- fps ---</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The fps of canvas/window, as the rate that events.draw is emitted</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fps</span>
+
+    <span class="k">def</span> <span class="nf">set_current</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make this the active GL canvas</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event : None</span>
+<span class="sd">            Not used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_set_current</span><span class="p">()</span>
+        <span class="n">set_current_canvas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">swap_buffers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Swap GL buffers such that the offscreen buffer becomes visible</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event : None</span>
+<span class="sd">            Not used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_swap_buffers</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show or hide the canvas</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        visible : bool</span>
+<span class="sd">            Make the canvas visible.</span>
+<span class="sd">        run : bool</span>
+<span class="sd">            Run the backend event loop.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_set_visible</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">run</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inform the backend that the Canvas needs to be redrawn</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event : None</span>
+<span class="sd">            Not used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_update</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the canvas</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This will usually destroy the GL context. For Qt, the context</span>
+<span class="sd">        (and widget) will be destroyed only if the widget is top-level.</span>
+<span class="sd">        To avoid having the widget destroyed (more like standard Qt</span>
+<span class="sd">        behavior), consider making the widget a sub-widget.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_close</span><span class="p">()</span>
+        <span class="n">forget_canvas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_fps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the fps after every window&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basetime</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">diff</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fps_window</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_count</span> <span class="o">/</span> <span class="n">diff</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_basetime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_frame_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fps_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fps</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">measure_fps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.1f</span><span class="s1"> FPS&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Measure the current FPS</span>
+
+<span class="sd">        Sets the update window, connects the draw event to update_fps</span>
+<span class="sd">        and sets the callback function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        window : float</span>
+<span class="sd">            The time-window (in seconds) to calculate FPS. Default 1.0.</span>
+<span class="sd">        callback : function | str</span>
+<span class="sd">            The function to call with the float FPS value, or the string</span>
+<span class="sd">            to be formatted with the fps value and then printed. The</span>
+<span class="sd">            default is ``&#39;%1.1f FPS&#39;``. If callback evaluates to False, the</span>
+<span class="sd">            FPS measurement is stopped.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Connect update_fps function to draw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_fps</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">callback</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+                <span class="n">callback_str</span> <span class="o">=</span> <span class="n">callback</span>  <span class="c1"># because callback gets overwritten</span>
+
+                <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">callback_str</span> <span class="o">%</span> <span class="n">x</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fps_window</span> <span class="o">=</span> <span class="n">window</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_fps</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fps_callback</span> <span class="o">=</span> <span class="n">callback</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fps_callback</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># ---------------------------------------------------------------- misc ---</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">) at </span><span class="si">%s</span><span class="s1">&gt;&#39;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">backend_name</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))))</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_warmup</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="c1"># ensure all GL calls are complete</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_vispy_set_current</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># ensure window is really closed/destroyed</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Render the canvas to an offscreen buffer and return the image</span>
+<span class="sd">        array.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        image : array</span>
+<span class="sd">            Numpy array of type ubyte and shape (h, w, 4). Index [0, 0] is the </span>
+<span class="sd">            upper-left corner of the rendered region.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_current</span><span class="p">()</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">physical_size</span>
+        <span class="n">fbo</span> <span class="o">=</span> <span class="n">FrameBuffer</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">RenderBuffer</span><span class="p">(</span><span class="n">size</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                          <span class="n">depth</span><span class="o">=</span><span class="n">RenderBuffer</span><span class="p">(</span><span class="n">size</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fbo</span><span class="o">.</span><span class="n">activate</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">fbo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">fbo</span><span class="o">.</span><span class="n">deactivate</span><span class="p">()</span>
+
+
+<span class="c1"># Event subclasses specific to the Canvas</span>
+<span class="k">class</span> <span class="nc">MouseEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mouse event class</span>
+
+<span class="sd">    Note that each event object has an attribute for each of the input</span>
+<span class="sd">    arguments listed below, as well as a &quot;time&quot; attribute with the event&#39;s</span>
+<span class="sd">    precision start time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    type : str</span>
+<span class="sd">       String indicating the event type (e.g. mouse_press, key_release)</span>
+<span class="sd">    pos : (int, int)</span>
+<span class="sd">        The position of the mouse (in screen coordinates).</span>
+<span class="sd">    button : int | None</span>
+<span class="sd">        The button that generated this event (can be None).</span>
+<span class="sd">        Left=1, right=2, middle=3. During a mouse drag, this</span>
+<span class="sd">        will return the button that started the drag (same thing as</span>
+<span class="sd">        ``event.press_event.button``).</span>
+<span class="sd">    buttons : [int, ...]</span>
+<span class="sd">        The list of buttons depressed during this event.</span>
+<span class="sd">    modifiers : tuple of Key instances</span>
+<span class="sd">        Tuple that specifies which modifier keys were pressed down at the</span>
+<span class="sd">        time of the event (shift, control, alt, meta).</span>
+<span class="sd">    delta : (float, float)</span>
+<span class="sd">        The amount of scrolling in horizontal and vertical direction. One</span>
+<span class="sd">        &quot;tick&quot; corresponds to a delta of 1.0.</span>
+<span class="sd">    press_event : MouseEvent</span>
+<span class="sd">        The press event that was generated at the start of the current drag,</span>
+<span class="sd">        if any.</span>
+<span class="sd">    last_event : MouseEvent</span>
+<span class="sd">        The MouseEvent immediately preceding the current event. During drag</span>
+<span class="sd">        operations, all generated events retain their last_event properties,</span>
+<span class="sd">        allowing the entire drag to be reconstructed.</span>
+<span class="sd">    native : object (optional)</span>
+<span class="sd">       The native GUI event object</span>
+<span class="sd">    **kwargs : keyword arguments</span>
+<span class="sd">        All extra keyword arguments become attributes of the event object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">buttons</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">modifiers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">last_event</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">press_event</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_button</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">button</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">button</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buttons</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="p">(</span><span class="n">buttons</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="n">buttons</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_modifiers</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">modifiers</span> <span class="ow">or</span> <span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">delta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_event</span> <span class="o">=</span> <span class="n">last_event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_press_event</span> <span class="o">=</span> <span class="n">press_event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_button</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buttons</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">modifiers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modifiers</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">delta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">press_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_press_event</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">last_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_event</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span>
+
+    <span class="k">def</span> <span class="nf">_forget_last_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Needed to break otherwise endless last-event chains</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_event</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_dragging</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Indicates whether this event is part of a mouse drag operation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">press_event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">drag_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a list of all mouse events in the current drag operation.</span>
+
+<span class="sd">        Returns None if there is no current drag operation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_dragging</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">event</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># mouse_press events can only be the start of a trail</span>
+            <span class="k">if</span> <span class="n">event</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;mouse_press&#39;</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">last_event</span>
+
+        <span class="k">return</span> <span class="n">events</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">trail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return an (N, 2) array of mouse coordinates for every event in the</span>
+<span class="sd">        current mouse drag operation.</span>
+
+<span class="sd">        Returns None if there is no current drag operation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drag_events</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">trail</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ev</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">events</span><span class="p">):</span>
+            <span class="n">trail</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">pos</span>
+
+        <span class="k">return</span> <span class="n">trail</span>
+
+
+<span class="k">class</span> <span class="nc">KeyEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Key event class</span>
+
+<span class="sd">    Note that each event object has an attribute for each of the input</span>
+<span class="sd">    arguments listed below.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    type : str</span>
+<span class="sd">       String indicating the event type (e.g. mouse_press, key_release)</span>
+<span class="sd">    key : vispy.keys.Key instance</span>
+<span class="sd">        The Key object for this event. Can be compared to string names.</span>
+<span class="sd">    text : str</span>
+<span class="sd">        The text representation of the key (can be an empty string).</span>
+<span class="sd">    modifiers : tuple of Key instances</span>
+<span class="sd">        Tuple that specifies which modifier keys were pressed down at the</span>
+<span class="sd">        time of the event (shift, control, alt, meta).</span>
+<span class="sd">    native : object (optional)</span>
+<span class="sd">       The native GUI event object</span>
+<span class="sd">    **kwargs : keyword arguments</span>
+<span class="sd">        All extra keyword arguments become attributes of the event object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">modifiers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_modifiers</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">modifiers</span> <span class="ow">or</span> <span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">modifiers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modifiers</span>
+
+
+<span class="k">class</span> <span class="nc">ResizeEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Resize event class</span>
+
+<span class="sd">    Note that each event object has an attribute for each of the input</span>
+<span class="sd">    arguments listed below.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    type : str</span>
+<span class="sd">       String indicating the event type (e.g. mouse_press, key_release)</span>
+<span class="sd">    size : (int, int)</span>
+<span class="sd">        The new size of the Canvas, in points (logical pixels).</span>
+<span class="sd">    physical_size : (int, int)</span>
+<span class="sd">        The new physical size of the Canvas, in pixels.</span>
+<span class="sd">    native : object (optional)</span>
+<span class="sd">       The native GUI event object</span>
+<span class="sd">    **kwargs : extra keyword arguments</span>
+<span class="sd">        All extra keyword arguments become attributes of the event object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">physical_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">physical_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">physical_size</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">physical_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_physical_size</span>
+
+
+<span class="k">class</span> <span class="nc">DrawEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw event class</span>
+
+<span class="sd">    This type of event is sent to Canvas.events.draw when a redraw</span>
+<span class="sd">    is required.</span>
+
+<span class="sd">    Note that each event object has an attribute for each of the input</span>
+<span class="sd">    arguments listed below.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    type : str</span>
+<span class="sd">       String indicating the event type (e.g. mouse_press, key_release)</span>
+<span class="sd">    region : (int, int, int, int) or None</span>
+<span class="sd">        The region of the canvas which needs to be redrawn (x, y, w, h).</span>
+<span class="sd">        If None, the entire canvas must be redrawn.</span>
+<span class="sd">    native : object (optional)</span>
+<span class="sd">       The native GUI event object</span>
+<span class="sd">    **kwargs : extra keyword arguments</span>
+<span class="sd">        All extra keyword arguments become attributes of the event object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Event</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_region</span> <span class="o">=</span> <span class="n">region</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">region</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_region</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

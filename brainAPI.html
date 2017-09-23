@@ -121,13 +121,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="sleep.html">2. Sleep</a></li>
-<li class="toctree-l2"><a class="reference internal" href="topo.html">3. Topo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ndviz.html">4. Ndviz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="signal.html">3. Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo.html">4. Topo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. Colorbar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="figure.html">6. Figure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">7. Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html">8. I/O</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vbexport.html">9. Screenshot</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -499,122 +498,125 @@ the definition of your screen must be multiplied.</p>
 </pre></div>
 </div>
 <p class="rubric">Methods</p>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>show()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.brain.Brain.show" title="visbrain.brain.brain.Brain.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>()</td>
 <td>Display the graphical user interface.</td>
 </tr>
-<tr class="row-even"><td><strong>quit()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.quit" title="visbrain.brain.user.BrainUserMethods.quit"><code class="xref py py-obj docutils literal"><span class="pre">quit</span></code></a>()</td>
 <td>Quit the interface.</td>
 </tr>
-<tr class="row-odd"><td><strong>rotate()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.rotate" title="visbrain.brain.user.BrainUserMethods.rotate"><code class="xref py py-obj docutils literal"><span class="pre">rotate</span></code></a>([fixed,&nbsp;custom])</td>
 <td>Rotate the scene elements using a predefined or a custom rotation.</td>
 </tr>
-<tr class="row-even"><td><strong>background_color()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.background_color" title="visbrain.brain.user.BrainUserMethods.background_color"><code class="xref py py-obj docutils literal"><span class="pre">background_color</span></code></a>([color])</td>
 <td>Set the background color of the main canvas and the colorbar.</td>
 </tr>
-<tr class="row-odd"><td><strong>screenshot()</strong></td>
-<td>Take a screenshot of the current scene and save it as a picture.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.screenshot" title="visbrain.brain.user.BrainUserMethods.screenshot"><code class="xref py py-obj docutils literal"><span class="pre">screenshot</span></code></a>(saveas[,&nbsp;canvas,&nbsp;print_size,&nbsp;…])</td>
+<td>Take a screeshot of the selected canvas.</td>
 </tr>
-<tr class="row-even"><td><strong>load_config()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.load_config" title="visbrain.brain.user.BrainUserMethods.load_config"><code class="xref py py-obj docutils literal"><span class="pre">load_config</span></code></a>(config)</td>
 <td>Load a configuration file.</td>
 </tr>
-<tr class="row-odd"><td><strong>save_config()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.save_config" title="visbrain.brain.user.BrainUserMethods.save_config"><code class="xref py py-obj docutils literal"><span class="pre">save_config</span></code></a>(config)</td>
 <td>Save a configuration file.</td>
 </tr>
-<tr class="row-even"><td><strong>brain_control()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.brain_control" title="visbrain.brain.user.BrainUserMethods.brain_control"><code class="xref py py-obj docutils literal"><span class="pre">brain_control</span></code></a>([template,&nbsp;hemisphere,&nbsp;…])</td>
 <td>Control the type of brain to use.</td>
 </tr>
-<tr class="row-odd"><td><strong>brain_list()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.brain_list" title="visbrain.brain.user.BrainUserMethods.brain_list"><code class="xref py py-obj docutils literal"><span class="pre">brain_list</span></code></a>()</td>
 <td>Get the list of available mesh brain templates.</td>
 </tr>
-<tr class="row-even"><td><strong>add_mesh()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.add_mesh" title="visbrain.brain.user.BrainUserMethods.add_mesh"><code class="xref py py-obj docutils literal"><span class="pre">add_mesh</span></code></a>(name,&nbsp;vertices,&nbsp;faces,&nbsp;**kwargs)</td>
 <td>Add a mesh to the scene.</td>
 </tr>
-<tr class="row-odd"><td><strong>add_volume()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.volume_control" title="visbrain.brain.user.BrainUserMethods.volume_control"><code class="xref py py-obj docutils literal"><span class="pre">volume_control</span></code></a>([volume,&nbsp;rendering,&nbsp;cmap,&nbsp;…])</td>
+<td>Control the 3-D volume.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.add_volume" title="visbrain.brain.user.BrainUserMethods.add_volume"><code class="xref py py-obj docutils literal"><span class="pre">add_volume</span></code></a>(name,&nbsp;vol[,&nbsp;transform,&nbsp;…])</td>
 <td>Add a new volume to the interface.</td>
 </tr>
-<tr class="row-even"><td><strong>volume_list()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.volume_list" title="visbrain.brain.user.BrainUserMethods.volume_list"><code class="xref py py-obj docutils literal"><span class="pre">volume_list</span></code></a>()</td>
 <td>Get the list of volumes available.</td>
 </tr>
-<tr class="row-odd"><td><strong>cross_sections_control()</strong></td>
-<td>Set the cross-section position.</td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.cross_sections_control" title="visbrain.brain.user.BrainUserMethods.cross_sections_control"><code class="xref py py-obj docutils literal"><span class="pre">cross_sections_control</span></code></a>([pos,&nbsp;center,&nbsp;…])</td>
+<td>Control the cross-section.</td>
 </tr>
-<tr class="row-even"><td><strong>sources_control()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.sources_control" title="visbrain.brain.user.BrainUserMethods.sources_control"><code class="xref py py-obj docutils literal"><span class="pre">sources_control</span></code></a>([data,&nbsp;color,&nbsp;symbol,&nbsp;…])</td>
 <td>Set data to sources and control source’s properties.</td>
 </tr>
-<tr class="row-odd"><td><strong>sources_opacity()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.sources_opacity" title="visbrain.brain.user.BrainUserMethods.sources_opacity"><code class="xref py py-obj docutils literal"><span class="pre">sources_opacity</span></code></a>([alpha,&nbsp;show])</td>
 <td>Set the level of transparency of sources.</td>
 </tr>
-<tr class="row-even"><td><strong>sources_display()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.sources_display" title="visbrain.brain.user.BrainUserMethods.sources_display"><code class="xref py py-obj docutils literal"><span class="pre">sources_display</span></code></a>([select])</td>
 <td>Select sources to display.</td>
 </tr>
-<tr class="row-odd"><td><strong>cortical_projection()</strong></td>
-<td>Project sources activity.</td>
-</tr>
-<tr class="row-even"><td><strong>cortical_repartition()</strong></td>
-<td>Get the number of contributing sources per vertex.</td>
-</tr>
-<tr class="row-odd"><td><strong>sources_colormap()</strong></td>
-<td>Change the colormap of cortical projection / repartition.</td>
-</tr>
-<tr class="row-even"><td><strong>sources_fit()</strong></td>
-<td>Force sources coordinates to fit to a selected object.</td>
-</tr>
-<tr class="row-odd"><td><strong>sources_to_convex_hull()</strong></td>
-<td>Convert a set of sources into a convex hull.</td>
-</tr>
-<tr class="row-even"><td><strong>add_sources()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.add_sources" title="visbrain.brain.user.BrainUserMethods.add_sources"><code class="xref py py-obj docutils literal"><span class="pre">add_sources</span></code></a>(name,&nbsp;**kwargs)</td>
 <td>Add a supplementar source’s object.</td>
 </tr>
-<tr class="row-odd"><td><strong>time_series_control()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.sources_fit" title="visbrain.brain.user.BrainUserMethods.sources_fit"><code class="xref py py-obj docutils literal"><span class="pre">sources_fit</span></code></a>([obj])</td>
+<td>Force sources coordinates to fit to a selected object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.sources_to_convex_hull" title="visbrain.brain.user.BrainUserMethods.sources_to_convex_hull"><code class="xref py py-obj docutils literal"><span class="pre">sources_to_convex_hull</span></code></a>(xyz)</td>
+<td>Convert a set of sources into a convex hull.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.cortical_projection" title="visbrain.brain.user.BrainUserMethods.cortical_projection"><code class="xref py py-obj docutils literal"><span class="pre">cortical_projection</span></code></a>([radius,&nbsp;project_on,&nbsp;…])</td>
+<td>Project sources activity.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.cortical_repartition" title="visbrain.brain.user.BrainUserMethods.cortical_repartition"><code class="xref py py-obj docutils literal"><span class="pre">cortical_repartition</span></code></a>([radius,&nbsp;project_on,&nbsp;…])</td>
+<td>Get the number of contributing sources per vertex.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.sources_colormap" title="visbrain.brain.user.BrainUserMethods.sources_colormap"><code class="xref py py-obj docutils literal"><span class="pre">sources_colormap</span></code></a>(**kwargs)</td>
+<td>Change the colormap of cortical projection / repartition.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.time_series_control" title="visbrain.brain.user.BrainUserMethods.time_series_control"><code class="xref py py-obj docutils literal"><span class="pre">time_series_control</span></code></a>([color,&nbsp;lw,&nbsp;amp,&nbsp;width,&nbsp;…])</td>
 <td>Control time-series settings.</td>
 </tr>
-<tr class="row-even"><td><strong>add_time_series()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.add_time_series" title="visbrain.brain.user.BrainUserMethods.add_time_series"><code class="xref py py-obj docutils literal"><span class="pre">add_time_series</span></code></a>(name,&nbsp;ts_xyz,&nbsp;ts_data,&nbsp;**kwargs)</td>
 <td>Add time-series (TS) object.</td>
 </tr>
-<tr class="row-odd"><td><strong>pictures_control()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.pictures_control" title="visbrain.brain.user.BrainUserMethods.pictures_control"><code class="xref py py-obj docutils literal"><span class="pre">pictures_control</span></code></a>([width,&nbsp;height,&nbsp;dxyz])</td>
 <td>Control pictures settings.</td>
 </tr>
-<tr class="row-even"><td><strong>add_pictures()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.add_pictures" title="visbrain.brain.user.BrainUserMethods.add_pictures"><code class="xref py py-obj docutils literal"><span class="pre">add_pictures</span></code></a>(name,&nbsp;pic_xyz,&nbsp;pic_data,&nbsp;**kwargs)</td>
 <td>Add pictures object.</td>
 </tr>
-<tr class="row-odd"><td><strong>connect_control()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.connect_control" title="visbrain.brain.user.BrainUserMethods.connect_control"><code class="xref py py-obj docutils literal"><span class="pre">connect_control</span></code></a>([colorby,&nbsp;dynamic,&nbsp;show])</td>
 <td>Update connectivity object.</td>
 </tr>
-<tr class="row-even"><td><strong>add_connect()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.add_connect" title="visbrain.brain.user.BrainUserMethods.add_connect"><code class="xref py py-obj docutils literal"><span class="pre">add_connect</span></code></a>(name,&nbsp;**kwargs)</td>
 <td>Add a supplementar connectivity object.</td>
 </tr>
-<tr class="row-odd"><td><strong>roi_control()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.roi_control" title="visbrain.brain.user.BrainUserMethods.roi_control"><code class="xref py py-obj docutils literal"><span class="pre">roi_control</span></code></a>([selection,&nbsp;subdivision,&nbsp;…])</td>
 <td>Select Region Of Interest (ROI) to plot.</td>
 </tr>
-<tr class="row-even"><td><strong>roi_light_reflection()</strong></td>
-<td>Change how light is reflecting onto roi.</td>
-</tr>
-<tr class="row-odd"><td><strong>roi_opacity()</strong></td>
-<td>Set the level of transparency of the deep structures.</td>
-</tr>
-<tr class="row-even"><td><strong>roi_list()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.roi_list" title="visbrain.brain.user.BrainUserMethods.roi_list"><code class="xref py py-obj docutils literal"><span class="pre">roi_list</span></code></a>([subdivision])</td>
 <td>Get the list of supported ROI.</td>
 </tr>
-<tr class="row-odd"><td><strong>cbar_control()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.roi_opacity" title="visbrain.brain.user.BrainUserMethods.roi_opacity"><code class="xref py py-obj docutils literal"><span class="pre">roi_opacity</span></code></a>([alpha,&nbsp;show])</td>
+<td>Set the level of transparency of the deep structures.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.roi_light_reflection" title="visbrain.brain.user.BrainUserMethods.roi_light_reflection"><code class="xref py py-obj docutils literal"><span class="pre">roi_light_reflection</span></code></a>([reflect_on])</td>
+<td>Change how light is reflecting onto roi.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.cbar_control" title="visbrain.brain.user.BrainUserMethods.cbar_control"><code class="xref py py-obj docutils literal"><span class="pre">cbar_control</span></code></a>(name,&nbsp;**kwargs)</td>
 <td>Control the colorbar of a specific object.</td>
 </tr>
-<tr class="row-even"><td><strong>cbar_select()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.cbar_select" title="visbrain.brain.user.BrainUserMethods.cbar_select"><code class="xref py py-obj docutils literal"><span class="pre">cbar_select</span></code></a>(name[,&nbsp;visible])</td>
 <td>Select and disply a colorbar.</td>
 </tr>
-<tr class="row-odd"><td><strong>cbar_list()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.cbar_list" title="visbrain.brain.user.BrainUserMethods.cbar_list"><code class="xref py py-obj docutils literal"><span class="pre">cbar_list</span></code></a>()</td>
 <td>Get the list of objects for which the colorbar can be controlled.</td>
 </tr>
-<tr class="row-even"><td><strong>cbar_autoscale()</strong></td>
-<td>Autoscale the colorbar to the best limits.</td>
-</tr>
-<tr class="row-odd"><td><strong>cbar_export()</strong></td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.cbar_export" title="visbrain.brain.user.BrainUserMethods.cbar_export"><code class="xref py py-obj docutils literal"><span class="pre">cbar_export</span></code></a>([filename,&nbsp;export_only,&nbsp;get_dict])</td>
 <td>Export colorbars in a text file or in a dictionary.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.brain.user.BrainUserMethods.cbar_autoscale" title="visbrain.brain.user.BrainUserMethods.cbar_autoscale"><code class="xref py py-obj docutils literal"><span class="pre">cbar_autoscale</span></code></a>(name)</td>
+<td>Autoscale the colorbar to the best limits.</td>
 </tr>
 </tbody>
 </table>

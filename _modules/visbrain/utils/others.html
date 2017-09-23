@@ -174,8 +174,9 @@
 
 <span class="kn">from</span> <span class="nn">vispy.geometry</span> <span class="k">import</span> <span class="n">MeshData</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vis_args&#39;</span><span class="p">,</span> <span class="s1">&#39;check_downsampling&#39;</span><span class="p">,</span> <span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;set_if_not_none&#39;</span><span class="p">)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vis_args&#39;</span><span class="p">,</span> <span class="s1">&#39;check_downsampling&#39;</span><span class="p">,</span> <span class="s1">&#39;get_dsf&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span> <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;set_if_not_none&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">vis_args</span><span class="p">(</span><span class="n">kw</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">[]):</span>
@@ -235,6 +236,24 @@
              <span class="s2">&quot;not a multiple of the sampling frequency (&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;hz) is&quot;</span>
              <span class="s2">&quot; not recommanded. A &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;hz will be used instead.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ds</span>
+
+
+<span class="k">def</span> <span class="nf">get_dsf</span><span class="p">(</span><span class="n">downsample</span><span class="p">,</span> <span class="n">sf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the downsampling factor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    downsample : float</span>
+<span class="sd">        The down-sampling frequency.</span>
+<span class="sd">    sf : float</span>
+<span class="sd">        The sampling frequency</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="n">downsample</span><span class="p">,</span> <span class="n">sf</span><span class="p">)]):</span>
+        <span class="n">dsf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sf</span> <span class="o">/</span> <span class="n">downsample</span><span class="p">))</span>
+        <span class="n">downsample</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sf</span> <span class="o">/</span> <span class="n">dsf</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dsf</span><span class="p">,</span> <span class="n">downsample</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="n">downsample</span>
 
 
 <span class="k">def</span> <span class="nf">vispy_array</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>

@@ -3,8 +3,18 @@
 Utils
 =====
 
-Brain utility functions
------------------------
+EEG datasets
+------------
+
+.. _RandomEEG:
+
+Generate a random EEG dataset
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. autofunction:: visbrain.utils.physio.generate_eeg
+
+
+Brain templates
+---------------
 
 .. _ConvertMeshData:
 
@@ -23,6 +33,3 @@ Add brain template
 Remove brain template
 ~~~~~~~~~~~~~~~~~~~~~
 .. autofunction:: visbrain.utils.others.remove_brain_template
-
-VisPy utility functions
------------------------

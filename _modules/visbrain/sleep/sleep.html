@@ -172,30 +172,28 @@
 <span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtWidgets</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">vispy.app</span> <span class="k">as</span> <span class="nn">visapp</span>
 <span class="kn">import</span> <span class="nn">vispy.scene.cameras</span> <span class="k">as</span> <span class="nn">viscam</span>
 
 <span class="kn">from</span> <span class="nn">.interface</span> <span class="k">import</span> <span class="n">uiInit</span><span class="p">,</span> <span class="n">uiElements</span>
-<span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">visuals</span>
+<span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">Visuals</span>
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="n">Tools</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">FixedCam</span><span class="p">,</span> <span class="n">load_sleepdataset</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">check_downsampling</span><span class="p">,</span>
-                     <span class="n">MouseEventControl</span><span class="p">,</span> <span class="n">set_widget_size</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">dialogLoad</span><span class="p">,</span> <span class="n">read_hypno</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">FixedCam</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">MouseEventControl</span><span class="p">,</span> <span class="n">set_widget_size</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">ReadSleepData</span>
 
 <span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Sleep"><a class="viewcode-back" href="../../../sleep.html#visbrain.sleep.sleep.Sleep">[docs]</a><span class="k">class</span> <span class="nc">Sleep</span><span class="p">(</span><span class="n">uiInit</span><span class="p">,</span> <span class="n">visuals</span><span class="p">,</span> <span class="n">uiElements</span><span class="p">,</span> <span class="n">Tools</span><span class="p">,</span> <span class="n">MouseEventControl</span><span class="p">):</span>
+<div class="viewcode-block" id="Sleep"><a class="viewcode-back" href="../../../sleep.html#visbrain.sleep.sleep.Sleep">[docs]</a><span class="k">class</span> <span class="nc">Sleep</span><span class="p">(</span><span class="n">ReadSleepData</span><span class="p">,</span> <span class="n">uiInit</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">,</span> <span class="n">uiElements</span><span class="p">,</span> <span class="n">Tools</span><span class="p">,</span>
+            <span class="n">MouseEventControl</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Visualize and edit sleep data.</span>
 
 <span class="sd">    Use this module to :</span>
 
-<span class="sd">        * Load .eeg (Brainvision and ELAN), .edf or directly raw data.</span>
-<span class="sd">        * Visualize polysomnographic data, spectrogram</span>
+<span class="sd">        * Load and visualize polysomnographic data and spectrogram.</span>
 <span class="sd">        * Load, edit and save hypnogram from the interface</span>
-<span class="sd">        * Perform several events detection</span>
+<span class="sd">        * Perform automatic events detection</span>
 <span class="sd">        * Further signal processing tools (de-mean, de-trend and filtering)</span>
 <span class="sd">        * Topographic data visualization</span>
 
@@ -203,23 +201,22 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    file : string | None</span>
-<span class="sd">        Path to the data file (.eeg, .trc or .edf).</span>
-<span class="sd">    hypno_file : string | None</span>
-<span class="sd">        Path to the hypnogram file (.hyp, .txt or .csv)</span>
+<span class="sd">    data : string, array_like | None</span>
+<span class="sd">        Polysomnographic data. Must either be a path to a supported file (see</span>
+<span class="sd">        notes) or an array of raw data of shape (n_channels, n_pts). If None,</span>
+<span class="sd">        a dialog window to load the file should appear.</span>
+<span class="sd">    hypno : array_like | None</span>
+<span class="sd">        Hypnogram data. Should be a raw vector of shape (n_pts,)</span>
 <span class="sd">    config_file : string | None</span>
 <span class="sd">        Path to the configuration file (.txt)</span>
-<span class="sd">    annotation_file : string | None</span>
+<span class="sd">    annotations : string | None</span>
 <span class="sd">        Path to the annotation file (.txt, .csv). Alternatively, you can pass</span>
-<span class="sd">        an annotation instance of MNE.</span>
-<span class="sd">    data : array_like | None</span>
-<span class="sd">        Array of data of shape (n_channels, n_pts)</span>
+<span class="sd">        an annotation instance of MNE or simply an (N,) array describing</span>
+<span class="sd">        the onset.</span>
 <span class="sd">    channels : list | None</span>
 <span class="sd">        List of channel names. The length of this list must be n_channels.</span>
 <span class="sd">    sf : float | None</span>
 <span class="sd">        The sampling frequency of raw data.</span>
-<span class="sd">    hypno : array_like | None</span>
-<span class="sd">        Hypnogram data. Should be a raw vector of shape (n_pts,)</span>
 <span class="sd">    downsample : float | 100.</span>
 <span class="sd">        The downsampling frequency for the data and hypnogram raw data.</span>
 <span class="sd">    axis : bool | Fals</span>
@@ -231,15 +228,41 @@
 <span class="sd">        plateforms.</span>
 <span class="sd">    hedit : bool | False</span>
 <span class="sd">        Enable the drag and drop hypnogram edition.</span>
+<span class="sd">    use_tf : bool | False</span>
+<span class="sd">        Specify if the spectrogram has to be replaced by a time-frequency map</span>
+<span class="sd">        using morlet&#39;s wavelets.</span>
 <span class="sd">    href : list | [&#39;art&#39;, &#39;wake&#39;, &#39;rem&#39;, &#39;n1&#39;, &#39;n2&#39;, &#39;n3&#39;]</span>
 <span class="sd">        List of sleep stages. This list can be used to changed the display</span>
 <span class="sd">        order into the GUI.</span>
+<span class="sd">    ..versionadded:: 0.3.4</span>
+<span class="sd">    preload : bool | True</span>
+<span class="sd">        Preload data into memory. For large datasets, turn this parameter to</span>
+<span class="sd">        True.</span>
+<span class="sd">    use_mne : bool | False</span>
+<span class="sd">        Force to load the file using mne.io functions.</span>
+<span class="sd">    kwargs_mne : dict | {}</span>
+<span class="sd">        Dictionary to pass to the mne.io loading function.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    .. note::</span>
+<span class="sd">        * Supported polysomnographic files : by default, Sleep support .vhdr</span>
+<span class="sd">          (BrainVision), .eeg (Elan), .trc (Micromed) and .edf (European Data</span>
+<span class="sd">          Format). If mne-python is installed, this default list of supported</span>
+<span class="sd">          files is extended to .cnt, .egi, .mff, .edf, .bdf, .gdf, .set, .vhdr.</span>
+<span class="sd">        * Supproted hypnogram files : by default, Sleep support .txt, .csv and</span>
+<span class="sd">          .hyp hypnogram files.</span>
+
+<span class="sd">    .. deprecated:: 0.3.4</span>
+<span class="sd">        Input arguments `file` and `hypno_file` has been deprecated in 0.3.4</span>
+<span class="sd">        release. Use instead the `data` and `hypno` inputs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hypno_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">annotation_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">hypno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span>
-                 <span class="n">hedit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;art&#39;</span><span class="p">,</span> <span class="s1">&#39;wake&#39;</span><span class="p">,</span> <span class="s1">&#39;rem&#39;</span><span class="p">,</span> <span class="s1">&#39;n1&#39;</span><span class="p">,</span> <span class="s1">&#39;n2&#39;</span><span class="p">,</span> <span class="s1">&#39;n3&#39;</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span>
+                 <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="n">hedit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_tf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">href</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;art&#39;</span><span class="p">,</span> <span class="s1">&#39;wake&#39;</span><span class="p">,</span> <span class="s1">&#39;rem&#39;</span><span class="p">,</span> <span class="s1">&#39;n1&#39;</span><span class="p">,</span> <span class="s1">&#39;n2&#39;</span><span class="p">,</span> <span class="s1">&#39;n3&#39;</span><span class="p">],</span>
+                 <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_mne</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kwargs_mne</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># ====================== APP CREATION ======================</span>
         <span class="c1"># Create the app and initialize all graphical elements :</span>
@@ -247,70 +270,24 @@
         <span class="n">uiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># Set default GUI state :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setDefaultState</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_default_state</span><span class="p">()</span>
 
         <span class="c1"># Mouse control :</span>
         <span class="n">MouseEventControl</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># ====================== LOAD FILE ======================</span>
-        <span class="c1"># Load file and convert if needed :</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">sf</span><span class="p">]]):</span>
-            <span class="c1"># --------------- Qt Dialog ---------------</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="c1"># Dialog window for the main dataset :</span>
-                <span class="n">file</span> <span class="o">=</span> <span class="n">dialogLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Open dataset&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-                                  <span class="s2">&quot;BrainVision/Elan (*.eeg);;Edf (*.edf);;&quot;</span>
-                                  <span class="s2">&quot;Micromed (*.trc);;All files (*.*)&quot;</span><span class="p">)</span>
-                <span class="c1"># Get the user path :</span>
-                <span class="n">upath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="c1"># Dialog window for hypnogram :</span>
-                <span class="n">hypno_file</span> <span class="o">=</span> <span class="n">dialogLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Open hypnogram&quot;</span><span class="p">,</span> <span class="n">upath</span><span class="p">,</span>
-                                        <span class="s2">&quot;Elan (*.hyp);;Text file (*.txt);;&quot;</span>
-                                        <span class="s2">&quot;CSV file (*.csv);;All files (*.*)&quot;</span><span class="p">)</span>
-
-            <span class="c1"># Load dataset :</span>
-            <span class="n">sf</span><span class="p">,</span> <span class="n">downsample</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">start_time</span> <span class="o">=</span> <span class="n">load_sleepdataset</span><span class="p">(</span>
-                <span class="n">file</span><span class="p">,</span> <span class="n">downsample</span><span class="p">)</span>
-            <span class="n">npts</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="c1"># Build the time vector :</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_N</span> <span class="o">=</span> <span class="n">N</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sfori</span> <span class="o">=</span> <span class="n">sf</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_toffset</span> <span class="o">=</span> <span class="n">start_time</span><span class="o">.</span><span class="n">hour</span> <span class="o">*</span> <span class="mi">3600</span> <span class="o">+</span> \
-                <span class="n">start_time</span><span class="o">.</span><span class="n">minute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">start_time</span><span class="o">.</span><span class="n">second</span>
-
-            <span class="c1"># Load hypnogram :</span>
-            <span class="k">if</span> <span class="n">hypno_file</span><span class="p">:</span>
-                <span class="c1"># Load the hypnogram :</span>
-                <span class="n">hypno</span> <span class="o">=</span> <span class="n">read_hypno</span><span class="p">(</span><span class="n">hypno_file</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
-
-            <span class="c1"># Change the sampling frequency if down-sample :</span>
-            <span class="k">if</span> <span class="n">downsample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="p">[::</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sf</span> <span class="o">/</span> <span class="n">downsample</span><span class="p">))]</span>
-                <span class="n">sf</span> <span class="o">=</span> <span class="n">downsample</span>
-                <span class="n">downsample</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># Data and sf are givin as an input :</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="c1"># Check down-sampling :</span>
-            <span class="n">downsample</span> <span class="o">=</span> <span class="n">check_downsampling</span><span class="p">(</span><span class="n">sf</span><span class="p">,</span> <span class="n">downsample</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_N</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sfori</span> <span class="o">=</span> <span class="n">sf</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_toffset</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>
+        <span class="n">ReadSleepData</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">hypno</span><span class="p">,</span> <span class="n">href</span><span class="p">,</span> <span class="n">preload</span><span class="p">,</span>
+                               <span class="n">use_mne</span><span class="p">,</span> <span class="n">downsample</span><span class="p">,</span> <span class="n">kwargs_mne</span><span class="p">,</span>
+                               <span class="n">annotations</span><span class="p">)</span>
 
         <span class="c1"># ====================== VARIABLES ======================</span>
         <span class="c1"># Check all data :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_file</span> <span class="o">=</span> <span class="n">file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_config_file</span> <span class="o">=</span> <span class="n">config_file</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_annot_file</span> <span class="o">=</span> <span class="n">annotation_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_annot_mark</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">,</span>
-         <span class="bp">self</span><span class="o">.</span><span class="n">_href</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hconv</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_data</span><span class="p">(</span><span class="n">sf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">hypno</span><span class="p">,</span>
-                                                     <span class="n">downsample</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">href</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hconvinv</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hconv</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ax</span> <span class="o">=</span> <span class="n">axis</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_enabhypedit</span> <span class="o">=</span> <span class="n">hedit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_use_tf</span> <span class="o">=</span> <span class="n">use_tf</span>
         <span class="c1"># ---------- Default line width ----------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_linemeth</span> <span class="o">=</span> <span class="n">line</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lw</span> <span class="o">=</span> <span class="mf">1.</span>
@@ -346,23 +323,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mtsym</span> <span class="o">=</span> <span class="s1">&#39;star&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_peaksym</span> <span class="o">=</span> <span class="s1">&#39;disc&#39;</span>
         <span class="c1"># Get some data info (min / max / std / mean)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_get_dataInfo</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_data_info</span><span class="p">()</span>
 
         <span class="c1"># ====================== USER &amp; GUI INTERACTION  ======================</span>
         <span class="c1"># User &lt;-&gt; GUI :</span>
         <span class="n">uiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># ====================== CAMERAS ======================</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_camCreation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cam_creation</span><span class="p">()</span>
 
         <span class="c1"># ====================== OBJECTS CREATION ======================</span>
-        <span class="n">visuals</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Visuals</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># ====================== TOOLS ======================</span>
         <span class="n">Tools</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># ====================== FUNCTIONS ON LOAD ======================</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcnsOnCreation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcns_on_creation</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of channels.&quot;&quot;&quot;</span>
@@ -373,158 +350,15 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datainfo</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
     <span class="c1">###########################################################################</span>
-    <span class="c1"># CHECKING</span>
-    <span class="c1">###########################################################################</span>
-    <span class="k">def</span> <span class="nf">_check_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check data, hypnogram, channels and sample frequency after loading.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        sf: float</span>
-<span class="sd">            The sampling frequency.</span>
-<span class="sd">        data: array_like</span>
-<span class="sd">            The data to use. Must be a (n_channels, n_pts) array.</span>
-<span class="sd">        channel : list</span>
-<span class="sd">            List of string where each element refer to a channel names.</span>
-<span class="sd">            The length of this list must be n_channels.</span>
-<span class="sd">        hypno : array_like | None</span>
-<span class="sd">            A row vector of shape (npts,) containing hypnogram values.</span>
-<span class="sd">            If the hypnogram is None, this functions returns a row vector</span>
-<span class="sd">            fill with zeros.</span>
-<span class="sd">        time : array_like | None</span>
-<span class="sd">            The time vector to use. If the time vector is None, it will be</span>
-<span class="sd">            inferred from data length (be carefull to time consistency).</span>
-<span class="sd">        href : list | None</span>
-<span class="sd">            List of sleep stages. This list can be used to changed the</span>
-<span class="sd">            display order into the GUI.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        sf: float</span>
-<span class="sd">            The sampling frequency</span>
-<span class="sd">        data : array_like</span>
-<span class="sd">            The float 32 data with a shape of (n_channels, n_pts).</span>
-<span class="sd">        channels : list</span>
-<span class="sd">            List of cleaned channel names.</span>
-<span class="sd">        hypno : array_like</span>
-<span class="sd">            The float 32 hypnogram with a shape of (npts,).</span>
-<span class="sd">        time : array_like</span>
-<span class="sd">            The time vector with a shape of (npts,).</span>
-<span class="sd">        href : list | default</span>
-<span class="sd">            List of checked hypno reference.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># ========================== CHECKING ==========================</span>
-        <span class="n">nchan</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span>
-        <span class="c1"># Check sampling frequency :</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sf</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The sampling frequency must be a float number &quot;</span>
-                             <span class="s2">&quot;(e.g. 1024., 512., etc)&quot;</span><span class="p">)</span>
-        <span class="n">sf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span>
-        <span class="c1"># Check data shape and format to float32 :</span>
-        <span class="c1"># data = np.atleast_2d(data)</span>
-        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The data must be a 2D array&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">nchan</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Organize data array as (n_channels, n_time_points) is more &quot;</span>
-                 <span class="s2">&quot;memory efficient&quot;</span><span class="p">)</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">T</span>
-        <span class="c1"># Get data length :</span>
-        <span class="n">npts</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="c1"># Channels checking :</span>
-        <span class="k">if</span> <span class="n">nchan</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Incorrect data shape. The number of channels &quot;</span>
-                             <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nchan</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;) can not be found.&#39;</span><span class="p">)</span>
-        <span class="c1"># href checking :</span>
-        <span class="n">absref</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;art&#39;</span><span class="p">,</span> <span class="s1">&#39;wake&#39;</span><span class="p">,</span> <span class="s1">&#39;n1&#39;</span><span class="p">,</span> <span class="s1">&#39;n2&#39;</span><span class="p">,</span> <span class="s1">&#39;n3&#39;</span><span class="p">,</span> <span class="s1">&#39;rem&#39;</span><span class="p">]</span>
-        <span class="n">absint</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">href</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">href</span> <span class="o">=</span> <span class="n">absref</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">href</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">href</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="c1"># Force lower case :</span>
-            <span class="n">href</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">href</span><span class="p">]</span>
-            <span class="c1"># Check that all stage are present :</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">absref</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">href</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="s2">&quot; not found in href.&quot;</span><span class="p">)</span>
-            <span class="c1"># Force capitalize :</span>
-            <span class="n">href</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">href</span><span class="p">]</span>
-            <span class="n">href</span><span class="p">[</span><span class="n">href</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;Rem&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="s1">&#39;REM&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The href parameter must be a list of string and&quot;</span>
-                             <span class="s2">&quot; must contain &#39;art&#39;, &#39;wake&#39;, &#39;n1&#39;, &#39;n2&#39;, &#39;n3&#39; &quot;</span>
-                             <span class="s2">&quot;and &#39;rem&#39;&quot;</span><span class="p">)</span>
-        <span class="c1"># Conversion variable :</span>
-        <span class="n">absref</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Art&#39;</span><span class="p">,</span> <span class="s1">&#39;Wake&#39;</span><span class="p">,</span> <span class="s1">&#39;N1&#39;</span><span class="p">,</span> <span class="s1">&#39;N2&#39;</span><span class="p">,</span> <span class="s1">&#39;N3&#39;</span><span class="p">,</span> <span class="s1">&#39;REM&#39;</span><span class="p">]</span>
-        <span class="n">conv</span> <span class="o">=</span> <span class="p">{</span><span class="n">absint</span><span class="p">[</span><span class="n">absref</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">)]:</span> <span class="n">absint</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">href</span><span class="p">)}</span>
-        <span class="c1"># Check hypnogram and format to float32 :</span>
-        <span class="k">if</span> <span class="n">hypno</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">hypno</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">npts</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hypno</span><span class="p">)</span>
-            <span class="c1"># Check hypno values :</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">hypno</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">hypno</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="n">npts</span><span class="p">):</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Hypnogram values must be comprised between -1 and 4 &quot;</span>
-                     <span class="s2">&quot;(see Iber et al. 2007). Use:</span><span class="se">\n</span><span class="s2">-1 -&gt; Art (optional)</span><span class="se">\n</span><span class="s2"> 0 &quot;</span>
-                     <span class="s2">&quot;-&gt; Wake</span><span class="se">\n</span><span class="s2"> 1 -&gt; N1</span><span class="se">\n</span><span class="s2"> 2 -&gt; N2</span><span class="se">\n</span><span class="s2"> 3 -&gt; N4</span><span class="se">\n</span><span class="s2"> 4 -&gt; REM</span><span class="se">\n</span><span class="s2">Empty &quot;</span>
-                     <span class="s2">&quot;hypnogram will be used instead&quot;</span><span class="p">)</span>
-                <span class="n">hypno</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">npts</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="c1"># Define time vector if needed :</span>
-        <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npts</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>
-        <span class="c1"># Clean channel names :</span>
-        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="s1">&#39;EEG&#39;</span><span class="p">]</span>
-        <span class="n">chanc</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
-            <span class="c1"># Remove informations after . :</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="c1"># Exclude patterns :</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
-                <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="c1"># Remove space :</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="n">chanc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-
-        <span class="c1"># ========================== DOWN-SAMPLING ==========================</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">downsample</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
-            <span class="c1"># Find frequency ratio :</span>
-            <span class="n">fratio</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">sf</span> <span class="o">/</span> <span class="n">downsample</span><span class="p">))</span>
-            <span class="c1"># Select time, data and hypno points :</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">::</span><span class="n">fratio</span><span class="p">]</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="p">[::</span><span class="n">fratio</span><span class="p">]</span>
-            <span class="n">hypno</span> <span class="o">=</span> <span class="n">hypno</span><span class="p">[::</span><span class="n">fratio</span><span class="p">]</span>
-            <span class="c1"># Replace sampling frequency :</span>
-            <span class="n">sf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">downsample</span><span class="p">)</span>
-
-        <span class="c1"># =========================== SCALING =============================</span>
-        <span class="c1"># Check amplitude of the data and if necessary apply re-scaling</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ptp</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">*=</span> <span class="mf">1e6</span>
-
-        <span class="c1"># ========================== CONVERSION ===========================</span>
-        <span class="c1"># Convert data and hypno to be contiguous and float 32 (for vispy):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">flags</span><span class="p">[</span><span class="s1">&#39;C_CONTIGUOUS&#39;</span><span class="p">]:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">hypno</span><span class="o">.</span><span class="n">flags</span><span class="p">[</span><span class="s1">&#39;C_CONTIGUOUS&#39;</span><span class="p">]:</span>
-            <span class="n">hypno</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">hypno</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">hypno</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">:</span>
-            <span class="n">hypno</span> <span class="o">=</span> <span class="n">hypno</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">sf</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">chanc</span><span class="p">,</span> <span class="n">hypno</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">href</span><span class="p">,</span> <span class="n">conv</span>
-
-    <span class="c1">###########################################################################</span>
     <span class="c1"># SUB-FONCTIONS</span>
     <span class="c1">###########################################################################</span>
-    <span class="k">def</span> <span class="nf">_get_dataInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get some info about data (min, max, std, mean, dist).&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datainfo</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
                           <span class="s1">&#39;std&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
                           <span class="s1">&#39;dist&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">1</span><span class="p">)}</span>
 
-    <span class="k">def</span> <span class="nf">setDefaultState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_set_default_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the default window state.&quot;&quot;&quot;</span>
         <span class="c1"># ================= TAB =================</span>
         <span class="n">set_widget_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
@@ -539,7 +373,7 @@
         <span class="n">app_icon</span><span class="o">.</span><span class="n">addFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathfile</span><span class="p">,</span> <span class="s1">&#39;sleep_icon.svg&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">app_icon</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_camCreation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_cam_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a set of cameras.&quot;&quot;&quot;</span>
         <span class="c1"># ------------------- Channels -------------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_chanCam</span> <span class="o">=</span> <span class="p">[]</span>
@@ -562,7 +396,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_allCams</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_chanCam</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_speccam</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hypcam</span><span class="p">,</span>
                          <span class="bp">self</span><span class="o">.</span><span class="n">_topocam</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timecam</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_fcnsOnCreation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_fcns_on_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Applied on creation.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_chanChecks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -581,11 +415,11 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annot_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># Annotation file</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loadAnnotationTable</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_file</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Sleep.show"><a class="viewcode-back" href="../../../signal.html#visbrain.sleep.sleep.Sleep.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Display the graphical user interface.&quot;&quot;&quot;</span>
         <span class="c1"># This function has to be placed here (and not in the user.py script)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
-        <span class="n">visapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+        <span class="n">visapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
 </pre></div>
 
            </div>

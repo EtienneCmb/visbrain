@@ -47,10 +47,19 @@ Visit this page for a set of `examples <http://visbrain.org/auto_examples/index.
 API
 ---
 
-Main Topo class
-~~~~~~~~~~~~~~~
+Topo class
+~~~~~~~~~~
 
-.. autoclass:: visbrain.topo.topo.Topo
+.. currentmodule:: visbrain.topo.topo
+
+.. autoclass:: Topo
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~Topo.show
+        ~Topo.add_topoplot
+        ~Topo.add_shared_colorbar
 
 Methods
 ~~~~~~~

@@ -1,0 +1,657 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.utils.physio &mdash; visbrain 0.3.3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.3 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.utils.physio</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.utils.physio</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Group of functions for physiological processing.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">re</span> <span class="k">import</span> <span class="n">findall</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">zscore</span>
+
+<span class="kn">from</span> <span class="nn">.sigproc</span> <span class="k">import</span> <span class="n">smoothing</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;find_non_eeg&#39;</span><span class="p">,</span> <span class="s1">&#39;rereferencing&#39;</span><span class="p">,</span> <span class="s1">&#39;bipolarization&#39;</span><span class="p">,</span> <span class="s1">&#39;commonaverage&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;tal2mni&#39;</span><span class="p">,</span> <span class="s1">&#39;mni2tal&#39;</span><span class="p">,</span> <span class="s1">&#39;find_roi&#39;</span><span class="p">,</span> <span class="s1">&#39;generate_eeg&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">find_non_eeg</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;eog&#39;</span><span class="p">,</span> <span class="s1">&#39;emg&#39;</span><span class="p">,</span> <span class="s1">&#39;ecg&#39;</span><span class="p">,</span> <span class="s1">&#39;abd&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Find non-EEG channels.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    channels : list</span>
+<span class="sd">        List of channel names.</span>
+<span class="sd">    pattern : list | [&#39;eog&#39;, &#39;emg&#39;, &#39;ecg&#39;, &#39;abd&#39;]</span>
+<span class="sd">        List of patterns for non-EEG channels.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    iseeg : array_like</span>
+<span class="sd">        NumPy vector of boolean values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set channels in lower case :</span>
+    <span class="n">channels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">lower</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">channels</span><span class="p">))</span>
+    <span class="c1"># Pre-allocation :</span>
+    <span class="n">iseeg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">),),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="c1"># Search patterns :</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pattern</span><span class="p">:</span>
+        <span class="n">iseeg</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">iseeg</span>
+
+
+<span class="c1">###############################################################################</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">#                               RE-REFERENCING</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">###############################################################################</span>
+
+<span class="k">def</span> <span class="nf">rereferencing</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">to_ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Re-reference data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : array_like</span>
+<span class="sd">        The array of data of shape (nchan, npts).</span>
+<span class="sd">    chans : list</span>
+<span class="sd">        List of channel names of length nchan.</span>
+<span class="sd">    reference : int</span>
+<span class="sd">        The index of the channel to consider as a reference.</span>
+<span class="sd">    to_ignore : list | None</span>
+<span class="sd">        List of channels to ignore in the re-referencing.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    datar : array_like</span>
+<span class="sd">        The re-referenced data.</span>
+<span class="sd">    channelsr : list</span>
+<span class="sd">        List of re-referenced channel names.</span>
+<span class="sd">    consider : list</span>
+<span class="sd">        List of boolean values of channels that have to be considered</span>
+<span class="sd">        during the ploting processus.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get shapes :</span>
+    <span class="n">nchan</span><span class="p">,</span> <span class="n">npts</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="c1"># Get data to use as the reference :</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="n">reference</span><span class="p">],</span> <span class="p">:]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">chans</span><span class="p">[</span><span class="n">reference</span><span class="p">]</span>
+    <span class="c1"># Build ignore vector :</span>
+    <span class="n">consider</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nchan</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">consider</span><span class="p">[</span><span class="n">reference</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="c1"># Find if some channels have to be ignored :</span>
+    <span class="k">if</span> <span class="n">to_ignore</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">nchan</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">to_ignore</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+        <span class="n">to_ignore</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">to_ignore</span><span class="p">)</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nchan</span><span class="p">)[</span><span class="o">~</span><span class="n">to_ignore</span><span class="p">]</span>
+        <span class="n">consider</span><span class="p">[</span><span class="n">to_ignore</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="c1"># Re-reference data :</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">sl</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="n">ref</span>
+    <span class="c1"># Build channel names :</span>
+    <span class="n">chan</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="k">if</span> <span class="n">consider</span><span class="p">[</span><span class="n">num</span><span class="p">]</span>
+            <span class="k">else</span> <span class="n">k</span> <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chans</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">chan</span><span class="p">,</span> <span class="n">consider</span>
+
+
+<span class="k">def</span> <span class="nf">bipolarization</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="n">to_ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Bipolarize data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : array_like</span>
+<span class="sd">        The array of data of shape (nchan, npts).</span>
+<span class="sd">    chans : list</span>
+<span class="sd">        List of channel names of length nchan.</span>
+<span class="sd">    to_ignore : list | None</span>
+<span class="sd">        List of channels to ignore in the bipolarization.</span>
+<span class="sd">    sep : string | &#39;.&#39;</span>
+<span class="sd">        Separator to simplify electrode names by removing undesired name</span>
+<span class="sd">        after the sep. For example, if channel = [&#39;h1.025&#39;, &#39;h2.578&#39;]</span>
+<span class="sd">        and sep=&#39;.&#39;, the final name will be &#39;h2-h1&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    datar : array_like</span>
+<span class="sd">        The re-referenced data.</span>
+<span class="sd">    channelsr : list</span>
+<span class="sd">        List of re-referenced channel names.</span>
+<span class="sd">    consider : list</span>
+<span class="sd">        List of boolean values of channels that have to be considered</span>
+<span class="sd">        during the ploting processus.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Variables :</span>
+    <span class="n">nchan</span><span class="p">,</span> <span class="n">npts</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">consider</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nchan</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+    <span class="c1"># Preprocess channel names by separating channel names / number:</span>
+    <span class="n">chnames</span><span class="p">,</span> <span class="n">chnums</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chans</span><span class="p">):</span>
+        <span class="c1"># Remove spaces and separation :</span>
+        <span class="n">chans</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Get only the name / number :</span>
+        <span class="k">if</span> <span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+            <span class="n">number</span> <span class="o">=</span> <span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">chnums</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+            <span class="n">chnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">number</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">chnums</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">chnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+    <span class="c1"># Find if some channels have to be ignored :</span>
+    <span class="k">if</span> <span class="n">to_ignore</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">nchan</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">to_ignore</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+        <span class="n">to_ignore</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">to_ignore</span><span class="p">)</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nchan</span><span class="p">)[</span><span class="o">~</span><span class="n">to_ignore</span><span class="p">]</span>
+        <span class="n">consider</span><span class="p">[</span><span class="n">to_ignore</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Bipolarize :</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">nchan</span><span class="p">)):</span>
+        <span class="c1"># If there&#39;s a number :</span>
+        <span class="k">if</span> <span class="n">chnums</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span><span class="n">num</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">):</span>
+            <span class="c1"># Get the name of the channel to find :</span>
+            <span class="n">chan_to_find</span> <span class="o">=</span> <span class="n">chnames</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">chnums</span><span class="p">[</span><span class="n">num</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># Search if exist in channel list :</span>
+            <span class="k">if</span> <span class="n">chan_to_find</span> <span class="ow">in</span> <span class="n">chans</span><span class="p">:</span>
+                <span class="c1"># Get the index :</span>
+                <span class="n">ind</span> <span class="o">=</span> <span class="n">chans</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">chan_to_find</span><span class="p">)</span>
+                <span class="c1"># Substract to data :</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">num</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="n">data</span><span class="p">[</span><span class="n">ind</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="c1"># Update channel name :</span>
+                <span class="n">chans</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="n">chans</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">chan_to_find</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">consider</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">consider</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="n">consider</span>
+
+
+<span class="k">def</span> <span class="nf">commonaverage</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="n">to_ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Re-referencement using common average.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : array_like</span>
+<span class="sd">        The array of data of shape (nchan, npts).</span>
+<span class="sd">    chans : list</span>
+<span class="sd">        List of channel names of length nchan.</span>
+<span class="sd">    to_ignore : list | None</span>
+<span class="sd">        List of channels to ignore in the re-referencing.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    datar : array_like</span>
+<span class="sd">        The re-referenced data.</span>
+<span class="sd">    channelsr : list</span>
+<span class="sd">        List of re-referenced channel names.</span>
+<span class="sd">    consider : list</span>
+<span class="sd">        List of boolean values of channels that have to be considered</span>
+<span class="sd">        during the ploting processus.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Variables :</span>
+    <span class="n">nchan</span><span class="p">,</span> <span class="n">npts</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">consider</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nchan</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="c1"># Find if some channels have to be ignored :</span>
+    <span class="k">if</span> <span class="n">to_ignore</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">consider</span><span class="p">[</span><span class="n">to_ignore</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="c1"># Get the mean across  EEG channels :</span>
+    <span class="n">eegmean</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">consider</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Remove the mean on EEG channels :</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">consider</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-=</span> <span class="n">eegmean</span>
+    <span class="c1"># Update channel name :</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chans</span><span class="p">)):</span>
+        <span class="n">chans</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">chans</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-m&#39;</span> <span class="k">if</span> <span class="n">consider</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">else</span> <span class="n">chans</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">chans</span><span class="p">,</span> <span class="n">consider</span>
+
+
+<span class="c1">###############################################################################</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">#                               XYZ CONVERSION</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">###############################################################################</span>
+
+<span class="k">def</span> <span class="nf">_spm_matrix</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Matrix transformation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p : array_like</span>
+<span class="sd">        Vector of floats for defining each tranformation. p must be a vector of</span>
+<span class="sd">        length 9.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Pr : array_like</span>
+<span class="sd">        The tranformed array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">):</span><span class="mi">12</span><span class="p">])</span>
+
+    <span class="c1"># Translation t :</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span>
+                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+    <span class="c1"># Rotation 1 :</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+    <span class="c1"># Rotation 2 :</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">]]),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+    <span class="c1"># Rotation 3 :</span>
+    <span class="n">r3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+    <span class="c1"># Translation z :</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([[</span><span class="n">p</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+    <span class="c1"># Translation s :</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="n">r1</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">*</span> <span class="n">r3</span> <span class="o">*</span> <span class="n">z</span> <span class="o">*</span> <span class="n">s</span>
+
+
+<span class="k">def</span> <span class="nf">tal2mni</span><span class="p">(</span><span class="n">xyz</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transform Talairach coordinates into MNI.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    xyz : array_like</span>
+<span class="sd">        Array of Talairach coordinates of shape (n_sources, 3)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xyz_r : array_like</span>
+<span class="sd">        Array of MNI coordinates of shape (n_sources, 3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check xyz to be (n_sources, 3) :</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The shape of xyz must be (N, 3).&quot;</span><span class="p">)</span>
+    <span class="n">n_sources</span> <span class="o">=</span> <span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Transformation matrices, different zooms above/below AC :</span>
+    <span class="n">rotn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">_spm_matrix</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">.</span><span class="mi">05</span><span class="p">]))</span>
+    <span class="n">upz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">_spm_matrix</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">.</span><span class="mi">99</span><span class="p">,</span> <span class="o">.</span><span class="mi">97</span><span class="p">,</span> <span class="o">.</span><span class="mi">92</span><span class="p">]))</span>
+    <span class="n">downz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">_spm_matrix</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">.</span><span class="mi">99</span><span class="p">,</span> <span class="o">.</span><span class="mi">97</span><span class="p">,</span> <span class="o">.</span><span class="mi">84</span><span class="p">]))</span>
+
+    <span class="c1"># Apply rotation and translation :</span>
+    <span class="n">xyz</span> <span class="o">=</span> <span class="n">rotn</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xyz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_sources</span><span class="p">,</span> <span class="p">))]</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xyz</span><span class="p">)[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="mf">0.</span>
+    <span class="n">xyz</span><span class="p">[:,</span> <span class="n">tmp</span><span class="p">]</span> <span class="o">=</span> <span class="n">downz</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="n">tmp</span><span class="p">]</span>
+    <span class="n">xyz</span><span class="p">[:,</span> <span class="o">~</span><span class="n">tmp</span><span class="p">]</span> <span class="o">=</span> <span class="n">upz</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="o">~</span><span class="n">tmp</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">mni2tal</span><span class="p">(</span><span class="n">xyz</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transform MNI coordinates into Talairach.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    xyz : array_like</span>
+<span class="sd">        Array of MNI coordinates of shape (n_sources, 3)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xyz_r : array_like</span>
+<span class="sd">        Array of Talairach coordinates of shape (n_sources, 3)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check xyz to be (n_sources, 3) :</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The shape of xyz must be (N, 3).&quot;</span><span class="p">)</span>
+    <span class="n">n_sources</span> <span class="o">=</span> <span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Transformation matrices, different zooms above/below AC :</span>
+    <span class="n">up_t</span> <span class="o">=</span> <span class="n">_spm_matrix</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">.</span><span class="mi">05</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">.</span><span class="mi">99</span><span class="p">,</span> <span class="o">.</span><span class="mi">97</span><span class="p">,</span> <span class="o">.</span><span class="mi">92</span><span class="p">])</span>
+    <span class="n">down_t</span> <span class="o">=</span> <span class="n">_spm_matrix</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">.</span><span class="mi">05</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">.</span><span class="mi">99</span><span class="p">,</span> <span class="o">.</span><span class="mi">97</span><span class="p">,</span> <span class="o">.</span><span class="mi">84</span><span class="p">])</span>
+    <span class="n">xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xyz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_sources</span><span class="p">,</span> <span class="p">))]</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xyz</span><span class="p">)[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="mf">0.</span>
+    <span class="n">xyz</span><span class="p">[:,</span> <span class="n">tmp</span><span class="p">]</span> <span class="o">=</span> <span class="n">down_t</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="n">tmp</span><span class="p">]</span>
+    <span class="n">xyz</span><span class="p">[:,</span> <span class="o">~</span><span class="n">tmp</span><span class="p">]</span> <span class="o">=</span> <span class="n">up_t</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="o">~</span><span class="n">tmp</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">find_roi</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">nearest</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="c1"># Check xyz to be (n_sources, 3) :</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The shape of xyz must be (N, 3).&quot;</span><span class="p">)</span>
+    <span class="c1"># xyz = tal2mni(xyz)</span>
+    <span class="n">n_sources</span> <span class="o">=</span> <span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xyz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_sources</span><span class="p">,))]</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># Load ROI atlas :</span>
+    <span class="n">pathfile</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="vm">__file__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;utils&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">path_to_template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span> <span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="s1">&#39;templates&#39;</span><span class="p">,</span> <span class="s1">&#39;roi.npz&#39;</span><span class="p">))</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathfile</span><span class="p">,</span> <span class="n">path_to_template</span><span class="p">)</span>
+    <span class="n">atlas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="c1"># Get volumes :</span>
+    <span class="n">aal_label</span><span class="p">,</span> <span class="n">aal_idx</span> <span class="o">=</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;aal_label&#39;</span><span class="p">],</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;aal_idx&#39;</span><span class="p">]</span>
+    <span class="n">vol</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">brod_idx</span> <span class="o">=</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;vol&#39;</span><span class="p">],</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;hdr&#39;</span><span class="p">],</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;brod_idx&#39;</span><span class="p">]</span>
+    <span class="n">sh</span> <span class="o">=</span> <span class="n">vol</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1"># Build AAL label for left and right :</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">aal_label</span><span class="p">),),</span> <span class="s1">&#39; (L)&#39;</span><span class="p">)</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">aal_label</span><span class="p">),),</span> <span class="s1">&#39; (R)&#39;</span><span class="p">)</span>
+    <span class="n">aal_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">defchararray</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">aal_label</span><span class="p">,</span> <span class="n">left</span><span class="p">)</span>
+    <span class="n">aal_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">defchararray</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">aal_label</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+    <span class="n">aal_label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">aal_l</span><span class="p">,</span> <span class="n">aal_r</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="c1"># print(aal_label.shape, aal_idx.shape, &#39;AAl : &#39;, aal_idx.min(), aal_idx.max(), &#39;VOL : &#39;, vol.min(), vol.max())</span>
+
+    <span class="c1"># Loop over source :</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">n_sources</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sources</span><span class="p">):</span>
+        <span class="n">info</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">::]</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="c1"># Apply HDR transformation :</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="p">[</span><span class="n">k</span><span class="p">]])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">sub</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sub</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sub</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+
+            <span class="k">if</span> <span class="n">nearest</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Find the Brodmann area :</span>
+                <span class="n">brod</span> <span class="o">=</span> <span class="n">brod_idx</span><span class="p">[</span><span class="n">sub</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sub</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sub</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">brod</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Brodmann area &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">brod</span><span class="p">)</span>
+                <span class="c1"># Find the AAL :</span>
+                <span class="n">aal</span> <span class="o">=</span> <span class="n">vol</span><span class="p">[</span><span class="n">sub</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sub</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sub</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">aal</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">aal_label</span><span class="p">[</span><span class="n">aal</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+            <span class="c1"># print(&#39;BAD&#39;)</span>
+
+    <span class="c1"># print(info)</span>
+
+
+<div class="viewcode-block" id="generate_eeg"><a class="viewcode-back" href="../../../utils.html#visbrain.utils.physio.generate_eeg">[docs]</a><span class="k">def</span> <span class="nf">generate_eeg</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="mf">512.</span><span class="p">,</span> <span class="n">n_pts</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_sines</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                 <span class="n">f_min</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">f_max</span><span class="o">=</span><span class="mf">160.</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate random eeg signals.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sf : float | 512.</span>
+<span class="sd">        The sampling frequency</span>
+<span class="sd">    n_pts : int | 1000</span>
+<span class="sd">        The number of time points.</span>
+<span class="sd">    n_channels : int | 1</span>
+<span class="sd">        Number of channels</span>
+<span class="sd">    n_trials : int | 1</span>
+<span class="sd">        Number of trials</span>
+<span class="sd">    n_sines : int | 100</span>
+<span class="sd">        Number of sines composing each epoch.</span>
+<span class="sd">    f_min : float | .5</span>
+<span class="sd">        Minimum frequency for sines.</span>
+<span class="sd">    f_max : float | 160.</span>
+<span class="sd">        Maximum frequency for sines.</span>
+<span class="sd">    smooth : float | 50.</span>
+<span class="sd">        The smoothing factor. Use larger smoothing to reduce high frequencies.</span>
+<span class="sd">    noise : float | 10.</span>
+<span class="sd">        Noise level.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    data : array_like</span>
+<span class="sd">        Dataset as a (n_channels, n_trials, n_pts) array.</span>
+<span class="sd">    time : array_like</span>
+<span class="sd">        A (n_pts,) vector containing time values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_pts</span> <span class="o">+=</span> <span class="mi">100</span>  <span class="c1"># edge effect compensation</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_channels</span><span class="p">,</span> <span class="n">n_trials</span><span class="p">,</span> <span class="n">n_pts</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_pts</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">sf</span>
+    <span class="n">f_sines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">f_min</span><span class="p">,</span> <span class="n">f_max</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">n_sines</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">phy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="p">(</span><span class="n">n_pts</span><span class="p">,</span> <span class="n">n_sines</span><span class="p">))</span>
+    <span class="n">sines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">f_sines</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">time</span> <span class="o">+</span> <span class="n">phy</span><span class="p">)</span>
+    <span class="n">amp_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_sines</span><span class="p">,</span> <span class="n">base</span><span class="o">=.</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_channels</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_trials</span><span class="p">)):</span>
+        <span class="n">amp</span> <span class="o">=</span> <span class="n">amp_log</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">n_sines</span><span class="p">)</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">smoothing</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">sines</span><span class="p">,</span> <span class="n">amp</span><span class="p">),</span> <span class="n">smooth</span><span class="p">,</span> <span class="s1">&#39;hanning&#39;</span><span class="p">)</span>
+        <span class="n">sig</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">sig</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">noise</span> <span class="o">*</span> <span class="n">sig</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+        <span class="n">signal</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sig</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">zscore</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">50</span><span class="p">:</span><span class="o">-</span><span class="mi">50</span><span class="p">]</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="o">-</span><span class="mi">50</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">time</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -32,7 +32,7 @@ https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing
     data, sf, chan = raw._data, raw.info['sfreq'], raw.info['ch_names']
 
     # Now, pass all the arguments to the Sleep module :
-    Sleep(data=data, sf=sf, channels=chan, hypno_file='sub-02.hyp').show()
+    Sleep(data=data, sf=sf, channels=chan, hypno='sub-02.hyp').show()
 
 **Total running time of the script:** ( 0 minutes  0.000 seconds)
 

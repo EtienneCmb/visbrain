@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.signal.signal &mdash; visbrain 0.3.3 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.3 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.signal.signal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.signal.signal</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Signal module.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sip</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtWidgets</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">vispy.app</span> <span class="k">as</span> <span class="nn">visapp</span>
+<span class="kn">import</span> <span class="nn">vispy.scene.cameras</span> <span class="k">as</span> <span class="nn">viscam</span>
+
+<span class="kn">from</span> <span class="nn">.ui_elements</span> <span class="k">import</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">UiInit</span>
+<span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">Visuals</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">set_widget_size</span><span class="p">,</span> <span class="n">safely_set_cbox</span><span class="p">,</span> <span class="n">color2tuple</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span>
+                     <span class="n">mpl_cmap</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
+<span class="c1"># get_screen_size</span>
+
+<span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Signal&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">(</span><span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Signal inspection module (data mining).</span>
+
+<span class="sd">    The Signal module can be used to relatively large datasets of</span>
+<span class="sd">    time-series. Two layout are provided :</span>
+
+<span class="sd">    * Grid layout : visualize all of the signals into a grid.</span>
+<span class="sd">    * Signal layout : visualize only one signal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : array_like</span>
+<span class="sd">        Array of data of shape (N,),</span>
+<span class="sd">    axis : int | -1</span>
+<span class="sd">        Specify where is located the time axis in data. By default, the last</span>
+<span class="sd">        axis is considered as the time axis (-1).</span>
+<span class="sd">    time : array_like | None</span>
+<span class="sd">        Time vector to use. If None, the time vector is inferred using the axis</span>
+<span class="sd">        input.</span>
+<span class="sd">    sf : float | 1.</span>
+<span class="sd">        Sampling frequency.</span>
+<span class="sd">    enable_grid : bool | True</span>
+<span class="sd">        Enable or disable the grid. If False, the grid is not computed and not</span>
+<span class="sd">        accessible from the GUI. The grid requires more memory RAM. It could be</span>
+<span class="sd">        turn to False for very large datasets.</span>
+<span class="sd">    form : {&#39;line&#39;, &#39;marker&#39;, &#39;histogram&#39;, &#39;tf&#39;, &#39;psd&#39;}</span>
+<span class="sd">        Plotting type.</span>
+<span class="sd">    color : array_like/string/tuple | &#39;black&#39;</span>
+<span class="sd">        Color of the plot.</span>
+<span class="sd">    line_lw : float | 1.</span>
+<span class="sd">        Line width (form in [&#39;line&#39;, &#39;psd&#39;]).</span>
+<span class="sd">    marker_symbol : string | &#39;o&#39;</span>
+<span class="sd">        Marker symbol.</span>
+<span class="sd">    marker_size : float | 10.</span>
+<span class="sd">        Marker size.</span>
+<span class="sd">    hist_nbins : int | 10</span>
+<span class="sd">        Number of bins for the histogram.</span>
+<span class="sd">    tf_norm : int | 0</span>
+<span class="sd">        Time-frequency normalization. If tf_baseline is not defined, the mean</span>
+<span class="sd">        and deviation are deduced using the entire trial. Use :</span>
+
+<span class="sd">            * 0 : No normalization</span>
+<span class="sd">            * 1 : Subtract the mean</span>
+<span class="sd">            * 2 : Divide by the mean</span>
+<span class="sd">            * 3 : Subtract then divide by the mean</span>
+<span class="sd">            * 4 : Z-score</span>
+<span class="sd">    tf_baseline : tuple | None</span>
+<span class="sd">        Baseline to used for the normalization. Must be a tuple of two integers</span>
+<span class="sd">        (starting, ending) time index.</span>
+<span class="sd">    tf_interp : string | &#39;gaussian&#39;</span>
+<span class="sd">        Time-frequency interpolation method.</span>
+<span class="sd">    tf_cmap : string | &#39;viridis&#39;</span>
+<span class="sd">        Time-frequency colormap.</span>
+<span class="sd">    tf_av_window : int | None</span>
+<span class="sd">        Length of the window to apply a time averaging.</span>
+<span class="sd">    tf_av_overlap : float | 0.</span>
+<span class="sd">        Overlap between successive time window. Default 0. means no overlap.</span>
+<span class="sd">    tf_clim : tuple | None</span>
+<span class="sd">        Colorbar limits to use for the tim-frequency map.</span>
+<span class="sd">    psd_nperseg : int | 256</span>
+<span class="sd">        Length of each segment (scipy.signal.welch).</span>
+<span class="sd">    psd_noverlap : int | 128</span>
+<span class="sd">        Number of points to overlap between segments (scipy.signal.welch).</span>
+<span class="sd">    parent : VisPy.parent | None</span>
+<span class="sd">        Parent of the mesh.</span>
+<span class="sd">    title : string | None</span>
+<span class="sd">        Title of the axis (signal layout).</span>
+<span class="sd">    xlabel : string | None</span>
+<span class="sd">        Label for the x-axis (signal layout).</span>
+<span class="sd">    ylabel : string | None</span>
+<span class="sd">        Label for the y-axis (signal layout).</span>
+<span class="sd">    title_font_size : float | 15.</span>
+<span class="sd">        Size of the title (signal layout).</span>
+<span class="sd">    axis_font_size : float | 12.</span>
+<span class="sd">        Size of x and y labels (signal layout).</span>
+<span class="sd">    axis_color : array_like/string/tuple | &#39;black&#39;</span>
+<span class="sd">        Label, title, axis and border color (signal layout).</span>
+<span class="sd">    tick_font_size : float | 8.</span>
+<span class="sd">        Size of ticks for the x and y-axis (signal layout).</span>
+<span class="sd">    bgcolor : array_like/tuple/string | &#39;black&#39;</span>
+<span class="sd">        Background color.</span>
+<span class="sd">    display_grid : bool | True</span>
+<span class="sd">        Display the grid layout.</span>
+<span class="sd">    display_signal : bool | True</span>
+<span class="sd">        Display the signal layout.</span>
+<span class="sd">    annotations : str | None</span>
+<span class="sd">        Path to an annotation file.</span>
+<span class="sd">    line_rendering : {&#39;gl&#39;, &#39;agg&#39;}</span>
+<span class="sd">        Specify the line rendering method. Use &#39;gl&#39; for a fast but lower</span>
+<span class="sd">        quality lines and &#39;agg&#39;, looks better but slower.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">enable_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">form</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">line_lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">marker_symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span>
+                 <span class="n">marker_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">hist_nbins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tf_norm</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tf_baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">tf_interp</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">tf_cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">tf_av_window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">tf_av_overlap</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">tf_clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">psd_nperseg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+                 <span class="n">psd_noverlap</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">display_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display_signal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">annot_txtsz</span><span class="o">=</span><span class="mf">18.</span><span class="p">,</span> <span class="n">annot_marksz</span><span class="o">=</span><span class="mf">16.</span><span class="p">,</span>
+                 <span class="n">annot_color</span><span class="o">=</span><span class="s1">&#39;#2ecc71&#39;</span><span class="p">,</span> <span class="n">line_rendering</span><span class="o">=</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enable_grid</span> <span class="o">=</span> <span class="n">enable_grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_previous_form</span> <span class="o">=</span> <span class="n">form</span>
+        <span class="n">display_grid</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">display_grid</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_grid</span><span class="p">)</span>
+
+        <span class="c1"># ==================== APP CREATION ====================</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+        <span class="n">UiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># ==================== DATA CHECKING ====================</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;data must be an NumPy array with less than three &quot;</span>
+                            <span class="s2">&quot;dimensions.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_grid</span><span class="p">:</span>  <span class="c1"># disable grid</span>
+            <span class="n">display_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_grid</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actionGrid</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span> <span class="o">=</span> <span class="n">axis</span>
+
+        <span class="c1"># ==================== VISUALS ====================</span>
+        <span class="n">grid_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">signal_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
+        <span class="n">Visuals</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">line_rendering</span><span class="p">,</span>
+                         <span class="n">grid_parent</span><span class="p">,</span> <span class="n">signal_parent</span><span class="p">)</span>
+
+        <span class="c1"># ==================== CAMERA ====================</span>
+        <span class="n">grid_rect</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">sig_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signal</span><span class="o">.</span><span class="n">rect</span>
+        <span class="n">cb_rect</span> <span class="o">=</span> <span class="p">(</span><span class="o">-.</span><span class="mi">05</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="mf">4.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_canvas</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="n">grid_rect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="n">sig_rect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">wc_cbar</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="n">cb_rect</span><span class="p">)</span>
+
+        <span class="c1"># ==================== UI INIT ====================</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fix_elements_limits</span><span class="p">()</span>
+        <span class="c1"># ------------- Signal -------------</span>
+        <span class="c1"># Signal and axis color :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_color</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">color2tuple</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="nb">float</span><span class="p">)))</span>
+        <span class="n">ax_color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;axis_color&#39;</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_color</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ax_color</span><span class="p">))</span>
+        <span class="c1"># Title, labels and ticks :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_title</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_title_fz</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title_font_size&#39;</span><span class="p">,</span> <span class="mf">15.</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_xlab</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xlabel&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_ylab</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ylabel&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_lab_fz</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;axis_font_size&#39;</span><span class="p">,</span> <span class="mf">12.</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_ticks_fz</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tick_font_size&#39;</span><span class="p">,</span> <span class="mf">8.</span><span class="p">))</span>
+        <span class="c1"># Signal properties :</span>
+        <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sig_form</span><span class="p">,</span> <span class="n">form</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_lw</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">line_lw</span><span class="p">)</span>  <span class="c1"># line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_nbins</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">hist_nbins</span><span class="p">)</span>  <span class="c1"># histogram</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_size</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">marker_size</span><span class="p">)</span>  <span class="c1"># marker</span>
+        <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sig_symbol</span><span class="p">,</span> <span class="n">marker_symbol</span><span class="p">)</span>  <span class="c1"># marker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_norm</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">tf_norm</span><span class="p">)</span>
+        <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sig_tf_interp</span><span class="p">,</span> <span class="n">tf_interp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_tf_rev</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">tf_cmap</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;_r&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_tf_cmap</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="n">mpl_cmap</span><span class="p">())</span>
+        <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sig_tf_cmap</span><span class="p">,</span> <span class="n">tf_cmap</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_r&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tf_baseline</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tf_baseline</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sig_baseline</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sig_base_start</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">tf_baseline</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sig_base_end</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">tf_baseline</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tf_av_window</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sig_averaging</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sig_av_win</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">tf_av_window</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sig_av_overlap</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">tf_av_overlap</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tf_clim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tf_clim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sig_tf_clim</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sig_climin</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">tf_clim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sig_climax</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">tf_clim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_nperseg</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">psd_nperseg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_noverlap</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">psd_noverlap</span><span class="p">)</span>
+
+        <span class="c1"># ------------- Cbar -------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">cbar</span><span class="o">.</span><span class="n">txtcolor</span> <span class="o">=</span> <span class="n">ax_color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">cbar</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">cbar</span><span class="o">.</span><span class="n">cbtxtsz</span> <span class="o">=</span> <span class="mf">15.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">cbar</span><span class="o">.</span><span class="n">txtsz</span> <span class="o">=</span> <span class="mf">12.</span>
+
+        <span class="c1"># ------------- Settings -------------</span>
+        <span class="n">bgcolor</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bgcolor&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_bgcolor</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">color2tuple</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="nb">float</span><span class="p">)))</span>
+
+        <span class="c1"># ------------- Annotations -------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annot_txtsz</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">annot_txtsz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annot_marksz</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">annot_marksz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annot_color</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">color2tuple</span><span class="p">(</span><span class="n">annot_color</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="nb">float</span><span class="p">)))</span>
+
+        <span class="c1"># ------------- Menu -------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionGrid</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">display_grid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionSignal</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">display_signal</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_on_creation</span><span class="p">()</span>
+
+        <span class="c1"># ==================== USER &lt;-&gt; GUI ====================</span>
+        <span class="n">UiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># ==================== SHORTCUTS ====================</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shpopup</span><span class="o">.</span><span class="n">set_shortcuts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh_grid</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sh_sig</span><span class="p">)</span>
+
+        <span class="c1"># ------------- Annotations -------------</span>
+        <span class="k">if</span> <span class="n">annotations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">annotations</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_load_annotations</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">annotations</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iterate over signal dimension.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_signal</span><span class="o">.</span><span class="n">_navidx</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">k</span>
+
+    <span class="k">def</span> <span class="nf">_fix_elements_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fiw the upper and lower limits of some elements.&quot;&quot;&quot;</span>
+        <span class="c1"># Fix index limits :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_index</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_index</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_signal</span><span class="o">.</span><span class="n">_navidx</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Fix amplitude limits :</span>
+        <span class="n">d_min</span><span class="p">,</span> <span class="n">d_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="p">(</span><span class="n">d_max</span> <span class="o">-</span> <span class="n">d_min</span><span class="p">)</span> <span class="o">/</span> <span class="mf">100.</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_amp_min</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="n">d_min</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_amp_min</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">d_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_amp_min</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">d_min</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_amp_min</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_amp_max</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="n">d_min</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_amp_max</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">d_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_amp_max</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">d_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_amp_max</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_av_win</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_base_start</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_base_end</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="c1"># Fix amplitude limits :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_th_min</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="n">d_min</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_th_min</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">d_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_th_min</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">d_min</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_th_min</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_th_max</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="n">d_min</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_th_max</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">d_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_th_max</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">d_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_th_max</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_on_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run on GUI creation.&quot;&quot;&quot;</span>
+        <span class="c1"># Settings :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">QuickSettings</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">set_widget_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
+        <span class="c1"># Fix proportion of canvas :</span>
+        <span class="c1"># w, g = get_screen_size(self._app)</span>
+        <span class="c1"># self._signal_canvas.wc.width_max = w / 2</span>
+        <span class="c1"># self._grid_canvas.wc.width_max = w / 2</span>
+        <span class="c1"># Display / hide grid and signal :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_grid</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_signal</span><span class="p">()</span>
+        <span class="c1"># Set signal data :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_set_signal</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Annotations :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_annot_appear</span><span class="p">()</span>
+        <span class="c1"># Update cameras :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_cameras</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update_cameras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g_rect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s_rect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update cameras.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">update</span> <span class="o">==</span> <span class="s1">&#39;both&#39;</span><span class="p">:</span>
+            <span class="n">update_grid</span> <span class="o">=</span> <span class="n">update_signal</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">update</span> <span class="o">==</span> <span class="s1">&#39;signal&#39;</span><span class="p">:</span>
+            <span class="n">update_grid</span><span class="p">,</span> <span class="n">update_signal</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">update</span> <span class="o">==</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span>
+            <span class="n">update_grid</span><span class="p">,</span> <span class="n">update_signal</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">update_grid</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_grid&#39;</span><span class="p">):</span>  <span class="c1"># Grid</span>
+            <span class="n">g_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">rect</span> <span class="k">if</span> <span class="n">g_rect</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">g_rect</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_canvas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">g_rect</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_canvas</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">update_signal</span><span class="p">:</span>  <span class="c1"># Signal</span>
+            <span class="n">s_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signal</span><span class="o">.</span><span class="n">rect</span> <span class="k">if</span> <span class="n">s_rect</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">s_rect</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">s_rect</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Signal.screenshot"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;screenshot.png&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">,</span>
+                   <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Take a screenshot of the scene.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : string | &#39;screenshot.png&#39;</span>
+<span class="sd">            Name and path of the screenshot file.</span>
+<span class="sd">        canvas : {&#39;signal&#39;, &#39;grid&#39;}</span>
+<span class="sd">            Canvas to capture.</span>
+<span class="sd">        autocrop : bool | False</span>
+<span class="sd">            Auto-cropping argument to remove useless space.</span>
+<span class="sd">        region : tuple/list | None</span>
+<span class="sd">            The region to export (x_start, y_start, width, height).</span>
+<span class="sd">        print_size : tuple | None</span>
+<span class="sd">            The desired print size. This argument should be used in association</span>
+<span class="sd">            with the dpi and unit inputs. print_size describe should be a tuple</span>
+<span class="sd">            of two floats describing (width, height) of the exported image for</span>
+<span class="sd">            a specific dpi level. The final image might not have the exact</span>
+<span class="sd">            desired size but will try instead to find a compromize</span>
+<span class="sd">            regarding to the proportion of width/height of the original image.</span>
+<span class="sd">        unit : {&#39;centimeter&#39;, &#39;millimeter&#39;, &#39;pixel&#39;, &#39;inch&#39;}</span>
+<span class="sd">            Unit of the printed size.</span>
+<span class="sd">        dpi : float | 300.</span>
+<span class="sd">            Dots per inch for printing the image.</span>
+<span class="sd">        factor : float | None</span>
+<span class="sd">            If you don&#39;t want to use the print_size input, factor simply</span>
+<span class="sd">            multiply the resolution of your screen.</span>
+<span class="sd">        bgcolor : array_like/string | None</span>
+<span class="sd">            Background color of the canvas.</span>
+<span class="sd">        transparent : bool | False</span>
+<span class="sd">            Use transparent background.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">canvas</span> <span class="o">==</span> <span class="s1">&#39;signal&#39;</span><span class="p">:</span>
+            <span class="n">c</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SignalWidget</span>
+        <span class="k">elif</span> <span class="n">canvas</span> <span class="o">==</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span>
+            <span class="n">c</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_canvas</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_GridWidget</span>
+        <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">autocrop</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">print_size</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span>
+                         <span class="n">dpi</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">,</span> <span class="n">transparent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Signal.set_xlim"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.set_xlim">[docs]</a>    <span class="k">def</span> <span class="nf">set_xlim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xstart</span><span class="p">,</span> <span class="n">xend</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fix limits of the x-axis.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xstart : float</span>
+<span class="sd">            Starting point of the x-axis.</span>
+<span class="sd">        xend : float</span>
+<span class="sd">            Ending point of the x-axis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">xstart</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">xend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Signal.set_ylim"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.set_ylim">[docs]</a>    <span class="k">def</span> <span class="nf">set_ylim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ystart</span><span class="p">,</span> <span class="n">yend</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fix limits of the y-axis.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ystart : float</span>
+<span class="sd">            Starting point of the y-axis.</span>
+<span class="sd">        yend : float</span>
+<span class="sd">            Ending point of the y-axis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">=</span> <span class="n">ystart</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">yend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Signal.set_signal_index"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.set_signal_index">[docs]</a>    <span class="k">def</span> <span class="nf">set_signal_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the index of the signal.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_safely_set_index</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Signal.set_signal_form"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.set_signal_form">[docs]</a>    <span class="k">def</span> <span class="nf">set_signal_form</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set plotting method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        form : {&#39;line&#39;, &#39;marker&#39;, &#39;histogram&#39;, &#39;tf&#39;, &#39;psd&#39;}</span>
+<span class="sd">            Plotting form.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="s1">&#39;marker&#39;</span><span class="p">,</span> <span class="s1">&#39;histogram&#39;</span><span class="p">,</span> <span class="s1">&#39;tf&#39;</span><span class="p">,</span> <span class="s1">&#39;psd&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_form</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Signal.show"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display the graphical user interface.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
+        <span class="n">visapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -102,21 +102,17 @@
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog and future directions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#changelog">Changelog</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#v0-3-2">v0.3.2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#v0-3-4">v0.3.4</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#visbrain">Visbrain</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#brain-module">Brain module</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#v0-3-0">v0.3.0</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id1">Brain module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sleep">Sleep</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#future-directions">Future directions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Visbrain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Visbrain</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#brain">Brain</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sleep">Sleep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Sleep</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#figure">Figure</a></li>
 </ul>
 </li>
@@ -189,50 +185,34 @@
 <span id="changelogfutur"></span><h1>Changelog and future directions<a class="headerlink" href="#changelog-and-future-directions" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="changelog">
 <h2>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="v0-3-2">
-<h3>v0.3.2<a class="headerlink" href="#v0-3-2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="v0-3-4">
+<h3>v0.3.4<a class="headerlink" href="#v0-3-4" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="visbrain">
 <h4>Visbrain<a class="headerlink" href="#visbrain" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
-<li>New topoplot module</li>
-<li>Screenshots improvements (new screenshot window from the GUI)</li>
+<li><em>Ndviz</em> has been replaced by <em>Signal</em></li>
 </ul>
 </div>
-<div class="section" id="brain-module">
-<h4>Brain module<a class="headerlink" href="#brain-module" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="sleep">
+<h4>Sleep<a class="headerlink" href="#sleep" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
-<li>Bug fixing</li>
-</ul>
-</div>
-</div>
-<div class="section" id="v0-3-0">
-<h3>v0.3.0<a class="headerlink" href="#v0-3-0" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id1">
-<h4>Brain module<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
-<ul class="simple">
-<li>Add time-series and pictures attached to sources</li>
-<li>Colorbar integration improvements</li>
-<li>Add volume and cross-sections</li>
-<li>Enable to import new brain template and nifti volumes</li>
-<li>Add XYZ source’s tab to find where source’s are localized</li>
-<li>Improve ROI selection</li>
-<li>New user methods</li>
-<li>GUI and Doc improvements</li>
+<li>List of supported files has been extended + better integration of MNE</li>
+<li>Start lazy loading for huge files</li>
+<li>Improve down-sampling</li>
+<li>Command-line control</li>
 </ul>
 </div>
 </div>
 </div>
 <div class="section" id="future-directions">
 <h2>Future directions<a class="headerlink" href="#future-directions" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id2">
-<h3>Visbrain<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Visbrain<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>conda installation</li>
 <li>Independent of the VisPy developer version for better installation (ST)</li>
 <li>Code style improvements (flake8 and numpydoc) (ST)</li>
-<li>Improve coverage (right now, PyQt tests failed) (ST)</li>
-<li>Improve doc with sphinx-gallery (ST)</li>
-<li>New modules are planned (<em>Connect</em>, <em>Signal</em>, <em>Image</em>, <em>ERP</em>, <em>Topo</em>) (LT)</li>
+<li>New modules are planned (<em>Connect</em>, <em>Pictures</em>, <em>ERP</em>) (LT)</li>
 </ul>
 </div>
 <div class="section" id="brain">
@@ -244,11 +224,9 @@
 <li>Support adding custom ROI (LT)</li>
 </ul>
 </div>
-<div class="section" id="sleep">
-<h3>Sleep<a class="headerlink" href="#sleep" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>Sleep<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Better integration of non-supported files (compatibility with MNE)  (ST)</li>
-<li>Command-line control (LT)</li>
 <li>De-noising (LT)</li>
 <li>Zero re-referencing (LT)</li>
 <li>Automatic-scoring (LT)</li>

@@ -41,7 +41,7 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="visbrain 0.3.3 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
-        <link rel="next" title="9. Screenshot" href="vbexport.html"/>
+        <link rel="next" title="Examples" href="auto_examples/index.html"/>
         <link rel="prev" title="7. Utils" href="utils.html"/> 
 
   
@@ -103,8 +103,8 @@
 <li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="brain.html">1. Brain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sleep.html">2. Sleep</a></li>
-<li class="toctree-l2"><a class="reference internal" href="topo.html">3. Topo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ndviz.html">4. Ndviz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="signal.html">3. Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo.html">4. Topo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. Colorbar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="figure.html">6. Figure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">7. Utils</a></li>
@@ -115,7 +115,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#image">8.4. Image</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="vbexport.html">9. Screenshot</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -279,27 +278,63 @@ element is a string of type ‘Ext (.ext)’</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="visbrain.io.mneio.mne_read_sleep">
-<code class="descclassname">visbrain.io.mneio.</code><code class="descname">mne_read_sleep</code><span class="sig-paren">(</span><em>file</em>, <em>ext</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/mneio.html#mne_read_sleep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.mneio.mne_read_sleep" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.io.mneio.mne_switch">
+<code class="descclassname">visbrain.io.mneio.</code><code class="descname">mne_switch</code><span class="sig-paren">(</span><em>file</em>, <em>ext</em>, <em>downsample</em>, <em>preload=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/mneio.html#mne_switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.mneio.mne_switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read sleep datasets using mne.io.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>file: string</dt>
-<dd>Filename.</dd>
-<dt>ext: string</dt>
-<dd>File extension.</dd>
-<dt>arg: tuple</dt>
-<dd>Further arguments.</dd>
-</dl>
-</dd>
-<dt>Kargs:</dt>
-<dd><dl class="first last docutils">
-<dt>kargs: dict, optional, (def: {})</dt>
-<dd>Further optional arguments.</dd>
-</dl>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>file</strong> : string</p>
+<blockquote>
+<div><p>Filename (without extension).</p>
+</div></blockquote>
+<p><strong>ext</strong> : string</p>
+<blockquote>
+<div><p>File extension (e.g. ‘.edf”).</p>
+</div></blockquote>
+<p><strong>preload</strong> : bool | True</p>
+<blockquote>
+<div><p>Preload data in memory.</p>
+</div></blockquote>
+<p><strong>kwargs</strong> : dict | {}</p>
+<blockquote>
+<div><p>Further arguments to pass to the mne.io.read function.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>sf</strong> : float</p>
+<blockquote>
+<div><p>The original sampling-frequency.</p>
+</div></blockquote>
+<p><strong>downsample</strong> : float</p>
+<blockquote>
+<div><p>The down-sampling frequency used.</p>
+</div></blockquote>
+<p><strong>dsf</strong> : int</p>
+<blockquote>
+<div><p>The down-sampling factor.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>The raw data of shape (n_channels, n_points)</p>
+</div></blockquote>
+<p><strong>channels</strong> : list</p>
+<blockquote>
+<div><p>List of channel names.</p>
+</div></blockquote>
+<p><strong>n</strong> : int</p>
+<blockquote>
+<div><p>Number of time points before down-sampling.</p>
+</div></blockquote>
+<p><strong>start_time</strong> : datetime.time</p>
+<blockquote class="last">
+<div><p>The time offset.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -356,8 +391,8 @@ element is a string of type ‘Ext (.ext)’</p>
 <h2>8.4. Image<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="visbrain.io.write_image.write_fig_hyp">
-<code class="descclassname">visbrain.io.write_image.</code><code class="descname">write_fig_hyp</code><span class="sig-paren">(</span><em>file</em>, <em>hypno</em>, <em>sf</em>, <em>tstartsec</em>, <em>grid=False</em>, <em>ascolor=False</em>, <em>colors={-1: ‘#8bbf56’</em>, <em>0: ‘#56bf8b’</em>, <em>1: ‘#aabcce’</em>, <em>2: ‘#405c79’</em>, <em>3: ‘#0b1c2c’</em>, <em>4: ‘#bf5656’}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/write_image.html#write_fig_hyp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.write_image.write_fig_hyp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Export hypnogram to a 600 dpi png figure.</p>
+<code class="descclassname">visbrain.io.write_image.</code><code class="descname">write_fig_hyp</code><span class="sig-paren">(</span><em>file</em>, <em>hypno</em>, <em>sf</em>, <em>tstartsec</em>, <em>grid=False</em>, <em>ascolor=False</em>, <em>dpi=600</em>, <em>colors={-1: ‘#8bbf56’</em>, <em>0: ‘#56bf8b’</em>, <em>1: ‘#aabcce’</em>, <em>2: ‘#405c79’</em>, <em>3: ‘#0b1c2c’</em>, <em>4: ‘#bf5656’}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/io/write_image.html#write_fig_hyp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.io.write_image.write_fig_hyp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export hypnogram to a high-res png figure.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -370,18 +405,31 @@ element is a string of type ‘Ext (.ext)’</p>
 <blockquote>
 <div><p>Hypnogram vector</p>
 </div></blockquote>
-<p><strong>sf</strong> : float | 100.</p>
+<p><strong>sf</strong> : float</p>
 <blockquote>
 <div><p>The sampling frequency of displayed elements (could be the
 down-sampling frequency)</p>
 </div></blockquote>
-<p><strong>tstartsec: int</strong></p>
+<p><strong>tstartsec</strong> : int</p>
 <blockquote>
 <div><p>Record starting time given in seconds.</p>
 </div></blockquote>
-<p><strong>grid</strong> : boolean, optional (def False)</p>
-<blockquote class="last">
+<p><strong>grid</strong> : bool | False</p>
+<blockquote>
 <div><p>Plot X and Y grid.</p>
+</div></blockquote>
+<p><strong>ascolor</strong> : bool | False</p>
+<blockquote>
+<div><p>Plot in color</p>
+</div></blockquote>
+<p><strong>dpi</strong> : int | 600</p>
+<blockquote>
+<div><p>Dots per inches</p>
+</div></blockquote>
+<p><strong>color</strong> : dict | {}</p>
+<blockquote class="last">
+<div><p>Color for each sleep stage. Default is : {-1: ‘#8bbf56’, 0: ‘#56bf8b’,
+1: ‘#aabcce’, 2: ‘#405c79’, 3: ‘#0b1c2c’, 4: ‘#bf5656’}</p>
 </div></blockquote>
 </td>
 </tr>
@@ -488,7 +536,7 @@ multiply the resolution of your screen.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="vbexport.html" class="btn btn-neutral float-right" title="9. Screenshot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="auto_examples/index.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="utils.html" class="btn btn-neutral" title="7. Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
