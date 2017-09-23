@@ -16,7 +16,7 @@ Visbrain
    :align:   center
 
 
-**Visbrain** is an open-source python 3 package and provides hardware accelerated visualizations mainly for neuroscientific data. It is based on top of `VisPy <http://vispy.org/>`_ and PyQt and is distributed under the 3-Clause BSD license. We also provide an on line `documentation <http://visbrain.org>`_, `examples and datasets <http://visbrain.org/auto_examples/>`_ and can also be downloaded from `PyPi <https://pypi.python.org/pypi/visbrain/>`_.
+**Visbrain** is an open-source python 3 package dedicated to brain signals visualization. It is based on top of `VisPy <http://vispy.org/>`_ and PyQt and is distributed under the 3-Clause BSD license. We also provide an on line `documentation <http://visbrain.org>`_, `examples and datasets <http://visbrain.org/auto_examples/>`_ and can also be downloaded from `PyPi <https://pypi.python.org/pypi/visbrain/>`_.
 
 Important links
 ===============
@@ -70,8 +70,8 @@ Modules
 
 * `Brain <http://visbrain.org/brain.html>`_ : visualize EEG/MEG/Intracranial data, connectivity in a standard MNI 3D brain (see `Brain examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_).
 * `Sleep <http://visbrain.org/sleep.html>`_ : visualize polysomnographic data and hypnogram edition (see `Sleep examples <http://visbrain.org/auto_examples/index.html#sleep-examples>`_).
+* `Signal <http://visbrain.org/signal.html>`_ : data-mining module for time-series inspection (see `Signal examples <http://visbrain.org/auto_examples/index.html#signal-examples>`_).
 * `Topo <http://visbrain.org/topo.html>`_ : display topographical maps (see `Topo examples <http://visbrain.org/auto_examples/index.html#topoplot-examples>`_).
-* `Ndviz <http://visbrain.org/ndviz.html>`_ : visualize multidimensional data and basic plotting forms (see `Ndviz examples <http://visbrain.org/auto_examples/index.html#ndviz-examples>`_).
 * `Figure <http://visbrain.org/figure.html>`_ : figure-layout for high-quality publication-like figures (see `Figure examples <http://visbrain.org/auto_examples/index.html#figure-examples>`_).
 * `Colorbar <http://visbrain.org/colorbar.html>`_ : colorbar editor (see `Colorbar examples <http://visbrain.org/auto_examples/index.html#colorbar-examples>`_).
 

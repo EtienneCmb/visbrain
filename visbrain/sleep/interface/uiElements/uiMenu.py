@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 from ....utils import HelpMenu
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    is_mne_installed)
+                    is_mne_installed, annotations_to_array, oversample_hypno)
 
 __all__ = ['uiMenu']
 
@@ -293,7 +293,8 @@ class uiMenu(HelpMenu):
                                   "All files (*.*)")
         if filename:
             # Load the hypnogram :
-            self._hypno = read_hypno(filename, len(self._hypno))
+            self._hypno, _ = read_hypno(filename)
+            self._hypno = oversample_hypno(self._hypno, self._N)[::self._dsf]
             self._hyp.set_data(self._sf, self._hypno, self._time)
             # Update info table :
             self._fcn_infoUpdate()
@@ -426,22 +427,7 @@ class uiMenu(HelpMenu):
                                   "All files (*.*)")
         # Clean annotations :
         self._AnnotateTable.setRowCount(0)
-        # Load the file :
-        if isinstance(filename, str):  # 'file.txt'
-            # Get starting/ending/annotation :
-            start, end, annot = np.genfromtxt(filename, delimiter=',',
-                                              dtype=str).T
-        elif isinstance(filename, np.ndarray):
-            start = end = filename
-            annot = np.array(['enter annotations'] * len(start))
-        elif is_mne_installed():  # MNE annotations
-            import mne
-            if isinstance(filename, mne.annotations.Annotations):
-                start = filename.onset
-                end = filename.onset + filename.duration
-                annot = filename.description
-        else:
-            raise ValueError("Annotation's type not supported.")
+        start, end, annot = annotations_to_array(filename)
 
         # Fill table :
         self._AnnotateTable.setRowCount(len(start))
@@ -529,9 +515,10 @@ class uiMenu(HelpMenu):
 
     def _disptog_indic(self):
         """Toggle method for display / hide the time indicators."""
-        self._specInd.mesh.visible = self.menuDispIndic.isChecked()
-        self._hypInd.mesh.visible = self.menuDispIndic.isChecked()
-        self._TimeAxis.mesh.visible = self.menuDispIndic.isChecked()
+        viz = self.menuDispIndic.isChecked()
+        self._specInd.mesh.visible = viz
+        self._hypInd.mesh.visible = viz
+        self._TimeAxis.mesh.visible = viz
         self._fcn_sliderMove()
 
     def _disptog_zoom(self):

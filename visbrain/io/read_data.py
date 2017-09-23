@@ -24,16 +24,14 @@ __all__ = ('switch_data', 'read_mat', 'read_pickle', 'read_npy', 'read_npz',
 def switch_data(path, *args, **kwargs):
     """Switch between data files.
 
-    Args:
-        path: string
-            Filename.
-
-        arg: tuple
-            Further arguments.
-
-    Kargs:
-        kargs: dict, optional, (def: {})
-            Further optional arguments.
+    Parameters
+    ----------
+    path : string
+        Filename.
+    arg : tuple
+        Further arguments.
+    kargs : dict | {}
+        Further optional arguments.
     """
     # Find file extension :
     file, ext = get_file_ext(path)

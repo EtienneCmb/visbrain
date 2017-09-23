@@ -18,22 +18,7 @@ __all__ = ('Topo')
 
 
 class Topo(UiInit, UiElements):
-    """Pass.
-
-    Parameters
-    ----------
-
-    Methods
-    -------
-    show()
-        Display the graphical user interface.
-    quit()
-        Quit the interface.
-    add_topoplot()
-        Add a subplot embedded in a subplot.
-    add_shared_colorbar()
-        Add a shared colorbar across subplots.
-    """
+    """Display topographic representation."""
 
     def __init__(self, *args, **kwargs):
         """Init."""

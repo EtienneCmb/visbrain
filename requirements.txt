@@ -1,5 +1,6 @@
-numpy
+numpy>=1.13
 scipy
 matplotlib>=1.5.5
 pyqt5
 pillow
+Click

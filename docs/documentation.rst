@@ -9,10 +9,9 @@ Documentation
 
     brain
     sleep
+    signal
     topo
-    ndviz
     colorbar
     figure
     utils
     io
-    vbexport

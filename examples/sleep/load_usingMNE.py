@@ -24,4 +24,4 @@ raw = io.read_raw_brainvision(vhdr_fname='sub-02.vhdr', preload=True)
 data, sf, chan = raw._data, raw.info['sfreq'], raw.info['ch_names']
 
 # Now, pass all the arguments to the Sleep module :
-Sleep(data=data, sf=sf, channels=chan, hypno_file='sub-02.hyp').show()
+Sleep(data=data, sf=sf, channels=chan, hypno='sub-02.hyp').show()

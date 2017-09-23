@@ -14,7 +14,7 @@ import numpy as np
 from scipy.signal import hilbert, detrend
 
 from ..filtering import filt, morlet, morlet_power, welch_power
-from ..sigproc import movingaverage, derivative, tkeo
+from ..sigproc import derivative, tkeo, smoothing
 from .event import (_events_duration, _events_removal, _events_distance_fill,
                     _events_amplitude)
 
@@ -28,7 +28,7 @@ __all__ = ('kcdetect', 'spindlesdetect', 'remdetect', 'slowwavedetect',
 
 def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
              kc_min_amp, kc_max_amp, fmin=.5, fmax=4., delta_thr=.75,
-             moving_s=20, spindles_thresh=1., range_spin_sec=20,
+             smoothing_s=20, spindles_thresh=1., range_spin_sec=20,
              kc_peak_min_distance=100., min_distance_ms=500.):
     """Perform a K-complex detection.
 
@@ -62,8 +62,8 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
     delta_thr : float | .75
         Delta normalized power threshold. Value must be between 0 and 1.
         0 = No thresholding by delta bandpower
-    moving_s : int | 20
-        Moving average window (sec) for smoothing of delta band power
+    smoothing_s : int | 20
+        Time window (sec) for smoothing of delta band power
     spindles_thresh : float | 1.
         Number of standard deviations to compute spindles detection
     range_spin_sec : int | 20
@@ -97,8 +97,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
     # Morlet's wavelet
     freqs = np.array([0.5, 4., 8., 12., 16.])
     delta_npow, _, _, _ = morlet_power(data, freqs, sf, norm=True)
-    delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
-    # local_delta_nfpow = movingaverage(delta_npow, sf, sf)
+    delta_nfpow = smoothing(delta_npow, smoothing_s * sf)
     idx_no_delta = np.where(delta_nfpow < delta_thr)[0]
     idx_loc_delta = np.where(delta_npow > np.mean(delta_npow))[0]
 
@@ -146,7 +145,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
 
         # Smooth and normalize probability vector
         proba = proba / 0.5 if hyploaded else proba / 0.4
-        proba = movingaverage(proba, sf, sf)
+        proba = smoothing(proba, sf)
 
         # Keep only proba >= proba_thr (user defined threshold)
         idx_sup_thr = np.intersect1d(idx_sup_thr, np.where(
@@ -248,7 +247,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
     # Compute relative sigma power
     freqs = np.array([0.5, 4., 8., fmin, fmax])
     _, _, _, sigma_npow = morlet_power(data, freqs, sf, norm=True)
-    sigma_nfpow = movingaverage(sigma_npow, sf, sf)
+    sigma_nfpow = smoothing(sigma_npow, sf * (tmin / 1000))
     idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
 
     # Get complex decomposition of filtered data :
@@ -308,7 +307,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
 
 
 def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
-              min_distance_ms=200, moving_ms=200, deriv_ms=30,
+              min_distance_ms=200, smoothing_ms=200, deriv_ms=30,
               amplitude_art=400):
     """Perform a rapid eye movement (REM) detection.
 
@@ -336,8 +335,8 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
     min_distance_ms : int | 200
         Minimum distance (ms) between two saccades to consider them as two
         distinct events.
-    moving_ms : int | 200
-        Time (ms) window of the moving average.
+    smoothing_ms : int | 200
+        Time (ms) window of the smoothing.
     deriv_ms : int | 30
         Time (ms) window of derivative computation
     amplitude_art : int | 400
@@ -361,12 +360,12 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
     else:
         length = max(elec.shape)
 
-    # Smooth signal with moving average
-    sm_sig = movingaverage(elec, moving_ms, sf)
+    # Smooth signal
+    sm_sig = smoothing(elec, sf * (smoothing_ms / 1000))
     # Compute first derivative
     deriv = derivative(sm_sig, deriv_ms, sf)
     # Smooth derivative
-    deriv = movingaverage(deriv, moving_ms, sf)
+    deriv = smoothing(deriv, sf * (smoothing_ms / 1000))
     # Define threshold
     if rem_only and 4 in hypno:
         id_th = np.setdiff1d(np.arange(elec.size), idx_zero)
@@ -405,7 +404,7 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
 
 
 def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
-                   fmax=2., welch_win_s=12, moving_s=30, min_duration_ms=500.):
+                   fmax=2., welch_win_s=12, min_duration_ms=500.):
     """Perform a Slow Wave detection.
 
     Parameters
@@ -429,8 +428,6 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
     welch_win_s  : int | 12
         Time (sec) window for computation of normalized bandpower with
         Welch's method
-    moving_s : int | 30
-        Time (sec) window of moving average to be applied on delta power
     min_duration_ms : float | 500.
         Minimum duration (ms) of slow waves
 
@@ -445,16 +442,10 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
     """
     length = max(elec.shape)
 
-    # Get complex decomposition of filtered data in the main EEG freq band:
-    # Using Morlet's wavelet - a bit longer
-    # freqs = np.array([fmin, fmax, 8., 12., 16.])
-    # delta_npow, _, _, _ = morlet_power(elec, freqs, sf, norm=True)
-    # delta_nfpow = movingaverage(delta_npow, moving_s * 1000, sf)
-
     # Using Welch's method
     delta_nfpow = welch_power(elec, fmin, fmax, sf, welch_win_s, norm=True)
     delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
-    delta_nfpow = movingaverage(delta_nfpow, 3 * welch_win_s * sf, sf)
+    delta_nfpow = smoothing(delta_nfpow, 3 * welch_win_s * sf)
 
     # Normalized power criteria
     idx_sup_thr = np.where(delta_nfpow > threshold)[0]
@@ -549,14 +540,14 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
     # Morlet's envelope
     analytic = morlet(elec, sf, np.mean([fmin, fmax]))
     amplitude = np.abs(analytic)
-    amplitude = movingaverage(amplitude, sf, sf)
+    amplitude = smoothing(amplitude, sf * (tmin / 1000))
 
     # Define threshold
     if rem_only and 4 in hypno:
         id_th = np.setdiff1d(np.arange(elec.size), idx_zero)
     else:
         # Remove period with too much delta power (N2 - N3)
-        delta_nfpow = welch_power(elec, 0.5, 2, sf, welch_win_s, norm=True)
+        delta_nfpow = welch_power(elec, 0.5, 4, sf, welch_win_s, norm=True)
         delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
         id_th = np.setdiff1d(np.arange(elec.size), np.where(
             delta_nfpow > delta_thr)[0])

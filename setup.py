@@ -6,7 +6,7 @@ import pip
 from pip.req import parse_requirements
 from optparse import Option
 
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
 MAINTAINER = "Etienne Combrisson"
@@ -80,4 +80,10 @@ setup(
                  'Intended Audience :: Developers',
                  'Topic :: Scientific/Engineering :: Visualization',
                  "Programming Language :: Python :: 3.5"
-                 ])
+                 ],
+    entry_points='''
+        [console_scripts]
+        visbrain_sleep=visbrain.cli:cli_sleep
+        visbrain_fig_hyp=visbrain.cli:cli_fig_hyp
+        visbrain_sleep_stats=visbrain.cli:cli_sleep_stats
+    ''')

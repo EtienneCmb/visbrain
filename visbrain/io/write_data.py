@@ -27,36 +27,36 @@ def write_mat():
     pass
 
 
-def write_txt(file, data):
+def write_txt(file, data, delimiter=', '):
     """Write data as a text (txt) file.
 
-    Args:
-        file: string
-            File name for saving file.
-
-        data: list
-            List of data to save to the txt file.
+    Parameters
+    ----------
+    file : string
+        File name for saving file.
+    data : list
+        List of data to save to the txt file.
     """
     # Open file :
     ofile = open(file, 'w')
     for k in data:
-        ofile.write("%s\n" % ', '.join(k))
+        ofile.write("%s\n" % delimiter.join(k))
     return
 
 
-def write_csv(file, data):
+def write_csv(file, data, delimiter=','):
     """Write data as a CSV (csv) file.
 
-    Args:
-        file: string
-            File name for saving file.
-
-        data: list
-            List of data to save to the csv file.
+    Parameters
+    ----------
+    file : string
+        File name for saving file.
+    data : list
+        List of data to save to the csv file.
     """
     import csv
     with open(file, 'w') as csvfile:
-        writer = csv.writer(csvfile, dialect='excel', delimiter=',')
+        writer = csv.writer(csvfile, dialect='excel', delimiter=delimiter)
         for k in data:
             writer.writerow(k)
     return

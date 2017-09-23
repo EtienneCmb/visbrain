@@ -13,9 +13,9 @@ import vispy.visuals.transforms as vist
 from .marker import Markers
 from ...utils import (array2colormap, color2vb, PrepareData)
 from ...utils.sleep.event import _index_to_events
-from ...visuals import TopoMesh
+from ...visuals import TopoMesh, TFmapsMesh
 
-__all__ = ("visuals")
+__all__ = ("Visuals")
 
 
 """
@@ -82,9 +82,10 @@ class Detection(object):
     def build_line(self, data):
         """Build detections reports.
 
-        Args:
-            data: np.ndarray
-                Data vector for a spcefic channel.
+        Parameters
+        ----------
+        data : array_like
+            Data vector for a spcefic channel.
         """
         for num, k in enumerate(self):
             if self[k]['index'].size:
@@ -112,12 +113,12 @@ class Detection(object):
     def build_hyp(self, chan, types):
         """Build hypnogram report.
 
-        Args:
-            chan: str
-                String name of the channel.
-
-            types: str
-                String name of the detection type.
+        Parameters
+        ----------
+        chan : str
+            String name of the channel.
+        types : str
+            String name of the detection type.
         """
         # Get index :
         index = self[(chan, types)]['index']
@@ -135,15 +136,14 @@ class Detection(object):
     def visible(self, viz, chan, types):
         """Set channel visibility.
 
-        Args:
-            viz: bool
-                Boolean value indicating if the plot have to be displayed.
-
-            chan: str
-                Channel name.
-
-            types: str
-                Detection type name.
+        Parameters
+        ----------
+        viz : bool
+            Boolean value indicating if the plot have to be displayed.
+        chan : str
+            Channel name.
+        types : str
+            Detection type name.
         """
         self.hyp.visible = viz
         if types == 'Peaks':
@@ -239,13 +239,13 @@ class ChannelPlot(PrepareData):
         for i, k in enumerate(channels):
             # ----------------------------------------------
             # Create a node parent :
-            node = scene.Node(name=k+'plot')
+            node = scene.Node(name=k + 'plot')
             node.parent = parent[i].wc.scene
             self.node.append(node)
 
             # ----------------------------------------------
             # Create main line (for channel plot) :
-            mesh = scene.visuals.Line(pos, name=k+'plot', color=self.color,
+            mesh = scene.visuals.Line(pos, name=k + 'plot', color=self.color,
                                       method=method, parent=node)
             mesh.set_gl_state('translucent')
             self.mesh.append(mesh)
@@ -260,7 +260,7 @@ class ChannelPlot(PrepareData):
 
             # ----------------------------------------------
             # Locations :
-            loc = scene.visuals.Line(pos, name=k+'location', method=method,
+            loc = scene.visuals.Line(pos, name=k + 'location', method=method,
                                      color=(.1, .1, .1, .3), parent=node,
                                      connect='segments')
             loc.set_gl_state('translucent')
@@ -287,19 +287,16 @@ class ChannelPlot(PrepareData):
     def set_data(self, sf, data, time, sl=None, ylim=None, autoamp=True):
         """Set data to channels.
 
-        Args:
-            data: np.ndarray
-                Array of data of shape (n_channels, n_points)
-
-            time: np.ndarray
-                The time vector.
-
-        Kargs:
-            sl: slice, optional, (def: None)
-                A slice object for the time selection of data.
-
-            ylim: np.ndarray, optional, (def: None)
-                Y-limits of each channel. Must be a (n_channels, 2) array.
+        Parameters
+        ----------
+        data: array_like
+            Array of data of shape (n_channels, n_points)
+        time: array_like
+            The time vector.
+        sl : slice | None
+            A slice object for the time selection of data.
+        ylim : array_like | None
+            Y-limits of each channel. Must be a (n_channels, 2) array.
         """
         if ylim is None:
             ylim = np.array([data.min(1), data.max(1)]).T
@@ -308,23 +305,23 @@ class ChannelPlot(PrepareData):
         sl = slice(0, data.shape[1]) if sl is None else sl
 
         # Slice selection (of time and data) :
-        timeSl = time[sl]
-        self.x = (timeSl.min(), timeSl.max())
-        dataSl = data[self.visible, sl]
-        z = np.full_like(timeSl, .5, dtype=np.float32)
+        time_sl = time[sl]
+        self.x = (time_sl.min(), time_sl.max())
+        data_sl = data[self.visible, sl]
+        z = np.full_like(time_sl, .5, dtype=np.float32)
 
         # Prepare the data (only if needed) :
         if self:
-            dataSl = self._prepare_data(sf, dataSl.copy(), timeSl)
+            data_sl = self._prepare_data(sf, data_sl.copy(), time_sl)
 
         # Set data to each plot :
         for l, (i, k) in enumerate(self):
             # ________ MAIN DATA ________
             # Select channel ;
-            datchan = dataSl[l, :]
+            datchan = data_sl[l, :]
 
             # Concatenate time / data / z axis :
-            dat = np.vstack((timeSl, datchan, z)).T
+            dat = np.vstack((time_sl, datchan, z)).T
 
             # Set main ligne :
             k.set_data(dat, width=self.width)
@@ -334,7 +331,7 @@ class ChannelPlot(PrepareData):
             ycam = (datchan.min(), datchan.max()) if self.autoamp else ylim[i]
 
             # Get camera rectangle and set it:
-            rect = (self.x[0], ycam[0], self.x[1]-self.x[0],
+            rect = (self.x[0], ycam[0], self.x[1] - self.x[0],
                     ycam[1] - ycam[0])
             self._camera[i].rect = rect
             k.update()
@@ -406,7 +403,7 @@ class Spectrogram(PrepareData):
     color, new frequency / time range, new settings...
     """
 
-    def __init__(self, camera, parent=None, fcn=None):
+    def __init__(self, camera, parent=None, fcn=None, use_tf=False):
         # Initialize PrepareData :
         PrepareData.__init__(self, axis=0)
 
@@ -414,90 +411,107 @@ class Spectrogram(PrepareData):
         self._camera = camera
         self._rect = (0., 0., 0., 0.)
         self._fcn = fcn
+        self._use_tf = use_tf
 
-        # Create a vispy image object :
-        self.mesh = scene.visuals.Image(np.zeros((2, 2)), name='spectrogram',
-                                        parent=parent)
+        # Time-frequency map
+        self.tf = TFmapsMesh(parent=parent)
+        # Spectrogram
+        self.mesh = scene.visuals.Image(np.zeros((2, 2)),
+                                        name='spectrogram', parent=parent)
+        self.mesh.transform = vist.STTransform()
 
     def set_data(self, sf, data, time, cmap='rainbow', nfft=30., overlap=0.,
-                 fstart=.5, fend=20., contraste=.5):
+                 fstart=.5, fend=20., contrast=.5, interp='nearest', norm=0):
         """Set data to the spectrogram.
 
         Use this method to change data, colormap, spectrogram settings, the
         starting and ending frequencies.
 
-        Args:
-            sf: float
-                The sampling frequency.
-
-            data: np.ndarray
-                The data to use for the spectrogram. Must be a row vector.
-
-            time: np.ndarray
-                The time vector.
-
-        Kargs:
-            cmap: string, optional, (def: 'viridis')
-                The matplotlib colormap to use.
-
-            nfft: float, optional, (def: 30.)
-                Number of fft points for the spectrogram (in seconds).
-
-            overlap: float, optional, (def: .5)
-                Time overlap for the spectrogram (in seconds).
-
-            fstart: float, optional, (def: .5)
-                Frequency from which the spectrogram have to start.
-
-            fend: float, optional, (def: 20.)
-                Frequency from which the spectrogram have to finish.
-
-            contraste: float, optional, (def: .5)
-                Contraste of the colormap.
+        Parameters
+        ----------
+        sf: float
+            The sampling frequency.
+        data: array_like
+            The data to use for the spectrogram. Must be a row vector.
+        time: array_like
+            The time vector.
+        cmap : string | 'viridis'
+            The matplotlib colormap to use.
+        nfft : float | 30.
+            Number of fft points for the spectrogram (in seconds).
+        overlap : float | .5
+            Ovelap proprotion (0 <= overlap <1).
+        fstart : float | .5
+            Frequency from which the spectrogram have to start.
+        fend : float | 20.
+            Frequency from which the spectrogram have to finish.
+        contrast : float | .5
+            Contrast of the colormap.
+        interp : string | 'nearest'
+            Interpolation method.
+        norm : int | 0
+            Normalization method for TF.
         """
-        # =================== CONVERSION ===================
-        nperseg = int(round(nfft * sf))
-        overlap = int(round(overlap * sf))
-
         # =================== PREPARE DATA ===================
         # Prepare data (only if needed)
         if self:
             data = self._prepare_data(sf, data.copy(), time)
 
-        # =================== COMPUTE ===================
-        # Compute the spectrogram :
-        freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
-                                           noverlap=overlap, window='hamming')
-        mesh = 20 * np.log10(mesh)
+        nperseg = int(round(nfft * sf))
 
-        # =================== FREQUENCY SELECTION ===================
-        # Find where freq is [fstart, fend] :
-        f = [0., 0.]
-        f[0] = np.abs(freq - fstart).argmin() if fstart else 0
-        f[1] = np.abs(freq - fend).argmin() if fend else len(freq)
-        # Build slicing and select frequency vector :
-        sls = slice(f[0], f[1]+1)
-        freq = freq[sls]
-        self._fstart, self._fend = freq[0], freq[-1]
+        # =================== TF // SPECTRO ===================
+        if self._use_tf:
+            self.tf.set_data(data, sf, f_min=fstart, f_max=fend, cmap=cmap,
+                             contrast=contrast, n_window=nperseg,
+                             overlap=overlap, window='hamming', norm=norm)
+            self.tf._image.interpolation = interp
+            self.rect = self.tf.rect
+            self.freq = self.tf.freqs
+        else:
+            # =================== CONVERSION ===================
+            overlap = int(round(overlap * nperseg))
 
-        # =================== COLOR ===================
-        # Get clim :
-        clim = (contraste * mesh.min(), contraste * mesh.max())
-        # Turn mesh into color array for selected frequencies:
-        self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap, clim=clim))
+            # =================== COMPUTE ===================
+            # Compute the spectrogram :
+            freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
+                                               noverlap=overlap,
+                                               window='hamming')
+            mesh = 20 * np.log10(mesh)
 
-        # =================== TRANSFORM ===================
-        tm, tM = time.min(), time.max()
-        # Re-scale the mesh for fitting in time / frequency :
-        fact = (freq.max() - freq.min()) / len(freq)
-        sc = (tM / mesh.shape[1], fact, 1)
-        tr = [0., freq.min(), 0.]
-        self.mesh.transform = vist.STTransform(scale=sc, translate=tr)
-        # Update object :
-        self.mesh.update()
-        # Get camera rectangle :
-        self.rect = (tm, freq.min(), tM-tm, freq.max() - freq.min())
-        self.freq = freq
+            # =================== FREQUENCY SELECTION ===================
+            # Find where freq is [fstart, fend] :
+            f = [0., 0.]
+            f[0] = np.abs(freq - fstart).argmin() if fstart else 0
+            f[1] = np.abs(freq - fend).argmin() if fend else len(freq)
+            # Build slicing and select frequency vector :
+            sls = slice(f[0], f[1] + 1)
+            freq = freq[sls]
+            self._fstart, self._fend = freq[0], freq[-1]
+
+            # =================== COLOR ===================
+            # Get clim :
+            clim = (contrast * mesh.min(), contrast * mesh.max())
+            # Turn mesh into color array for selected frequencies:
+            self.mesh.set_data(array2colormap(mesh[sls, :], cmap=cmap,
+                                              clim=clim))
+            self.mesh.interpolation = interp
+
+            # =================== TRANSFORM ===================
+            tm, tM = time.min(), time.max()
+            # Re-scale the mesh for fitting in time / frequency :
+            fact = (freq.max() - freq.min()) / len(freq)
+            sc = (tM / mesh.shape[1], fact, 1)
+            tr = [0., freq.min(), 0.]
+            self.mesh.transform.translate = tr
+            self.mesh.transform.scale = sc
+            # Update object :
+            self.mesh.update()
+            # Get camera rectangle :
+            self.rect = (tm, freq.min(), tM - tm, freq.max() - freq.min())
+            self.freq = freq
+        # Visibility :
+        self.mesh.visible = not self._use_tf
+        self.tf.visible = self._use_tf
 
     def clean(self):
         """Clean indicators."""
@@ -517,6 +531,21 @@ class Spectrogram(PrepareData):
         """Set rect value."""
         self._rect = value
         self._camera.rect = value
+
+    # ----------- INTERP -----------
+    @property
+    def interp(self):
+        """Get the interp value."""
+        return self._interp
+
+    @interp.setter
+    def interp(self, value):
+        """Set interp value."""
+        self._interp = value
+        self.mesh.interpolation = value
+        self.mesh.update()
+        self.tf.interpolation = value
+        self.tf.update()
 
 
 class Hypnogram(object):
@@ -546,7 +575,8 @@ class Hypnogram(object):
         self.edit.set_gl_state('translucent')
         # Add grid :
         self.grid = scene.visuals.GridLines(color=(.7, .7, .7, 1.),
-                                            scale=(30.*time[-1]/len(time), 1.),
+                                            scale=(30. * time[-1] / len(time),
+                                                   1.),
                                             parent=parent)
         self.grid.set_gl_state('translucent')
 
@@ -560,23 +590,20 @@ class Hypnogram(object):
     def set_data(self, sf, data, time, convert=True):
         """Set data to the hypnogram.
 
-        Args:
-            sf: float
-                The sampling frequency.
-
-            data: np.ndarray
-                The data to send. Must be a row vector.
-
-            time: np.ndarray
-                The time vector
-
-        Kargs:
-            convert: bool, optional, (def: True)
-                Specify if hypnogram data have to be converted.
+        Parameters
+        ----------
+        sf: float
+            The sampling frequency.
+        data: array_like
+            The data to send. Must be a row vector.
+        time: array_like
+            The time vector
+        convert : bool | True
+            Specify if hypnogram data have to be converted.
         """
         # Hypno conversion :
         if (self._hconv != self._hconvinv) and convert:
-            data = self.hyp2GUI(data)
+            data = self.hyp_to_gui(data)
         # Build color array :
         color = np.zeros((len(data), 4), dtype=np.float32)
         for k, v in zip(self.color.keys(), self.color.values()):
@@ -595,22 +622,22 @@ class Hypnogram(object):
         This method only set the stage without updating the entire
         hypnogram.
 
-        Args:
-            stfrom: int
-                The index where the stage start.
-
-            stend: int
-                The index where the stage end.
-
-            stage: int
-                Stage value.
+        Parameters
+        ----------
+        stfrom : int
+            The index where the stage start.
+        stend : int
+            The index where the stage end.
+        stage : int
+            Stage value.
         """
         # Convert the stage :
         stagec = self._hconv[stage]
         # Update color :
-        self.mesh.color[stfrom+1:stend+1, :] = self.color[stagec]
+        self.mesh.color[stfrom + 1:stend + 1, :] = self.color[stagec]
         # Only update the needed part :
         self.mesh.pos[stfrom:stend, 1] = -float(stagec)
+        self.mesh.update()
 
     def set_grid(self, time, length=30., y=1.):
         """Set grid lentgh."""
@@ -623,16 +650,18 @@ class Hypnogram(object):
     # -------------------------------------------------------------------------
     # CONVERSION METHODS
     # -------------------------------------------------------------------------
-    def hyp2GUI(self, data):
+    def hyp_to_gui(self, data):
         """Convert hypnogram data to the GUI.
 
-        Args:
-            data: np.ndarray
-                The data to send. Must be a row vector.
+        Parameters
+        ----------
+        data : array_like
+            The data to send. Must be a row vector.
 
-        Return:
-            datac: np.ndarray
-                Converted data
+        Returns
+        -------
+        datac : array_like
+            Converted data
         """
         # Backup copy :
         datac = data.copy()
@@ -642,12 +671,13 @@ class Hypnogram(object):
             data[datac == k] = self._hconv[k]
         return data
 
-    def GUI2hyp(self):
+    def gui_to_hyp(self):
         """Convert GUI hypnogram into data.
 
-        Return:
-            data: np.ndarray
-                The converted data.
+        Returns
+        -------
+        data : array_like
+            The converted data.
         """
         # Get latest data version :
         datac = -self.mesh.pos[:, 1]
@@ -657,18 +687,20 @@ class Hypnogram(object):
             data[datac == k] = self._hconvinv[k]
         return data
 
-    def pos2GUI(self, pos):
+    def pos_to_gui(self, pos):
         """Convert a position array.
 
-        Args:
-            pos: np.ndarray, int
-                Array of positions of shape (n_pos, 3) where the three
-                components are (time, y, z). Pos will also be converted if it's
-                a integer or float.
+        Parameters
+        ----------
+        pos : array_like, int
+            Array of positions of shape (n_pos, 3) where the three
+            components are (time, y, z). Pos will also be converted if it's
+            a integer or float.
 
-        Returns:
-            pos: np.ndarray, int
-                The converted position array/integer.
+        Returns
+        -------
+        pos : array_like, int
+            The converted position array/integer.
         """
         if isinstance(pos, np.ndarray):
             y = pos[:, 1]
@@ -679,18 +711,20 @@ class Hypnogram(object):
         elif isinstance(pos, (int, float)):
             return -self._hconv[-int(pos)]
 
-    def pos2GUIinv(self, pos):
+    def pos_to_gui_inv(self, pos):
         """Convert a position array.
 
-        Args:
-            pos: np.ndarray, int
-                Array of positions of shape (n_pos, 3) where the three
-                components are (time, y, z). Pos will also be converted if it's
-                a integer or float.
+        Parameters
+        ----------
+        pos : array_like, int
+            Array of positions of shape (n_pos, 3) where the three
+            components are (time, y, z). Pos will also be converted if it's
+            a integer or float.
 
-        Returns:
-            pos: np.ndarray, int
-                The converted position array/integer.
+        Returns
+        -------
+        pos : array_like, int
+            The converted position array/integer.
         """
         if isinstance(pos, np.ndarray):
             y = pos[:, 1]
@@ -786,22 +820,24 @@ class Indicator(object):
         image = color2vb('gray', alpha=alpha)[np.newaxis, ...]
         self.mesh = scene.visuals.Image(data=image, name=name,
                                         parent=parent)
+        self.mesh.transform = vist.STTransform()
         self.mesh.visible = visible
 
     def set_data(self, xlim, ylim):
         """Move the visual indicator.
 
-        Args:
-            xlim: tuple
-                A tuple of two float indicating where xlim start and xlim end.
-
-            ylim: tuple
-                A tuple of two floats indicating where ylim start and ylim end.
+        Parameters
+        ----------
+        xlim : tuple
+            A tuple of two float indicating where xlim start and xlim end.
+        ylim : tuple
+            A tuple of two floats indicating where ylim start and ylim end.
         """
         tox = (xlim[0], ylim[0], -1.)
         sc = (xlim[1] - xlim[0], ylim[1] - ylim[0], 1.)
         # Move the square
-        self.mesh.transform = vist.STTransform(translate=tox, scale=sc)
+        self.mesh.transform.translate = tox
+        self.mesh.transform.scale = sc
 
     def clean(self):
         """Clean indicators."""
@@ -817,14 +853,15 @@ Shortcuts applied on each canvas.
 """
 
 
-class vbShortcuts(object):
+class CanvasShortcuts(object):
     """This class add some shortcuts to the main canvas.
 
     It's also use to initialize to panel of shortcuts.
 
-    Args:
-        canvas: vispy canvas
-            Vispy canvas to add the shortcuts.
+    Parameters
+    ----------
+    canvas : vispy canvas
+        Vispy canvas to add the shortcuts.
     """
 
     def __init__(self, canvas):
@@ -998,9 +1035,9 @@ class vbShortcuts(object):
             """
             # ------------- MAGNIFY : CTRL + left click -------------
             name = canvas.title
-            isleft = self._is_left_click(event)
-            isCtrl = self._is_modifier(event, 'Control')
-            condition = bool(name.find('Canvas') + 1) and isleft and isCtrl
+            is_left = self._is_left_click(event)
+            is_ctrl = self._is_modifier(event, 'Control')
+            condition = bool(name.find('Canvas') + 1) and is_left and is_ctrl
             if condition and not self._slMagnify.isChecked():
                 # Get channel name :
                 chan = name.split('Canvas_')[1]
@@ -1017,8 +1054,12 @@ class vbShortcuts(object):
                 transform = vist.nonlinear.Magnify1DTransform(**kwargs)
                 self._chan.node[idx].transform = transform
 
+        @canvas.events.mouse_wheel.connect
+        def on_mouse_wheek(event):
+            pass
 
-class visuals(vbShortcuts):
+
+class Visuals(CanvasShortcuts):
     """Create the visual objects to be added to the scene."""
 
     def __init__(self):
@@ -1038,7 +1079,8 @@ class visuals(vbShortcuts):
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
         self._spec = Spectrogram(camera=cameras[1], fcn=self._fcn_specSetData,
-                                 parent=self._specCanvas.wc.scene)
+                                 parent=self._specCanvas.wc.scene,
+                                 use_tf=self._use_tf)
         self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
         # Create a visual indicator for spectrogram :
         self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
@@ -1076,7 +1118,7 @@ class visuals(vbShortcuts):
         # =================== SHORTCUTS ===================
         vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
-            vbShortcuts.__init__(self, k.canvas)
+            CanvasShortcuts.__init__(self, k.canvas)
 
         # Initialize popup window with shotcuts :
         self._shpopup.set_shortcuts(self.sh)

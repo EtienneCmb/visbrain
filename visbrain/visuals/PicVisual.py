@@ -145,7 +145,7 @@ class PicVisual(visuals.Visual):
         # Build the default grid of index :
         nr, nc = self.nrows, self.ncols
         g = np.arange(nr * nc).reshape(nc, nr)
-        g = np.fliplr(np.flipud(g.T))
+        g = np.fliplr(g.T)  # np.fliplr(np.flipud(g.T))
         # Build indices for one map :
         index = np.zeros((2 * (nr - 1) * (nc - 1), 3))
         q = 0

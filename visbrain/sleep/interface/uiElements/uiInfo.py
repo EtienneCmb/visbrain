@@ -3,6 +3,7 @@
 from PyQt5 import QtWidgets
 
 from ....utils import sleepstats
+from os import path
 
 __all__ = ['uiInfo']
 
@@ -12,29 +13,30 @@ class uiInfo(object):
 
     def __init__(self):
         """Init."""
-        # Time window changed :
-        self._infoTime.valueChanged.connect(self._fcn_infoUpdate)
-        self._infoTime.setKeyboardTracking(False)
+        pass
 
     def _fcn_infoUpdate(self):
         """Complete the table sleep info."""
-        # Get sleep info :
-        win = self._infoTime.value()
-        stats = sleepstats(self._file, self._hyp.GUI2hyp(), self._N,
-                           sf=self._sf, sfori=self._sfori,
-                           time_window=win)
-        self._keysInfo = ['Window'] + [''] * len(stats)
-        self._valInfo = [str(win)] + [''] * len(stats)
+        table = self._infoTable
+        # Get sleep stats :
+        stats = sleepstats(self._hyp.gui_to_hyp(), self._sf)
+
+        # Add global informations to stats dict
+        is_file = isinstance(self._file, str)
+        stats['Filename'] = path.basename(self._file) if is_file else ''
+        stats['Sampling frequency'] = str(self._sfori) + " Hz"
+        stats['Down-sampling'] = str(self._sf) + " Hz"
+
+        self._keysInfo = [''] * len(stats)
+        self._valInfo = [''] * len(stats)
         # Check line number:
-        self._infoTable.setRowCount(len(stats))
+        table.setRowCount(len(stats))
         # Fill table :
         for num, (k, v) in enumerate(stats.items()):
-            # Get keys and row :
-            key, r = k.split('_')
             # Add keys :
-            self._infoTable.setItem(int(r), 0, QtWidgets.QTableWidgetItem(key))
+            table.setItem(int(num), 0, QtWidgets.QTableWidgetItem(k))
             # Add values :
-            self._infoTable.setItem(int(r), 1, QtWidgets.QTableWidgetItem(str(v)))
+            table.setItem(int(num), 1, QtWidgets.QTableWidgetItem(str(v)))
             # Remember variables :
-            self._keysInfo[int(r) + 1] = key
-            self._valInfo[int(r) + 1] = str(v)
+            self._keysInfo[int(num)] = k
+            self._valInfo[int(num)] = str(v)
