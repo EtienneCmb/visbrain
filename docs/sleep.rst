@@ -405,6 +405,26 @@ Instead of leaving inputs arguments empty, send the path to the data :
     # hfile = None
     Sleep(data=dfile, hypno=hfile).show()
 
+.. _loadfrommne:
+
+Load file using MNE-Python
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Finally, it is possible to load several other file formats using `MNE Python package <http://martinos.org/mne/stable/>`_. The code below shows how to load either BDF, EGI or EEGLab files and pass them to *Sleep*.
+
+.. code-block:: python
+
+  # Import the Sleep module:
+  from visbrain import Sleep
+  # - Biosemi Data Format (BDF)
+  data = 'mybdffile.bdf'
+  # - EGI format
+  # data = 'myegifile.egi'
+  # - EEGLab
+  # data = 'myeeglabfile.set'
+  # Now, pass all the arguments to the Sleep module :
+  Sleep(data=data).show()
+
 .. _loadfromraw:
 
 Load file from raw data
@@ -507,29 +527,6 @@ Live editing consist of editing your hypnogram directly from the axis by adding 
    :align:   center
 
    Edit the hypnogram directly from the axes.
-
-.. _loadfrommne:
-
-Load file using MNE-Python
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Finally, it is possible to load several other file formats using `MNE Python package <http://martinos.org/mne/stable/>`_. The code below shows how to load either BDF, EGI or EEGLab files and pass them to Sleep.
-
-.. code-block:: python
-
-	from mne import io
-	# Import the Sleep module:
-	from visbrain import Sleep
-	# - Biosemi Data Format (BDF)
-	raw = io.read_raw_edf('mybdffile.bdf', preload=True, verbose=False)
-	# - EGI format
-	# raw = io.read_raw_egi('myegifile.egi', preload=True, verbose=False)
-	# - EEGLab
-	# raw = io.read_raw_eeglab('myeeglabfile.set', preload=True, verbose=False)
-	# Extract data, sampling frequency and channels names
-	data, sf, chan = raw._data, raw.info['sfreq'], raw.info['ch_names']
-	# Now, pass all the arguments to the Sleep module :
-	Sleep(data=data, sf=sf, channels=chan, hypno=hypno).show()
 
 .. ----------------------------------------------------------------------------
 ..                              DETECTIONS
