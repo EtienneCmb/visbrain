@@ -318,7 +318,7 @@ class GridShortcuts(object):
 
     def __init__(self, canvas):
         """Init."""
-        self._sh_grid = [('Double clik (grid canvas)', "Enlarge signal "
+        self._sh_grid = [('Double click (grid canvas)', "Enlarge signal "
                           "under the mouse cursor"),
                          ]
 
@@ -376,7 +376,7 @@ class SignalShortcuts(object):
         """Init."""
         self._sh_sig = [('n (signal canvas)', 'Go to the next signal'),
                         ('b (signal canvas)', 'Go to the previous signal'),
-                        ('Double clik (signal canvas)', 'Insert annotation'),
+                        ('Double click (signal canvas)', 'Insert annotation'),
                         ('g', 'Display / hide grid'),
                         ('s', 'Display / hide signal'),
                         ('<delete>', 'Reset the camera'),
