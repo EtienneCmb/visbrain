@@ -501,6 +501,7 @@ def read_eeg(path, downsample, read_markers=False):
                 st = re.split('\W+', item)[-1]
                 start_time = datetime.time(int(st[8:10]), int(st[10:12]),
                                            int(st[12:14]))
+                break
             else:
                 start_time = datetime.time(0, 0, 0)
 
