@@ -33,6 +33,8 @@ install:
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
   - "pip --version"
 
+  - "%CMD_IN_ENV% pip install numpy==1.9.3"
+  - "%CMD_IN_ENV% pip install scipy==0.16.0"
   - "%CMD_IN_ENV% pip install vispy"
   - "%CMD_IN_ENV% pip install mne"
   - "%CMD_IN_ENV% pip install nibabel"
