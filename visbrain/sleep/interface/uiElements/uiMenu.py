@@ -220,8 +220,8 @@ class uiMenu(HelpMenu):
                 config['Channel_Names'] = self._channels
                 config['Channel_Visible'] = viz
                 config['Channel_Amplitude'] = amp
-                config['AllAmpMin'] = self._PanAllAmpMin.value()
-                config['AllAmpMax'] = self._PanAllAmpMax.value()
+                # config['AllAmpMin'] = self._PanAllAmpMin.value()
+                # config['AllAmpMax'] = self._PanAllAmpMax.value()
                 config['SymAmp'] = self._PanAmpSym.isChecked()
                 config['AutoAmp'] = self._PanAmpAuto.isChecked()
                 # Spectrogram :
@@ -330,8 +330,8 @@ class uiMenu(HelpMenu):
                         config['Channel_Visible'][i])
                     self._ymaxSpin[i].setValue(config['Channel_Amplitude'][i])
                 # Amplitudes :
-                _try("self._PanAllAmpMin.setValue(config['AllAmpMin'])")
-                _try("self._PanAllAmpMax.setValue(config['AllAmpMax'])")
+                # _try("self._PanAllAmpMin.setValue(config['AllAmpMin'])")
+                # _try("self._PanAllAmpMax.setValue(config['AllAmpMax'])")
                 _try("self._PanAmpSym.setChecked(config['SymAmp'])")
                 _try("self._PanAmpAuto.setChecked(config['AutoAmp'])")
                 # Spectrogram
