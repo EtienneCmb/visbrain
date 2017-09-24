@@ -469,7 +469,7 @@ class Spectrogram(PrepareData):
             self.freq = self.tf.freqs
         else:
             # =================== CONVERSION ===================
-            overlap = int(round(overlap * nperseg))
+            overlap = int(round(overlap * sf))
 
             # =================== COMPUTE ===================
             # Compute the spectrogram :
