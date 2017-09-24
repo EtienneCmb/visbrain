@@ -41,7 +41,7 @@ install:
   - cd visbrain/
   # ------------------- VISBRAIN -------------------
   - pip install -e .
-script: ci/travis/bash build_install.sh
+script: bash ci/travis/build_install.sh
 cache:
   apt: true
 notifications:
