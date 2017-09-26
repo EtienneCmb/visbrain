@@ -5,7 +5,7 @@ dynamic / static transparency.
 """
 
 
-class uiConnectivity(object):
+class UiConnectivity(object):
     """Initialize interactions between the GUI and deep functions."""
 
     def __init__(self,):

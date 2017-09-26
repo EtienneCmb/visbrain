@@ -8,10 +8,8 @@ import numpy as np
 
 from ....utils import mpl_cmap, mpl_cmap_index
 
-__all__ = ['uiAtlas']
 
-
-class uiAtlas(object):
+class UiAtlas(object):
     """Link graphical interface with atlas functions.
 
     This class can be used to control the part of displayed brain (both / left

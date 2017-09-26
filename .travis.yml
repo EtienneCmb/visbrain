@@ -32,7 +32,6 @@ install:
   - pip install mne
   - pip install nibabel
   - pip install setuptools
-  - pip install nose
   - pip install PyOpenGL PyOpenGL_accelerate
   - pip install codecov
   - pip install pytest pytest-cov
@@ -42,7 +41,7 @@ install:
   - cd visbrain/
   # ------------------- VISBRAIN -------------------
   - pip install -e .
-script: bash build_install.sh
+script: bash ci/travis/build_install.sh
 cache:
   apt: true
 notifications:

@@ -1,2 +1,2 @@
 """From the uiElements file, import the uiElements class."""
-from .uiElements import uiElements
+from .ui_elements import UiElements
