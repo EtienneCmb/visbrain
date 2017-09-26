@@ -308,21 +308,24 @@ class TestBrain(object):
         for k, i in zip(canvas, formats):
             name = self._path_to_tmp(k + '_transparent_' + i)
             try:
-                vb.screenshot(name, canvas=k, transparent=True)
+                vb.screenshot(name, canvas=k, transparent=True, dpi=50)
             except:
                 warn("Screenshot failed for " + k + " transparent canvas")
-        # Test print_size and unit at 300 dpi :
+        # Test print_size and unit at 50 dpi :
         for k, i in zip(print_size, unit):
             name = self._path_to_tmp('main_' + i + '.png')
             try:
-                vb.screenshot(name, print_size=k, unit=i)
+                vb.screenshot(name, print_size=k, unit=i, dpi=50)
             except:
-                warn("Screenshot failed for print size" + k + " and unit"
+                warn("Screenshot failed for print size" + str(k) + " and unit"
                      " " + i + " transparent canvas")
         # Test factor :
         name = self._path_to_tmp('main_factor.png')
-        vb.screenshot(name, factor=2., region=(100, 100, 1000, 1000),
-                      bgcolor='#ab4642')
+        try:
+            vb.screenshot(name, factor=2., region=(100, 100, 1000, 1000),
+                          bgcolor='#ab4642', dpi=50)
+        except:
+            warn("Screenshot failed for region and factor")
 
     def test_save_config(self):
         """Test method save_config."""
