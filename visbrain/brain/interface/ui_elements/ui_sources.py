@@ -14,7 +14,7 @@ import vispy.visuals.transforms as vist
 from ....utils import textline2color, color2tuple
 
 
-class uiSources(object):
+class UiSources(object):
     """Main class for managing the interaction between the user and sources."""
 
     def __init__(self,):

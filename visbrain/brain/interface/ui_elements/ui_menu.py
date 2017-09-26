@@ -4,10 +4,8 @@ import vispy.scene.cameras as viscam
 
 from ....utils import toggle_enable_tab, HelpMenu
 
-__all__ = ('uiMenu')
 
-
-class uiMenu(HelpMenu):
+class UiMenu(HelpMenu):
     """Interactions with the menu."""
 
     def __init__(self):

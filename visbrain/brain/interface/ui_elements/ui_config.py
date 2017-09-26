@@ -3,10 +3,8 @@ from warnings import warn
 from ....io import dialogLoad, dialogSave, save_config_json, load_config_json
 from ....utils import color2json
 
-__all__ = ["uiConfig"]
 
-
-class uiConfig(object):
+class UiConfig(object):
     """Main class for saving/loading the configuration."""
 
     ###########################################################################

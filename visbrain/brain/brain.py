@@ -1,7 +1,7 @@
 """Top level Brain class.
 
-uiInit: initialize the graphical interface
-uiElements: interactions between graphical elements and deep functions
+UiInit: initialize the graphical interface
+UiElements: interactions between graphical elements and deep functions
 base: initialize all Brain objects (MNI, sources, connectivity...)
 and associated transformations
 BrainUserMethods: initialize functions for user interaction.
@@ -13,8 +13,7 @@ import sys
 import vispy.app as visapp
 import vispy.scene.cameras as viscam
 
-from .interface import uiInit, uiElements
-from .interface.uiInit import BrainShortcuts
+from .interface import UiInit, UiElements, BrainShortcuts
 from .base import base, BrainCbar
 from .user import BrainUserMethods
 from ..utils import set_widget_size
@@ -22,7 +21,7 @@ import sip
 sip.setdestroyonexit(False)
 
 
-class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
+class Brain(UiInit, UiElements, base, BrainCbar, BrainUserMethods):
     """Visualization of neuroscientic data on a standard MNI brain.
 
     The *Brain* module include several objects that can be individually
@@ -284,7 +283,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
         # ====================== App creation ======================
         # Create the app and initialize all graphical elements :
         self._app = QtWidgets.QApplication(sys.argv)
-        uiInit.__init__(self, bgcolor)
+        UiInit.__init__(self, bgcolor)
 
         # Set icon :
         # pathfile = sys.modules[__name__].__file__
@@ -300,7 +299,7 @@ class Brain(uiInit, uiElements, base, BrainCbar, BrainUserMethods):
 
         # ====================== UI to visbrain ======================
         # Link UI and visbrain function :
-        uiElements.__init__(self)
+        UiElements.__init__(self)
         self._shpopup.set_shortcuts(self.sh)
 
         # ====================== Cameras ======================

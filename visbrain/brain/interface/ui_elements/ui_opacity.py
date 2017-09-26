@@ -8,13 +8,8 @@ objects.
 
 import numpy as np
 
-from ....utils import slider2opacity
 
-
-__all__ = ['uiOpacity']
-
-
-class uiOpacity(object):
+class UiOpacity(object):
     """Main class for objects slices / opacity managment."""
 
     def __init__(self,):

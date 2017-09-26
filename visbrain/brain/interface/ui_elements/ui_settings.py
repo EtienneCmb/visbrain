@@ -7,10 +7,8 @@ from PyQt5.QtGui import QPalette, QFont
 
 from ....utils import set_spin_values
 
-__all__ = ['uiSettings']
 
-
-class uiSettings(object):
+class UiSettings(object):
     """Main class for settings managment (save / load / light / cameras...)."""
 
     def __init__(self):

@@ -13,8 +13,6 @@ from vispy import app, scene
 from .gui import Ui_MainWindow
 from ...utils import color2vb, get_screen_size
 
-__all__ = ('uiInit')
-
 
 class BrainShortcuts(object):
     """This class add some shortcuts to the main canvas of Brain.
@@ -149,7 +147,7 @@ class BrainCanvas(object):
         self.maxOpacity = 10000
 
 
-class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, BrainShortcuts):
+class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, BrainShortcuts):
     """Group and initialize the graphical elements and interactions.
 
     Kargs:
@@ -162,7 +160,7 @@ class uiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, BrainShortcuts):
     def __init__(self, bgcolor=(0.1, 0.1, 0.1)):
         """Init."""
         # Create the main window :
-        super(uiInit, self).__init__(None)
+        super(UiInit, self).__init__(None)
         self.setupUi(self)
         if self._savename is not None:
             self.setWindowTitle('Brain - ' + self._savename)
