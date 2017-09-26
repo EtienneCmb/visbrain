@@ -16,7 +16,12 @@ install:
   - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy matplotlib pip"
   - activate testenv
   - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pytest pytest-cov
+  # ------------------- VISPY -------------------
+  - cd ../
+  - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
   - ls
+  - cd visbrain/
+  # ------------------- VISBRAIN -------------------
   - pip install -e .
 
 test_script:
