@@ -10,8 +10,6 @@ from vispy import app, scene
 
 from .gui import Ui_MainWindow
 
-__all__ = ('UiInit')
-
 
 class TopoCanvas(object):
     """Canvas creation."""

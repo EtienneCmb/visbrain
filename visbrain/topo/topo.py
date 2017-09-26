@@ -7,8 +7,8 @@ import vispy.app as visapp
 import vispy.scene.cameras as viscam
 from vispy.scene import Node
 
-from .UiInit import UiInit
-from .UiElements import UiElements
+from .ui_init import UiInit
+from .ui_elements import UiElements
 from ..utils import set_widget_size
 from ..visuals import TopoMesh, CbarVisual
 

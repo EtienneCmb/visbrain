@@ -2,8 +2,6 @@
 from ...io import write_fig_pyqt, write_fig_canvas, dialogSave
 from ...utils import ScreenshotPopup
 
-__all__ = ('UiScreenshot')
-
 
 class UiScreenshot(object):
     """Initialize the screenshot GUI and functions to apply it."""

@@ -2,8 +2,6 @@
 
 from ...utils import HelpMenu
 
-__all__ = ('UiMenu')
-
 
 class UiMenu(HelpMenu):
     """Interactions between the menu and the user."""

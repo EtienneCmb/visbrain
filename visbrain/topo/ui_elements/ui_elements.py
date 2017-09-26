@@ -1,9 +1,7 @@
 """From the topo file, import the topo module."""
-from .UiSettings import UiSettings
-from .UiMenu import UiMenu
-from .UiScreenshot import UiScreenshot
-
-__all__ = ('UiElements')
+from .ui_settings import UiSettings
+from .ui_menu import UiMenu
+from .ui_screenshot import UiScreenshot
 
 
 class UiElements(UiSettings, UiMenu, UiScreenshot):
