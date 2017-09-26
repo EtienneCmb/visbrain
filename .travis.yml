@@ -29,12 +29,7 @@ install:
   # Replace dep1 dep2 ... with your dependencies
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
   - source activate testenv
-  - pip install mne
-  - pip install nibabel
-  - pip install setuptools
-  - pip install PyOpenGL PyOpenGL_accelerate
-  - pip install codecov
-  - pip install pytest pytest-cov
+  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate codecov pytest pytest-cov
   # ------------------- VISPY -------------------
   - cd ../
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
