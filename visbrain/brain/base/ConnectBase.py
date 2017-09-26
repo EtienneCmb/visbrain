@@ -35,7 +35,6 @@ class ConnectBase(CbarArgs):
         if (_xyz is not None) and(c_xyz is None):
             warn("No node's coordinates found for connectivity (c_xyz). "
                  "Source's location will be used instead")
-        # Connectivity properties :
             self.xyz = _xyz
         else:
             self.xyz = c_xyz
