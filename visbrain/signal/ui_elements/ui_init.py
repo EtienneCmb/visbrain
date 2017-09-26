@@ -9,8 +9,6 @@ from ...visuals import CbarVisual
 from ..gui import Ui_MainWindow
 from ...utils import color2vb
 
-__all__ = ('UiInit')
-
 
 class VisbrainCanvas(object):
     """Create a canvas with an embeded axis.

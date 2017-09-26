@@ -6,8 +6,6 @@ from ...utils import ScreenshotPopup, HelpMenu
 from ...io import (dialogSave, dialogLoad, write_fig_pyqt, write_fig_canvas,
                    write_csv, write_txt)
 
-__all__ = ('UiMenu', 'UiScreenshot')
-
 
 class UiMenu(HelpMenu):
     """Interactions with the menu."""

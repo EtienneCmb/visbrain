@@ -4,8 +4,6 @@ import numpy as np
 
 from ...utils import textline2color
 
-__all__ = ('UiAnnotations')
-
 
 class UiAnnotations(object):
     """Annotations interactions."""

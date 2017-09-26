@@ -1,8 +1,6 @@
 """Interactions between user and Settings tab of QuickSettings."""
 from ...utils import textline2color
 
-__all__ = ('UiSettings')
-
 
 class UiSettings(object):
     """Control axis and signal properties."""

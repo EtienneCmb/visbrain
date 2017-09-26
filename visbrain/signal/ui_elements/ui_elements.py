@@ -5,9 +5,6 @@ from .ui_annotations import UiAnnotations
 from .ui_settings import UiSettings
 
 
-__all__ = ('UiElements')
-
-
 class UiElements(UiMenu, UiScreenshot, UiSignals, UiAnnotations, UiSettings):
     """Gui interactions."""
 

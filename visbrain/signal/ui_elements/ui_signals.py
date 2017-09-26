@@ -1,9 +1,7 @@
 """Interactions between user and Signal tab of QuickSettings."""
 import numpy as np
 
-from ...utils import textline2color, safely_set_spin, mpl_cmap, safely_set_cbox
-
-__all__ = ('UiSignals')
+from ...utils import textline2color, safely_set_spin
 
 
 class UiSignals(object):
