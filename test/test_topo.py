@@ -1,7 +1,6 @@
 """Test Topo module and related methods."""
 import numpy as np
 from PyQt5 import QtWidgets
-from warnings import warn
 from visbrain import Topo
 
 app = QtWidgets.QApplication([])
@@ -15,11 +14,12 @@ class TestTopo(object):
         """Test function brain_creation."""
         name = 'Topo_1'
         channels = ['C3', 'C4', 'Cz', 'Fz', 'Pz']
-        data = [10, 20, 30, 10, 10]
+        data = [10., 20., 30., 10., 10.]
+        connect = np.random.rand(len(data), len(data))
         title = 'Basic topoplot illustration'
         cblabel = 'Colorbar label'
         tp.add_topoplot(name, data, channels=channels, title=title,
-                        cblabel=cblabel)
+                        cblabel=cblabel, c_connect=connect)
 
     def test_add_shared_colorbar(self):
         """Test function add_shared_colorbar."""
