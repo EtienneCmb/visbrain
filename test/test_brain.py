@@ -317,7 +317,7 @@ class TestBrain(object):
             try:
                 vb.screenshot(name, print_size=k, unit=i, dpi=50)
             except:
-                warn("Screenshot failed for print size" + k + " and unit"
+                warn("Screenshot failed for print size" + str(k) + " and unit"
                      " " + i + " transparent canvas")
         # Test factor :
         name = self._path_to_tmp('main_factor.png')
