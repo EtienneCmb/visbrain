@@ -311,7 +311,7 @@ class TestBrain(object):
                 vb.screenshot(name, canvas=k, transparent=True, dpi=50)
             except:
                 warn("Screenshot failed for " + k + " transparent canvas")
-        # Test print_size and unit at 300 dpi :
+        # Test print_size and unit at 50 dpi :
         for k, i in zip(print_size, unit):
             name = self._path_to_tmp('main_' + i + '.png')
             try:
