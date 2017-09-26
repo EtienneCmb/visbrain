@@ -4,10 +4,8 @@ from PyQt5 import QtWidgets
 
 from ....utils import transient
 
-__all__ = ['uiScoring']
 
-
-class uiScoring(object):
+class UiScoring(object):
     """Enable scoring using the table."""
 
     def __init__(self):

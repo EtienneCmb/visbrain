@@ -5,10 +5,8 @@ from PyQt5 import QtWidgets
 from ....utils import sleepstats
 from os import path
 
-__all__ = ['uiInfo']
 
-
-class uiInfo(object):
+class UiInfo(object):
     """Main class for info managment."""
 
     def __init__(self):

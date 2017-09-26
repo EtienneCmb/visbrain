@@ -6,10 +6,7 @@ from PyQt5.QtCore import QObjectCleanupHandler
 import vispy.visuals.transforms as vist
 
 
-__all__ = ['uiSettings']
-
-
-class uiSettings(object):
+class UiSettings(object):
     """Main class for settings managment."""
 
     def __init__(self):

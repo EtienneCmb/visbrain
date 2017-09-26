@@ -10,10 +10,8 @@ from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
                     is_mne_installed, annotations_to_array, oversample_hypno)
 
-__all__ = ['uiMenu']
 
-
-class uiMenu(HelpMenu):
+class UiMenu(HelpMenu):
     """Main class for sleep menus managment."""
 
     def __init__(self):

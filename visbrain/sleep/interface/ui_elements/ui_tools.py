@@ -3,12 +3,10 @@
 import numpy as np
 from PyQt5 import QtWidgets
 from ....utils import (rereferencing, bipolarization, find_non_eeg,
-                       commonaverage, id)
-
-__all__ = ['uiTools']
+                       commonaverage)
 
 
-class uiTools(object):
+class UiTools(object):
     """Main class for sleep tools managment."""
 
     def __init__(self):

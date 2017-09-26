@@ -9,7 +9,7 @@ import os
 import vispy.app as visapp
 import vispy.scene.cameras as viscam
 
-from .interface import uiInit, uiElements
+from .interface import UiInit, UiElements
 from .visuals import Visuals
 from .tools import Tools
 from ..utils import (FixedCam, color2vb, MouseEventControl, set_widget_size)
@@ -18,7 +18,7 @@ from ..io import ReadSleepData
 sip.setdestroyonexit(False)
 
 
-class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
+class Sleep(ReadSleepData, UiInit, Visuals, UiElements, Tools,
             MouseEventControl):
     """Visualize and edit sleep data.
 
@@ -100,7 +100,7 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
         # ====================== APP CREATION ======================
         # Create the app and initialize all graphical elements :
         self._app = QtWidgets.QApplication(sys.argv)
-        uiInit.__init__(self)
+        UiInit.__init__(self)
 
         # Set default GUI state :
         self._set_default_state()
@@ -160,7 +160,7 @@ class Sleep(ReadSleepData, uiInit, Visuals, uiElements, Tools,
 
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
-        uiElements.__init__(self)
+        UiElements.__init__(self)
 
         # ====================== CAMERAS ======================
         self._cam_creation()
