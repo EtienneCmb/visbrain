@@ -24,6 +24,7 @@ Main features
 
 * **Display topographic map**
     * Find coordinates according to channel names
+    * Add connectivity edges
     * Support multiple coordinate systems
     * Highly controllable colorbar
 * **Grid representation**
