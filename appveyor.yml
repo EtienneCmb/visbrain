@@ -13,12 +13,14 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy"
+  - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy matplotlib pip"
   - activate testenv
-  - pip install coverage
+  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pytest pytest-cov
+  - ls
+  - pip install -e .
 
 test_script:
-  - nosetests
+  - py.test --cov --verbose
 
 
 # environment:
