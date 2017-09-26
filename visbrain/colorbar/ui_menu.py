@@ -3,10 +3,8 @@
 from ..io import write_fig_pyqt, write_fig_canvas, dialogLoad, dialogSave
 from ..utils import ScreenshotPopup, HelpMenu
 
-__all__ = ('uiMenu')
 
-
-class uiMenu(HelpMenu):
+class UiMenu(HelpMenu):
     """Main class for sleep menus managment."""
 
     def __init__(self):
