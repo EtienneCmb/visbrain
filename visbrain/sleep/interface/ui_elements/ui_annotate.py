@@ -3,10 +3,8 @@
 from PyQt5 import QtWidgets
 import numpy as np
 
-__all__ = ['uiAnnotate']
 
-
-class uiAnnotate(object):
+class UiAnnotate(object):
     """Interactions with annotations."""
 
     def __init__(self):

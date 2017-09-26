@@ -7,10 +7,8 @@ from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect)
 from ....utils.sleep.event import _events_to_index
 
-__all__ = ['uiDetection']
 
-
-class uiDetection(object):
+class UiDetection(object):
     """Main class for sleep tools managment."""
 
     def __init__(self):

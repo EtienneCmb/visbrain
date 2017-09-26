@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import numpy as np
 
-from ..uiInit import AxisCanvas, TimeAxis
+from ..ui_init import AxisCanvas, TimeAxis
 from ....utils import mpl_cmap
 
 try:
@@ -13,10 +13,7 @@ except AttributeError:
         return s
 
 
-__all__ = ['uiPanels']
-
-
-class uiPanels(object):
+class UiPanels(object):
     """Main class for settings managment."""
 
     def __init__(self):
