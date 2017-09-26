@@ -1,8 +1,8 @@
 .. image:: https://travis-ci.org/EtienneCmb/visbrain.svg?branch=master
     :target: https://travis-ci.org/EtienneCmb/visbrain
 
-.. image:: https://ci.appveyor.com/project/EtienneCmb/visbrain/branch/master
-    :target: https://ci.appveyor.com/api/projects/status/fdxhhmpagms1so8l?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/fdxhhmpagms1so8l?svg=true
+    :target: https://ci.appveyor.com/project/EtienneCmb/visbrain/branch/master
 
 .. image:: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/EtienneCmb/visbrain
