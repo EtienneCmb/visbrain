@@ -338,9 +338,9 @@ class Brain(UiInit, UiElements, base, BrainCbar, BrainUserMethods):
         # Connectivity :
         if self.connect.mesh.visible:
             self.menuDispConnect.setChecked(True)
-            self._fcn_menuConnect()
+            self._fcn_menu_disp_connect()
         # Colorbar :
-        self._fcn_menuCbar()
+        self._fcn_menu_disp_cbar()
 
     def show(self):
         """Display the graphical user interface."""

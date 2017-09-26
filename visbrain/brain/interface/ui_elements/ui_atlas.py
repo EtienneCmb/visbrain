@@ -242,7 +242,7 @@ class UiAtlas(object):
     def _fcn_crossec_viz(self):
         """Control cross-sections visibility."""
         self.menuDispCrossec.setChecked(self.grpSec.isChecked())
-        self._fcn_menuCrossec()
+        self._fcn_menu_disp_crossec()
 
     def _fcn_crossec_change(self):
         """Change the cross-sections subdivision type."""

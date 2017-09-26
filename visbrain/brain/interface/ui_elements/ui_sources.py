@@ -22,25 +22,25 @@ class UiSources(object):
         # ====================== SOURCES ======================
         # ---------- Visibility ----------
         self._sourcesPickdisp.currentIndexChanged.connect(
-            self._fcn_sourcesDisplay)
+            self._fcn_sources_display)
         # ---------- Change marker look ----------
         # Symbol :
         sym = [self.s_Symbol.itemText(i) for i in range(self.s_Symbol.count())]
         self.s_Symbol.setCurrentIndex(sym.index(self.sources.symbol))
-        self.s_Symbol.currentIndexChanged.connect(self._fcn_MarkerLook)
+        self.s_Symbol.currentIndexChanged.connect(self._fcn_sources_look)
         # Edge color / width :
         edgcol = np.ndarray.tolist(self.sources.edgecolor.ravel())
         self.s_EdgeColor.setText(str(tuple(edgcol)))
-        self.s_EdgeColor.editingFinished.connect(self._fcn_MarkerLook)
+        self.s_EdgeColor.editingFinished.connect(self._fcn_sources_look)
         self.s_EdgeWidth.setValue(self.sources.edgewidth)
-        self.s_EdgeWidth.valueChanged.connect(self._fcn_MarkerLook)
+        self.s_EdgeWidth.valueChanged.connect(self._fcn_sources_look)
         # ---------- Marker's radius ----------
         self.s_radiusMin.setValue(self.sources.radiusmin)
-        self.s_radiusMin.valueChanged.connect(self._fcn_MarkerRadius)
+        self.s_radiusMin.valueChanged.connect(self._fcn_sources_radius)
         self.s_radiusMax.setValue(self.sources.radiusmax)
-        self.s_radiusMax.valueChanged.connect(self._fcn_MarkerRadius)
+        self.s_radiusMax.valueChanged.connect(self._fcn_sources_radius)
         self.s_Scaling.setChecked(self.sources.scaling)
-        self.s_Scaling.clicked.connect(self._fcn_MarkerRadius)
+        self.s_Scaling.clicked.connect(self._fcn_sources_radius)
 
         # ====================== SOURCE'S TEXT ======================
         if self.sources.stext is None:
@@ -65,7 +65,7 @@ class UiSources(object):
         # ====================== PROJECTION ======================
         # Radius :
         self._uitRadius.setValue(self._tradius)
-        self._uitApply.clicked.connect(self._fcn_sourcesProjection)
+        self._uitApply.clicked.connect(self._fcn_sources_proj)
         # Contribute :
         self._uitContribute.setChecked(self._tcontribute)
 
@@ -143,7 +143,7 @@ class UiSources(object):
     # =====================================================================
     # SOURCES
     # =====================================================================
-    def _fcn_sourcesDisplay(self):
+    def _fcn_sources_display(self):
         """Select which part of sources to display."""
         idx = int(self._sourcesPickdisp.currentIndex())
         if idx == 0:
@@ -159,7 +159,7 @@ class UiSources(object):
         elif idx == 5:
             self.sources_display(select='outside')
 
-    def _fcn_MarkerLook(self):
+    def _fcn_sources_look(self):
         """Change how marker looks."""
         self.sources.symbol = str(self.s_Symbol.currentText())
         self.sources.edgecolor = textline2color(
@@ -167,7 +167,7 @@ class UiSources(object):
         self.sources.edgewidth = self.s_EdgeWidth.value()
         self.sources.update()
 
-    def _fcn_MarkerRadius(self):
+    def _fcn_sources_radius(self):
         """Marker radius related functions."""
         self.sources.scaling = self.s_Scaling.isChecked()
         self.sources.radiusmin = self.s_radiusMin.value()
@@ -178,12 +178,12 @@ class UiSources(object):
     # =====================================================================
     # PROJECTION
     # =====================================================================
-    def _fcn_updateProjList(self):
+    def _fcn_update_proj_list(self):
         """Update the available projection list objects."""
         self._uitProjectOn.clear()
         self._uitProjectOn.addItems(list(self._tobj.keys()))
 
-    def _fcn_sourcesProjection(self):
+    def _fcn_sources_proj(self):
         """Apply source projection."""
         # Get projection radius :
         new_radius = self._uitRadius.value()

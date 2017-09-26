@@ -143,22 +143,22 @@ class UiConfig(object):
             # Settings :
             _try("self.menuDispQuickSettings.setChecked("
                  "config['SettingViz'])")
-            _try("self._fcn_menuDispSet()")
+            _try("self._fcn_menu_disp_set()")
             # Brain :
             _try("self.menuDispBrain.setChecked(config['BrainViz'])")
-            _try("self._fcn_menuBrain()")
+            _try("self._fcn_menu_disp_brain()")
             # Sources
             _try("self.menuDispSources.setChecked(config['SourcesViz'])")
-            _try("self._fcn_menuSources()")
+            _try("self._fcn_menu_disp_sources()")
             # Connect :
             _try("self.menuDispConnect.setChecked(config['ConnectViz'])")
-            _try("self._fcn_menuConnect()")
+            _try("self._fcn_menu_disp_connect()")
             # ROI :
             _try("self.menuDispROI.setChecked(config['ROIViz'])")
-            _try("self._fcn_menuROI()")
+            _try("self._fcn_menu_disp_roi()")
             # Cbar :
             _try("self.menuDispCbar.setChecked(config['CbarViz'])")
-            _try("self._fcn_menuCbar()")
+            _try("self._fcn_menu_disp_cbar()")
 
             # ----------------- CAMERA -----------------
             _try("self.view.wc.camera.set_state(config['CamState'])")
@@ -204,15 +204,15 @@ class UiConfig(object):
             # Sources object :
             _try("self._sourcesPickdisp.setCurrentIndex(config["
                  "'SourcesDisp'])")
-            _try("self._fcn_sourcesDisplay()")
+            _try("self._fcn_sources_display()")
             _try("self.s_Symbol.setCurrentIndex(config['SourcesSym'])")
             _try("self.s_EdgeColor.setText(str(config['SourcesEcol']))")
             _try("self.s_EdgeWidth.setValue(config['SourcesEw'])")
-            _try("self._fcn_MarkerLook()")
+            _try("self._fcn_sources_look()")
             _try("self.s_radiusMin.setValue(config['SourcesRm'])")
             _try("self.s_radiusMax.setValue(config['SourcesRM'])")
             _try("self.s_Scaling.setChecked(config['SourcesScale'])")
-            _try("self._fcn_MarkerRadius()")
+            _try("self._fcn_sources_radius()")
             # Source's text :
             _try("self.grpText.setChecked(config['StextShow'])")
             _try("self.q_stextsize.setValue(config['StextSz'])")
