@@ -29,7 +29,7 @@ kwargs['s_mask'] = np.array([True + False] + [True] * 9)
 c_connect = np.random.randint(-10, 10, (10, 10)).astype(float)
 c_connect[np.tril_indices_from(c_connect)] = 0
 c_connect = np.ma.masked_array(c_connect, mask=True)
-nz = np.where((c_connect > -5) & (c_connect < 5))
+nz = np.where((c_connect > -8) & (c_connect < 8))
 c_connect.mask[nz] = False
 kwargs['c_connect'] = c_connect
 
@@ -334,6 +334,131 @@ class TestBrain(object):
     def test_load_config(self):
         """Test method load_config."""
         vb.load_config(self._path_to_tmp('config.txt'))
+
+    ###########################################################################
+    #                                  UI_FILES
+    ###########################################################################
+
+    def test_gui_uimenu_projection(self):
+        """Test projection functions in ui_menu."""
+        vb._fcn_menu_projection()
+        vb._fcn_menu_repartition()
+
+    def test_gui_uimenu_display(self):
+        """Test display functions in ui_menu."""
+        vb._fcn_menu_disp_set()
+        vb._fcn_menu_disp_brain()
+        vb._fcn_menu_disp_crossec()
+        vb._fcn_menu_disp_vol()
+        vb._fcn_menu_disp_sources()
+        vb._fcn_menu_disp_connect()
+        vb._fcn_menu_disp_roi()
+        vb._fcn_menu_disp_cbar()
+
+    def test_gui_uimenu_rotation(self):
+        """Test rotation functions in ui_menu."""
+        vb._fcn_rotate_top()
+        vb._fcn_rotate_bottom()
+        vb._fcn_rotate_left()
+        vb._fcn_rotate_right()
+        vb._fcn_rotate_front()
+        vb._fcn_rotate_back()
+
+    def test_gui_uimenu_camera(self):
+        """Test camera functions in ui_menu."""
+        # Fly :
+        vb.menuCamFly.setChecked(True)
+        vb._fcn_set_cam_fly()
+        # Turntable :
+        vb.menuCamFly.setChecked(False)
+        vb._fcn_set_cam_fly()
+
+    def test_gui_uisources_markers(self):
+        """Test markers functions in ui_sources."""
+        # Display sources (all / none / left / right / inside / outside)
+        for k in range(6):
+            vb._sourcesPickdisp.setCurrentIndex(k)
+            vb._fcn_sources_display()
+        # Test marker look :
+        vb.s_Symbol.setCurrentIndex(5)
+        vb.s_EdgeColor.setText('green')
+        vb.s_EdgeWidth.setValue(3.2)
+        vb._fcn_sources_look()
+        # Radius :
+        vb.s_Scaling.setChecked(True)
+        vb.s_radiusMin.setValue(1.2)
+        vb.s_radiusMax.setValue(10.4)
+        vb._fcn_sources_radius()
+        # Projection :
+        vb._fcn_update_proj_list()
+        vb._uitRadius.setValue(17.)
+        vb._uitContribute.setChecked(True)
+        vb._uitPickProj.setCurrentIndex(1)
+        vb._fcn_sources_proj()
+        # Cross-sections :
+        vb._fcn_goto_cs()
+
+    def test_gui_uisources_text(self):
+        """Test text functions in ui_sources."""
+        vb.x_text.setValue(1.2)
+        vb.y_text.setValue(2.2)
+        vb.z_text.setValue(3.2)
+        vb.q_stextcolor.setText('darkblue')
+        vb.q_stextsize.setValue(10.2)
+        vb._fcn_textupdate()
+
+    def test_gui_uisources_ts(self):
+        """Test time-series functions in ui_sources."""
+        vb._tsWidth.setValue(1.2)
+        vb._tsAmp.setValue(2.2)
+        vb._tsLw.setValue(2.2)
+        vb._tsDx.setValue(1.2)
+        vb._tsDy.setValue(2.2)
+        vb._tsDz.setValue(3.2)
+        vb._tsColor.setText('yellow')
+        vb.grpTs.setChecked(True)
+        vb._fcn_ts_update()
+
+    def test_gui_uisources_pic(self):
+        """Test pictures functions in ui_sources."""
+        vb.grpPic.setChecked(True)
+        vb._picWidth.setValue(10.2)
+        vb._picHeight.setValue(12.2)
+        vb._picDx.setValue(1.2)
+        vb._picDy.setValue(2.2)
+        vb._picDz.setValue(3.2)
+        vb._fcn_pic_update()
+
+    def test_gui_uiconnect(self):
+        """Test functions in ui_connect."""
+        # Line-width :
+        vb.uiConnect_lw.setValue(2.5)
+        vb._fcn_connect_lw()
+        # Change colorby :
+        for k in range(3):
+            vb.uiConnect_colorby.setCurrentIndex(k)
+            vb._fcn_connect_colorby()
+        # Set the color :
+        vb._fcn_connect_set_color(update=True)
+        # Bundling :
+        for k in [True, False]:
+            vb._conBlEnable.setChecked(k)
+            vb._fcn_connect_bundle()
+
+    def test_gui_uiopacity(self):
+        """Test functions in ui_opacity."""
+        # (min, max) slices :
+        vb._fcn_minmax_slice()
+        # Opacity :
+        vb.o_Brain.setChecked(True)
+        vb.o_Sources.setChecked(True)
+        vb.o_Text.setChecked(True)
+        vb.o_Connect.setChecked(True)
+        vb.o_Areas.setChecked(True)
+        vb._fcn_opacity()
+        # XYZ slice :
+        vb.o_Areas.setChecked(False)
+        vb._fcn_xyz_slice()
 
     def test_delete_tmp_folder(self):
         """Delete tmp/folder."""
