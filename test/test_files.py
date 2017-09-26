@@ -1,7 +1,6 @@
 """Test if needed files are successfully installed with visbrain."""
 import os
 from distutils.sysconfig import get_python_lib
-from warnings import warn
 
 
 def _test_file(name, path):
@@ -10,11 +9,11 @@ def _test_file(name, path):
         full_path = [get_python_lib()] + path
         file = os.path.join(*full_path)
         assert os.path.isfile(file)
-        warn("Distant version passed for *" + name + "* file")
+        print("Distant version passed for *" + name + "* file")
     except:
         file = os.path.join(*path)
         assert os.path.isfile(file)
-        warn("Local version passed for *" + name + "* file")
+        print("Local version passed for *" + name + "* file")
 
 ###############################################################################
 #                                   BRAIN
