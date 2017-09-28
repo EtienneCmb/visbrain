@@ -337,10 +337,10 @@ class GridShortcuts(object):
             x, y = event.pos
             # Pass in the camera system [-1, 1]:
             x_cam = (width * (x / w_cols) + left) + 1.
-            y_cam = (height * y / w_rows) + bottom + 1.
+            y_cam = (height * ((w_rows - y) / w_rows) + bottom) + 1.
             # Get signal location :
             x_loc = int(np.ceil((n_cols / 2.) * x_cam) - 1.)
-            y_loc = int(abs(np.ceil((n_rows / 2.) * y_cam) - 1))
+            y_loc = int(n_rows - np.ceil((n_rows / 2.) * y_cam))
             y_loc, x_loc = self._grid._convert_row_cols(y_loc, x_loc)
             # String conversion :
             if self._data.ndim == 2:
