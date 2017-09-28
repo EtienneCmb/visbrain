@@ -200,13 +200,13 @@ class GridSignalVisual(visuals.Visual):
 
             # -------------- Index --------------
             (n_rows, n_cols), n = g_size, len(self)
-            index = np.c_[np.repeat(np.repeat(np.arange(n_cols), n_rows), n),
-                          np.repeat(np.tile(np.arange(n_rows), n_cols), n),
-                          np.tile(np.arange(n), m)].astype(np.float32)
+            idg = np.c_[np.repeat(np.repeat(np.arange(n_cols), n_rows), n),
+                        np.repeat(np.tile(np.arange(n_rows), n_cols), n)[::-1],
+                        np.tile(np.arange(n), m)].astype(np.float32)
 
             # -------------- Buffer --------------
             self._dbuffer.set_data(vispy_array(data))
-            self._ibuffer.set_data(vispy_array(index))
+            self._ibuffer.set_data(vispy_array(idg))
             self.shared_program.vert['u_size'] = g_size
             self._g_size = g_size
 
