@@ -8,12 +8,12 @@ https://github.com/vispy/vispy/blob/master/examples/demo/gloo/realtime_signals.p
 import numpy as np
 
 from vispy import gloo, visuals
-from vispy.scene.visuals import create_visual_node
+from vispy.scene.visuals import create_visual_node, Text
 
 from visbrain.utils import color2vb, vispy_array, PrepareData, ndsubplot
 
 
-__all__ = ('GridSignalMesh')
+__all__ = ('GridSignal')
 
 
 vertex_shader = """
@@ -84,7 +84,7 @@ class GridSignalVisual(visuals.Visual):
         return self._n
 
     def __init__(self, data, axis=-1, sf=1., color='random', space=2.,
-                 scale=(1., 1.)):
+                 scale=(1., .9)):
         """Init."""
         # =========================== CHECKING ===========================
         assert isinstance(data, np.ndarray) and (data.ndim <= 3)
@@ -100,6 +100,7 @@ class GridSignalVisual(visuals.Visual):
                           blend=True, blend_func=('src_alpha',
                                                   'one_minus_src_alpha'))
         self._draw_mode = 'line_strip'
+        self._txt = Text()
 
         # =========================== DATA ===========================
         # Keep some inputs :
@@ -141,10 +142,6 @@ class GridSignalVisual(visuals.Visual):
             Time axis location.
         random : array_like/string/tuple | 'random'
             Use 'random' for random colors or a color name for uniform color.
-        space : float | None
-            Space between subplots.
-        scale : tuple | None
-            Tuple descigin the scaling along the x and y-axis.
         """
         rnd_dyn = (.2, .8)  # random color range
         # ====================== CHECKING ======================
@@ -225,6 +222,11 @@ class GridSignalVisual(visuals.Visual):
             # Send color to buffer :
             self._cbuffer.set_data(vispy_array(a_color))
 
+        # self._txt.set_data('oki', pos=(0., 0., 0.))
+        self._txt.text = 'oki'
+        self._txt.pos = (0., 0., 0.)
+        self._txt.parent = self._parent
+
     def clean(self):
         """Clean buffers."""
         self._dbuffer.delete()
@@ -302,4 +304,4 @@ class GridSignalVisual(visuals.Visual):
         self.set_data(color=value)
 
 
-GridSignalMesh = create_visual_node(GridSignalVisual)
+GridSignal = create_visual_node(GridSignalVisual)
