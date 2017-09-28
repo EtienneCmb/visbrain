@@ -206,6 +206,7 @@ class Ui_MainWindow(object):
         self._sig_form.addItem("")
         self._sig_form.addItem("")
         self._sig_form.addItem("")
+        self._sig_form.addItem("")
         self.gridLayout_6.addWidget(self._sig_form, 0, 2, 1, 1)
         self.line_12 = QtWidgets.QFrame(self.groupBox_5)
         self.line_12.setFrameShape(QtWidgets.QFrame.VLine)
@@ -1240,7 +1241,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuDisplay.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.QuickSettings.setCurrentIndex(1)
+        self.QuickSettings.setCurrentIndex(0)
         self._PlottingForm.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -1275,6 +1276,7 @@ class Ui_MainWindow(object):
         self._sig_form.setItemText(2, _translate("MainWindow", "histogram"))
         self._sig_form.setItemText(3, _translate("MainWindow", "tf"))
         self._sig_form.setItemText(4, _translate("MainWindow", "psd"))
+        self._sig_form.setItemText(5, _translate("MainWindow", "butterfly"))
         self._sig_amp.setTitle(_translate("MainWindow", "Amplitude"))
         self.label_2.setText(_translate("MainWindow", "Max"))
         self.label.setText(_translate("MainWindow", "Min"))

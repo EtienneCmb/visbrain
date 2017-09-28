@@ -78,7 +78,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="movable">
           <bool>true</bool>
@@ -97,7 +97,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-98</y>
                 <width>405</width>
                 <height>907</height>
                </rect>
@@ -408,6 +408,11 @@ color</string>
                       <string>psd</string>
                      </property>
                     </item>
+                    <item>
+                     <property name="text">
+                      <string>butterfly</string>
+                     </property>
+                    </item>
                    </widget>
                   </item>
                   <item row="0" column="1">
@@ -524,7 +529,7 @@ color</string>
                      <enum>QFrame::NoFrame</enum>
                     </property>
                     <property name="currentIndex">
-                     <number>3</number>
+                     <number>4</number>
                     </property>
                     <widget class="QWidget" name="line">
                      <layout class="QGridLayout" name="gridLayout_9">
