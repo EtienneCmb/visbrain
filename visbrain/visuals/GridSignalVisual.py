@@ -84,7 +84,7 @@ class GridSignalVisual(visuals.Visual):
         return self._n
 
     def __init__(self, data, axis=-1, sf=1., color='random', title=None,
-                 space=2., scale=(1., .9)):
+                 space=2., scale=(1., .9), font_size=10.):
         """Init."""
         # =========================== CHECKING ===========================
         assert isinstance(data, np.ndarray) and (data.ndim <= 3)
@@ -100,7 +100,7 @@ class GridSignalVisual(visuals.Visual):
                           blend=True, blend_func=('src_alpha',
                                                   'one_minus_src_alpha'))
         self._draw_mode = 'line_strip'
-        self._txt = Text()
+        self._txt = Text(bold=False, font_size=font_size)
 
         # =========================== DATA ===========================
         # Keep some inputs :
@@ -228,7 +228,6 @@ class GridSignalVisual(visuals.Visual):
             title = [st.format(i, k) for i, k in it]
         # Set text and font size :
         self._txt.text = title
-        self._txt.font_size = 10.
         # Get titles position :
         x_factor, y_factor = 1. / (n_cols), 1. / (n_rows)
         r_x = np.linspace(-1. + x_factor, 1. - x_factor, n_cols)
@@ -314,6 +313,39 @@ class GridSignalVisual(visuals.Visual):
         """Set color value."""
         self._color = value
         self.set_data(color=value)
+
+    # ----------- FONT_SIZE -----------
+    @property
+    def font_size(self):
+        """Get the font_size value."""
+        return self._txt.font_size
+
+    @font_size.setter
+    def font_size(self, value):
+        """Set font_size value."""
+        self._txt.font_size = value
+
+    # ----------- TCOLOR -----------
+    @property
+    def tcolor(self):
+        """Get the tcolor value."""
+        return self._txt.color
+
+    @tcolor.setter
+    def tcolor(self, value):
+        """Set tcolor value."""
+        self._txt.color = color2vb(value)
+
+    # ----------- TVISIBLE -----------
+    @property
+    def tvisible(self):
+        """Get the tvisible value."""
+        return self._txt.visible
+
+    @tvisible.setter
+    def tvisible(self, value):
+        """Set tvisible value."""
+        self._txt.visible = value
 
 
 GridSignal = create_visual_node(GridSignalVisual)
