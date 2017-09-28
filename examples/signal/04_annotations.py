@@ -29,4 +29,4 @@ data, _ = generate_eeg(sf=sf, n_pts=n_pts, n_trials=n_trials, smooth=200,
 """
 annotations = 'signal_annotations.txt'
 
-Signal(data, sf=sf, axis=-1, lw=2., annotations=annotations).show()
+Signal(data, sf=sf, axis=-1, line_lw=2., annotations=annotations).show()
