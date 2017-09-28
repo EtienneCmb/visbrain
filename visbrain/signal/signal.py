@@ -11,7 +11,7 @@ import vispy.scene.cameras as viscam
 from .ui_elements import UiElements, UiInit
 from .visuals import Visuals
 from ..utils import (set_widget_size, safely_set_cbox, color2tuple, color2vb,
-                     mpl_cmap)
+                     mpl_cmap, toggle_enable_tab)
 from ..io import write_fig_canvas
 # get_screen_size
 
@@ -99,6 +99,16 @@ class Signal(UiInit, UiElements, Visuals):
         Label, title, axis and border color (signal layout).
     tick_font_size : float | 8.
         Size of ticks for the x and y-axis (signal layout).
+    grid_titles : list | None
+        Titles do add to each plot in the grid. Sould be a list of length
+        (n_rows * n_cols).
+    grid_font_size : float | 10.
+        Font size of grid titles.
+    grid_color : string | 'random'
+        Grid plot color. Use 'random' to have one random color per plot or
+        use a string (e.g. 'gray') for a uniform color.
+    grid_titles_color : array_like/string/tuple | 'black'
+        Grid titles color.
     bgcolor : array_like/tuple/string | 'black'
         Background color.
     display_grid : bool | True
@@ -119,7 +129,9 @@ class Signal(UiInit, UiElements, Visuals):
                  tf_av_overlap=0., tf_clim=None, psd_nperseg=256,
                  psd_noverlap=128, display_grid=True, display_signal=True,
                  annotations=None, annot_txtsz=18., annot_marksz=16.,
-                 annot_color='#2ecc71', line_rendering='gl', **kwargs):
+                 annot_color='#2ecc71', line_rendering='gl', grid_titles=None,
+                 grid_font_size=10., grid_color='random',
+                 grid_titles_color='black', **kwargs):
         """Init."""
         self._enable_grid = enable_grid
         self._previous_form = form
@@ -138,6 +150,7 @@ class Signal(UiInit, UiElements, Visuals):
         if data.ndim == 1 or not self._enable_grid:  # disable grid
             display_grid = self._enable_grid = False
             self.actionGrid.setEnabled(False)
+            toggle_enable_tab(self.QuickSettings, 'Grid', False)
         self._data = data.astype(np.float32, copy=False)
         self._axis = axis
 
@@ -145,7 +158,7 @@ class Signal(UiInit, UiElements, Visuals):
         grid_parent = self._grid_canvas.wc.scene
         signal_parent = self._signal_canvas.wc.scene
         Visuals.__init__(self, data, time, sf, axis, line_rendering,
-                         grid_parent, signal_parent)
+                         grid_titles, grid_color, grid_parent, signal_parent)
 
         # ==================== CAMERA ====================
         grid_rect = (0, 0, 1, 1)
@@ -194,6 +207,11 @@ class Signal(UiInit, UiElements, Visuals):
             self._sig_climax.setValue(tf_clim[1])
         self._sig_nperseg.setValue(psd_nperseg)
         self._sig_noverlap.setValue(psd_noverlap)
+
+        # ------------- Grid -------------
+        gt_st = str(color2tuple(grid_titles_color, astype=float))
+        self._grid_titles_fz.setValue(grid_font_size)
+        self._grid_titles_color.setText(gt_st)
 
         # ------------- Cbar -------------
         self._signal_canvas.cbar.txtcolor = ax_color
@@ -274,6 +292,8 @@ class Signal(UiInit, UiElements, Visuals):
         # Display / hide grid and signal :
         self._fcn_menu_disp_grid()
         self._fcn_menu_disp_signal()
+        # Grid properties :
+        self._fcn_grid_tupdate()
         # Set signal data :
         self._fcn_set_signal(force=True)
         # Annotations :

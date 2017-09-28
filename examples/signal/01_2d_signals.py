@@ -37,7 +37,8 @@ n_trials = 125  # number of trials in the dataset
 """Generate a random EEG dataset of shape (n_trials, n_pts). Also get the
 associated time vector with the same length as the data.
 """
-data, time = generate_eeg(sf=sf, n_pts=n_pts, n_trials=n_trials)
+data, time = generate_eeg(sf=sf, n_pts=n_pts, n_trials=n_trials, smooth=200,
+                          noise=100)
 time += 8.  # force the time vector to start at 8 seconds
 time *= 1000.  # millisecond conversion
 
@@ -54,5 +55,10 @@ xlabel = 'Time (ms)'
 ylabel = 'Amplitude (uV)'
 title = 'Plot of a 1-d signal'
 
+"""Build the title to add to each time-series in the grid
+"""
+gtitles = ['Trial ' + str(k) for k in range(n_trials)]  # grid titles
+gfz = 8.  # grid titles font-size
+
 Signal(data, sf=sf, axis=axis, time=time, xlabel=xlabel, ylabel=ylabel,
-       title=title).show()
+       title=title, grid_titles=gtitles, grid_font_size=gfz).show()
