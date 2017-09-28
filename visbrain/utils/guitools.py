@@ -438,5 +438,4 @@ def set_widget_size(app, widget, width=100., height=100.):
     s_height = np.around(s_height * height / 100)
     # Set maximum size to the widget :
     size = QtCore.QSize(s_width, s_height)
-    widget.setMaximumSize(size)
-    widget.setMinimumSize(size)
+    widget.resize(size)
