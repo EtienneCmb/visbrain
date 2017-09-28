@@ -4,8 +4,8 @@ A large portion of this code was taken from the example developped by the vispy
 team :
 https://github.com/vispy/vispy/blob/master/examples/demo/gloo/realtime_signals.py
 """
-
 import numpy as np
+from itertools import product
 
 from vispy import gloo, visuals
 from vispy.scene.visuals import create_visual_node, Text
@@ -83,8 +83,8 @@ class GridSignalVisual(visuals.Visual):
         """Return the number of time points."""
         return self._n
 
-    def __init__(self, data, axis=-1, sf=1., color='random', space=2.,
-                 scale=(1., .9)):
+    def __init__(self, data, axis=-1, sf=1., color='random', title=None,
+                 space=2., scale=(1., .9)):
         """Init."""
         # =========================== CHECKING ===========================
         assert isinstance(data, np.ndarray) and (data.ndim <= 3)
@@ -128,10 +128,10 @@ class GridSignalVisual(visuals.Visual):
         self.shared_program.vert['u_n'] = len(self)
 
         # Set data :
-        self.set_data(data, axis, color)
+        self.set_data(data, axis, color, title)
         self.freeze()
 
-    def set_data(self, data=None, axis=None, color=None):
+    def set_data(self, data=None, axis=None, color=None, title=None):
         """Set data to the grid of signals.
 
         Parameters
@@ -181,7 +181,7 @@ class GridSignalVisual(visuals.Visual):
                 sig_index = sig_index.reshape(opt_rows, opt_cols)
                 g_size = (opt_rows, opt_cols)
             self._opt_shape = list(data.shape)[0:-1]
-            self._sig_index = np.flipud(sig_index)
+            self._sig_index = sig_index
 
             # -------------- (n_rows * n_cols, n_time) --------------
             data = np.reshape(data, (m, len(self)), order='F')
@@ -210,7 +210,6 @@ class GridSignalVisual(visuals.Visual):
         # ====================== COLOR ======================
         if color is not None:
             g_size = np.array(self._g_size)
-            m = g_size.prod()  # n_row x n_col
             n = len(self)
             if color == 'random':  # (m, 3) random color
                 singcol = np.random.uniform(size=(m, 3), low=rnd_dyn[0],
@@ -222,10 +221,23 @@ class GridSignalVisual(visuals.Visual):
             # Send color to buffer :
             self._cbuffer.set_data(vispy_array(a_color))
 
-        # self._txt.set_data('oki', pos=(0., 0., 0.))
-        self._txt.text = 'oki'
-        self._txt.pos = (0., 0., 0.)
-        self._txt.parent = self._parent
+        # ====================== TITLES ======================
+        # Titles checking :
+        if title is None or (len(title) != m):
+            st, it = '({}, {})', product(range(n_rows), range(n_cols))
+            title = [st.format(i, k) for i, k in it]
+        # Set text and font size :
+        self._txt.text = title
+        self._txt.font_size = 10.
+        # Get titles position :
+        x_factor, y_factor = 1. / (n_cols), 1. / (n_rows)
+        r_x = np.linspace(-1. + x_factor, 1. - x_factor, n_cols)
+        r_x = np.tile(r_x, n_rows)
+        r_y = np.linspace(-1. + y_factor, 1. - y_factor, n_rows)[::-1]
+        r_y += y_factor
+        r_y = np.repeat(r_y, n_cols)
+        pos = np.c_[r_x, r_y, np.full_like(r_x, -10.)]
+        self._txt.pos = pos.astype(np.float32)
 
     def clean(self):
         """Clean buffers."""
