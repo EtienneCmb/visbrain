@@ -227,7 +227,7 @@ class SignalVisual(SignalAnnotations):
         _data = self._prep._prepare_data(self._sf, data_c, self._time)
 
         # Set data :
-        if form in ['line', 'marker', 'psd']:  # line and marker
+        if form in ['line', 'marker', 'psd', 'butterfly']:  # line and marker
             # Get position array :
             pos = np.c_[self._time, _data]
             # Send position :
@@ -258,10 +258,29 @@ class SignalVisual(SignalAnnotations):
                 self._th.visible = is_th
                 self._line.set_data(pos, width=lw, color=col)
                 self._line.update()
-            else:
+            elif form == 'marker':
                 self._mark.set_data(pos, face_color=color, symbol=symbol,
                                     size=size, edge_width=0.)
                 self._mark.update()
+            elif form == 'butterfly':
+                # Get soe shape related variables :
+                n, m = len(self._time), int(np.prod(data.shape))
+                n_rep = int(m / n)
+                data = vispy_array(data)
+                # Build position :
+                pos = np.c_[np.tile(self._time.ravel(), n_rep), data.ravel()]
+                # Disconnect some points :
+                connect = np.c_[np.arange(m - 1), np.arange(1, m)]
+                to_delete = np.linspace(n - 1, m - 1, n_rep)
+                connect = np.delete(connect, to_delete, axis=0)
+                # Build color :
+                col = color2vb(color, length=m)
+                # singcol = np.random.uniform(size=(n_rep, 3), low=.2,
+                #                             high=.8).astype(np.float32)
+                # col = np.repeat(singcol, n, 0)
+                # Send data :
+                self._line.set_data(pos, width=lw, color=col, connect=connect)
+                self._line.update()
             # Get camera rectangle :
             t_min, t_max = pos[:, 0].min(), pos[:, 0].max()
             d_min, d_max = pos[:, 1].min(), pos[:, 1].max()
@@ -330,7 +349,7 @@ class SignalVisual(SignalAnnotations):
         return self._navidx.index(idx)
 
     def _visibility(self):
-        self._line.visible = self.form in ['line', 'psd']
+        self._line.visible = self.form in ['line', 'psd', 'butterfly']
         self._mark.visible = self.form == 'marker'
         self._hist.visible = self.form == 'histogram'
         self._tf.visible = self.form == 'tf'

@@ -45,7 +45,7 @@ class Signal(UiInit, UiElements, Visuals):
         Enable or disable the grid. If False, the grid is not computed and not
         accessible from the GUI. The grid requires more memory RAM. It could be
         turn to False for very large datasets.
-    form : {'line', 'marker', 'histogram', 'tf', 'psd'}
+    form : {'line', 'marker', 'histogram', 'tf', 'psd', 'butterfly'}
         Plotting type.
     color : array_like/string/tuple | 'black'
         Color of the plot.
@@ -399,10 +399,11 @@ class Signal(UiInit, UiElements, Visuals):
 
         Parameters
         ----------
-        form : {'line', 'marker', 'histogram', 'tf', 'psd'}
+        form : {'line', 'marker', 'histogram', 'tf', 'psd', 'butterfly'}
             Plotting form.
         """
-        idx = ['line', 'marker', 'histogram', 'tf', 'psd'].index(form)
+        idx = ['line', 'marker', 'histogram', 'tf', 'psd',
+               'butterfly'].index(form)
         self._sig_form.setCurrentIndex(idx)
 
     def show(self):
