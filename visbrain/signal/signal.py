@@ -158,7 +158,7 @@ class Signal(UiInit, UiElements, Visuals):
         grid_parent = self._grid_canvas.wc.scene
         signal_parent = self._signal_canvas.wc.scene
         Visuals.__init__(self, data, time, sf, axis, line_rendering,
-                         grid_titles, grid_parent, signal_parent)
+                         grid_titles, grid_color, grid_parent, signal_parent)
 
         # ==================== CAMERA ====================
         grid_rect = (0, 0, 1, 1)

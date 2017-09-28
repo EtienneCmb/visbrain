@@ -47,7 +47,9 @@ title = 'Plot of a 1-d signal'
 st = 'Channel {} - trial {}'
 it = product(range(n_channels), range(n_trials))
 gtitles = [st.format(c, t) for c, t in it]  # grid titles
-gfz = 8.  # grid titles font-size
+gfz = 7.  # grid titles font-size
+gc = 'gray'  # grid color
 
 Signal(data, sf=sf, axis=axis, time=time, xlabel=xlabel, ylabel=ylabel,
-       title=title, grid_titles=gtitles, grid_font_size=gfz).show()
+       title=title, grid_titles=gtitles, grid_font_size=gfz,
+       grid_color=gc).show()

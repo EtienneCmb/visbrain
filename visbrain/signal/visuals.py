@@ -344,7 +344,7 @@ class Visuals(object):
     """
 
     def __init__(self, data, time, sf, axis, line_rendering, grid_titles,
-                 parent_grid, parent_signal):
+                 grid_color, grid_parent, signal_parent):
         """Init."""
         # ========================== CHECK ==========================
         # ----------- AXIS -----------
@@ -363,10 +363,10 @@ class Visuals(object):
         # ========================== GRID ==========================
         if self._enable_grid:  # don't create grid for 1-D signals
             self._grid = GridSignal(data, axis=axis, sf=sf, title=grid_titles,
-                                    parent=parent_grid)
-            self._grid._txt.parent = parent_grid
+                                    color=grid_color, parent=grid_parent)
+            self._grid._txt.parent = grid_parent
 
         # ========================== SIGNAL ==========================
         self._signal = SignalVisual(time, sf, data.shape, axis,
                                     line_rendering=line_rendering,
-                                    parent=parent_signal)
+                                    parent=signal_parent)
