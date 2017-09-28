@@ -84,7 +84,7 @@ class GridSignalVisual(visuals.Visual):
         return self._n
 
     def __init__(self, data, axis=-1, sf=1., color='random', title=None,
-                 space=2., scale=(1., .9), font_size=10.):
+                 space=2., scale=(.98, .9), font_size=10.):
         """Init."""
         # =========================== CHECKING ===========================
         assert isinstance(data, np.ndarray) and (data.ndim <= 3)
