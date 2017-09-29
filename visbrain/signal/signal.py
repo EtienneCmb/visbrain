@@ -136,7 +136,7 @@ class Signal(UiInit, UiElements, Visuals):
                  display_grid=True, display_signal=True, annotations=None,
                  annot_txtsz=18., annot_marksz=16., annot_color='#2ecc71',
                  grid_lw=1., grid_smooth=False, grid_titles=None,
-                 grid_font_size=10., grid_color='random',
+                 grid_font_size=10., grid_color='random', grid_shape=None,
                  grid_titles_color='black', **kwargs):
         """Init."""
         self._enable_grid = enable_grid
@@ -164,7 +164,7 @@ class Signal(UiInit, UiElements, Visuals):
         grid_parent = self._grid_canvas.wc.scene
         signal_parent = self._signal_canvas.wc.scene
         Visuals.__init__(self, data, time, sf, axis, grid_titles, grid_color,
-                         grid_parent, signal_parent)
+                         grid_shape, grid_parent, signal_parent)
 
         # ==================== CAMERA ====================
         grid_rect = (0, 0, 1, 1)
