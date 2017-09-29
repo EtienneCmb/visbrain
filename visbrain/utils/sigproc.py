@@ -1,11 +1,12 @@
 """This script contains some usefull signal processing functions."""
+from warnings import warn
 
 import numpy as np
-from warnings import warn
+from scipy.signal import fftconvolve
 
 
 __all__ = ('normalize', 'derivative', 'tkeo', 'zerocrossing', 'power_of_ten',
-           'averaging', 'normalization', 'smoothing')
+           'averaging', 'normalization', 'smoothing', 'smooth_3d')
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -326,3 +327,26 @@ def smoothing(x, n_window=10, window='hanning'):
 
     y = np.convolve(w / w.sum(), s, mode='same')
     return y[n_window - 1:-n_window + 1]
+
+
+def smooth_3d(vol, smooth_factor=3):
+    """Smooth a 3-D volume.
+
+    Parameters
+    ----------
+    vol : array_like
+        The volume of shape (N, M, P)
+    smooth_factor : int | 3
+        The smoothing factor.
+
+    Returns
+    -------
+    vol_smooth : array_like
+        The smooth volume with the same shape as vol.
+    """
+    if isinstance(smooth_factor, int) and (smooth_factor >= 3):
+        sz = np.full((3,), smooth_factor, dtype=int)
+        smooth = np.ones([smooth_factor] * 3) / np.prod(sz)
+        return fftconvolve(vol, smooth, mode='same')
+    else:
+        return vol
