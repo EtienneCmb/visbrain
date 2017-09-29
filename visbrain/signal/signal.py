@@ -50,7 +50,10 @@ class Signal(UiInit, UiElements, Visuals):
     color : array_like/string/tuple | 'black'
         Color of the plot.
     line_lw : float | 1.
-        Line width (form in ['line', 'psd']).
+        Line width (form in ['line', 'psd', 'butterfly']).
+    line_smooth : bool | False
+        Specify if grid lines have to be smoothed. might be unstable on some
+        platform.
     marker_symbol : string | 'o'
         Marker symbol.
     marker_size : float | 10.
@@ -99,6 +102,8 @@ class Signal(UiInit, UiElements, Visuals):
         Label, title, axis and border color (signal layout).
     tick_font_size : float | 8.
         Size of ticks for the x and y-axis (signal layout).
+    grid_lw : float | 1.
+        Grid line width.
     grid_titles : list | None
         Titles do add to each plot in the grid. Sould be a list of length
         (n_rows * n_cols).
@@ -117,19 +122,20 @@ class Signal(UiInit, UiElements, Visuals):
         Display the signal layout.
     annotations : str | None
         Path to an annotation file.
-    line_rendering : {'gl', 'agg'}
-        Specify the line rendering method. Use 'gl' for a fast but lower
-        quality lines and 'agg', looks better but slower.
+    smooth_lines : bool | True
+        Specify if grid lines have to be smoothed. might be unstable on some
+        platform.
     """
 
     def __init__(self, data, axis=-1, time=None, sf=1., enable_grid=True,
-                 form='line', color='black', line_lw=1., marker_symbol='disc',
-                 marker_size=10., hist_nbins=10, tf_norm=0, tf_baseline=None,
-                 tf_interp='gaussian', tf_cmap='viridis', tf_av_window=None,
-                 tf_av_overlap=0., tf_clim=None, psd_nperseg=256,
-                 psd_noverlap=128, display_grid=True, display_signal=True,
-                 annotations=None, annot_txtsz=18., annot_marksz=16.,
-                 annot_color='#2ecc71', line_rendering='gl', grid_titles=None,
+                 form='line', color='black', line_lw=1., line_smooth=False,
+                 marker_symbol='disc', marker_size=10., hist_nbins=10,
+                 tf_norm=0, tf_baseline=None, tf_interp='gaussian',
+                 tf_cmap='viridis', tf_av_window=None, tf_av_overlap=0.,
+                 tf_clim=None, psd_nperseg=256, psd_noverlap=128,
+                 display_grid=True, display_signal=True, annotations=None,
+                 annot_txtsz=18., annot_marksz=16., annot_color='#2ecc71',
+                 grid_lw=1., grid_smooth=False, grid_titles=None,
                  grid_font_size=10., grid_color='random',
                  grid_titles_color='black', **kwargs):
         """Init."""
@@ -157,8 +163,8 @@ class Signal(UiInit, UiElements, Visuals):
         # ==================== VISUALS ====================
         grid_parent = self._grid_canvas.wc.scene
         signal_parent = self._signal_canvas.wc.scene
-        Visuals.__init__(self, data, time, sf, axis, line_rendering,
-                         grid_titles, grid_color, grid_parent, signal_parent)
+        Visuals.__init__(self, data, time, sf, axis, grid_titles, grid_color,
+                         grid_parent, signal_parent)
 
         # ==================== CAMERA ====================
         grid_rect = (0, 0, 1, 1)
@@ -185,6 +191,7 @@ class Signal(UiInit, UiElements, Visuals):
         # Signal properties :
         safely_set_cbox(self._sig_form, form)
         self._sig_lw.setValue(line_lw)  # line
+        self._sig_smooth.setChecked(line_smooth)  # line
         self._sig_nbins.setValue(hist_nbins)  # histogram
         self._sig_size.setValue(marker_size)  # marker
         safely_set_cbox(self._sig_symbol, marker_symbol)  # marker
@@ -209,9 +216,16 @@ class Signal(UiInit, UiElements, Visuals):
         self._sig_noverlap.setValue(psd_noverlap)
 
         # ------------- Grid -------------
+        if hasattr(self, '_grid'):
+            n_rows, n_cols = self._grid.g_size
+            self._grid_nrows.setValue(n_rows)
+            self._grid_nrows.setMaximum(np.prod(self._grid.g_size))
+            self._grid_ncols.setValue(n_cols)
+            self._grid_ncols.setMaximum(np.prod(self._grid.g_size))
         gt_st = str(color2tuple(grid_titles_color, astype=float))
         self._grid_titles_fz.setValue(grid_font_size)
         self._grid_titles_color.setText(gt_st)
+        self._grid_lw.setValue(grid_lw)
 
         # ------------- Cbar -------------
         self._signal_canvas.cbar.txtcolor = ax_color
@@ -222,6 +236,7 @@ class Signal(UiInit, UiElements, Visuals):
         # ------------- Settings -------------
         bgcolor = kwargs.get('bgcolor', 'white')
         self._set_bgcolor.setText(str(color2tuple(bgcolor, astype=float)))
+        self._grid_smooth.setChecked(grid_smooth)
 
         # ------------- Annotations -------------
         self._annot_txtsz.setValue(annot_txtsz)
@@ -294,8 +309,10 @@ class Signal(UiInit, UiElements, Visuals):
         self._fcn_menu_disp_signal()
         # Grid properties :
         self._fcn_grid_tupdate()
+        self._fcn_grid_lw()
         # Set signal data :
         self._fcn_set_signal(force=True)
+        self._fcn_sig_smooth()
         # Annotations :
         self._fcn_annot_appear()
         # Update cameras :

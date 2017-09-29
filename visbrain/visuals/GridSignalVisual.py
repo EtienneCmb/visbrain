@@ -259,9 +259,17 @@ class GridSignalVisual(visuals.Visual):
         view_vert = view.view_program.vert
         view_vert['transform'] = tr.get_transform()
 
-    # def _prepare_draw(self, view=None):
-    #     """Function called everytime there's a camera update."""
-    #     pass
+    def _prepare_draw(self, view=None):
+        """Function called everytime there's a camera update."""
+        try:
+            import OpenGL.GL as GL
+            GL.glLineWidth(self._width)
+            if self._smooth_line:
+                GL.glEnable(GL.GL_LINE_SMOOTH)
+            else:
+                GL.glDisable(GL.GL_LINE_SMOOTH)
+        except Exception:  # can be other than ImportError sometimes
+            pass
 
     # ========================================================================
     # ========================================================================
@@ -346,6 +354,44 @@ class GridSignalVisual(visuals.Visual):
     def tvisible(self, value):
         """Set tvisible value."""
         self._txt.visible = value
+
+    # ----------- G_SIZE -----------
+    @property
+    def g_size(self):
+        """Get the g_size value."""
+        return self._g_size
+
+    @g_size.setter
+    def g_size(self, value):
+        """Set g_size value."""
+        self._g_size = value
+        self.shared_program.vert['u_size'] = value
+        self.update()
+
+    # ----------- WIDTH -----------
+    @property
+    def width(self):
+        """Get the width value."""
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        """Set width value."""
+        self._width = value
+        self.update()
+
+    # ----------- METHOD -----------
+    @property
+    def method(self):
+        """Get the method value."""
+        return self._method
+
+    @method.setter
+    def method(self, value):
+        """Set method value."""
+        self._method = value
+        self._smooth_line = value == 'agg'
+        self.update()
 
 
 GridSignal = create_visual_node(GridSignalVisual)

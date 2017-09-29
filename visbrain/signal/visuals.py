@@ -362,8 +362,8 @@ class Visuals(object):
     ----------
     """
 
-    def __init__(self, data, time, sf, axis, line_rendering, grid_titles,
-                 grid_color, grid_parent, signal_parent):
+    def __init__(self, data, time, sf, axis, grid_titles, grid_color,
+                 grid_parent, signal_parent):
         """Init."""
         # ========================== CHECK ==========================
         # ----------- AXIS -----------
@@ -387,5 +387,4 @@ class Visuals(object):
 
         # ========================== SIGNAL ==========================
         self._signal = SignalVisual(time, sf, data.shape, axis,
-                                    line_rendering=line_rendering,
                                     parent=signal_parent)

@@ -2,7 +2,7 @@
 import numpy as np
 
 from ...utils import textline2color, safely_set_spin
-from ...io import dialog_color
+from ...io import dialog_color, is_opengl_installed
 
 
 class UiSignals(object):
@@ -26,6 +26,7 @@ class UiSignals(object):
         self._sig_color.editingFinished.connect(self._fcn_set_signal)
         self._sig_sig_picker.clicked.connect(self._fcn_color_sig_picker)
         self._sig_lw.valueChanged.connect(self._fcn_set_signal)
+        self._sig_smooth.clicked.connect(self._fcn_sig_smooth)
         self._sig_nbins.valueChanged.connect(self._fcn_set_signal)
         self._sig_size.valueChanged.connect(self._fcn_set_signal)
         self._sig_symbol.currentIndexChanged.connect(self._fcn_set_signal)
@@ -181,6 +182,14 @@ class UiSignals(object):
             self._cbar_update(self._signal._tf)
         self._signal_canvas.update()
         self._previous_form = form
+
+    def _fcn_sig_smooth(self):
+        """Set smooth line."""
+        if is_opengl_installed():
+            method = 'agg' if self._sig_smooth.isChecked() else 'gl'
+            self._signal._line.method = method
+        else:
+            self._sig_smooth.setEnabled(False)
 
     def _fcn_color_sig_picker(self):
         """Pick color for signal."""

@@ -10,7 +10,7 @@ class UiSettings(object):
         """Init."""
         # Background color :
         self._set_bgcolor.editingFinished.connect(self._fcn_set_bgcolor)
-        self._sig_bgd_picker.clicked.connect(self._fcn_color_bgd_picker)
+        self._set_bgd_picker.clicked.connect(self._fcn_color_bgd_picker)
         # Filtering :
         # Prepare data :
         self._sig_filt_apply.clicked.connect(self._fcn_set_filtering)
