@@ -434,8 +434,8 @@ def set_widget_size(app, widget, width=100., height=100.):
     # Get scren (width, height) :
     s_width, s_height = get_screen_size(app)
     # Convert (width, height) into pixels :
-    s_width = np.around(s_width * width / 100)
-    s_height = np.around(s_height * height / 100)
+    s_width = np.around(s_width * width / 100.)
+    s_height = np.around(s_height * height / 100.)
     # Set maximum size to the widget :
     size = QtCore.QSize(s_width, s_height)
     widget.resize(size)
