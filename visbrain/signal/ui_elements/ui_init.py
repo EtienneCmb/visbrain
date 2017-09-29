@@ -328,7 +328,7 @@ class GridShortcuts(object):
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
             """Executed function when double click mouse over canvas."""
-            n_rows, n_cols = self._grid._g_size
+            n_rows, n_cols = self._grid.g_size
             rect = self._grid_canvas.camera.rect
             w_cols, w_rows = self._grid_canvas.canvas.size
             # Get camera limits :

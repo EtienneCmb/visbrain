@@ -32,7 +32,7 @@ from visbrain.utils import generate_eeg
 
 sf = 512.  # sampling frequency
 n_pts = 4000  # number of time points
-n_trials = 125  # number of trials in the dataset
+n_trials = 120  # number of trials in the dataset
 
 """Generate a random EEG dataset of shape (n_trials, n_pts). Also get the
 associated time vector with the same length as the data.
@@ -59,6 +59,8 @@ title = 'Plot of a 1-d signal'
 """
 gtitles = ['Trial ' + str(k) for k in range(n_trials)]  # grid titles
 gfz = 8.  # grid titles font-size
+glw = 2.  # grid line width
 
 Signal(data, sf=sf, axis=axis, time=time, xlabel=xlabel, ylabel=ylabel,
-       title=title, grid_titles=gtitles, grid_font_size=gfz).show()
+       title=title, grid_titles=gtitles, grid_font_size=gfz,
+       grid_lw=glw).show()

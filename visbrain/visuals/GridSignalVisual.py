@@ -84,7 +84,8 @@ class GridSignalVisual(visuals.Visual):
         return self._n
 
     def __init__(self, data, axis=-1, sf=1., color='random', title=None,
-                 space=2., scale=(.98, .9), font_size=10.):
+                 space=2., scale=(.98, .9), font_size=10., width=1.,
+                 method='gl'):
         """Init."""
         # =========================== CHECKING ===========================
         assert isinstance(data, np.ndarray) and (data.ndim <= 3)
@@ -112,6 +113,8 @@ class GridSignalVisual(visuals.Visual):
         self.scale = scale
         self.space = space
         self._prep = PrepareData(axis=-1)
+        self.width = width
+        self.method = method
 
         # =========================== BUFFERS ===========================
         # Create buffers (for data, index and color)
@@ -131,7 +134,8 @@ class GridSignalVisual(visuals.Visual):
         self.set_data(data, axis, color, title)
         self.freeze()
 
-    def set_data(self, data=None, axis=None, color=None, title=None):
+    def set_data(self, data=None, axis=None, color=None, title=None,
+                 force_shape=None):
         """Set data to the grid of signals.
 
         Parameters
@@ -173,13 +177,15 @@ class GridSignalVisual(visuals.Visual):
             sig_index = np.arange(m).reshape(*g_size)
 
             # -------------- Optimal 2-D --------------
-            force_2d = True
+            self._data = data
             self._ori_shape = list(data.shape)[0:-1]
-            if force_2d:
-                opt_rows, opt_cols = ndsubplot(m)
-                data = data.reshape(opt_rows, opt_cols, len(self))
-                sig_index = sig_index.reshape(opt_rows, opt_cols)
-                g_size = (opt_rows, opt_cols)
+            if force_shape is None:
+                n_rows, n_cols = ndsubplot(m)
+            elif len(g_size) == 2:
+                n_rows, n_cols = force_shape
+            data = data.reshape(n_rows, n_cols, len(self))
+            sig_index = sig_index.reshape(n_rows, n_cols)
+            g_size = (n_rows, n_cols)
             self._opt_shape = list(data.shape)[0:-1]
             self._sig_index = sig_index
 
@@ -194,22 +200,20 @@ class GridSignalVisual(visuals.Visual):
             kw = {'axis': -1, 'keepdims': True}
             data -= data.mean(**kw)
             data /= np.abs(data).max(**kw)
-
-            # -------------- Index --------------
-            (n_rows, n_cols), n = g_size, len(self)
-            idg = np.c_[np.repeat(np.repeat(np.arange(n_cols), n_rows), n),
-                        np.repeat(np.tile(np.arange(n_rows), n_cols), n)[::-1],
-                        np.tile(np.arange(n), m)].astype(np.float32)
-
-            # -------------- Buffer --------------
             self._dbuffer.set_data(vispy_array(data))
-            self._ibuffer.set_data(vispy_array(idg))
-            self.shared_program.vert['u_size'] = g_size
-            self._g_size = g_size
+            self.g_size = g_size
+
+        # ====================== INDEX ======================
+        n, m = len(self), np.prod(g_size)
+        self._sig_index = self._sig_index.reshape(n_rows, n_cols)
+        idg = np.c_[np.repeat(np.repeat(np.arange(n_cols), n_rows), n),
+                    np.repeat(np.tile(np.arange(n_rows), n_cols), n)[::-1],
+                    np.tile(np.arange(n), m)].astype(np.float32)
+        self._ibuffer.set_data(vispy_array(idg))
 
         # ====================== COLOR ======================
         if color is not None:
-            g_size = np.array(self._g_size)
+            g_size = np.array(self.g_size)
             n = len(self)
             if color == 'random':  # (m, 3) random color
                 singcol = np.random.uniform(size=(m, 3), low=rnd_dyn[0],
@@ -227,7 +231,8 @@ class GridSignalVisual(visuals.Visual):
             st, it = '({}, {})', product(range(n_rows), range(n_cols))
             title = [st.format(i, k) for i, k in it]
         # Set text and font size :
-        self._txt.text = title
+        if not self._txt.text:
+            self._txt.text = title
         # Get titles position :
         x_factor, y_factor = 1. / (n_cols), 1. / (n_rows)
         r_x = np.linspace(-1. + x_factor, 1. - x_factor, n_cols)
