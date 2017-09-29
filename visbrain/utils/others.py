@@ -3,13 +3,17 @@
 import sys
 import os
 from warnings import warn
+
 import numpy as np
 
 from vispy.geometry import MeshData
+from vispy.geometry.isosurface import isosurface
+
+from .sigproc import smooth_3d
 
 __all__ = ('vis_args', 'check_downsampling', 'get_dsf',
-           'vispy_array', 'convert_meshdata', 'add_brain_template',
-           'remove_brain_template', 'set_if_not_none')
+           'vispy_array', 'convert_meshdata', 'volume_to_mesh',
+           'add_brain_template', 'remove_brain_template', 'set_if_not_none')
 
 
 def vis_args(kw, prefix, ignore=[]):
@@ -169,6 +173,43 @@ def convert_meshdata(vertices=None, faces=None, normals=None, meshdata=None,
     faces = vispy_array(faces, np.uint32)
     normals = vispy_array(normals)
 
+    return vertices, faces, normals
+
+
+def volume_to_mesh(vol, smooth_factor=3, level=None, **kwargs):
+    """Convert a volume into a mesh with vertices, faces and normals.
+
+    Parameters
+    ----------
+    vol : array_like
+        The volume of shape (N, M, P)
+    smooth_factor : int | 3
+        The smoothing factor to apply to the volume.
+    level : int | None
+        Level to extract.
+    kwargs : dict | {}
+        Optional arguments to pass to convert_meshdata.
+
+    Returns
+    -------
+    vertices : array_like
+        Mesh vertices.
+    faces : array_like
+        Mesh faces.
+    normals : array_like
+        Mesh normals.
+    """
+    # Smooth the volume :
+    vol_s = smooth_3d(vol, smooth_factor)
+    # Extract vertices and faces :
+    if level is None:
+        level = .5
+    elif isinstance(level, int):
+        vol_s[vol_s != level] = 0
+        level = .5
+    vert_n, faces_n = isosurface(vol_s, level=level)
+    # Convert to meshdata :
+    vertices, faces, normals = convert_meshdata(vert_n, faces_n, **kwargs)
     return vertices, faces, normals
 
 
