@@ -13,7 +13,7 @@ Perform:
 import numpy as np
 from scipy.signal import hilbert, detrend
 
-from ..filtering import filt, morlet, morlet_power, welch_power
+from ..filtering import filt, morlet, morlet_power
 from ..sigproc import derivative, tkeo, smoothing
 from .event import (_events_duration, _events_removal, _events_distance_fill,
                     _events_amplitude)
@@ -28,7 +28,7 @@ __all__ = ('kcdetect', 'spindlesdetect', 'remdetect', 'slowwavedetect',
 
 def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
              kc_min_amp, kc_max_amp, fmin=.5, fmax=4., delta_thr=.75,
-             smoothing_s=20, spindles_thresh=1., range_spin_sec=20,
+             smoothing_s=30, spindles_thresh=2., range_spin_sec=20,
              kc_peak_min_distance=100., min_distance_ms=500.):
     """Perform a K-complex detection.
 
@@ -96,7 +96,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
     # Compute delta band power
     # Morlet's wavelet
     freqs = np.array([0.5, 4., 8., 12., 16.])
-    delta_npow, _, _, _ = morlet_power(data, freqs, sf, norm=True)
+    delta_npow = morlet_power(data, freqs, sf, norm=True)[0]
     delta_nfpow = smoothing(delta_npow, smoothing_s * sf)
     idx_no_delta = np.where(delta_nfpow < delta_thr)[0]
     idx_loc_delta = np.where(delta_npow > np.mean(delta_npow))[0]
@@ -136,12 +136,12 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
         proba[idx_kc_spin] += 0.1
 
         if hyploaded:
-            proba[np.where(hypno == -1)[0]] += -0.1
-            proba[np.where(hypno == 0)[0]] += -0.2
-            proba[np.where(hypno == 2)[0]] += 0
-            proba[np.where(hypno == 2)[0]] += 0.1
-            proba[np.where(hypno == 3)[0]] += -0.1
-            proba[np.where(hypno == 4)[0]] += -0.2
+            proba[hypno == -1] += -0.1
+            proba[hypno == 0] += -0.2
+            proba[hypno == 1] += 0
+            proba[hypno == 2] += 0.1
+            proba[hypno == 3] += -0.1
+            proba[hypno == 4] += -0.2
 
         # Smooth and normalize probability vector
         proba = proba / 0.5 if hyploaded else proba / 0.4
@@ -174,7 +174,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
 
         # Export info
         number, duration_ms, idx_start, idx_stop = _events_duration(
-            idx_sup_thr, sf)
+                                                        idx_sup_thr, sf)
 
         density = number / (length / sf / 60.)
         return idx_sup_thr, number, density, duration_ms
@@ -246,7 +246,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
     # Pre-detection
     # Compute relative sigma power
     freqs = np.array([0.5, 4., 8., fmin, fmax])
-    _, _, _, sigma_npow = morlet_power(data, freqs, sf, norm=True)
+    sigma_npow = morlet_power(data, freqs, sf, norm=True)[-1]
     sigma_nfpow = smoothing(sigma_npow, sf * (tmin / 1000))
     idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
 
@@ -304,7 +304,6 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
 ###########################################################################
 # REM DETECTION
 ###########################################################################
-
 
 def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
               min_distance_ms=200, smoothing_ms=200, deriv_ms=30,
@@ -402,9 +401,8 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
 # SLOW WAVE DETECTION
 ###########################################################################
 
-
 def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
-                   fmax=2., welch_win_s=12, min_duration_ms=500.):
+                   fmax=2., smoothing_s=30, min_duration_ms=500.):
     """Perform a Slow Wave detection.
 
     Parameters
@@ -425,9 +423,8 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
         High-pass frequency
     fmax  : float | 2.
         Lowpass frequency
-    welch_win_s  : int | 12
-        Time (sec) window for computation of normalized bandpower with
-        Welch's method
+    smoothing_s  : int | 30
+        Smoothing window in seconds
     min_duration_ms : float | 500.
         Minimum duration (ms) of slow waves
 
@@ -442,10 +439,10 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
     """
     length = max(elec.shape)
 
-    # Using Welch's method
-    delta_nfpow = welch_power(elec, fmin, fmax, sf, welch_win_s, norm=True)
-    delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
-    delta_nfpow = smoothing(delta_nfpow, 3 * welch_win_s * sf)
+    delta_nfpow = morlet_power(elec, [0.5, 4, 8, 12, 16, 30], sf,
+                                                    norm=True)[0, :]
+
+    delta_nfpow = smoothing(delta_nfpow, smoothing_s * sf)
 
     # Normalized power criteria
     idx_sup_thr = np.where(delta_nfpow > threshold)[0]
@@ -477,10 +474,8 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
 # MUSCLE TWITCHES DETECTION
 ###########################################################################
 
-
 def mtdetect(elec, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
-             tmin=800, tmax=2500, min_distance_ms=1000, welch_win_s=15,
-             delta_thr=.5, min_amp=10, max_amp=400):
+             tmin=800, tmax=2500, min_distance_ms=1000, min_amp=10, max_amp=400):
     """Perform a detection of muscle twicthes (MT).
 
     Sampling frequency must be at least 1000 Hz.
@@ -510,11 +505,6 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
     min_distance_ms : int | 1000
         Minimum distance (in ms) between 2 MTs to consider them as
         two distinct events
-    welch_win_s : int | 15
-        Time window (s) of Welch spectrum
-    delta_thr : float | .5
-        Threshold of delta normalized bandpower, above which detected
-        events are probably artefacts.
     max_amp : int | 400
         Maximum amplitude of Muscle Twitches. Above this threshold,
         detected events are probably artefacts.
@@ -547,10 +537,10 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
         id_th = np.setdiff1d(np.arange(elec.size), idx_zero)
     else:
         # Remove period with too much delta power (N2 - N3)
-        delta_nfpow = welch_power(elec, 0.5, 4, sf, welch_win_s, norm=True)
-        delta_nfpow = np.repeat(delta_nfpow, welch_win_s * sf)
+        delta_nfpow = morlet_power(elec, [0.5, 4],
+                                            sf, norm=False)
         id_th = np.setdiff1d(np.arange(elec.size), np.where(
-            delta_nfpow > delta_thr)[0])
+            delta_nfpow > np.median(delta_nfpow))[0])
 
     # Remove extreme values
     id_th = np.setdiff1d(id_th, np.where(abs(elec) > 400)[0])

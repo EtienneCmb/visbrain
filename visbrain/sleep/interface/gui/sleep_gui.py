@@ -1249,7 +1249,7 @@ class Ui_MainWindow(object):
         self._ToolKCProbTh.setSizePolicy(sizePolicy)
         self._ToolKCProbTh.setMaximum(1.0)
         self._ToolKCProbTh.setSingleStep(0.1)
-        self._ToolKCProbTh.setProperty("value", 0.8)
+        self._ToolKCProbTh.setProperty("value", 0.7)
         self._ToolKCProbTh.setObjectName("_ToolKCProbTh")
         self.gridLayout_8.addWidget(self._ToolKCProbTh, 0, 4, 2, 2)
         self.line_19 = QtWidgets.QFrame(self._ToolKCPanel)
@@ -2177,4 +2177,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-

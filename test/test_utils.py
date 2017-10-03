@@ -333,8 +333,11 @@ class TestFiltering(object):
 
     def test_welch_power(self):
         """Test welch_power function."""
-        x, f, sf = self._get_data(False)
-        welch_power(x, f[0], f[1], 50, 10.)
+        x, _, sf = self._get_data(True)
+        f = [5, 10., 15]
+        assert welch_power(x, f, sf, window_s=10, norm=False).sum(0).max() > 1.)
+        assert math.isclose(welch_power(x, f, sf, window_s=10,
+                                                norm=True).sum(0).max() > 1.)
 
     def test_prepare_data(self):
         """Test class PrepareData."""
