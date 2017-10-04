@@ -53,7 +53,7 @@ class ReadSleepData(object):
             # Force to use MNE if preload is False :
             use_mne = True if not preload else use_mne
             # Get if the file has to be loaded using Sleep or MNE python :
-            sleep_ext = ['.eeg', '.vhdr', '.edf', '.trc']
+            sleep_ext = ['.eeg', '.vhdr', '.edf', '.trc', '.rec']
             use_mne = True if ext not in sleep_ext else use_mne
 
             if not is_mne_installed() and use_mne:
@@ -233,7 +233,7 @@ def sleep_switch(file, ext, downsample):
     if ext == '.eeg':  # Elan
         return read_elan(path, downsample)
 
-    elif ext == '.edf':  # European Data Format
+    elif ext in ['.edf', '.rec']:  # European Data Format
         return read_edf(path, downsample)
 
     elif ext == '.trc':  # Micromed
