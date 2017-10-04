@@ -41,7 +41,7 @@ class ReadSleepData(object):
                               "BrainVision (*.vhdr);;EDF (*.edf);;"
                               "GDF (*.gdf);;BDF (*.bdf);;Elan (*.eeg);;"
                               "EGI (*.egi);;MFF (*.mff);;CNT (*.cnt);;"
-                              "Micromed (*.trc);;EEGLab (*.set)")
+                              "Micromed (*.trc);;EEGLab (*.set);;REC (*.rec)")
             upath = os.path.split(data)[0]
         else:
             upath = ''
