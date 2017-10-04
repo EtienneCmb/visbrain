@@ -241,8 +241,8 @@ def welch_power(x, freqs, sf, window_s=10, norm=True):
                             scaling='spectrum')
 
         for num, k in enumerate(freqs[:-1]):
-            fmin = np.where(f == k)[0][0]
-            fmax = np.where(f == freqs[num + 1])[0][0]
+            fmin = np.where(np.abs(f - k) == np.abs(f - k).min())
+            fmax = np.where(np.abs(f - freqs[num+1]) == np.abs(f - freqs[num+1]).min())
             epoch = int(i / (window_s * sf))
             xpow[num, epoch] = np.mean(Pxx_spec[fmin:fmax])
 

@@ -404,8 +404,8 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
 ###########################################################################
 
 
-def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
-                   fmax=2., smoothing_s=30, min_duration_ms=500.):
+def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.1,
+                   fmax=4., smoothing_s=30, min_duration_ms=500.):
     """Perform a Slow Wave detection.
 
     Parameters
@@ -442,7 +442,7 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
     """
     length = max(elec.shape)
 
-    delta_nfpow = morlet_power(elec, [0.5, 4, 8, 12, 16, 30], sf,
+    delta_nfpow = morlet_power(elec, [fmin, fmax, 8, 12, 16, 30], sf,
                                norm=True)[0, :]
 
     delta_nfpow = smoothing(delta_nfpow, smoothing_s * sf)
