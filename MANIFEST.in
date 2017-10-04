@@ -13,3 +13,6 @@ include visbrain/sleep/sleep_icon.svg
 include visbrain/topo/topo_icon.svg
 include visbrain/colorbar/colorbar_icon.svg
 include visbrain/figure/figure_icon.svg
+
+# Add url path :
+include visbrain/data_url.txt
