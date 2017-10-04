@@ -81,3 +81,14 @@ def test_figure_icon():
     """Test if the Figure icon is installed."""
     path = ['visbrain', 'figure', 'figure_icon.svg']
     _test_file('Figure icon (figure_icon.svg)', path)
+
+
+###############################################################################
+#                                   URL
+###############################################################################
+
+
+def test_data_url():
+    """Test if the Figure icon is installed."""
+    path = ['visbrain', 'data_url.txt']
+    _test_file('URL to data (data_url.txt)', path)

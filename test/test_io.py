@@ -2,6 +2,7 @@ import os
 import shutil
 import numpy as np
 
+from visbrain.io.download import get_data_url_file, download_file
 from visbrain.io.read_annotations import (annotations_to_array,
                                           merge_annotations)
 from visbrain.io.rw_config import save_config_json, load_config_json
@@ -32,6 +33,28 @@ class TestIO(object):
     @staticmethod
     def _path_to_tmp(name):
         return os.path.join(*(path_to_tmp, name))
+
+    ###########################################################################
+    #                                DOWNLOAD
+    ###########################################################################
+    def test_get_data_url_file(self):
+        """Test function get_data_url_file."""
+        get_data_url_file()
+
+    def test_download_file(self):
+        """Test function download_file."""
+        download_file('Px.npy', to_path=path_to_tmp)
+
+    def test_download_custom_url(self):
+        """Test function download_custom_url."""
+        name = "https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1"
+        download_file(name, filename="text.npz", to_path=path_to_tmp)
+
+    # def test_download_files_from_dropbox(self):
+    #     """Test function download_file from dropbox."""
+    #     urls = get_data_url_file()
+    #     for name in list(urls.keys()):
+    #         download_file(name, to_path=path_to_tmp)
 
     ###########################################################################
     #                              ANNOTATIONS
