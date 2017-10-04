@@ -27,7 +27,7 @@ __all__ = ('kcdetect', 'spindlesdetect', 'remdetect', 'slowwavedetect',
 
 
 def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
-             kc_min_amp, kc_max_amp, fmin=.5, fmax=4., delta_thr=.75,
+             kc_min_amp, kc_max_amp, fmin=.5, fmax=4., delta_thr=.8,
              smoothing_s=30, spindles_thresh=2., range_spin_sec=20,
              kc_peak_min_distance=100., min_distance_ms=500.):
     """Perform a K-complex detection.
@@ -59,7 +59,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
         High-pass cutoff frequency
     fmax : float | 4.
         Low-pass cutoff frequency
-    delta_thr : float | .75
+    delta_thr : float | .8
         Delta normalized power threshold. Value must be between 0 and 1.
         0 = No thresholding by delta bandpower
     smoothing_s : int | 20
@@ -95,7 +95,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
     # PRE DETECTION
     # Compute delta band power
     # Morlet's wavelet
-    freqs = np.array([0.5, 4., 8., 12., 16.])
+    freqs = np.array([0.1, 4., 8., 12., 16., 30.])
     delta_npow = morlet_power(data, freqs, sf, norm=True)[0]
     delta_nfpow = smoothing(delta_npow, smoothing_s * sf)
     idx_no_delta = np.where(delta_nfpow < delta_thr)[0]
