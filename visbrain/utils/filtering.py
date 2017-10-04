@@ -204,6 +204,7 @@ def morlet_power(x, freqs, sf, norm=True):
         np.divide(xpow, sum_pow, out=xpow)
     return xpow
 
+
 def welch_power(x, freqs, sf, window_s=10, norm=True):
     """Compute bandwise-normalized power of data using morlet wavelet.
 
@@ -232,7 +233,7 @@ def welch_power(x, freqs, sf, window_s=10, norm=True):
     freq_spacing = .1
     n_epoch = int(len(x) / (window_s * sf))
 
-    xpow = np.zeros((len(freqs)-1, n_epoch), dtype=np.float)
+    xpow = np.zeros((len(freqs) - 1, n_epoch), dtype=np.float)
 
     for i in np.arange(0, len(x), window_s * sf):
         f, Pxx_spec = welch(x[int(i):int(i + window_s * sf)], sf,
@@ -241,7 +242,7 @@ def welch_power(x, freqs, sf, window_s=10, norm=True):
 
         for num, k in enumerate(freqs[:-1]):
             fmin = np.where(f == k)[0][0]
-            fmax = np.where(f == freqs[num+1])[0][0]
+            fmax = np.where(f == freqs[num + 1])[0][0]
             epoch = int(i / (window_s * sf))
             xpow[num, epoch] = np.mean(Pxx_spec[fmin:fmax])
 

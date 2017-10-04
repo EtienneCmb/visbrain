@@ -174,7 +174,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
 
         # Export info
         number, duration_ms, idx_start, idx_stop = _events_duration(
-                                                        idx_sup_thr, sf)
+            idx_sup_thr, sf)
 
         density = number / (length / sf / 60.)
         return idx_sup_thr, number, density, duration_ms
@@ -305,6 +305,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
 # REM DETECTION
 ###########################################################################
 
+
 def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
               min_distance_ms=200, smoothing_ms=200, deriv_ms=30,
               amplitude_art=400):
@@ -397,9 +398,11 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
+
 ###########################################################################
 # SLOW WAVE DETECTION
 ###########################################################################
+
 
 def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
                    fmax=2., smoothing_s=30, min_duration_ms=500.):
@@ -440,7 +443,7 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
     length = max(elec.shape)
 
     delta_nfpow = morlet_power(elec, [0.5, 4, 8, 12, 16, 30], sf,
-                                                    norm=True)[0, :]
+                               norm=True)[0, :]
 
     delta_nfpow = smoothing(delta_nfpow, smoothing_s * sf)
 
@@ -470,12 +473,15 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.5,
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
+
 ###########################################################################
 # MUSCLE TWITCHES DETECTION
 ###########################################################################
 
+
 def mtdetect(elec, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
-             tmin=800, tmax=2500, min_distance_ms=1000, min_amp=10, max_amp=400):
+             tmin=800, tmax=2500, min_distance_ms=1000, min_amp=10,
+             max_amp=400):
     """Perform a detection of muscle twicthes (MT).
 
     Sampling frequency must be at least 1000 Hz.
@@ -537,8 +543,7 @@ def mtdetect(elec, sf, threshold, hypno, rem_only, fmin=0., fmax=50.,
         id_th = np.setdiff1d(np.arange(elec.size), idx_zero)
     else:
         # Remove period with too much delta power (N2 - N3)
-        delta_nfpow = morlet_power(elec, [0.5, 4],
-                                            sf, norm=False)
+        delta_nfpow = morlet_power(elec, [0.5, 4], sf, norm=False)
         id_th = np.setdiff1d(np.arange(elec.size), np.where(
             delta_nfpow > np.median(delta_nfpow))[0])
 
