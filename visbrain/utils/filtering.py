@@ -239,6 +239,7 @@ def welch_power(x, freqs, sf, window_s=10, norm=True):
         f, Pxx_spec = welch(x[int(i):int(i + window_s * sf)], sf,
                             nperseg=sf * (1 / freq_spacing),
                             scaling='spectrum')
+        epoch = int(i / (window_s * sf))
 
         for num, k in enumerate(freqs[:-1]):
             fmin = np.abs(f - k).argmin()
