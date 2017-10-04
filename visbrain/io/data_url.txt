@@ -1,0 +1,3 @@
+{"xyz_sample.npz": "https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1",
+"Px.npy": "https://www.dropbox.com/s/qzwjavhz5lg13km/Px.npy?dl=1",
+"1.rec": ""}
