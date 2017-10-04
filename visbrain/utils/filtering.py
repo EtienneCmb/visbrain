@@ -206,7 +206,7 @@ def morlet_power(x, freqs, sf, norm=True):
 
 
 def welch_power(x, freqs, sf, window_s=10, norm=True):
-    """Compute bandwise-normalized power of data using morlet wavelet.
+    """Compute bandwise-normalized power of data using welch power.
 
     Parameters
     ----------
