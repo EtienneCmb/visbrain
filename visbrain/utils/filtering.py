@@ -231,7 +231,7 @@ def welch_power(x, freqs, sf, window_s=10, norm=True):
     """
     sf = int(sf)
     freq_spacing = .1
-    n_epoch = int(len(x) / (window_s * sf))
+    n_epoch = max(1, int(len(x) / (window_s * sf)))
 
     xpow = np.zeros((len(freqs) - 1, n_epoch), dtype=np.float)
 
