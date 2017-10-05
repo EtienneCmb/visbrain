@@ -1,5 +1,4 @@
 """Download files from dropbox."""
-from __future__ import print_function
 import os
 import sys
 from urllib import request
@@ -7,6 +6,7 @@ import zipfile
 from warnings import warn
 
 from .rw_config import load_config_json
+from ..utils import verbose
 
 
 __all__ = ["get_data_url_file", "download_file"]
@@ -48,17 +48,16 @@ def reporthook(blocknum, blocksize, totalsize):
     readsofar = blocknum * blocksize
     if totalsize > 0:
         percent = min(100, readsofar * 1e2 / totalsize)
-        s = "\r%5.1f%% %*d / %d" % (
+        s = "\rSTATUS : %5.1f%% %*d / %d" % (
             percent, len(str(totalsize)), readsofar, totalsize)
         sys.stderr.write(s)
         if readsofar >= totalsize:  # near the end
             sys.stderr.write("\n")
     else:  # total size is unknown
-        pass
-        # sys.stderr.write("read %d\n" % (readsofar,))
+        sys.stderr.write("\rread %d" % (readsofar,))
 
 
-def download_file(name, filename=None, to_path=None, verbose=True,
+def download_file(name, filename=None, to_path=None,
                   unzip=False, remove_archive=False):
     """Download a file.
 
@@ -68,9 +67,8 @@ def download_file(name, filename=None, to_path=None, verbose=True,
         Name of the file to download or url.
     filename : string | None
         Name of the file to be saved in case of url.
-    verbose : bool | None
-        Display downloading informations.
     """
+    print('------------------------------------------------------------------')
     if bool(name.find('http') + 1):
         assert isinstance(filename, str)
         url = name
@@ -82,15 +80,12 @@ def download_file(name, filename=None, to_path=None, verbose=True,
 
     # Dowload file if needed :
     if to_download:
-        if verbose:
-            print('Downloading ' + path_to_file)
-
+        verbose('Downloading ' + path_to_file, level='info')
         # Check if directory exists else creates it
         if not os.path.exists(to_path):
+            verbose('Foler ' + to_path + ' created', level='info')
             os.makedirs(to_path)
-                
         # Download file :
-        # path_to_file += '.zip' * unzip
         fh, _ = request.urlretrieve(url, path_to_file, reporthook=reporthook)
         # Unzip file :
         if unzip:
@@ -98,8 +93,10 @@ def download_file(name, filename=None, to_path=None, verbose=True,
             zip_file_object = zipfile.ZipFile(fh, 'r')
             zip_file_object.extractall(path=to_path)
             zip_file_object.close()
+            verbose('Unzip file', level='info')
             if remove_archive:  # Remove archive :
+                verbose('Archive' + path_to_file + ' removed', level='warning')
                 os.remove(path_to_file)
     else:
-        if verbose:
-            print("File already dowloaded (" + path_to_file + ").")
+        verbose("File already dowloaded (" + path_to_file + ").", level='info')
+    print('------------------------------------------------------------------')
