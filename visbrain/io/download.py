@@ -68,7 +68,7 @@ def download_file(name, filename=None, to_path=None,
     filename : string | None
         Name of the file to be saved in case of url.
     """
-    print('------------------------------------------------------------------')
+    print('\n----------------------------------------------------------------')
     if bool(name.find('http') + 1):
         assert isinstance(filename, str)
         url = name
@@ -99,4 +99,4 @@ def download_file(name, filename=None, to_path=None,
                 os.remove(path_to_file)
     else:
         verbose("File already dowloaded (" + path_to_file + ").", level='info')
-    print('------------------------------------------------------------------')
+    print('----------------------------------------------------------------\n')

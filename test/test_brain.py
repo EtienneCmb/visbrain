@@ -29,7 +29,7 @@ kwargs['s_mask'] = np.array([True + False] + [True] * 9)
 c_connect = np.random.randint(-10, 10, (10, 10)).astype(float)
 c_connect[np.tril_indices_from(c_connect)] = 0
 c_connect = np.ma.masked_array(c_connect, mask=True)
-nz = np.where((c_connect > -8) & (c_connect < 8))
+nz = np.where((c_connect > -5) & (c_connect < 5))
 c_connect.mask[nz] = False
 kwargs['c_connect'] = c_connect
 

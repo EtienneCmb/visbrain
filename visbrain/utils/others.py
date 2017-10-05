@@ -39,6 +39,8 @@ def verbose(msg, level=None, display=True):
             'logging.' + level.upper()))
         if display:
             eval('logging.%s(%s)' % (level, 'msg'))
+    elif level == Warning:
+        warn(msg)
     else:
         if display:
             raise eval('%s(%s)' % (level.__name__, 'msg'))
