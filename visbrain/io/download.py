@@ -84,6 +84,11 @@ def download_file(name, filename=None, to_path=None, verbose=True,
     if to_download:
         if verbose:
             print('Downloading ' + path_to_file)
+
+        # Check if directory exists else creates it
+        if not os.path.exists(to_path):
+            os.makedirs(to_path)
+                
         # Download file :
         # path_to_file += '.zip' * unzip
         fh, _ = request.urlretrieve(url, path_to_file, reporthook=reporthook)

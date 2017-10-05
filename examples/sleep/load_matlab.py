@@ -5,21 +5,25 @@ Load a Matlab file
 This example demonstrate how to load an ELAN file.
 
 Required dataset at :
-https://www.dropbox.com/s/6teybg0i1wgn9sk/sleep_matlab.zip?dl=1
+https://www.dropbox.com/s/bmfc2u55xsejbaf/sleep_matlab.zip?dl=1
 
 .. image:: ../../picture/picsleep/ex_LoadMatlab.png
 """
+import os
 import numpy as np
 from scipy.io import loadmat
 
 from visbrain import Sleep
 from visbrain.io import download_file
 
+current_path = os.getcwd()
+target_path = os.path.join(current_path, 'data', 'matlab')
+
 # Download matlab file :
-download_file('sleep_matlab.zip', unzip=True)
+download_file("sleep_matlab.zip", unzip=True, to_path=target_path)
 
 # Load the matlab file :
-mat = loadmat('s2_sleep.mat')
+mat = loadmat(os.path.join(target_path, 's2_sleep.mat'))
 
 # Get the data, sampling frequency and channel names :
 raw_data = mat['data']
