@@ -2,8 +2,9 @@
 from __future__ import print_function
 import os
 import sys
-from warnings import warn
 from urllib import request
+import zipfile
+from warnings import warn
 
 from .rw_config import load_config_json
 
@@ -53,10 +54,12 @@ def reporthook(blocknum, blocksize, totalsize):
         if readsofar >= totalsize:  # near the end
             sys.stderr.write("\n")
     else:  # total size is unknown
-        sys.stderr.write("read %d\n" % (readsofar,))
+        pass
+        # sys.stderr.write("read %d\n" % (readsofar,))
 
 
-def download_file(name, filename=None, to_path=None, verbose=True):
+def download_file(name, filename=None, to_path=None, verbose=True,
+                  unzip=False):
     """Download a file.
 
     Parameters
@@ -81,7 +84,17 @@ def download_file(name, filename=None, to_path=None, verbose=True):
     if to_download:
         if verbose:
             print('Downloading ' + path_to_file)
-        request.urlretrieve(url, path_to_file, reporthook=reporthook)
+        # Download file :
+        path_to_file += '.zip' * unzip
+        fh, _ = request.urlretrieve(url, path_to_file, reporthook=reporthook)
+        # Unzip file :
+        if unzip:
+            # Unzip archive :
+            zip_file_object = zipfile.ZipFile(fh, 'r')
+            zip_file_object.extractall()
+            zip_file_object.close()
+            # Remove archive :
+            os.remove(path_to_file)
     else:
         if verbose:
             print("File already dowloaded (" + path_to_file + ").")
