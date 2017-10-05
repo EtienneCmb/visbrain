@@ -200,12 +200,12 @@ class Figure(object):
     def save(self, saveas, dpi=300):
         """Save the figure.
 
-        Args:
-            saveas: string
-                Name of the saved figure.
-
-            dpi : int | 300
-                The resolution of the exported figure.
+        Parameters
+        ----------
+        saveas : string
+            Name of the saved figure.
+        dpi : int | 300
+            The resolution of the exported figure.
         """
         self._fig.savefig(saveas, bbox_inches='tight', dpi=dpi,
                           facecolor=self._figcol)
