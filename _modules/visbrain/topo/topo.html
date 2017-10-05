@@ -169,13 +169,15 @@
 <span class="kn">import</span> <span class="nn">sip</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtWidgets</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">vispy.app</span> <span class="k">as</span> <span class="nn">visapp</span>
 <span class="kn">import</span> <span class="nn">vispy.scene.cameras</span> <span class="k">as</span> <span class="nn">viscam</span>
 <span class="kn">from</span> <span class="nn">vispy.scene</span> <span class="k">import</span> <span class="n">Node</span>
 
-<span class="kn">from</span> <span class="nn">.UiInit</span> <span class="k">import</span> <span class="n">UiInit</span>
-<span class="kn">from</span> <span class="nn">.UiElements</span> <span class="k">import</span> <span class="n">UiElements</span>
+<span class="kn">from</span> <span class="nn">.ui_init</span> <span class="k">import</span> <span class="n">UiInit</span>
+<span class="kn">from</span> <span class="nn">.ui_elements</span> <span class="k">import</span> <span class="n">UiElements</span>
+<span class="kn">from</span> <span class="nn">..brain.base.ConnectBase</span> <span class="k">import</span> <span class="n">ConnectBase</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">set_widget_size</span>
 <span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">TopoMesh</span><span class="p">,</span> <span class="n">CbarVisual</span>
 
@@ -208,7 +210,8 @@
         <span class="sd">&quot;&quot;&quot;Set the object name.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_topos</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-<div class="viewcode-block" id="Topo.add_topoplot"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo.add_topoplot">[docs]</a>    <span class="k">def</span> <span class="nf">add_topoplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Topo.add_topoplot"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo.add_topoplot">[docs]</a>    <span class="k">def</span> <span class="nf">add_topoplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">c_select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">c_cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">c_linewidth</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
                      <span class="n">system</span><span class="o">=</span><span class="s1">&#39;cartesian&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;degree&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">title_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">title_size</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
                      <span class="n">line_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">chan_size</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">chan_offset</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span>
@@ -238,6 +241,16 @@
 <span class="sd">            Array of source&#39;s coordinates.</span>
 <span class="sd">        channels : list | None</span>
 <span class="sd">            List of channel names.</span>
+<span class="sd">        c_connect : array_like | None</span>
+<span class="sd">            Array of connections between sources. Must be a (n_channels,</span>
+<span class="sd">            n_channels) upper triangular array of connecivity strength.</span>
+<span class="sd">        c_select : array_like | None</span>
+<span class="sd">            Array of boolean values to select which edges to display or to</span>
+<span class="sd">            hide.</span>
+<span class="sd">        c_cmap : string | &#39;inferno&#39;</span>
+<span class="sd">            Colormap name to use for the edges color.</span>
+<span class="sd">        c_linewidth : float | 3.</span>
+<span class="sd">            Connectivity edges line width.</span>
 <span class="sd">        system : {&#39;cartesian&#39;, &#39;spherical&#39;}</span>
 <span class="sd">            Coordinate system.</span>
 <span class="sd">        unit : {&#39;degree&#39;, &#39;rad&#39;}</span>
@@ -314,6 +327,14 @@
                         <span class="n">margin</span><span class="p">)</span>
         <span class="n">topo</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">levels</span><span class="p">,</span> <span class="n">level_colors</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span>
                       <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">,</span> <span class="n">cblabel</span><span class="p">)</span>
+        <span class="c1"># Connectivity :</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_connect</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="n">c_connect</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">topo</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">topo</span><span class="p">))</span>
+            <span class="n">xyz</span> <span class="o">=</span> <span class="n">topo</span><span class="o">.</span><span class="n">_xyz</span><span class="p">[</span><span class="n">topo</span><span class="o">.</span><span class="n">_keeponly</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span> <span class="o">=</span> <span class="n">ConnectBase</span><span class="p">(</span><span class="n">c_xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="n">c_connect</span><span class="p">,</span>
+                                       <span class="n">c_cmap</span><span class="o">=</span><span class="n">c_cmap</span><span class="p">,</span> <span class="n">c_linewidth</span><span class="o">=</span><span class="n">c_linewidth</span><span class="p">,</span>
+                                       <span class="n">c_select</span><span class="o">=</span><span class="n">c_select</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">topo</span><span class="o">.</span><span class="n">node_chan</span>
         <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">topo</span>
         <span class="c1"># Create a PanZoom camera :</span>
         <span class="n">cam</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">aspect</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="n">topo</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>

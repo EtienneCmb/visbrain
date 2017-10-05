@@ -167,8 +167,8 @@
   <h1>Source code for visbrain.brain.brain</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Top level Brain class.</span>
 
-<span class="sd">uiInit: initialize the graphical interface</span>
-<span class="sd">uiElements: interactions between graphical elements and deep functions</span>
+<span class="sd">UiInit: initialize the graphical interface</span>
+<span class="sd">UiElements: interactions between graphical elements and deep functions</span>
 <span class="sd">base: initialize all Brain objects (MNI, sources, connectivity...)</span>
 <span class="sd">and associated transformations</span>
 <span class="sd">BrainUserMethods: initialize functions for user interaction.</span>
@@ -180,8 +180,7 @@
 <span class="kn">import</span> <span class="nn">vispy.app</span> <span class="k">as</span> <span class="nn">visapp</span>
 <span class="kn">import</span> <span class="nn">vispy.scene.cameras</span> <span class="k">as</span> <span class="nn">viscam</span>
 
-<span class="kn">from</span> <span class="nn">.interface</span> <span class="k">import</span> <span class="n">uiInit</span><span class="p">,</span> <span class="n">uiElements</span>
-<span class="kn">from</span> <span class="nn">.interface.uiInit</span> <span class="k">import</span> <span class="n">BrainShortcuts</span>
+<span class="kn">from</span> <span class="nn">.interface</span> <span class="k">import</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">BrainShortcuts</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">base</span><span class="p">,</span> <span class="n">BrainCbar</span>
 <span class="kn">from</span> <span class="nn">.user</span> <span class="k">import</span> <span class="n">BrainUserMethods</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">set_widget_size</span>
@@ -189,7 +188,7 @@
 <span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Brain"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.brain.Brain">[docs]</a><span class="k">class</span> <span class="nc">Brain</span><span class="p">(</span><span class="n">uiInit</span><span class="p">,</span> <span class="n">uiElements</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">BrainCbar</span><span class="p">,</span> <span class="n">BrainUserMethods</span><span class="p">):</span>
+<div class="viewcode-block" id="Brain"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.brain.Brain">[docs]</a><span class="k">class</span> <span class="nc">Brain</span><span class="p">(</span><span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">BrainCbar</span><span class="p">,</span> <span class="n">BrainUserMethods</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Visualization of neuroscientic data on a standard MNI brain.</span>
 
 <span class="sd">    The *Brain* module include several objects that can be individually</span>
@@ -451,7 +450,7 @@
         <span class="c1"># ====================== App creation ======================</span>
         <span class="c1"># Create the app and initialize all graphical elements :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
-        <span class="n">uiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">)</span>
+        <span class="n">UiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">)</span>
 
         <span class="c1"># Set icon :</span>
         <span class="c1"># pathfile = sys.modules[__name__].__file__</span>
@@ -467,7 +466,7 @@
 
         <span class="c1"># ====================== UI to visbrain ======================</span>
         <span class="c1"># Link UI and visbrain function :</span>
-        <span class="n">uiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">UiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_shpopup</span><span class="o">.</span><span class="n">set_shortcuts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">)</span>
 
         <span class="c1"># ====================== Cameras ======================</span>
@@ -506,9 +505,9 @@
         <span class="c1"># Connectivity :</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">menuDispConnect</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menuConnect</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_connect</span><span class="p">()</span>
         <span class="c1"># Colorbar :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menuCbar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_cbar</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Brain.show"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.brain.Brain.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Display the graphical user interface.&quot;&quot;&quot;</span>

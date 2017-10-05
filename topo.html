@@ -214,6 +214,7 @@
 <dt><strong>Display topographic map</strong></dt>
 <dd><ul class="first last">
 <li>Find coordinates according to channel names</li>
+<li>Add connectivity edges</li>
 <li>Support multiple coordinate systems</li>
 <li>Highly controllable colorbar</li>
 </ul>
@@ -278,7 +279,7 @@
 <h4>4.2.2.1. Add topoplot<a class="headerlink" href="#add-topoplot" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
 <dt id="visbrain.topo.topo.Topo.add_topoplot">
-<code class="descclassname">Topo.</code><code class="descname">add_topoplot</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz=None</em>, <em>channels=None</em>, <em>system=’cartesian’</em>, <em>unit=’degree’</em>, <em>title=None</em>, <em>title_color=’black’</em>, <em>title_size=5.0</em>, <em>line_color=’black’</em>, <em>line_width=2.0</em>, <em>chan_size=2.0</em>, <em>chan_offset=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>chan_mark_color=’white’</em>, <em>chan_mark_symbol=’disc’</em>, <em>chan_txt_color=’black’</em>, <em>bgcolor=’white’</em>, <em>cbar=True</em>, <em>cblabel=None</em>, <em>cb_txt_size=4.0</em>, <em>levels=None</em>, <em>level_colors=’white’</em>, <em>cmap=’viridis’</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>margin=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/topo/topo.html#Topo.add_topoplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.topo.topo.Topo.add_topoplot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Topo.</code><code class="descname">add_topoplot</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz=None</em>, <em>channels=None</em>, <em>c_connect=None</em>, <em>c_select=None</em>, <em>c_cmap=’inferno’</em>, <em>c_linewidth=3.0</em>, <em>system=’cartesian’</em>, <em>unit=’degree’</em>, <em>title=None</em>, <em>title_color=’black’</em>, <em>title_size=5.0</em>, <em>line_color=’black’</em>, <em>line_width=2.0</em>, <em>chan_size=2.0</em>, <em>chan_offset=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>chan_mark_color=’white’</em>, <em>chan_mark_symbol=’disc’</em>, <em>chan_txt_color=’black’</em>, <em>bgcolor=’white’</em>, <em>cbar=True</em>, <em>cblabel=None</em>, <em>cb_txt_size=4.0</em>, <em>levels=None</em>, <em>level_colors=’white’</em>, <em>cmap=’viridis’</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>margin=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/topo/topo.html#Topo.add_topoplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.topo.topo.Topo.add_topoplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a subplot embedded in a subplot.</p>
 <p>For now, there’s two for using coordinates to define the subplot :</p>
 <blockquote>
@@ -309,6 +310,24 @@ channels variable.</li>
 <p><strong>channels</strong> : list | None</p>
 <blockquote>
 <div><p>List of channel names.</p>
+</div></blockquote>
+<p><strong>c_connect</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of connections between sources. Must be a (n_channels,
+n_channels) upper triangular array of connecivity strength.</p>
+</div></blockquote>
+<p><strong>c_select</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of boolean values to select which edges to display or to
+hide.</p>
+</div></blockquote>
+<p><strong>c_cmap</strong> : string | ‘inferno’</p>
+<blockquote>
+<div><p>Colormap name to use for the edges color.</p>
+</div></blockquote>
+<p><strong>c_linewidth</strong> : float | 3.</p>
+<blockquote>
+<div><p>Connectivity edges line width.</p>
 </div></blockquote>
 <p><strong>system</strong> : {‘cartesian’, ‘spherical’}</p>
 <blockquote>

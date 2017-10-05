@@ -22,6 +22,7 @@ channels, 10 trials of 4000 points each. The 2D grid will have a shape of
 
 .. code-block:: python
 
+    from itertools import product
     from visbrain import Signal
     from visbrain.utils import generate_eeg
 
@@ -49,9 +50,17 @@ channels, 10 trials of 4000 points each. The 2D grid will have a shape of
     ylabel = 'Amplitude (uV)'
     title = 'Plot of a 1-d signal'
 
+    """Build the title to add to each time-series in the grid
+    """
+    st = 'Channel {} - trial {}'
+    it = product(range(n_channels), range(n_trials))
+    gtitles = [st.format(c, t) for c, t in it]  # grid titles
+    gfz = 7.  # grid titles font-size
+    gc = 'gray'  # grid color
+
     Signal(data, sf=sf, axis=axis, time=time, xlabel=xlabel, ylabel=ylabel,
-           title=title, bgcolor=(.1, .1, .1), axis_color='wlite',
-           color='white').show()
+           title=title, grid_titles=gtitles, grid_font_size=gfz,
+           grid_color=gc).show()
 
 **Total running time of the script:** ( 0 minutes  0.000 seconds)
 

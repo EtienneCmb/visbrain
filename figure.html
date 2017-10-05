@@ -393,23 +393,23 @@ have to be considered as the reference.</p>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col width="32%" />
-<col width="68%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>show()</strong></td>
-<td>Display the final figure.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.figure.figure.Figure.show" title="visbrain.figure.figure.Figure.show"><code class="xref py py-obj docutils literal"><span class="pre">show</span></code></a>()</td>
+<td>Display the figure.</td>
 </tr>
-<tr class="row-even"><td><strong>save()</strong></td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.figure.figure.Figure.save" title="visbrain.figure.figure.Figure.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>(saveas[,&nbsp;dpi])</td>
 <td>Save the figure.</td>
 </tr>
-<tr class="row-odd"><td><strong>colorbar_to_axis()</strong></td>
-<td>Add a specific colorbar to a selected picture.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.figure.figure.Figure.colorbar_to_axis" title="visbrain.figure.figure.Figure.colorbar_to_axis"><code class="xref py py-obj docutils literal"><span class="pre">colorbar_to_axis</span></code></a>(toaxis,&nbsp;clim,&nbsp;cmap[,&nbsp;vmin,&nbsp;…])</td>
+<td>Add a colorbar to a particular axis.</td>
 </tr>
-<tr class="row-even"><td><strong>shared_colorbar()</strong></td>
-<td>Add a a colorbar shared by multiple subplots.</td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.figure.figure.Figure.shared_colorbar" title="visbrain.figure.figure.Figure.shared_colorbar"><code class="xref py py-obj docutils literal"><span class="pre">shared_colorbar</span></code></a>(clim,&nbsp;cmap[,&nbsp;position,&nbsp;…])</td>
+<td>Add a colorbar to a particular axis.</td>
 </tr>
 </tbody>
 </table>
@@ -421,8 +421,8 @@ have to be considered as the reference.</p>
 <div class="section" id="show">
 <span id="id2"></span><h4>6.3.2.1. show<a class="headerlink" href="#show" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
-<dt id="visbrain.figure.Figure.show">
-<code class="descclassname">Figure.</code><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.show" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.figure.figure.Figure.show">
+<code class="descclassname">Figure.</code><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.figure.Figure.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display the figure.</p>
 </dd></dl>
 
@@ -430,27 +430,33 @@ have to be considered as the reference.</p>
 <div class="section" id="save">
 <span id="id3"></span><h4>6.3.2.2. save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
-<dt id="visbrain.figure.Figure.save">
-<code class="descclassname">Figure.</code><code class="descname">save</code><span class="sig-paren">(</span><em>saveas</em>, <em>dpi=300</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.save" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.figure.figure.Figure.save">
+<code class="descclassname">Figure.</code><code class="descname">save</code><span class="sig-paren">(</span><em>saveas</em>, <em>dpi=300</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.figure.Figure.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the figure.</p>
-<dl class="docutils">
-<dt>Args:</dt>
-<dd><dl class="first last docutils">
-<dt>saveas: string</dt>
-<dd>Name of the saved figure.</dd>
-<dt>dpi <span class="classifier-delimiter">:</span> <span class="classifier">int | 300</span></dt>
-<dd>The resolution of the exported figure.</dd>
-</dl>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>saveas</strong> : string</p>
+<blockquote>
+<div><p>Name of the saved figure.</p>
+</div></blockquote>
+<p><strong>dpi</strong> : int | 300</p>
+<blockquote class="last">
+<div><p>The resolution of the exported figure.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
 <div class="section" id="colorbar-to-axis">
 <span id="id4"></span><h4>6.3.2.3. colorbar_to_axis<a class="headerlink" href="#colorbar-to-axis" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
-<dt id="visbrain.figure.Figure.colorbar_to_axis">
-<code class="descclassname">Figure.</code><code class="descname">colorbar_to_axis</code><span class="sig-paren">(</span><em>toaxis</em>, <em>clim</em>, <em>cmap</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em>, <em>orientation=’vertical’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.colorbar_to_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.colorbar_to_axis" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.figure.figure.Figure.colorbar_to_axis">
+<code class="descclassname">Figure.</code><code class="descname">colorbar_to_axis</code><span class="sig-paren">(</span><em>toaxis</em>, <em>clim</em>, <em>cmap</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em>, <em>orientation=’vertical’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.colorbar_to_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.figure.Figure.colorbar_to_axis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a colorbar to a particular axis.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -525,7 +531,7 @@ ticks directly.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><code class="xref py py-obj docutils literal"><span class="pre">shared_colorbar</span></code></dt>
+<dt><a class="reference internal" href="#visbrain.figure.figure.Figure.shared_colorbar" title="visbrain.figure.figure.Figure.shared_colorbar"><code class="xref py py-obj docutils literal"><span class="pre">shared_colorbar</span></code></a></dt>
 <dd>colorbar shared by multiple subplots.</dd>
 </dl>
 </div>
@@ -535,8 +541,8 @@ ticks directly.</p>
 <div class="section" id="shared-colorbar">
 <span id="id5"></span><h4>6.3.2.4. shared_colorbar<a class="headerlink" href="#shared-colorbar" title="Permalink to this headline">¶</a></h4>
 <dl class="method">
-<dt id="visbrain.figure.Figure.shared_colorbar">
-<code class="descclassname">Figure.</code><code class="descname">shared_colorbar</code><span class="sig-paren">(</span><em>clim</em>, <em>cmap</em>, <em>position=’right’</em>, <em>height=0.5</em>, <em>width=0.02</em>, <em>pltmargin=0.02</em>, <em>figmargin=0.07</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.shared_colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.Figure.shared_colorbar" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.figure.figure.Figure.shared_colorbar">
+<code class="descclassname">Figure.</code><code class="descname">shared_colorbar</code><span class="sig-paren">(</span><em>clim</em>, <em>cmap</em>, <em>position=’right’</em>, <em>height=0.5</em>, <em>width=0.02</em>, <em>pltmargin=0.02</em>, <em>figmargin=0.07</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>title=None</em>, <em>ycb=10.0</em>, <em>fz_title=15</em>, <em>ticks=’complete’</em>, <em>fz_ticks=10</em>, <em>outline=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/figure/figure.html#Figure.shared_colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.figure.figure.Figure.shared_colorbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a colorbar to a particular axis.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -628,7 +634,7 @@ ticks directly.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><code class="xref py py-obj docutils literal"><span class="pre">colorbar_to_axis</span></code></dt>
+<dt><a class="reference internal" href="#visbrain.figure.figure.Figure.colorbar_to_axis" title="visbrain.figure.figure.Figure.colorbar_to_axis"><code class="xref py py-obj docutils literal"><span class="pre">colorbar_to_axis</span></code></a></dt>
 <dd>add a specific colorbar to an axis.</dd>
 </dl>
 </div>

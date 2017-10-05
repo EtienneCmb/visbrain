@@ -263,17 +263,6 @@
 <span class="sd">        key &#39;axis&#39; to specify if pictures have to share the same height (0)</span>
 <span class="sd">        or width (1). Use &#39;extend&#39; if the smallest (False) or the largest</span>
 <span class="sd">        have to be considered as the reference.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    show()</span>
-<span class="sd">        Display the final figure.</span>
-<span class="sd">    save()</span>
-<span class="sd">        Save the figure.</span>
-<span class="sd">    colorbar_to_axis()</span>
-<span class="sd">        Add a specific colorbar to a selected picture.</span>
-<span class="sd">    shared_colorbar()</span>
-<span class="sd">        Add a a colorbar shared by multiple subplots.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figtitle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">,</span>
@@ -367,12 +356,12 @@
 <div class="viewcode-block" id="Figure.save"><a class="viewcode-back" href="../../../figure.html#visbrain.figure.figure.Figure.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save the figure.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            saveas: string</span>
-<span class="sd">                Name of the saved figure.</span>
-
-<span class="sd">            dpi : int | 300</span>
-<span class="sd">                The resolution of the exported figure.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        saveas : string</span>
+<span class="sd">            Name of the saved figure.</span>
+<span class="sd">        dpi : int | 300</span>
+<span class="sd">            The resolution of the exported figure.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span>
                           <span class="n">facecolor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figcol</span><span class="p">)</span></div>

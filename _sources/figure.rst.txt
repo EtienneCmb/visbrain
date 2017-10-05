@@ -89,7 +89,18 @@ First, you will need to create a Figure objects with the files to load, titles, 
 * :ref:`colorbar_to_axis` : add a colorbar to a specific axis
 * :ref:`shared_colorbar` : add a shared colorbar
 
-.. autoclass:: visbrain.figure.figure.Figure
+.. currentmodule:: visbrain.figure.figure
+
+.. autoclass:: Figure
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~Figure.show
+        ~Figure.save
+        ~Figure.colorbar_to_axis
+        ~Figure.shared_colorbar
+
 
 Methods
 ^^^^^^^
@@ -99,24 +110,24 @@ Methods
 show
 ~~~~
 
-.. automethod:: visbrain.figure.Figure.show
+.. automethod:: Figure.show
 
 .. _save:
 
 save
 ~~~~
-.. automethod:: visbrain.figure.Figure.save
+.. automethod:: Figure.save
 
 .. _colorbar_to_axis:
 
 colorbar_to_axis
 ~~~~~~~~~~~~~~~~
 
-.. automethod:: visbrain.figure.Figure.colorbar_to_axis
+.. automethod:: Figure.colorbar_to_axis
 
 .. _shared_colorbar:
 
 shared_colorbar
 ~~~~~~~~~~~~~~~
 
-.. automethod:: visbrain.figure.Figure.shared_colorbar
+.. automethod:: Figure.shared_colorbar

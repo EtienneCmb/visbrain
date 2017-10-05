@@ -196,7 +196,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh</span>
 
 
-<div class="viewcode-block" id="BrainUserMethods"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods">[docs]</a><span class="k">class</span> <span class="nc">BrainUserMethods</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">BrainUserMethods</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Group all functions accessible by the user.</span>
 
 <span class="sd">    Those functions are grouped in the following categories:</span>
@@ -1183,7 +1183,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_apply_roi_selection</span><span class="p">()</span>
         <span class="c1"># Add ROI to mesh list :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_updateProjList</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_update_proj_list</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.roi_light_reflection"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.roi_light_reflection">[docs]</a>    <span class="k">def</span> <span class="nf">roi_light_reflection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reflect_on</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change how light is reflecting onto roi.</span>
@@ -1373,7 +1373,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="c1"># Display / hide the colorbar :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menuDispCbar</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menuCbar</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_cbar</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.cbar_list"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_list">[docs]</a>    <span class="k">def</span> <span class="nf">cbar_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the list of objects for which the colorbar can be controlled.</span>
@@ -1431,7 +1431,7 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">save_config_json</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">get_dict</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">config</span></div></div>
+            <span class="k">return</span> <span class="n">config</span></div>
 </pre></div>
 
            </div>

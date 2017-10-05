@@ -178,7 +178,7 @@
 <span class="kn">from</span> <span class="nn">.ui_elements</span> <span class="k">import</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">UiInit</span>
 <span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">Visuals</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">set_widget_size</span><span class="p">,</span> <span class="n">safely_set_cbox</span><span class="p">,</span> <span class="n">color2tuple</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span>
-                     <span class="n">mpl_cmap</span><span class="p">)</span>
+                     <span class="n">mpl_cmap</span><span class="p">,</span> <span class="n">toggle_enable_tab</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
 <span class="c1"># get_screen_size</span>
 
@@ -212,12 +212,15 @@
 <span class="sd">        Enable or disable the grid. If False, the grid is not computed and not</span>
 <span class="sd">        accessible from the GUI. The grid requires more memory RAM. It could be</span>
 <span class="sd">        turn to False for very large datasets.</span>
-<span class="sd">    form : {&#39;line&#39;, &#39;marker&#39;, &#39;histogram&#39;, &#39;tf&#39;, &#39;psd&#39;}</span>
+<span class="sd">    form : {&#39;line&#39;, &#39;marker&#39;, &#39;histogram&#39;, &#39;tf&#39;, &#39;psd&#39;, &#39;butterfly&#39;}</span>
 <span class="sd">        Plotting type.</span>
 <span class="sd">    color : array_like/string/tuple | &#39;black&#39;</span>
 <span class="sd">        Color of the plot.</span>
 <span class="sd">    line_lw : float | 1.</span>
-<span class="sd">        Line width (form in [&#39;line&#39;, &#39;psd&#39;]).</span>
+<span class="sd">        Line width (form in [&#39;line&#39;, &#39;psd&#39;, &#39;butterfly&#39;]).</span>
+<span class="sd">    line_smooth : bool | False</span>
+<span class="sd">        Specify if grid lines have to be smoothed. might be unstable on some</span>
+<span class="sd">        platform.</span>
 <span class="sd">    marker_symbol : string | &#39;o&#39;</span>
 <span class="sd">        Marker symbol.</span>
 <span class="sd">    marker_size : float | 10.</span>
@@ -266,6 +269,18 @@
 <span class="sd">        Label, title, axis and border color (signal layout).</span>
 <span class="sd">    tick_font_size : float | 8.</span>
 <span class="sd">        Size of ticks for the x and y-axis (signal layout).</span>
+<span class="sd">    grid_lw : float | 1.</span>
+<span class="sd">        Grid line width.</span>
+<span class="sd">    grid_titles : list | None</span>
+<span class="sd">        Titles do add to each plot in the grid. Sould be a list of length</span>
+<span class="sd">        (n_rows * n_cols).</span>
+<span class="sd">    grid_font_size : float | 10.</span>
+<span class="sd">        Font size of grid titles.</span>
+<span class="sd">    grid_color : string | &#39;random&#39;</span>
+<span class="sd">        Grid plot color. Use &#39;random&#39; to have one random color per plot or</span>
+<span class="sd">        use a string (e.g. &#39;gray&#39;) for a uniform color.</span>
+<span class="sd">    grid_titles_color : array_like/string/tuple | &#39;black&#39;</span>
+<span class="sd">        Grid titles color.</span>
 <span class="sd">    bgcolor : array_like/tuple/string | &#39;black&#39;</span>
 <span class="sd">        Background color.</span>
 <span class="sd">    display_grid : bool | True</span>
@@ -274,19 +289,22 @@
 <span class="sd">        Display the signal layout.</span>
 <span class="sd">    annotations : str | None</span>
 <span class="sd">        Path to an annotation file.</span>
-<span class="sd">    line_rendering : {&#39;gl&#39;, &#39;agg&#39;}</span>
-<span class="sd">        Specify the line rendering method. Use &#39;gl&#39; for a fast but lower</span>
-<span class="sd">        quality lines and &#39;agg&#39;, looks better but slower.</span>
+<span class="sd">    smooth_lines : bool | True</span>
+<span class="sd">        Specify if grid lines have to be smoothed. might be unstable on some</span>
+<span class="sd">        platform.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">enable_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">form</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">line_lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">marker_symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span>
-                 <span class="n">marker_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">hist_nbins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tf_norm</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tf_baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">tf_interp</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">tf_cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">tf_av_window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">tf_av_overlap</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">tf_clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">psd_nperseg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
-                 <span class="n">psd_noverlap</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">display_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display_signal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">annot_txtsz</span><span class="o">=</span><span class="mf">18.</span><span class="p">,</span> <span class="n">annot_marksz</span><span class="o">=</span><span class="mf">16.</span><span class="p">,</span>
-                 <span class="n">annot_color</span><span class="o">=</span><span class="s1">&#39;#2ecc71&#39;</span><span class="p">,</span> <span class="n">line_rendering</span><span class="o">=</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="n">form</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">line_lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">line_smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">marker_symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span> <span class="n">marker_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">hist_nbins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">tf_norm</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tf_baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tf_interp</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
+                 <span class="n">tf_cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">tf_av_window</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tf_av_overlap</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">tf_clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">psd_nperseg</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">psd_noverlap</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+                 <span class="n">display_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display_signal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">annot_txtsz</span><span class="o">=</span><span class="mf">18.</span><span class="p">,</span> <span class="n">annot_marksz</span><span class="o">=</span><span class="mf">16.</span><span class="p">,</span> <span class="n">annot_color</span><span class="o">=</span><span class="s1">&#39;#2ecc71&#39;</span><span class="p">,</span>
+                 <span class="n">grid_lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">grid_smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">grid_titles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">grid_font_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">grid_color</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">grid_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">grid_titles_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_enable_grid</span> <span class="o">=</span> <span class="n">enable_grid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_previous_form</span> <span class="o">=</span> <span class="n">form</span>
@@ -305,14 +323,15 @@
         <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_grid</span><span class="p">:</span>  <span class="c1"># disable grid</span>
             <span class="n">display_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_grid</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">actionGrid</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">toggle_enable_tab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">QuickSettings</span><span class="p">,</span> <span class="s1">&#39;Grid&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span> <span class="o">=</span> <span class="n">axis</span>
 
         <span class="c1"># ==================== VISUALS ====================</span>
         <span class="n">grid_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
         <span class="n">signal_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
-        <span class="n">Visuals</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">line_rendering</span><span class="p">,</span>
-                         <span class="n">grid_parent</span><span class="p">,</span> <span class="n">signal_parent</span><span class="p">)</span>
+        <span class="n">Visuals</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">grid_titles</span><span class="p">,</span> <span class="n">grid_color</span><span class="p">,</span>
+                         <span class="n">grid_shape</span><span class="p">,</span> <span class="n">grid_parent</span><span class="p">,</span> <span class="n">signal_parent</span><span class="p">)</span>
 
         <span class="c1"># ==================== CAMERA ====================</span>
         <span class="n">grid_rect</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -339,6 +358,7 @@
         <span class="c1"># Signal properties :</span>
         <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sig_form</span><span class="p">,</span> <span class="n">form</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sig_lw</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">line_lw</span><span class="p">)</span>  <span class="c1"># line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_smooth</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">line_smooth</span><span class="p">)</span>  <span class="c1"># line</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sig_nbins</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">hist_nbins</span><span class="p">)</span>  <span class="c1"># histogram</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sig_size</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">marker_size</span><span class="p">)</span>  <span class="c1"># marker</span>
         <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sig_symbol</span><span class="p">,</span> <span class="n">marker_symbol</span><span class="p">)</span>  <span class="c1"># marker</span>
@@ -362,6 +382,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_sig_nperseg</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">psd_nperseg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sig_noverlap</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">psd_noverlap</span><span class="p">)</span>
 
+        <span class="c1"># ------------- Grid -------------</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_grid&#39;</span><span class="p">):</span>
+            <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">g_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_nrows</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">n_rows</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_nrows</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">g_size</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_ncols</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">n_cols</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_ncols</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">g_size</span><span class="p">))</span>
+        <span class="n">gt_st</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">color2tuple</span><span class="p">(</span><span class="n">grid_titles_color</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_titles_fz</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">grid_font_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_titles_color</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">gt_st</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_lw</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">grid_lw</span><span class="p">)</span>
+
         <span class="c1"># ------------- Cbar -------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">cbar</span><span class="o">.</span><span class="n">txtcolor</span> <span class="o">=</span> <span class="n">ax_color</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">cbar</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="kc">False</span>
@@ -371,6 +403,7 @@
         <span class="c1"># ------------- Settings -------------</span>
         <span class="n">bgcolor</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bgcolor&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_bgcolor</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">color2tuple</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">astype</span><span class="o">=</span><span class="nb">float</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_smooth</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">grid_smooth</span><span class="p">)</span>
 
         <span class="c1"># ------------- Annotations -------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_annot_txtsz</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">annot_txtsz</span><span class="p">)</span>
@@ -441,8 +474,12 @@
         <span class="c1"># Display / hide grid and signal :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_grid</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_signal</span><span class="p">()</span>
+        <span class="c1"># Grid properties :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_grid_tupdate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_grid_lw</span><span class="p">()</span>
         <span class="c1"># Set signal data :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_set_signal</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sig_smooth</span><span class="p">()</span>
         <span class="c1"># Annotations :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_annot_appear</span><span class="p">()</span>
         <span class="c1"># Update cameras :</span>
@@ -546,10 +583,11 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        form : {&#39;line&#39;, &#39;marker&#39;, &#39;histogram&#39;, &#39;tf&#39;, &#39;psd&#39;}</span>
+<span class="sd">        form : {&#39;line&#39;, &#39;marker&#39;, &#39;histogram&#39;, &#39;tf&#39;, &#39;psd&#39;, &#39;butterfly&#39;}</span>
 <span class="sd">            Plotting form.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="s1">&#39;marker&#39;</span><span class="p">,</span> <span class="s1">&#39;histogram&#39;</span><span class="p">,</span> <span class="s1">&#39;tf&#39;</span><span class="p">,</span> <span class="s1">&#39;psd&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="s1">&#39;marker&#39;</span><span class="p">,</span> <span class="s1">&#39;histogram&#39;</span><span class="p">,</span> <span class="s1">&#39;tf&#39;</span><span class="p">,</span> <span class="s1">&#39;psd&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;butterfly&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sig_form</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Signal.show"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

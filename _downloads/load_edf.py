@@ -5,11 +5,13 @@ Load EDF file
 This example demonstrate how to load an EDF file.
 
 Required dataset at :
-https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing
+https://www.dropbox.com/s/hc18bgn2hlnmiph/sleep_edf.zip?dl=1
 
 .. image:: ../../picture/picsleep/ex_LoadEDF.png
 """
 from visbrain import Sleep
+from visbrain.io import download_file
 
-Sleep(data='excerpt2.edf', hypno='Hypnogram_excerpt2.txt',
-      config_file='excerpt2_config.txt').show()
+download_file('sleep_edf.zip', unzip=True)
+
+Sleep(data='excerpt2.edf', hypno='Hypnogram_excerpt2.txt').show()

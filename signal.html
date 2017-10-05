@@ -262,7 +262,7 @@
 <h3>3.2.1. Signal class<a class="headerlink" href="#signal-class" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="visbrain.signal.signal.Signal">
-<em class="property">class </em><code class="descclassname">visbrain.signal.signal.</code><code class="descname">Signal</code><span class="sig-paren">(</span><em>data</em>, <em>axis=-1</em>, <em>time=None</em>, <em>sf=1.0</em>, <em>enable_grid=True</em>, <em>form=’line’</em>, <em>color=’black’</em>, <em>line_lw=1.0</em>, <em>marker_symbol=’disc’</em>, <em>marker_size=10.0</em>, <em>hist_nbins=10</em>, <em>tf_norm=0</em>, <em>tf_baseline=None</em>, <em>tf_interp=’gaussian’</em>, <em>tf_cmap=’viridis’</em>, <em>tf_av_window=None</em>, <em>tf_av_overlap=0.0</em>, <em>tf_clim=None</em>, <em>psd_nperseg=256</em>, <em>psd_noverlap=128</em>, <em>display_grid=True</em>, <em>display_signal=True</em>, <em>annotations=None</em>, <em>annot_txtsz=18.0</em>, <em>annot_marksz=16.0</em>, <em>annot_color=’#2ecc71’</em>, <em>line_rendering=’gl’</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/signal/signal.html#Signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.signal.signal.Signal" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.signal.signal.</code><code class="descname">Signal</code><span class="sig-paren">(</span><em>data</em>, <em>axis=-1</em>, <em>time=None</em>, <em>sf=1.0</em>, <em>enable_grid=True</em>, <em>form=’line’</em>, <em>color=’black’</em>, <em>line_lw=1.0</em>, <em>line_smooth=False</em>, <em>marker_symbol=’disc’</em>, <em>marker_size=10.0</em>, <em>hist_nbins=10</em>, <em>tf_norm=0</em>, <em>tf_baseline=None</em>, <em>tf_interp=’gaussian’</em>, <em>tf_cmap=’viridis’</em>, <em>tf_av_window=None</em>, <em>tf_av_overlap=0.0</em>, <em>tf_clim=None</em>, <em>psd_nperseg=256</em>, <em>psd_noverlap=128</em>, <em>display_grid=True</em>, <em>display_signal=True</em>, <em>annotations=None</em>, <em>annot_txtsz=18.0</em>, <em>annot_marksz=16.0</em>, <em>annot_color=’#2ecc71’</em>, <em>grid_lw=1.0</em>, <em>grid_smooth=False</em>, <em>grid_titles=None</em>, <em>grid_font_size=10.0</em>, <em>grid_color=’random’</em>, <em>grid_shape=None</em>, <em>grid_titles_color=’black’</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/signal/signal.html#Signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.signal.signal.Signal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signal inspection module (data mining).</p>
 <p>The Signal module can be used to relatively large datasets of
 time-series. Two layout are provided :</p>
@@ -298,7 +298,7 @@ input.</p>
 accessible from the GUI. The grid requires more memory RAM. It could be
 turn to False for very large datasets.</p>
 </div></blockquote>
-<p><strong>form</strong> : {‘line’, ‘marker’, ‘histogram’, ‘tf’, ‘psd’}</p>
+<p><strong>form</strong> : {‘line’, ‘marker’, ‘histogram’, ‘tf’, ‘psd’, ‘butterfly’}</p>
 <blockquote>
 <div><p>Plotting type.</p>
 </div></blockquote>
@@ -308,7 +308,12 @@ turn to False for very large datasets.</p>
 </div></blockquote>
 <p><strong>line_lw</strong> : float | 1.</p>
 <blockquote>
-<div><p>Line width (form in [‘line’, ‘psd’]).</p>
+<div><p>Line width (form in [‘line’, ‘psd’, ‘butterfly’]).</p>
+</div></blockquote>
+<p><strong>line_smooth</strong> : bool | False</p>
+<blockquote>
+<div><p>Specify if grid lines have to be smoothed. might be unstable on some
+platform.</p>
 </div></blockquote>
 <p><strong>marker_symbol</strong> : string | ‘o’</p>
 <blockquote>
@@ -401,6 +406,28 @@ and deviation are deduced using the entire trial. Use :</p>
 <blockquote>
 <div><p>Size of ticks for the x and y-axis (signal layout).</p>
 </div></blockquote>
+<p><strong>grid_lw</strong> : float | 1.</p>
+<blockquote>
+<div><p>Grid line width.</p>
+</div></blockquote>
+<p><strong>grid_titles</strong> : list | None</p>
+<blockquote>
+<div><p>Titles do add to each plot in the grid. Sould be a list of length
+(n_rows * n_cols).</p>
+</div></blockquote>
+<p><strong>grid_font_size</strong> : float | 10.</p>
+<blockquote>
+<div><p>Font size of grid titles.</p>
+</div></blockquote>
+<p><strong>grid_color</strong> : string | ‘random’</p>
+<blockquote>
+<div><p>Grid plot color. Use ‘random’ to have one random color per plot or
+use a string (e.g. ‘gray’) for a uniform color.</p>
+</div></blockquote>
+<p><strong>grid_titles_color</strong> : array_like/string/tuple | ‘black’</p>
+<blockquote>
+<div><p>Grid titles color.</p>
+</div></blockquote>
 <p><strong>bgcolor</strong> : array_like/tuple/string | ‘black’</p>
 <blockquote>
 <div><p>Background color.</p>
@@ -417,10 +444,10 @@ and deviation are deduced using the entire trial. Use :</p>
 <blockquote>
 <div><p>Path to an annotation file.</p>
 </div></blockquote>
-<p><strong>line_rendering</strong> : {‘gl’, ‘agg’}</p>
+<p><strong>smooth_lines</strong> : bool | True</p>
 <blockquote class="last">
-<div><p>Specify the line rendering method. Use ‘gl’ for a fast but lower
-quality lines and ‘agg’, looks better but slower.</p>
+<div><p>Specify if grid lines have to be smoothed. might be unstable on some
+platform.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -522,7 +549,7 @@ quality lines and ‘agg’, looks better but slower.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>form</strong> : {‘line’, ‘marker’, ‘histogram’, ‘tf’, ‘psd’}</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>form</strong> : {‘line’, ‘marker’, ‘histogram’, ‘tf’, ‘psd’, ‘butterfly’}</p>
 <blockquote class="last">
 <div><p>Plotting form.</p>
 </div></blockquote>

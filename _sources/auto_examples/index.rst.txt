@@ -383,7 +383,7 @@ Examples demonstrating figure layout.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Arange pictures in a grid. Before running this script, make sure you generate pictures before u...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Arange pictures in a grid. ">
 
 .. only:: html
 
@@ -480,9 +480,9 @@ Examples demonstrating how to use the Signal module.
 
 .. only:: html
 
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_04_interface_customization_thumb.png
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_03_interface_customization_thumb.png
 
-        :ref:`sphx_glr_auto_examples_signal_04_interface_customization.py`
+        :ref:`sphx_glr_auto_examples_signal_03_interface_customization.py`
 
 .. raw:: html
 
@@ -492,7 +492,7 @@ Examples demonstrating how to use the Signal module.
 .. toctree::
    :hidden:
 
-   /auto_examples/signal/04_interface_customization
+   /auto_examples/signal/03_interface_customization
 
 .. raw:: html
 
@@ -500,9 +500,9 @@ Examples demonstrating how to use the Signal module.
 
 .. only:: html
 
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_05_annotations_thumb.png
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_04_annotations_thumb.png
 
-        :ref:`sphx_glr_auto_examples_signal_05_annotations.py`
+        :ref:`sphx_glr_auto_examples_signal_04_annotations.py`
 
 .. raw:: html
 
@@ -512,7 +512,7 @@ Examples demonstrating how to use the Signal module.
 .. toctree::
    :hidden:
 
-   /auto_examples/signal/05_annotations
+   /auto_examples/signal/04_annotations
 
 .. raw:: html
 
@@ -520,9 +520,9 @@ Examples demonstrating how to use the Signal module.
 
 .. only:: html
 
-    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_06_screenshot_thumb.png
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_05_screenshot_thumb.png
 
-        :ref:`sphx_glr_auto_examples_signal_06_screenshot.py`
+        :ref:`sphx_glr_auto_examples_signal_05_screenshot.py`
 
 .. raw:: html
 
@@ -532,7 +532,27 @@ Examples demonstrating how to use the Signal module.
 .. toctree::
    :hidden:
 
-   /auto_examples/signal/06_screenshot
+   /auto_examples/signal/05_screenshot
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Superimposition of all the signals.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/signal/images/thumb/sphx_glr_06_butterfly_thumb.png
+
+        :ref:`sphx_glr_auto_examples_signal_06_butterfly.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/signal/06_butterfly
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -549,9 +569,9 @@ Examples demonstrating how to load files in Sleep.
 
 .. only:: html
 
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_BrainVision_thumb.png
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_brainvision_thumb.png
 
-        :ref:`sphx_glr_auto_examples_sleep_load_BrainVision.py`
+        :ref:`sphx_glr_auto_examples_sleep_load_brainvision.py`
 
 .. raw:: html
 
@@ -561,7 +581,7 @@ Examples demonstrating how to load files in Sleep.
 .. toctree::
    :hidden:
 
-   /auto_examples/sleep/load_BrainVision
+   /auto_examples/sleep/load_brainvision
 
 .. raw:: html
 
@@ -625,13 +645,13 @@ Examples demonstrating how to load files in Sleep.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to load data using MNE-Python package. https://martinos.org/mne/stable/i...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to load a .rec file.">
 
 .. only:: html
 
-    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_usingMNE_thumb.png
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_rec_thumb.png
 
-        :ref:`sphx_glr_auto_examples_sleep_load_usingMNE.py`
+        :ref:`sphx_glr_auto_examples_sleep_load_rec.py`
 
 .. raw:: html
 
@@ -641,7 +661,27 @@ Examples demonstrating how to load files in Sleep.
 .. toctree::
    :hidden:
 
-   /auto_examples/sleep/load_usingMNE
+   /auto_examples/sleep/load_rec
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to load data using MNE-Python package. https://martinos.org/mne/stable/i...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/sleep/images/thumb/sphx_glr_load_using_mne_thumb.png
+
+        :ref:`sphx_glr_auto_examples_sleep_load_using_mne.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/sleep/load_using_mne
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -751,6 +791,26 @@ Examples demonstrating how to display and configure topographic plot.
    :hidden:
 
    /auto_examples/topo/04_topoplot_plotting_properties
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Add connectivity to the topoplot.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/topo/images/thumb/sphx_glr_05_topoplot_and_connectivity_thumb.png
+
+        :ref:`sphx_glr_auto_examples_topo_05_topoplot_and_connectivity.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/topo/05_topoplot_and_connectivity
 .. raw:: html
 
     <div style='clear:both'></div>

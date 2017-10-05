@@ -170,13 +170,17 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">vispy.geometry</span> <span class="k">import</span> <span class="n">MeshData</span>
+<span class="kn">from</span> <span class="nn">vispy.geometry.isosurface</span> <span class="k">import</span> <span class="n">isosurface</span>
+
+<span class="kn">from</span> <span class="nn">.sigproc</span> <span class="k">import</span> <span class="n">smooth_3d</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vis_args&#39;</span><span class="p">,</span> <span class="s1">&#39;check_downsampling&#39;</span><span class="p">,</span> <span class="s1">&#39;get_dsf&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span> <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;set_if_not_none&#39;</span><span class="p">)</span>
+           <span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span> <span class="s1">&#39;volume_to_mesh&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;set_if_not_none&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">vis_args</span><span class="p">(</span><span class="n">kw</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">[]):</span>
@@ -337,6 +341,43 @@
     <span class="n">normals</span> <span class="o">=</span> <span class="n">vispy_array</span><span class="p">(</span><span class="n">normals</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span></div>
+
+
+<span class="k">def</span> <span class="nf">volume_to_mesh</span><span class="p">(</span><span class="n">vol</span><span class="p">,</span> <span class="n">smooth_factor</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a volume into a mesh with vertices, faces and normals.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vol : array_like</span>
+<span class="sd">        The volume of shape (N, M, P)</span>
+<span class="sd">    smooth_factor : int | 3</span>
+<span class="sd">        The smoothing factor to apply to the volume.</span>
+<span class="sd">    level : int | None</span>
+<span class="sd">        Level to extract.</span>
+<span class="sd">    kwargs : dict | {}</span>
+<span class="sd">        Optional arguments to pass to convert_meshdata.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    vertices : array_like</span>
+<span class="sd">        Mesh vertices.</span>
+<span class="sd">    faces : array_like</span>
+<span class="sd">        Mesh faces.</span>
+<span class="sd">    normals : array_like</span>
+<span class="sd">        Mesh normals.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Smooth the volume :</span>
+    <span class="n">vol_s</span> <span class="o">=</span> <span class="n">smooth_3d</span><span class="p">(</span><span class="n">vol</span><span class="p">,</span> <span class="n">smooth_factor</span><span class="p">)</span>
+    <span class="c1"># Extract vertices and faces :</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">vol_s</span><span class="p">[</span><span class="n">vol_s</span> <span class="o">!=</span> <span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>
+    <span class="n">vert_n</span><span class="p">,</span> <span class="n">faces_n</span> <span class="o">=</span> <span class="n">isosurface</span><span class="p">(</span><span class="n">vol_s</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
+    <span class="c1"># Convert to meshdata :</span>
+    <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span> <span class="o">=</span> <span class="n">convert_meshdata</span><span class="p">(</span><span class="n">vert_n</span><span class="p">,</span> <span class="n">faces_n</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span>
 
 
 <div class="viewcode-block" id="add_brain_template"><a class="viewcode-back" href="../../../utils.html#visbrain.utils.others.add_brain_template">[docs]</a><span class="k">def</span> <span class="nf">add_brain_template</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span class="n">lr_index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

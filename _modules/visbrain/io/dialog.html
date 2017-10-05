@@ -170,11 +170,12 @@
 <span class="sd">* dialogSave : Open a window to save a file</span>
 <span class="sd">* dialogLoad : Open a window to load a file</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QFileDialog</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QColorDialog</span>
 <span class="kn">import</span> <span class="nn">os</span>
+
 <span class="kn">from</span> <span class="nn">.rw_utils</span> <span class="k">import</span> <span class="n">safety_save</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dialogSave&#39;</span><span class="p">,</span> <span class="s1">&#39;dialogLoad&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dialogSave&#39;</span><span class="p">,</span> <span class="s1">&#39;dialogLoad&#39;</span><span class="p">,</span> <span class="s1">&#39;dialog_color&#39;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="dialogSave"><a class="viewcode-back" href="../../../io.html#visbrain.io.dialog.dialogSave">[docs]</a><span class="k">def</span> <span class="nf">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Save file&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;file&#39;</span><span class="p">,</span>
@@ -233,6 +234,11 @@
     <span class="c1"># Open the window :</span>
     <span class="n">file</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">allext</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">dialog_color</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Open a QColorDialog window.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">QColorDialog</span><span class="o">.</span><span class="n">getColor</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
 </pre></div>
 
            </div>

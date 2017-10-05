@@ -41,7 +41,7 @@
         <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="visbrain 0.3.4 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
-        <link rel="next" title="Interface customization" href="04_interface_customization.html"/>
+        <link rel="next" title="Interface customization" href="03_interface_customization.html"/>
         <link rel="prev" title="Plot a 2D array of data" href="01_2d_signals.html"/> 
 
   
@@ -109,9 +109,10 @@
 <li class="toctree-l3"><a class="reference internal" href="00_1d_signal.html">Plot a 1D signal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="01_2d_signals.html">Plot a 2D array of data</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Plot a 3D array of data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="04_interface_customization.html">Interface customization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="05_annotations.html">Import, save and add annotations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="06_screenshot.html">Screenshot tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_interface_customization.html">Interface customization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_annotations.html">Import, save and add annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_screenshot.html">Screenshot tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_butterfly.html">Butterfly plot</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
@@ -195,7 +196,8 @@ To illustrate this point, we generate a random EEG dataset composed with 20
 channels, 10 trials of 4000 points each. The 2D grid will have a shape of
 (20 rows, 10 columns).</p>
 <img alt="../../_images/ex_3d_signal.png" src="../../_images/ex_3d_signal.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Signal</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Signal</span>
 <span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="kn">import</span> <span class="n">generate_eeg</span>
 
 <span class="n">sf</span> <span class="o">=</span> <span class="mf">512.</span>  <span class="c1"># sampling frequency</span>
@@ -222,9 +224,17 @@ channels, 10 trials of 4000 points each. The 2D grid will have a shape of
 <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude (uV)&#39;</span>
 <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Plot of a 1-d signal&#39;</span>
 
+<span class="sd">&quot;&quot;&quot;Build the title to add to each time-series in the grid</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;Channel {} - trial {}&#39;</span>
+<span class="n">it</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_channels</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_trials</span><span class="p">))</span>
+<span class="n">gtitles</span> <span class="o">=</span> <span class="p">[</span><span class="n">st</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">it</span><span class="p">]</span>  <span class="c1"># grid titles</span>
+<span class="n">gfz</span> <span class="o">=</span> <span class="mf">7.</span>  <span class="c1"># grid titles font-size</span>
+<span class="n">gc</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>  <span class="c1"># grid color</span>
+
 <span class="n">Signal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span>
-       <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis_color</span><span class="o">=</span><span class="s1">&#39;wlite&#39;</span><span class="p">,</span>
-       <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+       <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">grid_titles</span><span class="o">=</span><span class="n">gtitles</span><span class="p">,</span> <span class="n">grid_font_size</span><span class="o">=</span><span class="n">gfz</span><span class="p">,</span>
+       <span class="n">grid_color</span><span class="o">=</span><span class="n">gc</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -247,7 +257,7 @@ channels, 10 trials of 4000 points each. The 2D grid will have a shape of
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="04_interface_customization.html" class="btn btn-neutral float-right" title="Interface customization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="03_interface_customization.html" class="btn btn-neutral float-right" title="Interface customization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="01_2d_signals.html" class="btn btn-neutral" title="Plot a 2D array of data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

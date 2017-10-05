@@ -112,9 +112,10 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="02_3d_signals.html">Plot a 3D array of data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="04_interface_customization.html">Interface customization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="05_annotations.html">Import, save and add annotations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="06_screenshot.html">Screenshot tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_interface_customization.html">Interface customization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_annotations.html">Import, save and add annotations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_screenshot.html">Screenshot tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_butterfly.html">Butterfly plot</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
@@ -217,12 +218,13 @@ forms (line, marker, histogram, time-frequency map, PSD)</li>
 
 <span class="n">sf</span> <span class="o">=</span> <span class="mf">512.</span>  <span class="c1"># sampling frequency</span>
 <span class="n">n_pts</span> <span class="o">=</span> <span class="mi">4000</span>  <span class="c1"># number of time points</span>
-<span class="n">n_trials</span> <span class="o">=</span> <span class="mi">125</span>  <span class="c1"># number of trials in the dataset</span>
+<span class="n">n_trials</span> <span class="o">=</span> <span class="mi">120</span>  <span class="c1"># number of trials in the dataset</span>
 
 <span class="sd">&quot;&quot;&quot;Generate a random EEG dataset of shape (n_trials, n_pts). Also get the</span>
 <span class="sd">associated time vector with the same length as the data.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">data</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="n">generate_eeg</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">n_pts</span><span class="o">=</span><span class="n">n_pts</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="n">n_trials</span><span class="p">)</span>
+<span class="n">data</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="n">generate_eeg</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">n_pts</span><span class="o">=</span><span class="n">n_pts</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="n">n_trials</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+                          <span class="n">noise</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">time</span> <span class="o">+=</span> <span class="mf">8.</span>  <span class="c1"># force the time vector to start at 8 seconds</span>
 <span class="n">time</span> <span class="o">*=</span> <span class="mf">1000.</span>  <span class="c1"># millisecond conversion</span>
 
@@ -239,8 +241,15 @@ forms (line, marker, histogram, time-frequency map, PSD)</li>
 <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Amplitude (uV)&#39;</span>
 <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Plot of a 1-d signal&#39;</span>
 
+<span class="sd">&quot;&quot;&quot;Build the title to add to each time-series in the grid</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">gtitles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Trial &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_trials</span><span class="p">)]</span>  <span class="c1"># grid titles</span>
+<span class="n">gfz</span> <span class="o">=</span> <span class="mf">8.</span>  <span class="c1"># grid titles font-size</span>
+<span class="n">glw</span> <span class="o">=</span> <span class="mf">2.</span>  <span class="c1"># grid line width</span>
+
 <span class="n">Signal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span>
-       <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+       <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">grid_titles</span><span class="o">=</span><span class="n">gtitles</span><span class="p">,</span> <span class="n">grid_font_size</span><span class="o">=</span><span class="n">gfz</span><span class="p">,</span>
+       <span class="n">grid_lw</span><span class="o">=</span><span class="n">glw</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>

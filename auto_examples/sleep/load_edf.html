@@ -42,7 +42,7 @@
     <link rel="top" title="visbrain 0.3.4 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Load ELAN files" href="load_elan.html"/>
-        <link rel="prev" title="Load a BrainVision file" href="load_BrainVision.html"/> 
+        <link rel="prev" title="Load a BrainVision file" href="load_brainvision.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -107,11 +107,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#signal-examples">Signal Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="load_BrainVision.html">Load a BrainVision file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="load_brainvision.html">Load a BrainVision file</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Load EDF file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="load_elan.html">Load ELAN files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="load_matlab.html">Load a Matlab file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="load_usingMNE.html">Load a file using MNE-python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="load_rec.html">Load REC files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="load_using_mne.html">Load a file using MNE-python</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#topoplot-examples">Topoplot Examples</a></li>
@@ -187,12 +188,14 @@
 <span id="sphx-glr-auto-examples-sleep-load-edf-py"></span><h1>Load EDF file<a class="headerlink" href="#load-edf-file" title="Permalink to this headline">¶</a></h1>
 <p>This example demonstrate how to load an EDF file.</p>
 <p>Required dataset at :
-<a class="reference external" href="https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing">https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing</a></p>
+<a class="reference external" href="https://www.dropbox.com/s/hc18bgn2hlnmiph/sleep_edf.zip?dl=1">https://www.dropbox.com/s/hc18bgn2hlnmiph/sleep_edf.zip?dl=1</a></p>
 <img alt="../../_images/ex_LoadEDF.png" src="../../_images/ex_LoadEDF.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
-<span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;excerpt2.edf&#39;</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;Hypnogram_excerpt2.txt&#39;</span><span class="p">,</span>
-      <span class="n">config_file</span><span class="o">=</span><span class="s1">&#39;excerpt2_config.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;sleep_edf.zip&#39;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;excerpt2.edf&#39;</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;Hypnogram_excerpt2.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -218,7 +221,7 @@
         <a href="load_elan.html" class="btn btn-neutral float-right" title="Load ELAN files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="load_BrainVision.html" class="btn btn-neutral" title="Load a BrainVision file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="load_brainvision.html" class="btn btn-neutral" title="Load a BrainVision file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

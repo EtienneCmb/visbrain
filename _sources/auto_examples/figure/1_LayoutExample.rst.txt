@@ -6,15 +6,19 @@
 Page layout example
 ===================
 
-Arange pictures in a grid. Before running this script, make sure you generate
-pictures before using 0_GeneratePictures.py otherwise, download the archive :
-https://drive.google.com/open?id=0B6vtJiCQZUBvRXVsN0F6ZDFuaUE
+Arange pictures in a grid. 
+
+Download the archive :
+https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1
 
 
 
 .. code-block:: python
 
     from visbrain import Figure
+    from visbrain.io import download_file
+
+    download_file("figure.zip", unzip=True)
 
     # Files to load :
     files = ['default.png', 'inside.png', 'count.png', 'density.png',
