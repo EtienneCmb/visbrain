@@ -21,7 +21,7 @@ def path_to_edf(name):
 
 
 class TestCli(object):
-    """Test brain.py."""
+    """Test cli.py."""
 
     ###########################################################################
     #                                 SETTINGS
