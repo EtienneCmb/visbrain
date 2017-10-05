@@ -8,13 +8,6 @@ from visbrain.io import download_file
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
-if not os.path.exists(path_to_tmp):
-    os.makedirs(path_to_tmp)
-
-
-def path_to_edf(name):
-    """Get path to the edf file."""
-    return os.path.join(path_to_tmp, name)
 
 
 class TestFigure(object):
@@ -27,6 +20,10 @@ class TestFigure(object):
         """Create tmp folder."""
         if not os.path.exists(path_to_tmp):
             os.makedirs(path_to_tmp)
+
+    @staticmethod
+    def _path_to_tmp(name):
+        return os.path.join(*(path_to_tmp, name))
 
     def test_download_file(self):
         """Download the EDF dataset."""
