@@ -219,6 +219,10 @@ class TestSleep(object):
     #                          DELETE TMP FOLDER
     ###########################################################################
 
+    def test_close_sleep_app(self):
+        """Close Sleep application."""
+        app.quit()
+
     def test_delete_tmp_folder(self):
         """Delete tmp/folder."""
         shutil.rmtree(path_to_tmp)
