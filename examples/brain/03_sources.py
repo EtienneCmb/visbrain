@@ -9,12 +9,14 @@ attach some data to sources and project this activity onto the surface
 which is defined as the number of contributing sources per vertex.
 
 Download source's coordinates (xyz_sample.npz) :
-https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE
+https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 
 .. image:: ../../picture/picbrain/ex_sources.png
 """
-from visbrain import Brain
 import numpy as np
+
+from visbrain import Brain
+from visbrain.io import download_file
 
 # Define a empty dictionnary :
 kwargs = {}
@@ -22,6 +24,7 @@ kwargs = {}
 """
 Load the xyz coordinates and corresponding subject name
 """
+download_file('xyz_sample.npz')
 mat = np.load('xyz_sample.npz')
 kwargs['s_xyz'], subjects = mat['xyz'], mat['subjects']
 

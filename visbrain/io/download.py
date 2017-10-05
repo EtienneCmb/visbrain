@@ -57,8 +57,8 @@ def reporthook(blocknum, blocksize, totalsize):
         sys.stderr.write("\rread %d" % (readsofar,))
 
 
-def download_file(name, filename=None, to_path=None,
-                  unzip=False, remove_archive=False):
+def download_file(name, filename=None, to_path=None, unzip=False,
+                  remove_archive=False):
     """Download a file.
 
     Parameters
@@ -67,6 +67,11 @@ def download_file(name, filename=None, to_path=None,
         Name of the file to download or url.
     filename : string | None
         Name of the file to be saved in case of url.
+
+    Returns
+    -------
+    path_to_file : string
+        Path to the downloaded file.
     """
     print('\n----------------------------------------------------------------')
     if bool(name.find('http') + 1):
@@ -100,3 +105,4 @@ def download_file(name, filename=None, to_path=None,
     else:
         verbose("File already dowloaded (" + path_to_file + ").", level='info')
     print('----------------------------------------------------------------\n')
+    return path_to_file

@@ -1,8 +1,20 @@
-{"xyz_sample.npz": "https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1",
+{
+"xyz_sample.npz": "https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1",
+"thalamus.txt": "https://www.dropbox.com/s/sw7vkplwd9zbns1/thalamus.txt?dl=1",
 "Px.npy": "https://www.dropbox.com/s/qzwjavhz5lg13km/Px.npy?dl=1",
 "figure.zip": "https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1",
+"brain_config.txt": "https://www.dropbox.com/s/o0ljy16mpz7mmxu/brain_config.txt?dl=1",
+"cbar_config.zip": "https://www.dropbox.com/s/5o1ph08rmpft200/cbar_config.zip?dl=1",
+"GG-853-GM-0.7mm.nii.gz": "https://www.dropbox.com/s/escinae2yprcq52/GG-853-GM-0.7mm.nii.gz?dl=1",
+"GG-853-WM-0.7mm.nii.gz": "https://www.dropbox.com/s/26l6ky0bj981yux/GG-853-WM-0.7mm.nii.gz?dl=1",
+"Custom.npz": "https://www.dropbox.com/s/phzptkbht4us33q/Custom.npz?dl=1",
+"Inflated.npz": "https://www.dropbox.com/s/3tbyesoalpmct6b/Inflated.npz?dl=1",
+"Sphere.npz": "https://www.dropbox.com/s/2rp0wcfjajd0lmh/Sphere.npz?dl=1",
+"WhiteMatter.npz": "https://www.dropbox.com/s/upgoo4zqzbnb9fr/WhiteMatter.npz?dl=1",
 "sleep_rec.zip": "https://www.dropbox.com/s/oer3eh8s6i8wcf5/sleep_rec.zip?dl=1",
 "sleep_edf.zip": "https://www.dropbox.com/s/bj1ra95rbksukro/sleep_edf.zip?dl=1",
 "sleep_brainvision.zip": "https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1",
 "sleep_elan.zip": "https://www.dropbox.com/s/95xvdqivpgk90hg/sleep_elan.zip?dl=1",
-"sleep_matlab.zip": "https://www.dropbox.com/s/bmfc2u55xsejbaf/sleep_matlab.zip?dl=1"}
+"sleep_matlab.zip": "https://www.dropbox.com/s/bmfc2u55xsejbaf/sleep_matlab.zip?dl=1",
+"topoplot_data.npz": "https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1"
+}
