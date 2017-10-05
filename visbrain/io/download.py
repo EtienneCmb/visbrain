@@ -59,7 +59,7 @@ def reporthook(blocknum, blocksize, totalsize):
 
 
 def download_file(name, filename=None, to_path=None, verbose=True,
-                  unzip=False):
+                  unzip=False, remove_archive=False):
     """Download a file.
 
     Parameters
@@ -85,7 +85,7 @@ def download_file(name, filename=None, to_path=None, verbose=True,
         if verbose:
             print('Downloading ' + path_to_file)
         # Download file :
-        path_to_file += '.zip' * unzip
+        # path_to_file += '.zip' * unzip
         fh, _ = request.urlretrieve(url, path_to_file, reporthook=reporthook)
         # Unzip file :
         if unzip:
@@ -93,8 +93,8 @@ def download_file(name, filename=None, to_path=None, verbose=True,
             zip_file_object = zipfile.ZipFile(fh, 'r')
             zip_file_object.extractall()
             zip_file_object.close()
-            # Remove archive :
-            os.remove(path_to_file)
+            if remove_archive:  # Remove archive :
+                os.remove(path_to_file)
     else:
         if verbose:
             print("File already dowloaded (" + path_to_file + ").")

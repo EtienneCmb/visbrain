@@ -1,4 +1,6 @@
 {"xyz_sample.npz": "https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1",
 "Px.npy": "https://www.dropbox.com/s/qzwjavhz5lg13km/Px.npy?dl=1",
-"sleep_rec.rec": "https://www.dropbox.com/sh/vy3pb8g92i3hws3/AACZw7HHfmFdCfYGL_gNQJiWa?dl=1",
-"sleep_edf.edf": "https://www.dropbox.com/s/cldl7545k0apaei/sleep_edf.edf?dl=1"}
+"sleep_rec.zip": "https://www.dropbox.com/s/oer3eh8s6i8wcf5/sleep_rec.zip?dl=1",
+"sleep_edf.zip": "https://www.dropbox.com/s/hc18bgn2hlnmiph/sleep_edf.zip?dl=1",
+"sleep_brainvision.zip": "https://www.dropbox.com/s/t1s4e39gu3wdb6i/sleep_brainvision.zip?dl=1",
+"sleep_matlab.zip": "https://www.dropbox.com/s/6teybg0i1wgn9sk/sleep_matlab.zip?dl=1"}

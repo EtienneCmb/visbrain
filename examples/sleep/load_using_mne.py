@@ -11,13 +11,18 @@ A full list of supported format can be found here:
 https://martinos.org/mne/stable/python_reference.html#reading-raw-data
 
 Required dataset at :
-https://drive.google.com/drive/folders/0B6vtJiCQZUBvRjc3cFFYcmFIeW8?usp=sharing
+https://www.dropbox.com/s/t1s4e39gu3wdb6i/sleep_brainvision.zip?dl=0
 
 .. image:: ../../picture/picsleep/ex_LoadMNE.png
 """
 from mne import io
 from visbrain import Sleep
+from visbrain.io import download_file
 
+# Download the brainvision file :
+download_file('sleep_brainvision.zip', unzip=True)
+
+# Read raw data unsing MNE-python :
 raw = io.read_raw_brainvision(vhdr_fname='sub-02.vhdr', preload=True)
 
 # Extract data, sampling frequency and channels names
