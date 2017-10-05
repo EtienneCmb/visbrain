@@ -91,7 +91,7 @@ def download_file(name, filename=None, to_path=None, verbose=True,
         if unzip:
             # Unzip archive :
             zip_file_object = zipfile.ZipFile(fh, 'r')
-            zip_file_object.extractall()
+            zip_file_object.extractall(path=to_path)
             zip_file_object.close()
             if remove_archive:  # Remove archive :
                 os.remove(path_to_file)
