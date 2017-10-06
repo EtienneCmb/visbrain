@@ -45,6 +45,8 @@ class TestCli(object):
     ###########################################################################
     def test_cli_fig_hyp(self):
         """Test function cli_fig_hyp."""
+        import matplotlib
+        matplotlib.use('agg')
         runner = CliRunner()
         hypno = self._path_to_tmp('Hypnogram_excerpt2.txt')
         # Run without output :
