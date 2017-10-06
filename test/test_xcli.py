@@ -12,8 +12,6 @@ from visbrain.utils import verbose
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
-if not os.path.exists(path_to_tmp):
-    os.makedirs(path_to_tmp)
 
 
 def path_to_edf(name):
@@ -32,13 +30,13 @@ class TestCli(object):
         if not os.path.exists(path_to_tmp):
             os.makedirs(path_to_tmp)
 
-    def test_download_file(self):
-        """Download the EDF dataset."""
-        download_file('sleep_edf.zip', to_path=path_to_tmp, unzip=True)
-
     @staticmethod
     def _path_to_tmp(name):
         return os.path.join(*(path_to_tmp, name))
+
+    def test_download_file(self):
+        """Download the EDF dataset."""
+        download_file('sleep_edf.zip', to_path=path_to_tmp, unzip=True)
 
     ###########################################################################
     #                           HYPNO -> FIG

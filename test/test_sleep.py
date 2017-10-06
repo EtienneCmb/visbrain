@@ -13,8 +13,6 @@ from visbrain.io import download_file
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
-if not os.path.exists(path_to_tmp):
-    os.makedirs(path_to_tmp)
 
 # Create a random dataset :
 download_file('sleep_edf.zip', to_path=path_to_tmp, unzip=True)
