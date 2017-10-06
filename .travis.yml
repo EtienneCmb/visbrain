@@ -5,7 +5,8 @@ python:
 before_install:
   # Fix screen resolution to 1280x1024x16 :
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
-  - apt-get install python-image
+  - sudo apt-get install libjpeg libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev
+sudo: required
 install:
   - pushd $PWD
   # ------------------- PYTHON ENVIRONNEMENT -------------------
