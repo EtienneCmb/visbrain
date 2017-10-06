@@ -50,12 +50,11 @@ class TestCli(object):
         runner = CliRunner()
         hypno = self._path_to_tmp('Hypnogram_excerpt2.txt')
         # Run without output :
-        r1 = runner.invoke(cli_fig_hyp, ['-h', hypno, '-g', True, '-c', True,
-                           '--dpi', 100])
+        r1 = runner.invoke(cli_fig_hyp, ['-h', hypno, '-g', True, '-c', True])
         # Run with output :
         out = self._path_to_tmp('hypno.png')
         r2 = runner.invoke(cli_fig_hyp, ['-h', hypno, '-g', True, '-c', True,
-                           '-o', out, '--dpi', 100])
+                           '-o', out])
         print('Result 1 :', r1.output)
         print('Result 2 :', r2.output)
 
