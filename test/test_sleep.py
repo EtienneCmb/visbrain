@@ -28,8 +28,8 @@ def path_to_edf(name):
 # Create Sleep application :
 app = QtWidgets.QApplication([])
 sp = Sleep(data=path_to_edf('excerpt2.edf'),
-           hypno=path_to_edf('Hypnogram_excerpt2.txt'), axis=False,
-           hedit=True, annotations=onset)
+           hypno=path_to_edf('Hypnogram_excerpt2.txt'), axis=True, hedit=True,
+           annotations=onset)
 
 
 class TestSleep(object):
