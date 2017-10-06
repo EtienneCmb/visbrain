@@ -1,7 +1,6 @@
 """Interactions between user and Settings tab of QuickSettings."""
 from ...utils import textline2color
-
-__all__ = ('UiSettings')
+from ...io import dialog_color
 
 
 class UiSettings(object):
@@ -11,6 +10,7 @@ class UiSettings(object):
         """Init."""
         # Background color :
         self._set_bgcolor.editingFinished.connect(self._fcn_set_bgcolor)
+        self._set_bgd_picker.clicked.connect(self._fcn_color_bgd_picker)
         # Filtering :
         # Prepare data :
         self._sig_filt_apply.clicked.connect(self._fcn_set_filtering)
@@ -29,6 +29,12 @@ class UiSettings(object):
         bgcolor = textline2color(str(self._set_bgcolor.text()))[1]
         self._grid_canvas.bgcolor = bgcolor
         self._signal_canvas.bgcolor = bgcolor
+
+    def _fcn_color_bgd_picker(self):
+        """Pick color for background."""
+        color = dialog_color()
+        self._set_bgcolor.setText(str(color))
+        self._fcn_set_bgcolor()
 
     ###########################################################################
     #                               FILTERING

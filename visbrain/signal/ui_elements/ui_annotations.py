@@ -3,8 +3,7 @@ from PyQt5 import QtWidgets
 import numpy as np
 
 from ...utils import textline2color
-
-__all__ = ('UiAnnotations')
+from ...io import dialog_color
 
 
 class UiAnnotations(object):
@@ -19,6 +18,7 @@ class UiAnnotations(object):
         self._annot_txtsz.valueChanged.connect(self._fcn_annot_appear)
         self._annot_marksz.valueChanged.connect(self._fcn_annot_appear)
         self._annot_color.editingFinished.connect(self._fcn_annot_appear)
+        self._sig_annot_picker.clicked.connect(self._fcn_color_annot_picker)
         self._annot_viz.clicked.connect(self._fcn_annot_appear)
 
     def _annotate_event(self, signal, coord, text="Enter annotation"):
@@ -91,3 +91,9 @@ class UiAnnotations(object):
         self._signal._annot_text.update()
         self._signal._annot_text.visible = self._annot_viz.isChecked()
         self._signal._annot_mark.visible = self._annot_viz.isChecked()
+
+    def _fcn_color_annot_picker(self):
+        """Pick color for annotation."""
+        color = dialog_color()
+        self._annot_color.setText(str(color))
+        self._fcn_annot_appear()

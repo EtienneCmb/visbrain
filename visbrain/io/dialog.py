@@ -3,11 +3,12 @@
 * dialogSave : Open a window to save a file
 * dialogLoad : Open a window to load a file
 """
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QColorDialog
 import os
+
 from .rw_utils import safety_save
 
-__all__ = ['dialogSave', 'dialogLoad']
+__all__ = ['dialogSave', 'dialogLoad', 'dialog_color']
 
 
 def dialogSave(self, name='Save file', default='file',
@@ -66,3 +67,8 @@ def dialogLoad(self, name='Open file', default='file',
     # Open the window :
     file, _ = QFileDialog.getOpenFileName(self, name, default, allext)
     return str(file)
+
+
+def dialog_color():
+    """Open a QColorDialog window."""
+    return QColorDialog.getColor().name()

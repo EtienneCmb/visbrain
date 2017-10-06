@@ -6,7 +6,7 @@ from itertools import product
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from ..visuals import GridSignalMesh, TFmapsMesh
+from ..visuals import GridSignal, TFmapsMesh
 from ..utils import color2vb, vispy_array, PrepareData
 
 __all__ = ('Visuals')
@@ -227,7 +227,7 @@ class SignalVisual(SignalAnnotations):
         _data = self._prep._prepare_data(self._sf, data_c, self._time)
 
         # Set data :
-        if form in ['line', 'marker', 'psd']:  # line and marker
+        if form in ['line', 'marker', 'psd', 'butterfly']:  # line and marker
             # Get position array :
             pos = np.c_[self._time, _data]
             # Send position :
@@ -258,10 +258,29 @@ class SignalVisual(SignalAnnotations):
                 self._th.visible = is_th
                 self._line.set_data(pos, width=lw, color=col)
                 self._line.update()
-            else:
+            elif form == 'marker':
                 self._mark.set_data(pos, face_color=color, symbol=symbol,
                                     size=size, edge_width=0.)
                 self._mark.update()
+            elif form == 'butterfly':
+                # Get soe shape related variables :
+                n, m = len(self._time), int(np.prod(data.shape))
+                n_rep = int(m / n)
+                data = vispy_array(data)
+                # Build position :
+                pos = np.c_[np.tile(self._time.ravel(), n_rep), data.ravel()]
+                # Disconnect some points :
+                connect = np.c_[np.arange(m - 1), np.arange(1, m)]
+                to_delete = np.linspace(n - 1, m - 1, n_rep)
+                connect = np.delete(connect, to_delete, axis=0)
+                # Build color :
+                col = color2vb(color, length=m)
+                # singcol = np.random.uniform(size=(n_rep, 3), low=.2,
+                #                             high=.8).astype(np.float32)
+                # col = np.repeat(singcol, n, 0)
+                # Send data :
+                self._line.set_data(pos, width=lw, color=col, connect=connect)
+                self._line.update()
             # Get camera rectangle :
             t_min, t_max = pos[:, 0].min(), pos[:, 0].max()
             d_min, d_max = pos[:, 1].min(), pos[:, 1].max()
@@ -330,7 +349,7 @@ class SignalVisual(SignalAnnotations):
         return self._navidx.index(idx)
 
     def _visibility(self):
-        self._line.visible = self.form in ['line', 'psd']
+        self._line.visible = self.form in ['line', 'psd', 'butterfly']
         self._mark.visible = self.form == 'marker'
         self._hist.visible = self.form == 'histogram'
         self._tf.visible = self.form == 'tf'
@@ -343,8 +362,8 @@ class Visuals(object):
     ----------
     """
 
-    def __init__(self, data, time, sf, axis, line_rendering, parent_grid,
-                 parent_signal):
+    def __init__(self, data, time, sf, axis, grid_titles, grid_color,
+                 grid_shape, grid_parent, signal_parent):
         """Init."""
         # ========================== CHECK ==========================
         # ----------- AXIS -----------
@@ -362,10 +381,11 @@ class Visuals(object):
 
         # ========================== GRID ==========================
         if self._enable_grid:  # don't create grid for 1-D signals
-            self._grid = GridSignalMesh(data, axis=axis, sf=sf)
-            self._grid.parent = parent_grid
+            self._grid = GridSignal(data, axis=axis, sf=sf, title=grid_titles,
+                                    color=grid_color, force_shape=grid_shape,
+                                    parent=grid_parent)
+            self._grid._txt.parent = grid_parent
 
         # ========================== SIGNAL ==========================
         self._signal = SignalVisual(time, sf, data.shape, axis,
-                                    line_rendering=line_rendering,
-                                    parent=parent_signal)
+                                    parent=signal_parent)

@@ -23,15 +23,15 @@ from visbrain.utils.guitools import (slider2opacity, textline2color,
 from visbrain.utils.memory import arrays_share_data, id, code_timer
 from visbrain.utils.others import (vis_args, check_downsampling, get_dsf,
                                    vispy_array, convert_meshdata,
-                                   add_brain_template, remove_brain_template,
-                                   set_if_not_none)
+                                   volume_to_mesh, add_brain_template,
+                                   remove_brain_template, set_if_not_none)
 from visbrain.utils.physio import (find_non_eeg, rereferencing, bipolarization,
                                    commonaverage, tal2mni, mni2tal,
                                    generate_eeg)
 from visbrain.utils.picture import (piccrop, picresize)
 from visbrain.utils.sigproc import (normalize, derivative, tkeo, zerocrossing,
                                     power_of_ten, averaging, normalization,
-                                    smoothing)
+                                    smoothing, smooth_3d)
 from visbrain.utils.sleep.detection import (kcdetect, spindlesdetect,
                                             remdetect, slowwavedetect,
                                             mtdetect, peakdetect)
@@ -209,7 +209,7 @@ class TestDetections(object):
         """Test function slowwavedetect."""
         # Get a dataset example :
         data, sf = self._get_eeg_dataset(n=10000, sine=True, offset=300., f=.7)
-        slowwavedetect(data, sf, .8, welch_win_s=12., min_duration_ms=5.)
+        slowwavedetect(data, sf, .8, min_duration_ms=5.)
 
     def test_mtdetect(self):
         """Test function mtdetect."""
@@ -333,8 +333,9 @@ class TestFiltering(object):
 
     def test_welch_power(self):
         """Test welch_power function."""
-        x, f, sf = self._get_data(False)
-        welch_power(x, f[0], f[1], 50, 10.)
+        x, _, sf = self._get_data(True)
+        f = [5, 10., 15]
+        assert math.isclose(welch_power(x, f, sf, norm=True).sum(0).max(), 1.)
 
     def test_prepare_data(self):
         """Test class PrepareData."""
@@ -637,6 +638,11 @@ class TestOthers(object):
         tr.rotate(90, (0, 0, 1))
         convert_meshdata(*tup, transform=tr)[-1]
 
+    def test_volume_to_mesh(self):
+        """Test function volume_to_mesh."""
+        x = np.random.rand(10, 20, 30)
+        volume_to_mesh(x)
+
     def test_add_brain_template(self):
         """Test add_brain_template function."""
         # Force creation of vertices, faces and normals :
@@ -829,6 +835,11 @@ class TestSigproc(object):
         for w in window:
             x_ns = smoothing(x_n, window=w)
             assert len(x_ns) == len(x_n)
+
+    def test_smooth_3d(self):
+        """Test function smooth_3d."""
+        x = np.random.rand(10, 20, 30)
+        smooth_3d(x)
 
 
 ###############################################################################

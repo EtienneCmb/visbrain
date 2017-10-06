@@ -96,17 +96,6 @@ class Figure(object):
         key 'axis' to specify if pictures have to share the same height (0)
         or width (1). Use 'extend' if the smallest (False) or the largest
         have to be considered as the reference.
-
-    Methods
-    -------
-    show()
-        Display the final figure.
-    save()
-        Save the figure.
-    colorbar_to_axis()
-        Add a specific colorbar to a selected picture.
-    shared_colorbar()
-        Add a a colorbar shared by multiple subplots.
     """
 
     def __init__(self, files, path=None, grid=None, figtitle=None, y=1.02,
@@ -200,12 +189,12 @@ class Figure(object):
     def save(self, saveas, dpi=300):
         """Save the figure.
 
-        Args:
-            saveas: string
-                Name of the saved figure.
-
-            dpi : int | 300
-                The resolution of the exported figure.
+        Parameters
+        ----------
+        saveas : string
+            Name of the saved figure.
+        dpi : int | 300
+            The resolution of the exported figure.
         """
         self._fig.savefig(saveas, bbox_inches='tight', dpi=dpi,
                           facecolor=self._figcol)

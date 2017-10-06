@@ -2,13 +2,15 @@
 import sip
 import sys
 from PyQt5 import QtWidgets
+import numpy as np
 
 import vispy.app as visapp
 import vispy.scene.cameras as viscam
 from vispy.scene import Node
 
-from .UiInit import UiInit
-from .UiElements import UiElements
+from .ui_init import UiInit
+from .ui_elements import UiElements
+from ..brain.base.ConnectBase import ConnectBase
 from ..utils import set_widget_size
 from ..visuals import TopoMesh, CbarVisual
 
@@ -41,7 +43,8 @@ class Topo(UiInit, UiElements):
         """Set the object name."""
         self._topos[name] = value
 
-    def add_topoplot(self, name, data, xyz=None, channels=None,
+    def add_topoplot(self, name, data, xyz=None, channels=None, c_connect=None,
+                     c_select=None, c_cmap='inferno', c_linewidth=3.,
                      system='cartesian', unit='degree', title=None,
                      title_color='black', title_size=5., line_color='black',
                      line_width=2., chan_size=2., chan_offset=(0., 0., 0.),
@@ -71,6 +74,16 @@ class Topo(UiInit, UiElements):
             Array of source's coordinates.
         channels : list | None
             List of channel names.
+        c_connect : array_like | None
+            Array of connections between sources. Must be a (n_channels,
+            n_channels) upper triangular array of connecivity strength.
+        c_select : array_like | None
+            Array of boolean values to select which edges to display or to
+            hide.
+        c_cmap : string | 'inferno'
+            Colormap name to use for the edges color.
+        c_linewidth : float | 3.
+            Connectivity edges line width.
         system : {'cartesian', 'spherical'}
             Coordinate system.
         unit : {'degree', 'rad'}
@@ -147,6 +160,14 @@ class Topo(UiInit, UiElements):
                         margin)
         topo.set_data(data, levels, level_colors, cmap, clim, vmin, under,
                       vmax, over, cblabel)
+        # Connectivity :
+        if isinstance(c_connect, np.ndarray):
+            assert c_connect.shape == (len(topo), len(topo))
+            xyz = topo._xyz[topo._keeponly]
+            self.connect = ConnectBase(c_xyz=xyz, c_connect=c_connect,
+                                       c_cmap=c_cmap, c_linewidth=c_linewidth,
+                                       c_select=c_select)
+            self.connect.mesh.parent = topo.node_chan
         self[name] = topo
         # Create a PanZoom camera :
         cam = viscam.PanZoomCamera(aspect=1., rect=topo.rect)

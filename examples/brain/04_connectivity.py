@@ -6,13 +6,15 @@ Display and customize connectivity. To this end, we define some deep sources
 and connect them.
 
 Download source's coordinates (xyz_sample.npz) :
-https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE
+https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 
 .. image:: ../../picture/picbrain/ex_connectivity.png
 """
 from __future__ import print_function
 import numpy as np
+
 from visbrain import Brain
+from visbrain.io import download_file
 
 # Create an empty kwargs dictionnary :
 kwargs = {}
@@ -20,6 +22,7 @@ kwargs = {}
 # ____________________________ DATA ____________________________
 
 # Load the xyz coordinates and corresponding subject name :
+download_file('xyz_sample.npz')
 mat = np.load('xyz_sample.npz')
 s_xyz, subjects = mat['xyz'], mat['subjects']
 

@@ -4,16 +4,16 @@ A large portion of this code was taken from the example developped by the vispy
 team :
 https://github.com/vispy/vispy/blob/master/examples/demo/gloo/realtime_signals.py
 """
-
 import numpy as np
+from itertools import product
 
 from vispy import gloo, visuals
-from vispy.scene.visuals import create_visual_node
+from vispy.scene.visuals import create_visual_node, Text
 
 from visbrain.utils import color2vb, vispy_array, PrepareData, ndsubplot
 
 
-__all__ = ('GridSignalMesh')
+__all__ = ('GridSignal')
 
 
 vertex_shader = """
@@ -83,8 +83,9 @@ class GridSignalVisual(visuals.Visual):
         """Return the number of time points."""
         return self._n
 
-    def __init__(self, data, axis=-1, sf=1., color='random', space=2.,
-                 scale=(1., 1.)):
+    def __init__(self, data, axis=-1, sf=1., color='random', title=None,
+                 space=2., scale=(.98, .9), font_size=10., width=1.,
+                 method='gl', force_shape=None):
         """Init."""
         # =========================== CHECKING ===========================
         assert isinstance(data, np.ndarray) and (data.ndim <= 3)
@@ -100,6 +101,7 @@ class GridSignalVisual(visuals.Visual):
                           blend=True, blend_func=('src_alpha',
                                                   'one_minus_src_alpha'))
         self._draw_mode = 'line_strip'
+        self._txt = Text(bold=False, font_size=font_size)
 
         # =========================== DATA ===========================
         # Keep some inputs :
@@ -111,6 +113,8 @@ class GridSignalVisual(visuals.Visual):
         self.scale = scale
         self.space = space
         self._prep = PrepareData(axis=-1)
+        self.width = width
+        self.method = method
 
         # =========================== BUFFERS ===========================
         # Create buffers (for data, index and color)
@@ -127,10 +131,11 @@ class GridSignalVisual(visuals.Visual):
         self.shared_program.vert['u_n'] = len(self)
 
         # Set data :
-        self.set_data(data, axis, color)
+        self.set_data(data, axis, color, title, force_shape)
         self.freeze()
 
-    def set_data(self, data=None, axis=None, color=None):
+    def set_data(self, data=None, axis=None, color=None, title=None,
+                 force_shape=None):
         """Set data to the grid of signals.
 
         Parameters
@@ -141,10 +146,6 @@ class GridSignalVisual(visuals.Visual):
             Time axis location.
         random : array_like/string/tuple | 'random'
             Use 'random' for random colors or a color name for uniform color.
-        space : float | None
-            Space between subplots.
-        scale : tuple | None
-            Tuple descigin the scaling along the x and y-axis.
         """
         rnd_dyn = (.2, .8)  # random color range
         # ====================== CHECKING ======================
@@ -176,15 +177,17 @@ class GridSignalVisual(visuals.Visual):
             sig_index = np.arange(m).reshape(*g_size)
 
             # -------------- Optimal 2-D --------------
-            force_2d = True
+            self._data = data
             self._ori_shape = list(data.shape)[0:-1]
-            if force_2d:
-                opt_rows, opt_cols = ndsubplot(m)
-                data = data.reshape(opt_rows, opt_cols, len(self))
-                sig_index = sig_index.reshape(opt_rows, opt_cols)
-                g_size = (opt_rows, opt_cols)
+            if force_shape is None:
+                n_rows, n_cols = ndsubplot(m)
+            elif len(g_size) == 2:
+                n_rows, n_cols = force_shape
+            data = data.reshape(n_rows, n_cols, len(self))
+            sig_index = sig_index.reshape(n_rows, n_cols)
+            g_size = (n_rows, n_cols)
             self._opt_shape = list(data.shape)[0:-1]
-            self._sig_index = np.flipud(sig_index)
+            self._sig_index = sig_index
 
             # -------------- (n_rows * n_cols, n_time) --------------
             data = np.reshape(data, (m, len(self)), order='F')
@@ -197,23 +200,20 @@ class GridSignalVisual(visuals.Visual):
             kw = {'axis': -1, 'keepdims': True}
             data -= data.mean(**kw)
             data /= np.abs(data).max(**kw)
-
-            # -------------- Index --------------
-            (n_rows, n_cols), n = g_size, len(self)
-            index = np.c_[np.repeat(np.repeat(np.arange(n_cols), n_rows), n),
-                          np.repeat(np.tile(np.arange(n_rows), n_cols), n),
-                          np.tile(np.arange(n), m)].astype(np.float32)
-
-            # -------------- Buffer --------------
             self._dbuffer.set_data(vispy_array(data))
-            self._ibuffer.set_data(vispy_array(index))
-            self.shared_program.vert['u_size'] = g_size
-            self._g_size = g_size
+            self.g_size = g_size
+
+        # ====================== INDEX ======================
+        n, m = len(self), np.prod(g_size)
+        self._sig_index = self._sig_index.reshape(n_rows, n_cols)
+        idg = np.c_[np.repeat(np.repeat(np.arange(n_cols), n_rows), n),
+                    np.repeat(np.tile(np.arange(n_rows), n_cols), n)[::-1],
+                    np.tile(np.arange(n), m)].astype(np.float32)
+        self._ibuffer.set_data(vispy_array(idg))
 
         # ====================== COLOR ======================
         if color is not None:
-            g_size = np.array(self._g_size)
-            m = g_size.prod()  # n_row x n_col
+            g_size = np.array(self.g_size)
             n = len(self)
             if color == 'random':  # (m, 3) random color
                 singcol = np.random.uniform(size=(m, 3), low=rnd_dyn[0],
@@ -224,6 +224,24 @@ class GridSignalVisual(visuals.Visual):
             a_color = np.repeat(singcol, n, axis=0)
             # Send color to buffer :
             self._cbuffer.set_data(vispy_array(a_color))
+
+        # ====================== TITLES ======================
+        # Titles checking :
+        if title is None or (len(title) != m):
+            st, it = '({}, {})', product(range(n_rows), range(n_cols))
+            title = [st.format(i, k) for i, k in it]
+        # Set text and font size :
+        if not self._txt.text:
+            self._txt.text = title
+        # Get titles position :
+        x_factor, y_factor = 1. / (n_cols), 1. / (n_rows)
+        r_x = np.linspace(-1. + x_factor, 1. - x_factor, n_cols)
+        r_x = np.tile(r_x, n_rows)
+        r_y = np.linspace(-1. + y_factor, 1. - y_factor, n_rows)[::-1]
+        r_y += y_factor
+        r_y = np.repeat(r_y, n_cols)
+        pos = np.c_[r_x, r_y, np.full_like(r_x, -10.)]
+        self._txt.pos = pos.astype(np.float32)
 
     def clean(self):
         """Clean buffers."""
@@ -246,9 +264,17 @@ class GridSignalVisual(visuals.Visual):
         view_vert = view.view_program.vert
         view_vert['transform'] = tr.get_transform()
 
-    # def _prepare_draw(self, view=None):
-    #     """Function called everytime there's a camera update."""
-    #     pass
+    def _prepare_draw(self, view=None):
+        """Function called everytime there's a camera update."""
+        try:
+            import OpenGL.GL as GL
+            GL.glLineWidth(self._width)
+            if self._smooth_line:
+                GL.glEnable(GL.GL_LINE_SMOOTH)
+            else:
+                GL.glDisable(GL.GL_LINE_SMOOTH)
+        except Exception:  # can be other than ImportError sometimes
+            pass
 
     # ========================================================================
     # ========================================================================
@@ -301,5 +327,76 @@ class GridSignalVisual(visuals.Visual):
         self._color = value
         self.set_data(color=value)
 
+    # ----------- FONT_SIZE -----------
+    @property
+    def font_size(self):
+        """Get the font_size value."""
+        return self._txt.font_size
 
-GridSignalMesh = create_visual_node(GridSignalVisual)
+    @font_size.setter
+    def font_size(self, value):
+        """Set font_size value."""
+        self._txt.font_size = value
+
+    # ----------- TCOLOR -----------
+    @property
+    def tcolor(self):
+        """Get the tcolor value."""
+        return self._txt.color
+
+    @tcolor.setter
+    def tcolor(self, value):
+        """Set tcolor value."""
+        self._txt.color = color2vb(value)
+
+    # ----------- TVISIBLE -----------
+    @property
+    def tvisible(self):
+        """Get the tvisible value."""
+        return self._txt.visible
+
+    @tvisible.setter
+    def tvisible(self, value):
+        """Set tvisible value."""
+        self._txt.visible = value
+
+    # ----------- G_SIZE -----------
+    @property
+    def g_size(self):
+        """Get the g_size value."""
+        return self._g_size
+
+    @g_size.setter
+    def g_size(self, value):
+        """Set g_size value."""
+        self._g_size = value
+        self.shared_program.vert['u_size'] = value
+        self.update()
+
+    # ----------- WIDTH -----------
+    @property
+    def width(self):
+        """Get the width value."""
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        """Set width value."""
+        self._width = value
+        self.update()
+
+    # ----------- METHOD -----------
+    @property
+    def method(self):
+        """Get the method value."""
+        return self._method
+
+    @method.setter
+    def method(self, value):
+        """Set method value."""
+        self._method = value
+        self._smooth_line = value == 'agg'
+        self.update()
+
+
+GridSignal = create_visual_node(GridSignalVisual)

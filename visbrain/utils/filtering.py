@@ -205,38 +205,55 @@ def morlet_power(x, freqs, sf, norm=True):
     return xpow
 
 
-def welch_power(x, fmin, fmax, sf, window_s=30, norm=True):
-    """Compute bandwise-normalized power of data using welch.
+def welch_power(x, freqs, sf, window_s=10, norm=True):
+    """Compute bandwise-normalized power of data using welch power.
 
     Parameters
     ----------
     x : array_like
-        Signal
-    sf : int
-        Downsampling frequency
-    window_s : int | 30
-        Time resolution (sec) of Welch's periodogram. Must be > 10 seconds.
-    norm : boolean, optional (def True)
-        If True, return normalized band power
+        Row vector signal.
+    freqs : array_like
+        Frequency bands for power computation. The power will be computed
+        using successive frequency band (e.g freqs=(1., 2, .3)).
+    sf : float
+        Sampling frequency.
+    window_s : int | 10
+        Length of NFFT
+    norm : bool | True
+        If True, return bandwise normalized band power
+        (For each time point, the sum of power in the 4 band equals 1)
+
+    Returns
+    -------
+    xpow : array_like
+        The power in the specified frequency bands of shape
+        (len(freqs)-1, npts).
     """
     sf = int(sf)
     freq_spacing = .1
-    f_vector = np.arange(0, sf / 2 + freq_spacing, freq_spacing)
-    idx_fmin = np.where(f_vector == fmin)[0][0]
-    idx_fmax = np.where(f_vector == fmax)[0][0] + 1
-    delta_spec = np.array([], dtype=float)
-    delta_spec_norm = np.array([], dtype=float)
+    n_epoch = max(1, int(len(x) / (window_s * sf)))
+
+    xpow = np.zeros((len(freqs) - 1, n_epoch), dtype=np.float)
 
     for i in np.arange(0, len(x), window_s * sf):
-        f, Pxx_spec = welch(x[int(i):int(i + window_s * sf)], sf, 'hanning',
+        f, Pxx_spec = welch(x[int(i):int(i + window_s * sf)], sf,
                             nperseg=sf * (1 / freq_spacing),
                             scaling='spectrum')
-        mean_delta = np.mean(Pxx_spec[idx_fmin:idx_fmax, ])
-        norm_delta = np.sum(Pxx_spec[idx_fmin:idx_fmax, ]) / np.sum(Pxx_spec)
-        delta_spec = np.append(delta_spec, mean_delta)
-        delta_spec_norm = np.append(delta_spec_norm, norm_delta)
+        epoch = int(i / (window_s * sf))
 
-    return delta_spec_norm if norm else delta_spec
+        for num, k in enumerate(freqs[:-1]):
+            fmin = np.abs(f - k).argmin()
+            fmax = np.abs(f - freqs[num + 1]).argmin()
+            xpow[num, epoch] = np.mean(Pxx_spec[fmin:fmax])
+
+    # Normalize by the band sum :
+    if norm:
+        sum_pow = xpow.sum(0).reshape(1, -1)
+        np.divide(xpow, sum_pow, out=xpow)
+
+    # Oversample
+    xpow = np.repeat(xpow, int(window_s * sf), axis=1)
+    return xpow
 
 
 class PrepareData(object):

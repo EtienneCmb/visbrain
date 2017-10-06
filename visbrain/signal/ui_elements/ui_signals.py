@@ -1,9 +1,8 @@
 """Interactions between user and Signal tab of QuickSettings."""
 import numpy as np
 
-from ...utils import textline2color, safely_set_spin, mpl_cmap, safely_set_cbox
-
-__all__ = ('UiSignals')
+from ...utils import textline2color, safely_set_spin
+from ...io import dialog_color, is_opengl_installed
 
 
 class UiSignals(object):
@@ -14,6 +13,7 @@ class UiSignals(object):
         self._previous_form = 'line'
         # Axis :
         self._axis_color.editingFinished.connect(self._fcn_axis_color)
+        self._sig_ax_picker.clicked.connect(self._fcn_color_ax_picker)
         self._sig_title.textChanged.connect(self._fcn_axis_title)
         self._sig_title_fz.valueChanged.connect(self._fcn_axis_title_fz)
         self._sig_xlab.textChanged.connect(self._fcn_axis_xlab)
@@ -24,7 +24,9 @@ class UiSignals(object):
         self._sig_index.valueChanged.connect(self._fcn_set_signal)
         self._sig_form.currentIndexChanged.connect(self._fcn_set_signal)
         self._sig_color.editingFinished.connect(self._fcn_set_signal)
+        self._sig_sig_picker.clicked.connect(self._fcn_color_sig_picker)
         self._sig_lw.valueChanged.connect(self._fcn_set_signal)
+        self._sig_smooth.clicked.connect(self._fcn_sig_smooth)
         self._sig_nbins.valueChanged.connect(self._fcn_set_signal)
         self._sig_size.valueChanged.connect(self._fcn_set_signal)
         self._sig_symbol.currentIndexChanged.connect(self._fcn_set_signal)
@@ -64,6 +66,12 @@ class UiSignals(object):
         col = textline2color(str(self._axis_color.text()))[1]
         self._signal_canvas.axis_color = col
         self._signal_canvas.cbar.txtcolor = col
+
+    def _fcn_color_ax_picker(self):
+        """Pick color for axis."""
+        color = dialog_color()
+        self._axis_color.setText(str(color))
+        self._fcn_axis_color()
 
     # ------------ TITLE ------------
     def _fcn_axis_title(self):
@@ -174,6 +182,20 @@ class UiSignals(object):
             self._cbar_update(self._signal._tf)
         self._signal_canvas.update()
         self._previous_form = form
+
+    def _fcn_sig_smooth(self):
+        """Set smooth line."""
+        if is_opengl_installed():
+            method = 'agg' if self._sig_smooth.isChecked() else 'gl'
+            self._signal._line.method = method
+        else:
+            self._sig_smooth.setEnabled(False)
+
+    def _fcn_color_sig_picker(self):
+        """Pick color for signal."""
+        color = dialog_color()
+        self._sig_color.setText(str(color))
+        self._fcn_set_signal()
 
     def _fcn_disp_apply_tf(self):
         """Display the apply TF button."""

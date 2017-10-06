@@ -9,8 +9,6 @@ from ...visuals import CbarVisual
 from ..gui import Ui_MainWindow
 from ...utils import color2vb
 
-__all__ = ('UiInit')
-
 
 class VisbrainCanvas(object):
     """Create a canvas with an embeded axis.
@@ -330,7 +328,7 @@ class GridShortcuts(object):
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
             """Executed function when double click mouse over canvas."""
-            n_rows, n_cols = self._grid._g_size
+            n_rows, n_cols = self._grid.g_size
             rect = self._grid_canvas.camera.rect
             w_cols, w_rows = self._grid_canvas.canvas.size
             # Get camera limits :
@@ -339,10 +337,10 @@ class GridShortcuts(object):
             x, y = event.pos
             # Pass in the camera system [-1, 1]:
             x_cam = (width * (x / w_cols) + left) + 1.
-            y_cam = (height * (w_rows - y) / w_rows) + bottom + 1.
+            y_cam = (height * ((w_rows - y) / w_rows) + bottom) + 1.
             # Get signal location :
             x_loc = int(np.ceil((n_cols / 2.) * x_cam) - 1.)
-            y_loc = int(abs(np.ceil((n_rows / 2.) * y_cam) - 1))
+            y_loc = int(n_rows - np.ceil((n_rows / 2.) * y_cam))
             y_loc, x_loc = self._grid._convert_row_cols(y_loc, x_loc)
             # String conversion :
             if self._data.ndim == 2:

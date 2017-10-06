@@ -1016,7 +1016,7 @@ class BrainUserMethods(object):
         self._fcn_apply_roi_selection()
         # Add ROI to mesh list :
         self._tobj[name] = self.volume
-        self._fcn_updateProjList()
+        self._fcn_update_proj_list()
 
     def roi_light_reflection(self, reflect_on=None):
         """Change how light is reflecting onto roi.
@@ -1206,7 +1206,7 @@ class BrainUserMethods(object):
         self.cbqt.select(name)
         # Display / hide the colorbar :
         self.menuDispCbar.setChecked(visible)
-        self._fcn_menuCbar()
+        self._fcn_menu_disp_cbar()
 
     def cbar_list(self):
         """Get the list of objects for which the colorbar can be controlled.

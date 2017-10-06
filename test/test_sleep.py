@@ -8,22 +8,25 @@ from vispy.util.keys import Key
 from PyQt5 import QtWidgets
 
 from visbrain import Sleep
+from visbrain.io import download_file
 
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 
 # Create a random dataset :
-sf, nelec, npts = 1000., 8, 100000
-data = 10. * np.random.rand(nelec, npts)
-channels = ['Cz', 'Fz', 'C1', 'C2', 'C3', 'C4', 'F1', 'other']
-hypno = np.random.randint(-1, 3, (npts,))
+download_file('sleep_edf.zip', to_path=path_to_tmp, unzip=True)
 onset = np.array([100, 2000, 5000])
+
+
+def path_to_edf(name):
+    """Get path to the edf file."""
+    return os.path.join(path_to_tmp, name)
 
 # Create Sleep application :
 app = QtWidgets.QApplication([])
-sp = Sleep(data=data, channels=channels,
-           sf=sf, downsample=100., hypno=hypno, axis=False, hedit=True,
+sp = Sleep(data=path_to_edf('excerpt2.edf'),
+           hypno=path_to_edf('Hypnogram_excerpt2.txt'), axis=True, hedit=True,
            annotations=onset)
 
 
@@ -47,6 +50,7 @@ class TestSleep(object):
     ###########################################################################
     def test_ui_detections(self):
         """Test method for detections."""
+        sp._ToolDetectChan.setCurrentIndex(2)  # Select CZ channel
         for k in range(6):
             sp._ToolDetectType.setCurrentIndex(k)
             sp._fcn_applyDetection()
@@ -118,9 +122,9 @@ class TestSleep(object):
 
     def test_load_selected_detection(self):
         """Test loading selected detection."""
-        sp.loadDetectSelect(filename=self._path_to_tmp("selected_detect_Cz-"
+        sp.loadDetectSelect(filename=self._path_to_tmp("selected_detect_CZ-"
                                                        "Spindles.txt"))
-        sp.loadDetectSelect(filename=self._path_to_tmp("selected_detect_Cz-"
+        sp.loadDetectSelect(filename=self._path_to_tmp("selected_detect_CZ-"
                                                        "Spindles.csv"))
 
     def test_load_annotations(self):
@@ -212,6 +216,10 @@ class TestSleep(object):
     ###########################################################################
     #                          DELETE TMP FOLDER
     ###########################################################################
+
+    def test_close_sleep_app(self):
+        """Close Sleep application."""
+        app.quit()
 
     def test_delete_tmp_folder(self):
         """Delete tmp/folder."""

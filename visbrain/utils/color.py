@@ -44,18 +44,15 @@ def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0):
     """
     # Default or static color :
     if (color is None) or isinstance(color, (str, tuple, list, np.ndarray)):
-        # Default color :
-        if color is None:
+        if color is None:  # Default
             coltuple = default
-        # Static color :
-        elif isinstance(color, (tuple, list, np.ndarray)):
+        elif isinstance(color, (tuple, list, np.ndarray)):  # Static
             color = np.squeeze(color)
             if len(color) == 4:
                 alpha = color[-1]
                 color = color[0:-1]
             coltuple = color
-        # Matplotlib color :
-        elif isinstance(color, str) and (color[0] is not '#'):
+        elif isinstance(color, str) and (color[0] is not '#'):  # Matplotlib
             # Check if the name is in the Matplotlib database :
             if color in mplcol.cnames.keys():
                 coltuple = mplcol.hex2color(mplcol.cnames[color])
@@ -63,8 +60,7 @@ def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0):
                 warn("The color name " + color + " is not in the matplotlib "
                      "database. Default color will be used instead.")
                 coltuple = default
-        # Hexadecimal colors :
-        elif isinstance(color, str) and (color[0] is '#'):
+        elif isinstance(color, str) and (color[0] is '#'):  # Hexadecimal
             try:
                 coltuple = mplcol.hex2color(color)
             except:

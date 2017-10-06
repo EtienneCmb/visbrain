@@ -4,11 +4,11 @@ from PyQt5 import QtWidgets
 
 import vispy.app as visapp
 
-from .uiInit import uiInit
+from .ui_init import UiInit
 from ..visuals import CbarQt, CbarBase, CbarObjetcs
 
 
-class Colorbar(uiInit):
+class Colorbar(UiInit):
     """Display a colorbar editor.
 
     Parameters
@@ -64,7 +64,7 @@ class Colorbar(uiInit):
         # Create the app and initialize all graphical elements :
         self._app = QtWidgets.QApplication(sys.argv)
         # Initialise GUI :
-        uiInit.__init__(self)
+        UiInit.__init__(self)
 
         cbobjs = CbarObjetcs()
         if isinstance(config, str):

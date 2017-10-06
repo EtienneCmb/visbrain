@@ -1,0 +1,33 @@
+build: false
+
+environment:
+  matrix:
+    - PYTHON_VERSION: 3.6
+      MINICONDA: C:\Miniconda36-x64
+
+init:
+  - "ECHO %PYTHON_VERSION% %MINICONDA%"
+
+install:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-desktop.ps1'))
+  # - ps: $screen_resolution = '1280x800'; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-desktop.ps1'))
+  # ------------------- PYTHON ENVIRONNEMENT -------------------
+  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - "conda create -q -n testenv python=%PYTHON_VERSION% numpy scipy matplotlib pip"
+  # Activate testing environnement :
+  - activate testenv
+  # Install dependencies :
+  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pytest pytest-cov
+  # ------------------- VISPY -------------------
+  - cd ../
+  - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
+  - ls
+  - cd visbrain/
+  # ------------------- VISBRAIN -------------------
+  - pip install -e .
+
+test_script:
+  - py.test --cov --verbose
