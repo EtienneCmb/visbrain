@@ -5,14 +5,17 @@ Plotting properties
 Display topographic plots in a grid using several plotting properties.
 
 Download topoplot data (topoplot_data.npz) :
-https://drive.google.com/open?id=0B6vtJiCQZUBvaHNUeTROWDBPRG8
+https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1
 
 .. image:: ../../picture/pictopo/ex_topoplot_plotting_properties.png
 """
 import numpy as np
+
 from visbrain import Topo
+from visbrain.io import download_file
 
 # Load the data :
+download_file('topoplot_data.npz')
 mat = np.load('topoplot_data.npz')
 xyz, data = mat['xyz'], mat['data']
 channels = [str(k) for k in range(len(data))]

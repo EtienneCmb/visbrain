@@ -1,11 +1,13 @@
 """Command-line control of visbrain."""
 from __future__ import print_function
 import click
+import os.path
+import numpy as np
+
 from visbrain import Sleep
 from visbrain.io import (write_fig_hyp, read_hypno, oversample_hypno,
                          write_csv)
 from visbrain.utils import sleepstats
-import os.path
 
 ###############################################################################
 #                                  SLEEP
@@ -89,8 +91,8 @@ def cli_fig_hyp(hypno, grid, color, outfile, dpi):
     hypno, sf_hyp = read_hypno(hypno)
     # Bad cases (e.g. EDF files from DreamBank.net)
     if sf_hyp < 1:
-        time_base = 1 / sf_hyp
-        hypno = oversample_hypno(hypno, len(hypno) * time_base)
+        mult = int(np.round(len(hypno) / sf_hyp))
+        hypno = oversample_hypno(hypno, mult)
         sf_hyp = 1
     # Create figure
     write_fig_hyp(outfile, hypno, sf=sf_hyp, tstartsec=0, grid=grid,
@@ -139,8 +141,8 @@ def cli_sleep_stats(hypno, outfile):
     # Load hypnogram
     hypno, sf_hyp = read_hypno(hypno_path)
     if sf_hyp < 1:
-        time_base = 1 / sf_hyp
-        hypno = oversample_hypno(hypno, len(hypno) * time_base)
+        mult = int(np.round(len(hypno) / sf_hyp))
+        hypno = oversample_hypno(hypno, mult)
         sf_hyp = 1
 
     # Get sleep stats

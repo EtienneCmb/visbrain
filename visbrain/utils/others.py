@@ -2,6 +2,7 @@
 
 import sys
 import os
+import logging
 from warnings import warn
 
 import numpy as np
@@ -11,9 +12,38 @@ from vispy.geometry.isosurface import isosurface
 
 from .sigproc import smooth_3d
 
-__all__ = ('vis_args', 'check_downsampling', 'get_dsf',
+__all__ = ('verbose', 'vis_args', 'check_downsampling', 'get_dsf',
            'vispy_array', 'convert_meshdata', 'volume_to_mesh',
            'add_brain_template', 'remove_brain_template', 'set_if_not_none')
+
+
+def verbose(msg, level=None, display=True):
+    """Display messages.
+
+    Parameters
+    ----------
+    msg : string
+        Message to display
+    level : string | None
+        Message level. Use None to simply print the message, 'debug', 'info',
+        'warning', 'error', 'critical' for logging or any Exception.
+    display : bool | True
+        Display or hide the message.
+    """
+    if level is None:
+        if display:
+            sys.stderr.write(msg + '\n')
+    elif level in ['debug', 'info', 'warning', 'error', 'critical']:
+        format = "%(levelname)s : %(message)s"
+        logging.basicConfig(format=format, level=eval(
+            'logging.' + level.upper()))
+        if display:
+            eval('logging.%s(%s)' % (level, 'msg'))
+    elif level == Warning:
+        warn(msg)
+    else:
+        if display:
+            raise eval('%s(%s)' % (level.__name__, 'msg'))
 
 
 def vis_args(kw, prefix, ignore=[]):

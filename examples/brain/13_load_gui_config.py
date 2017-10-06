@@ -11,17 +11,19 @@ Load this file :
 * Using the load_config() method
 
 Download configuration file (config.txt) :
-https://drive.google.com/open?id=0B6vtJiCQZUBvUm9menhtUzVhS2M
+https://www.dropbox.com/s/o0ljy16mpz7mmxu/brain_config.txt?dl=1
 
 .. image:: ../../picture/picbrain/ex_load_config.png
 """
 from visbrain import Brain
+from visbrain.io import download_file
 
 # Define an empty Brain instance
 vb = Brain()
 
 # Load the configuration file :
-vb.load_config('config.txt')
+download_file('brain_config.txt')
+vb.load_config('brain_config.txt')
 
 """
 Alternatively, if you want you can use the following method to save a new

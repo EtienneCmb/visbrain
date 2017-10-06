@@ -25,6 +25,7 @@ install:
   - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate codecov pytest pytest-cov
   # ------------------- VISPY -------------------
   - cd ../
+  # Install the developper version of VisPy :
   - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
   - cd visbrain/
   # ------------------- VISBRAIN -------------------
@@ -40,3 +41,9 @@ notifications:
     email: false
 after_success:
   - codecov
+
+# screenshot tests are really slow on travis... but installing image librairies
+# does't fix it.
+# before_install:
+#   - sudo apt-get -qq install libfreetype6-dev libjpeg-turbo-progs
+# sudo: required

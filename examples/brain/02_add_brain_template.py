@@ -16,14 +16,14 @@ import numpy as np
 
 from visbrain import Brain
 from visbrain.utils import (add_brain_template, remove_brain_template)
+from visbrain.io import download_file
 
+"""Download the brain template. Use either 'WhiteMatter', 'Inflated' or
+'Sphere'
 """
-Define path to the template and load it. By default, the path is set to
-~/home/Templates/ so you have to adapt it.
-"""
-path_to_file = os.path.join(*(os.getenv("HOME"), 'Templates',
-                              'WhiteMatter.npz'))
-mat = np.load(path_to_file)
+template = 'WhiteMatter'
+download_file(template + '.npz')
+mat = np.load(template + '.npz')
 
 """
 Get variables for defining a new template. Vertices are nodes connected by the
@@ -39,16 +39,16 @@ lr_index = mat['lr_index']
 Add the template to visbrain. After adding this template, it will always be
 accessible unless you use the remove_brain_template() function
 """
-add_brain_template('WhiteMatter', vert, faces, norm, lr_index)
+add_brain_template(template, vert, faces, norm, lr_index)
 
 """
 Open the interface and select the added template
 """
-vb = Brain(a_template='WhiteMatter')
+vb = Brain(a_template=template)
 print('Brain templates : ', vb.brain_list())
 vb.show()
 
 """
 Finally, and this is not a necessity, remove the template
 """
-remove_brain_template('WhiteMatter')
+remove_brain_template(template)

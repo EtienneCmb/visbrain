@@ -72,14 +72,14 @@ Finally, install Visbrain :
 
 .. code-block:: shell
 
-    pip install visbain
+    pip install visbrain
 
 Develop mode
 ============
 
 .. code-block:: shell
 
-    git clone git@github.com:EtienneCmb/visbrain.git visbrain/
+    git clone https://github.com/EtienneCmb/visbrain.git visbrain/
     cd visbrain/
     pip install -r requirements.txt
     python setup.py develop 

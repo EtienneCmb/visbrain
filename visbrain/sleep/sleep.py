@@ -52,7 +52,7 @@ class Sleep(ReadSleepData, UiInit, Visuals, UiElements, Tools,
         The sampling frequency of raw data.
     downsample : float | 100.
         The downsampling frequency for the data and hypnogram raw data.
-    axis : bool | Fals
+    axis : bool | False
         Specify if each axis have to contains its own axis. Be carefull
         with this option, the rendering can be much slower.
     line : string | 'gl'
