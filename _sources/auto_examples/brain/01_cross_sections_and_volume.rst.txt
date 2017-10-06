@@ -16,17 +16,17 @@ The nibabel package should also be installed.
 
 .. code-block:: python
 
-    import os
     from visbrain import Brain
-    from visbrain.io import read_nifti
+    from visbrain.io import read_nifti, download_file
 
     """Import the volume and the associated affine transformation
     """
-    volume_name = 'GG-853-WM-0.7mm'
-    path_to_nifti = os.getenv("HOME")
-    file_nifti = 'GG-853-WM-0.7mm.nii.gz'
-    path = os.path.join(path_to_nifti, file_nifti)
-    data, header, tf = read_nifti(path)
+    volume_name = 'GG-853-WM-0.7mm.nii.gz'
+
+    """Download the file. 
+    """
+    download_file(volume_name)
+    data, header, tf = read_nifti(volume_name)
 
     vb = Brain()
 

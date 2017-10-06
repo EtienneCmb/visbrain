@@ -11,22 +11,33 @@ A full list of supported format can be found here:
 https://martinos.org/mne/stable/python_reference.html#reading-raw-data
 
 Required dataset at :
-https://www.dropbox.com/s/t1s4e39gu3wdb6i/sleep_brainvision.zip?dl=0
+https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1
 
 .. image:: ../../picture/picsleep/ex_LoadMNE.png
 """
+import os
 from mne import io
 from visbrain import Sleep
 from visbrain.io import download_file
 
-# Download the brainvision file :
-download_file('sleep_brainvision.zip', unzip=True)
+current_path = os.getcwd()
+target_path = os.path.join(current_path, 'data', 'brainvision')
 
-# Read raw data unsing MNE-python :
-raw = io.read_raw_brainvision(vhdr_fname='sub-02.vhdr', preload=True)
+# Download dataset :
+download_file("sleep_brainvision.zip", unzip=True, to_path=target_path)
+
+dfile = os.path.join(target_path, 'sub-02.vhdr')
+hfile = os.path.join(target_path, 'sub-02.hyp')
+
+# Read raw data using MNE-python :
+raw = io.read_raw_brainvision(vhdr_fname=dfile, preload=True)
 
 # Extract data, sampling frequency and channels names
 data, sf, chan = raw._data, raw.info['sfreq'], raw.info['ch_names']
 
 # Now, pass all the arguments to the Sleep module :
-Sleep(data=data, sf=sf, channels=chan, hypno='sub-02.hyp').show()
+Sleep(data=data, sf=sf, channels=chan, hypno=hfile).show()
+
+# Alternatively, these steps can be done automatically by using the 'use_mne'
+# input argument of sleep
+# Sleep(data=dfile, hypno=hfile, use_mne=True).show()

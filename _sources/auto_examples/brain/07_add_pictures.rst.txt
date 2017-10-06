@@ -10,7 +10,7 @@ This example demonstrate how to display small pictures attached to sources. The
 pictures can then be controlled from the GUI in the Sources/Pictures tab.
 
 Download source's coordinates (xyz_sample.npz) :
-https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE
+https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 
 .. image:: ../../picture/picbrain/ex_pictures.png
 
@@ -18,11 +18,14 @@ https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE
 
 .. code-block:: python
 
-    from visbrain import Brain
     import numpy as np
+
+    from visbrain import Brain
+    from visbrain.io import download_file
 
     kwargs = {}
     # Load the xyz coordinates and corresponding subject name :
+    download_file('xyz_sample.npz')
     s_xyz = np.load('xyz_sample.npz')['xyz']
     s_xyz = s_xyz[4::10, ...]
     kwargs['s_text'] = [str(k) for k in range(s_xyz.shape[0])]

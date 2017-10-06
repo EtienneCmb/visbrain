@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Convert mesh data &mdash; visbrain 0.3.4 documentation</title>
+  <title>Convert mesh data &mdash; visbrain 0.3.5 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.4 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Colorbar control" href="12_colorbar_control.html"/>
         <link rel="prev" title="Add Nifti volume" href="10_add_nifti_volume.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.4
+                0.3.5
               </div>
             
           
@@ -197,7 +197,7 @@
 <p>This example illustrate how to convert mesh data to be compatible with
 visbrain.</p>
 <p>As an example, download the Custom.npz file :
-<a class="reference external" href="https://drive.google.com/open?id=0B6vtJiCQZUBvVF9wWE5jRTF0dzQ">https://drive.google.com/open?id=0B6vtJiCQZUBvVF9wWE5jRTF0dzQ</a></p>
+<a class="reference external" href="https://www.dropbox.com/s/phzptkbht4us33q/Custom.npz?dl=1">https://www.dropbox.com/s/phzptkbht4us33q/Custom.npz?dl=1</a></p>
 <img alt="../../_images/ex_convert_mesh_data.png" src="../../_images/ex_convert_mesh_data.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
@@ -207,10 +207,11 @@ visbrain.</p>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
 <span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">convert_meshdata</span><span class="p">,</span> <span class="n">add_brain_template</span><span class="p">,</span>
                             <span class="n">remove_brain_template</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="c1"># Define path to the template and load it :</span>
-<span class="n">path_to_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;HOME&quot;</span><span class="p">),</span> <span class="s1">&#39;Templates&#39;</span><span class="p">,</span> <span class="s1">&#39;Custom.npz&#39;</span><span class="p">))</span>
-<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">)</span>
+<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;Custom.npz&#39;</span><span class="p">)</span>
+<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;Custom.npz&#39;</span><span class="p">)</span>
 
 <span class="c1"># Get vertices and faces from the archive :</span>
 <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;coord&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;tri&#39;</span><span class="p">]</span>
@@ -289,7 +290,7 @@ visbrain.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.4',
+            VERSION:'0.3.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

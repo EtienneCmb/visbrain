@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Connect deep sources &mdash; visbrain 0.3.4 documentation</title>
+  <title>Connect deep sources &mdash; visbrain 0.3.5 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.4 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add Region of interest (ROI)" href="05_region_of_interest.html"/>
         <link rel="prev" title="Add deep sources" href="03_sources.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.4
+                0.3.5
               </div>
             
           
@@ -197,11 +197,13 @@
 <p>Display and customize connectivity. To this end, we define some deep sources
 and connect them.</p>
 <p>Download source’s coordinates (xyz_sample.npz) :
-<a class="reference external" href="https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE">https://drive.google.com/open?id=0B6vtJiCQZUBvSFJvaTFSRDJvMEE</a></p>
+<a class="reference external" href="https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1">https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1</a></p>
 <img alt="../../_images/ex_connectivity.png" src="../../_images/ex_connectivity.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="c1"># Create an empty kwargs dictionnary :</span>
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -209,6 +211,7 @@ and connect them.</p>
 <span class="c1"># ____________________________ DATA ____________________________</span>
 
 <span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
+<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
 <span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
 <span class="n">s_xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
 
@@ -342,7 +345,7 @@ and connect them.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.4',
+            VERSION:'0.3.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

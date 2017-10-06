@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.utils.others &mdash; visbrain 0.3.4 documentation</title>
+  <title>visbrain.utils.others &mdash; visbrain 0.3.5 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.4 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.5 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.4
+                0.3.5
               </div>
             
           
@@ -169,6 +169,7 @@
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -178,9 +179,38 @@
 
 <span class="kn">from</span> <span class="nn">.sigproc</span> <span class="k">import</span> <span class="n">smooth_3d</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vis_args&#39;</span><span class="p">,</span> <span class="s1">&#39;check_downsampling&#39;</span><span class="p">,</span> <span class="s1">&#39;get_dsf&#39;</span><span class="p">,</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="s1">&#39;vis_args&#39;</span><span class="p">,</span> <span class="s1">&#39;check_downsampling&#39;</span><span class="p">,</span> <span class="s1">&#39;get_dsf&#39;</span><span class="p">,</span>
            <span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span> <span class="s1">&#39;volume_to_mesh&#39;</span><span class="p">,</span>
            <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;set_if_not_none&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display messages.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    msg : string</span>
+<span class="sd">        Message to display</span>
+<span class="sd">    level : string | None</span>
+<span class="sd">        Message level. Use None to simply print the message, &#39;debug&#39;, &#39;info&#39;,</span>
+<span class="sd">        &#39;warning&#39;, &#39;error&#39;, &#39;critical&#39; for logging or any Exception.</span>
+<span class="sd">    display : bool | True</span>
+<span class="sd">        Display or hide the message.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">level</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;debug&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;warning&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="s1">&#39;critical&#39;</span><span class="p">]:</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(levelname)s</span><span class="s2"> : </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span>
+            <span class="s1">&#39;logging.&#39;</span> <span class="o">+</span> <span class="n">level</span><span class="o">.</span><span class="n">upper</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+            <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;logging.</span><span class="si">%s</span><span class="s1">(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="s1">&#39;msg&#39;</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="ne">Warning</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">level</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;msg&#39;</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">vis_args</span><span class="p">(</span><span class="n">kw</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">[]):</span>
@@ -482,7 +512,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.4',
+            VERSION:'0.3.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

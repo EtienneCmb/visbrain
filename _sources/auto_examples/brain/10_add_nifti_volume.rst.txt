@@ -26,7 +26,7 @@ https://brainder.org/download/flair/
     import os
 
     from visbrain import Brain
-    from visbrain.io import read_nifti
+    from visbrain.io import read_nifti, download_file
 
     # Define four sources sources :
     s_xyz = np.array([[29.9, -37.3, -19.3],
@@ -41,18 +41,12 @@ https://brainder.org/download/flair/
     print('Volumes available by default : ', vb.volume_list())
 
     """
-    If you don't have access to a Nifti file, download one of the volume available
-    at https://brainder.org/download/flair/.
-    """
-    path_to_nifti1 = os.getenv("HOME")       # Path to the Nifti file
-    file_nifti1 = 'GG-853-GM-0.7mm.nii.gz'   # Name of the Nifti file
-    path1 = os.path.join(path_to_nifti1, file_nifti1)
-
-    """
     Load the Nifti file. The read_nifti function load the data and the
     transformation to convert data into the MNI space :
     """
-    data1, header1, tf1 = read_nifti(path1)
+    nifti1 = 'GG-853-GM-0.7mm.nii.gz'
+    download_file(nifti1)
+    data1, header1, tf1 = read_nifti(nifti1)
     # print(header1)
 
     # Add the volume to the GUI :
@@ -60,10 +54,9 @@ https://brainder.org/download/flair/
     print('Add Volume1 to the list of volumes : ', vb.volume_list())
 
     # You can add multiple volumes :
-    path_to_nifti2 = os.getenv("HOME")
-    file_nifti2 = 'GG-853-WM-0.7mm.nii.gz'
-    path2 = os.path.join(path_to_nifti2, file_nifti2)
-    data2, header2, tf2 = read_nifti(path2)
+    nifti2 = 'GG-853-WM-0.7mm.nii.gz'
+    download_file(nifti2)
+    data2, header2, tf2 = read_nifti(nifti2)
     vb.add_volume('Volume2', data2, transform=tf2)
     print('Add Volume2 to the list of volumes : ', vb.volume_list())
 

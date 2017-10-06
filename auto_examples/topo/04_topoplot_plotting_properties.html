@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Plotting properties &mdash; visbrain 0.3.4 documentation</title>
+  <title>Plotting properties &mdash; visbrain 0.3.5 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.4 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Connectivity" href="05_topoplot_and_connectivity.html"/>
         <link rel="prev" title="Shared colorbar" href="03_shared_colorbar.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.4
+                0.3.5
               </div>
             
           
@@ -188,12 +188,15 @@
 <span id="sphx-glr-auto-examples-topo-04-topoplot-plotting-properties-py"></span><h1>Plotting properties<a class="headerlink" href="#plotting-properties" title="Permalink to this headline">¶</a></h1>
 <p>Display topographic plots in a grid using several plotting properties.</p>
 <p>Download topoplot data (topoplot_data.npz) :
-<a class="reference external" href="https://drive.google.com/open?id=0B6vtJiCQZUBvaHNUeTROWDBPRG8">https://drive.google.com/open?id=0B6vtJiCQZUBvaHNUeTROWDBPRG8</a></p>
+<a class="reference external" href="https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1">https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1</a></p>
 <img alt="../../_images/ex_topoplot_plotting_properties.png" src="../../_images/ex_topoplot_plotting_properties.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Topo</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="c1"># Load the data :</span>
+<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;topoplot_data.npz&#39;</span><span class="p">)</span>
 <span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;topoplot_data.npz&#39;</span><span class="p">)</span>
 <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
 <span class="n">channels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))]</span>
@@ -295,7 +298,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.4',
+            VERSION:'0.3.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

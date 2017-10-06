@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Load a BrainVision file &mdash; visbrain 0.3.4 documentation</title>
+  <title>Load a BrainVision file &mdash; visbrain 0.3.5 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.4 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Load EDF file" href="load_edf.html"/>
         <link rel="prev" title="Butterfly plot" href="../signal/06_butterfly.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.4
+                0.3.5
               </div>
             
           
@@ -188,15 +188,23 @@
 <span id="sphx-glr-auto-examples-sleep-load-brainvision-py"></span><h1>Load a BrainVision file<a class="headerlink" href="#load-a-brainvision-file" title="Permalink to this headline">¶</a></h1>
 <p>This example demonstrate how to load a BrainVision file.</p>
 <p>Required dataset at :
-<a class="reference external" href="https://www.dropbox.com/s/t1s4e39gu3wdb6i/sleep_brainvision.zip?dl=0">https://www.dropbox.com/s/t1s4e39gu3wdb6i/sleep_brainvision.zip?dl=0</a></p>
+<a class="reference external" href="https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1">https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1</a></p>
 <img alt="../../_images/ex_LoadBrainVision.png" src="../../_images/ex_LoadBrainVision.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
-<span class="c1"># Download dataset :</span>
-<span class="n">download_file</span><span class="p">(</span><span class="s2">&quot;sleep_brainvision.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">current_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="n">target_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_path</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;brainvision&#39;</span><span class="p">)</span>
 
-<span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;sub-02.vhdr&#39;</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;sub-02.hyp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># Download dataset :</span>
+<span class="n">download_file</span><span class="p">(</span><span class="s2">&quot;sleep_brainvision.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">to_path</span><span class="o">=</span><span class="n">target_path</span><span class="p">)</span>
+
+<span class="n">dfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;sub-02.vhdr&#39;</span><span class="p">)</span>
+<span class="n">hfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;sub-02.hyp&#39;</span><span class="p">)</span>
+<span class="n">cfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;sub-02_config.txt&#39;</span><span class="p">)</span>
+
+<span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dfile</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">hfile</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="n">cfile</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -253,7 +261,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.4',
+            VERSION:'0.3.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

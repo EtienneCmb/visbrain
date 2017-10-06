@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Cross-sections and volume control &mdash; visbrain 0.3.4 documentation</title>
+  <title>Cross-sections and volume control &mdash; visbrain 0.3.5 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.4 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add a brain template" href="02_add_brain_template.html"/>
         <link rel="prev" title="Brain control" href="00_brain_control.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.4
+                0.3.5
               </div>
             
           
@@ -198,17 +198,17 @@
 nifti volume downloadable at : <a class="reference external" href="https://brainder.org/download/flair/">https://brainder.org/download/flair/</a>
 The nibabel package should also be installed.</p>
 <img alt="../../_images/ex_crossec_and_volume.png" src="../../_images/ex_crossec_and_volume.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">read_nifti</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">read_nifti</span><span class="p">,</span> <span class="n">download_file</span>
 
 <span class="sd">&quot;&quot;&quot;Import the volume and the associated affine transformation</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">volume_name</span> <span class="o">=</span> <span class="s1">&#39;GG-853-WM-0.7mm&#39;</span>
-<span class="n">path_to_nifti</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;HOME&quot;</span><span class="p">)</span>
-<span class="n">file_nifti</span> <span class="o">=</span> <span class="s1">&#39;GG-853-WM-0.7mm.nii.gz&#39;</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_to_nifti</span><span class="p">,</span> <span class="n">file_nifti</span><span class="p">)</span>
-<span class="n">data</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">read_nifti</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">volume_name</span> <span class="o">=</span> <span class="s1">&#39;GG-853-WM-0.7mm.nii.gz&#39;</span>
+
+<span class="sd">&quot;&quot;&quot;Download the file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">download_file</span><span class="p">(</span><span class="n">volume_name</span><span class="p">)</span>
+<span class="n">data</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">read_nifti</span><span class="p">(</span><span class="n">volume_name</span><span class="p">)</span>
 
 <span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
 
@@ -287,7 +287,7 @@ The nibabel package should also be installed.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.4',
+            VERSION:'0.3.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

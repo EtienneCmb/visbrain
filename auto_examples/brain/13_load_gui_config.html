@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Load Graphical User Interface configuration &mdash; visbrain 0.3.4 documentation</title>
+  <title>Load Graphical User Interface configuration &mdash; visbrain 0.3.5 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.4 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Open the colorbar editor" href="../colorbar/00_open_editor.html"/>
         <link rel="prev" title="Colorbar control" href="12_colorbar_control.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.4
+                0.3.5
               </div>
             
           
@@ -202,15 +202,17 @@ session.</p>
 <li>Using the load_config() method</li>
 </ul>
 <p>Download configuration file (config.txt) :
-<a class="reference external" href="https://drive.google.com/open?id=0B6vtJiCQZUBvUm9menhtUzVhS2M">https://drive.google.com/open?id=0B6vtJiCQZUBvUm9menhtUzVhS2M</a></p>
+<a class="reference external" href="https://www.dropbox.com/s/o0ljy16mpz7mmxu/brain_config.txt?dl=1">https://www.dropbox.com/s/o0ljy16mpz7mmxu/brain_config.txt?dl=1</a></p>
 <img alt="../../_images/ex_load_config.png" src="../../_images/ex_load_config.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="c1"># Define an empty Brain instance</span>
 <span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
 
 <span class="c1"># Load the configuration file :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;config.txt&#39;</span><span class="p">)</span>
+<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;brain_config.txt&#39;</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="s1">&#39;brain_config.txt&#39;</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Alternatively, if you want you can use the following method to save a new</span>
@@ -275,7 +277,7 @@ session.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.4',
+            VERSION:'0.3.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

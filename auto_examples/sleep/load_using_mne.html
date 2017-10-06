@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Load a file using MNE-python &mdash; visbrain 0.3.4 documentation</title>
+  <title>Load a file using MNE-python &mdash; visbrain 0.3.5 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.4 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Basic topoplot" href="../topo/00_basic_topoplot.html"/>
         <link rel="prev" title="Load REC files" href="load_rec.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.4
+                0.3.5
               </div>
             
           
@@ -192,23 +192,34 @@
 <p>A full list of supported format can be found here:
 <a class="reference external" href="https://martinos.org/mne/stable/python_reference.html#reading-raw-data">https://martinos.org/mne/stable/python_reference.html#reading-raw-data</a></p>
 <p>Required dataset at :
-<a class="reference external" href="https://www.dropbox.com/s/t1s4e39gu3wdb6i/sleep_brainvision.zip?dl=0">https://www.dropbox.com/s/t1s4e39gu3wdb6i/sleep_brainvision.zip?dl=0</a></p>
+<a class="reference external" href="https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1">https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1</a></p>
 <img alt="../../_images/ex_LoadMNE.png" src="../../_images/ex_LoadMNE.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
-<span class="c1"># Download the brainvision file :</span>
-<span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;sleep_brainvision.zip&#39;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">current_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="n">target_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_path</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;brainvision&#39;</span><span class="p">)</span>
 
-<span class="c1"># Read raw data unsing MNE-python :</span>
-<span class="n">raw</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read_raw_brainvision</span><span class="p">(</span><span class="n">vhdr_fname</span><span class="o">=</span><span class="s1">&#39;sub-02.vhdr&#39;</span><span class="p">,</span> <span class="n">preload</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># Download dataset :</span>
+<span class="n">download_file</span><span class="p">(</span><span class="s2">&quot;sleep_brainvision.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">to_path</span><span class="o">=</span><span class="n">target_path</span><span class="p">)</span>
+
+<span class="n">dfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;sub-02.vhdr&#39;</span><span class="p">)</span>
+<span class="n">hfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;sub-02.hyp&#39;</span><span class="p">)</span>
+
+<span class="c1"># Read raw data using MNE-python :</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">read_raw_brainvision</span><span class="p">(</span><span class="n">vhdr_fname</span><span class="o">=</span><span class="n">dfile</span><span class="p">,</span> <span class="n">preload</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="c1"># Extract data, sampling frequency and channels names</span>
 <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">chan</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">],</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">]</span>
 
 <span class="c1"># Now, pass all the arguments to the Sleep module :</span>
-<span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">chan</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="s1">&#39;sub-02.hyp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">chan</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">hfile</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Alternatively, these steps can be done automatically by using the &#39;use_mne&#39;</span>
+<span class="c1"># input argument of sleep</span>
+<span class="c1"># Sleep(data=dfile, hypno=hfile, use_mne=True).show()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -265,7 +276,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.4',
+            VERSION:'0.3.5',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
