@@ -134,6 +134,7 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
 
     # Save as 600 dpi .png
     plt.savefig(file, format='png', dpi=dpi, bbox_inches='tight')
+    plt.close()
 
 
 def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
