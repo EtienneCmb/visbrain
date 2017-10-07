@@ -221,6 +221,7 @@ class ChannelPlot(PrepareData):
 
         # Variables :
         self._camera = camera
+        self._preproc_channel = -1
         self.rect = []
         self.width = width
         self.autoamp = False
@@ -312,7 +313,14 @@ class ChannelPlot(PrepareData):
 
         # Prepare the data (only if needed) :
         if self:
-            data_sl = self._prepare_data(sf, data_sl.copy(), time_sl)
+            if self._preproc_channel == -1:  # prepare all channels
+                data_sl = self._prepare_data(sf, data_sl.copy(), time_sl)
+            else:  # filt only one channel
+                # Get on which visible channel to apply preprocessing :
+                chan_lst_viz = list(np.arange(len(self))[self.visible])
+                to_chan = chan_lst_viz.index(self._preproc_channel)
+                data_sl[[to_chan], :] = self._prepare_data(sf, data_sl[
+                    [to_chan], :].copy(), time_sl)
 
         # Set data to each plot :
         for l, (i, k) in enumerate(self):
