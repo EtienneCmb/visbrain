@@ -32,5 +32,6 @@ s += s2
 # print(s.project_modulation.__doc__)
 
 
-print(s.project_modulation.__doc__)
+print(s.project_modulation)
+s.project_repartition
 # s.preview(axis=False)

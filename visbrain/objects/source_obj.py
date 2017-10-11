@@ -27,9 +27,10 @@ class SourceObj(VisbrainObject):
                  symbol='disc', radiusmin=5., radiusmax=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None, maskcolor='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
-                 text_shift=(0., 2., 0.), visible=True, _z=-10.):
+                 text_shift=(0., 2., 0.), visible=True, parent=None, _z=-10.):
         """Init."""
         self._node = scene.Node(name='SourceObj')
+        self._node.parent = parent
         # _______________________ CHECKING _______________________
         # Init Visbrain object base class :
         VisbrainObject.__init__(self)
@@ -104,10 +105,13 @@ class SourceObj(VisbrainObject):
         return np.all(self._visible)
 
     def __iter__(self):
-        """Loop over visible xyz coordinates."""
+        """Loop over visible xyz coordinates.
+
+        At each step, the coordinates are (1, 3) and not (3,).
+        """
         xyz = self.xyz  # get only visible coordinates
         for k in range(xyz.shape[0]):
-            yield xyz[k, :]
+            yield xyz[[k], :]
 
     def __add__(self, value):
         """Add two SourceObj instances.
@@ -231,8 +235,9 @@ class SourceObj(VisbrainObject):
         Returns
         -------
         modulation : array_like
-            The index faced modulations of shape (N, 3). This is a masked
-            array where the mask refer to sources that are over the radius.
+            The modulations of shape (nv, 3) or (nv, 3, 3) if index faced. This
+            is a masked array where the mask refer to sources that are over the
+            radius.
         """
         # Check inputs :
         xyz, data, v, xsign = self._check_projection(v, radius, contribute)
@@ -285,8 +290,9 @@ class SourceObj(VisbrainObject):
         Returns
         -------
         repartition: array_like
-            The index faced repartition of shape (N, 3). This is a masked
-            array where the mask refer to sources that are over the radius.
+            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced. This
+            is a masked array where the mask refer to sources that are over the
+            radius.
         """
         # Check inputs :
         xyz, _, v, xsign = self._check_projection(v, radius, contribute)
@@ -323,8 +329,7 @@ class SourceObj(VisbrainObject):
         Returns
         -------
         idx: array_like
-            The index faced repartition of shape (N, 3). This is a masked
-            array where the mask refer to sources that are over the radius.
+            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced.
         """
         # Check inputs and get masked xyz / data :
         xyz, data, v, xsign = self._check_projection(v, radius, contribute,
@@ -343,6 +348,83 @@ class SourceObj(VisbrainObject):
         idx = np.dot(m, np.ones((len(data),), dtype=bool)).reshape(nv, 3)
 
         return np.squeeze(idx)
+
+    def select_inside(self, v, select='inside'):
+        """Select sources that are either inside or outside the mesh.
+
+        Parameters
+        ----------
+        v : array_like
+            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
+        select : {'inside', 'outside'}
+            Use either 'inside' or 'outside'.
+        """
+        if v.ndim == 2:  # index faced vertices
+            v = v[:, np.newaxis, :]
+        xyz = self.xyz
+        # Predifined inside :
+        nv, index_faced = v.shape[0], v.shape[1]
+        v = v.reshape(nv * index_faced, 3)
+        inside = np.ones((xyz.shape[0],), dtype=bool)
+
+        # Loop over sources :
+        for i, k in enumerate(self):
+            # Get the euclidian distance :
+            eucl = cdist(v, k)
+            # Get the closest vertex :
+            eucl_argmin = eucl.argmin()
+            # Get distance to zero :
+            xyz_t0 = np.sqrt((k ** 2).sum())
+            v_t0 = np.sqrt((v[eucl_argmin, :] ** 2).sum())
+            inside[i] = xyz_t0 <= v_t0
+        self.visible = inside if select == 'inside' else np.invert(inside)
+
+    def fit_to_vertices(self, v):
+        """Move sources to the closest vertex.
+
+        Parameters
+        ----------
+        v : array_like
+            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
+        """
+        if v.ndim == 2:  # index faced vertices
+            v = v[:, np.newaxis, :]
+        xyz = self.xyz
+        # Predifined inside :
+        nv, index_faced = v.shape[0], v.shape[1]
+        v = v.reshape(nv * index_faced, 3)
+        new_pos = np.zeros_like(xyz)
+
+        # Loop over visible and not-masked sources :
+        for i, k in enumerate(self):
+            # Get the euclidian distance :
+            eucl = cdist(v, k)
+            # Set new coordinate using the closest vertex :
+            new_pos[i, :] = v[eucl.argmin(), :]
+        # Finally update data sources and text :
+        self._sources._data['a_position'] = new_pos
+        self._sources_text.pos = new_pos
+        self.update()
+
+    ###########################################################################
+    ###########################################################################
+    #                                  PHYSIO
+    ###########################################################################
+    ###########################################################################
+
+    def analyse_sources(self, roi_obj=None):
+        """"""
+        pass
+        # self._analysis = ...
+
+    def color_sources(self, color_by=None, roi_to_color=None):
+        """"""
+        if color_by in ['brodmann', 'aal']:
+            if not hasattr(self, '_analysis'):
+                self.analyse_sources()
+            # color_by = np.array([])
+        if isinstance(color_by, (list, np.ndarray, tuple)):
+            pass
 
     ###########################################################################
     ###########################################################################
