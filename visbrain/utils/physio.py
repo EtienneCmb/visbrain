@@ -8,9 +8,11 @@ from itertools import product
 from scipy.stats import zscore
 
 from .sigproc import smoothing
+from .others import get_data_path
 
 __all__ = ('find_non_eeg', 'rereferencing', 'bipolarization', 'commonaverage',
-           'tal2mni', 'mni2tal', 'find_roi', 'generate_eeg')
+           'tal2mni', 'mni2tal', 'find_roi', 'load_predefined_roi',
+           'generate_eeg')
 
 
 def find_non_eeg(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
@@ -319,6 +321,7 @@ def mni2tal(xyz):
     xyz[:, ~tmp] = up_t * xyz[:, ~tmp]
     return np.array(xyz[0:3, :].T)
 
+
 def find_roi(xyz, r=5., nearest=True):
     # Check xyz to be (n_sources, 3) :
     if (xyz.ndim != 2) or (xyz.shape[1] != 3):
@@ -352,7 +355,7 @@ def find_roi(xyz, r=5., nearest=True):
         info[k, 2::] = xyz[0:-1, k].ravel()
         # Apply HDR transformation :
         pos = np.linalg.lstsq(hdr, xyz[:, [k]])[0].reshape(-1)
-        sub = list(np.around(pos).astype(int))
+        sub = list(np.round(pos).astype(int))
 
         if (sub[0] <= sh[0]) and (sub[1] <= sh[1]) and (sub[2] <= sh[2]):
 
@@ -372,6 +375,37 @@ def find_roi(xyz, r=5., nearest=True):
             # print('BAD')
 
     # print(info)
+
+
+def load_predefined_roi(name):
+    """Load a predefined ROI template.
+
+    Parameters
+    ----------
+    name : {'brodmann', 'aal', 'talairach'}
+        Name of the ROI atlas to load.
+
+    Returns
+    -------
+    vol : array_like
+        The volume of shape (nx, ny, nz).
+    labels : array_like
+        Array of labels of type object and of length n_labels.
+    index : array_like
+        Array of index corresponding to the labels of type np.int and of length
+        n_labels.
+    hdr : array_like
+        The matrix of transformation of shape (4, 4).
+    """
+    name = name.lower()
+    assert name in ['brodmann', 'aal', 'talairach']
+    # Load archive :
+    arch = np.load(get_data_path(name + '.npz'))
+    # Extract informations :
+    vol, hdr = arch['vol'], arch['hdr']
+    labels, index = arch['labels'], arch['index']
+
+    return vol, labels, index, hdr
 
 
 def generate_eeg(sf=512., n_pts=1000, n_channels=1, n_trials=1, n_sines=100,
