@@ -14,7 +14,8 @@ from .sigproc import smooth_3d
 
 __all__ = ('verbose', 'vis_args', 'check_downsampling', 'get_dsf',
            'vispy_array', 'convert_meshdata', 'volume_to_mesh',
-           'add_brain_template', 'remove_brain_template', 'set_if_not_none')
+           'add_brain_template', 'remove_brain_template', 'set_if_not_none',
+           'get_data_path')
 
 
 def verbose(msg, level=None, display=True):
@@ -309,3 +310,25 @@ def set_if_not_none(to_set, value, cond=True):
         The value if not None else to_set
     """
     return value if (value is not None) and cond else to_set
+
+
+def get_data_path(file=None):
+    """Get the path to the visbrain data folder.
+
+    Parameters
+    ----------
+    file : string | None
+        File name.
+
+    Returns
+    -------
+    path : string
+        Path to the data folder or to the file if file is not None.
+    """
+    cur_path = sys.modules[__name__].__file__.split('utils')[0]
+    if file is not None:
+        path = os.path.join(*(cur_path, 'data', file))
+        assert os.path.isfile(path)
+    else:
+        path = os.path.join(*(cur_path, 'data'))
+    return path
