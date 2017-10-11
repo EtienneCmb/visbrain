@@ -7,7 +7,9 @@ from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
 from .visbrain_obj import VisbrainObject
+from .roi_obj import RoiObj
 from ..utils import tal2mni, color2vb, normalize, vispy_array
+from ..io import is_pandas_installed
 
 
 class SourceObj(VisbrainObject):
@@ -23,20 +25,21 @@ class SourceObj(VisbrainObject):
         Array of weights of shape (n_sources,).
     """
 
+    ###########################################################################
+    ###########################################################################
+    #                                BUILT IN
+    ###########################################################################
+    ###########################################################################
+
     def __init__(self, name, xyz, data=None, color='black', alpha=1.,
                  symbol='disc', radiusmin=5., radiusmax=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None, maskcolor='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
                  text_shift=(0., 2., 0.), visible=True, parent=None, _z=-10.):
         """Init."""
-        self._node = scene.Node(name='SourceObj')
-        self._node.parent = parent
-        # _______________________ CHECKING _______________________
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self)
-        # Name :
-        assert isinstance(name, str)
-        self._name = name
+        VisbrainObject.__init__(self, name, parent)
+        # _______________________ CHECKING _______________________
         # XYZ :
         sh = xyz.shape
         assert sh[1] in [2, 3]
@@ -89,12 +92,6 @@ class SourceObj(VisbrainObject):
         self.visible = visible
         self._update_radius()
         self._update_color()
-
-    ###########################################################################
-    ###########################################################################
-    #                                BUILT IN
-    ###########################################################################
-    ###########################################################################
 
     def __len__(self):
         """Get the number of sources."""
@@ -412,10 +409,27 @@ class SourceObj(VisbrainObject):
     ###########################################################################
     ###########################################################################
 
-    def analyse_sources(self, roi_obj=None):
+    def analyse_sources(self, roi_obj='talairach', nearest=5.):
         """"""
-        pass
-        # self._analysis = ...
+        # Define the ROI object if needed :
+        if roi_obj in ['brodmann', 'aal', 'talairach']:
+            roi_obj = RoiObj(roi_obj)
+        elif not isinstance(roi_obj, RoiObj):
+            raise TypeError("msg")
+        vol, hdr = roi_obj.vol, roi_obj.hdr
+        sh = vol.shape
+        # Predefined analysis :
+        self._analysis = np.zeros(len(self), dtype=object)
+        # Loop over sources :
+        xyz = np.c_[self._xyz, np.ones((len(self),), dtype=self._xyz.dtype)].T
+        for k in range(len(self)):
+            # Apply HDR transformation :
+            pos = np.linalg.lstsq(hdr, xyz[:, [k]])[0][0:-1].reshape(-1)
+            sub = np.round(pos).astype(int)
+            if roi_obj >= sub:  # use __ge__ of RoiObj
+                idx_vol = vol[sub[0], sub[1], sub[2]]
+                self._analysis[k] = roi_obj.find_label(idx_vol)
+        print(self._analysis)
 
     def color_sources(self, color_by=None, roi_to_color=None):
         """"""
