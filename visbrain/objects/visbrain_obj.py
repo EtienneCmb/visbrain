@@ -8,9 +8,14 @@ from ..visuals import VisbrainCanvas
 class VisbrainObject(object):
     """Base class inherited by all of the Visbrain objects."""
 
-    def __init__(self, prev_camera='turntable'):
+    def __init__(self, name, parent, prev_camera='turntable'):
         """Init."""
         self._prev_camera = prev_camera
+        self._node = vispy.scene.Node(name=type(self).__name__)
+        self._node.parent = parent
+        # Name :
+        assert isinstance(name, str)
+        self._name = name
 
     def __repr__(self):
         """Represent ClassName(name='object_name')."""
