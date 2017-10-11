@@ -1,10 +1,11 @@
-
+"""Base class for objects of type source."""
+import numpy as np
 from vispy import scene
 from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
-from visbrain.objects.visbrain_obj import VisbrainObject
-from visbrain.utils import tal2mni, color2vb, normalize
+from .visbrain_obj import VisbrainObject
+from ..utils import tal2mni, color2vb, normalize
 
 
 class SourceObj(VisbrainObject):
@@ -24,7 +25,7 @@ class SourceObj(VisbrainObject):
                  symbol='disc', radiusmin=5., radiusmax=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None, maskcolor='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
-                 text_shift=(0., 2., 0.), _z=-10.):
+                 text_shift=(0., 2., 0.), visible=True, _z=-10.):
         """Init."""
         self._node = scene.Node(name='SourceObj')
         # _______________________ CHECKING _______________________
@@ -67,9 +68,6 @@ class SourceObj(VisbrainObject):
                                         edge_color=edge_color,
                                         edge_width=edge_width,
                                         parent=self._node)
-        # Radius / color :
-        self._update_radius()
-        self._update_color()
 
         # _______________________ TEXT _______________________
         tvisible = text is None
@@ -81,6 +79,12 @@ class SourceObj(VisbrainObject):
                                           parent=self._node)
         self._sources_text.visible = not tvisible
         self._sources_text.transform = vist.STTransform(translate=text_shift)
+
+        # _______________________ UPDATE _______________________
+        # Radius / color :
+        self.visible = visible
+        self._update_radius()
+        self._update_color()
 
     def __len__(self):
         """Get the number of sources."""
@@ -98,6 +102,13 @@ class SourceObj(VisbrainObject):
             radius = normalize(self._data, tomin=self._radiusmin,
                                tomax=self._radiusmax)
         self._sources._data['a_size'] = radius
+        to_hide = np.invert(self._visible)
+        # Marker size + egde width = 0 and text='' for hide sources :
+        self._sources._data['a_size'][to_hide] = 0.
+        self._sources._data['a_edgewidth'][to_hide] = 0.
+        text = np.array(self._text.copy())
+        text[to_hide] = ''
+        self._sources_text.text = text
         self._sources.update()
 
     def _update_color(self):
@@ -247,30 +258,18 @@ class SourceObj(VisbrainObject):
         self._maskcolor = color2vb(value)
         self._update_color()
 
+    # ----------- VISIBLE -----------
+    @property
+    def visible(self):
+        """Get the visible value."""
+        return self._visible
 
-
-
-
-
-
-
-
-import numpy as np
-pos = 100*np.random.rand(100, 3) + 100
-pos = np.sort(pos, axis=0)
-color = np.random.rand(100, 3)
-color = ['orange'] * 50 + ['red'] * 50
-data = np.arange(100)
-mask = np.logical_and(data >= 20, data <= 30)
-text = ['channel' + str(k) for k in range(len(data))]
-s = SourceObj('test', pos, data=data, color=color, mask=mask, text=text,
-              text_size=15, text_bold=True)
-s.edge_width = 1
-s.edge_color = 'orange'
-s.symbol = 'x'
-s.radiusmax = 30.
-s.radiusmin = 10.
-s.alpha = 1.
-s.maskcolor = 'blue'
-s.mask = np.logical_and(data >= 60, data <= 90)
-s.preview(axis=False)
+    @visible.setter
+    def visible(self, value):
+        """Set visible value."""
+        if isinstance(value, bool):
+            self._visible = np.full((len(self),), value)
+        else:
+            self._visible = np.asarray(value).ravel().astype(bool)
+        assert len(self._visible) == len(self)
+        self._update_radius()
