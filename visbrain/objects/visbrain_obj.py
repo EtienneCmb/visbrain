@@ -12,6 +12,14 @@ class VisbrainObject(object):
         """Init."""
         self._prev_camera = prev_camera
 
+    def __repr__(self):
+        """Represent ClassName(name='object_name')."""
+        return type(self).__name__ + "(name='" + self._name + "')"
+
+    def __str__(self):
+        """Return the object name."""
+        return self._name
+
     def preview(self, bgcolor='white', axis=True):
         """Previsualize the result.
 
