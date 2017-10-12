@@ -19,13 +19,13 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 import numpy as np
 
 from visbrain import Brain
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
 # Define a empty dictionnary :
 kwargs = {}
 
 # Load the xyz coordinates and corresponding subject name :
-download_file('xyz_sample.npz')
+download_file(path_to_visbrain_data('xyz_sample.npz'))
 mat = np.load('xyz_sample.npz')
 kwargs['s_xyz'], subjects = mat['xyz'], mat['subjects']
 

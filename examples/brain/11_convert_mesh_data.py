@@ -10,18 +10,16 @@ https://www.dropbox.com/s/phzptkbht4us33q/Custom.npz?dl=1
 
 .. image:: ../../picture/picbrain/ex_convert_mesh_data.png
 """
-import os
-
 import numpy as np
 import vispy.visuals.transforms as vist
 
 from visbrain import Brain
 from visbrain.utils import (convert_meshdata, add_brain_template,
                             remove_brain_template)
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
 # Define path to the template and load it :
-download_file('Custom.npz')
+download_file(path_to_visbrain_data('Custom.npz'))
 mat = np.load('Custom.npz')
 
 # Get vertices and faces from the archive :

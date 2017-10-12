@@ -14,7 +14,7 @@ from __future__ import print_function
 import numpy as np
 
 from visbrain import Brain
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
 # Create an empty kwargs dictionnary :
 kwargs = {}
@@ -23,7 +23,7 @@ kwargs = {}
 
 # Load the xyz coordinates and corresponding subject name :
 download_file('xyz_sample.npz')
-mat = np.load('xyz_sample.npz')
+mat = np.load(path_to_visbrain_data('xyz_sample.npz'))
 s_xyz, subjects = mat['xyz'], mat['subjects']
 
 N = s_xyz.shape[0]  # Number of electrodes

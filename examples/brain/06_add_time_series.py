@@ -13,11 +13,11 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 import numpy as np
 
 from visbrain import Brain
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
 # Load the xyz coordinates and corresponding subject name :
 download_file('xyz_sample.npz')
-s_xyz = np.load('xyz_sample.npz')['xyz']
+s_xyz = np.load(path_to_visbrain_data('xyz_sample.npz'))['xyz']
 s_xyz = s_xyz[4::25, ...]
 s_text = [str(k) for k in range(s_xyz.shape[0])]
 s_textsize = 1.5

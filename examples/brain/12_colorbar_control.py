@@ -43,14 +43,14 @@ from __future__ import print_function
 import numpy as np
 
 from visbrain import Brain, Colorbar
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
 
 """
 Define some sources with random data between [0, 100.]
 """
 n_sources = 50
-download_file('xyz_sample.npz')
+download_file(path_to_visbrain_data('xyz_sample.npz'))
 s_xyz = np.load('xyz_sample.npz')['xyz'][:n_sources, :]
 s_data = 100. * np.random.rand(n_sources)
 

@@ -20,15 +20,15 @@ from __future__ import print_function
 import numpy as np
 
 from visbrain import Brain
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
 # Load thalamus sources :
 download_file('thalamus.txt')
-s_xyz = np.loadtxt('thalamus.txt')
+s_xyz = np.loadtxt(path_to_visbrain_data('thalamus.txt'))
 # Load alpha power. In fact, the PX.npy contains the power across several time
 # windows. So we take the mean across time :
 download_file('Px.npy')
-s_data = np.load('Px.npy').mean(1) * 10e26
+s_data = np.load(path_to_visbrain_data('Px.npy')).mean(1) * 10e26
 
 # Define a Brain instance :
 vb = Brain(s_xyz=s_xyz, s_data=s_data, s_cmap='viridis')
