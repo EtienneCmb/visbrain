@@ -1,3 +1,4 @@
+"""Base class for objects of type ROI."""
 import numpy as np
 
 from .visbrain_obj import VisbrainObject
@@ -6,7 +7,30 @@ from ..io import is_pandas_installed
 
 
 class RoiObj(VisbrainObject):
-    """docstring for RoiObj"""
+    """Create a Region Of Interest (ROI) object.
+
+    Parameters
+    ----------
+    name : string
+        Name of the ROI object. If name is 'brodmann', 'aal' or 'talairach' a
+        predefined ROI object is used and vol, index and label are ignored.
+    vol : array_like | None
+        ROI volume. Sould be an array with three dimensions.
+    label : array_like | None
+        Array of labels. A structured array can be used (i.e
+        label=np.zeros(n_sources, dtype=[('brodmann', int), ('aal', object)])).
+    index : array_like | None
+        Array of index that make the correspondance between the volumne values
+        and labels. The length of index must be the same as label.
+    hdr : array_like | None
+        Array of transform source's coordinates into the volume space. Must be
+        a (4, 4) array.
+    system : {'mni', 'tal'}
+        The system of the volumne. Can either be MNI ('mni') or Talairach
+        ('tal').
+    parent : VisPy.parent | None
+        ROI object parent.
+    """
 
     ###########################################################################
     ###########################################################################
@@ -14,7 +38,7 @@ class RoiObj(VisbrainObject):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, vol=None, index=None, label=None, hdr=None,
+    def __init__(self, name, vol=None, label=None, index=None, hdr=None,
                  system='mni', parent=None):
         """Init."""
         # Test if pandas is installed :
@@ -46,11 +70,10 @@ class RoiObj(VisbrainObject):
         self.system = system
 
         # _______________________ REFERENCE _______________________
-        label_dict = self._unpack_struct_array(label)
-        columns = ['index'] + list(label_dict.keys())
-        self.ref = pd.DataFrame({'index': index, **label_dict},
-                                columns=columns)
-        self.analysis = pd.DataFrame({}, columns=columns)
+        label_dict = self._struct_array_to_dict(label)
+        cols = ['index'] + list(label_dict.keys())
+        self.ref = pd.DataFrame({'index': index, **label_dict}, columns=cols)
+        self.analysis = pd.DataFrame({}, columns=cols)
 
     def __len__(self):
         """Return the number of ROI."""
@@ -121,7 +144,7 @@ class RoiObj(VisbrainObject):
             # Find where is the point if inside the volume :
             if self >= sub:  # use __ge__ of RoiObj
                 idx_vol = self.vol[sub[0], sub[1], sub[2]] + self._offset
-                location = self.find_label(idx_vol)
+                location = self._find_roi_label(idx_vol)
             else:
                 location = None
             self.analysis.loc[k] = location
@@ -137,12 +160,14 @@ class RoiObj(VisbrainObject):
                 self.analysis.replace(k, replace_with, inplace=True)
         return self.analysis
 
-    def find_label(self, vol_idx):
+    def _find_roi_label(self, vol_idx):
+        """Find the ROI label associated to a volume index."""
         ref_index = np.where(self.ref['index'] == vol_idx)[0]
         return self[int(ref_index)] if ref_index.size else None
 
     @staticmethod
-    def _unpack_struct_array(arr):
+    def _struct_array_to_dict(arr):
+        """Convert a structured array into a dictionnary."""
         try:
             if arr.dtype.names is None:
                 return {'label': arr}
@@ -151,6 +176,5 @@ class RoiObj(VisbrainObject):
         except:
             return {'label': arr}
 
-    def roi_to_mesh(self):
-        pass
-
+    # def roi_to_mesh(self):
+    #     pass
