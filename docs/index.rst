@@ -53,11 +53,11 @@ Here's the list of visbrain's dependencies :
 * PyQt5 : Graphical User Interface components
 * Pillow : for screenshots and image file format support.
 
-We also strongly recommend to install *pyopengl* :
+We also strongly recommend to install *pandas* and *pyopengl* :
 
 .. code-block:: shell
 
-    pip install PyOpenGL PyOpenGL_accelerate
+    pip install pandas PyOpenGL PyOpenGL_accelerate
 
 PyQt5 version
 =============
