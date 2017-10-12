@@ -9,7 +9,6 @@ import vispy.visuals.transforms as vist
 from .visbrain_obj import VisbrainObject
 from .roi_obj import RoiObj
 from ..utils import tal2mni, color2vb, normalize, vispy_array
-from ..io import is_pandas_installed
 
 
 class SourceObj(VisbrainObject):
@@ -23,6 +22,50 @@ class SourceObj(VisbrainObject):
         Array of positions of shape (n_sources, 2) or (n_sources, 3).
     data : array_like | None
         Array of weights of shape (n_sources,).
+    color : array_like/string/tuple | 'black'
+        Marker's color. Use a string (i.e 'green') to use the same color across
+        markers or a list of colors of length n_sources to use different colors
+        for markers.
+    alpha : float | 1.
+        Transparency level.
+    symbol : string | 'disc'
+        Symbol to use for sources. Allowed style strings are: disc, arrow,
+        ring, clobber, square, diamond, vbar, hbar, cross, tailed_arrow, x,
+        triangle_up, triangle_down, and star.
+    radiusmin / radiusmax : float | 5.0/10.0
+        Define the minimum and maximum source's possible radius. By default
+        if all sources have the same value, the radius will be radiusmin.
+    edge_color : string/list/array_like | 'black'
+        Edge color of source's markers.
+    edge_width : float | 0.
+        Edge width source's markers.
+    system : {'mni', 'tal'}
+        Specify if the coodinates are in the MNI space ('mni') or Talairach
+        ('tal').
+    mask : array_like | None
+        Array of boolean values to specify masked sources. For example, if data
+        are p-values, mask could be non-significant sources.
+    mask_color : array_like/tuple/string | 'red'
+        Color to use for masked sources.
+    text : list | None
+        Text to attach to each source. For example, text could be the name of
+        each source.
+    text_size : float | 3.
+        Text size attached to sources.
+    text_color : array_like/string/tuple | 'black'
+        Text color attached to sources.
+    text_bold : bool | False
+        Specify if the text attached to sources should be bold.
+    text_shift : tuple | (0., 2., 0.)
+        Text shifting along the (x, y, z) axis.
+    visible : bool/array_like | True
+        Specify which source's have to be displayed. If visible is True, all
+        sources are displayed, False all sources are hiden. Alternatively, use
+        an array of shape (n_sources,) to select which sources to display.
+    parent : VisPy.parent | None
+        Markers object parent.
+    _z : float | 10.
+        In case of (n_sources, 2) use _z to specify the elevation.
     """
 
     ###########################################################################
@@ -33,7 +76,7 @@ class SourceObj(VisbrainObject):
 
     def __init__(self, name, xyz, data=None, color='black', alpha=1.,
                  symbol='disc', radiusmin=5., radiusmax=10., edge_width=0.,
-                 edge_color='black', system='mni', mask=None, maskcolor='red',
+                 edge_color='black', system='mni', mask=None, mask_color='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
                  text_shift=(0., 2., 0.), visible=True, parent=None, _z=-10.):
         """Init."""
@@ -67,7 +110,7 @@ class SourceObj(VisbrainObject):
             mask = [False] * len(self)
         self._mask = np.asarray(mask).ravel().astype(bool)
         assert len(self._mask) == len(self)
-        self._maskcolor = color2vb(maskcolor)
+        self._mask_color = color2vb(mask_color)
 
         # _______________________ MARKERS _______________________
         self._sources = visuals.Markers(pos=self._xyz, name=name,
@@ -168,7 +211,7 @@ class SourceObj(VisbrainObject):
                                                          self._alpha)]
             bg_color = self._color.copy()
         # Update masked marker's color :
-        bg_color[self._mask, :] = self._maskcolor
+        bg_color[self._mask, :] = self._mask_color
         self._sources._data['a_bg_color'] = bg_color
 
     def _get_camera(self):
@@ -176,6 +219,65 @@ class SourceObj(VisbrainObject):
         d_mean = self._xyz.mean(0)
         dist = np.sqrt(np.sum(d_mean ** 2))
         return scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
+
+    ###########################################################################
+    ###########################################################################
+    #                                  PHYSIO
+    ###########################################################################
+    ###########################################################################
+
+    def analyse_sources(self, roi_obj='talairach', replace_bad=True,
+                        bad_patterns=[-1, 'undefined', 'None'],
+                        replace_with='Not found'):
+        """Analyse sources using Region of interest (ROI).
+
+        This method can be used to identify in which structure is located a
+        source.
+
+        Parameters
+        ----------
+        roi_obj : string/list | 'talairach'
+            The ROI object to use. Use either 'talairach', 'brodmann' or 'aal'
+            to use a predefined ROI template. Otherwise, use a RoiObj object or
+            a list of RoiObj.
+        replace_bad : bool | True
+            Replace bad values (True) or not (False).
+        bad_patterns : list | [-1, 'undefined', 'None']
+            Bad patterns to replace if replace_bad is True.
+        replace_with : string | 'Not found'
+            Replace bad patterns with this string.
+
+        Returns
+        -------
+        df : pandas.DataFrames
+            A Pandas DataFrame or a list of DataFrames if roi_obj is a list.
+        """
+        # List of predefined ROI objects :
+        proi = ['brodmann', 'aal', 'talairach']
+        # Define the ROI object if needed :
+        if isinstance(roi_obj, str):
+            roi_obj = [roi_obj]
+        # Convert predefined ROI into RoiObj objects :
+        roi_obj = [RoiObj(k) for k in roi_obj if k in proi]
+        if isinstance(roi_obj, (list, tuple)):
+            test_r = all([k in proi or isinstance(k, RoiObj) for k in roi_obj])
+            if not test_r:
+                raise TypeError("roi_obj should either be 'brodmann', 'aal', "
+                                "'talairach' or a list or RoiObj objects.")
+        # Get all of the DataFrames :
+        df = [k.localize_sources(self._xyz, self._text, replace_bad,
+                                 bad_patterns, replace_with) for k in roi_obj]
+        # Return the df if len == 1 :
+        return df[0] if len(df) == 1 else df
+
+    def color_sources(self, analysis, color_by=None, roi_to_color=None):
+        """"""
+        if color_by in ['brodmann', 'aal']:
+            if not hasattr(self, '_analysis'):
+                self.analyse_sources()
+            # color_by = np.array([])
+        if isinstance(color_by, (list, np.ndarray, tuple)):
+            pass
 
     ###########################################################################
     ###########################################################################
@@ -405,50 +507,9 @@ class SourceObj(VisbrainObject):
 
     ###########################################################################
     ###########################################################################
-    #                                  PHYSIO
-    ###########################################################################
-    ###########################################################################
-
-    def analyse_sources(self, roi_obj='talairach', nearest=5.):
-        """"""
-        # Define the ROI object if needed :
-        if roi_obj in ['brodmann', 'aal', 'talairach']:
-            roi_obj = RoiObj(roi_obj)
-        elif not isinstance(roi_obj, RoiObj):
-            raise TypeError("msg")
-        vol, hdr = roi_obj.vol, roi_obj.hdr
-        sh = vol.shape
-        # Predefined analysis :
-        self._analysis = np.zeros(len(self), dtype=object)
-        # Loop over sources :
-        xyz = np.c_[self._xyz, np.ones((len(self),), dtype=self._xyz.dtype)].T
-        for k in range(len(self)):
-            # Apply HDR transformation :
-            pos = np.linalg.lstsq(hdr, xyz[:, [k]])[0][0:-1].reshape(-1)
-            sub = np.round(pos).astype(int)
-            if roi_obj >= sub:  # use __ge__ of RoiObj
-                idx_vol = vol[sub[0], sub[1], sub[2]]
-                self._analysis[k] = roi_obj.find_label(idx_vol)
-        print(self._analysis)
-
-    def color_sources(self, color_by=None, roi_to_color=None):
-        """"""
-        if color_by in ['brodmann', 'aal']:
-            if not hasattr(self, '_analysis'):
-                self.analyse_sources()
-            # color_by = np.array([])
-        if isinstance(color_by, (list, np.ndarray, tuple)):
-            pass
-
-    ###########################################################################
-    ###########################################################################
     #                             PROPERTIES
     ###########################################################################
     ###########################################################################
-
-    # -------------------------------------------------------------------------
-    #                                SOURCES
-    # -------------------------------------------------------------------------
 
     # ----------- XYZ -----------
     @property
@@ -583,14 +644,14 @@ class SourceObj(VisbrainObject):
 
     # ----------- MASKCOLOR -----------
     @property
-    def maskcolor(self):
-        """Get the maskcolor value."""
-        return self._maskcolor
+    def mask_color(self):
+        """Get the mask_color value."""
+        return self._mask_color
 
-    @maskcolor.setter
-    def maskcolor(self, value):
-        """Set maskcolor value."""
-        self._maskcolor = color2vb(value)
+    @mask_color.setter
+    def mask_color(self, value):
+        """Set mask_color value."""
+        self._mask_color = color2vb(value)
         self._update_color()
 
     # ----------- VISIBLE -----------
@@ -620,9 +681,6 @@ class SourceObj(VisbrainObject):
         """Set hide value."""
         self._hide = value
 
-    # -------------------------------------------------------------------------
-    #                                    TEXT
-    # -------------------------------------------------------------------------
     # ----------- TEXT_SIZE -----------
     @property
     def text_size(self):
