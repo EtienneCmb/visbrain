@@ -264,8 +264,7 @@ def add_brain_template(name, vertices, faces, normals, lr_index=None):
     """
     # Get path to the templates/ folder :
     name = os.path.splitext(name)[0]
-    dirfile = sys.modules[__name__].__file__.split('utils')[0]
-    to_temp = (dirfile, 'brain', 'base', 'templates', name + '.npz')
+    to_temp = (get_data_path(), 'templates', name + '.npz')
     path = os.path.join(*to_temp)
     # Save the template :
     np.savez(path, vertices=vertices, faces=faces, normals=normals,
@@ -282,8 +281,7 @@ def remove_brain_template(name):
     """
     # Get path to the templates/ folder :
     name = os.path.splitext(name)[0]
-    dirfile = sys.modules[__name__].__file__.split('utils')[0]
-    to_temp = (dirfile, 'brain', 'base', 'templates', name + '.npz')
+    to_temp = (get_data_path(), 'templates', name + '.npz')
     path = os.path.join(*to_temp)
     # Remove the file from templates/ folder :
     if os.path.isfile(path):
