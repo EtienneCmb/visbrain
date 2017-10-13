@@ -23,8 +23,17 @@ def _test_file(name, path):
 def test_brain_templates():
     """Test if templates are installed."""
     name = "Brain template ({})"
-    path_to_template = ['visbrain', 'brain', 'base', 'templates']
-    for k in ['B1.npz', 'B2.npz', 'B3.npz', 'roi.npz']:
+    path_to_template = ['visbrain', 'data', 'templates']
+    for k in ['B1.npz', 'B2.npz', 'B3.npz']:
+        path = path_to_template + [k]
+        _test_file(name.format(k), path)
+
+
+def test_roi_templates():
+    """Test if templates are installed."""
+    name = "ROI template ({})"
+    path_to_template = ['visbrain', 'data', 'roi']
+    for k in ['brodmann.npz', 'aal.npz', 'talairach.npz']:
         path = path_to_template + [k]
         _test_file(name.format(k), path)
 
@@ -51,7 +60,7 @@ def test_sleep_icon():
 
 def test_topo_file():
     """Test if the topo reference file is installed."""
-    path = ['visbrain', 'visuals', 'eegref.npz']
+    path = ['visbrain', 'data', 'topo', 'eegref.npz']
     _test_file('Topo reference file (eegref.npz)', path)
 
 
