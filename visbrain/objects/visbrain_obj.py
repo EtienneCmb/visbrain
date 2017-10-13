@@ -12,6 +12,12 @@ class VisbrainObject(object):
 
     Parameters
     ----------
+    name : string
+        Object name.
+    transform : VisPy.visuals.transforms | None
+        VisPy transformation to set to the parent node.
+    parent : VisPy.parent | None
+        Markers object parent.
     """
 
     def __init__(self, name, parent, transform=None):
@@ -58,7 +64,7 @@ class VisbrainObject(object):
     @property
     def parent(self):
         """Get the parent value."""
-        return self._node.parent
+        return self._node
 
     @parent.setter
     def parent(self, value):
@@ -85,6 +91,10 @@ class CombineObjects(object):
 
     def __init__(self, obj_type, objects, select=None, parent=None):
         """Init."""
+        # Parent node for combined objects :
+        self._cnode = vispy.scene.Node(name='Combine')
+        self._cnode.parent = parent
+        # Initialize objects :
         self._objs, self._objs_order = {}, []
         self._obj_type = obj_type.__name__
         if objects is not None:
@@ -101,7 +111,7 @@ class CombineObjects(object):
             self.select(select)
             self.name = str(self)
             # Set parent :
-            self.parent = parent
+            self.parent = self._cnode
         else:
             self.name = None
 
