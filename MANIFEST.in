@@ -4,8 +4,9 @@ include LICENSE
 include requirements.txt
 
 # Add brain templates and eeg reference file :
-recursive-include visbrain/brain/base/templates *.npz
-include visbrain/visuals/eegref.npz
+recursive-include visbrain/data/templates *.npz
+recursive-include visbrain/data/roi *.npz
+recursive-include visbrain/data/topo *.npz
 
 # Add visbrain icons :
 include visbrain/brain/brain_icon.svg
