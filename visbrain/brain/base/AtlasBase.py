@@ -6,11 +6,11 @@
 """
 
 import os
-import sys
 import numpy as np
 from warnings import warn
 
 from ...visuals import BrainMesh
+from ...utils import get_data_path
 
 
 class AtlasBase(object):
@@ -40,15 +40,11 @@ class AtlasBase(object):
 
         # ________________ PATH & TEMPLATES ________________
         # Find relative path to templates :
-        dirfile = sys.modules[__name__].__file__.split('Atlas')[0]
-        self._surf_path = os.path.join(dirfile, 'templates')
+        self._surf_path = os.path.join(get_data_path(), 'templates')
         # Build list of templates available from the templates/ folder :
-        self._surf_list = ['B1', 'B2', 'B3', 'roi']
-        for k in os.listdir(self._surf_path):
-            file, ext = os.path.splitext(k)
-            if (ext == '.npz') and (file not in self._surf_list):
-                self._surf_list.append(file)
-        del self._surf_list[self._surf_list.index('roi')]
+        all_files = os.listdir(self._surf_path)
+        self._surf_list = [os.path.splitext(k)[0] for k in all_files]
+        self._surf_list.sort()
 
         # ________________ INITIALIZE ________________
         # Load template :
