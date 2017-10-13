@@ -7,7 +7,7 @@ from vispy import scene
 from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
-from .visbrain_obj import VisbrainObject
+from .visbrain_obj import VisbrainObject, CombineObjects
 from .roi_obj import RoiObj
 from ..utils import tal2mni, color2vb, normalize, vispy_array
 
@@ -63,6 +63,8 @@ class SourceObj(VisbrainObject):
         Specify which source's have to be displayed. If visible is True, all
         sources are displayed, False all sources are hiden. Alternatively, use
         an array of shape (n_sources,) to select which sources to display.
+    transform : VisPy.visuals.transforms | None
+        VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         Markers object parent.
     _z : float | 10.
@@ -79,10 +81,11 @@ class SourceObj(VisbrainObject):
                  symbol='disc', radiusmin=5., radiusmax=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None, mask_color='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
-                 text_shift=(0., 2., 0.), visible=True, parent=None, _z=-10.):
+                 text_shift=(0., 2., 0.), visible=True, transform=None,
+                 parent=None, _z=-10.):
         """Init."""
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent)
+        VisbrainObject.__init__(self, name, parent, transform)
         # _______________________ CHECKING _______________________
         # XYZ :
         sh = xyz.shape
@@ -92,7 +95,7 @@ class SourceObj(VisbrainObject):
         # Radius min and max :
         assert all([isinstance(k, (int, float)) for k in (
             radiusmin, radiusmax)])
-        assert radiusmax >= radiusmin
+        radiusmax = max(radiusmin, radiusmax)
         self._radiusmin, self._radiusmax = radiusmin, radiusmax
         # Data :
         if data is None:
@@ -117,14 +120,14 @@ class SourceObj(VisbrainObject):
         self._sources = visuals.Markers(pos=self._xyz, name=name,
                                         edge_color=edge_color,
                                         edge_width=edge_width,
-                                        parent=self._node)
+                                        symbol=symbol, parent=self._node)
 
         # _______________________ TEXT _______________________
         tvisible = text is None
         self._text = [''] * len(self) if tvisible else text
         assert len(self._text) == len(self)
         self._sources_text = visuals.Text(self._text, pos=self._xyz,
-                                          bold=text_bold,
+                                          bold=text_bold, name=name + '_text',
                                           color=color2vb(text_color),
                                           font_size=text_size,
                                           parent=self._node)
@@ -490,35 +493,50 @@ class SourceObj(VisbrainObject):
 
         return np.squeeze(idx)
 
-    def select_inside(self, v, select='inside'):
+    def set_visible_sources(self, v, select='all', distance=5.):
         """Select sources that are either inside or outside the mesh.
 
         Parameters
         ----------
         v : array_like
             The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
-        select : {'inside', 'outside'}
-            Use either 'inside' or 'outside'.
+        select : {'inside', 'outside', 'close', 'all', 'none', None}
+            Custom source selection. Use 'inside' or 'outside' to select
+            sources respectively inside or outside the volume. Use 'close' to
+            select sources that are closed to the surface (see the distance
+            parameter below). Finally, use 'all' (or True), 'none' (or None,
+            False) to show or hide all of the sources.
+        distance : float | 5.
+            Distance between the source and the surface.
         """
-        if v.ndim == 2:  # index faced vertices
-            v = v[:, np.newaxis, :]
-        xyz = self.xyz
-        # Predifined inside :
-        nv, index_faced = v.shape[0], v.shape[1]
-        v = v.reshape(nv * index_faced, 3)
-        inside = np.ones((xyz.shape[0],), dtype=bool)
+        select = select.lower() if isinstance(select, str) else select
+        assert select in ['all', 'inside', 'outside', 'none', 'close', None,
+                          True, False]
+        assert isinstance(distance, (int, float))
+        if select in ['inside', 'outside', 'close']:
+            if v.ndim == 2:  # index faced vertices
+                v = v[:, np.newaxis, :]
+            # Predifined inside :
+            nv, index_faced = v.shape[0], v.shape[1]
+            v = v.reshape(nv * index_faced, 3)
+            inside = np.ones((self._xyz.shape[0],), dtype=bool)
 
-        # Loop over sources :
-        for i, k in enumerate(self):
-            # Get the euclidian distance :
-            eucl = cdist(v, k)
-            # Get the closest vertex :
-            eucl_argmin = eucl.argmin()
-            # Get distance to zero :
-            xyz_t0 = np.sqrt((k ** 2).sum())
-            v_t0 = np.sqrt((v[eucl_argmin, :] ** 2).sum())
-            inside[i] = xyz_t0 <= v_t0
-        self.visible = inside if select == 'inside' else np.invert(inside)
+            # Loop over ALL oh the sources :
+            for i in range(len(self)):
+                # Get the euclidian distance :
+                eucl = cdist(v, self._xyz[[i], :])
+                # Get the closest vertex :
+                eucl_argmin = eucl.argmin()
+                # Get distance to zero :
+                xyz_t0 = np.sqrt((self._xyz[[i], :] ** 2).sum())
+                v_t0 = np.sqrt((v[eucl_argmin, :] ** 2).sum())
+                if select in ['inside', 'outside']:
+                    inside[i] = xyz_t0 <= v_t0
+                elif select == 'close':
+                    inside[i] = np.abs(xyz_t0 - v_t0) > distance
+            self.visible = inside if select == 'inside' else np.invert(inside)
+        elif select in ['all', 'none', None, True, False]:
+            self.visible = select in ['all', True]
 
     def fit_to_vertices(self, v):
         """Move sources to the closest vertex.
@@ -530,11 +548,10 @@ class SourceObj(VisbrainObject):
         """
         if v.ndim == 2:  # index faced vertices
             v = v[:, np.newaxis, :]
-        xyz = self.xyz
         # Predifined inside :
         nv, index_faced = v.shape[0], v.shape[1]
         v = v.reshape(nv * index_faced, 3)
-        new_pos = np.zeros_like(xyz)
+        new_pos = np.zeros_like(self._xyz)
 
         # Loop over visible and not-masked sources :
         for i, k in enumerate(self):
@@ -587,7 +604,7 @@ class SourceObj(VisbrainObject):
     def radiusmin(self, value):
         """Set radiusmin value."""
         assert isinstance(value, (int, float))
-        self._radiusmin = value
+        self._radiusmin = min(self._radiusmax, value)
         self._update_radius()
 
     # ----------- RADIUSMAX -----------
@@ -600,7 +617,7 @@ class SourceObj(VisbrainObject):
     def radiusmax(self, value):
         """Set radiusmax value."""
         assert isinstance(value, (int, float))
-        self._radiusmax = value
+        self._radiusmax = max(self._radiusmin, value)
         self._update_radius()
 
     # ----------- SYMBOL -----------
@@ -764,6 +781,106 @@ class SourceObj(VisbrainObject):
         self._sources_text.transform.translate = value
         self._text_shift = value
         self._sources_text.update()
+
+
+class SourceProjection(object):
+    """docstring for SourceProjection"""
+
+    def __init__(self, arg):
+        super(SourceProjection, self).__init__()
+        self.arg = arg
+
+
+class CombineSources(CombineObjects):
+    """Combine sources objects.
+
+    Parameters
+    ----------
+    sobjs : SourceObj/list | None
+        List of source objects.
+    select : string | None
+        The name of the source object to select.
+    parent : VisPy.parent | None
+        Markers object parent.
+    """
+
+    def __init__(self, sobjs=None, select=None, parent=None):
+        """Init."""
+        CombineObjects.__init__(self, SourceObj, sobjs, select, parent)
+
+    def fit_to_vertices(self, v):
+        """See sources doc."""
+        for k in self:
+            k.fit_to_vertices(v)
+
+    def set_visible_sources(self, v, select='inside', distance=5.):
+        """See sources doc."""
+        for k in self:
+            k.set_visible_sources(v, select, distance)
+
+    # ----------- _XYZ -----------
+    @property
+    def _xyz(self):
+        """Get the _xyz value."""
+        _xyz = np.array([])
+        for k in self:
+            _xyz = np.r_[_xyz, k._xyz] if _xyz.size else k._xyz
+        return _xyz
+
+    # ----------- XYZ -----------
+    @property
+    def xyz(self):
+        """Get the xyz value."""
+        xyz = np.array([])
+        for k in self:
+            xyz = np.r_[xyz, k.xyz] if xyz.size else k.xyz
+        return xyz
+
+    # ----------- DATA -----------
+    @property
+    def data(self):
+        """Get the data value."""
+        data = np.array([])
+        for k in self:
+            data = np.r_[data, k.data] if data.size else k.data
+        return data
+
+    # ----------- TEXT -----------
+    @property
+    def text(self):
+        """Get the text value."""
+        text = np.array([])
+        for k in self:
+            text = np.r_[text, k.text] if text.size else k.text
+        return text
+
+    # ----------- VISIBLE -----------
+    @property
+    def visible(self):
+        """Get the visible value."""
+        visible = np.array([])
+        for k in self:
+            visible = np.r_[visible, k.visible] if visible.size else k.visible
+        return visible
+
+    # ----------- MASK -----------
+    @property
+    def mask(self):
+        """Get the mask value."""
+        mask = np.array([])
+        for k in self:
+            mask = np.r_[mask, k.mask] if mask.size else k.mask
+        return mask
+
+    # ----------- VISIBLE_AND_NOT_MASKED -----------
+    @property
+    def visible_and_not_masked(self):
+        """Get the visible_and_not_masked value."""
+        vnm = np.array([])
+        for k in self:
+            vnm_obj = k.visible_and_not_masked
+            vnm = np.r_[vnm, vnm_obj] if vnm.size else vnm_obj
+        return vnm
 
 # proj_doc = """v : array_like
 #             The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
