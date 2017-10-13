@@ -7,7 +7,6 @@ node -> rescale x800 (solve GL issues for small plots)
         node_head -> recenter + (T4, Fpz)
         node_chan -> translate (0, 0, 10.) (objects superposition)
 """
-import sys
 import os
 from warnings import warn
 
@@ -19,7 +18,7 @@ from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
 from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
-                     vpnormalize, vprecenter)
+                     vpnormalize, vprecenter, get_data_path)
 from .cbar import CbarVisual
 
 __all__ = ('TopoMesh')
@@ -428,8 +427,7 @@ class TopoMesh(object):
             List of channel names.
         """
         # Load the coordinates template :
-        path_file = sys.modules[__name__].__file__.split('Topo')[0]
-        path = os.path.join(*(path_file, 'eegref.npz'))
+        path = os.path.join(get_data_path(), 'topo', 'eegref.npz')
         file = np.load(path)
         nameRef, xyzRef = file['chan'], file['xyz']
         keeponly = np.ones((len(chan)), dtype=bool)
