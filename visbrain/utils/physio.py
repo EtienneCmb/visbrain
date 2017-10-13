@@ -1,5 +1,6 @@
 """Group of functions for physiological processing."""
 from re import findall
+import os
 
 import numpy as np
 from itertools import product
@@ -344,7 +345,8 @@ def load_predefined_roi(name):
     name = name.lower()
     assert name in ['brodmann', 'aal', 'talairach']
     # Load archive :
-    arch = np.load(get_data_path(name + '.npz'))
+    file = os.path.join(*(get_data_path(), 'roi', name + '.npz'))
+    arch = np.load(file)
     # Extract informations :
     vol, hdr = arch['vol'], arch['hdr']
     labels, index = arch['labels'], arch['index']
