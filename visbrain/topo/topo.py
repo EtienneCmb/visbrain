@@ -150,7 +150,7 @@ class Topo(UiInit, UiElements):
         margin : float | .05
             Margin percentage between the topoplot and the edge of the subplot.
         """
-        # Check if name is avaible :
+        # Check if name is available :
         self._check_name_for(name, 'topoplot')
         # Create the topoplot and set the data :
         topo = TopoMesh(xyz, channels, system, unit, title, title_color,
