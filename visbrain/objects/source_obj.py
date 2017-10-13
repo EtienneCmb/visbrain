@@ -33,9 +33,9 @@ class SourceObj(VisbrainObject):
         Symbol to use for sources. Allowed style strings are: disc, arrow,
         ring, clobber, square, diamond, vbar, hbar, cross, tailed_arrow, x,
         triangle_up, triangle_down, and star.
-    radiusmin / radiusmax : float | 5.0/10.0
+    radius_min / radius_max : float | 5.0/10.0
         Define the minimum and maximum source's possible radius. By default
-        if all sources have the same value, the radius will be radiusmin.
+        if all sources have the same value, the radius will be radius_min.
     edge_color : string/list/array_like | 'black'
         Edge color of source's markers.
     edge_width : float | 0.
@@ -78,7 +78,7 @@ class SourceObj(VisbrainObject):
     ###########################################################################
 
     def __init__(self, name, xyz, data=None, color='black', alpha=1.,
-                 symbol='disc', radiusmin=5., radiusmax=10., edge_width=0.,
+                 symbol='disc', radius_min=5., radius_max=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None, mask_color='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
                  text_shift=(0., 2., 0.), visible=True, transform=None,
@@ -94,9 +94,9 @@ class SourceObj(VisbrainObject):
         pos = xyz if sh[1] == 3 else np.c_[xyz, np.full((len(self),), _z)]
         # Radius min and max :
         assert all([isinstance(k, (int, float)) for k in (
-            radiusmin, radiusmax)])
-        radiusmax = max(radiusmin, radiusmax)
-        self._radiusmin, self._radiusmax = radiusmin, radiusmax
+            radius_min, radius_max)])
+        radius_max = max(radius_min, radius_max)
+        self._radius_min, self._radius_max = radius_min, radius_max
         # Data :
         if data is None:
             data = np.ones((len(self),))
@@ -185,10 +185,10 @@ class SourceObj(VisbrainObject):
     def _update_radius(self):
         """Update marker's radius."""
         if np.unique(self._data).size == 1:
-            radius = self._radiusmin * np.ones((len(self,)))
+            radius = self._radius_min * np.ones((len(self,)))
         else:
-            radius = normalize(self._data, tomin=self._radiusmin,
-                               tomax=self._radiusmax)
+            radius = normalize(self._data, tomin=self._radius_min,
+                               tomax=self._radius_max)
         self._sources._data['a_size'] = radius
         to_hide = self.hide
         # Marker size + egde width = 0 and text='' for hide sources :
@@ -596,28 +596,28 @@ class SourceObj(VisbrainObject):
 
     # ----------- RADIUSMIN -----------
     @property
-    def radiusmin(self):
-        """Get the radiusmin value."""
-        return self._radiusmin
+    def radius_min(self):
+        """Get the radius_min value."""
+        return self._radius_min
 
-    @radiusmin.setter
-    def radiusmin(self, value):
-        """Set radiusmin value."""
+    @radius_min.setter
+    def radius_min(self, value):
+        """Set radius_min value."""
         assert isinstance(value, (int, float))
-        self._radiusmin = min(self._radiusmax, value)
+        self._radius_min = min(self._radius_max, value)
         self._update_radius()
 
     # ----------- RADIUSMAX -----------
     @property
-    def radiusmax(self):
-        """Get the radiusmax value."""
-        return self._radiusmax
+    def radius_max(self):
+        """Get the radius_max value."""
+        return self._radius_max
 
-    @radiusmax.setter
-    def radiusmax(self, value):
-        """Set radiusmax value."""
+    @radius_max.setter
+    def radius_max(self, value):
+        """Set radius_max value."""
         assert isinstance(value, (int, float))
-        self._radiusmax = max(self._radiusmin, value)
+        self._radius_max = max(self._radius_min, value)
         self._update_radius()
 
     # ----------- SYMBOL -----------
