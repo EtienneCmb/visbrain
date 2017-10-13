@@ -1,7 +1,6 @@
 """Oki."""
 import numpy as np
 import os
-import sys
 
 from vispy import scene
 import vispy.visuals.transforms as vist
@@ -10,7 +9,8 @@ from vispy.color import BaseColormap
 
 from .CrossSecBase import CrossSections
 from .RoiBase import RoiBase
-from ...utils import array_to_stt, normalize
+from ...utils import (array_to_stt, normalize, get_data_path,
+                      load_predefined_roi)
 
 __all__ = ('VolumeBase')
 
@@ -213,37 +213,18 @@ class VolumeBase(CrossSections, Volume3D, RoiBase):
 
     def _load_default(self):
         """Load the AAL and Brodmann atlas."""
-        # _______________ LOAD _______________
-        # Get path to the roi.npz file :
-        cur_path = sys.modules[__name__].__file__.split('Volume')[0]
-        roi_path = (cur_path, 'templates', 'roi.npz')
-        path = os.path.join(*roi_path)
-        # Load the volume :
-        v = np.load(path)
-        # Define the transformation :
-        tr = array_to_stt(v['hdr'])
-
         # _______________ BRODMANN _______________
-        # Add Brodmann volume :
-        vol = v['brod_idx']
-        roi_values = np.unique(vol)[1::]
-        # label = np.array(["%.2d" % k + ': BA' + str(k) for num, k
-        #                   in enumerate(roi_values)])
-        label = self._labels_to_gui(roi_values.astype(str), 'BA')
+        vol, label, roi_values, hdr, _ = load_predefined_roi('brodmann')
+        tr = array_to_stt(hdr)
+        label = self._labels_to_gui(label['brodmann'])
         # Add Brodmann to referenced volumes :
         self.add_volume('Brodmann', vol, transform=tr, roi_values=roi_values,
                         roi_labels=label)
 
         # _______________ AAL _______________
-        # Add AAL volume :
-        vol = v['vol']
-        roi_values = np.unique(v['aal_idx'])
-        nlabel = len(v['aal_label'])
-        # Get labels for left / right hemispheres :
-        l, r = np.full((nlabel,), ' (L)'), np.full((nlabel,), ' (R)')
-        label_l = np.core.defchararray.add(v['aal_label'], l)
-        label_r = np.core.defchararray.add(v['aal_label'], r)
-        label = self._labels_to_gui(np.c_[label_l, label_r].flatten())
+        vol, label, roi_values, hdr, _ = load_predefined_roi('aal')
+        tr = array_to_stt(hdr)
+        label = self._labels_to_gui(label['aal'])
         # Add AAL to referenced volumes :
         self.add_volume('AAL', vol, transform=tr, roi_values=roi_values,
                         roi_labels=label)
