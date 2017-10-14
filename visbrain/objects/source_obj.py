@@ -132,7 +132,8 @@ class SourceObj(VisbrainObject):
                                           font_size=text_size,
                                           parent=self._node)
         self._sources_text.visible = not tvisible
-        self._sources_text.transform = vist.STTransform(translate=text_translate)
+        tr = vist.STTransform(translate=text_translate)
+        self._sources_text.transform = tr
 
         # _______________________ UPDATE _______________________
         # Radius / color :
