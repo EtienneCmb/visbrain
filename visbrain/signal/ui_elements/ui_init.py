@@ -6,7 +6,7 @@ from warnings import warn
 from vispy import app
 
 from ..gui import Ui_MainWindow
-from ...visuals import VisbrainCanvas
+from ...objects import VisbrainCanvas
 
 
 class GridShortcuts(object):
