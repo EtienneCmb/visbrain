@@ -112,7 +112,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
 
     if idx_sup_thr.size > 0:
         # Check if spindles are present in range_spin_sec
-        idx_spin, _, _, _ = spindlesdetect(data, sf, spindles_thresh, hypno,
+        idx_spin, _, _, _, _ = spindlesdetect(data, sf, spindles_thresh, hypno,
                                            nrem_only=False)
 
         number, _, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
@@ -188,8 +188,8 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
 ###########################################################################
 
 def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
-                   tmin=500, tmax=2000, method='wavelet', min_distance_ms=500,
-                   sigma_thr=0.25, adapt_band=True):
+                   tmin=300, tmax=3000, method='wavelet', min_distance_ms=300,
+                   sigma_thr=0.2, adapt_band=True, return_full=False):
     """Perform a sleep spindles detection.
 
     Parameters
@@ -220,6 +220,9 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
         Sigma band-wise normalized power threshold (between 0 and 1)
     adapt_band : bool | True
         If true, adapt sigma band limit by finding the peak sigma freq.
+    return_full : bool | False
+        If true, return more variables (start, stop, sigma, hard and soft thresh)
+        Used in function write_fig_spindles
 
     Returns
     -------
@@ -231,6 +234,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
         Number of spindles per minutes of data
     duration_ms : float
         Duration (ms) of each spindles detected
+    power
 
     """
     # Find if hypnogram is loaded :
@@ -249,7 +253,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
     if adapt_band:
         # Find peak sigma frequency
         f, Pxx_den = welch(data, sf)
-        mfs = f[Pxx_den == Pxx_den[np.where((f >= 11) & (f <16))].max()][0]
+        mfs = f[Pxx_den == Pxx_den[np.where((f >= 11) & (f < 16))].max()][0]
         fmin = mfs - 1
         fmax = mfs + 1
 
@@ -314,7 +318,7 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
             idx_spindles = np.append(idx_spindles, np.arange(
                                         s - soft_beg, s + soft_end))
 
-            # Fill gap between events separated by less than min_distance_ms
+        # Fill gap between events separated by less than min_distance_ms
         idx_spindles = _events_distance_fill(idx_spindles, min_distance_ms, sf)
 
         # Get duration
@@ -334,19 +338,30 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
         density = number / (data.size / sf / 60.)
 
         # Compute mean power of each spindles
-        power = np.zeros(shape=number)
+        pwrs = np.zeros(shape=number)
         for i, (start, stop) in enumerate(zip(idx_start, idx_stop)):
             data_sp = data[start:stop]
             # Using Morlet
-            ind_power = morlet_power(data_sp, [fmin, fmax], sf, norm=False)[0]
-            power[i] = np.mean(ind_power)
+            ind_pwr = morlet_power(data_sp, [fmin, fmax], sf, norm=False)[0]
+            pwrs[i] = np.mean(ind_pwr)
         # Normalize by dividing by the mean
-        normalization(power, norm = 2)
+        normalization(pwrs, norm = 2)
 
-        return idx_spindles, number, density, duration_ms
-
+        if return_full:
+            return idx_spindles, number, density, duration_ms, pwrs, idx_start,\
+            idx_stop, hard_thr, soft_thr, idx_sigma, fmin, fmax, sigma_nfpow,\
+            amplitude, sigma_thr
+        else:
+            return idx_spindles, number, density, duration_ms, pwrs
     else:
-        return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
+        if return_full:
+            return np.array([], dtype=int), 0., 0., np.array([], dtype=int), \
+            np.array([]), np.array([], dtype=int), np.array([], dtype=int), \
+            hard_thr, soft_thr, idx_sigma, fmin, fmax, sigma_nfpow, amplitude, \
+            sigma_thr
+        else:
+            return np.array([], dtype=int), 0., 0., np.array([], dtype=int),\
+            np.array([])
 
 
 ###########################################################################
