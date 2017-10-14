@@ -11,12 +11,12 @@ Perform:
 - Peak detection
 """
 import numpy as np
-from scipy.signal import hilbert, detrend
+from scipy.signal import hilbert, detrend, welch
 
 from ..filtering import filt, morlet, morlet_power
-from ..sigproc import derivative, tkeo, smoothing
+from ..sigproc import derivative, tkeo, smoothing, normalization
 from .event import (_events_duration, _events_removal, _events_distance_fill,
-                    _events_amplitude)
+                    _events_amplitude, _index_to_events, _events_to_index)
 
 __all__ = ('kcdetect', 'spindlesdetect', 'remdetect', 'slowwavedetect',
            'mtdetect', 'peakdetect')
@@ -189,7 +189,7 @@ def kcdetect(elec, sf, proba_thr, amp_thr, hypno, nrem_only, tmin, tmax,
 
 def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
                    tmin=500, tmax=2000, method='wavelet', min_distance_ms=500,
-                   sigma_thr=0.25):
+                   sigma_thr=0.25, adapt_band=True):
     """Perform a sleep spindles detection.
 
     Parameters
@@ -218,6 +218,8 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
         two distinct spindles
     sigma_thr : float | 0.25
         Sigma band-wise normalized power threshold (between 0 and 1)
+    adapt_band : bool | True
+        If true, adapt sigma band limit by finding the peak sigma freq.
 
     Returns
     -------
@@ -244,10 +246,18 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
         length = max(data.shape)
 
     # Pre-detection
+    if adapt_band:
+        # Find peak sigma frequency
+        f, Pxx_den = welch(data, sf)
+        mfs = f[Pxx_den == Pxx_den[np.where((f >= 11) & (f <16))].max()][0]
+        fmin = mfs - 1
+        fmax = mfs + 1
+
     # Compute relative sigma power
     freqs = np.array([0.5, 4., 8., fmin, fmax])
     sigma_npow = morlet_power(data, freqs, sf, norm=True)[-1]
     sigma_nfpow = smoothing(sigma_npow, sf * (tmin / 1000))
+    # Vector of sigma power supra-threshold values
     idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
 
     # Get complex decomposition of filtered data :
@@ -264,38 +274,76 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
     elif method == 'wavelet':
         analytic = morlet(data, sf, np.mean([fmin, fmax]))
 
+    # Get envelope
     amplitude = np.abs(analytic)
 
     if hyploaded:
         amplitude[idx_zero] = np.nan
 
-    # Define threshold
-    thresh = np.nanmean(amplitude) + threshold * np.nanstd(amplitude)
+    # Define hard and soft thresholds
+    hard_thr = np.nanmean(amplitude) + threshold * np.nanstd(amplitude)
+    soft_thr = 0.5 * hard_thr
 
     with np.errstate(divide='ignore', invalid='ignore'):
-        idx_sup_thr = np.where(amplitude > thresh)[0]
+        idx_hard = np.where(amplitude > hard_thr)[0]
+        idx_soft = np.where(amplitude > soft_thr)[0]
 
-    if idx_sup_thr.size > 0:
+    # Find threshold-crossing indices of soft threshold
+    idx_zc_soft = _events_to_index(idx_soft).flatten()
 
-        idx_sup_thr = np.intersect1d(idx_sup_thr, idx_sigma, True)
-        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
+    if idx_hard.size > 0:
+        # Initialize spindles vector
+        idx_spindles = np.array([], dtype=int)
 
-        # Get where spindles start / end and duration :
-        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr,
-                                                               sf)
+        # Keep only period with high relative sigma power (i.e. remove artefact)
+        idx_hard = np.intersect1d(idx_hard, idx_sigma, True)
 
-        # Get where min_dur < spindles duration < max_dur :
+        # Fill gap between events separated by less than min_distance_ms
+        idx_hard = _events_distance_fill(idx_hard, min_distance_ms, sf)
+
+        # Get where spindles start / end :
+        idx_start, idx_stop = _events_to_index(idx_hard).T
+
+        # Find true beginning / end using soft threshold
+        for s in idx_start:
+            d = s - idx_zc_soft
+            # Find distance to nearest soft threshold crossing before start
+            soft_beg = d[d > 0].min()
+            # Find distance to nearest soft threshold crossing before start
+            soft_end = np.abs(d[d < 0]).min()
+            idx_spindles = np.append(idx_spindles, np.arange(
+                                        s - soft_beg, s + soft_end))
+
+            # Fill gap between events separated by less than min_distance_ms
+        idx_spindles = _events_distance_fill(idx_spindles, min_distance_ms, sf)
+
+        # Get duration
+        idx_start, idx_stop = _events_to_index(idx_spindles).T
+        duration_ms = (idx_stop - idx_start) * (1000 / sf)
+
+        # Remove events with bad duration
         good_dur = np.where(np.logical_and(duration_ms > tmin,
                                            duration_ms < tmax))[0]
 
-        good_idx = _events_removal(idx_start, idx_stop, good_dur)
+        idx_spindles = _index_to_events(np.c_[idx_start, idx_stop][good_dur])
 
-        idx_sup_thr = idx_sup_thr[good_idx]
+        # Compute number, duration, density
+        idx_start, idx_stop = _events_to_index(idx_spindles).T
+        number = idx_start.size
+        duration_ms = (idx_stop - idx_start) * (1000 / sf)
+        density = number / (data.size / sf / 60.)
 
-        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
-        density = number / (length / sf / 60.)
+        # Compute mean power of each spindles
+        power = np.zeros(shape=number)
+        for i, (start, stop) in enumerate(zip(idx_start, idx_stop)):
+            data_sp = data[start:stop]
+            # Using Morlet
+            ind_power = morlet_power(data_sp, [fmin, fmax], sf, norm=False)[0]
+            power[i] = np.mean(ind_power)
+        # Normalize by dividing by the mean
+        normalization(power, norm = 2)
 
-        return idx_sup_thr, number, density, duration_ms
+        return idx_spindles, number, density, duration_ms
 
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
