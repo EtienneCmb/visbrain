@@ -6,6 +6,10 @@ class is also responsible of turning camera rotations into light ajustement.
 
 This class inherit from vispy.visuals so it can be turned into a vispy node,
 which make it easier to add vispy transformations.
+
+Authors: Etienne Combrisson <e.combrisson@gmail.com>
+
+License: BSD (3-clause)
 """
 
 import numpy as np

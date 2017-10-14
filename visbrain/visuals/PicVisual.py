@@ -1,3 +1,8 @@
+"""
+Authors: Etienne Combrisson <e.combrisson@gmail.com>
+
+License: BSD (3-clause)
+"""
 import numpy as np
 
 from vispy import gloo, visuals, scene

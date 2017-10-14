@@ -6,6 +6,10 @@ node -> rescale x800 (solve GL issues for small plots)
     node_headfull -> scale (-1, 1)
         node_head -> recenter + (T4, Fpz)
         node_chan -> translate (0, 0, 10.) (objects superposition)
+
+Authors: Etienne Combrisson <e.combrisson@gmail.com>
+
+License: BSD (3-clause)
 """
 import os
 from warnings import warn

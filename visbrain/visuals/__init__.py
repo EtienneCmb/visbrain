@@ -1,6 +1,5 @@
 """Visual objects."""
 from .BrainVisual import BrainMesh
-from .canvas import VisbrainCanvas
 from .cbar import *
 from .ConnectVisual import ConnectMesh
 from .GridSignalVisual import GridSignal
