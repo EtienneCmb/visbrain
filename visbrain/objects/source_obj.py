@@ -57,8 +57,8 @@ class SourceObj(VisbrainObject):
         Text color attached to sources.
     text_bold : bool | False
         Specify if the text attached to sources should be bold.
-    text_dxyz : tuple | (0., 2., 0.)
-        Text shifting along the (x, y, z) axis.
+    text_translate : tuple | (0., 2., 0.)
+        Translate the text along the (x, y, z) axis.
     visible : bool/array_like | True
         Specify which source's have to be displayed. If visible is True, all
         sources are displayed, False all sources are hiden. Alternatively, use
@@ -81,7 +81,7 @@ class SourceObj(VisbrainObject):
                  symbol='disc', radius_min=5., radius_max=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None, mask_color='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
-                 text_dxyz=(0., 2., 0.), visible=True, transform=None,
+                 text_translate=(0., 2., 0.), visible=True, transform=None,
                  parent=None, _z=-10.):
         """Init."""
         # Init Visbrain object base class :
@@ -132,7 +132,7 @@ class SourceObj(VisbrainObject):
                                           font_size=text_size,
                                           parent=self._node)
         self._sources_text.visible = not tvisible
-        self._sources_text.transform = vist.STTransform(translate=text_dxyz)
+        self._sources_text.transform = vist.STTransform(translate=text_translate)
 
         # _______________________ UPDATE _______________________
         # Radius / color :
@@ -768,18 +768,18 @@ class SourceObj(VisbrainObject):
         self._text_color = color
         self._sources_text.update()
 
-    # ----------- TEXT_DXYZ -----------
+    # ----------- TEXT_TRANSLATE -----------
     @property
-    def text_dxyz(self):
-        """Get the text_dxyz value."""
-        return self._text_dxyz
+    def text_translate(self):
+        """Get the text_translate value."""
+        return self._text_translate
 
-    @text_dxyz.setter
-    def text_dxyz(self, value):
-        """Set text_dxyz value."""
+    @text_translate.setter
+    def text_translate(self, value):
+        """Set text_translate value."""
         assert len(value) == 3
         self._sources_text.transform.translate = value
-        self._text_dxyz = value
+        self._text_translate = value
         self._sources_text.update()
 
 
