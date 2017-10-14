@@ -57,7 +57,7 @@ class SourceObj(VisbrainObject):
         Text color attached to sources.
     text_bold : bool | False
         Specify if the text attached to sources should be bold.
-    text_shift : tuple | (0., 2., 0.)
+    text_dxyz : tuple | (0., 2., 0.)
         Text shifting along the (x, y, z) axis.
     visible : bool/array_like | True
         Specify which source's have to be displayed. If visible is True, all
@@ -81,7 +81,7 @@ class SourceObj(VisbrainObject):
                  symbol='disc', radius_min=5., radius_max=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None, mask_color='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
-                 text_shift=(0., 2., 0.), visible=True, transform=None,
+                 text_dxyz=(0., 2., 0.), visible=True, transform=None,
                  parent=None, _z=-10.):
         """Init."""
         # Init Visbrain object base class :
@@ -117,7 +117,7 @@ class SourceObj(VisbrainObject):
         self._mask_color = color2vb(mask_color)
 
         # _______________________ MARKERS _______________________
-        self._sources = visuals.Markers(pos=self._xyz, name=name,
+        self._sources = visuals.Markers(pos=self._xyz, name='SourceObjMarkers',
                                         edge_color=edge_color,
                                         edge_width=edge_width,
                                         symbol=symbol, parent=self._node)
@@ -127,12 +127,12 @@ class SourceObj(VisbrainObject):
         self._text = [''] * len(self) if tvisible else text
         assert len(self._text) == len(self)
         self._sources_text = visuals.Text(self._text, pos=self._xyz,
-                                          bold=text_bold, name=name + '_text',
+                                          bold=text_bold, name='SourceObjText',
                                           color=color2vb(text_color),
                                           font_size=text_size,
                                           parent=self._node)
         self._sources_text.visible = not tvisible
-        self._sources_text.transform = vist.STTransform(translate=text_shift)
+        self._sources_text.transform = vist.STTransform(translate=text_dxyz)
 
         # _______________________ UPDATE _______________________
         # Radius / color :
@@ -768,18 +768,18 @@ class SourceObj(VisbrainObject):
         self._text_color = color
         self._sources_text.update()
 
-    # ----------- TEXT_SHIFT -----------
+    # ----------- TEXT_DXYZ -----------
     @property
-    def text_shift(self):
-        """Get the text_shift value."""
-        return self._text_shift
+    def text_dxyz(self):
+        """Get the text_dxyz value."""
+        return self._text_dxyz
 
-    @text_shift.setter
-    def text_shift(self, value):
-        """Set text_shift value."""
+    @text_dxyz.setter
+    def text_dxyz(self, value):
+        """Set text_dxyz value."""
         assert len(value) == 3
         self._sources_text.transform.translate = value
-        self._text_shift = value
+        self._text_dxyz = value
         self._sources_text.update()
 
 
@@ -817,6 +817,14 @@ class CombineSources(CombineObjects):
         """See sources doc."""
         for k in self:
             k.set_visible_sources(v, select, distance)
+
+    def analyse_sources(self, *args, **kwargs):
+        """See sources doc."""
+        import pandas as pd
+        df = []
+        for k in self:
+            df.append(k.analyse_sources(*args, **kwargs))
+        return pd.concat(df, ignore_index=True)
 
     # ----------- _XYZ -----------
     @property
