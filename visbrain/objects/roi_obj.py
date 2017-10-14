@@ -1,7 +1,7 @@
 """Base class for objects of type ROI."""
 import numpy as np
 
-from .visbrain_obj import VisbrainObject
+from .visbrain_obj import VisbrainObject, CombineObjects
 from ..utils import load_predefined_roi, mni2tal
 from ..io import is_pandas_installed
 
@@ -178,3 +178,21 @@ class RoiObj(VisbrainObject):
 
     # def roi_to_mesh(self):
     #     pass
+
+
+class CombineRoi(CombineObjects):
+    """Combine Roi objects.
+
+    Parameters
+    ----------
+    robjs : RoiObj/list | None
+        List of Roi objects.
+    select : string | None
+        The name of the Roi object to select.
+    parent : VisPy.parent | None
+        Roi object parent.
+    """
+
+    def __init__(self, robjs=None, select=None, parent=None):
+        """Init."""
+        CombineObjects.__init__(self, RoiObj, robjs, select, parent)
