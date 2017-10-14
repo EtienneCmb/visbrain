@@ -4,7 +4,7 @@ import sys
 import vispy
 import vispy.visuals.transforms as vist
 
-from ..visuals import VisbrainCanvas
+from .scene_obj import VisbrainCanvas
 
 
 class VisbrainObject(object):
@@ -153,6 +153,11 @@ class CombineObjects(object):
         """Represent combined objects."""
         reprs = [repr(k) for k in self]
         return type(self).__name__ + "(" + ", ".join(reprs) + ")"
+
+    def update(self):
+        """Update every objects."""
+        for k in self:
+            k.update()
 
     def get_list_of_objects(self):
         """Get the list of defined objects."""
