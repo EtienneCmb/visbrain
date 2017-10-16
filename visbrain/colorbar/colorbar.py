@@ -81,7 +81,7 @@ class Colorbar(UiInit):
             obj1 = CbarBase(**kwargs)
             cbobjs.add_object(name, obj1, overwrite=False)
         self.cbqt = CbarQt(self.guiW, self.vizW, cbobjs)
-        self.cbqt._fcn_ChangeObj(clean=True)
+        self.cbqt._fcn_change_object(clean=True)
 
     def show(self):
         """Display the graphical user interface."""
