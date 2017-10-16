@@ -109,12 +109,18 @@ class SourceObj(VisbrainObject):
         self._xyz = vispy_array(pos)
         # Color :
         self._color, self._alpha = color, alpha
+        # Edges :
+        self._edge_color, self._edge_width = edge_color, edge_width
         # Mask :
         if mask is None:
             mask = [False] * len(self)
         self._mask = np.asarray(mask).ravel().astype(bool)
         assert len(self._mask) == len(self)
         self._mask_color = color2vb(mask_color)
+        # Text :
+        self._text_size = text_size
+        self._text_color = text_color
+        self._text_translate = text_translate
 
         # _______________________ MARKERS _______________________
         self._sources = visuals.Markers(pos=self._xyz, name='SourceObjMarkers',
@@ -180,6 +186,7 @@ class SourceObj(VisbrainObject):
 
     def update(self):
         """Update the source object."""
+        self._sources._vbo.set_data(self._sources._data)
         self._sources.update()
         self._sources_text.update()
 
@@ -197,8 +204,7 @@ class SourceObj(VisbrainObject):
         self._sources._data['a_edgewidth'][to_hide] = 0.
         text = np.array(self._text.copy())
         text[to_hide] = ''
-        self._sources_text.text = text
-        self._sources.update()
+        self.update()
 
     def _update_color(self):
         """Update marker's color."""
@@ -218,6 +224,7 @@ class SourceObj(VisbrainObject):
         # Update masked marker's color :
         bg_color[self._mask, :] = self._mask_color
         self._sources._data['a_bg_color'] = bg_color
+        self.update()
 
     def _get_camera(self):
         """Get the most adapted camera."""
@@ -645,7 +652,7 @@ class SourceObj(VisbrainObject):
         assert isinstance(value, (int, float))
         self._edge_width = value
         self._sources._data['a_edgewidth'] = value
-        self._sources.update()
+        self.update()
 
     # ----------- EDGE_COLOR -----------
     @property
@@ -656,10 +663,10 @@ class SourceObj(VisbrainObject):
     @edge_color.setter
     def edge_color(self, value):
         """Set edge_color value."""
-        color = color2vb(value)
+        color = color2vb(value, alpha=self.alpha)
         self._sources._data['a_fg_color'] = color
         self._edge_color = color
-        self._sources.update()
+        self.update()
 
     # ----------- ALPHA -----------
     @property
@@ -675,7 +682,7 @@ class SourceObj(VisbrainObject):
         self._alpha = value
         self._sources._data['a_fg_color'][:, -1] = value
         self._sources._data['a_bg_color'][:, -1] = value
-        self._sources.update()
+        self.update()
 
     # ----------- COLOR -----------
     @property
@@ -853,6 +860,15 @@ class CombineSources(CombineObjects):
         for k in self:
             data = np.r_[data, k.data] if data.size else k.data
         return data
+
+    # ----------- _TEXT -----------
+    @property
+    def _text(self):
+        """Get the _text value."""
+        _text = np.array([])
+        for k in self:
+            _text = np.r_[_text, k._text] if _text.size else k._text
+        return _text
 
     # ----------- TEXT -----------
     @property
