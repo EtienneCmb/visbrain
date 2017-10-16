@@ -81,13 +81,12 @@ class VisbrainObject(object):
     @property
     def visible_obj(self):
         """Get the visible_obj value."""
-        return self._visible_obj
+        return self._node.visible
 
     @visible_obj.setter
     def visible_obj(self, value):
         """Set visible_obj value."""
         assert isinstance(value, bool)
-        self._visible_obj = value
         self._node.visible = value
 
 
@@ -156,7 +155,9 @@ class CombineObjects(object):
 
     def update(self):
         """Update every objects."""
+        self._cnode.update()
         for k in self:
+            k._node.update()
             k.update()
 
     def get_list_of_objects(self):
