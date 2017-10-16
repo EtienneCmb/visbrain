@@ -121,7 +121,7 @@ class ConnectObj(VisbrainObject, CbarArgs):
         """Update the line."""
         self._connect.update()
 
-    def _build_line(self, force=True):
+    def _build_line(self):
         """Build the connectivity line."""
         # Build the line position (consecutive segments):
         nnz_x, nnz_y = np.where(~self._edges.mask)
@@ -179,7 +179,8 @@ class ConnectObj(VisbrainObject, CbarArgs):
     def line_width(self, value):
         """Set line_width value."""
         assert isinstance(value, (int, float))
-        self._connect.width = value
+        self._connect._width = value
+        self.update()
 
     # ----------- COLOR_BY -----------
     @property
@@ -203,7 +204,7 @@ class ConnectObj(VisbrainObject, CbarArgs):
     @dynamic.setter
     def dynamic(self, value):
         """Set dynamic value."""
-        assert len(value) == 2
+        assert value is None or len(value) == 2
         self._dynamic = value
         self._build_line()
 
@@ -219,6 +220,7 @@ class ConnectObj(VisbrainObject, CbarArgs):
         assert 0. <= value <= 1.
         self._connect.color[:, -1] = value
         self._alpha = value
+        self.update()
 
 
 class CombineConnect(CombineObjects):
