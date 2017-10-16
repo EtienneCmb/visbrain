@@ -148,22 +148,13 @@ class BrainCanvas(object):
 
 
 class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, BrainShortcuts):
-    """Group and initialize the graphical elements and interactions.
-
-    Kargs:
-        bgcolor: tuple, optional, (def: (0.1, 0.1, 0.1))
-            Background color of the main window. The same background
-            will be used for the colorbar panel so that future figures
-            can be uniform.
-    """
+    """Group and initialize the graphical elements and interactions."""
 
     def __init__(self, bgcolor=(0.1, 0.1, 0.1)):
         """Init."""
         # Create the main window :
         super(UiInit, self).__init__(None)
         self.setupUi(self)
-        if self._savename is not None:
-            self.setWindowTitle('Brain - ' + self._savename)
 
         # Get screen size :
         size = get_screen_size(self._app)
