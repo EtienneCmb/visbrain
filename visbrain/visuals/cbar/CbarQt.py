@@ -1,10 +1,27 @@
 """Mehods to manage interactions between the GUI and objects."""
+from functools import wraps
 
-from ...utils import color2json, mpl_cmap, mpl_cmap_index
 from .gui import CbarForm
 from .CbarVisual import CbarVisual
+from ...utils import color2json, mpl_cmap, mpl_cmap_index
 
 __all__ = ['CbarQt']
+
+
+def _run_method_if_needed(fn):
+    @wraps(fn)
+    def wrapper(self):
+        if self._trigger_cbar:
+            fn(self)
+    return wrapper
+
+
+def _update_obj(fn):
+    @wraps(fn)
+    def wrapper(self):
+        if self._update_obj:
+            fn(self)
+    return wrapper
 
 
 class CbarQt(object):
@@ -24,7 +41,7 @@ class CbarQt(object):
     def __init__(self, guiW, vizW, cbobjs, parent=None, camera=None):
         """Init."""
         # --------------------------------------------------------------------
-        #                             GUI COMPONENTS
+        #                          GUI COMPONENTS
         # --------------------------------------------------------------------
         # Add colorbar properties to guiW :
         self.cbui = CbarForm()
@@ -33,8 +50,63 @@ class CbarQt(object):
         self.cbviz = CbarVisual(parent=parent)
         vizW.addWidget(self.cbviz._canvas.native)
         self.cbobjs = cbobjs
-
+        # Add items contains in the cbobs :
         self['object'].addItems(self.cbobjs.keys())
+
+        # --------------------------------------------------------------------
+        #                         CONNECT GUI ELEMENTS
+        # --------------------------------------------------------------------
+        self['object'].currentIndexChanged.connect(self._fcn_change_object)
+        self['bckCol'].editingFinished.connect(self._fcn_bgcolor)
+        self['txtCol'].editingFinished.connect(self._fcn_text_color)
+        self['ndigits'].valueChanged.connect(self._fcn_n_digits)
+        self['width'].valueChanged.connect(self._fcn_width)
+        self['border'].clicked.connect(self._fcn_border)
+        self['bw'].valueChanged.connect(self._fcn_bw)
+        self['limTxt'].clicked.connect(self._fcn_limits)
+        self['ndigits'].setKeyboardTracking(False)
+        self['width'].setKeyboardTracking(False)
+
+        # _____________ COLORMAPS _____________
+        self._cmaps = mpl_cmap()
+        self['cmap'].addItems(self._cmaps)
+        self['cmap'].currentIndexChanged.connect(self._fcn_cmap_changed)
+        self['cmapRev'].clicked.connect(self._fcn_cmap_changed)
+
+        # _____________ CLIM _____________
+        self['climm'].valueChanged.connect(self._fcn_clim_changed)
+        self['climM'].valueChanged.connect(self._fcn_clim_changed)
+        self['climm'].setKeyboardTracking(False)
+        self['climM'].setKeyboardTracking(False)
+
+        # _____________ VMIN/VMAX _____________
+        # Vmin :
+        self['isvmin'].clicked.connect(self._fcn_vmin_changed)
+        self['vmin'].valueChanged.connect(self._fcn_vmin_changed)
+        self['under'].editingFinished.connect(self._fcn_vmin_changed)
+        self['vmin'].setKeyboardTracking(False)
+        # Vmax :
+        self['isvmax'].clicked.connect(self._fcn_vmax_changed)
+        self['vmax'].valueChanged.connect(self._fcn_vmax_changed)
+        self['over'].editingFinished.connect(self._fcn_vmax_changed)
+        self['vmax'].setKeyboardTracking(False)
+
+        # _____________ TEXT _____________
+        # Colorbar label :
+        self['cblabel'].editingFinished.connect(self._fcn_cb_title)
+        self['cbTxtSz'].valueChanged.connect(self._fcn_cb_txt_size)
+        self['cbTxtSh'].valueChanged.connect(self._fcn_cb_txt_shift)
+        self['cbTxtSz'].setKeyboardTracking(False)
+        self['cbTxtSh'].setKeyboardTracking(False)
+        # Limits label :
+        self['txtSz'].valueChanged.connect(self._fcn_txt_size)
+        self['txtSh'].valueChanged.connect(self._fcn_txt_shift)
+        self['txtSz'].setKeyboardTracking(False)
+        self['txtSh'].setKeyboardTracking(False)
+
+        # _____________ AUTOSCALE _____________
+        self['autoscale'].clicked.connect(self._fcn_cb_autoscale)
+        self._trigger_cbar = True
 
     ###########################################################################
     ###########################################################################
@@ -51,6 +123,10 @@ class CbarQt(object):
             exec('self.cbviz.' + key + '=' + str(value))
         else:
             exec("self.cbviz." + key + "='" + value + "'")
+
+    def __bool__(self):
+        """Test if there's objects defined."""
+        return bool(len(self.cbobjs.keys()))
 
     ###########################################################################
     ###########################################################################
@@ -97,7 +173,7 @@ class CbarQt(object):
         self.cbobjs._objs[name]._fcn = fcn
         self.cbobjs._objs[name]._minmaxfcn = minmaxfcn
 
-    def select(self, name, onload=False):
+    def select(self, name):
         """Select an object.
 
         Parameters
@@ -106,25 +182,26 @@ class CbarQt(object):
             Name of the object to select.
         """
         # Get the list of all current objects :
-        allItems = [self['object'].itemText(i) for i in range(
+        all_items = [self['object'].itemText(i) for i in range(
             self['object'].count())]
-        if name in allItems:
-            # Select object in the cbar object manager :
-            self.cbobjs.select(name)
-            # Find the index and set it in the combobox :
-            idx = allItems.index(name)
-            self['object'].setCurrentIndex(idx)
-        else:
-            raise ValueError(name + " not in the list of objects.")
+        if isinstance(name, str):
+            idx = all_items.index(name)
+        elif isinstance(name, int):
+            idx = name
+            name = all_items[name]
+        assert name in all_items
+        # Select object in the cbar object manager :
+        self.cbobjs.select(name)
+        self['object'].setCurrentIndex(idx)
 
     def setEnabled(self, name, enable=True):
         """Deactivate an object."""
         # Get the list of all current objects :
-        allItems = [self['object'].itemText(i) for i in range(
+        all_items = [self['object'].itemText(i) for i in range(
             self['object'].count())]
-        if name in allItems:
+        if name in all_items:
             # Find the index and set it in the combobox :
-            idx = allItems.index(name)
+            idx = all_items.index(name)
             self['object'].model().item(idx).setEnabled(enable)
 
     ###########################################################################
@@ -146,9 +223,6 @@ class CbarQt(object):
         self['limTxt'].setChecked(self.cbobjs['limtxt'])
 
         # _____________ COLORMAPS _____________
-        self['cmap'].clear()
-        self._cmaps = mpl_cmap()
-        self['cmap'].addItems(self._cmaps)
         idx, rev = mpl_cmap_index(self.cbobjs['cmap'])
         self['cmap'].setCurrentIndex(idx)
         self['cmapRev'].setChecked(rev)
@@ -160,7 +234,7 @@ class CbarQt(object):
 
         # _____________ VMIN/VMAX _____________
         # Set vmin/vmax limits :
-        self._vminvmaxCheck()
+        self._check_vmin_vmax()
         # Vmin/under :
         self['isvmin'].setChecked(self.cbobjs['isvmin'])
         self['vmin'].setValue(self.cbobjs['vmin'])
@@ -179,128 +253,33 @@ class CbarQt(object):
         self['txtSz'].setValue(self.cbobjs['txtsz'])
         self['txtSh'].setValue(self.cbobjs['txtsh'])
 
-        self._gui2visual()
+        # Enable to run methods to update the CbarVisual :
+        self._trigger_cbar = True
+        self._gui_to_visual()
 
     # --------------------------------------------------------------------
     #                             GUI -> VISUAL
     # --------------------------------------------------------------------
-    def _gui2visual(self):
+    def _gui_to_visual(self):
         # Settings :
-        self._fcn_BckCol()
-        self._fcn_TxtCol()
-        self._fcn_Digits()
-        self._fcn_Width()
-        self._fcn_Border()
-        self._fcn_Bw()
-        self._fcn_Limits()
+        self._fcn_bgcolor()
+        self._fcn_text_color()
+        self._fcn_n_digits()
+        self._fcn_width()
+        self._fcn_border()
+        self._fcn_bw()
+        self._fcn_limits()
         # Cmap/Clim/Vmin/Vmax :
-        self._fcn_cmapChanged()
-        self._fcn_climchanged()
-        self._fcn_vminChanged()
-        self._fcn_vmaxChanged()
+        self._fcn_cmap_changed()
+        self._fcn_clim_changed()
+        self._fcn_vmin_changed()
+        self._fcn_vmax_changed()
         # Text :
-        self._fcn_CbTitle()
-        self._fcn_cbTxtSize()
-        self._fcn_cbTxtShift()
-        self._fcn_TxtSize()
-        self._fcn_TxtShift()
-
-    # --------------------------------------------------------------------
-    #                             CONNECT
-    # --------------------------------------------------------------------
-    def _connect(self):
-        """Connect cbui to cbviz."""
-        # _____________ SETTINGS _____________
-        self['object'].currentIndexChanged.connect(self._fcn_ChangeObj)
-        self['bckCol'].editingFinished.connect(self._fcn_BckCol)
-        self['txtCol'].editingFinished.connect(self._fcn_TxtCol)
-        self['ndigits'].valueChanged.connect(self._fcn_Digits)
-        self['width'].valueChanged.connect(self._fcn_Width)
-        self['border'].clicked.connect(self._fcn_Border)
-        self['bw'].valueChanged.connect(self._fcn_Bw)
-        self['limTxt'].clicked.connect(self._fcn_Limits)
-        self['ndigits'].setKeyboardTracking(False)
-        self['width'].setKeyboardTracking(False)
-
-        # _____________ COLORMAPS _____________
-        self['cmap'].currentIndexChanged.connect(self._fcn_cmapChanged)
-        self['cmapRev'].clicked.connect(self._fcn_cmapChanged)
-
-        # _____________ CLIM _____________
-        self['climm'].valueChanged.connect(self._fcn_climchanged)
-        self['climM'].valueChanged.connect(self._fcn_climchanged)
-        self['climm'].setKeyboardTracking(False)
-        self['climM'].setKeyboardTracking(False)
-
-        # _____________ VMIN/VMAX _____________
-        # Vmin :
-        self['isvmin'].clicked.connect(self._fcn_vminChanged)
-        self['vmin'].valueChanged.connect(self._fcn_vminChanged)
-        self['under'].editingFinished.connect(self._fcn_vminChanged)
-        self['vmin'].setKeyboardTracking(False)
-        # Vmax :
-        self['isvmax'].clicked.connect(self._fcn_vmaxChanged)
-        self['vmax'].valueChanged.connect(self._fcn_vmaxChanged)
-        self['over'].editingFinished.connect(self._fcn_vmaxChanged)
-        self['vmax'].setKeyboardTracking(False)
-
-        # _____________ TEXT _____________
-        # Colorbar label :
-        self['cblabel'].editingFinished.connect(self._fcn_CbTitle)
-        self['cbTxtSz'].valueChanged.connect(self._fcn_cbTxtSize)
-        self['cbTxtSh'].valueChanged.connect(self._fcn_cbTxtShift)
-        self['cbTxtSz'].setKeyboardTracking(False)
-        self['cbTxtSh'].setKeyboardTracking(False)
-        # Limits label :
-        self['txtSz'].valueChanged.connect(self._fcn_TxtSize)
-        self['txtSh'].valueChanged.connect(self._fcn_TxtShift)
-        self['txtSz'].setKeyboardTracking(False)
-        self['txtSh'].setKeyboardTracking(False)
-
-        # _____________ AUTOSCALE _____________
-        self['autoscale'].clicked.connect(self._fcn_cbAutoscale)
-
-    # --------------------------------------------------------------------
-    #                             DISCONNECT
-    # --------------------------------------------------------------------
-    def _disconnect(self):
-        def _try(obj):
-            """Be sure to deconnect to all interactions."""
-            while True:
-                try:
-                    obj.disconnect()
-                except TypeError:
-                    break
-        # Settings :
-        _try(self['object'])
-        _try(self['bckCol'])
-        _try(self['txtCol'])
-        _try(self['ndigits'])
-        _try(self['width'])
-        _try(self['border'])
-        _try(self['bw'])
-        _try(self['limTxt'])
-        # Cmap :
-        _try(self['cmap'])
-        _try(self['cmapRev'])
-        # Clim :
-        _try(self['climm'])
-        _try(self['climM'])
-        # Vmin/Vmax/Under/Over :
-        _try(self['isvmin'])
-        _try(self['vmin'])
-        _try(self['under'])
-        _try(self['isvmax'])
-        _try(self['vmax'])
-        _try(self['over'])
-        # Text :
-        _try(self['cblabel'])
-        _try(self['cbTxtSz'])
-        _try(self['cbTxtSh'])
-        _try(self['txtSz'])
-        _try(self['txtSh'])
-        # Autoscale :
-        _try(self['autoscale'])
+        self._fcn_cb_title()
+        self._fcn_cb_txt_size()
+        self._fcn_cb_txt_shift()
+        self._fcn_txt_size()
+        self._fcn_txt_shift()
 
     ###########################################################################
     ###########################################################################
@@ -310,10 +289,11 @@ class CbarQt(object):
     # --------------------------------------------------------------------
     #                             SETTINGS
     # --------------------------------------------------------------------
-    def _fcn_ChangeObj(self, *args, clean=False):
+    def _fcn_change_object(self, *args, clean=False):
         """Change colorbar object."""
         # Disconnect interactions :
-        self._disconnect()
+        self._trigger_cbar = False
+        self['object'].disconnect()
         # Clean drowdown box for object selection :
         if clean:
             self['object'].clear()
@@ -325,18 +305,21 @@ class CbarQt(object):
         # Update GUI :
         self._initialize()
         # Re-connect interactions :
-        self._connect()
+        self._trigger_cbar = True
+        self['object'].currentIndexChanged.connect(self._fcn_change_object)
 
-    def _fcn_BckCol(self):
+    @_run_method_if_needed
+    def _fcn_bgcolor(self):
         """Change background color."""
         bgcolor = color2json(self['bckCol'])
         self['bgcolor'] = bgcolor
         self.cbobjs['bgcolor'] = self.cbviz.bgcolor
 
-    def _fcn_Digits(self):
+    @_run_method_if_needed
+    def _fcn_n_digits(self):
         """Change the number of digits."""
         ndigits = self['ndigits'].value()
-        if 0 < ndigits:
+        if ndigits > 0:
             self['ndigits'] = ndigits
             self.cbobjs['ndigits'] = self.cbviz.ndigits
             self['climm'].setDecimals(ndigits)
@@ -344,19 +327,22 @@ class CbarQt(object):
             self['vmin'].setDecimals(ndigits)
             self['vmax'].setDecimals(ndigits)
 
-    def _fcn_Width(self):
+    @_run_method_if_needed
+    def _fcn_width(self):
         """Change colorbar width."""
         self['width'] = self['width'].value()
         self.cbobjs['width'] = self.cbviz.width
 
-    def _fcn_Border(self):
+    @_run_method_if_needed
+    def _fcn_border(self):
         """Set the border."""
         viz = self['border'].isChecked()
         self['border'] = viz
         self.cbobjs['border'] = self.cbviz.border
         self['bw'].setEnabled(viz)
 
-    def _fcn_Bw(self):
+    @_run_method_if_needed
+    def _fcn_bw(self):
         """Change border width."""
         self['bw'] = self['bw'].value()
         self.cbobjs['bw'] = self.cbviz.bw
@@ -364,7 +350,8 @@ class CbarQt(object):
     # --------------------------------------------------------------------
     #                                CMAP
     # --------------------------------------------------------------------
-    def _fcn_cmapChanged(self):
+    @_run_method_if_needed
+    def _fcn_cmap_changed(self):
         """Change the colormap."""
         rv = self['cmapRev'].isChecked() * '_r'
         self['cmap'] = str(self['cmap'].currentText()) + rv
@@ -375,48 +362,50 @@ class CbarQt(object):
     # --------------------------------------------------------------------
     #                             CLIM
     # --------------------------------------------------------------------
-    def _fcn_climchanged(self):
+    @_run_method_if_needed
+    def _fcn_clim_changed(self):
         """Update colorbar limits."""
         # Get value (climm, climM):
         climm = float(self['climm'].value())
-        climM = float(self['climM'].value())
+        clim_max = float(self['climM'].value())
         # Fix (climm, climM) limits :
-        if climm < climM:
+        if climm < clim_max:
             # Update clim :
-            self['clim'] = (climm, climM)
+            self['clim'] = (climm, clim_max)
             self.cbobjs['clim'] = self.cbviz.clim
             # Update vmin/vmax limits :
-            self._vminvmaxCheck()
+            self._check_vmin_vmax()
             # Run object's update function :
             self.cbobjs.update()
         else:
-            raise ValueError(str(tuple((climm, climM))) + " : clim.min() "
+            raise ValueError(str(tuple((climm, clim_max))) + " : clim.min() "
                              "> clim.max().")
 
     # --------------------------------------------------------------------
     #                   VMIN / VMAX / UNDER / OVER
     # --------------------------------------------------------------------
-    def _vminvmaxCheck(self):
+    def _check_vmin_vmax(self):
         """Activate checkboxs if vmin/vmax not None."""
         # Get clim and define step :
         climm = float(self['climm'].value())
-        climM = float(self['climM'].value())
-        step = (climM - climm) / 100.
+        clim_max = float(self['climM'].value())
+        step = (clim_max - climm) / 100.
         # -------------- Vmin --------------
         if not isinstance(self.cbobjs['vmin'], (int, float)):
             self.cbobjs['vmin'] = climm - 1.
         self['vmin'].setMinimum(climm)
-        self['vmin'].setMaximum(climM)
+        self['vmin'].setMaximum(clim_max)
         self['vmin'].setSingleStep(step)
 
         # -------------- Vmax --------------
         if not isinstance(self.cbobjs['vmax'], (int, float)):
-            self.cbobjs['vmax'] = climM + 1.
+            self.cbobjs['vmax'] = clim_max + 1.
         self['vmax'].setMinimum(climm)
-        self['vmax'].setMaximum(climM)
+        self['vmax'].setMaximum(clim_max)
         self['vmax'].setSingleStep(step)
 
-    def _fcn_vminChanged(self):
+    @_run_method_if_needed
+    def _fcn_vmin_changed(self):
         """Change vmin/vmax/under/over."""
         isvmin = self['isvmin'].isChecked()
         # Enable/Disable panels :
@@ -431,7 +420,8 @@ class CbarQt(object):
         # Run object's update function :
         self.cbobjs.update()
 
-    def _fcn_vmaxChanged(self):
+    @_run_method_if_needed
+    def _fcn_vmax_changed(self):
         """Change vmin/vmax/under/over."""
         isvmax = self['isvmax'].isChecked()
         self['vmaxW'].setEnabled(isvmax)
@@ -445,7 +435,8 @@ class CbarQt(object):
         # Run object's update function :
         self.cbobjs.update()
 
-    def _fcn_Limits(self):
+    @_run_method_if_needed
+    def _fcn_limits(self):
         """Display/hide vmin/vmax."""
         self['limtxt'] = self['limTxt'].isChecked()
         self.cbobjs['limtxt'] = self.cbviz.limtxt
@@ -453,31 +444,37 @@ class CbarQt(object):
     # --------------------------------------------------------------------
     #                             TEXT
     # --------------------------------------------------------------------
-    def _fcn_CbTitle(self):
+    @_run_method_if_needed
+    def _fcn_cb_title(self):
         """Change colorbar title."""
         self['cblabel'] = str(self['cblabel'].text())
         self.cbobjs['cblabel'] = self.cbviz.cblabel
 
-    def _fcn_cbTxtSize(self):
+    @_run_method_if_needed
+    def _fcn_cb_txt_size(self):
         """Change colorbar text size."""
         self['cbtxtsz'] = self['cbTxtSz'].value()
         self.cbobjs['cbtxtsz'] = self.cbviz.cbtxtsz
 
-    def _fcn_cbTxtShift(self):
+    @_run_method_if_needed
+    def _fcn_cb_txt_shift(self):
         """Change cblabel shift."""
         self['cbtxtsh'] = self['cbTxtSh'].value()
         self.cbobjs['cbtxtsh'] = self.cbviz.cbtxtsh
 
-    def _fcn_TxtSize(self):
+    @_run_method_if_needed
+    def _fcn_txt_size(self):
         """Change text size for limits."""
         self['txtsz'] = self['txtSz'].value()
         self.cbobjs['txtsz'] = self.cbviz.txtsz
 
-    def _fcn_TxtShift(self):
+    @_run_method_if_needed
+    def _fcn_txt_shift(self):
         """Change text shift."""
         self['txtsh'] = self['txtSh'].value()
 
-    def _fcn_TxtCol(self):
+    @_run_method_if_needed
+    def _fcn_text_color(self):
         """Change text color."""
         txtcolor = color2json(self['txtCol'])
         self['txtcolor'] = txtcolor
@@ -487,29 +484,28 @@ class CbarQt(object):
     # --------------------------------------------------------------------
     #                             TEXT
     # --------------------------------------------------------------------
-    def _fcn_cbAutoscale(self, *args, name=None):
+    def _fcn_cb_autoscale(self, *args, name=None):
         """Autoscale limits to data (Min, Max)."""
         # Select object if it's not the current one :
         if (name is not None) and self.cbobjs.name != name:
             self.select(name)
         # Disconnect clim buttons :
-        self['climm'].disconnect()
-        self['climM'].disconnect()
+        self._trigger_cbar = False
         # Run the auto-scaling function :
+        self['isvmin'] = False
+        self['isvmax'] = False
+        self.cbobjs['isvmin'] = False
+        self.cbobjs['isvmax'] = False
         self.cbobjs.autoscale()
         # Set clim to the gui :
         self['climm'].setValue(self.cbobjs['clim'][0])
         self['climM'].setValue(self.cbobjs['clim'][1])
         # Check vmin/vmax values :
-        self._vminvmaxCheck()
-        # Set clim the the VisPy based colorbar :
+        self._check_vmin_vmax()
+        # Set clim to the VisPy based colorbar :
         self['clim'] = self.cbobjs['clim']
-        # Reconnect clim buttons :
-        self['climm'].valueChanged.connect(self._fcn_climchanged)
-        self['climM'].valueChanged.connect(self._fcn_climchanged)
-        self['climm'].setKeyboardTracking(False)
-        self['climM'].setKeyboardTracking(False)
         # Deactivate vmin/vmax :
         self['isvmin'].setChecked(False)
         self['isvmax'].setChecked(False)
         self['isvmin'] = self['isvmax'] = False
+        self._trigger_cbar = True
