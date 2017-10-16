@@ -17,17 +17,15 @@ The following elements are initialized :
 
 from vispy import scene
 
+from ...objects import (CombineSources, CombineConnect, CombineTimeSeries,
+                        CombinePictures)
+
 from .AtlasBase import AtlasBase
-from .SourcesBase import SourcesBase
-from .ConnectBase import ConnectBase
-from .TimeSeriesBase import TimeSeriesBase
-from .PicBase import PicBase
 from .VolumeBase import VolumeBase
 from .projection import Projections
-from ...utils import toggle_enable_tab
 
 
-class base(Projections):
+class BaseVisual(Projections):
     """Initialize Brain objects.
 
     Initialize sources / connectivity / areas / colorbar / projections.
@@ -45,11 +43,10 @@ class base(Projections):
         # Initialize visbrain objects :
         self.atlas = AtlasBase(**kwargs)
         self.volume = VolumeBase(parent_sp=parent_sp)
-        self.sources = SourcesBase(**kwargs)
-        self.connect = ConnectBase(_xyz=self.sources.xyz,
-                                   c_xyz=self.sources.xyz, **kwargs)
-        self.tseries = TimeSeriesBase(ts_xyz=self.sources.xyz, **kwargs)
-        self.pic = PicBase(pic_xyz=self.sources.xyz, **kwargs)
+        self.sources = CombineSources(kwargs.get('source_obj', None))
+        self.connect = CombineConnect(kwargs.get('connect_obj', None))
+        self.tseries = CombineTimeSeries(kwargs.get('time_series_obj', None))
+        self.pic = CombinePictures(kwargs.get('picture_obj', None))
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -60,46 +57,27 @@ class base(Projections):
         # corresponding object.
 
         # Sources panel:
-        if self.sources.name is 'NoneSources':
+        if self.sources.name is None:
+            self._obj_type_lst.model().item(0).setEnabled(False)
             # Disable menu :
             self.menuDispSources.setChecked(False)
             self.menuDispSources.setEnabled(False)
             self.menuTransform.setEnabled(False)
-            # Disable source/connect/cbar tabs :
-            toggle_enable_tab(self.QuickSettings, 'Sources', False)
-            toggle_enable_tab(self.QuickSettings, 'Connect', False)
-            toggle_enable_tab(self.QuickSettings, 'Cbar', False)
-            # Disable transparency on sources :
-            self.o_Sources.setEnabled(False)
-            self.o_Sources.setChecked(False)
-
-        # Text panel:
-        if self.sources.stextmesh.name == 'NoneText':
-            self.o_Text.setEnabled(False)
-            self.o_Text.setChecked(False)
-            self.grpText.setEnabled(False)
-
-        # Time-series panel :
-        if self.tseries.mesh.name == 'NoneTimeSeries':
-            self.grpTs.setEnabled(False)
-
-        # Pictures panel :
-        if self.pic.mesh.name == 'NonePic':
-            self.grpPic.setEnabled(False)
 
         # Connectivity panel:
-        if self.connect.name == 'NoneConnect':
+        if self.connect.name is None:
+            self._obj_type_lst.model().item(1).setEnabled(False)
             # Disable menu :
             self.menuDispConnect.setEnabled(False)
             self.menuDispConnect.setChecked(False)
-            # Disable Connect tab :
-            toggle_enable_tab(self.QuickSettings, 'Connect', False)
-            self.o_Connect.setEnabled(False)
-            self.o_Connect.setChecked(False)
-        elif self.connect.colval is not None:
-            self.cmapConnect.setEnabled(False)
-            self.o_Connect.setEnabled(False)
-        self._lw = kwargs.get('c_linewidth', 4.)
+
+        # Time-series panel :
+        if self.tseries.name is None:
+            self._obj_type_lst.model().item(2).setEnabled(False)
+
+        # Pictures panel :
+        if self.pic.name is None:
+            self._obj_type_lst.model().item(3).setEnabled(False)
 
         # ---------- Put everything in a root node ----------
         # Here, each object is put in a root node so that each transformation
@@ -110,11 +88,10 @@ class base(Projections):
 
         # Make this root node the parent of others Brain objects :
         self.volume.parent = self._vbNode
-        self.sources.mesh.parent = self._vbNode
-        self.connect.mesh.parent = self._vbNode
-        self.sources.stextmesh.parent = self._vbNode
-        self.tseries.mesh.parent = self._vbNode
-        self.pic.mesh.parent = self._vbNode
+        self.sources.parent = self._vbNode
+        self.connect.parent = self._vbNode
+        self.tseries.parent = self._vbNode
+        self.pic.parent = self._vbNode
         self.atlas.mesh.parent = self._vbNode
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)
