@@ -58,14 +58,7 @@ class UiSettings(object):
     # =============================================================
     def _fcn_tab_changed(self):
         """Executed function when the user change the tab."""
-        # Get tab name :
-        tabname = str(self.QuickSettings.currentWidget().objectName())
-        # 
-        if (tabname == 'q_CONNECT') and (self.connect.name != 'NoneConnect'):
-            self.cbqt.select('Connectivity')
-        elif (tabname == 'q_SOURCES') and (self.sources.name != 'NoneSources'):
-            if self._modproj is not None:
-                self.cbqt.select('Projection')
+        pass
 
     # =============================================================
     # GUI
