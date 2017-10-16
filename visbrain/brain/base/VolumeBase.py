@@ -1,6 +1,5 @@
 """Oki."""
 import numpy as np
-import os
 
 from vispy import scene
 import vispy.visuals.transforms as vist
@@ -9,8 +8,7 @@ from vispy.color import BaseColormap
 
 from .CrossSecBase import CrossSections
 from .RoiBase import RoiBase
-from ...utils import (array_to_stt, normalize, get_data_path,
-                      load_predefined_roi)
+from ...utils import (array_to_stt, normalize, load_predefined_roi)
 
 __all__ = ('VolumeBase')
 
@@ -214,19 +212,27 @@ class VolumeBase(CrossSections, Volume3D, RoiBase):
     def _load_default(self):
         """Load the AAL and Brodmann atlas."""
         # _______________ BRODMANN _______________
-        vol, label, roi_values, hdr, _ = load_predefined_roi('brodmann')
+        vol, label, index, hdr, _ = load_predefined_roi('brodmann')
         tr = array_to_stt(hdr)
-        label = self._labels_to_gui(label['brodmann'])
+        label = self._labels_to_gui(label['brodmann'], index)
         # Add Brodmann to referenced volumes :
-        self.add_volume('Brodmann', vol, transform=tr, roi_values=roi_values,
+        self.add_volume('Brodmann', vol, transform=tr, roi_values=index,
                         roi_labels=label)
 
         # _______________ AAL _______________
-        vol, label, roi_values, hdr, _ = load_predefined_roi('aal')
+        vol, label, index, hdr, _ = load_predefined_roi('aal')
         tr = array_to_stt(hdr)
-        label = self._labels_to_gui(label['aal'])
+        label = self._labels_to_gui(label['aal'], index)
         # Add AAL to referenced volumes :
-        self.add_volume('AAL', vol, transform=tr, roi_values=roi_values,
+        self.add_volume('AAL', vol, transform=tr, roi_values=index,
+                        roi_labels=label)
+
+        # _______________ Talairach _______________
+        vol, label, index, hdr, _ = load_predefined_roi('talairach')
+        tr = array_to_stt(hdr)
+        label = self._labels_to_gui(label, index)
+        # Add Talairach to referenced volumes :
+        self.add_volume('Talairach', vol, transform=tr, roi_values=index,
                         roi_labels=label)
 
     def add_volume(self, name, vol, **kwargs):
@@ -265,7 +271,7 @@ class VolumeBase(CrossSections, Volume3D, RoiBase):
         self._node_vol.update()
         self._node_cs.update()
 
-    def _labels_to_gui(self, label, pattern=''):
+    def _labels_to_gui(self, label, index, pattern=''):
         """Convert list of labels for GUI integration.
 
         Convert "label" => "00: " + pattern + "label"
@@ -274,6 +280,8 @@ class VolumeBase(CrossSections, Volume3D, RoiBase):
         ----------
         label : array_like
             Array of labels.
+        index : array_like
+            Label index.
         pattern : string | ''
             Pattern to add to each label.
 
@@ -284,8 +292,8 @@ class VolumeBase(CrossSections, Volume3D, RoiBase):
         """
         n_labels = len(label)
         n_digit = "%." + str(len(str(n_labels))) + "d"
-        roi_labels = [n_digit % k + ": " + pattern + i for k, i
-                      in enumerate(label)]
+        roi_labels = [n_digit % k + ": " + pattern + str(i) for k, i
+                      in zip(index, label)]
         return np.array(roi_labels)
 
     # ----------- PARENT -----------
