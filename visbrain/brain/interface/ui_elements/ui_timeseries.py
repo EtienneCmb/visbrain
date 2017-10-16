@@ -1,4 +1,4 @@
-"""GUI interactions with the GUI."""
+"""GUI interactions with time-series."""
 
 from .ui_objects import _run_method_if_needed
 from ....io import dialog_color
