@@ -14,14 +14,14 @@ import vispy.app as visapp
 import vispy.scene.cameras as viscam
 
 from .interface import UiInit, UiElements, BrainShortcuts
-from .base import base, BrainCbar
+from .base import BaseVisual, BrainCbar
 from .user import BrainUserMethods
 from ..utils import set_widget_size
 import sip
 sip.setdestroyonexit(False)
 
 
-class Brain(UiInit, UiElements, base, BrainCbar, BrainUserMethods):
+class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
     """Visualization of neuroscientic data on a standard MNI brain.
 
     The *Brain* module include several objects that can be individually
@@ -67,144 +67,17 @@ class Brain(UiInit, UiElements, base, BrainCbar, BrainUserMethods):
     a_template : string | 'B1'
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
 
-    s_xyz : array_like | None
-        Array of talairach or MNI coordinates to display sources
-        into the brain. The shape of the array must be (N, 3) where
-        '3' is for (x, y, z) coordinates and N, the number of sources.
+    source_obj : SourceObj | None
+        An object (or list of objects) of type source (SourceObj).
 
-    s_data : array_like | None
-        Add some data to sources. As a consequence, the radius of each
-        source will be a function of s_data. must be an array of shape
-        (N,). If s_data is None, all sources will have the same value.
-        The parameter s_data can be masked using numpy.ma module.
+    connect_obj : ConnectObj | None
+        An object (or list of objects) of type connectivity (ConnectObj).
 
-    s_system : string | 'mni'
-        Specify the coordinate system. Use either 'mni' (MNI) or 'tal'
-        (Talairach).
+    time_series_obj : TimeSeriesObj | None
+        An object (or list of objects) of type time-series (TimeSeriesObj).
 
-    s_color : string/list/array_like | 'red'
-        Color of each source sphere. If s_color is a single string,
-        all sphere will have the same color. If it's' a list of strings,
-        the length must be N. Alternatively, s_color can be a (N, 3) RGB
-        or (N, 4) RGBA colors.
-
-    s_alpha : int/float | 1.0
-        Transparency of all sources. Must be between 0 and 1.
-
-    s_radiusmin / s_radiusmax : float | 5.0/10.0
-        Define the minimum and maximum source's possible radius. By default
-        if all sources have the same value, the radius will be s_radiusmin.
-
-    s_edgecolor : string/list/array_like | None
-        Add an edge to sources
-
-    s_edgewidth : float | 0.4
-        Edge width of sources
-
-    s_scaling : bool | True
-        If set to True, marker scales when zooming.
-
-    s_symbol : string | 'disc'
-        Symbol to use for sources. Allowed style strings are: disc, arrow,
-        ring, clobber, square, diamond, vbar, hbar, cross, tailed_arrow, x,
-        triangle_up, triangle_down, and star.
-
-    s_text : list/tuple | None
-        Set text to each electrode. s_text should be an iterable object,
-        composed of strings, with the same length as the number of sources.
-
-    s_textcolor : string/list/array_like | 'k'
-        A single color element for all the text
-
-    s_textsize : int | 3
-        Font size of text elements
-
-    s_textshift : list/tuple | (0,1,0)
-        Translate the text along (x, y, z) coordinates to improve text
-        visibility
-
-    s_projecton : string | 'surface'
-        Project sources activity either on surface or, if displayed,
-        on deep structures.
-
-    s_mask : array_like | None
-        Vector of boolean values, with the same length as the length of
-        s_xyz. Use this parameter to mask some sources but keep it
-        displayed.
-
-    s_maskcolor : list/tuple | 'gray'
-        Color of masked sources when projected on surface.
-
-    ts_data : array_like | None
-        Array of data for the time-series. This array must have a shape of
-        (n_sources, n_time_points).
-
-    ts_select : array_like | None
-        Array of boolean values to specify which time-series to hide or to
-        display.
-
-    ts_color : string/list/tuple/array_like | 'white'
-        Color of the time-series.
-
-    ts_amp : float | 6.
-        Graphical amplitude of the time-series.
-
-    ts_width : float | 20.
-        Graphical width of th time-series.
-
-    ts_lw : float | 1.5
-        Line width of the time-series.
-
-    ts_dxyz : tuple | (0., 0., 1.)
-        Offset along the (x, y, z) axis for the time-series.
-
-    pic_data : array_like | None
-        Array of picture data. Must have a shape of (n_sources, n_rows, n_cols)
-
-    pic_width : float | 7.
-        Width of each picture.
-
-    pic_height : float | 7.
-        Height of each picture.
-
-    pic_dxyz : float | (0., 0., 1.)
-        Offset along the (x, y, z) axis for the pictures.
-
-    c_connect : array_like | None
-        Connections between sources. Define N sources location using s_xyz
-        of shape (N, 3). Then, c_connect must be a (N, N) array defining
-        each value of connection between all sources. The diagonal is going
-        to be systematically ignored.
-
-    c_select : array_like | None
-        Select relevant connections do display. This array should be
-        composed of 0 and 1 and must have the same shape as c_connect.
-        Alternatively, set a mask to c_connect to have the same effect
-        without using this parameter.
-
-    c_colorby : string | 'strength'
-        Define how to color connexions. Use 'strength' if the color has to
-        be modulate by the connectivity strength. Use 'count' if the
-        color depends on the number of connexions per node. Use 'density'
-        to define colors according to the number of line in a sphere of
-        radius c_dradius.
-
-    c_dynamic : tuple | None
-        Control the dynamic opacity. For example, if c_dynamic=(0, 1),
-        strong connections will be more opaque than weak connections.
-
-    c_dradius : float | 30.
-        Radius for the density color line method.
-
-    c_colval : dict | None
-        Define colors for a specifics values. For example, c_colval=
-        {1.5: 'red', 2.1: 'blue'} every connexions equal to 1.5 are going
-        to be red and blue for 2.1. Use np.nan: 'gray' in order to define
-        the color of all connexions that are not in the dictionary
-        otherwise they are going to be ignored.
-
-    c_linewidth : float | 3.0
-        Line width of connectivity lines.
+    picture_obj : PictureObj | None
+        An object (or list of objects) of type pictures (PictureObj).
 
     t_radius : float | 10.
         The projection radius to use (depending on coordinates type)
@@ -216,20 +89,6 @@ class Brain(UiInit, UiElements, base, BrainCbar, BrainUserMethods):
 
     ui_bgcolor : string/tuple | (0.09, 0.09, 0.09)
         Background color of the ui
-
-    ui_savename : string | None
-        The save name when exporting
-
-    ui_region : tuple | None
-        Crop the exportation of the main canvas to the region define by
-        (x, y, width, height).
-
-    ui_autocrop : bool | True
-        Automatically crop figures when saving.
-
-    ui_resolution : float | 3000
-        Define the screenshot resolution by indicating the number of times
-        the definition of your screen must be multiplied.
 
     l_position : tuple | (100., 100., 100.)
         Position of the light
@@ -269,15 +128,11 @@ class Brain(UiInit, UiElements, base, BrainCbar, BrainUserMethods):
         bgcolor = kwargs.get('ui_bgcolor', (0., 0., 0.))
         # Savename, extension and croping region (usefull for the screenshot) :
         self._savename = kwargs.get('ui_savename', None)
-        self._crop = kwargs.get('ui_region', None)
-        self._autocrop = kwargs.get('ui_autocrop', True)
-        self._uirez = kwargs.get('ui_resolution', 3000.)
         self._xyzRange = {'turntable': {'x': None, 'y': (-1200, 1200),
                                         'z': None},
                           'fly': {'x': (-120, 120), 'y': (-100, 200),
                                   'z': (-90, 90)},
                           }
-        self._cbarexport = True
         self._userobj = {}
 
         # ====================== App creation ======================
@@ -294,8 +149,8 @@ class Brain(UiInit, UiElements, base, BrainCbar, BrainUserMethods):
         # ====================== Objects creation ======================
         camera = viscam.TurntableCamera(azimuth=0, distance=1000,
                                         name='turntable')
-        base.__init__(self, self.view.wc, self._csGrid, self.progressBar,
-                      **kwargs)
+        BaseVisual.__init__(self, self.view.wc, self._csGrid, self.progressBar,
+                            **kwargs)
 
         # ====================== UI to visbrain ======================
         # Link UI and visbrain function :
@@ -306,7 +161,6 @@ class Brain(UiInit, UiElements, base, BrainCbar, BrainUserMethods):
         # Main camera :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(self.view.wc.camera)
-        self.pic.set_camera(self.view.wc.camera)
         self._vbNode.parent = self.view.wc.scene
         self._rotate(fixed='axial')
         self.view.wc.camera.set_default_state()
@@ -332,13 +186,16 @@ class Brain(UiInit, UiElements, base, BrainCbar, BrainUserMethods):
         set_widget_size(self._app, self.q_widget, 23)
         # Display menu :
         self.menuDispBrain.setChecked(self.atlas.mesh.visible)
+        # Objects :
+        self._all_object_are_none()
+        self._fcn_obj_type()
         # Sources :
-        if self.sources.mesh.visible:
-            self.menuDispSources.setChecked(True)
+        # if self.sources.visible:
+        #     self.menuDispSources.setChecked(True)
         # Connectivity :
-        if self.connect.mesh.visible:
-            self.menuDispConnect.setChecked(True)
-            self._fcn_menu_disp_connect()
+        # if self.connect.mesh.visible:
+        #     self.menuDispConnect.setChecked(True)
+        #     self._fcn_menu_disp_connect()
         # Colorbar :
         self._fcn_menu_disp_cbar()
 
