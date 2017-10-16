@@ -148,10 +148,13 @@ class RoiObj(VisbrainObject):
             else:
                 location = None
             self.analysis.loc[k] = location
-        self.analysis['name'] = source_name
-        self.analysis['x'] = xyz[0]
-        self.analysis['y'] = xyz[1]
-        self.analysis['z'] = xyz[2]
+        # Add Text and (X, Y, Z) to the table :
+        new_col = ['Text'] + self.analysis.columns.tolist() + ['X', 'Y', 'Z']
+        self.analysis['Text'] = source_name
+        self.analysis['X'] = xyz[0]
+        self.analysis['Y'] = xyz[1]
+        self.analysis['Z'] = xyz[2]
+        self.analysis = self.analysis[new_col]
         if replace_bad:
             # Replace NaN values :
             self.analysis.fillna(replace_with, inplace=True)
