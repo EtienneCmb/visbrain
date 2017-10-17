@@ -10,7 +10,7 @@ from vispy.scene import Node
 
 from .ui_init import UiInit
 from .ui_elements import UiElements
-from ..brain.base.ConnectBase import ConnectBase
+# from ..brain.base.ConnectBase import ConnectBase
 from ..utils import set_widget_size
 from ..visuals import TopoMesh, CbarVisual
 

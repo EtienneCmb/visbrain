@@ -9,10 +9,10 @@ import numpy as np
 from scipy.spatial import ConvexHull
 
 from ..visuals import BrainMesh
-from .base.SourcesBase import SourcesBase
-from .base.ConnectBase import ConnectBase
-from .base.TimeSeriesBase import TimeSeriesBase
-from .base.PicBase import PicBase
+# from .base.SourcesBase import SourcesBase
+# from .base.ConnectBase import ConnectBase
+# from .base.TimeSeriesBase import TimeSeriesBase
+# from .base.PicBase import PicBase
 from ..utils import (color2vb, extend_combo_list, safely_set_cbox,
                      get_combo_list_index, safely_set_spin, safely_set_slider,
                      set_if_not_none)
