@@ -204,6 +204,7 @@ class SourceObj(VisbrainObject):
         self._sources._data['a_edgewidth'][to_hide] = 0.
         text = np.array(self._text.copy())
         text[to_hide] = ''
+        self._sources_text.text = text
         self.update()
 
     def _update_color(self):
@@ -508,7 +509,7 @@ class SourceObj(VisbrainObject):
         ----------
         v : array_like
             The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
-        select : {'inside', 'outside', 'close', 'all', 'none', None}
+        select : {'inside', 'outside', 'close', 'all', 'none', 'left', 'right'}
             Custom source selection. Use 'inside' or 'outside' to select
             sources respectively inside or outside the volume. Use 'close' to
             select sources that are closed to the surface (see the distance
@@ -519,24 +520,25 @@ class SourceObj(VisbrainObject):
         """
         select = select.lower() if isinstance(select, str) else select
         assert select in ['all', 'inside', 'outside', 'none', 'close', None,
-                          True, False]
+                          True, False, 'left', 'right']
         assert isinstance(distance, (int, float))
+        xyz = self._xyz
         if select in ['inside', 'outside', 'close']:
             if v.ndim == 2:  # index faced vertices
                 v = v[:, np.newaxis, :]
             # Predifined inside :
             nv, index_faced = v.shape[0], v.shape[1]
             v = v.reshape(nv * index_faced, 3)
-            inside = np.ones((self._xyz.shape[0],), dtype=bool)
+            inside = np.ones((xyz.shape[0],), dtype=bool)
 
             # Loop over ALL oh the sources :
             for i in range(len(self)):
                 # Get the euclidian distance :
-                eucl = cdist(v, self._xyz[[i], :])
+                eucl = cdist(v, xyz[[i], :])
                 # Get the closest vertex :
                 eucl_argmin = eucl.argmin()
                 # Get distance to zero :
-                xyz_t0 = np.sqrt((self._xyz[[i], :] ** 2).sum())
+                xyz_t0 = np.sqrt((xyz[[i], :] ** 2).sum())
                 v_t0 = np.sqrt((v[eucl_argmin, :] ** 2).sum())
                 if select in ['inside', 'outside']:
                     inside[i] = xyz_t0 <= v_t0
@@ -545,6 +547,9 @@ class SourceObj(VisbrainObject):
             self.visible = inside if select == 'inside' else np.invert(inside)
         elif select in ['all', 'none', None, True, False]:
             self.visible = select in ['all', True]
+        elif select in ['left', 'right']:
+            vec = xyz[:, 0]
+            self.visible = vec <= 0 if select == 'left' else vec >= 0
 
     def fit_to_vertices(self, v):
         """Move sources to the closest vertex.
@@ -791,12 +796,12 @@ class SourceObj(VisbrainObject):
         self._sources_text.update()
 
 
-class SourceProjection(object):
-    """docstring for SourceProjection"""
+# class SourceProjection(object):
+#     """docstring for SourceProjection"""
 
-    def __init__(self, arg):
-        super(SourceProjection, self).__init__()
-        self.arg = arg
+#     def __init__(self, arg):
+#         super(SourceProjection, self).__init__()
+#         self.arg = arg
 
 
 class CombineSources(CombineObjects):
@@ -821,10 +826,10 @@ class CombineSources(CombineObjects):
         for k in self:
             k.fit_to_vertices(v)
 
-    def set_visible_sources(self, v, select='inside', distance=5.):
+    def set_visible_sources(self, *args, **kwargs):
         """See sources doc."""
         for k in self:
-            k.set_visible_sources(v, select, distance)
+            k.set_visible_sources(*args, **kwargs)
 
     def analyse_sources(self, *args, **kwargs):
         """See sources doc."""

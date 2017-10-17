@@ -13,6 +13,7 @@ class UiSources(object):
         """Init."""
         # ====================== SOURCES ======================
         self._s_grp.clicked.connect(self._fcn_source_visible)
+        self._s_select.currentIndexChanged.connect(self._fcn_source_select)
         self._s_symbol.currentIndexChanged.connect(self._fcn_source_symbol)
         self._s_radiusmin.valueChanged.connect(self._fcn_source_radius)
         self._s_radiusmax.valueChanged.connect(self._fcn_source_radius)
@@ -49,7 +50,6 @@ class UiSources(object):
         # # Contribute :
         # self._uitContribute.setChecked(self._tcontribute)
 
-
     # =====================================================================
     # SOURCES
     # =====================================================================
@@ -76,6 +76,12 @@ class UiSources(object):
         viz = self._s_grp.isChecked()
         self._get_select_object().visible_obj = viz
         self._st_grp.setEnabled(viz)
+
+    def _fcn_source_select(self):
+        """Select the source to display."""
+        txt = self._s_select.currentText().split(' ')[0].lower()
+        v = self._tobj['brain'].mesh.get_vertices
+        self.sources.set_visible_sources(v, txt)
 
     @_run_method_if_needed
     def _fcn_source_symbol(self):
