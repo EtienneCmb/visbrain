@@ -3,7 +3,8 @@ import logging
 import numpy as np
 
 from .ui_objects import _run_method_if_needed
-from ....utils import textline2color, safely_set_cbox, fill_pyqt_table
+from ....utils import (textline2color, safely_set_cbox, fill_pyqt_table,
+                       toggle_enable_tab)
 from ....io import dialog_color
 
 
@@ -47,12 +48,12 @@ class UiSources(object):
         # Analyse sources :
         self._s_analyse_run.clicked.connect(self._fcn_analyse_sources)
 
-        # # ====================== PROJECTION ======================
-        # # Radius :
-        # self._uitRadius.setValue(self._tradius)
-        # self._uitApply.clicked.connect(self._fcn_sources_proj)
-        # # Contribute :
-        # self._uitContribute.setChecked(self._tcontribute)
+        # ====================== PROJECTION ======================
+        # Radius :
+        self._s_proj_radius.setValue(self._tradius)
+        self._s_proj_apply.clicked.connect(self._fcn_source_proj)
+        # Contribute :
+        self._s_proj_contribute.setChecked(self._tcontribute)
 
     # =====================================================================
     # SOURCES
@@ -176,35 +177,41 @@ class UiSources(object):
         df = self.sources.analyse_sources(roi.lower())
         fill_pyqt_table(self._s_table, df=df)
 
-    # # =====================================================================
-    # # PROJECTION
-    # # =====================================================================
-    # def _fcn_update_proj_list(self):
-    #     """Update the available projection list objects."""
-    #     self._uitProjectOn.clear()
-    #     self._uitProjectOn.addItems(list(self._tobj.keys()))
+    # =====================================================================
+    # PROJECTION
+    # =====================================================================
+    def _fcn_enable_projection(self):
+        """Enable projection if already runned."""
+        is_proj = hasattr(self.sources._minmax)
+        self.menuRun_projection.setEnabled(is_proj)
+        toggle_enable_tab(self._source_tab, 'Projection', is_proj)
 
-    # def _fcn_sources_proj(self):
-    #     """Apply source projection."""
-    #     # Get projection radius :
-    #     new_radius = self._uitRadius.value()
-    #     if self._tradius != new_radius:
-    #         self._tradius = new_radius
-    #         self._cleanProj()
-    #     # Get if activity has to be projected on surface / ROI :
-    #     new_projecton = str(self._uitProjectOn.currentText()).lower()
-    #     if self._tprojecton != new_projecton:
-    #         self._tprojecton = new_projecton
-    #         self._cleanProj()
-    #     # Get if projection has to contribute on both hemisphere :
-    #     new_contribute = self._uitContribute.isChecked()
-    #     if self._tcontribute != new_contribute:
-    #         self._tcontribute = new_contribute
-    #         self._cleanProj()
-    #     # Run either the activity / repartition projection :
-    #     idxproj = int(self._uitPickProj.currentIndex())
-    #     if idxproj == 0:
-    #         self._tprojectas = 'activity'
-    #     elif idxproj == 1:
-    #         self._tprojectas = 'repartition'
-    #     self._sourcesProjection()
+    def _fcn_update_proj_list(self):
+        """Update the available projection list objects."""
+        self._s_proj_on.clear()
+        self._s_proj_on.addItems(list(self._tobj.keys()))
+
+    def _fcn_source_proj(self):
+        """Apply source projection."""
+        # Get projection radius :
+        new_radius = self._s_proj_radius.value()
+        if self._tradius != new_radius:
+            self._tradius = new_radius
+            self._cleanProj()
+        # Get if activity has to be projected on surface / ROI :
+        new_projecton = str(self._s_proj_on.currentText()).lower()
+        if self._tprojecton != new_projecton:
+            self._tprojecton = new_projecton
+            self._cleanProj()
+        # Get if projection has to contribute on both hemisphere :
+        new_contribute = self._s_proj_contribute.isChecked()
+        if self._tcontribute != new_contribute:
+            self._tcontribute = new_contribute
+            self._cleanProj()
+        # Run either the activity / repartition projection :
+        idxproj = int(self._s_proj_type.currentIndex())
+        if idxproj == 0:
+            self._tprojectas = 'activity'
+        elif idxproj == 1:
+            self._tprojectas = 'repartition'
+        self._sourcesProjection()
