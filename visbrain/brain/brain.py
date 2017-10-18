@@ -71,11 +71,9 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
         An object (or list of objects) of type time-series (TimeSeriesObj).
     picture_obj : PictureObj | None
         An object (or list of objects) of type pictures (PictureObj).
-
-    t_radius : float | 10.
+    project_radius : float | 10.
         The projection radius to use (depending on coordinates type)
-
-    t_contribute : bool | False
+    project_contribute : bool | False
         Specify if source's can contribute to both hemisphere during projection
         (True) or if it can only be projected on the hemisphere the source
         belong.
