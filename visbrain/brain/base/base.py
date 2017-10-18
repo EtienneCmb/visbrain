@@ -18,9 +18,7 @@ The following elements are initialized :
 from vispy import scene
 
 from ...objects import (CombineSources, CombineConnect, CombineTimeSeries,
-                        CombinePictures)
-
-from .AtlasBase import AtlasBase
+                        CombinePictures, BrainObj)
 from .VolumeBase import VolumeBase
 from .projection import Projections
 
@@ -40,8 +38,18 @@ class BaseVisual(Projections):
         # Get progress bar :
         self.progressbar = progressbar
 
+        # Main brain object :
+        if kwargs.get('brain_obj', None) is None:
+            template = kwargs.get('brain_template', 'B1')
+            translucent = kwargs.get('brain_translucent', True)
+            hemisphere = kwargs.get('brain_hemisphere', 'both')
+            self.atlas = BrainObj(template, translucent=translucent,
+                                  hemisphere=hemisphere)
+        else:
+            self.atlas = kwargs['brain_obj']
+
         # Initialize visbrain objects :
-        self.atlas = AtlasBase(**kwargs)
+        # self.atlas = AtlasBase(**kwargs)
         self.volume = VolumeBase(parent_sp=parent_sp)
         self.sources = CombineSources(kwargs.get('source_obj', None))
         self.connect = CombineConnect(kwargs.get('connect_obj', None))
@@ -61,15 +69,12 @@ class BaseVisual(Projections):
             self._obj_type_lst.model().item(0).setEnabled(False)
             # Disable menu :
             self.menuDispSources.setChecked(False)
-            self.menuDispSources.setEnabled(False)
             self.menuTransform.setEnabled(False)
 
         # Connectivity panel:
         if self.connect.name is None:
             self._obj_type_lst.model().item(1).setEnabled(False)
-            # Disable menu :
             self.menuDispConnect.setEnabled(False)
-            self.menuDispConnect.setChecked(False)
 
         # Time-series panel :
         if self.tseries.name is None:
@@ -84,7 +89,7 @@ class BaseVisual(Projections):
         # can be applied to all elements.
 
         # Create a root node :
-        self._vbNode = scene.Node(name='visbrain')
+        self._vbNode = scene.Node(name='Brain')
 
         # Make this root node the parent of others Brain objects :
         self.volume.parent = self._vbNode
@@ -92,10 +97,7 @@ class BaseVisual(Projections):
         self.connect.parent = self._vbNode
         self.tseries.parent = self._vbNode
         self.pic.parent = self._vbNode
-        self.atlas.mesh.parent = self._vbNode
+        self.atlas.parent = self._vbNode
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)
         # scene.visuals.XYZAxis(parent=self._vbNode)
-
-        # Add a rescale / translate transformation to the Node :
-        self._vbNode.transform = self.atlas.mesh._btransform
