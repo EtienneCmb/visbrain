@@ -108,6 +108,7 @@ class CombineObjects(object):
         self._cnode.parent = parent
         # Initialize objects :
         self._objs, self._objs_order = {}, []
+        self._visible_obj = True
         self._obj_type = obj_type.__name__
         if objects is not None:
             if isinstance(objects, obj_type):  # single object
@@ -130,7 +131,10 @@ class CombineObjects(object):
 
     def __getitem__(self, value):
         """Get the object from the key value."""
-        return self._objs[value]
+        if isinstance(value, str):
+            return self._objs[value]
+        elif isinstance(value, int):
+            return self._objs[self._objs_order[value]]
 
     def __setitem__(self, key, value):
         """Set an attribute of the selected object.."""
