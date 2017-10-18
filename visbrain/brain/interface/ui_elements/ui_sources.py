@@ -1,9 +1,13 @@
 """GUI interactions with sources and text."""
+import logging
 import numpy as np
 
 from .ui_objects import _run_method_if_needed
 from ....utils import textline2color, safely_set_cbox, fill_pyqt_table
 from ....io import dialog_color
+
+
+logger = logging.getLogger('visbrain')
 
 
 class UiSources(object):
@@ -81,7 +85,7 @@ class UiSources(object):
         """Select the source to display."""
         txt = self._s_select.currentText().split(' ')[0].lower()
         v = self._tobj['brain'].mesh.get_vertices
-        self.sources.set_visible_sources(v, txt)
+        self.sources.set_visible_sources(txt, v)
 
     @_run_method_if_needed
     def _fcn_source_symbol(self):
@@ -168,6 +172,7 @@ class UiSources(object):
     def _fcn_analyse_sources(self):
         """Analyse sources locations."""
         roi = self._s_analyse_roi.currentText()
+        logger.info("Analyse source's locations using %s ROI" % roi)
         df = self.sources.analyse_sources(roi.lower())
         fill_pyqt_table(self._s_table, df=df)
 
