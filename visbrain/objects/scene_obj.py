@@ -209,7 +209,7 @@ class VisbrainCanvas(object):
     @property
     def camera(self):
         """Get the camera value."""
-        return self._camera
+        return self.wc.camera
 
     @camera.setter
     def camera(self, value):
