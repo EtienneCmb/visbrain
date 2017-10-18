@@ -22,7 +22,7 @@ class VisbrainObject(object):
 
     def __init__(self, name, parent, transform=None):
         """Init."""
-        self._node = vispy.scene.Node(name=type(self).__name__)
+        self._node = vispy.scene.Node(name=name)
         self._node.parent = parent
         # Name :
         assert isinstance(name, str)
@@ -48,7 +48,7 @@ class VisbrainObject(object):
         bgcolor : array_like/string/tuple | 'white'
             Background color for the preview.
         """
-        parent_bck = self.parent
+        parent_bck = self._node.parent
         canvas = VisbrainCanvas(axis=axis, show=True, title=self._name,
                                 bgcolor=bgcolor)
         self._node.parent = canvas.wc.scene
@@ -58,7 +58,7 @@ class VisbrainObject(object):
         if sys.flags.interactive != 1:
             vispy.app.run()
         # Reset orignial parent :
-        self.parent = parent_bck
+        self._node.parent = parent_bck
 
     # ----------- PARENT -----------
     @property
@@ -104,7 +104,7 @@ class CombineObjects(object):
     def __init__(self, obj_type, objects, select=None, parent=None):
         """Init."""
         # Parent node for combined objects :
-        self._cnode = vispy.scene.Node(name='Combine')
+        self._cnode = vispy.scene.Node(name='Combine ' + obj_type.__name__)
         self._cnode.parent = parent
         # Initialize objects :
         self._objs, self._objs_order = {}, []
@@ -123,7 +123,8 @@ class CombineObjects(object):
             self.select(select)
             self.name = str(self)
             # Set parent :
-            self.parent = self._cnode
+            for k in self:
+                k.parent = self._cnode
         else:
             self.name = None
 
@@ -206,14 +207,12 @@ class CombineObjects(object):
     @property
     def parent(self):
         """Get the parent value."""
-        return self._parent
+        return self._cnode.parent
 
     @parent.setter
     def parent(self, value):
         """Set parent value."""
-        for k in self:
-            k.parent = value
-        self._parent = value
+        self._cnode.parent = value
 
     # ----------- VISIBLE_OBJ -----------
     @property
