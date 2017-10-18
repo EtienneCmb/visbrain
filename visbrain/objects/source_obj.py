@@ -11,12 +11,189 @@ import vispy.visuals.transforms as vist
 from .visbrain_obj import VisbrainObject, CombineObjects
 from .roi_obj import RoiObj
 from ..utils import tal2mni, color2vb, normalize, vispy_array
+from ..visuals import CbarArgs
 
 
 logger = logging.getLogger('visbrain')
 
 
-class SourceObj(VisbrainObject):
+class SourceProjection(CbarArgs):
+    """Group cortical projection and cortical repartition projections."""
+
+    def __init__(self, cmap='viridis', clim=(0., 1.), vmin=None, isvmin=False,
+                 under='gray', vmax=None, isvmax=False, over='red'):
+        """Init."""
+        # Initialize colorbar arguments :
+        CbarArgs.__init__(self, cmap, clim, isvmin, vmin, isvmax, vmax, under,
+                          over)
+
+    @staticmethod
+    def _get_eucl_mask(v, xyz, radius, contribute, xsign):
+        # Compute euclidian distance and get sources under radius :
+        eucl = cdist(v, xyz)
+        eucl = eucl.astype(np.float32, copy=False)
+        mask = eucl <= radius
+        # Contribute :
+        if not contribute:
+            # Get vertices sign :
+            vsign = np.sign(v[:, 0]).reshape(-1, 1)
+            # Find where vsign and xsign are equals :
+            isign = np.logical_and(vsign != xsign, xsign != 0)
+            mask[isign] = False
+        return eucl, mask
+
+    def _check_projection(self, v, radius, contribute, not_masked=True):
+        # =============== CHECKING ===============
+        assert isinstance(v, np.ndarray)
+        assert isinstance(radius, (int, float))
+        assert isinstance(contribute, bool)
+        if v.ndim == 2:  # index faced vertices
+            v = v[:, np.newaxis, :]
+
+        # =============== PRE-ALLOCATION ===============
+        if not_masked:  # get only visible and not masked sources
+            mask = self.visible_and_not_masked
+        else:           # get only not visible and masked sources
+            mask = ~self.visible_and_not_masked
+        xyz, data = self._xyz[mask, :], self._data[mask]
+        # Get sign of the x coordinate :
+        xsign = np.sign(xyz[:, 0]).reshape(1, -1)
+
+        return xyz, data, v, xsign
+
+    def project_modulation(self, v, radius, contribute=False):
+        """Project source's data onto vertices.
+
+        Parameters
+        ----------
+        v : array_like
+            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
+        radius : float
+            The radius under which activity is projected on vertices.
+        contribute: bool | False
+            Specify if sources contribute on both hemisphere.
+
+        Returns
+        -------
+        modulation : array_like
+            The modulations of shape (nv, 3) or (nv, 3, 3) if index faced. This
+            is a masked array where the mask refer to sources that are over the
+            radius.
+        """
+        # Check inputs :
+        xyz, data, v, xsign = self._check_projection(v, radius, contribute)
+        index_faced = v.shape[1]
+        # Modulation / proportion / (Min, Max) :
+        modulation = np.ma.zeros((v.shape[0], index_faced), dtype=np.float32)
+        prop = np.zeros_like(modulation.data)
+        minmax = np.zeros((index_faced, 2), dtype=np.float32)
+
+        # For each triangle :
+        for k in range(index_faced):
+            # =============== EUCLIDIAN DISTANCE ===============
+            eucl, mask = self._get_eucl_mask(v[:, k, :], xyz, radius,
+                                             contribute, xsign)
+            # Invert euclidian distance for modulation and mask it :
+            np.multiply(eucl, -1. / eucl.max(), out=eucl)
+            np.add(eucl, 1., out=eucl)
+            eucl = np.ma.masked_array(eucl, mask=np.invert(mask),
+                                      dtype=np.float32)
+
+            # =============== MODULATION ===============
+            # Modulate data by distance (only for sources under radius) :
+            modulation[:, k] = np.ma.dot(eucl, data, strict=False)
+
+            # =============== PROPORTIONS ===============
+            np.sum(mask, axis=1, dtype=np.float32, out=prop[:, k])
+            nnz = np.nonzero(mask.sum(0))
+            minmax[k, :] = np.array([data[nnz].min(), data[nnz].max()])
+
+        # Divide modulations by the number of contributing sources :
+        prop[prop == 0.] = 1.
+        np.divide(modulation, prop, out=modulation)
+        # Normalize inplace modulations between under radius data :
+        normalize(modulation, minmax.min(), minmax.max())
+        self._minmax = (modulation.min(), modulation.max())
+
+        return np.squeeze(modulation)
+
+    def project_repartition(self, v, radius, contribute=False):
+        """Project source's repartition onto vertices.
+
+        Parameters
+        ----------
+        v : array_like
+            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
+        radius : float
+            The radius under which activity is projected on vertices.
+        contribute: bool | False
+            Specify if sources contribute on both hemisphere.
+
+        Returns
+        -------
+        repartition: array_like
+            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced. This
+            is a masked array where the mask refer to sources that are over the
+            radius.
+        """
+        # Check inputs :
+        xyz, _, v, xsign = self._check_projection(v, radius, contribute)
+        index_faced = v.shape[1]
+        # Corticale repartition :
+        repartition = np.ma.zeros((v.shape[0], index_faced), dtype=np.int)
+
+        # For each triangle :
+        for k in range(index_faced):
+            # =============== EUCLIDIAN DISTANCE ===============
+            eucl, mask = self._get_eucl_mask(v[:, k, :], xyz, radius,
+                                             contribute, xsign)
+
+            # =============== REPARTITION ===============
+            # Sum over sources dimension :
+            sm = np.sum(mask, 1, dtype=np.int)
+            smmask = np.invert(sm.astype(bool))
+            repartition[:, k] = np.ma.masked_array(sm, mask=smmask)
+        self._minmax = (repartition.min(), repartition.max())
+
+        return np.squeeze(repartition)
+
+    def get_masked_index(self, v, radius, contribute=False):
+        """Get the index of masked source's under radius.
+
+        Parameters
+        ----------
+        v : array_like
+            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
+        radius : float
+            The radius under which activity is projected on vertices.
+        contribute: bool | False
+            Specify if sources contribute on both hemisphere.
+
+        Returns
+        -------
+        idx: array_like
+            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced.
+        """
+        # Check inputs and get masked xyz / data :
+        xyz, data, v, xsign = self._check_projection(v, radius, contribute,
+                                                     False)
+        # Predefined masked euclidian distance :
+        nv, index_faced = v.shape[0], v.shape[1]
+        fmask = np.ones((v.shape[0], index_faced, len(data)), dtype=bool)
+
+        # For each triangle :
+        for k in range(index_faced):
+            # =============== EUCLIDIAN DISTANCE ===============
+            _, fmask[:, k, :] = self._get_eucl_mask(v[:, k, :], xyz, radius,
+                                                    contribute, xsign)
+        # Find where there's sources under radius and need to be masked :
+        m = fmask.reshape(fmask.shape[0] * 3, fmask.shape[2])
+        idx = np.dot(m, np.ones((len(data),), dtype=bool)).reshape(nv, 3)
+
+        return np.squeeze(idx)
+
+
+class SourceObj(VisbrainObject, SourceProjection):
     """Create a source object.
 
     Parameters
@@ -86,10 +263,11 @@ class SourceObj(VisbrainObject):
                  edge_color='black', system='mni', mask=None, mask_color='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
                  text_translate=(0., 2., 0.), visible=True, transform=None,
-                 parent=None, _z=-10.):
+                 parent=None, _z=-10., **kwargs):
         """Init."""
-        # Init Visbrain object base class :
+        # Init Visbrain object base class and SourceProjection :
         VisbrainObject.__init__(self, name, parent, transform)
+        SourceProjection.__init__(self, **kwargs)
         # _______________________ CHECKING _______________________
         # XYZ :
         sh = xyz.shape
@@ -339,175 +517,6 @@ class SourceObj(VisbrainObject):
                             "like {'roi_name': 'red'}.")
         self.color = colors
 
-    ###########################################################################
-    ###########################################################################
-    #                             PROJECTION
-    ###########################################################################
-    ###########################################################################
-
-    @staticmethod
-    def _get_eucl_mask(v, xyz, radius, contribute, xsign):
-        # Compute euclidian distance and get sources under radius :
-        eucl = cdist(v, xyz)
-        eucl = eucl.astype(np.float32, copy=False)
-        mask = eucl <= radius
-        # Contribute :
-        if not contribute:
-            # Get vertices sign :
-            vsign = np.sign(v[:, 0]).reshape(-1, 1)
-            # Find where vsign and xsign are equals :
-            isign = np.logical_and(vsign != xsign, xsign != 0)
-            mask[isign] = False
-        return eucl, mask
-
-    def _check_projection(self, v, radius, contribute, not_masked=True):
-        # =============== CHECKING ===============
-        assert isinstance(v, np.ndarray)
-        assert isinstance(radius, (int, float))
-        assert isinstance(contribute, bool)
-        if v.ndim == 2:  # index faced vertices
-            v = v[:, np.newaxis, :]
-
-        # =============== PRE-ALLOCATION ===============
-        if not_masked:  # get only visible and not masked sources
-            mask = self.visible_and_not_masked
-        else:  # get only not visible and masked sources
-            mask = ~self.visible_and_not_masked
-        xyz, data = self._xyz[mask, :], self._data[mask]
-        # Get sign of the x coordinate :
-        xsign = np.sign(xyz[:, 0]).reshape(1, -1)
-
-        return xyz, data, v, xsign
-
-    def project_modulation(self, v, radius, contribute=False):
-        """Project source's data onto vertices.
-
-        Parameters
-        ----------
-        v : array_like
-            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
-        radius : float
-            The radius under which activity is projected on vertices.
-        contribute: bool | False
-            Specify if sources contribute on both hemisphere.
-
-        Returns
-        -------
-        modulation : array_like
-            The modulations of shape (nv, 3) or (nv, 3, 3) if index faced. This
-            is a masked array where the mask refer to sources that are over the
-            radius.
-        """
-        # Check inputs :
-        xyz, data, v, xsign = self._check_projection(v, radius, contribute)
-        index_faced = v.shape[1]
-        # Modulation / proportion / (Min, Max) :
-        modulation = np.ma.zeros((v.shape[0], index_faced), dtype=np.float32)
-        prop = np.zeros_like(modulation.data)
-        minmax = np.zeros((index_faced, 2), dtype=np.float32)
-
-        # For each triangle :
-        for k in range(index_faced):
-            # =============== EUCLIDIAN DISTANCE ===============
-            eucl, mask = self._get_eucl_mask(v[:, k, :], xyz, radius,
-                                             contribute, xsign)
-            # Invert euclidian distance for modulation and mask it :
-            np.multiply(eucl, -1. / eucl.max(), out=eucl)
-            np.add(eucl, 1., out=eucl)
-            eucl = np.ma.masked_array(eucl, mask=np.invert(mask),
-                                      dtype=np.float32)
-
-            # =============== MODULATION ===============
-            # Modulate data by distance (only for sources under radius) :
-            modulation[:, k] = np.ma.dot(eucl, data, strict=False)
-
-            # =============== PROPORTIONS ===============
-            np.sum(mask, axis=1, dtype=np.float32, out=prop[:, k])
-            nnz = np.nonzero(mask.sum(0))
-            minmax[k, :] = np.array([data[nnz].min(), data[nnz].max()])
-
-        # Divide modulations by the number of contributing sources :
-        prop[prop == 0.] = 1.
-        np.divide(modulation, prop, out=modulation)
-        # Normalize inplace modulations between under radius data :
-        normalize(modulation, minmax.min(), minmax.max())
-
-        return np.squeeze(modulation)
-
-    def project_repartition(self, v, radius, contribute=False):
-        """Project source's repartition onto vertices.
-
-        Parameters
-        ----------
-        v : array_like
-            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
-        radius : float
-            The radius under which activity is projected on vertices.
-        contribute: bool | False
-            Specify if sources contribute on both hemisphere.
-
-        Returns
-        -------
-        repartition: array_like
-            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced. This
-            is a masked array where the mask refer to sources that are over the
-            radius.
-        """
-        # Check inputs :
-        xyz, _, v, xsign = self._check_projection(v, radius, contribute)
-        index_faced = v.shape[1]
-        # Corticale repartition :
-        repartition = np.ma.zeros((v.shape[0], index_faced), dtype=np.int)
-
-        # For each triangle :
-        for k in range(index_faced):
-            # =============== EUCLIDIAN DISTANCE ===============
-            eucl, mask = self._get_eucl_mask(v[:, k, :], xyz, radius,
-                                             contribute, xsign)
-
-            # =============== REPARTITION ===============
-            # Sum over sources dimension :
-            sm = np.sum(mask, 1, dtype=np.int)
-            smmask = np.invert(sm.astype(bool))
-            repartition[:, k] = np.ma.masked_array(sm, mask=smmask)
-
-        return np.squeeze(repartition)
-
-    def get_masked_index(self, v, radius, contribute=False):
-        """Get the index of masked source's under radius.
-
-        Parameters
-        ----------
-        v : array_like
-            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
-        radius : float
-            The radius under which activity is projected on vertices.
-        contribute: bool | False
-            Specify if sources contribute on both hemisphere.
-
-        Returns
-        -------
-        idx: array_like
-            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced.
-        """
-        # Check inputs and get masked xyz / data :
-        xyz, data, v, xsign = self._check_projection(v, radius, contribute,
-                                                     False)
-        # Predefined masked euclidian distance :
-        nv, index_faced = v.shape[0], v.shape[1]
-        fmask = np.ones((v.shape[0], index_faced, len(data)), dtype=bool)
-
-        # For each triangle :
-        for k in range(index_faced):
-            # =============== EUCLIDIAN DISTANCE ===============
-            _, fmask[:, k, :] = self._get_eucl_mask(v[:, k, :], xyz, radius,
-                                                    contribute, xsign)
-        # Find where there's sources under radius and need to be masked :
-        m = fmask.reshape(fmask.shape[0] * 3, fmask.shape[2])
-        idx = np.dot(m, np.ones((len(data),), dtype=bool)).reshape(nv, 3)
-
-        return np.squeeze(idx)
-
     def set_visible_sources(self, select='all', v=None, distance=5.):
         """Select sources that are either inside or outside the mesh.
 
@@ -720,6 +729,12 @@ class SourceObj(VisbrainObject):
         self._mask = value
         self._update_color()
 
+    # ----------- IS_MASKED -----------
+    @property
+    def is_masked(self):
+        """Get the is_masked value."""
+        return any(self._mask)
+
     # ----------- MASKCOLOR -----------
     @property
     def mask_color(self):
@@ -753,11 +768,6 @@ class SourceObj(VisbrainObject):
     def hide(self):
         """Get the hide value."""
         return np.invert(self._visible)
-
-    @hide.setter
-    def hide(self, value):
-        """Set hide value."""
-        self._hide = value
 
     # ----------- TEXT_SIZE -----------
     @property
@@ -802,15 +812,7 @@ class SourceObj(VisbrainObject):
         self._sources_text.update()
 
 
-# class SourceProjection(object):
-#     """docstring for SourceProjection"""
-
-#     def __init__(self, arg):
-#         super(SourceProjection, self).__init__()
-#         self.arg = arg
-
-
-class CombineSources(CombineObjects):
+class CombineSources(CombineObjects, SourceProjection):
     """Combine sources objects.
 
     Parameters
@@ -823,9 +825,10 @@ class CombineSources(CombineObjects):
         Markers object parent.
     """
 
-    def __init__(self, sobjs=None, select=None, parent=None):
+    def __init__(self, sobjs=None, select=None, parent=None, **kwargs):
         """Init."""
         CombineObjects.__init__(self, SourceObj, sobjs, select, parent)
+        SourceProjection.__init__(self, **kwargs)
 
     def fit_to_vertices(self, v):
         """See sources doc."""
@@ -863,6 +866,15 @@ class CombineSources(CombineObjects):
             xyz = np.r_[xyz, k.xyz] if xyz.size else k.xyz
         return xyz
 
+    # ----------- _DATA -----------
+    @property
+    def _data(self):
+        """Get the _data value."""
+        _data = np.array([])
+        for k in self:
+            _data = np.r_[_data, k._data] if _data.size else k._data
+        return _data
+
     # ----------- DATA -----------
     @property
     def data(self):
@@ -876,19 +888,19 @@ class CombineSources(CombineObjects):
     @property
     def _text(self):
         """Get the _text value."""
-        _text = np.array([])
+        _text = []
         for k in self:
-            _text = np.r_[_text, k._text] if _text.size else k._text
-        return _text
+            _text += k._text
+        return np.array(_text)
 
     # ----------- TEXT -----------
     @property
     def text(self):
         """Get the text value."""
-        text = np.array([])
+        text = []
         for k in self:
-            text = np.r_[text, k.text] if text.size else k.text
-        return text
+            text += k.text.tolist()
+        return np.array(text)
 
     # ----------- VISIBLE -----------
     @property
@@ -907,6 +919,16 @@ class CombineSources(CombineObjects):
         for k in self:
             mask = np.r_[mask, k.mask] if mask.size else k.mask
         return mask
+
+    # ----------- IS_MASKED -----------
+    @property
+    def is_masked(self):
+        """Get the is_masked value."""
+        is_masked = []
+        for k in self:
+            is_masked.append(k.is_masked)
+        print(is_masked)
+        return any(is_masked)
 
     # ----------- VISIBLE_AND_NOT_MASKED -----------
     @property
