@@ -12,7 +12,6 @@ from vispy import app
 
 from .gui import Ui_MainWindow
 from ...objects import VisbrainCanvas
-from ...utils import get_screen_size
 
 
 class BrainShortcuts(object):
@@ -124,13 +123,10 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, BrainShortcuts):
         super(UiInit, self).__init__(None)
         self.setupUi(self)
 
-        # Get screen size :
-        size = get_screen_size(self._app)
-
         #######################################################################
         #                            BRAIN CANVAS
         #######################################################################
-        cdict = {'bgcolor': bgcolor, 'cargs': {'size': size, 'dpi': 600,
+        cdict = {'bgcolor': bgcolor, 'cargs': {'size': (800, 600), 'dpi': 600,
                  'fullscreen': True, 'resizable': True}}
         self.view = VisbrainCanvas(name='MainCanvas', **cdict)
         self.vBrain.addWidget(self.view.canvas.native)
