@@ -12,10 +12,51 @@ from vispy.geometry.isosurface import isosurface
 
 from .sigproc import smooth_3d
 
-__all__ = ('verbose', 'vis_args', 'check_downsampling', 'get_dsf',
-           'vispy_array', 'convert_meshdata', 'volume_to_mesh',
+__all__ = ('set_log_level', 'verbose', 'vis_args', 'check_downsampling',
+           'get_dsf', 'vispy_array', 'convert_meshdata', 'volume_to_mesh',
            'add_brain_template', 'remove_brain_template', 'set_if_not_none',
            'get_data_path')
+
+
+logger = logging.getLogger('visbrain')
+
+
+def set_log_level(verbose=None):
+    """Convenience function for setting the logging level
+
+    Parameters
+    ----------
+    verbose : bool, str, int, or None
+        The verbosity of messages to print. If a str, it can be either DEBUG,
+        INFO, WARNING, ERROR, or CRITICAL. Note that these are for
+        convenience and are equivalent to passing in logging.DEBUG, etc.
+        For bool, True is the same as 'INFO', False is the same as 'WARNING'.
+        If None, the environment variable MNE_LOG_LEVEL is read, and if
+        it doesn't exist, defaults to INFO.
+    return_old_level : bool
+        If True, return the old verbosity level.
+    """
+    # import vispy
+    # log = logging.getLogger('vispy')
+    # log.setLevel(logging.ERROR)
+    if verbose is None:
+        verbose = "INFO"
+    elif isinstance(verbose, bool):
+        if verbose is True:
+            verbose = 'INFO'
+        else:
+            verbose = 'WARNING'
+    if isinstance(verbose, str):
+        verbose = verbose.upper()
+        logging_types = dict(DEBUG=logging.DEBUG, INFO=logging.INFO,
+                             WARNING=logging.WARNING, ERROR=logging.ERROR,
+                             CRITICAL=logging.CRITICAL)
+        if verbose not in logging_types:
+            raise ValueError('verbose must be of a valid type')
+        verbose = logging_types[verbose]
+    format = "%(levelname)s : %(message)s"
+    logging.basicConfig(format=format)
+    logger.setLevel(verbose)
 
 
 def verbose(msg, level=None, display=True):
