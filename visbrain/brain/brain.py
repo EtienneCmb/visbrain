@@ -6,9 +6,9 @@ base: initialize all Brain objects (MNI, sources, connectivity...)
 and associated transformations
 BrainUserMethods: initialize functions for user interaction.
 """
-
-from PyQt5 import QtWidgets
+import logging
 import sys
+from PyQt5 import QtWidgets
 
 import vispy.app as visapp
 import vispy.scene.cameras as viscam
@@ -16,9 +16,12 @@ import vispy.scene.cameras as viscam
 from .interface import UiInit, UiElements, BrainShortcuts
 from .base import BaseVisual, BrainCbar
 from .user import BrainUserMethods
-from ..utils import set_widget_size
+from ..utils import set_widget_size, set_log_level
 import sip
 sip.setdestroyonexit(False)
+
+
+logger = logging.getLogger('visbrain')
 
 
 class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
@@ -54,28 +57,18 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
 
     Parameters
     ----------
-    a_color : tuple | (1., 1., 1.)
-        RGB colors of the MNI brain (default is white).
-
-    a_opacity : int/float | 1.
-        Transparency of the MNI brain. Must be between 0 and 1.
-
-    a_proj : string | {'internal', 'external'}
-        Turn a_proj to 'internal' for internal projection or 'external' for
-        cortical rendering.
-
-    a_template : string | 'B1'
+    brain_template : string | 'B1'
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
-
+    brain_translucent : bool | True
+        Use translucent or opaque brain.
+    brain_hemisphere : {'left', 'both', 'right'}
+        Specify which brain hemisphere to use. Default is 'both'.
     source_obj : SourceObj | None
         An object (or list of objects) of type source (SourceObj).
-
     connect_obj : ConnectObj | None
         An object (or list of objects) of type connectivity (ConnectObj).
-
     time_series_obj : TimeSeriesObj | None
         An object (or list of objects) of type time-series (TimeSeriesObj).
-
     picture_obj : PictureObj | None
         An object (or list of objects) of type pictures (PictureObj).
 
@@ -89,21 +82,6 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
 
     ui_bgcolor : string/tuple | (0.09, 0.09, 0.09)
         Background color of the ui
-
-    l_position : tuple | (100., 100., 100.)
-        Position of the light
-
-    l_intensity : tuple | (1., 1., 1.)
-        Intensity of the light
-
-    l_color : tuple | (1., 1., 1., 1.)
-        Color of the light
-
-    l_ambient : float | 0.05
-        Coefficient for the ambient light
-
-    l_specular : float | 0.5
-        Coefficient for the specular light
 
     Examples
     --------
@@ -121,18 +99,14 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
     >>> vb.show()
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, verbose=None, **kwargs):
         """Init."""
+        # ====================== Verbose ======================
+        set_log_level(verbose)
         # ====================== ui Arguments ======================
+
         # Background color (for the main and the colorbar canvas) :
         bgcolor = kwargs.get('ui_bgcolor', (0., 0., 0.))
-        # Savename, extension and croping region (usefull for the screenshot) :
-        self._savename = kwargs.get('ui_savename', None)
-        self._xyzRange = {'turntable': {'x': None, 'y': (-1200, 1200),
-                                        'z': None},
-                          'fly': {'x': (-120, 120), 'y': (-100, 200),
-                                  'z': (-90, 90)},
-                          }
         self._userobj = {}
 
         # ====================== App creation ======================
@@ -147,8 +121,6 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
         #     '/vbrain')[0], path)))
 
         # ====================== Objects creation ======================
-        camera = viscam.TurntableCamera(azimuth=0, distance=1000,
-                                        name='turntable')
         BaseVisual.__init__(self, self.view.wc, self._csGrid, self.progressBar,
                             **kwargs)
 
@@ -159,16 +131,17 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
 
         # ====================== Cameras ======================
         # Main camera :
-        self.view.wc.camera = camera
-        self.atlas.mesh.set_camera(self.view.wc.camera)
+        self.view.wc.camera = self.atlas.camera
         self._vbNode.parent = self.view.wc.scene
-        self._rotate(fixed='axial')
-        self.view.wc.camera.set_default_state()
+        self.atlas.rotate('top')
+        if logger.level == 10:
+            print('\n========================================================')
+            print(self._vbNode.describe_tree())
+            print('========================================================\n')
 
         # ====================== Colorbar ======================
-        # Fixed colorbar camera :
+        # Cbar creation + camera:
         camera = viscam.PanZoomCamera(rect=(-.2, -2.5, 1, 5))
-        # Cbar creation :
         BrainCbar.__init__(self, camera)
         # Add shortcuts on it :
         BrainShortcuts.__init__(self, self.cbqt.cbviz._canvas)
@@ -182,27 +155,21 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
         self.QuickSettings.setCurrentIndex(0)
         self._objsPage.setCurrentIndex(0)
         self.menuDispQuickSettings.setChecked(True)
-        self.SettingTab.setCurrentIndex(0)
+        self._source_tab.setCurrentIndex(0)
         set_widget_size(self._app, self.q_widget, 23)
+        # Progress bar and rotation panel :
+        self.progressBar.hide()
+        self.userRotationPanel.setVisible(False)
         # Display menu :
         self.menuDispBrain.setChecked(self.atlas.mesh.visible)
         # Objects :
+        self._fcn_3dobj_type()
         self._all_object_are_none()
         self._fcn_obj_type()
-        # Sources :
-        # if self.sources.visible:
-        #     self.menuDispSources.setChecked(True)
-        # Connectivity :
-        # if self.connect.mesh.visible:
-        #     self.menuDispConnect.setChecked(True)
-        #     self._fcn_menu_disp_connect()
         # Colorbar :
         self._fcn_menu_disp_cbar()
 
     def show(self):
         """Display the graphical user interface."""
-        # This function has to be placed here (and not in the user.py script)
         self.showMaximized()
-        # Fix brain range :
-        # self._set_cam_range()
         visapp.run()
