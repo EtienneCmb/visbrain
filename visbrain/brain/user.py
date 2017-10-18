@@ -280,7 +280,7 @@ class BrainUserMethods(object):
             self.atlas.mesh.set_alpha(alpha)
         # Transparent / opaque :
         if isinstance(transparent, bool):
-            self._brainTransp.setChecked(transparent)
+            self._brain_translucent.setChecked(transparent)
             _light_update = True
         # Visible :
         self.menuDispBrain.setChecked(visible)
@@ -763,7 +763,7 @@ class BrainUserMethods(object):
             The object name to fit. Use 'brain' or 'roi'.
         """
         # Get vertices of the selected object :
-        v = self._findVertices(obj)
+        v = self._get_obj_vertices(obj)
         # fit sources to the selected vertices :
         self.sources._fit(v, self.progressbar)
 
