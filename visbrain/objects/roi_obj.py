@@ -1,9 +1,13 @@
 """Base class for objects of type ROI."""
 import numpy as np
 
+from vispy import scene
+from vispy.geometry.isosurface import isosurface
+
 from .visbrain_obj import VisbrainObject, CombineObjects
-from ..utils import load_predefined_roi, mni2tal
 from ..io import is_pandas_installed
+from ..utils import load_predefined_roi, mni2tal, smooth_3d
+from ..visuals import BrainMesh
 
 
 class RoiObj(VisbrainObject):
@@ -28,6 +32,8 @@ class RoiObj(VisbrainObject):
     system : {'mni', 'tal'}
         The system of the volumne. Can either be MNI ('mni') or Talairach
         ('tal').
+    transform : VisPy.visuals.transforms | None
+        VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         ROI object parent.
     """
@@ -39,41 +45,11 @@ class RoiObj(VisbrainObject):
     ###########################################################################
 
     def __init__(self, name, vol=None, label=None, index=None, hdr=None,
-                 system='mni', parent=None):
+                 system='mni', transform=None, parent=None):
         """Init."""
-        # Test if pandas is installed :
-        if not is_pandas_installed():
-            raise ImportError("In order to work properly, pandas package "
-                              "should be installed using *pip install pandas*")
-        import pandas as pd
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent)
-        # _______________________ PREDEFINED _______________________
-        if name in ['brodmann', 'talairach', 'aal']:
-            vol, label, index, hdr, system = load_predefined_roi(name)
-        self._offset = -1 if name == 'talairach' else 0
-
-        # _______________________ CHECKING _______________________
-        # vol :
-        assert vol.ndim == 3
-        # Index and label :
-        assert len(index) == len(label)
-        index = np.asarray(index).astype(int)
-        label = np.asarray(label)
-        self.vol = vol
-        self._n_roi = len(index)
-        # hdr :
-        self.hdr = np.eye(4) if hdr is None else hdr
-        assert self.hdr.shape == (4, 4)
-        # System :
-        assert system in ['mni', 'tal']
-        self.system = system
-
-        # _______________________ REFERENCE _______________________
-        label_dict = self._struct_array_to_dict(label)
-        cols = ['index'] + list(label_dict.keys())
-        self.ref = pd.DataFrame({'index': index, **label_dict}, columns=cols)
-        self.analysis = pd.DataFrame({}, columns=cols)
+        VisbrainObject.__init__(self, name, parent, transform)
+        self.change_roi_object(name, vol, label, index, hdr, system)
 
     def __len__(self):
         """Return the number of ROI."""
@@ -107,6 +83,71 @@ class RoiObj(VisbrainObject):
         assert len(idx) == 3
         sh = self.vol.shape
         return (sh[0] < idx[0]) and (sh[1] < idx[1]) and (sh[2] < idx[2])
+
+    def change_roi_object(self, name, vol=None, label=None, index=None,
+                          hdr=None, system='mni'):
+        """Load an roi object.
+
+        Parameters
+        ----------
+        name : string
+            Name of the ROI object. If name is 'brodmann', 'aal' or
+            'talairach' a predefined ROI object is used and vol, index and
+            label are ignored.
+        vol : array_like | None
+            ROI volume. Sould be an array with three dimensions.
+        label : array_like | None
+            Array of labels. A structured array can be used (i.e
+            label=np.zeros(n_sources, dtype=[('brodmann', int),
+            ('aal', object)])).
+        index : array_like | None
+            Array of index that make the correspondance between the volumne
+            values and labels. The length of index must be the same as label.
+        hdr : array_like | None
+            Array of transform source's coordinates into the volume space.
+            Must be a (4, 4) array.
+        system : {'mni', 'tal'}
+            The system of the volumne. Can either be MNI ('mni') or Talairach
+            ('tal').
+        """
+        # Test if pandas is installed :
+        if not is_pandas_installed():
+            raise ImportError("In order to work properly, pandas package "
+                              "should be installed using *pip install pandas*")
+        import pandas as pd
+        # _______________________ PREDEFINED _______________________
+        if name in ['brodmann', 'talairach', 'aal']:
+            vol, label, index, hdr, system = load_predefined_roi(name)
+        self._offset = -1 if name == 'talairach' else 0
+
+        # _______________________ CHECKING _______________________
+        # vol :
+        assert vol.ndim == 3
+        # Index and label :
+        assert len(index) == len(label)
+        index = np.asarray(index).astype(int)
+        label = np.asarray(label)
+        self.vol = vol
+        self._n_roi = len(index)
+        # hdr :
+        self.hdr = np.eye(4) if hdr is None else hdr
+        assert self.hdr.shape == (4, 4)
+        # System :
+        assert system in ['mni', 'tal']
+        self.system = system
+
+        # _______________________ REFERENCE _______________________
+        label_dict = self._struct_array_to_dict(label)
+        label_dict['index'] = index
+        cols = list(label_dict.keys())
+        self.ref = pd.DataFrame(label_dict, columns=cols)
+        self.analysis = pd.DataFrame({}, columns=cols)
+
+    ###########################################################################
+    ###########################################################################
+    #                                ANALYSE
+    ###########################################################################
+    ###########################################################################
 
     def localize_sources(self, xyz, source_name=None, replace_bad=True,
                          bad_patterns=[-1, 'undefined', 'None'],
@@ -166,7 +207,7 @@ class RoiObj(VisbrainObject):
     def _find_roi_label(self, vol_idx):
         """Find the ROI label associated to a volume index."""
         ref_index = np.where(self.ref['index'] == vol_idx)[0]
-        return self[int(ref_index)] if ref_index.size else None
+        return self[int(ref_index[0])] if ref_index.size else None
 
     @staticmethod
     def _struct_array_to_dict(arr):
@@ -179,8 +220,65 @@ class RoiObj(VisbrainObject):
         except:
             return {'label': arr}
 
-    # def roi_to_mesh(self):
-    #     pass
+    def get_roi_vertices(self, level=.5, unique_color=False, smooth=3,
+                         plot=False):
+        """"""
+        # Get vertices / faces :
+        if not unique_color:
+            vert, faces = self._get_roi_vertices(self.vol, level, smooth)
+        else:
+            assert not isinstance(level, float)
+            level = [level] if isinstance(level, int) else level
+            vert, faces, color = np.array([]), np.array([]), np.array([])
+            # Generate a (n_levels, 3, 4) array of unique colors :
+            col_unique = np.random.uniform(.1, .9, (len(level), 4))
+            col_unique[..., -1] = 1.
+            col_unique = np.tile(col_unique[:, np.newaxis, :], (1, 3, 1))
+            for i, k in enumerate(level):
+                v, f = self._get_roi_vertices(self.vol, k, smooth)
+                # Concatenate vertices / faces :
+                faces = np.r_[faces, f + faces.max() + 1] if faces.size else f
+                vert = np.r_[vert, v] if vert.size else v
+                # Concatenate color :
+                col = np.tile(col_unique[[i], ...], (f.shape[0], 1, 1))
+                color = np.r_[color, col] if color.size else col
+        if plot and vert.size:
+            if not hasattr(self, 'mesh'):
+                self.mesh = BrainMesh(vertices=vert, faces=faces,
+                                      scale_factor=800., parent=self._node,
+                                      recenter=True)
+                self.mesh.set_camera(scene.cameras.TurntableCamera())
+                if unique_color:
+                    self.mesh.color = color
+
+    @staticmethod
+    def _get_roi_vertices(vol, level, smooth):
+        vol = vol.copy()
+        if isinstance(level, int):
+            vol[vol != level] = 0
+        elif isinstance(level, float):
+            vol[vol > level] = 0
+        elif isinstance(level, (np.ndarray, list, tuple)):
+            vol[np.logical_and.reduce([vol != k for k in level])] = 0
+        return isosurface(smooth_3d(vol, smooth), level=.5)
+
+    def _get_camera(self):
+        """Get the most adapted camera."""
+        self.mesh._camera.scale_factor = self.mesh._camratio[0]
+        return self.mesh._camera
+
+    # ----------- TRANSLUCENT -----------
+    @property
+    def translucent(self):
+        """Get the translucent value."""
+        return self.mesh.translucent if hasattr(self, 'mesh') else False
+
+    @translucent.setter
+    def translucent(self, value):
+        """Set translucent value."""
+        if hasattr(self, 'mesh'):
+            self.mesh.translucent = value
+
 
 
 class CombineRoi(CombineObjects):
