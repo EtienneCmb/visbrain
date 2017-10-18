@@ -21,7 +21,6 @@ from vispy.scene.visuals import create_visual_node
 
 from ..utils import (array2colormap, color2vb, convert_meshdata, vispy_array)
 
-__all__ = ['BrainMesh']
 
 logger = logging.getLogger('visbrain')
 
@@ -37,7 +36,7 @@ varying vec3 v_normal;
 void main() {
     v_position = $a_position;
     v_normal = $a_normal;
-    v_color = $a_color * $u_color;
+    v_color = $a_color * $u_light_color;
     gl_Position = $transform(vec4($a_position, 1));
 }
 """
@@ -58,7 +57,7 @@ varying vec3 v_normal;
 void main() {
 
     // ----------------- Ambient light -----------------
-    vec3 ambientLight = $u_coefAmbient * v_color.rgb * $u_light_intensity;
+    vec3 ambientLight = $u_coef_ambient * v_color.rgb * $u_light_intensity;
 
 
     // ----------------- Diffuse light -----------------
@@ -66,9 +65,10 @@ void main() {
     vec3 surfaceToLight = $u_light_position - v_position;
 
     // Calculate the cosine of the angle of incidence
-    float brightness = dot(v_normal, surfaceToLight) / (length(surfaceToLight) * length(v_normal));
+    float l_surf_norm = length(surfaceToLight) * length(v_normal);
+    float brightness = dot(v_normal, surfaceToLight) / l_surf_norm;
     // brightness = clamp(brightness, 0, 1);
-    brightness = max(min(brightness,1.0),0.0);
+    brightness = max(min(brightness, 1.0), 0.0);
 
     // Get diffuse light :
     vec3 diffuseLight =  v_color.rgb * brightness * $u_light_intensity;
@@ -78,7 +78,8 @@ void main() {
     vec3 surfaceToCamera = vec3(0.0, 0.0, 1.0) - v_position;
     vec3 K = normalize(normalize(surfaceToLight) + normalize(surfaceToCamera));
     float specular = clamp(pow(abs(dot(v_normal, K)), 40.), 0.0, 1.0);
-    vec3 specularLight = $u_coefSpecular * specular * vec3(1., 1., 1.) * $u_light_intensity;
+    specular *= $u_coef_specular;
+    vec3 specularLight = specular * vec3(1., 1., 1.) * $u_light_intensity;
 
 
     // ----------------- Attenuation -----------------
@@ -92,7 +93,8 @@ void main() {
     vec3 linearColor = ambientLight + specularLight + diffuseLight;
 
     // With attenuation :
-    // vec3 linearColor = ambientLight + attenuation*(specularLight + diffuseLight);
+    // vec3 linearColor = attenuation*(specularLight + diffuseLight);
+    // linearColor += ambientLight
 
     // ----------------- Gamma correction -----------------
     // vec3 gamma = vec3(1.0/1.2);
@@ -165,13 +167,11 @@ class BrainVisual(Visual):
         pass
 
     def __init__(self, vertices=None, faces=None, normals=None, lr_index=None,
-                 hemisphere='both', alpha=1., l_position=[100.] * 3,
-                 l_color=[1.] * 4, l_intensity=[1.] * 3, l_ambient=.05,
-                 l_specular=.5, vertfcn=None, camera=None, meshdata=None):
+                 hemisphere='both', alpha=1., light_position=[100.] * 3,
+                 light_color=[1.] * 4, light_intensity=[1.] * 3,
+                 coef_ambient=.05, coef_specular=.5, vertfcn=None, camera=None,
+                 meshdata=None):
         """Init."""
-        self._color_changed = False
-        self._hemisphere = hemisphere
-        self._lr_index = None
         self._camera = None
         self._camera_transform = vist.NullTransform()
         self._translucent = True
@@ -198,10 +198,14 @@ class BrainVisual(Visual):
         self.shared_program.vert['a_normal'] = self._normals_buffer
         self.shared_program.frag['u_alpha'] = alpha
 
-        # _________________ DATA / LIGHT / CAMERA _________________
+        # _________________ DATA / CAMERA / LIGHT _________________
         self.set_data(vertices, faces, normals, hemisphere, lr_index)
-        self.set_light(l_position, l_color, l_intensity, l_ambient, l_specular)
         self.set_camera(camera)
+        self.light_color = light_color
+        self.light_position = light_position
+        self.light_intensity = light_intensity
+        self.coef_ambient = coef_ambient
+        self.coef_specular = coef_specular
 
         # _________________ GL STATE _________________
         self.set_gl_state('translucent', depth_test=True, cull_face=False,
@@ -283,7 +287,8 @@ class BrainVisual(Visual):
         logger.debug("Should not use index faced vertices / normals "
                      "(BrainVisual.py). This is a limitation for : \n"
                      "* Bigger files \n* Difficult to find camera center "
-                     "(x, y, z) and configure scale_factor \n* Slower")
+                     "(x, y, z) and configure scale_factor \n* Slower \n"
+                     "* Much more RAM needed for projection")
         # from vispy.geometry import MeshData
         # m = MeshData(vertices=vertices, faces=faces)
         # vertices = m.get_vertices()
@@ -352,45 +357,6 @@ class BrainVisual(Visual):
         self._color_buffer.set_data(self._colFaces)
         self.update()
 
-    def set_light(self, l_position=None, l_color=None, l_intensity=None,
-                  l_ambient=None, l_specular=None):
-        """Set light properties.
-
-        Parameters
-        ----------
-        l_position: tuple | (1., 1., 1.)
-            Position of the light
-        l_color: tuple | (1., 1., 1., 1.)
-            Color of the light (RGBA)
-        l_intensity: tuple | (1., 1., 1.)
-            Intensity of the light
-        l_ambient: float | 0.11
-            Coefficient for the ambient light
-        l_specular: float | 0.5
-            Coefficient for the specular light
-        """
-        # Light position :
-        if l_position is not None:
-            self._l_position = l_position
-            self.shared_program.frag['u_light_position'] = l_position
-        # Light color :
-        if l_color is not None:
-            self._l_color = l_color
-            self.shared_program.vert['u_color'] = l_color
-        # Light ambient coefficient :
-        if l_ambient is not None:
-            self._l_ambient = l_ambient
-            self.shared_program.frag['u_coefAmbient'] = l_ambient
-        # Light specular coefficient :
-        if l_specular is not None:
-            self._l_specular = l_specular
-            self.shared_program.frag['u_coefSpecular'] = l_specular
-        # Light intensity :
-        if l_intensity is not None:
-            self._l_intensity = l_intensity
-            self.shared_program.frag['u_light_intensity'] = l_intensity
-        self.update()
-
     def set_camera(self, camera=None):
         """Set a camera to the mesh.
 
@@ -432,7 +398,7 @@ class BrainVisual(Visual):
         """Call everytime there is an interaction with the mesh."""
         view_frag = view.view_program.frag
         view_frag['u_light_position'] = self._camera_transform.map(
-            self._l_position)[0:-1]
+            self._light_position)[0:-1]
 
     @staticmethod
     def _prepare_transforms(view):
@@ -453,17 +419,6 @@ class BrainVisual(Visual):
     def get_vertices(self):
         """Mesh data."""
         return self._vertfcn.map(self._vertices)[..., 0:-1]
-
-    @property
-    def get_color(self):
-        """Vertex color."""
-        return self._colFaces
-
-    @property
-    def get_light(self):
-        """List of all light properties."""
-        return list(self._l_position) + list(self._l_intensity) + list(
-            self._l_color) + list(tuple([self._l_ambient, self._l_specular]))
 
     # ----------- COLOR -----------
     @property
@@ -515,6 +470,76 @@ class BrainVisual(Visual):
         value = min(value, .1) if self._translucent else 1.
         self._alpha = value
         self.shared_program.frag['u_alpha'] = value
+        self.update()
+
+    # ----------- LIGHT_POSITION -----------
+    @property
+    def light_position(self):
+        """Get the light_position value."""
+        return self._light_position
+
+    @light_position.setter
+    def light_position(self, value):
+        """Set light_position value."""
+        assert len(value) == 3
+        self.shared_program.frag['u_light_position'] = value
+        self._light_position = value
+        self.update()
+
+    # ----------- LIGHT_COLOR -----------
+    @property
+    def light_color(self):
+        """Get the light_color value."""
+        return self._light_color
+
+    @light_color.setter
+    def light_color(self, value):
+        """Set light_color value."""
+        assert len(value) == 4
+        self.shared_program.vert['u_light_color'] = value
+        self._light_color = value
+        self.update()
+
+    # ----------- LIGHT_INTENSITY -----------
+    @property
+    def light_intensity(self):
+        """Get the light_intensity value."""
+        return self._light_intensity
+
+    @light_intensity.setter
+    def light_intensity(self, value):
+        """Set light_intensity value."""
+        assert len(value) == 3
+        self.shared_program.frag['u_light_intensity'] = value
+        self._light_intensity = value
+        self.update()
+
+    # ----------- COEF_AMBIENT -----------
+    @property
+    def coef_ambient(self):
+        """Get the coef_ambient value."""
+        return self._coef_ambient
+
+    @coef_ambient.setter
+    def coef_ambient(self, value):
+        """Set coef_ambient value."""
+        assert isinstance(value, (int, float))
+        self.shared_program.frag['u_coef_ambient'] = float(value)
+        self._coef_ambient = value
+        self.update()
+
+    # ----------- COEF_SPECULAR -----------
+    @property
+    def coef_specular(self):
+        """Get the coef_specular value."""
+        return self._coef_specular
+
+    @coef_specular.setter
+    def coef_specular(self, value):
+        """Set coef_specular value."""
+        assert isinstance(value, (int, float))
+        self.shared_program.frag['u_coef_specular'] = value
+        self._coef_specular = value
         self.update()
 
 
