@@ -18,18 +18,26 @@ class UiAtlas(object):
 
     def __init__(self):
         """Init."""
+        self._3dobj_type_lst.currentIndexChanged.connect(self._fcn_3dobj_type)
+
         #######################################################################
         #                              BRAIN
         #######################################################################
+        # Visible :
+        self._brain_grp.clicked.connect(self._fcn_brain_visible)
         # Template :
-        self._brainTemplate.addItems(self.atlas._surf_list)
-        idx = self.atlas._surf_list.index(self.atlas.template)
-        self._brainTemplate.setCurrentIndex(idx)
-        self._brainTemplate.currentIndexChanged.connect(self._brain_control)
+        all_templates = self.atlas._get_all_available_templates()
+        self._brain_template.addItems(all_templates)
+        idx = all_templates.index(self.atlas.name)
+        self._brain_template.setCurrentIndex(idx)
+        self._brain_template.currentIndexChanged.connect(
+            self._fcn_brain_template)
         # Hemisphere :
-        self._brainPickHemi.currentIndexChanged.connect(self._brain_control)
-        # Transparent :
-        self._brainTransp.clicked.connect(self._light_reflection)
+        self._brain_hemi.currentIndexChanged.connect(self._fcn_brain_template)
+        # Translucent :
+        self._brain_translucent.setChecked(self.atlas.translucent)
+        self._brain_translucent.clicked.connect(self._fcn_brain_translucent)
+        self._brain_alpha.valueChanged.connect(self._fcn_brain_alpha)
 
         #######################################################################
         #                         REGION OF INTEREST
@@ -84,45 +92,57 @@ class UiAtlas(object):
         self._volIsoTh.valueChanged.connect(self._fcn_vol3d_change)
         self._volIsoTh.setKeyboardTracking(False)
 
+    def _fcn_3dobj_type(self):
+        """Change the 3-D object type."""
+        self._3dobj_stack.setCurrentIndex(self._3dobj_type_lst.currentIndex())
+
+    def _fcn_gui_rotation(self):
+        """Display rotation informations.
+
+        This function display rotation informations (azimuth / elevation /
+        distance) at the bottom of the setting panel.
+        """
+        # Define and set the rotation string :
+        rotstr = 'Azimuth: {a}°, Elevation: {e}°,\nDistance: {d}, Scale: {s}'
+        # Get camera Azimuth / Elevation / Distance :
+        a = str(self.view.wc.camera.azimuth)
+        e = str(self.view.wc.camera.elevation)
+        d = str(np.around(self.view.wc.camera.distance, 2))
+        s = str(np.around(self.view.wc.camera.scale_factor, 2))
+        # Set the text to the box :
+        self.userRotation.setText(rotstr.format(a=a, e=e, d=d, s=s))
+
     ###########################################################################
     ###########################################################################
     #                                 BRAIN
     ###########################################################################
     ###########################################################################
-    def _brain_control(self):
+    def _fcn_brain_visible(self):
+        """Display / hide the brain."""
+        self.atlas.visible_obj = self._brain_grp.isChecked()
+
+    def _fcn_brain_template(self):
         """Control the type of brain to use."""
         # _____________________ TEMPLATE _____________________
-        template = str(self._brainTemplate.currentText())
-        hemisphere = str(self._brainPickHemi.currentText())
-        self.atlas.set_data(template, hemisphere)
+        template = str(self._brain_template.currentText())
+        hemisphere = str(self._brain_hemi.currentText())
+        self.atlas.set_data(name=template, hemisphere=hemisphere)
 
-        # _____________________ VISIBLE _____________________
-        self.atlas.mesh.visible = self.menuDispBrain.isChecked()
-
-        # _____________________ RELATED _____________________
-        self._cleanProj()
-        self._fcn_minmax_slice()
-
-        # _____________________ TRANSFORMATION _____________________
-        self._vbNode.transform = self.atlas.mesh._btransform
-        self._vbNode.update()
-
-    def _light_reflection(self):
+    def _fcn_brain_translucent(self):
         """Change how light is reflected onto the brain.
 
         The 'internal' option can be used to observe deep structures with a
         fully transparent brain. The 'external' option is only usefull for
         the cortical surface.
         """
-        viz = self._brainTransp.isChecked()
-        if viz:
-            self.atlas.mesh.projection('internal')
-        else:
-            self.atlas.mesh.projection('external')
-            self.atlas.mesh.set_alpha(1.)
-        self.o_Brain.setChecked(viz)
-        self.o_Brain.setEnabled(viz)
-        self.atlas.mesh.update()
+        viz = self._brain_translucent.isChecked()
+        self.atlas.mesh.translucent = viz
+        self._brain_alpha.setEnabled(viz)
+        self._fcn_brain_alpha()
+
+    def _fcn_brain_alpha(self):
+        """Update brain transparency."""
+        self.atlas.mesh.alpha = self._brain_alpha.value() / 100.
 
     ###########################################################################
     ###########################################################################
@@ -183,7 +203,6 @@ class UiAtlas(object):
             self._roiTransp.setEnabled(True)
             self.menuDispROI.setEnabled(True)
             self.menuDispROI.setChecked(True)
-            self.o_Areas.setEnabled(True)
             self._area_light_reflection()
         else:
             raise ValueError("No ROI selected.")
@@ -196,12 +215,8 @@ class UiAtlas(object):
         """
         if self._roiTransp.isChecked():
             self.volume.mesh.projection('internal')
-            self.o_Areas.setChecked(True)
-            self.o_Areas.setEnabled(True)
         else:
             self.volume.mesh.projection('external')
-            self.o_Areas.setChecked(False)
-            self.o_Areas.setEnabled(False)
 
     ###########################################################################
     ###########################################################################
@@ -225,9 +240,8 @@ class UiAtlas(object):
         pos = self.volume.transform.map(np.array([dx, dy, dz]))
         # Get selected colormap :
         cmap = str(self._csCmap.currentText())
-        # Set new center position :
-        bgd = (self.bgd_red.value(), self.bgd_green.value(),
-               self.bgd_blue.value())
+        # Set background color :
+        bgd = self.view.canvas.bgcolor.rgb
         # Get transparency level :
         alpha = 1. - float(self._csTransp.isChecked())
         self.volume.set_cs_data(dx, dy, dz, bgcolor=bgd, alpha=alpha,
