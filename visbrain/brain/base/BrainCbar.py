@@ -1,5 +1,9 @@
 """Colorbar management for the Brain module."""
+import logging
+
 from ...visuals import CbarQt, CbarObjetcs, CbarBase
+
+logger = logging.getLogger('visbrain')
 
 __all__ = ['BrainCbar']
 
@@ -13,7 +17,17 @@ class BrainCbar(object):
         # Create the cbar objects manager :
         self.cbobjs = CbarObjetcs()
 
+        logger.debug("Cbar should directly update objects that inherit from "
+                     "CbarArgs")
         # ------------------- CBARBASE -------------------
+        # ________ Projection ________
+        if self.sources.name is not None:
+            cbproj = CbarBase(**self.sources.to_kwargs(True))
+            self.cbobjs.add_object('Projection', cbproj)
+            obj = self.cbobjs._objs['Projection']
+            obj._fcn = self._fcn_link_proj
+            obj._minmaxfcn = self._fcn_minmax_proj
+
         # ________ Connectivity ________
         if self.connect.name is not None:
             for k in self.connect:
@@ -49,12 +63,14 @@ class BrainCbar(object):
     ###########################################################################
     def _fcn_link_proj(self):
         """Executed function when projection need updates."""
-        self._proj2Color()
+        if hasattr(self.sources, '_minmax'):
+            self._projection_to_color()
 
     def _fcn_minmax_proj(self):
         """Executed function for autoscale projections."""
-        self.cbqt.cbobjs._objs['Projection']._clim = self.sources._minmax
-        self._proj2Color()
+        if hasattr(self.sources, '_minmax'):
+            self.cbqt.cbobjs._objs['Projection']._clim = self.sources._minmax
+            self._projection_to_color()
 
     ###########################################################################
     #                              CONNECTIVITY
