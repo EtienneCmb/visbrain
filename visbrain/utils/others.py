@@ -285,7 +285,7 @@ def volume_to_mesh(vol, smooth_factor=3, level=None, **kwargs):
     return vertices, faces, normals
 
 
-def add_brain_template(name, vertices, faces, normals, lr_index=None):
+def add_brain_template(name, vertices, faces, normals=None, lr_index=None):
     """Add a brain template to the default list.
 
     Parameters
@@ -303,6 +303,8 @@ def add_brain_template(name, vertices, faces, normals, lr_index=None):
         Specify where to cut vertices for left and right hemisphere so that
         x_left <= lr_index and right > lr_index
     """
+    # Convert meshdata :
+    vertices, faces, normals = convert_meshdata(vertices, faces, normals)
     # Get path to the templates/ folder :
     name = os.path.splitext(name)[0]
     to_temp = (get_data_path(), 'templates', name + '.npz')
