@@ -1,7 +1,8 @@
 """Base class for objects of type source."""
+from warnings import warn
+import logging
 import numpy as np
 from scipy.spatial.distance import cdist
-from warnings import warn
 
 from vispy import scene
 from vispy.scene import visuals
@@ -10,6 +11,9 @@ import vispy.visuals.transforms as vist
 from .visbrain_obj import VisbrainObject, CombineObjects
 from .roi_obj import RoiObj
 from ..utils import tal2mni, color2vb, normalize, vispy_array
+
+
+logger = logging.getLogger('visbrain')
 
 
 class SourceObj(VisbrainObject):
@@ -108,7 +112,7 @@ class SourceObj(VisbrainObject):
         pos = pos if system == 'mni' else tal2mni(pos)
         self._xyz = vispy_array(pos)
         # Color :
-        self._color, self._alpha = color, alpha
+        self._color = color
         # Edges :
         self._edge_color, self._edge_width = edge_color, edge_width
         # Mask :
@@ -123,7 +127,7 @@ class SourceObj(VisbrainObject):
         self._text_translate = text_translate
 
         # _______________________ MARKERS _______________________
-        self._sources = visuals.Markers(pos=self._xyz, name='SourceObjMarkers',
+        self._sources = visuals.Markers(pos=self._xyz, name='Markers',
                                         edge_color=edge_color,
                                         edge_width=edge_width,
                                         symbol=symbol, parent=self._node)
@@ -133,7 +137,7 @@ class SourceObj(VisbrainObject):
         self._text = [''] * len(self) if tvisible else text
         assert len(self._text) == len(self)
         self._sources_text = visuals.Text(self._text, pos=self._xyz,
-                                          bold=text_bold, name='SourceObjText',
+                                          bold=text_bold, name='Text',
                                           color=color2vb(text_color),
                                           font_size=text_size,
                                           parent=self._node)
@@ -146,6 +150,7 @@ class SourceObj(VisbrainObject):
         self.visible = visible
         self._update_radius()
         self._update_color()
+        self.alpha = alpha
 
     def __len__(self):
         """Get the number of sources."""
@@ -192,6 +197,7 @@ class SourceObj(VisbrainObject):
 
     def _update_radius(self):
         """Update marker's radius."""
+        logger.debug("Weird edge arround markers (source_obj.py)")
         if np.unique(self._data).size == 1:
             radius = self._radius_min * np.ones((len(self,)))
         else:
@@ -199,7 +205,7 @@ class SourceObj(VisbrainObject):
                                tomax=self._radius_max)
         self._sources._data['a_size'] = radius
         to_hide = self.hide
-        # Marker size + egde width = 0 and text='' for hide sources :
+        # Marker size + egde width = 0 and text='' for hidden sources :
         self._sources._data['a_size'][to_hide] = 0.
         self._sources._data['a_edgewidth'][to_hide] = 0.
         text = np.array(self._text.copy())
@@ -502,19 +508,19 @@ class SourceObj(VisbrainObject):
 
         return np.squeeze(idx)
 
-    def set_visible_sources(self, v, select='all', distance=5.):
+    def set_visible_sources(self, select='all', v=None, distance=5.):
         """Select sources that are either inside or outside the mesh.
 
         Parameters
         ----------
-        v : array_like
-            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
         select : {'inside', 'outside', 'close', 'all', 'none', 'left', 'right'}
             Custom source selection. Use 'inside' or 'outside' to select
             sources respectively inside or outside the volume. Use 'close' to
             select sources that are closed to the surface (see the distance
             parameter below). Finally, use 'all' (or True), 'none' (or None,
             False) to show or hide all of the sources.
+        v : array_like | None
+            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.
         distance : float | 5.
             Distance between the source and the surface.
         """
