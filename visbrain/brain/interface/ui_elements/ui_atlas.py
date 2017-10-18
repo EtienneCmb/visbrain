@@ -48,7 +48,7 @@ class UiAtlas(object):
         self._roiButRst.clicked.connect(self._fcn_reset_roi_list)
         self._roiButApply.clicked.connect(self._fcn_apply_roi_selection)
         # Internal/external projection :
-        self._roiTransp.clicked.connect(self._area_light_reflection)
+        self._roiTransp.clicked.connect(self._fcn_area_trasnlucent)
         self._fcn_build_roi_list()
 
         #######################################################################
@@ -203,20 +203,13 @@ class UiAtlas(object):
             self._roiTransp.setEnabled(True)
             self.menuDispROI.setEnabled(True)
             self.menuDispROI.setChecked(True)
-            self._area_light_reflection()
+            self._fcn_area_trasnlucent()
         else:
             raise ValueError("No ROI selected.")
 
-    def _area_light_reflection(self, *args):
-        """Change how light is refleting onto sub-areas.
-
-        This function can be used to see either the surface only (external) or
-        deep voxels inside areas (internal).
-        """
-        if self._roiTransp.isChecked():
-            self.volume.mesh.projection('internal')
-        else:
-            self.volume.mesh.projection('external')
+    def _fcn_area_trasnlucent(self, *args):
+        """Use opaque / translucent roi."""
+        self.volume.mesh.translucent = self._roiTransp.isChecked()
 
     ###########################################################################
     ###########################################################################
