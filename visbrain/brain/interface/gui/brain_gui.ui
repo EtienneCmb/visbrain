@@ -1919,7 +1919,7 @@ name</string>
                           </widget>
                          </item>
                          <item row="0" column="2">
-                          <widget class="QDoubleSpinBox" name="_uitRadius">
+                          <widget class="QDoubleSpinBox" name="_s_proj_radius">
                            <property name="toolTip">
                             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Radius for the cortical projection / repartition. Every vertices arround each sources comprised in a sphere of radius &amp;quot;Radius&amp;quot; will be considered in the projection. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Input parameter : &lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;t_radius&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
@@ -1993,7 +1993,7 @@ type</string>
                           </widget>
                          </item>
                          <item row="2" column="2">
-                          <widget class="QComboBox" name="_uitProjectOn">
+                          <widget class="QComboBox" name="_s_proj_on">
                            <property name="toolTip">
                             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Project source's activity / repartition either on the surface of :&lt;/p&gt;&lt;p&gt;- The brain&lt;/p&gt;&lt;p&gt;- ROI (if a ROI is displayed)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
@@ -2023,7 +2023,7 @@ type</string>
                           </spacer>
                          </item>
                          <item row="3" column="0" colspan="3">
-                          <widget class="QCheckBox" name="_uitContribute">
+                          <widget class="QCheckBox" name="_s_proj_contribute">
                            <property name="toolTip">
                             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If contribute is checked, the projection of a source can contribute to both hemisphere. If it's not checked, the projection is only performed on the hemisphere it belong to. If the source is perfectly centered (like Cz), the projection is forced to be on both hemisphere.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Input parameter : &lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;t_contribute&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
@@ -2033,7 +2033,7 @@ type</string>
                           </widget>
                          </item>
                          <item row="1" column="2">
-                          <widget class="QComboBox" name="_uitPickProj">
+                          <widget class="QComboBox" name="_s_proj_type">
                            <property name="toolTip">
                             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose the projection type :&lt;/p&gt;&lt;p&gt;- &lt;span style=&quot; font-weight:600;&quot;&gt;Source's activity :&lt;/span&gt; project the s_data input parameter on the surface.&lt;/p&gt;&lt;p&gt;- &lt;span style=&quot; font-weight:600;&quot;&gt;Source's repartition :&lt;/span&gt; project the number of contributing sources per vertex.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                            </property>
@@ -2073,7 +2073,7 @@ type</string>
                           </spacer>
                          </item>
                          <item>
-                          <widget class="QPushButton" name="_uitApply">
+                          <widget class="QPushButton" name="_s_proj_apply">
                            <property name="enabled">
                             <bool>true</bool>
                            </property>
