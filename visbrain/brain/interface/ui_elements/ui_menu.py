@@ -194,9 +194,9 @@ class UiMenu(HelpMenu):
     def _fcn_menu_projection(self):
         """Run the cortical projection."""
         self._tprojectas = 'activity'
-        self._sourcesProjection()
+        self._fcn_source_proj()
 
     def _fcn_menu_repartition(self):
         """Run the cortical projection."""
         self._tprojectas = 'repartition'
-        self._sourcesProjection()
+        self._fcn_source_proj()
