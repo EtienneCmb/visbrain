@@ -60,8 +60,8 @@ class TimeSeriesObj(VisbrainObject):
         xyz = xyz if sh[1] == 3 else np.c_[xyz, np.full((len(self),), _z)]
         self._xyz = xyz.astype(np.float32)
         # Select :
-        select = np.ones(len(self), dtype=bool) if select is None else select
-        assert (select.dtype == bool) and (len(select) == len(self))
+        select = np.arange(len(self)) if select is None else select
+        assert isinstance(select, (list, np.ndarray))
         self._select = select
         # Amplitude / width :
         assert isinstance(amplitude, float) and isinstance(width, float)
@@ -103,9 +103,8 @@ class TimeSeriesObj(VisbrainObject):
             pos[k, :, 2] = self._xyz[k, 2]
         pos = pos.reshape(n_nodes * self._n_pts, 3)
         # Build the connection vector :
-        connect = np.ones((n_nodes, self._n_pts), dtype=bool)
-        connect[~self._select, :] = False
-        connect[:, -1] = False  # don't connect last point
+        connect = np.zeros((n_nodes, self._n_pts), dtype=bool)
+        connect[self._select, 0:-1] = True  # don't connect last point
         self._ts.set_data(pos=pos, connect=connect.ravel())
 
     def _get_camera(self):

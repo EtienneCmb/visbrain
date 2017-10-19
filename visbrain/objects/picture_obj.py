@@ -73,8 +73,7 @@ class PictureObj(VisbrainObject, CbarArgs):
         xyz = xyz if sh[1] == 3 else np.c_[xyz, np.full((len(self),), _z)]
         self._xyz = xyz.astype(np.float32)
         # Select :
-        if isinstance(select, np.ndarray):
-            assert len(select) == len(self)
+        assert (select is None) or isinstance(select, (list, np.ndarray))
         # Width, height :
         assert all([isinstance(k, (int, float)) for k in (height, width)])
         self._width, self._height = width, height
