@@ -187,10 +187,10 @@ class SourceProjection(CbarArgs):
             _, fmask[:, k, :] = self._get_eucl_mask(v[:, k, :], xyz, radius,
                                                     contribute, xsign)
         # Find where there's sources under radius and need to be masked :
-        m = fmask.reshape(fmask.shape[0] * 3, fmask.shape[2])
-        idx = np.dot(m, np.ones((len(data),), dtype=bool)).reshape(nv, 3)
+        m = fmask.reshape(fmask.shape[0] * index_faced, fmask.shape[2])
+        idx = np.dot(m, np.ones((len(data),), dtype=bool))
 
-        return np.squeeze(idx)
+        return np.squeeze(idx.reshape(nv, index_faced))
 
 
 class SourceObj(VisbrainObject, SourceProjection):
@@ -927,7 +927,6 @@ class CombineSources(CombineObjects, SourceProjection):
         is_masked = []
         for k in self:
             is_masked.append(k.is_masked)
-        print(is_masked)
         return any(is_masked)
 
     # ----------- VISIBLE_AND_NOT_MASKED -----------
