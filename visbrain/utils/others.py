@@ -311,8 +311,7 @@ def add_brain_template(name, vertices, faces, normals=None, lr_index=None):
     vertices, faces, normals = convert_meshdata(vertices, faces, normals)
     # Get path to the templates/ folder :
     name = os.path.splitext(name)[0]
-    to_temp = (get_data_path(), 'templates', name + '.npz')
-    path = os.path.join(*to_temp)
+    path = get_data_path(folder='templates', file=name + '.npz')
     # Save the template :
     np.savez(path, vertices=vertices, faces=faces, normals=normals,
              lr_index=lr_index)
@@ -329,8 +328,7 @@ def remove_brain_template(name):
     assert name not in ['B1', 'B2', 'B3']
     # Get path to the templates/ folder :
     name = os.path.splitext(name)[0]
-    to_temp = (get_data_path(), 'templates', name + '.npz')
-    path = os.path.join(*to_temp)
+    path = get_data_path(folder='templates', file=name + '.npz')
     # Remove the file from templates/ folder :
     if os.path.isfile(path):
         os.remove(path)
@@ -358,11 +356,15 @@ def set_if_not_none(to_set, value, cond=True):
     return value if (value is not None) and cond else to_set
 
 
-def get_data_path(file=None):
+def get_data_path(folder=None, file=None):
     """Get the path to the visbrain data folder.
+
+    This function can find a file in visbrain/data or visbrain/data/folder.
 
     Parameters
     ----------
+    folder : string | None
+        Sub-folder of visbrain/data.
     file : string | None
         File name.
 
@@ -372,9 +374,6 @@ def get_data_path(file=None):
         Path to the data folder or to the file if file is not None.
     """
     cur_path = sys.modules[__name__].__file__.split('utils')[0]
-    if file is not None:
-        path = os.path.join(*(cur_path, 'data', file))
-        assert os.path.isfile(path)
-    else:
-        path = os.path.join(*(cur_path, 'data'))
-    return path
+    folder = '' if not isinstance(folder, str) else folder
+    file = '' if not isinstance(file, str) else file
+    return os.path.join(*(cur_path, 'data', folder, file))
