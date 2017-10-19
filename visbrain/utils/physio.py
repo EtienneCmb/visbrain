@@ -345,7 +345,7 @@ def load_predefined_roi(name):
     name = name.lower()
     assert name in ['brodmann', 'aal', 'talairach']
     # Load archive :
-    file = os.path.join(*(get_data_path(), 'roi', name + '.npz'))
+    file = get_data_path(folder='roi', file=name + '.npz')
     arch = np.load(file)
     # Extract informations :
     vol, hdr = arch['vol'], arch['hdr']
