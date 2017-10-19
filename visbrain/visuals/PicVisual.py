@@ -54,7 +54,7 @@ class PicVisual(visuals.Visual):
         visuals.Visual.__init__(self, VERT_SHADER, FRAG_SHADER)
 
         # Select pictures :
-        if (select is not None) and (len(select) == pos.shape[0]):
+        if isinstance(select, (list, np.ndarray)):
             data = data[select, ...]
             pos = pos[select, ...]
 
