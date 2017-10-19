@@ -1,4 +1,5 @@
 """Download files from dropbox."""
+import logging
 import os
 import sys
 from urllib import request
@@ -6,6 +7,9 @@ import zipfile
 from warnings import warn
 
 from .rw_config import load_config_json
+
+
+logger = logging.getLogger('visbrain')
 
 
 __all__ = ["get_data_url_file", "download_file", "path_to_visbrain_data"]
@@ -97,10 +101,10 @@ def download_file(name, filename=None, to_path=None, unzip=False,
 
     # Dowload file if needed :
     if to_download:
-        print('Downloading ' + path_to_file)
+        logger.info('Downloading %s' % path_to_file)
         # Check if directory exists else creates it
         if not os.path.exists(to_path):
-            print('Foler ' + to_path + ' created')
+            logger.info('Foler %s created' % to_path)
             os.makedirs(to_path)
         # Download file :
         fh, _ = request.urlretrieve(url, path_to_file, reporthook=reporthook)
@@ -110,12 +114,12 @@ def download_file(name, filename=None, to_path=None, unzip=False,
             zip_file_object = zipfile.ZipFile(fh, 'r')
             zip_file_object.extractall(path=to_path)
             zip_file_object.close()
-            print('Unzip file')
+            logger.info('Unzip archive')
             if remove_archive:  # Remove archive :
-                print('Archive' + path_to_file + ' removed')
+                logger.info('Archive %s removed' % path_to_file)
                 os.remove(path_to_file)
     else:
-        print("File already dowloaded (" + path_to_file + ").")
+        logger.info("File already dowloaded (%s)." % path_to_file)
     print('----------------------------------------------------------------\n')
     return path_to_file
 
