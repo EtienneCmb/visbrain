@@ -2,6 +2,7 @@
 from warnings import warn
 import logging
 import numpy as np
+from functools import wraps
 from scipy.spatial.distance import cdist
 
 from vispy import scene
@@ -13,6 +14,14 @@ from .roi_obj import RoiObj
 from ..utils import tal2mni, color2vb, normalize, vispy_array
 from ..visuals import CbarArgs
 
+
+def wrap_properties(fn):
+    """Run properties if not None."""
+    @wraps(fn)
+    def wrapper(self, value):
+        if value is not None:
+            fn(self, value)
+    return wrapper
 
 logger = logging.getLogger('visbrain')
 
@@ -611,6 +620,13 @@ class SourceObj(VisbrainObject, SourceProjection):
         """Get the data value."""
         return self._data[self.visible_and_not_masked]
 
+    @data.setter
+    @wrap_properties
+    def data(self, value):
+        """Set data value."""
+        assert isinstance(value, np.ndarray) and len(value) == len(self)
+        self._data = value
+
     # ----------- TEXT -----------
     @property
     def text(self):
@@ -630,6 +646,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._radius_min
 
     @radius_min.setter
+    @wrap_properties
     def radius_min(self, value):
         """Set radius_min value."""
         assert isinstance(value, (int, float))
@@ -643,6 +660,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._radius_max
 
     @radius_max.setter
+    @wrap_properties
     def radius_max(self, value):
         """Set radius_max value."""
         assert isinstance(value, (int, float))
@@ -656,8 +674,10 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._sources.symbol
 
     @symbol.setter
+    @wrap_properties
     def symbol(self, value):
         """Set symbol value."""
+        assert isinstance(value, str)
         self._sources.symbol = value
         self._sources.update()
 
@@ -668,6 +688,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._edge_width
 
     @edge_width.setter
+    @wrap_properties
     def edge_width(self, value):
         """Set edge_width value."""
         assert isinstance(value, (int, float))
@@ -682,6 +703,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._edge_color
 
     @edge_color.setter
+    @wrap_properties
     def edge_color(self, value):
         """Set edge_color value."""
         color = color2vb(value, alpha=self.alpha)
@@ -696,6 +718,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._alpha
 
     @alpha.setter
+    @wrap_properties
     def alpha(self, value):
         """Set alpha value."""
         assert isinstance(value, (int, float))
@@ -712,6 +735,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._color
 
     @color.setter
+    @wrap_properties
     def color(self, value):
         """Set color value."""
         self._color = value
@@ -724,6 +748,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._mask
 
     @mask.setter
+    @wrap_properties
     def mask(self, value):
         """Set mask value."""
         assert len(value) == len(self)
@@ -743,6 +768,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._mask_color
 
     @mask_color.setter
+    @wrap_properties
     def mask_color(self, value):
         """Set mask_color value."""
         self._mask_color = color2vb(value)
@@ -755,6 +781,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._visible
 
     @visible.setter
+    @wrap_properties
     def visible(self, value):
         """Set visible value."""
         if isinstance(value, bool):
@@ -777,6 +804,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._text_size
 
     @text_size.setter
+    @wrap_properties
     def text_size(self, value):
         """Set text_size value."""
         assert isinstance(value, (int, float))
@@ -791,6 +819,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._text_color
 
     @text_color.setter
+    @wrap_properties
     def text_color(self, value):
         """Set text_color value."""
         color = color2vb(value)
@@ -805,6 +834,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         return self._text_translate
 
     @text_translate.setter
+    @wrap_properties
     def text_translate(self, value):
         """Set text_translate value."""
         assert len(value) == 3
