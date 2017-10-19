@@ -129,20 +129,15 @@ class UiAtlas(object):
         self.atlas.set_data(name=template, hemisphere=hemisphere)
 
     def _fcn_brain_translucent(self):
-        """Change how light is reflected onto the brain.
-
-        The 'internal' option can be used to observe deep structures with a
-        fully transparent brain. The 'external' option is only usefull for
-        the cortical surface.
-        """
+        """Use translucent or opaque brain."""
         viz = self._brain_translucent.isChecked()
-        self.atlas.mesh.translucent = viz
+        self.atlas.translucent = viz
         self._brain_alpha.setEnabled(viz)
         self._fcn_brain_alpha()
 
     def _fcn_brain_alpha(self):
         """Update brain transparency."""
-        self.atlas.mesh.alpha = self._brain_alpha.value() / 100.
+        self.atlas.alpha = self._brain_alpha.value() / 100.
 
     ###########################################################################
     ###########################################################################
