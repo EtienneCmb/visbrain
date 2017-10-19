@@ -7,24 +7,20 @@ and associated transformations
 BrainUserMethods: initialize functions for user interaction.
 """
 import logging
-import sys
-from PyQt5 import QtWidgets
 
-import vispy.app as visapp
 import vispy.scene.cameras as viscam
 
 from .interface import UiInit, UiElements, BrainShortcuts
 from .base import BaseVisual, BrainCbar
 from .user import BrainUserMethods
-from ..utils import set_widget_size, set_log_level
-import sip
-sip.setdestroyonexit(False)
+from ..pyqt_module import PyQtModule
 
 
 logger = logging.getLogger('visbrain')
 
 
-class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
+class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
+            BrainUserMethods):
     """Visualization of neuroscientic data on a standard MNI brain.
 
     The *Brain* module include several objects that can be individually
@@ -57,6 +53,8 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
 
     Parameters
     ----------
+    bgcolor : string/tuple | 'black'
+        Background color of the GUI.
     brain_template : string | 'B1'
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
     brain_translucent : bool | True
@@ -78,8 +76,6 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
         (True) or if it can only be projected on the hemisphere the source
         belong.
 
-    ui_bgcolor : string/tuple | (0.09, 0.09, 0.09)
-        Background color of the ui
 
     Examples
     --------
@@ -97,45 +93,24 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
     >>> vb.show()
     """
 
-    def __init__(self, verbose=None, **kwargs):
+    def __init__(self, bgcolor='black', verbose=None, **kwargs):
         """Init."""
         # ====================== Verbose ======================
-        set_log_level(verbose)
-        # ====================== ui Arguments ======================
-
-        # Background color (for the main and the colorbar canvas) :
-        bgcolor = kwargs.get('ui_bgcolor', (0., 0., 0.))
+        PyQtModule.__init__(self, verbose=verbose, to_describe='_vbNode',
+                            icon='brain_icon.svg')
         self._userobj = {}
 
         # ====================== App creation ======================
-        # Create the app and initialize all graphical elements :
-        self._app = QtWidgets.QApplication(sys.argv)
-        UiInit.__init__(self, bgcolor)
-
-        # Set icon :
-        # pathfile = sys.modules[__name__].__file__
-        # path = os.path.join(*['brain', 'interface', 'gui', 'vbicon.png'])
-        # self.setWindowIcon(QtGui.QIcon(os.path.join(pathfile.split(
-        #     '/vbrain')[0], path)))
-
-        # ====================== Objects creation ======================
-        BaseVisual.__init__(self, self.view.wc, self._csGrid, self.progressBar,
-                            **kwargs)
-
-        # ====================== UI to visbrain ======================
-        # Link UI and visbrain function :
-        UiElements.__init__(self)
-        self._shpopup.set_shortcuts(self.sh)
+        UiInit.__init__(self, bgcolor)  # GUI creation + canvas
+        BaseVisual.__init__(self, self.view.wc, self._csGrid, **kwargs)
+        UiElements.__init__(self)  # GUI interactions
+        self._shpopup.set_shortcuts(self.sh)  # shortcuts dict
 
         # ====================== Cameras ======================
         # Main camera :
         self.view.wc.camera = self.atlas.camera
         self._vbNode.parent = self.view.wc.scene
         self.atlas.rotate('top')
-        if logger.level == 10:
-            print('\n========================================================')
-            print(self._vbNode.describe_tree())
-            print('========================================================\n')
 
         # ====================== Colorbar ======================
         # Cbar creation + camera:
@@ -149,12 +124,9 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
     def _fcn_on_load(self):
         """Function that need to be executed on load."""
         # Setting panel :
-        self.q_widget.setVisible(True)
-        self.QuickSettings.setCurrentIndex(0)
         self._objsPage.setCurrentIndex(0)
         self.menuDispQuickSettings.setChecked(True)
         self._source_tab.setCurrentIndex(0)
-        set_widget_size(self._app, self.q_widget, 23)
         # Progress bar and rotation panel :
         self.progressBar.hide()
         self.userRotationPanel.setVisible(False)
@@ -166,8 +138,3 @@ class Brain(UiInit, UiElements, BaseVisual, BrainCbar, BrainUserMethods):
         self._fcn_obj_type()
         # Colorbar :
         self._fcn_menu_disp_cbar()
-
-    def show(self):
-        """Display the graphical user interface."""
-        self.showMaximized()
-        visapp.run()
