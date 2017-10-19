@@ -228,8 +228,9 @@ def convert_meshdata(vertices=None, faces=None, normals=None, meshdata=None,
         # Get normals if None :
         if (normals is None) or (vertices.ndim == 2):
             md = MeshData(vertices=vertices, faces=faces)
-            vertices = md.get_vertices(indexed='faces')
             normals = md.get_vertex_normals(indexed='faces')
+            if vertices.ndim == 2:
+                vertices = md.get_vertices(indexed='faces')
 
     # Invert normals :
     norm_coef = -1. if invert_normals else 1.
