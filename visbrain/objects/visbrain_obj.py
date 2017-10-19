@@ -5,6 +5,7 @@ import vispy
 import vispy.visuals.transforms as vist
 
 from .scene_obj import VisbrainCanvas
+from ..utils import color2vb
 
 
 class VisbrainObject(object):
@@ -14,13 +15,13 @@ class VisbrainObject(object):
     ----------
     name : string
         Object name.
-    transform : VisPy.visuals.transforms | None
-        VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         Markers object parent.
+    transform : VisPy.visuals.transforms | None
+        VisPy transformation to set to the parent node.
     """
 
-    def __init__(self, name, parent, transform=None):
+    def __init__(self, name, parent=None, transform=None):
         """Init."""
         self._node = vispy.scene.Node(name=name)
         self._node.parent = parent
@@ -40,7 +41,7 @@ class VisbrainObject(object):
         """Return the object name."""
         return self._name
 
-    def preview(self, bgcolor='white', axis=True):
+    def preview(self, bgcolor='white', axis=True, show=True):
         """Previsualize the result.
 
         Parameters
@@ -49,13 +50,13 @@ class VisbrainObject(object):
             Background color for the preview.
         """
         parent_bck = self._node.parent
-        canvas = VisbrainCanvas(axis=axis, show=True, title=self._name,
-                                bgcolor=bgcolor)
+        canvas = VisbrainCanvas(axis=axis, show=show, name=self._name,
+                                bgcolor=color2vb(bgcolor))
         self._node.parent = canvas.wc.scene
         canvas.camera = self._get_camera()
         # vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)
         # view.camera = camera
-        if sys.flags.interactive != 1:
+        if (sys.flags.interactive != 1) and show:
             vispy.app.run()
         # Reset orignial parent :
         self._node.parent = parent_bck
@@ -64,7 +65,7 @@ class VisbrainObject(object):
     @property
     def parent(self):
         """Get the parent value."""
-        return self._node
+        return self._node.parent
 
     @parent.setter
     def parent(self, value):
