@@ -8,7 +8,7 @@ from vispy import scene
 from .visbrain_obj import VisbrainObject
 from ..visuals import BrainMesh
 from ..utils import get_data_path
-from ..io import download_file, path_to_visbrain_data
+from ..io import download_file
 
 logger = logging.getLogger('visbrain')
 
@@ -122,7 +122,7 @@ class BrainObj(VisbrainObject):
 
     def _get_template_path(self):
         """Get the path where datasets are stored."""
-        return os.path.join(get_data_path(), 'templates')
+        return get_data_path(folder='templates')
 
     def _get_all_available_templates(self):
         """Get all available brain templates (e.g defaults and downloadable."""
