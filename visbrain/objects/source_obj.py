@@ -313,6 +313,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         # _______________________ TEXT _______________________
         tvisible = text is None
         self._text = [''] * len(self) if tvisible else text
+        self._text = np.array(self._text)
         assert len(self._text) == len(self)
         self._sources_text = visuals.Text(self._text, pos=self._xyz,
                                           bold=text_bold, name='Text',
@@ -888,19 +889,19 @@ class CombineSources(CombineObjects, SourceProjection):
     @property
     def _text(self):
         """Get the _text value."""
-        _text = []
+        _text = np.array([])
         for k in self:
-            _text += k._text
-        return np.array(_text)
+            _text = np.r_[_text, k._text] if _text.size else k._text
+        return _text
 
     # ----------- TEXT -----------
     @property
     def text(self):
         """Get the text value."""
-        text = []
+        text = np.array([])
         for k in self:
-            text += k.text.tolist()
-        return np.array(text)
+            text = np.r_[text, k.text] if text.size else k.text
+        return text
 
     # ----------- VISIBLE -----------
     @property
