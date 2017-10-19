@@ -8,7 +8,7 @@ from vispy import scene
 from .visbrain_obj import VisbrainObject
 from ..visuals import BrainMesh
 from ..utils import get_data_path
-from ..io import download_file
+from ..io import download_file, path_to_visbrain_data
 
 logger = logging.getLogger('visbrain')
 
@@ -19,17 +19,31 @@ class BrainObj(VisbrainObject):
     Parameters
     ----------
     name : string
-        Name of the brain object.
-    visible : bool/array_like | True
-        Specify which source's have to be displayed. If visible is True, all
-        sources are displayed, False all sources are hiden. Alternatively, use
-        an array of shape (n_sources,) to select which sources to display.
+        Name of the brain object. If brain is 'B1' or 'B2' or 'B3' use a
+        default brain template. If name is 'WhiteMatter', 'Inflated' or
+        'Sphere'download the template (if needed). Otherwise, at least vertices
+        and faces must be defined.
+    vertices : array_like | None
+        Mesh vertices to use for the brain. Must be an array of shape
+        (n_vertices, 3) or (n_vertices, 3, 3) if index faced.
+    faces : array_like | None
+        Mesh faces of shape (n_faces, 3).
+    normals : array_like | None
+        Normals to each vertex. If None, the program will try to compute it.
+        Must be an array with the same shape as vertices.
+    lr_index : array_like | None
+        Left / Right index for hemispheres. Must be a vector of length
+        n_vertices. This vector must be a boolean array where True refer to
+        vertices that belong to the left hemisphere and False, the right
+        hemisphere.
+    hemisphere : {'left', 'both', 'right'}
+        The hemisphere to plot.
+    translucent : bool | True
+        Use translucent (True) or opaque (False) brain.
     transform : VisPy.visuals.transforms | None
         VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
-        Markers object parent.
-    _z : float | 10.
-        In case of (n_sources, 2) use _z to specify the elevation.
+        Brain object parent.
     """
 
     ###########################################################################
@@ -40,7 +54,7 @@ class BrainObj(VisbrainObject):
 
     def __init__(self, name, vertices=None, faces=None, normals=None,
                  lr_index=None, hemisphere='both', translucent=True,
-                 transform=None, parent=None, _z=-10.):
+                 transform=None, parent=None):
         """Init."""
         # Init Visbrain object base class :
         VisbrainObject.__init__(self, name, parent, transform)
@@ -58,15 +72,13 @@ class BrainObj(VisbrainObject):
         if (name in b_download) and (name not in b_installed):
             self._add_downloadable_templates(name)
         if name in self._get_installed_templates():  # predefined
-            arch = np.load(os.path.join(self._get_template_path(),
-                                        name + '.npz'))
-            vertices, faces = arch['vertices'], arch['faces']
-            normals = arch['normals']
-            lr_index = arch['lr_index'] if 'lr_index' in arch.keys() else None
+            (vertices, faces, normals,
+             lr_index) = self._load_brain_template(name)
 
         # _______________________ CHECKING _______________________
-        assert all([isinstance(k, np.ndarray) for k in (vertices, faces,
-                                                        normals)])
+        assert all([isinstance(k, np.ndarray) for k in (vertices, faces)])
+        if normals is not None:  # vertex normals
+            assert normals.shape == vertices.shape
         assert (lr_index is None) or isinstance(lr_index, np.ndarray)
         assert hemisphere in ['both', 'left', 'right']
 
@@ -88,6 +100,19 @@ class BrainObj(VisbrainObject):
                                lr_index=lr_index, hemisphere=hemisphere)
         # Optimal camera state :
         self.reset_camera()
+
+    def _load_brain_template(self, name, path=None):
+        """Load the brain template.
+
+        If path is None, use the default visbrain/data folder.
+        """
+        if path is None:
+            name = os.path.join(self._get_template_path(), name + '.npz')
+        arch = np.load(name)
+        vertices, faces = arch['vertices'], arch['faces']
+        normals = arch['normals']
+        lr_index = arch['lr_index'] if 'lr_index' in arch.keys() else None
+        return vertices, faces, normals, lr_index
 
     ###########################################################################
     ###########################################################################
@@ -237,6 +262,17 @@ class BrainObj(VisbrainObject):
         """Set translucent value."""
         assert isinstance(value, bool)
         self.mesh.translucent = value
+
+    # ----------- ALPHA -----------
+    @property
+    def alpha(self):
+        """Get the alpha value."""
+        return self.mesh.alpha
+
+    @alpha.setter
+    def alpha(self, value):
+        """Set alpha value."""
+        self.mesh.alpha = value
 
     # ----------- CAMERA -----------
     @property
