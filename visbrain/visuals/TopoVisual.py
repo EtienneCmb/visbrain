@@ -12,7 +12,7 @@ Authors: Etienne Combrisson <e.combrisson@gmail.com>
 License: BSD (3-clause)
 """
 import os
-from warnings import warn
+import logging
 
 import numpy as np
 from scipy.interpolate import interp2d
@@ -24,6 +24,8 @@ import vispy.visuals.transforms as vist
 from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
                      vpnormalize, vprecenter, get_data_path)
 from .cbar import CbarVisual
+
+logger = logging.getLogger('visbrain')
 
 __all__ = ('TopoMesh')
 
@@ -385,7 +387,7 @@ class TopoMesh(object):
         if any(keeponly):
             if not all(keeponly):
                 ignore = list(np.array(channels)[np.invert(keeponly)])
-                warn("Channels " + str(ignore) + " have been ignored")
+                logger.info("Channels " + str(ignore) + " have been ignored")
 
             # ----------- Conversion -----------
             if isinstance(xyz, np.ndarray):
