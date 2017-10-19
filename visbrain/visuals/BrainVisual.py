@@ -284,7 +284,7 @@ class BrainVisual(Visual):
         self._colFaces = np.ones((faces.shape[0], 3, 4), dtype=np.float32)
 
         # ____________________ BUFFERS ____________________
-        logger.debug("Should not use index faced vertices / normals "
+        logger.debug("Should not use indexed faces vertices / normals "
                      "(BrainVisual.py). This is a limitation for : \n"
                      "* Bigger files \n* Difficult to find camera center "
                      "(x, y, z) and configure scale_factor \n* Slower \n"
