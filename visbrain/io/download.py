@@ -7,6 +7,7 @@ import zipfile
 from warnings import warn
 
 from .rw_config import load_config_json
+from ..utils import get_data_path
 
 
 logger = logging.getLogger('visbrain')
@@ -17,8 +18,7 @@ __all__ = ["get_data_url_file", "download_file", "path_to_visbrain_data"]
 
 def get_data_url_file():
     """Get path to the data_url.txt file."""
-    dirfile = sys.modules[__name__].__file__.split('download')[0]
-    return load_config_json(os.path.join(dirfile, 'data_url.txt'))
+    return load_config_json(get_data_path(file='data_url.txt'))
 
 
 def get_data_url(name):
