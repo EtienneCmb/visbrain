@@ -26,17 +26,20 @@ from .figure import Figure
 from .sleep import Sleep
 from .topo import Topo
 from .signal import Signal
+from .utils import set_log_level
 
 __all__ = ['Brain', 'Colorbar', 'Figure', 'Signal', 'Sleep', 'Topo']
 __version__ = "0.3.5"
+
+set_log_level()
 
 # PyQt5 crash if an error occured. This small function fix it for all modules
 # to retrieve the PyQt4 behavior :
 
 
-def PyQt4_behavior(type, value, tback):
+def pyqt4_behavior(type, value, tback):
     """Retrieve PyQt4 behavior if an error occured."""
     sys.__excepthook__(type, value, tback)
 
 
-sys.excepthook = PyQt4_behavior
+sys.excepthook = pyqt4_behavior
