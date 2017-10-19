@@ -22,7 +22,10 @@ logger = logging.getLogger('visbrain')
 
 
 def set_log_level(verbose=None):
-    """Convenience function for setting the logging level
+    """Convenience function for setting the logging level.
+
+    This function comes from the PySurfer package. See :
+    https://github.com/nipy/PySurfer/blob/master/surfer/utils.py
 
     Parameters
     ----------
