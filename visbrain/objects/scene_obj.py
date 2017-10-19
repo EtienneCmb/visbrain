@@ -23,11 +23,9 @@ class VisbrainCanvas(object):
     axis_font_size : float | 12.
         Size of x and y labels (only if axis=True).
     axis_color : array_like/string/tuple | 'black'
-        Axis color (x and y axis).
+        Label, title, axis and border color (only if axis=True).
     tick_font_size : float | 10.
         Size of ticks for the x and y-axis (only if axis=True).
-    color : array_like/tuple/string | 'white'
-        Label, title, axis and border color (only if axis=True).
     name : string | None
         Canvas name.
     x_height_max : float | 80
@@ -55,12 +53,26 @@ class VisbrainCanvas(object):
 
     def __init__(self, axis=False, title=None, xlabel=None, ylabel=None,
                  title_font_size=15., axis_font_size=12., axis_color='black',
-                 tick_font_size=10., color='black', name=None, x_height_max=80,
+                 tick_font_size=10., name=None, x_height_max=80,
                  y_width_max=80, axis_label_margin=50, tick_label_margin=5,
                  rpad=20., bgcolor='white', add_cbar=False, cargs={}, xargs={},
                  yargs={}, cbargs={}, show=False):
         """Init."""
         self._axis = axis
+        self._title = title
+        self._xlabel = xlabel
+        self._ylabel = ylabel
+        self._title_font_size = title_font_size
+        self._axis_font_size = axis_font_size
+        self._axis_color = axis_color
+        self._tick_font_size = tick_font_size
+        self._name = name
+        self._x_height_max = x_height_max
+        self._y_width_max = y_width_max
+        self._axis_label_margin = axis_label_margin
+        self._tick_label_margin = tick_label_margin
+        self._bgcolor = bgcolor
+        self._visible = show
 
         # ########################## MAIN CANVAS ##########################
         self.canvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
@@ -119,6 +131,10 @@ class VisbrainCanvas(object):
         else:  # Ignore axis
             self.wc = self.canvas.central_widget.add_view()
 
+    def __bool__(self):
+        """Return if there's an axis attached to the canvas."""
+        return self._axis
+
     def update(self):
         """Update canvas."""
         self.canvas.update()
@@ -155,7 +171,7 @@ class VisbrainCanvas(object):
     @axis.setter
     def axis(self, value):
         """Set axis value."""
-        if hasattr(self, 'xaxis') and isinstance(value, bool):
+        if self and isinstance(value, bool):
             self.xaxis.visible = value
             self.yaxis.visible = value
             self._titleObj.visible = value
@@ -172,7 +188,7 @@ class VisbrainCanvas(object):
     @xlabel.setter
     def xlabel(self, value):
         """Set xlabel value."""
-        if isinstance(value, str) and hasattr(self, 'xaxis'):
+        if self and isinstance(value, str):
             self.xaxis.axis.axis_label = value
             self.xaxis.axis._update_subvisuals()
             self._xlabel = value
@@ -186,7 +202,7 @@ class VisbrainCanvas(object):
     @ylabel.setter
     def ylabel(self, value):
         """Set ylabel value."""
-        if isinstance(value, str) and hasattr(self, 'yaxis'):
+        if self and isinstance(value, str):
             self.yaxis.axis.axis_label = value
             self.yaxis.axis._update_subvisuals()
             self._ylabel = value
@@ -200,7 +216,7 @@ class VisbrainCanvas(object):
     @title.setter
     def title(self, value):
         """Set title value."""
-        if isinstance(value, str) and hasattr(self, '_titleObj'):
+        if self and isinstance(value, str):
             self._titleObj.text = value
             self._titleObj.update()
             self._title = value
@@ -218,7 +234,7 @@ class VisbrainCanvas(object):
         # Set camera to the main widget :
         self.wc.camera = value
         # Link transformations with axis :
-        if self._axis:
+        if self:
             self.xaxis.link_view(self.wc)
             self.yaxis.link_view(self.wc)
 
@@ -233,7 +249,7 @@ class VisbrainCanvas(object):
         """Set axis_color value."""
         self._axis_color = value
         col = color2vb(value)
-        if self._axis:
+        if self:
             # Title :
             self._titleObj._text_visual.color = col
             # X-axis :
@@ -257,7 +273,7 @@ class VisbrainCanvas(object):
     @title_font_size.setter
     def title_font_size(self, value):
         """Set title_font_size value."""
-        if self._axis and isinstance(value, (int, float)):
+        if self and isinstance(value, (int, float)):
             self._titleObj._text_visual.font_size = value
             self._title_font_size = value
 
@@ -265,12 +281,12 @@ class VisbrainCanvas(object):
     @property
     def axis_font_size(self):
         """Get the axis_font_size value."""
-        return self._label_font_size
+        return self._axis_font_size
 
     @axis_font_size.setter
     def axis_font_size(self, value):
         """Set axis_font_size value."""
-        if self._axis and isinstance(value, (int, float)):
+        if self and isinstance(value, (int, float)):
             self.xaxis.axis._axis_label.font_size = value
             self.yaxis.axis._axis_label.font_size = value
             self._axis_font_size = value
@@ -279,12 +295,12 @@ class VisbrainCanvas(object):
     @property
     def tick_font_size(self):
         """Get the tick_font_size value."""
-        return self.tick_font_size
+        return self._tick_font_size
 
     @tick_font_size.setter
     def tick_font_size(self, value):
         """Set tick_font_size value."""
-        if self._axis and isinstance(value, (int, float)):
+        if self and isinstance(value, (int, float)):
             self.xaxis.axis._text.font_size = value
             self.yaxis.axis._text.font_size = value
             self._tick_font_size = value
@@ -311,10 +327,11 @@ class SceneObj(object):
         Background color of the scene.
     """
 
-    def __init__(self, bgcolor='black'):
+    def __init__(self, bgcolor='black', show=True):
         """Init."""
-        self._canvas = scene.SceneCanvas(keys='interactive', show=True,
-                                         title='Object scene', bgcolor=bgcolor)
+        self._canvas = scene.SceneCanvas(keys='interactive', show=show,
+                                         title='Object scene',
+                                         bgcolor=color2vb(bgcolor))
         self._grid = self._canvas.central_widget.add_grid(margin=10)
 
     def add_to_subplot(self, obj, row=0, col=0):
