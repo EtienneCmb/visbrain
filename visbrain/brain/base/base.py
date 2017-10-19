@@ -18,7 +18,7 @@ The following elements are initialized :
 from vispy import scene
 
 from ...objects import (CombineSources, CombineConnect, CombineTimeSeries,
-                        CombinePictures, BrainObj)
+                        CombinePictures, BrainObj, VolumeObj)
 from .VolumeBase import VolumeBase
 from .projection import Projections
 
@@ -32,12 +32,9 @@ class BaseVisual(Projections):
     GUI has to be deactivate).
     """
 
-    def __init__(self, canvas, parent_sp, progressbar, **kwargs):
+    def __init__(self, canvas, parent_sp, **kwargs):
         """Init."""
         # ---------- Initialize base ----------
-        # Get progress bar :
-        self.progressbar = progressbar
-
         # Main brain object :
         if kwargs.get('brain_obj', None) is None:
             template = kwargs.get('brain_template', 'B1')
@@ -49,7 +46,6 @@ class BaseVisual(Projections):
             self.atlas = kwargs['brain_obj']
 
         # Initialize visbrain objects :
-        # self.atlas = AtlasBase(**kwargs)
         self.volume = VolumeBase(parent_sp=parent_sp)
         self.sources = CombineSources(kwargs.get('source_obj', None))
         self.connect = CombineConnect(kwargs.get('connect_obj', None))
@@ -89,7 +85,7 @@ class BaseVisual(Projections):
         # can be applied to all elements.
 
         # Create a root node :
-        self._vbNode = scene.Node(name='Brain')
+        self._vbNode = scene.Node(name='*Brain*')
 
         # Make this root node the parent of others Brain objects :
         self.volume.parent = self._vbNode
