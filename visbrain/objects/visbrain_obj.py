@@ -65,7 +65,8 @@ class VisbrainObject(object):
     @property
     def parent(self):
         """Get the parent value."""
-        return self._node.parent
+        p_isnn = self._node.parent is not None
+        return self._node.parent if p_isnn else self._node
 
     @parent.setter
     def parent(self, value):
