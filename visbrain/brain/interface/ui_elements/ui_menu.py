@@ -25,7 +25,7 @@ class UiMenu(HelpMenu):
         # Config :
         self.menuLoadGuiConfig.triggered.connect(self._fcn_loadConfig)
         # Exit :
-        self.actionExit.triggered.connect(QtWidgets.qApp.quit)
+        self.actionExit.triggered.connect(self.closeEvent)
 
         # =============================================================
         # DISPLAY
@@ -193,10 +193,10 @@ class UiMenu(HelpMenu):
     ###########################################################################
     def _fcn_menu_projection(self):
         """Run the cortical projection."""
-        self._tprojectas = 'activity'
+        self._s_proj_type.setCurrentIndex(0)
         self._fcn_source_proj()
 
     def _fcn_menu_repartition(self):
         """Run the cortical projection."""
-        self._tprojectas = 'repartition'
+        self._s_proj_type.setCurrentIndex(1)
         self._fcn_source_proj()
