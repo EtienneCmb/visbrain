@@ -322,6 +322,7 @@ def remove_brain_template(name):
     name : string
         Name of the template to remove.
     """
+    assert name not in ['B1', 'B2', 'B3']
     # Get path to the templates/ folder :
     name = os.path.splitext(name)[0]
     to_temp = (get_data_path(), 'templates', name + '.npz')
