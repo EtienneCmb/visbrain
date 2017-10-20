@@ -179,12 +179,6 @@ class UiSources(object):
     # =====================================================================
     # PROJECTION
     # =====================================================================
-    def _fcn_enable_projection(self):
-        """Enable projection if already runned."""
-        is_proj = hasattr(self.sources._minmax)
-        self.menuRun_projection.setEnabled(is_proj)
-        toggle_enable_tab(self._source_tab, 'Projection', is_proj)
-
     def _fcn_update_proj_list(self):
         """Update the available projection list objects."""
         self._s_proj_on.clear()
