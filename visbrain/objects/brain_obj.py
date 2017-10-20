@@ -169,7 +169,7 @@ class BrainObj(VisbrainObject):
     def _optimal_camera_properties(self, with_distance=True):
         """Get the optimal camera properties."""
         logger.debug("Wrong center and scale_factor (brain_obj.py)")
-        center = self.mesh._vertices.mean(0).mean(0)
+        center = self.mesh._center
         sc = 1.08 * (self.mesh._vertices.max() - self.mesh._vertices.min())
         prop = {'center': center, 'scale_factor': sc, 'azimuth': 0.,
                 'elevation': 90, 'distance': 4 * sc}
