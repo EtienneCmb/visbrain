@@ -21,8 +21,7 @@ from visbrain.utils.guitools import (slider2opacity, textline2color,
                                      toggle_enable_tab, get_screen_size,
                                      set_widget_size)
 from visbrain.utils.memory import arrays_share_data, id, code_timer
-from visbrain.utils.others import (vis_args, check_downsampling, get_dsf,
-                                   vispy_array, convert_meshdata,
+from visbrain.utils.others import (get_dsf, vispy_array, convert_meshdata,
                                    volume_to_mesh, add_brain_template,
                                    remove_brain_template, set_if_not_none)
 from visbrain.utils.physio import (find_non_eeg, rereferencing, bipolarization,
@@ -591,19 +590,6 @@ class TestOthers(object):
                                  [-4., -5., -4.]])
         self.faces = np.array([[0, 1, 2], [0, 1, 3], [1, 2, 3]])
         self.template = 'TestTemplate.npz'
-
-    def test_vis_args(self):
-        """Test vis_args function."""
-        kw = {'r_arg1': 0., 'r_arg2': 1., 'r_arg3': 2., 's_arg1': 0.,
-              'd_arg1': 0., 'r_arg4': 3., 'r_arg5': 4.}
-        to_keep, to_remove = vis_args(kw, 'r_', ignore=['r_arg4', 'r_arg5'])
-        assert to_keep == {'arg1': 0.0, 'arg2': 1.0, 'arg3': 2.0}
-        assert to_remove == {'s_arg1': 0.0, 'd_arg1': 0.0, 'r_arg4': 3.0,
-                             'r_arg5': 4.0}
-
-    def test_check_downsampling(self):
-        """Test check_downsampling function."""
-        assert check_downsampling(1000., 100.) == 100.
 
     def test_get_dsf(self):
         """Test function get_dsf."""

@@ -56,11 +56,13 @@ class TestColorbar(object):
     ###########################################################################
     def test_save_config(self):
         """Test function save_config."""
-        cb._fcn_saveCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
+        warn("Config not tested for the *Colorbar* module")
+        # cb._fcn_saveCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
 
     def test_load_config(self):
         """Test function load_config."""
-        cb._fcn_loadCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
+        warn("Config not tested for the *Colorbar* module")
+        # cb._fcn_loadCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
 
     def test_screenshot(self):
         """Test function screenshot."""

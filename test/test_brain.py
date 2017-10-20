@@ -8,28 +8,32 @@ import numpy as np
 from itertools import product
 
 from vispy.app.canvas import MouseEvent, KeyEvent
-from vispy.util.keys import Key
+# from vispy.util.keys import Key
 
 from visbrain import Brain
 from visbrain.objects import SourceObj, ConnectObj, TimeSeriesObj, PictureObj
+from visbrain.io import download_file
 
 
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 
-# Create empty argument dictionary :
-kwargs = {}
+# Download intrcranial xyz :
+download_file('xyz_sample.npz', to_path=path_to_tmp)
+mat = np.load(os.path.join(path_to_tmp, 'xyz_sample.npz'))
+xyz_full = mat['xyz']
+xyz_1, xyz_2 = xyz_full[20:30, :], xyz_full[10:20, :]
+
 
 # ---------------- Sources ----------------
 # Define some random sources :
-s_xyz = np.random.randint(-20, 20, (10, 3))
 s_data = 100 * np.random.rand(10)
 s_color = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
 s_mask = np.array([True] + [False] * 9)
 
-s_obj1 = SourceObj('S1', s_xyz, data=s_data, color=s_color, mask=s_mask)
-s_obj2 = SourceObj('S2', 1.5 * s_xyz, data=2 * s_data, color=s_color,
+s_obj1 = SourceObj('S1', xyz_1, data=s_data, color=s_color, mask=s_mask)
+s_obj2 = SourceObj('S2', xyz_2, data=2 * s_data, color=s_color,
                    mask=s_mask)
 
 # ---------------- Connectivity ----------------
@@ -41,22 +45,22 @@ nz = np.where((c_connect > -5) & (c_connect < 5))
 c_connect.mask[nz] = False
 c_connect = c_connect
 
-c_obj = ConnectObj('C1', s_xyz, c_connect)
-c_obj2 = ConnectObj('C2', 1.5 * s_xyz, c_connect)
+c_obj = ConnectObj('C1', xyz_1, c_connect)
+c_obj2 = ConnectObj('C2', xyz_2, c_connect)
 
 # ---------------- Time-series ----------------
 ts_data = 100. * np.random.rand(10, 100)
 ts_select = np.ones((10,), dtype=bool)
 ts_select[[3, 4, 7]] = False
 
-ts_obj1 = TimeSeriesObj('TS1', ts_data, s_xyz, select=ts_select)
-ts_obj2 = TimeSeriesObj('TS2', ts_data, 1.5 * s_xyz, select=ts_select)
+ts_obj1 = TimeSeriesObj('TS1', ts_data, xyz_1, select=ts_select)
+ts_obj2 = TimeSeriesObj('TS2', ts_data, xyz_2, select=ts_select)
 
 # ---------------- Pictures ----------------
 pic_data = 100. * np.random.rand(10, 20, 17)
 
-p_obj1 = PictureObj('P1', pic_data, s_xyz)
-p_obj2 = PictureObj('P2', 2 * pic_data, 1.5 * s_xyz)
+p_obj1 = PictureObj('P1', pic_data, xyz_1)
+p_obj2 = PictureObj('P2', 2 * pic_data, xyz_2)
 
 # ---------------- Application  ----------------
 app = QtWidgets.QApplication([])
