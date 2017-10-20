@@ -191,10 +191,10 @@ class UiAtlas(object):
             # Plot areas and set parent :
             self.volume.plot_roi()
             self.volume.mesh.parent = self.volume._node
-            self._tobj['roi'] = self.volume
+            self._proj_obj['roi'] = self.volume
             self.volume.set_roi_camera(self.view.wc.camera)
             # Enable projection on ROI and related buttons :
-            self._uitProjectOn.model().item(1).setEnabled(True)
+            self._s_proj_on.model().item(1).setEnabled(True)
             self._roiTransp.setEnabled(True)
             self.menuDispROI.setEnabled(True)
             self.menuDispROI.setChecked(True)
