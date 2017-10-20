@@ -1,39 +1,32 @@
 """Topo class for topographic representations."""
-import sip
-import sys
-from PyQt5 import QtWidgets
 import numpy as np
 
-import vispy.app as visapp
 import vispy.scene.cameras as viscam
 from vispy.scene import Node
 
+from ..pyqt_module import PyQtModule
 from .ui_init import UiInit
 from .ui_elements import UiElements
-# from ..brain.base.ConnectBase import ConnectBase
-from ..utils import set_widget_size
+from ..objects import ConnectObj
 from ..visuals import TopoMesh, CbarVisual
 
-sip.setdestroyonexit(False)
 
 __all__ = ('Topo')
 
 
-class Topo(UiInit, UiElements):
+class Topo(PyQtModule, UiInit, UiElements):
     """Display topographic representation."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, verbose=None):
         """Init."""
+        PyQtModule.__init__(self, verbose=verbose, to_describe='_grid',
+                            icon='topo_icon.svg', show_settings=False)
         self._topos = {}
         self._topoGrid = {}
 
         # ====================== App creation ======================
-        # Create the app and initialize all graphical elements :
-        self._app = QtWidgets.QApplication(sys.argv)
         UiInit.__init__(self)
         UiElements.__init__(self)
-        set_widget_size(self._app, self.q_widget, 23)
-        self.q_widget.setVisible(False)
 
     def __getitem__(self, name):
         """Get the object name."""
@@ -164,10 +157,9 @@ class Topo(UiInit, UiElements):
         if isinstance(c_connect, np.ndarray):
             assert c_connect.shape == (len(topo), len(topo))
             xyz = topo._xyz[topo._keeponly]
-            self.connect = ConnectBase(c_xyz=xyz, c_connect=c_connect,
-                                       c_cmap=c_cmap, c_linewidth=c_linewidth,
-                                       c_select=c_select)
-            self.connect.mesh.parent = topo.node_chan
+            self.connect = ConnectObj('TopoConnect', xyz, c_connect, cmap=cmap,
+                                      select=c_select, line_width=c_linewidth,
+                                      parent=topo.node_chan)
         self[name] = topo
         # Create a PanZoom camera :
         cam = viscam.PanZoomCamera(aspect=1., rect=topo.rect)
@@ -271,8 +263,3 @@ class Topo(UiInit, UiElements):
         elif name in list(self._topos.keys()):
             raise ValueError("'" + name + "' already exist. Use a different"
                              " name for this " + use + ".")
-
-    def show(self):
-        """Display the graphical user interface."""
-        self.showMaximized()
-        visapp.run()

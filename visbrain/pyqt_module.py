@@ -27,13 +27,15 @@ class PyQtModule(object):
         Name of the icon to use.
     """
 
-    def __init__(self, verbose=None, to_describe=None, icon=None):
+    def __init__(self, verbose=None, to_describe=None, icon=None,
+                 show_settings=True):
         """Init."""
         self._app = QtWidgets.QApplication(sys.argv)
         self._need_description = to_describe
         if isinstance(self._need_description, str):
             self._need_description = [self._need_description]
         self._module_icon = icon
+        self._show_settings = show_settings
         set_log_level(verbose)
 
     def show(self):
@@ -41,7 +43,7 @@ class PyQtModule(object):
         # Fixed size for the settings panel :
         if hasattr(self, 'q_widget'):
             set_widget_size(self._app, self.q_widget, 23)
-            self.q_widget.setVisible(True)
+            self.q_widget.setVisible(self._show_settings)
         # Force the quick settings tab to be on the first tab :
         if hasattr(self, 'QuickSettings'):
             self.QuickSettings.setCurrentIndex(0)
@@ -54,6 +56,8 @@ class PyQtModule(object):
                 self.setWindowIcon(app_icon)
             else:  # don't crash just for an icon...
                 logger.debug("No icon found (%s)" % self._module_icon)
+        else:
+            logger.debug("No icon passed as an input.")
         # Tree description if log level is on debug :
         if isinstance(self._need_description, list) and (logger.level == 10):
             print('\n' + '=' * 60)
