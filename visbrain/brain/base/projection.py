@@ -22,6 +22,11 @@ class Projections(object):
                  project_contribute=False, project_type='activity',
                  project_mask_color='orange', **kwargs):
         """Init."""
+        logger.debug("Problème avec proj_obj : on enregistre les mesh dans "
+                     "proj_obj pour récupérer les vertices + définir ensuite "
+                     "la couleur. Le problème c'est que en enregistrant tout "
+                     "l objet, on enregistre pas une copie et donc tout les "
+                     "objects on la même taille...")
         assert isinstance(project_radius, (int, float))
         assert project_type in ['activity', 'repartition']
         self._proj_obj = {}
@@ -38,8 +43,9 @@ class Projections(object):
     # ======================================================================
     def _get_obj_vertices(self, obj):
         """Find the vertices from the object."""
-        print(self._proj_obj.keys(), obj)
         if obj in self._proj_obj.keys():
+            sh = [k + str(i.mesh.get_vertices.shape) for k, i in self._proj_obj.items()]
+            logger.debug("Wrong shapes : %s" % ', '.join(sh))
             return self._proj_obj[obj].mesh.get_vertices
         else:
             lst_obj = ', '.join(list(self._proj_obj.keys()))
