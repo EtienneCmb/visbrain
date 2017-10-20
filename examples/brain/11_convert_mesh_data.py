@@ -19,8 +19,8 @@ from visbrain.utils import (convert_meshdata, add_brain_template,
 from visbrain.io import download_file, path_to_visbrain_data
 
 # Define path to the template and load it :
-download_file(path_to_visbrain_data('Custom.npz'))
-mat = np.load('Custom.npz')
+download_file('Custom.npz')
+mat = np.load(path_to_visbrain_data('Custom.npz'))
 
 # Get vertices and faces from the archive :
 vert, faces = mat['coord'], mat['tri']

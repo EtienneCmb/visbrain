@@ -43,6 +43,7 @@ from __future__ import print_function
 import numpy as np
 
 from visbrain import Brain, Colorbar
+from visbrain.objects import SourceObj, ConnectObj, PictureObj
 from visbrain.io import download_file, path_to_visbrain_data
 
 
@@ -50,9 +51,11 @@ from visbrain.io import download_file, path_to_visbrain_data
 Define some sources with random data between [0, 100.]
 """
 n_sources = 50
-download_file(path_to_visbrain_data('xyz_sample.npz'))
-s_xyz = np.load('xyz_sample.npz')['xyz'][:n_sources, :]
+download_file('xyz_sample.npz')
+s_xyz = np.load(path_to_visbrain_data('xyz_sample.npz'))['xyz'][:n_sources, :]
 s_data = 100. * np.random.rand(n_sources)
+
+s_obj = SourceObj('Sources', s_xyz, data=s_data)
 
 """
 Define random connectivity with connectivity strength between [12.1 and 15.23].
@@ -63,24 +66,26 @@ c_connect = 100. * np.random.rand(n_sources, n_sources)
 mask = np.logical_and(12.1 <= c_connect, c_connect < 15.23)
 c_connect = np.ma.masked_array(c_connect, mask=~mask)
 
+c_obj = ConnectObj('Connectivity', s_xyz, c_connect)
+
 """
 Define random pictures with values between [0, 50]. Each picture have 10 rows
 and 20 columns
 """
 pic_data = 50. * np.random.rand(n_sources, 10, 20)
+pic_obj = PictureObj('Pictures', pic_data, s_xyz)
 
 
 """
 Define the Brain instance and pass variables for sources, pictures and
 connections
 """
-vb = Brain(s_xyz=s_xyz, s_data=s_data, a_template='B3', c_connect=c_connect,
-           pic_data=pic_data)
+vb = Brain(source_obj=s_obj, connect_obj=c_obj, picture_obj=pic_obj)
 
 """
 Set the Brain opaque to visualize the cortical projection :
 """
-vb.brain_control(transparent=False)
+vb.brain_control(translucent=False)
 
 """
 The colormap of the projection can't be controlled without running it. So we
