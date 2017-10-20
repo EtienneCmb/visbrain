@@ -3,7 +3,6 @@
 import sys
 import os
 import logging
-from warnings import warn
 
 import numpy as np
 
@@ -12,10 +11,9 @@ from vispy.geometry.isosurface import isosurface
 
 from .sigproc import smooth_3d
 
-__all__ = ('set_log_level', 'verbose', 'vis_args', 'check_downsampling',
-           'get_dsf', 'vispy_array', 'convert_meshdata', 'volume_to_mesh',
-           'add_brain_template', 'remove_brain_template', 'set_if_not_none',
-           'get_data_path')
+__all__ = ('set_log_level', 'get_dsf', 'vispy_array', 'convert_meshdata',
+           'volume_to_mesh', 'add_brain_template', 'remove_brain_template',
+           'set_if_not_none', 'get_data_path')
 
 
 logger = logging.getLogger('visbrain')
@@ -60,94 +58,6 @@ def set_log_level(verbose=None):
     format = "%(levelname)s : %(message)s"
     logging.basicConfig(format=format)
     logger.setLevel(verbose)
-
-
-def verbose(msg, level=None, display=True):
-    """Display messages.
-
-    Parameters
-    ----------
-    msg : string
-        Message to display
-    level : string | None
-        Message level. Use None to simply print the message, 'debug', 'info',
-        'warning', 'error', 'critical' for logging or any Exception.
-    display : bool | True
-        Display or hide the message.
-    """
-    if level is None:
-        if display:
-            sys.stderr.write(msg + '\n')
-    elif level in ['debug', 'info', 'warning', 'error', 'critical']:
-        format = "%(levelname)s : %(message)s"
-        logging.basicConfig(format=format, level=eval(
-            'logging.' + level.upper()))
-        if display:
-            eval('logging.%s(%s)' % (level, 'msg'))
-    elif level == Warning:
-        warn(msg)
-    else:
-        if display:
-            raise eval('%s(%s)' % (level.__name__, 'msg'))
-
-
-def vis_args(kw, prefix, ignore=[]):
-    """Extract arguments that contain a prefix from a dictionary.
-
-    Parameters
-    ----------
-    kw : dict
-        The dictionary of arguments
-    prefix : string
-        The prefix to use (something like 'nd_', 'cb_'...)
-    ignors : list | []
-        List of patterns to ignore.
-
-    Returns
-    -------
-    args : dict
-        The dictionary which contain aguments starting with prefix.
-    others : dict
-        A dictionary with all other arguments.
-    """
-    # Create two dictionaries (for usefull args and others) :
-    args, others = {}, {}
-    l = len(prefix)
-    #
-    for k, v in zip(kw.keys(), kw.values()):
-        entry = k[:l]
-        if (entry == prefix) and (k not in ignore):
-            args[k.replace(prefix, '')] = v
-        else:
-            others[k] = v
-    return args, others
-
-
-def check_downsampling(sf, ds):
-    """Check the down-sampling frequency and return the most appropriate one.
-
-    Parameters
-    ----------
-    sf : float
-        The sampling frequency
-    ds : float
-        The desired down-sampling frequency.
-
-    Returns
-    -------
-    dsout : float
-        The most appropriate down-sampling frequency.
-    """
-    if sf % ds != 0:
-        dsbck = ds
-        ds = int(sf / round(sf / (ds)))
-        while sf % ds != 0:
-            ds -= 1
-        # ds = sf / round(sf / ds)
-        warn("Using a down-sampling frequency (" + str(dsbck) + "hz) that is "
-             "not a multiple of the sampling frequency (" + str(sf) + "hz) is"
-             " not recommanded. A " + str(ds) + "hz will be used instead.")
-    return ds
 
 
 def get_dsf(downsample, sf):
