@@ -87,7 +87,7 @@ vb.cross_sections_control(visible=False, split_view=False)
 
 """Background color and transparency control of ROI screenshot
 """
-vb.roi_control(name='BA3-4-32', selection=[3, 5, 32], subdivision='Brodmann',
+vb.roi_control(name='BA3-4-32', selection=[3, 5, 32], roi_type='Brodmann',
                smooth=7)
 
 # Run the cortical repartition

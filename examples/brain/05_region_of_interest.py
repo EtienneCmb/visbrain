@@ -43,7 +43,7 @@ don't know what is the index of your ROI, open the GUI and look at the
 number in front of the name. Otherwise, un comment the following line :
 """
 # print(vb.roi_list('AAL'))
-vb.roi_control(selection=[76, 77], subdivision='AAL', smooth=5,
+vb.roi_control(selection=[76, 77], roi_type='AAL', smooth=5,
                name='thalamus', translucent=False)
 
 # Project the source's activity onto the thalamus :
@@ -56,7 +56,7 @@ vb.cortical_projection(project_on='thalamus', cmap='Spectral_r',
 sources_fit() method find the closest roi vertex to each source and change the
 source's coordinate for it.
 """
-# vb.sources_fit_to_vertices(obj='thalamus')
+# vb.sources_fit_to_vertices(fit_to='thalamus')
 
 # Eventualy, take a screenshot :
 # vb.screenshot('thalamus.png', autocrop=True)

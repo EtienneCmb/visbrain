@@ -599,16 +599,19 @@ class BrainUserMethods(object):
         self.cbar_control('Projection', **kwargs)
         self._fcn_source_proj()
 
-    def sources_fit_to_vertices(self, obj='brain'):
+    def sources_fit_to_vertices(self, name=None, fit_to='brain'):
         """Force sources coordinates to fit to a selected object.
 
         Parameters
         ----------
-        obj : {'brain', 'roi'}
+        name : string | None
+            If name is None, all sources across objects are going to be used.
+        fit_to : {'brain', 'roi'}
             The object name to fit. Use 'brain' or 'roi'.
         """
-        v = self._get_obj_vertices(obj)
-        self.sources.fit_to_vertices(v)
+        obj = self.sources[name] if name is not None else self.sources
+        v = self._get_obj_vertices(fit_to)
+        obj.fit_to_vertices(v)
 
     def sources_to_convex_hull(self, xyz):
         """Convert a set of sources into a convex hull.
@@ -735,7 +738,7 @@ class BrainUserMethods(object):
     #                                 ROI
     # =========================================================================
     # =========================================================================
-    def roi_control(self, selection=[], subdivision='Brodmann', smooth=3,
+    def roi_control(self, selection=[], roi_type='Brodmann', smooth=3,
                     name='roi', translucent=False, alpha=None):
         """Select Region Of Interest (ROI) to plot.
 
@@ -745,7 +748,7 @@ class BrainUserMethods(object):
             List of integers where each one refer to a particular roi. The
             corresponding list can be found in the graphical interface in
             the ROI tab or using the function roi_list.
-        subdivision : {'Brodmann', 'AAL', 'Talairach'}
+        roi_type : {'Brodmann', 'AAL', 'Talairach'}
             Select the sub-division method i.e 'Brodmann' (for brodmann areas)
             or 'AAL' (Anatomical Automatic Labeling) or 'Talairach'.
         smoth : int | 3
@@ -762,8 +765,8 @@ class BrainUserMethods(object):
             raise ValueError("The selection parameter must be a list of "
                              "integers")
         selection = np.unique(selection)
-        # Select subdivision in the combo list :
-        idx = get_combo_list_index(self._roiDiv, subdivision)
+        # Select roi_type in the combo list :
+        idx = get_combo_list_index(self._roiDiv, roi_type)
         self._roiDiv.setCurrentIndex(idx)
         # Update the list of structures :
         self._fcn_build_roi_list()
@@ -777,12 +780,12 @@ class BrainUserMethods(object):
         self.volume.mesh.translucent = translucent
         self.volume.mesh.alpha = alpha
 
-    def roi_list(self, subdivision='Brodmann'):
+    def roi_list(self, roi_type='Brodmann'):
         """Get the list of supported ROI.
 
         Parameters
         ----------
-        subdivision : str | 'Brodmann'
+        roi_type : str | 'Brodmann'
             Select the sub-division method i.e 'Brodmann' (for brodmann areas)
             or 'AAL' (Anatomical Automatic Labeling)
 
@@ -791,7 +794,7 @@ class BrainUserMethods(object):
         roi_labels : array_like
             The currently supported ROI's labels.
         """
-        return self.volume._vols[subdivision].roi_labels
+        return self.volume._vols[roi_type].roi_labels
 
     # =========================================================================
     # =========================================================================
