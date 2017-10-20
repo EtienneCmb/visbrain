@@ -2,7 +2,6 @@
 from warnings import warn
 import logging
 import numpy as np
-from functools import wraps
 from scipy.spatial.distance import cdist
 
 from vispy import scene
@@ -11,17 +10,9 @@ import vispy.visuals.transforms as vist
 
 from .visbrain_obj import VisbrainObject, CombineObjects
 from .roi_obj import RoiObj
-from ..utils import tal2mni, color2vb, normalize, vispy_array
+from ..utils import tal2mni, color2vb, normalize, vispy_array, wrap_properties
 from ..visuals import CbarArgs
 
-
-def wrap_properties(fn):
-    """Run properties if not None."""
-    @wraps(fn)
-    def wrapper(self, value):
-        if value is not None:
-            fn(self, value)
-    return wrapper
 
 logger = logging.getLogger('visbrain')
 
@@ -29,9 +20,11 @@ logger = logging.getLogger('visbrain')
 class SourceProjection(CbarArgs):
     """Group cortical projection and cortical repartition projections."""
 
-    def __init__(self, cmap='viridis', clim=(0., 1.), vmin=None, isvmin=False,
-                 under='gray', vmax=None, isvmax=False, over='red'):
+    def __init__(self, cmap='viridis', clim=(0., 1.), vmin=None, under='gray',
+                 vmax=None, over='red'):
         """Init."""
+        isvmin = isinstance(vmin, (int, float))
+        isvmax = isinstance(vmax, (int, float))
         # Initialize colorbar arguments :
         CbarArgs.__init__(self, cmap, clim, isvmin, vmin, isvmax, vmax, under,
                           over)
@@ -389,7 +382,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         if np.unique(self._data).size == 1:
             radius = self._radius_min * np.ones((len(self,)))
         else:
-            radius = normalize(self._data, tomin=self._radius_min,
+            radius = normalize(self._data.copy(), tomin=self._radius_min,
                                tomax=self._radius_max)
         self._sources._data['a_size'] = radius
         to_hide = self.hide
@@ -632,6 +625,15 @@ class SourceObj(VisbrainObject, SourceProjection):
     def text(self):
         """Get the text value."""
         return np.array(self._text)[self.visible_and_not_masked]
+
+    @text.setter
+    @wrap_properties
+    def text(self, value):
+        """Set text value."""
+        assert len(value) == len(self._text)
+        self._text = value
+        self._sources_text.visible = True
+        self._update_radius()
 
     # ----------- VISIBLE_AND_NOT_MASKED -----------
     @property
