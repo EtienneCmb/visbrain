@@ -41,7 +41,7 @@ class VisbrainObject(object):
         """Return the object name."""
         return self._name
 
-    def preview(self, bgcolor='white', axis=True, show=True):
+    def preview(self, bgcolor='white', axis=False, show=True):
         """Previsualize the result.
 
         Parameters
