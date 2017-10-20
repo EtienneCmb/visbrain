@@ -4,10 +4,13 @@
 - write_fig_canvas : Export a canvas as a figure
 - write_fig_pyqt : Export a GUI window as a figure
 """
-from os.path import splitext
+import logging
+# from os.path import splitext
 import numpy as np
 from ..utils.color import color2vb
 
+
+logger = logging.getLogger('visbrain')
 
 __all__ = ('write_fig_hyp', 'write_fig_canvas', 'write_fig_pyqt')
 
@@ -134,6 +137,7 @@ def write_fig_hyp(file, hypno, sf, tstartsec, grid=False, ascolor=False,
 
     # Save as 600 dpi .png
     plt.savefig(file, format='png', dpi=dpi, bbox_inches='tight')
+    logger.info('Image successfully saved (%s)' % file)
     plt.close()
 
 
@@ -258,6 +262,7 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
         img = piccrop(img)
     # Save it :
     imsave(filename, img)
+    logger.info('Image successfully saved (%s)' % filename)
 
     # Set to the canvas it's previous size :
     canvas._backend._physical_size = backup_size
@@ -283,6 +288,7 @@ def write_fig_pyqt(self, filename):
         screen = QtWidgets.QApplication.primaryScreen()
         p = screen.grabWindow(0)
         p.save(filename)
+        logger.info('Image successfully saved (%s)' % filename)
     # Take screenshot if filename :
     if filename:
         # Timer (avoid shooting the saving window)
