@@ -6,7 +6,7 @@ from vispy import scene
 from vispy.scene import visuals
 
 from .visbrain_obj import VisbrainObject, CombineObjects
-from ..utils import array2colormap, normalize, color2vb
+from ..utils import array2colormap, normalize, color2vb, wrap_properties
 from ..visuals import CbarArgs
 
 
@@ -136,6 +136,8 @@ class ConnectObj(VisbrainObject, CbarArgs):
             node_count = Counter(np.ravel([nnz_x, nnz_y]))
             values = np.array([node_count[k] for k in indices])
         self._minmax = (values.min(), values.max())
+        if self._clim is None:
+            self._clim = self._minmax
 
         # Get the color according to values :
         if isinstance(self._custom_colors, dict):  # custom color
@@ -151,7 +153,7 @@ class ConnectObj(VisbrainObject, CbarArgs):
 
         # Dynamic color :
         if self._dynamic is not None:
-            color[:, 3] = normalize(values, tomin=self._dynamic[0],
+            color[:, 3] = normalize(values.copy(), tomin=self._dynamic[0],
                                     tomax=self._dynamic[1])
 
         # Send data to the connectivity object :
@@ -176,6 +178,7 @@ class ConnectObj(VisbrainObject, CbarArgs):
         return self._connect.width
 
     @line_width.setter
+    @wrap_properties
     def line_width(self, value):
         """Set line_width value."""
         assert isinstance(value, (int, float))
@@ -189,6 +192,7 @@ class ConnectObj(VisbrainObject, CbarArgs):
         return self._color_by
 
     @color_by.setter
+    @wrap_properties
     def color_by(self, value):
         """Set color_by value."""
         assert value in ['strength', 'count']
@@ -202,6 +206,7 @@ class ConnectObj(VisbrainObject, CbarArgs):
         return self._dynamic
 
     @dynamic.setter
+    @wrap_properties
     def dynamic(self, value):
         """Set dynamic value."""
         assert value is None or len(value) == 2
@@ -215,6 +220,7 @@ class ConnectObj(VisbrainObject, CbarArgs):
         return self._alpha
 
     @alpha.setter
+    @wrap_properties
     def alpha(self, value):
         """Set alpha value."""
         assert 0. <= value <= 1.

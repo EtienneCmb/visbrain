@@ -5,6 +5,7 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .visbrain_obj import VisbrainObject, CombineObjects
+from ..utils import wrap_properties
 from ..visuals import PicMesh, CbarArgs
 
 
@@ -117,6 +118,7 @@ class PictureObj(VisbrainObject, CbarArgs):
         return self._width
 
     @width.setter
+    @wrap_properties
     def width(self, value):
         """Set width value."""
         assert isinstance(value, (int, float))
@@ -130,6 +132,7 @@ class PictureObj(VisbrainObject, CbarArgs):
         return self._height
 
     @height.setter
+    @wrap_properties
     def height(self, value):
         """Set height value."""
         assert isinstance(value, (int, float))
@@ -143,6 +146,7 @@ class PictureObj(VisbrainObject, CbarArgs):
         return self._translate
 
     @translate.setter
+    @wrap_properties
     def translate(self, value):
         """Set translate value."""
         assert len(value) == 3
@@ -157,6 +161,7 @@ class PictureObj(VisbrainObject, CbarArgs):
         return self._alpha
 
     @alpha.setter
+    @wrap_properties
     def alpha(self, value):
         """Set alpha value."""
         assert isinstance(value, (int, float)) and (0. <= value <= 1.)

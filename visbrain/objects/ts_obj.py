@@ -6,7 +6,7 @@ from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
 from .visbrain_obj import VisbrainObject, CombineObjects
-from ..utils import normalize, color2vb
+from ..utils import normalize, color2vb, wrap_properties
 
 
 class TimeSeriesObj(VisbrainObject):
@@ -126,6 +126,7 @@ class TimeSeriesObj(VisbrainObject):
         return self._width
 
     @width.setter
+    @wrap_properties
     def width(self, value):
         """Set width value."""
         assert isinstance(value, (int, float))
@@ -139,6 +140,7 @@ class TimeSeriesObj(VisbrainObject):
         return self._amplitude
 
     @amplitude.setter
+    @wrap_properties
     def amplitude(self, value):
         """Set amplitude value."""
         assert isinstance(value, (int, float))
@@ -152,6 +154,7 @@ class TimeSeriesObj(VisbrainObject):
         return self._color
 
     @color.setter
+    @wrap_properties
     def color(self, value):
         """Set color value."""
         color = color2vb(value)
@@ -166,6 +169,7 @@ class TimeSeriesObj(VisbrainObject):
         return self._alpha
 
     @alpha.setter
+    @wrap_properties
     def alpha(self, value):
         """Set alpha value."""
         assert isinstance(value, (int, float)) and (0. <= value <= 1.)
@@ -180,6 +184,7 @@ class TimeSeriesObj(VisbrainObject):
         return self._translate
 
     @translate.setter
+    @wrap_properties
     def translate(self, value):
         """Set translate value."""
         assert len(value) == 3
@@ -194,6 +199,7 @@ class TimeSeriesObj(VisbrainObject):
         return self._line_width
 
     @line_width.setter
+    @wrap_properties
     def line_width(self, value):
         """Set line_width value."""
         assert isinstance(value, (int, float))
