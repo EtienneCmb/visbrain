@@ -43,17 +43,16 @@ class UiSources(object):
             col_names = ['Text', 'X', 'Y', 'Z']
             fill_pyqt_table(self._s_table, col_names, col)
             self._s_table.setEnabled(True)
-            # Connect table :
             self._s_table.itemSelectionChanged.connect(self._fcn_goto_cs)
-        # Analyse sources :
         self._s_analyse_run.clicked.connect(self._fcn_analyse_sources)
 
         # ====================== PROJECTION ======================
-        # Radius :
-        self._s_proj_radius.setValue(self._tradius)
+        self._s_proj_radius.setValue(self._proj_radius)
+        self._s_proj_contribute.setChecked(self._proj_contribute)
+        safely_set_cbox(self._s_proj_type, self._proj_type)
+        self._s_proj_mask_color.setText(str(self._proj_mask_color))
+        self._s_proj_mask_color_p.clicked.connect(self._fcn_mask_color_p)
         self._s_proj_apply.clicked.connect(self._fcn_source_proj)
-        # Contribute :
-        self._s_proj_contribute.setChecked(self._tcontribute)
 
     # =====================================================================
     # SOURCES
@@ -85,7 +84,7 @@ class UiSources(object):
     def _fcn_source_select(self):
         """Select the source to display."""
         txt = self._s_select.currentText().split(' ')[0].lower()
-        v = self._tobj['brain'].mesh.get_vertices
+        v = self._proj_obj['brain'].mesh.get_vertices
         self.sources.set_visible_sources(txt, v)
 
     @_run_method_if_needed
@@ -189,29 +188,37 @@ class UiSources(object):
     def _fcn_update_proj_list(self):
         """Update the available projection list objects."""
         self._s_proj_on.clear()
-        self._s_proj_on.addItems(list(self._tobj.keys()))
+        self._s_proj_on.addItems(list(self._proj_obj.keys()))
+
+    def _fcn_mask_color_p(self):
+        """Use color picker to update mask color."""
+        color = dialog_color()
+        self._s_proj_mask_color.setText(str(color))
 
     def _fcn_source_proj(self):
         """Apply source projection."""
         # Get projection radius :
         new_radius = self._s_proj_radius.value()
-        if self._tradius != new_radius:
-            self._tradius = new_radius
-            self._cleanProj()
+        if self._proj_radius != new_radius:
+            self._proj_radius = new_radius
+            self._clean_source_projection()
         # Get if activity has to be projected on surface / ROI :
-        new_projecton = str(self._s_proj_on.currentText()).lower()
-        if self._tprojecton != new_projecton:
-            self._tprojecton = new_projecton
-            self._cleanProj()
+        new_projecton = str(self._s_proj_on.currentText())
+        if self._proj_on != new_projecton:
+            self._proj_on = new_projecton
+            self._clean_source_projection()
         # Get if projection has to contribute on both hemisphere :
         new_contribute = self._s_proj_contribute.isChecked()
-        if self._tcontribute != new_contribute:
-            self._tcontribute = new_contribute
-            self._cleanProj()
+        if self._proj_contribute != new_contribute:
+            self._proj_contribute = new_contribute
+            self._clean_source_projection()
         # Run either the activity / repartition projection :
         idxproj = int(self._s_proj_type.currentIndex())
         if idxproj == 0:
-            self._tprojectas = 'activity'
+            self._proj_type = 'activity'
         elif idxproj == 1:
-            self._tprojectas = 'repartition'
-        self._sourcesProjection()
+            self._proj_type = 'repartition'
+        # Mask color :
+        color = textline2color(str(self._s_proj_mask_color.text()))[1]
+        self._proj_mask_color = color
+        self._run_source_projection()
