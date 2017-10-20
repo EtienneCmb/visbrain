@@ -19,7 +19,8 @@ from vispy.visuals import Visual
 import vispy.visuals.transforms as vist
 from vispy.scene.visuals import create_visual_node
 
-from ..utils import (array2colormap, color2vb, convert_meshdata, vispy_array)
+from ..utils import (array2colormap, color2vb, convert_meshdata, vispy_array,
+                     wrap_properties)
 
 
 logger = logging.getLogger('visbrain')
@@ -257,6 +258,7 @@ class BrainVisual(Visual):
         vsize = np.array(vsize).astype(float)
 
         # Find ratio for the camera :
+        self._center = vertices.mean(0).mean(0)
         self._camratio = vsize.max(1) - vsize.min(1)
 
         # ____________________ HEMISPHERE ____________________
@@ -427,6 +429,7 @@ class BrainVisual(Visual):
         return self._colFaces
 
     @color.setter
+    @wrap_properties
     def color(self, value):
         """Set color value."""
         n_faces = self._shapes['faces'][0]
@@ -444,6 +447,7 @@ class BrainVisual(Visual):
         return self._translucent
 
     @translucent.setter
+    @wrap_properties
     def translucent(self, value):
         """Set translucent value."""
         assert isinstance(value, bool)
@@ -464,6 +468,7 @@ class BrainVisual(Visual):
         return self._alpha
 
     @alpha.setter
+    @wrap_properties
     def alpha(self, value):
         """Set alpha value."""
         assert isinstance(value, (int, float))
@@ -479,6 +484,7 @@ class BrainVisual(Visual):
         return self._light_position
 
     @light_position.setter
+    @wrap_properties
     def light_position(self, value):
         """Set light_position value."""
         assert len(value) == 3
@@ -493,6 +499,7 @@ class BrainVisual(Visual):
         return self._light_color
 
     @light_color.setter
+    @wrap_properties
     def light_color(self, value):
         """Set light_color value."""
         assert len(value) == 4
@@ -507,6 +514,7 @@ class BrainVisual(Visual):
         return self._light_intensity
 
     @light_intensity.setter
+    @wrap_properties
     def light_intensity(self, value):
         """Set light_intensity value."""
         assert len(value) == 3
@@ -521,6 +529,7 @@ class BrainVisual(Visual):
         return self._coef_ambient
 
     @coef_ambient.setter
+    @wrap_properties
     def coef_ambient(self, value):
         """Set coef_ambient value."""
         assert isinstance(value, (int, float))
@@ -535,6 +544,7 @@ class BrainVisual(Visual):
         return self._coef_specular
 
     @coef_specular.setter
+    @wrap_properties
     def coef_specular(self, value):
         """Set coef_specular value."""
         assert isinstance(value, (int, float))
