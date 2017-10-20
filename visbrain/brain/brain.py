@@ -23,34 +23,6 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
             BrainUserMethods):
     """Visualization of neuroscientic data on a standard MNI brain.
 
-    The *Brain* module include several objects that can be individually
-    controlled :
-
-    * **a_** : Atlas properties
-    * **s_** : Sources properties
-    * **ts_** : Time-series properties
-    * **pic_** : Pictures properties
-    * **c_** : Connectivity properties
-    * **t_** : Transformations properties
-    * **ui_** : Graphical User Interface properties
-    * **l_** : Light properties
-
-    In addition, some objects provide an extended control of color properties.
-    This is the case for source's projection (**s_**), connectivity (**c_**)
-    and pictures (**pic_**). Here's the list of color properties for those
-    objects :
-
-    * **clim** : a tuple of two floats for the colorbar limits.
-    * **cmap** : a string name of a matplotlib colormap.
-    * **vmin** : a float for the lower threshold.
-    * **under** : a string for color under vmin.
-    * **vmax** : a float for the higher threshold.
-    * **over** : a string for color over vmax.
-
-    As an example, s_cmap, c_clim and pic_vmin respectively controlled the
-    colormap of projected source's activity, the colorbar limits of the
-    connectivity and the lower threshold of pictures.
-
     Parameters
     ----------
     bgcolor : string/tuple | 'black'
@@ -70,27 +42,29 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
     picture_obj : PictureObj | None
         An object (or list of objects) of type pictures (PictureObj).
     project_radius : float | 10.
-        The projection radius to use (depending on coordinates type)
+        The projection radius to use.
+    project_type : {'activity', 'repartition'}
+        Define the projection type. Use 'activity' to project the source's
+        activity or 'repartition' to get the number of contributing sources per
+        vertex.
     project_contribute : bool | False
         Specify if source's can contribute to both hemisphere during projection
         (True) or if it can only be projected on the hemisphere the source
         belong.
-
-
-    Examples
-    --------
-    >>> # Load librairies :
-    >>> import numpy as np
-    >>> from visbrain import Brain
-    >>> # Define some coordinates and colors for three deep sources :
-    >>> s_xyz = np.array([[-12, -13, 58], [40, 7, 57], [10, 5, 36]])
-    >>> s_color = ["#3498db", "#e74c3c", "#2ecc71"]
-    >>> # Add data to sources :
-    >>> s_data = [100, 0.2, 27]
-    >>> # Define a visbrain instance with previous parameters :
-    >>> vb = Brain(s_xyz=s_xyz, s_data=s_data, s_color=s_color)
-    >>> # Finally, display the interface :
-    >>> vb.show()
+    project_mask_color : string/tuple/array_like | 'orange'
+        The color to assign to vertex for masked sources.
+    project_cmap : string | 'viridis'
+        The colormap to use for the source projection.
+    project_clim : tuple | (0., 1.)
+        Colorbar limits of the projection.
+    project_vmin : float | None
+        Minimum threshold for the projection colorbar.
+    project_under : string/tuple/array_like | 'gray'
+        Color to use for values under project_vmin.
+    project_vmax : float | None
+        Maximum threshold for the projection colorbar.
+    project_over : string/tuple/array_like | 'red'
+        Color to use for values over project_vmax.
     """
 
     def __init__(self, bgcolor='black', verbose=None, **kwargs):
