@@ -1,4 +1,5 @@
 """Download files from dropbox."""
+import logging
 import os
 import sys
 from urllib import request
@@ -6,16 +7,18 @@ import zipfile
 from warnings import warn
 
 from .rw_config import load_config_json
-from ..utils import verbose
+from ..utils import get_data_path
 
 
-__all__ = ["get_data_url_file", "download_file"]
+logger = logging.getLogger('visbrain')
+
+
+__all__ = ["get_data_url_file", "download_file", "path_to_visbrain_data"]
 
 
 def get_data_url_file():
     """Get path to the data_url.txt file."""
-    dirfile = sys.modules[__name__].__file__.split('download')[0]
-    return load_config_json(os.path.join(dirfile, 'data_url.txt'))
+    return load_config_json(get_data_path(file='data_url.txt'))
 
 
 def get_data_url(name):
@@ -58,8 +61,10 @@ def reporthook(blocknum, blocksize, totalsize):
 
 
 def download_file(name, filename=None, to_path=None, unzip=False,
-                  remove_archive=False):
+                  remove_archive=False, use_pwd=False):
     """Download a file.
+
+    By default this function download a file to ~/visbrain_data.
 
     Parameters
     ----------
@@ -67,28 +72,39 @@ def download_file(name, filename=None, to_path=None, unzip=False,
         Name of the file to download or url.
     filename : string | None
         Name of the file to be saved in case of url.
+    to_path : string | None
+        Download file to the path specified.
+    unzip : bool | False
+        Unzip archive if needed.
+    remove_archive : bool | False
+        Remove archive after unzip.
+    use_pwd : bool | False
+        Download the file to the current directory.
 
     Returns
     -------
     path_to_file : string
         Path to the downloaded file.
     """
+    # Default visbrain-path to data (HOME/visbrain_data):
+    vb_path = os.path.join(os.path.expanduser('~'), 'visbrain_data')
+    vb_path = os.getcwd() if use_pwd else vb_path
     print('\n----------------------------------------------------------------')
     if bool(name.find('http') + 1):
         assert isinstance(filename, str)
         url = name
     else:
         filename, url = name, get_data_url(name)
-    to_path = os.getcwd() if not isinstance(to_path, str) else to_path
+    to_path = vb_path if not isinstance(to_path, str) else to_path
     path_to_file = os.path.join(to_path, filename)
     to_download = not os.path.isfile(path_to_file)
 
     # Dowload file if needed :
     if to_download:
-        verbose('Downloading ' + path_to_file, level='info')
+        logger.info('Downloading %s' % path_to_file)
         # Check if directory exists else creates it
         if not os.path.exists(to_path):
-            verbose('Foler ' + to_path + ' created', level='info')
+            logger.info('Foler %s created' % to_path)
             os.makedirs(to_path)
         # Download file :
         fh, _ = request.urlretrieve(url, path_to_file, reporthook=reporthook)
@@ -98,11 +114,34 @@ def download_file(name, filename=None, to_path=None, unzip=False,
             zip_file_object = zipfile.ZipFile(fh, 'r')
             zip_file_object.extractall(path=to_path)
             zip_file_object.close()
-            verbose('Unzip file', level='info')
+            logger.info('Unzip archive')
             if remove_archive:  # Remove archive :
-                verbose('Archive' + path_to_file + ' removed', level='warning')
+                logger.info('Archive %s removed' % path_to_file)
                 os.remove(path_to_file)
     else:
-        verbose("File already dowloaded (" + path_to_file + ").", level='info')
+        logger.info("File already dowloaded (%s)." % path_to_file)
     print('----------------------------------------------------------------\n')
     return path_to_file
+
+
+def path_to_visbrain_data(file=None):
+    """Get the path to the visbrain_data folder.
+
+    Parameters
+    ----------
+    file : string | None
+        File name. If None, only the path to the visbrain_data folder is
+        returned.
+
+    Returns
+    -------
+    path : string
+        Path to the file or to the visbrain_data.
+    """
+    vb_path = os.path.expanduser('~')
+    if file is not None:
+        path = os.path.join(*(vb_path, 'visbrain_data', file))
+        assert os.path.isfile(path)
+    else:
+        path = os.path.join(*(vb_path, 'visbrain_data'))
+    return path

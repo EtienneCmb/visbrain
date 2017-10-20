@@ -19,7 +19,8 @@ __all__ = ('color2vb', 'array2colormap', 'dynamic_color', 'color2faces',
            )
 
 
-def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0):
+def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0,
+             faces_index=False):
     """Turn into a RGBA compatible color format.
 
     This function can tranform a tuple of RGB, a matplotlib color or an
@@ -36,6 +37,9 @@ def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0):
         The length of the output array.
     alpha : float | 1
         The opacity (Last digit of the RGBA tuple).
+    faces_index : bool | False
+        Specify if the returned color have to be compatible with faces index
+        (e.g a (n_color, 3, 4) array).
 
     Return
     ------
@@ -71,6 +75,10 @@ def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0):
         vcolor = np.concatenate((np.array([list(coltuple)] * length),
                                  alpha * np.ones((length, 1),
                                                  dtype=np.float32)), axis=1)
+
+        # Faces index :
+        if faces_index:
+            vcolor = np.tile(vcolor[:, np.newaxis, :], (1, 3, 1))
 
         return vcolor.astype(np.float32)
     else:

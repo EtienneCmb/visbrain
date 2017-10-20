@@ -1,8 +1,5 @@
 """Signal module."""
 import os
-import sip
-import sys
-from PyQt5 import QtWidgets
 import numpy as np
 
 import vispy.app as visapp
@@ -10,17 +7,17 @@ import vispy.scene.cameras as viscam
 
 from .ui_elements import UiElements, UiInit
 from .visuals import Visuals
-from ..utils import (set_widget_size, safely_set_cbox, color2tuple, color2vb,
-                     mpl_cmap, toggle_enable_tab)
+from ..utils import (safely_set_cbox, color2tuple, color2vb, mpl_cmap,
+                     toggle_enable_tab)
 from ..io import write_fig_canvas
+from ..pyqt_module import PyQtModule
 # get_screen_size
 
-sip.setdestroyonexit(False)
 
 __all__ = ('Signal')
 
 
-class Signal(UiInit, UiElements, Visuals):
+class Signal(PyQtModule, UiInit, UiElements, Visuals):
     """Signal inspection module (data mining).
 
     The Signal module can be used to relatively large datasets of
@@ -137,14 +134,15 @@ class Signal(UiInit, UiElements, Visuals):
                  annot_txtsz=18., annot_marksz=16., annot_color='#2ecc71',
                  grid_lw=1., grid_smooth=False, grid_titles=None,
                  grid_font_size=10., grid_color='random', grid_shape=None,
-                 grid_titles_color='black', **kwargs):
+                 grid_titles_color='black', verbose=None, **kwargs):
         """Init."""
+        dscb = ['_grid_canvas.canvas.scene', '_signal_canvas.canvas.scene']
+        PyQtModule.__init__(self, verbose=verbose, to_describe=dscb)
         self._enable_grid = enable_grid
         self._previous_form = form
         display_grid = bool(display_grid * self._enable_grid)
 
         # ==================== APP CREATION ====================
-        self._app = QtWidgets.QApplication(sys.argv)
         UiInit.__init__(self, **kwargs)
 
         # ==================== DATA CHECKING ====================
@@ -297,9 +295,6 @@ class Signal(UiInit, UiElements, Visuals):
 
     def _fcn_on_creation(self):
         """Run on GUI creation."""
-        # Settings :
-        self.QuickSettings.setCurrentIndex(0)
-        set_widget_size(self._app, self.q_widget, 23)
         # Fix proportion of canvas :
         # w, g = get_screen_size(self._app)
         # self._signal_canvas.wc.width_max = w / 2
@@ -422,8 +417,3 @@ class Signal(UiInit, UiElements, Visuals):
         idx = ['line', 'marker', 'histogram', 'tf', 'psd',
                'butterfly'].index(form)
         self._sig_form.setCurrentIndex(idx)
-
-    def show(self):
-        """Display the graphical user interface."""
-        self.showMaximized()
-        visapp.run()

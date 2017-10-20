@@ -1,5 +1,9 @@
 """Colorbar management for the Brain module."""
+import logging
+
 from ...visuals import CbarQt, CbarObjetcs, CbarBase
+
+logger = logging.getLogger('visbrain')
 
 __all__ = ['BrainCbar']
 
@@ -13,46 +17,43 @@ class BrainCbar(object):
         # Create the cbar objects manager :
         self.cbobjs = CbarObjetcs()
 
+        logger.debug("Cbar should directly update objects that inherit from "
+                     "CbarArgs")
         # ------------------- CBARBASE -------------------
-        # Cbarbase for the projection :
-        cbproj = CbarBase(**self.sources.to_kwargs(True))
-        self.cbobjs.add_object('Projection', cbproj)
-        # Cbarbase for the connectivity :
-        cbconnect = CbarBase(**self.connect.to_kwargs(True))
-        self.cbobjs.add_object('Connectivity', cbconnect)
-        # Cbarbase for the pictures :
-        cbpic = CbarBase(**self.pic.to_kwargs(True))
-        self.cbobjs.add_object('Pictures', cbpic)
+        # ________ Projection ________
+        if self.sources.name is not None:
+            cbproj = CbarBase(**self.sources.to_kwargs(True))
+            self.cbobjs.add_object('Projection', cbproj)
+            obj = self.cbobjs._objs['Projection']
+            obj._fcn = self._fcn_link_proj
+            obj._minmaxfcn = self._fcn_minmax_proj
+
+        # ________ Connectivity ________
+        if self.connect.name is not None:
+            for k in self.connect:
+                cbconnect = CbarBase(**self.connect[k.name].to_kwargs(True))
+                self.cbobjs.add_object(k.name, cbconnect)
+                obj = self.cbobjs._objs[k.name]
+                obj._fcn = self._fcn_link_connect(k.name)
+                obj._minmaxfcn = self._fcn_minmax_connect(k.name)
+
+        # ________ Pictures ________
+        if self.pic.name is not None:
+            for k in self.pic:
+                cbpic = CbarBase(**self.pic[k.name].to_kwargs(True))
+                self.cbobjs.add_object(k.name, cbpic)
+                obj = self.cbobjs._objs[k.name]
+                obj._fcn = self._fcn_link_pic(k.name)
+                obj._minmaxfcn = self._fcn_minmax_pic(k.name)
 
         # ------------------- CBQT -------------------
         # Add colorbar and interactions :
         self.cbqt = CbarQt(self._cbarWidget, self.cbpanel, self.cbobjs)
-
-        # ------------------- LINK -------------------
-        # ________ Sources ________
-        if self.sources.name != 'NoneSources':
-            # ________ Connectivity ________
-            if self.connect.name != 'NoneConnect':
-                # Link the colorbase with connectivity :
-                self.cbqt.link('Connectivity', self._fcn_link_connect,
-                               self._fcn_minmax_connect)
-            else:
-                self.cbqt.setEnabled('Connectivity', False)
-            # ________ Pictures ________
-            if self.pic.mesh.name != 'NonePic':
-                # Link the colorbase with connectivity :
-                self.cbqt.link('Pictures', self._fcn_link_pic,
-                               self._fcn_minmax_pic)
-            else:
-                self.cbqt.setEnabled('Pictures', False)
-
-            # Connect graphical buttons :
-            self.cbqt.select('Projection', onload=False)
-            self.cbqt._connect()
-        else:
-            self.cbqt.setEnabled('Connectivity', False)
-            self.cbqt.setEnabled('Pictures', False)
-        self.cbqt.setEnabled('Projection', False)
+        is_cbqt = bool(self.cbqt)
+        if is_cbqt:
+            self.cbqt.select(0)
+            self.cbqt._fcn_change_object()
+        self.menuDispCbar.setEnabled(is_cbqt)
 
         # Add the camera to the colorbar :
         self.cbqt.add_camera(camera)
@@ -62,40 +63,51 @@ class BrainCbar(object):
     ###########################################################################
     def _fcn_link_proj(self):
         """Executed function when projection need updates."""
-        self._proj2Color()
+        if hasattr(self.sources, '_minmax'):
+            self._projection_to_color()
 
     def _fcn_minmax_proj(self):
         """Executed function for autoscale projections."""
-        self.cbqt.cbobjs._objs['Projection']._clim = self.sources._minmax
-        self._proj2Color()
+        if hasattr(self.sources, '_minmax'):
+            self.cbqt.cbobjs._objs['Projection']._clim = self.sources._minmax
+            self._projection_to_color()
 
     ###########################################################################
     #                              CONNECTIVITY
     ###########################################################################
-    def _fcn_link_connect(self):
+    def _fcn_link_connect(self, name):
         """Executed function when connectivity need updates."""
-        kwargs = self.cbqt.cbobjs._objs['Connectivity'].to_kwargs()
-        self.connect.update_from_dict(kwargs)
-        self.connect.update()
+        def _get_connect_fcn():
+            kwargs = self.cbqt.cbobjs._objs[name].to_kwargs(True)
+            self.connect[name].update_from_dict(kwargs)
+            self.connect[name]._build_line()
+        return _get_connect_fcn
 
-    def _fcn_minmax_connect(self):
+    def _fcn_minmax_connect(self, name):
         """Executed function for autoscale connectivity."""
-        self.connect.needupdate = True
-        self.connect.update()
-        self.cbqt.cbobjs._objs['Connectivity']._clim = self.connect._minmax
+        def _get_minmax_connect_fcn():
+            self.cbqt.cbobjs._objs[name]._clim = self.connect[name]._minmax
+            kwargs = self.cbqt.cbobjs._objs[name].to_kwargs(True)
+            self.connect[name].update_from_dict(kwargs)
+            self.connect[name]._build_line()
+        return _get_minmax_connect_fcn
 
     ###########################################################################
     #                              PICTURES
     ###########################################################################
-    def _fcn_link_pic(self):
+    def _fcn_link_pic(self, name):
         """Executed function when pictures need updates."""
-        kwargs = self.cbqt.cbobjs._objs['Pictures'].to_kwargs()
-        self.pic.mesh.set_data(**kwargs)
-        self.pic.mesh.update()
+        def _get_pic_fcn():
+            kwargs = self.cbqt.cbobjs._objs[name].to_kwargs()
+            self.pic[name].update_from_dict(kwargs)
+            self.pic[name]._pic.set_data(**kwargs)
+        return _get_pic_fcn
 
-    def _fcn_minmax_pic(self):
+    def _fcn_minmax_pic(self, name):
         """Executed function for autoscale pictures."""
-        self.cbqt.cbobjs._objs['Pictures']._clim = self.pic._minmax
-        kwargs = self.cbqt.cbobjs._objs['Pictures'].to_kwargs()
-        self.pic.mesh.set_data(**kwargs)
-        self.pic.mesh.update()
+        def _get_minmax_pic_fcn():
+            self.cbqt.cbobjs._objs[name]._clim = self.pic[name]._minmax
+            kwargs = self.cbqt.cbobjs._objs[name].to_kwargs()
+            self.pic[name].update_from_dict(kwargs)
+            self.pic[name]._pic.set_data(**kwargs)
+        return _get_minmax_pic_fcn

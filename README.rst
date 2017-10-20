@@ -59,11 +59,11 @@ Then, install Visbrain :
 
     pip install visbain
 
-We also strongly recommend to install *pyopengl* :
+We also strongly recommend to install *pandas* and *pyopengl* :
 
 .. code-block:: shell
 
-    pip install PyOpenGL PyOpenGL_accelerate
+    pip install pandas PyOpenGL PyOpenGL_accelerate
 
 Modules
 =======

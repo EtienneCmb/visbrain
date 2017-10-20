@@ -16,14 +16,14 @@ import numpy as np
 
 from visbrain import Brain
 from visbrain.utils import (add_brain_template, remove_brain_template)
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
 """Download the brain template. Use either 'WhiteMatter', 'Inflated' or
 'Sphere'
 """
 template = 'WhiteMatter'
 download_file(template + '.npz')
-mat = np.load(template + '.npz')
+mat = np.load(path_to_visbrain_data(template + '.npz'))
 
 """
 Get variables for defining a new template. Vertices are nodes connected by the

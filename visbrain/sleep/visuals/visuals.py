@@ -6,6 +6,7 @@ hypnogram, indicator, shortcuts)
 import numpy as np
 import scipy.signal as scpsig
 import itertools
+import logging
 
 from vispy import scene
 import vispy.visuals.transforms as vist
@@ -14,6 +15,8 @@ from .marker import Markers
 from ...utils import (array2colormap, color2vb, PrepareData)
 from ...utils.sleep.event import _index_to_events
 from ...visuals import TopoMesh, TFmapsMesh
+
+logger = logging.getLogger('visbrain')
 
 __all__ = ("Visuals")
 
@@ -942,30 +945,36 @@ class CanvasShortcuts(object):
                 self._fcn_gridToggle()
 
             # ------------ SCORING ------------
-            elif event.text.lower() == 'a':
+            elif event.text.lower() == 'a':  # Art
                 self._add_stage_on_win(-1)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
-            elif event.text.lower() == 'w':
+                logger.info("Art stage inserted")
+            elif event.text.lower() == 'w':  # Wake
                 self._add_stage_on_win(0)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
+                logger.info("Wake stage inserted")
             elif event.text == '1':
                 self._add_stage_on_win(1)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
+                logger.info("N1 stage inserted")
             elif event.text == '2':
                 self._add_stage_on_win(2)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
+                logger.info("N2 stage inserted")
             elif event.text == '3':
                 self._add_stage_on_win(3)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
+                logger.info("N3 stage inserted")
             elif event.text.lower() == 'r':
                 self._add_stage_on_win(4)
                 self._SlGoto.setValue(self._SlGoto.value(
                 ) + self._SigSlStep.value())
+                logger.info("REM stage inserted")
 
         @canvas.events.mouse_release.connect
         def on_mouse_release(event):

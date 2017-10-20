@@ -203,8 +203,7 @@ class RoiBase(object):
         """
         if not hasattr(self, 'mesh'):
             self.mesh = BrainMesh(vertices=self.vert, faces=self.faces,
-                                  scale_factor=1., name=self.name_roi,
-                                  recenter=False, parent=self._parent,
+                                  name=self.name_roi, parent=self._parent,
                                   vertfcn=self.transform)
             self.name_roi = 'ROI'
         else:

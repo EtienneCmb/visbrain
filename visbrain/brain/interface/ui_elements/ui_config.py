@@ -44,7 +44,7 @@ class UiConfig(object):
 
             # ----------------- BRAIN -----------------
             # Brain :
-            config['BrainTransp'] = self._brainTransp.isChecked()
+            config['BrainTransp'] = self._brain_translucent.isChecked()
             config['BrainHemi'] = self._brainPickHemi.currentIndex()
             config['BrainTemplate'] = self._brainTemplate.currentIndex()
             # ROI :
@@ -166,7 +166,7 @@ class UiConfig(object):
 
             # ----------------- BRAIN -----------------
             # Brain :
-            _try("self._brainTransp.setChecked(config['BrainTransp'])")
+            _try("self._brain_translucent.setChecked(config['BrainTransp'])")
             _try("self._brainPickHemi.setCurrentIndex(config["
                  "'BrainHemi'])")
             _try("self._brainTemplate.setCurrentIndex(config["

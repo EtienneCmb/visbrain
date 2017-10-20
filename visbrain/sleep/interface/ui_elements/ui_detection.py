@@ -2,10 +2,13 @@
 import numpy as np
 from warnings import warn
 from PyQt5 import QtWidgets, QtCore
+import logging
 
 from ....utils import (remdetect, spindlesdetect, slowwavedetect, kcdetect,
                        peakdetect, mtdetect)
 from ....utils.sleep.event import _events_to_index
+
+logger = logging.getLogger('visbrain')
 
 
 class UiDetection(object):
@@ -168,6 +171,9 @@ class UiDetection(object):
                 rem_only = self._ToolMTOnly.isChecked()
                 index, nb, dty, dur = mtdetect(self._data[k, :], self._sf, th,
                                                self._hypno, rem_only)
+
+            logger.info(("Perform %s detection on channel %s. %i events "
+                         "detected.") % (method, self._channels[k], nb))
 
             if index.size:
                 # Enable detection tab :

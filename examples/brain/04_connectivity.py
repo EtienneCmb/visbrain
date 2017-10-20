@@ -14,7 +14,8 @@ from __future__ import print_function
 import numpy as np
 
 from visbrain import Brain
-from visbrain.io import download_file
+from visbrain.objects import SourceObj, ConnectObj
+from visbrain.io import download_file, path_to_visbrain_data
 
 # Create an empty kwargs dictionnary :
 kwargs = {}
@@ -23,80 +24,54 @@ kwargs = {}
 
 # Load the xyz coordinates and corresponding subject name :
 download_file('xyz_sample.npz')
-mat = np.load('xyz_sample.npz')
-s_xyz, subjects = mat['xyz'], mat['subjects']
+mat = np.load(path_to_visbrain_data('xyz_sample.npz'))
+xyz, subjects = mat['xyz'], mat['subjects']
 
-N = s_xyz.shape[0]  # Number of electrodes
-kwargs['s_opacity'] = 0.5 	# Sources opacity
+N = xyz.shape[0]  # Number of electrodes
 
 # Now, create some random data between [-50,50]
-s_data = np.round(100 * np.random.rand(s_xyz.shape[0]) - 50)
-kwargs['s_xyz'], kwargs['s_data'] = s_xyz, s_data
-kwargs['s_color'] = 'crimson'
+data = np.random.uniform(-50, 50, len(subjects))
+
+"""Create the source object :
+"""
+s_obj = SourceObj('SourceObj1', xyz, data, color='crimson', alpha=.5,
+                  edge_width=2., radius_min=2., radius_max=10.)
 
 """
 To connect sources between them, we create a (N, N) array.
 This array should be either upper or lower triangular to avoid
 redondant connections.
 """
-c_connect = 1000 * np.random.rand(N, N)		    # Random array of connections
-c_connect[np.tril_indices_from(c_connect)] = 0  # Set to zero inferior triangle
+connect = 1000 * np.random.rand(N, N)		# Random array of connections
+connect[np.tril_indices_from(connect)] = 0  # Set to zero inferior triangle
 
 """
 Because all connections are not necessary interesting, it's possible to select
-only certain either using a c_select array composed with ones and zeros, or by
+only certain either using a select array composed with ones and zeros, or by
 masking the connection matrix. We are giong to search vealues between umin and
 umax to limit the number of connections :
 """
 umin, umax = 30, 31
 
-# 1 - Using c_select (0: hide, 1: display):
-c_select = np.zeros_like(c_connect)
-c_select[(c_connect > umin) & (c_connect < umax)] = 1
+# 1 - Using select (0: hide, 1: display):
+select = np.zeros_like(connect)
+select[(connect > umin) & (connect < umax)] = 1
 
 # 2 - Using masking (True: hide, 1: display):
-c_connect = np.ma.masked_array(c_connect, mask=True)
-c_connect.mask[np.where((c_connect > umin) & (c_connect < umax))] = False
+connect = np.ma.masked_array(connect, mask=True)
+connect.mask[np.where((connect > umin) & (connect < umax))] = False
 
-print('1 and 2 equivalent :', np.array_equal(c_select, ~c_connect.mask + 0))
-kwargs['c_connect'] = c_connect
-# ____________________________ SETTINGS ____________________________
+print('1 and 2 equivalent :', np.array_equal(select, ~connect.mask + 0))
 
-
-# Control the dynamic range of sources radius and the edge color :
-kwargs['s_radiusmin'], kwargs['s_radiusmax'] = 2, 10
-kwargs['s_edgecolor'] = None  # 'white'
-kwargs['s_edgewidth'] = 0
-
-# Colormap properties (for sources) :
-kwargs['s_cmap'] = 'Spectral_r'				# Matplotlib colormap
-kwargs['s_clim'] = (-50., 50.)
-kwargs['s_vmin'], kwargs['s_vmax'] = None, 21
-kwargs['s_under'], kwargs['s_over'] = 'midnightblue', "#e74c3c"
-
-# Colormap properties (for connectivity) :
-kwargs['c_cmap'] = 'gnuplot'				# Matplotlib colormap
-kwargs['c_vmin'], kwargs['c_vmax'] = umin + 0.2, umax - 0.1
-kwargs['c_under'], kwargs['c_over'] = 'green', "white"
-kwargs['c_clim'] = [umin, umax]
-
+"""Create the connectivity object :
 """
-Finally, use c_colorby to define how connections have to be colored.
-if c_colorby is 'count', it's the number of connections which pear node
-drive the colormap. If 'strength', it's the connectivity strength between
-two nodes.
+c_obj = ConnectObj('ConnectObj1', xyz, connect, color_by='strength',
+                   dynamic=(.1, 1.), cmap='gnuplot', vmin=umin + .2,
+                   vmax=umax - .1, under='red', over='green',
+                   clim=(umin, umax))
+
+"""Finally, pass source and connectivity objects to Brain :
 """
-kwargs['c_colorby'] = 'strength'
-kwargs['c_radiusmin'] = 4
-kwargs['c_dynamic'] = (0.1, 1)
+vb = Brain(source_obj=s_obj, connect_obj=c_obj)
 
-# Atlas template and opacity :
-kwargs['a_template'] = 'B1'
-
-# Set font size, color and label for the colorbar :
-kwargs['cb_fontsize'] = 15
-kwargs['cb_fontcolor'] = 'white'
-kwargs['cb_label'] = 'My colorbar label'
-
-vb = Brain(**kwargs)
 vb.show()
