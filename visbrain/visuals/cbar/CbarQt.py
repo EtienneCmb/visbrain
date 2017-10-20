@@ -3,7 +3,7 @@ from functools import wraps
 
 from .gui import CbarForm
 from .CbarVisual import CbarVisual
-from ...utils import color2json, mpl_cmap, mpl_cmap_index
+from ...utils import color2json, mpl_cmap, mpl_cmap_index, disconnect_all
 
 __all__ = ['CbarQt']
 
@@ -293,7 +293,7 @@ class CbarQt(object):
         """Change colorbar object."""
         # Disconnect interactions :
         self._trigger_cbar = False
-        self['object'].disconnect()
+        disconnect_all(self['object'])
         # Clean drowdown box for object selection :
         if clean:
             self['object'].clear()
