@@ -1,3 +1,4 @@
+"""Source projection."""
 import logging
 import numpy as np
 
@@ -17,69 +18,61 @@ class Projections(object):
     access to vertices & sources coordinates / data.
     """
 
-    def __init__(self, t_radius=10.0, t_projecton='brain', t_contribute=False,
-                 t_projectas='activity', t_mask_color='orange', **kwargs):
+    def __init__(self, project_radius=10.0, project_on='brain',
+                 project_contribute=False, project_type='activity',
+                 project_mask_color='orange', **kwargs):
         """Init."""
-        self._tobj = {}
-        self._tradius = t_radius
-        self._tprojecton = t_projecton
-        self._tprojectas = t_projectas
-        self._tcontribute = t_contribute
-        self._idxmasked = None
-        self._proj_mask_color = color2vb(t_mask_color)
-        self._modproj = None
+        assert isinstance(project_radius, (int, float))
+        assert project_type in ['activity', 'repartition']
+        self._proj_obj = {}
+        self._proj_radius = project_radius
+        self._proj_on = project_on
+        self._proj_type = project_type
+        self._proj_contribute = project_contribute
+        self._proj_mask_color = color2vb(project_mask_color)
+        self._proj_mask_idx = None
+        self._proj_data = None
 
     # ======================================================================
     # PROJECTIONS
     # ======================================================================
     def _get_obj_vertices(self, obj):
         """Find the vertices from the object."""
-        if obj in self._tobj.keys():
-            return self._tobj[obj].mesh.get_vertices
+        print(self._proj_obj.keys(), obj)
+        if obj in self._proj_obj.keys():
+            return self._proj_obj[obj].mesh.get_vertices
         else:
-            raise ValueError(obj + " not found. Use : " +
-                             list(self._tobj.keys()))
+            lst_obj = ', '.join(list(self._proj_obj.keys()))
+            raise ValueError(obj + " not found. Use : " + lst_obj)
 
-    def _sourcesProjection(self):
+    def _run_source_projection(self):
         """Apply corticale projection."""
         # =============== CHECKING ===============
-        # Check projection radius :
-        if isinstance(self._tradius, (int, float)):
-            self._tradius = float(self._tradius)
-        else:
-            raise ValueError("The radius parameter must be a integer or a "
-                             "float number.")
-
-        # Clean projection :
-        self._cleanProj()
-
-        # Check projection type :
-        if self._tprojectas not in ['activity', 'repartition']:
-            raise ValueError("The t_projectas parameter must either be "
-                             "'activity' to project source's activity or "
-                             "'repartition' to explore the number of "
-                             "contributing sources per vertex.")
+        assert isinstance(self._proj_radius, (int, float))
+        assert self._proj_type in ['activity', 'repartition']
+        self._clean_source_projection()
 
         # =============== VERTICES ===============
-        v = self._get_obj_vertices(self._tprojecton)
+        v = self._get_obj_vertices(self._proj_on)
         self._vsh = v.shape
 
         # ============= MODULATIONS =============
-        r, c = self._tradius, self._tcontribute
+        r, c = self._proj_radius, self._proj_contribute
         log_str = ("Project {} onto the %s using a %s "
-                   "radius") % (self._tprojecton, str(self._tradius))
-        if self._tprojectas == 'activity':
+                   "radius") % (self._proj_on, str(self._proj_radius))
+        if self._proj_type == 'activity':
             logger.info(log_str.format("source's activity"))
             mod = self.sources.project_modulation(v, r, c)
-        elif self._tprojectas == 'repartition':
+        elif self._proj_type == 'repartition':
             logger.info(log_str.format("source's repartition"))
             mod = self.sources.project_repartition(v, r, c)
-        self._modproj = mod
+        self._proj_data = mod
         self.sources._minmax = (mod.min(), mod.max())
 
         # ============= MASKED =============
-        if self.sources.is_masked and (self._idxmasked is None):
-            self._idxmasked = self.sources.get_masked_index(v, self._tradius, c)
+        if self.sources.is_masked and (self._proj_mask_idx is None):
+            self._proj_mask_idx = self.sources.get_masked_index(
+                v, self._proj_radius, c)
 
         # ============= COLOR =============
         self._projection_to_color()
@@ -89,19 +82,19 @@ class Projections(object):
         # Get color arguents :
         kwargs = self.cbobjs._objs['Projection'].to_kwargs()
         # Get the colormap :
-        color = array2colormap(self._modproj, **kwargs)
-        color[self._modproj.mask, ...] = 1.
+        color = array2colormap(self._proj_data, **kwargs)
+        color[self._proj_data.mask, ...] = 1.
 
         if self.sources.is_masked:
             # Find only non-colored vertex :
-            idxcol = np.logical_and(self._idxmasked, self._modproj.mask)
+            idxcol = np.logical_and(self._proj_mask_idx, self._proj_data.mask)
             # Set them color to the mask color :
             color[idxcol, ...] = self._proj_mask_color
 
         # ============= MESH =============
-        self._tobj[self._tprojecton].mesh.set_color(data=color)
+        self._proj_obj[self._proj_on].mesh.set_color(data=color)
 
-    def _cleanProj(self):
+    def _clean_source_projection(self):
         """Clean projection variables."""
-        self._idxmasked = None
-        self._modproj = None
+        self._proj_mask_idx = None
+        self._proj_data = None
