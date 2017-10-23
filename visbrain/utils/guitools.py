@@ -6,7 +6,7 @@ import numpy as np
 
 from .color import color2vb, color2tuple
 
-__all__ = ('slider2opacity', 'textline2color', 'color2json', 'set_spin_values',
+__all__ = ('slider2opacity', 'textline2color', 'color2json',
            'ndsubplot', 'combo', 'is_color', 'MouseEventControl',
            'disconnect_all', 'extend_combo_list', 'get_combo_list_index',
            'safely_set_cbox', 'safely_set_spin', 'safely_set_slider',
@@ -134,22 +134,6 @@ def is_color(color, comefrom='color'):
         raise ValueError("The comefrom must either be 'color' or 'textline'.")
 
     return iscol
-
-
-def set_spin_values(elements, values):
-    """Set a list of value to a list of elements.
-
-    Parameters
-    ----------
-    elements : QtSpin
-        List of Qt spin elements.
-    values : list
-        List of values per element.
-    """
-    if len(elements) != len(values):
-        raise ValueError("List of Qt spins must have the same length "
-                         "as values")
-    [k.setValue(i) for k, i in zip(elements, values)]
 
 
 def ndsubplot(n, line=4, force_col=None, max_rows=100, max_on_line=True):
