@@ -31,11 +31,12 @@ class UiAtlas(object):
         self._brain_grp.clicked.connect(self._fcn_brain_visible)
         # Template :
         all_templates = self.atlas._get_all_available_templates()
-        self._brain_template.addItems(all_templates)
-        idx = all_templates.index(self.atlas.name)
-        self._brain_template.setCurrentIndex(idx)
-        self._brain_template.currentIndexChanged.connect(
-            self._fcn_brain_template)
+        if self.atlas.name in all_templates:
+            self._brain_template.addItems(all_templates)
+            idx = all_templates.index(self.atlas.name)
+            self._brain_template.setCurrentIndex(idx)
+            self._brain_template.currentIndexChanged.connect(
+                self._fcn_brain_template)
         # Hemisphere :
         self._brain_hemi.currentIndexChanged.connect(self._fcn_brain_template)
         # Translucent :
@@ -134,6 +135,7 @@ class UiAtlas(object):
                      "template") % (hemisphere, template))
         self.atlas.set_data(name=template, hemisphere=hemisphere)
         self.atlas.rotate('top')
+        self.atlas.scale = self._gl_scale
 
     def _fcn_brain_translucent(self):
         """Use translucent or opaque brain."""
