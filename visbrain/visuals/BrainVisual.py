@@ -11,7 +11,6 @@ Authors: Etienne Combrisson <e.combrisson@gmail.com>
 
 License: BSD (3-clause)
 """
-import logging
 import numpy as np
 
 from vispy import gloo
@@ -21,9 +20,6 @@ from vispy.scene.visuals import create_visual_node
 
 from ..utils import (array2colormap, color2vb, convert_meshdata, vispy_array,
                      wrap_properties)
-
-
-logger = logging.getLogger('visbrain')
 
 
 # Vertex shader : executed code for individual vertices. The transformation
@@ -246,20 +242,17 @@ class BrainVisual(Visual):
         # ____________________ VERTICES / FACES / NORMALS ____________________
         vertices, faces, normals = convert_meshdata(vertices, faces, normals,
                                                     meshdata, invert_normals)
+        self._vertices = vertices
+        self._faces = faces
         # Keep shapes :
         self._shapes = np.zeros(1, dtype=[('vert', int), ('faces', int)])
         self._shapes['vert'] = vertices.shape[0]
         self._shapes['faces'] = faces.shape[0]
 
-        # Keep maximum/minimum per coordinates :
-        vsize = [(vertices[:, 0, :].min(), vertices[:, 0, :].max()),
-                 (vertices[:, 1, :].min(), vertices[:, 1, :].max()),
-                 (vertices[:, 2, :].min(), vertices[:, 2, :].max())]
-        vsize = np.array(vsize).astype(float)
-
         # Find ratio for the camera :
-        self._center = vertices.mean(0).mean(0)
-        self._camratio = vsize.max(1) - vsize.min(1)
+        v_max, v_min = vertices.max(0), vertices.min(0)
+        self._center = (v_max + v_min).astype(float) / 2.
+        self._camratio = (v_max - v_min).astype(float)
 
         # ____________________ HEMISPHERE ____________________
         # Load only left/ritgh hemisphere :
@@ -267,40 +260,26 @@ class BrainVisual(Visual):
             # Find index to keep only left or right hemisphere :
             if hemisphere == 'left':
                 if lr_index is None:
-                    inf = np.where(
-                        vertices[..., 0, 0] <= vertices[:, :, 0].mean())[0]
+                    inf = vertices[:, 0] <= vertices[:, 0].mean()
                 else:
                     inf = lr_index
             if hemisphere == 'right':
                 if lr_index is None:
-                    inf = np.where(
-                        vertices[..., 0, 0] >= vertices[:, :, 0].mean())[0]
+                    inf = vertices[:, 0] >= vertices[:, 0].mean()
                 else:
                     inf = ~lr_index
-            vertices = vertices[inf, ...]
+            inf = inf[faces[:, 0]]
             normals = normals[inf, ...]
             faces = faces[inf, ...]
 
         # ____________________ ASSIGN ____________________
-        self._vertices = vertices
-        self._colFaces = np.ones((faces.shape[0], 3, 4), dtype=np.float32)
+        color = np.ones((faces.shape[0], 3, 4), dtype=np.float32)
 
         # ____________________ BUFFERS ____________________
-        logger.debug("Should not use indexed faces vertices / normals "
-                     "(BrainVisual.py). This is a limitation for : \n"
-                     "* Bigger files \n* Difficult to find camera center "
-                     "(x, y, z) and configure scale_factor \n* Slower \n"
-                     "* Much more RAM needed for projection")
-        # from vispy.geometry import MeshData
-        # m = MeshData(vertices=vertices, faces=faces)
-        # vertices = m.get_vertices()
-        # faces = m.get_faces()
-        # normals = m.get_vertex_normals()
-
-        self._vert_buffer.set_data(vertices, convert=True)
+        self._vert_buffer.set_data(vertices[faces], convert=True)
         self._faces_buffer.set_data(faces, convert=True)
         self._normals_buffer.set_data(normals, convert=True)
-        self._color_buffer.set_data(self._colFaces, convert=True)
+        self._color_buffer.set_data(color, convert=True)
         self.update()
 
     def set_color(self, data=None, color='white', alpha=1.0, **kwargs):
@@ -338,8 +317,7 @@ class BrainVisual(Visual):
             col = np.transpose(np.tile(col[..., np.newaxis], (1, 1, 3)),
                                (0, 2, 1))
 
-        self._colFaces = np.ascontiguousarray(col, dtype=np.float32)
-        self._color_buffer.set_data(self._colFaces)
+        self._color_buffer.set_data(vispy_array(col))
         self.update()
 
     def set_alpha(self, alpha, index=None):
@@ -422,23 +400,23 @@ class BrainVisual(Visual):
         """Mesh data."""
         return self._vertfcn.map(self._vertices)[..., 0:-1]
 
-    # ----------- COLOR -----------
-    @property
-    def color(self):
-        """Get the color value."""
-        return self._colFaces
+    # # ----------- COLOR -----------
+    # @property
+    # def color(self):
+    #     """Get the color value."""
+    #     return self._color
 
-    @color.setter
-    @wrap_properties
-    def color(self, value):
-        """Set color value."""
-        n_faces = self._shapes['faces'][0]
-        if isinstance(value, str):
-            value = color2vb(value, length=n_faces, faces_index=True)
-        assert isinstance(value, np.ndarray) and value.ndim == 3
-        assert value.shape[0] == n_faces
-        self._color_buffer.set_data(value.astype(np.float32))
-        self._colFaces = value
+    # @color.setter
+    # @wrap_properties
+    # def color(self, value):
+    #     """Set color value."""
+    #     n_faces = self._shapes['faces'][0]
+    #     if isinstance(value, str):
+    #         value = color2vb(value, length=n_faces, faces_index=True)
+    #     assert isinstance(value, np.ndarray) and value.ndim == 3
+    #     assert value.shape[0] == n_faces
+    #     self._color_buffer.set_data(value.astype(np.float32))
+    #     self._colFaces = value
 
     # ----------- TRANSPARENT -----------
     @property
