@@ -42,7 +42,6 @@ from visbrain.utils.sleep.hypnoprocessing import (transient, sleepstats)
 from visbrain.utils.transform import (vprescale, vprecenter, vpnormalize,
                                       array_to_stt)
 
-mark = pytest.mark.slowtest
 ###############################################################################
 ###############################################################################
 #                                cameras.py
@@ -361,7 +360,7 @@ class TestFiltering(object):
 class TestPopup(object):
     """Test functions in popup.py."""
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_shortcut_popup(self):
         """Test function ShortcutPopup."""
         sh = [('key1', 'Action1'), ('key2', 'Action2')]
@@ -370,7 +369,7 @@ class TestPopup(object):
         pop.set_shortcuts(sh)
         # app.quit()
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_screenshot_popup(self):
         """Test function ScreenshotPopup."""
         def fcn():
@@ -383,7 +382,7 @@ class TestPopup(object):
         sc._fcn_enable_bgcolor()
         # app.quit()
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_help_menu(self):
         """Test function HelpMenu."""
         pass
@@ -418,7 +417,7 @@ class TestGuitools(object):
         textline2color('#ab4642')
         textline2color(None)
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_color2json(self):
         """Test function color2json."""
         app = QtWidgets.QApplication([])
@@ -460,7 +459,7 @@ class TestGuitools(object):
         assert mec._is_modifier(me, 'ctrl')
         assert not mec._is_modifier(me, 'alt')
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_disconnect_all(self):
         """Test function disconnect_all."""
         app = QtWidgets.QApplication([])
@@ -469,7 +468,7 @@ class TestGuitools(object):
         spin.valueChanged.connect(f1)
         disconnect_all(spin)
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_extend_combo_list(self):
         """Test function extend_combo_list."""
         app = QtWidgets.QApplication([])
@@ -479,7 +478,7 @@ class TestGuitools(object):
         extend_combo_list(cbox, 'NewItem', f1)
         assert cbox.itemText(0) == 'NewItem'
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_get_combo_list_index(self):
         """Test function get_combo_list_index."""
         app = QtWidgets.QApplication([])
@@ -488,7 +487,7 @@ class TestGuitools(object):
         extend_combo_list(cbox, 'NewItem2')
         assert get_combo_list_index(cbox, 'NewItem2') == 1
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_safely_set_cbox(self):
         """Test function safely_set_cbox."""
         app = QtWidgets.QApplication([])
@@ -500,7 +499,7 @@ class TestGuitools(object):
         safely_set_cbox(cbox, 1, f1)
         assert int(cbox.currentIndex()) == 1
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_safely_set_spin(self):
         """Test function safely_set_spin."""
         app = QtWidgets.QApplication([])
@@ -510,7 +509,7 @@ class TestGuitools(object):
         safely_set_spin(spin, 2., [f1])
         assert float(spin.value()) == 2.
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_safely_set_slider(self):
         """Test function safely_set_slider."""
         app = QtWidgets.QApplication([])
@@ -520,7 +519,7 @@ class TestGuitools(object):
         safely_set_slider(slider, 2., [f1])
         assert float(slider.value()) == 2.
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_toggle_enable_tab(self):
         """Test function toggle_enable_tab."""
         app = QtWidgets.QApplication([])
@@ -532,13 +531,13 @@ class TestGuitools(object):
         toggle_enable_tab(tab, 'TabName', False)
         assert not tab.isTabEnabled(0)
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_get_screen_size(self):
         """Test function get_screen_size."""
         app = QtWidgets.QApplication([])
         get_screen_size(app)
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Too much app creation => segmentation fault')
     def test_set_widget_size(self):
         """Test function set_widget_size."""
         app = QtWidgets.QApplication([])

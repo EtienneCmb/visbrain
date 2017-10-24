@@ -2,6 +2,7 @@
 import os
 import shutil
 from warnings import warn
+import pytest
 
 from PyQt5 import QtWidgets
 
@@ -54,19 +55,20 @@ class TestColorbar(object):
     ###########################################################################
     #                                 GUI
     ###########################################################################
+    @pytest.mark.skip('Not configured')
     def test_save_config(self):
         """Test function save_config."""
-        warn("Config not tested for the *Colorbar* module")
-        # cb._fcn_saveCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
+        cb._fcn_saveCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
 
+    @pytest.mark.skip('Not configured')
     def test_load_config(self):
         """Test function load_config."""
-        warn("Config not tested for the *Colorbar* module")
-        # cb._fcn_loadCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
+        cb._fcn_loadCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
 
+    @pytest.mark.skip('Not configured')
     def test_screenshot(self):
         """Test function screenshot."""
-        warn("gui_screenshot not tested in Colorbar()")
+        pass
 
     def test_delete_tmp_folder(self):
         """Delete tmp/folder."""

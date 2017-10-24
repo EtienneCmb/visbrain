@@ -1,12 +1,13 @@
 """Test command lines."""
 import os
 import shutil
+import pytest
 from PyQt5 import QtWidgets
 
 from click.testing import CliRunner
 
 from visbrain.io import download_file
-# from visbrain.cli import cli_fig_hyp, cli_sleep_stats, cli_sleep
+from visbrain.cli import cli_fig_hyp, cli_sleep_stats, cli_sleep
 
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -15,7 +16,7 @@ path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 
 def path_to_edf(name):
     """Get path to the edf file."""
-    return os.path.join(path_to_tmp, name)
+    return os.path.jocli_fig_hypin(path_to_tmp, name)
 
 
 class TestCli(object):
@@ -40,42 +41,42 @@ class TestCli(object):
     ###########################################################################
     #                           HYPNO -> FIG
     ###########################################################################
+    @pytest.mark.skip('Segmentation fault')
     def test_cli_fig_hyp(self):
         """Test function cli_fig_hyp."""
-        pass
-        # import matplotlib
-        # matplotlib.use('agg')
-        # runner = CliRunner()
-        # hypno = self._path_to_tmp('Hypnogram_excerpt2.txt')
-        # # Run without output :
-        # r1 = runner.invoke(cli_fig_hyp, ['-h', hypno, '-g', True, '-c', True,
-        #                    '--dpi', 100])
-        # # Run with output :
-        # out = self._path_to_tmp('hypno.png')
-        # r2 = runner.invoke(cli_fig_hyp, ['-h', hypno, '-g', True, '-c', True,
-        #                    '-o', out, '--dpi', 100])
-        # print('Result 1 :', r1.output)
-        # print('Result 2 :', r2.output)
+        import matplotlib
+        matplotlib.use('agg')
+        runner = CliRunner()
+        hypno = self._path_to_tmp('Hypnogram_excerpt2.txt')
+        # Run without output :
+        r1 = runner.invoke(cli_fig_hyp, ['-h', hypno, '-g', True, '-c', True,
+                           '--dpi', 100])
+        # Run with output :
+        out = self._path_to_tmp('hypno.png')
+        r2 = runner.invoke(cli_fig_hyp, ['-h', hypno, '-g', True, '-c', True,
+                           '-o', out, '--dpi', 100])
+        print('Result 1 :', r1.output)
+        print('Result 2 :', r2.output)
 
+    @pytest.mark.skip('Segmentation fault')    
     def test_cli_sleep_stats(self):
         """Test function cli_sleep_stats."""
-        pass
-        # runner = CliRunner()
-        # hypno = self._path_to_tmp('Hypnogram_excerpt2.txt')
-        # out = self._path_to_tmp('hypno.csv')
-        # r1 = runner.invoke(cli_sleep_stats, ['-h', hypno, '-o', out])
-        # print('Result : \n', r1.output)
+        runner = CliRunner()
+        hypno = self._path_to_tmp('Hypnogram_excerpt2.txt')
+        out = self._path_to_tmp('hypno.csv')
+        r1 = runner.invoke(cli_sleep_stats, ['-h', hypno, '-o', out])
+        print('Result : \n', r1.output)
 
+    @pytest.mark.skip('Segmentation fault')    
     def test_cli_sleep(self):
         """Test function cli_sleep."""
-        pass
-        # runner = CliRunner()
-        # data = self._path_to_tmp('excerpt2.edf')
-        # hypno = self._path_to_tmp('Hypnogram_excerpt2.txt')
-        # app = QtWidgets.QApplication([])
-        # runner.invoke(cli_sleep, ['-d', data, '-h', hypno, '--show', False])
-        # app.quit()
-        # del app
+        runner = CliRunner()
+        data = self._path_to_tmp('excerpt2.edf')
+        hypno = self._path_to_tmp('Hypnogram_excerpt2.txt')
+        app = QtWidgets.QApplication([])
+        runner.invoke(cli_sleep, ['-d', data, '-h', hypno, '--show', False])
+        app.quit()
+        del app
 
     def test_delete_tmp_folder(self):
         """Delete tmp/folder."""

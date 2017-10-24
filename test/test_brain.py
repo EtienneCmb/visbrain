@@ -325,12 +325,12 @@ class TestBrain(object):
         except:
             warn("Screenshot failed for region and factor")
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Not configured')
     def test_save_config(self):
         """Test method save_config."""
         vb.save_config(self._path_to_tmp('config.txt'))
 
-    @pytest.mark.skip
+    @pytest.mark.skip('Not configured')
     def test_load_config(self):
         """Test method load_config."""
         vb.load_config(self._path_to_tmp('config.txt'))
