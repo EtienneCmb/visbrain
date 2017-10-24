@@ -185,7 +185,7 @@ class BrainVisual(Visual):
         def_3 = np.zeros((0, 3), dtype=np.float32)
         def_4 = np.zeros((0, 4), dtype=np.float32)
         self._vert_buffer = gloo.VertexBuffer(def_3)
-        self._faces_buffer = gloo.IndexBuffer()
+        self._index_buffer = gloo.IndexBuffer()
         self._color_buffer = gloo.VertexBuffer(def_4)
         self._normals_buffer = gloo.VertexBuffer(def_3)
 
@@ -268,16 +268,16 @@ class BrainVisual(Visual):
                     inf = vertices[:, 0] >= vertices[:, 0].mean()
                 else:
                     inf = ~lr_index
-            inf = inf[faces[:, 0]]
-            normals = normals[inf, ...]
-            faces = faces[inf, ...]
+            # inf = inf[faces[:, 0]]
+            # normals = normals[inf, ...]
+            # faces = faces[inf, ...]
 
         # ____________________ ASSIGN ____________________
-        color = np.ones((faces.shape[0], 3, 4), dtype=np.float32)
+        color = np.ones((vertices.shape[0], 4), dtype=np.float32)
 
         # ____________________ BUFFERS ____________________
-        self._vert_buffer.set_data(vertices[faces], convert=True)
-        self._faces_buffer.set_data(faces, convert=True)
+        self._vert_buffer.set_data(vertices, convert=True)
+        self._index_buffer.set_data(faces, convert=True)
         self._normals_buffer.set_data(normals, convert=True)
         self._color_buffer.set_data(color, convert=True)
         self.update()
@@ -311,11 +311,6 @@ class BrainVisual(Visual):
             col = vispy_array(data)
         else:
             col = data
-
-        # Adapt for faces :
-        if col.ndim != 3:
-            col = np.transpose(np.tile(col[..., np.newaxis], (1, 1, 3)),
-                               (0, 2, 1))
 
         self._color_buffer.set_data(vispy_array(col))
         self.update()
@@ -360,7 +355,7 @@ class BrainVisual(Visual):
         """
         # Delete vertices / faces / colors / normals :
         self._vert_buffer.delete()
-        self._faces_buffer.delete()
+        self._index_buffer.delete()
         self._color_buffer.delete()
         self._normals_buffer.delete()
 

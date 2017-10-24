@@ -98,8 +98,7 @@ class Projections(object):
             color[idxcol, ...] = self._proj_mask_color
 
         # ============= MESH =============
-        obj = self._proj_obj[self._proj_on].mesh
-        obj.set_color(data=color[obj._faces])
+        self._proj_obj[self._proj_on].mesh.set_color(data=color)
 
     def _clean_source_projection(self):
         """Clean projection variables."""
