@@ -173,6 +173,7 @@ class BrainVisual(Visual):
         self._camera_transform = vist.NullTransform()
         self._translucent = True
         self._alpha = alpha
+        self._hemisphere = hemisphere
 
         # Initialize the vispy.Visual class with the vertex / fragment buffer :
         Visual.__init__(self, vcode=VERT_SHADER, fcode=FRAG_SHADER)
@@ -185,7 +186,7 @@ class BrainVisual(Visual):
         def_3 = np.zeros((0, 3), dtype=np.float32)
         def_4 = np.zeros((0, 4), dtype=np.float32)
         self._vert_buffer = gloo.VertexBuffer(def_3)
-        self._faces_buffer = gloo.IndexBuffer()
+        self._index_buffer = gloo.IndexBuffer()
         self._color_buffer = gloo.VertexBuffer(def_4)
         self._normals_buffer = gloo.VertexBuffer(def_3)
 
@@ -255,32 +256,18 @@ class BrainVisual(Visual):
         self._camratio = (v_max - v_min).astype(float)
 
         # ____________________ HEMISPHERE ____________________
-        # Load only left/ritgh hemisphere :
-        if hemisphere in ['left', 'right']:
-            # Find index to keep only left or right hemisphere :
-            if hemisphere == 'left':
-                if lr_index is None:
-                    inf = vertices[:, 0] <= vertices[:, 0].mean()
-                else:
-                    inf = lr_index
-            if hemisphere == 'right':
-                if lr_index is None:
-                    inf = vertices[:, 0] >= vertices[:, 0].mean()
-                else:
-                    inf = ~lr_index
-            inf = inf[faces[:, 0]]
-            normals = normals[inf, ...]
-            faces = faces[inf, ...]
+        if lr_index is None or len(lr_index) != vertices.shape[0]:
+            lr_index = vertices[:, 0] <= vertices[:, 0].mean()
+        self._lr_index = lr_index[faces[:, 0]]
 
         # ____________________ ASSIGN ____________________
-        color = np.ones((faces.shape[0], 3, 4), dtype=np.float32)
+        color = np.ones((vertices.shape[0], 4), dtype=np.float32)
 
         # ____________________ BUFFERS ____________________
-        self._vert_buffer.set_data(vertices[faces], convert=True)
-        self._faces_buffer.set_data(faces, convert=True)
+        self._vert_buffer.set_data(vertices, convert=True)
         self._normals_buffer.set_data(normals, convert=True)
         self._color_buffer.set_data(color, convert=True)
-        self.update()
+        self.hemisphere = hemisphere
 
     def set_color(self, data=None, color='white', alpha=1.0, **kwargs):
         """Set specific colors on the brain.
@@ -311,11 +298,6 @@ class BrainVisual(Visual):
             col = vispy_array(data)
         else:
             col = data
-
-        # Adapt for faces :
-        if col.ndim != 3:
-            col = np.transpose(np.tile(col[..., np.newaxis], (1, 1, 3)),
-                               (0, 2, 1))
 
         self._color_buffer.set_data(vispy_array(col))
         self.update()
@@ -360,7 +342,7 @@ class BrainVisual(Visual):
         """
         # Delete vertices / faces / colors / normals :
         self._vert_buffer.delete()
-        self._faces_buffer.delete()
+        self._index_buffer.delete()
         self._color_buffer.delete()
         self._normals_buffer.delete()
 
@@ -399,6 +381,26 @@ class BrainVisual(Visual):
     def get_vertices(self):
         """Mesh data."""
         return self._vertfcn.map(self._vertices)[..., 0:-1]
+
+    # ----------- HEMISPHERE -----------
+    @property
+    def hemisphere(self):
+        """Get the hemisphere value."""
+        return self._hemisphere
+
+    @hemisphere.setter
+    def hemisphere(self, value):
+        """Set hemisphere value."""
+        assert value in ['left', 'both', 'right']
+        if value == 'both':
+            index = self._faces
+        elif value == 'left':
+            index = self._faces[self._lr_index, :]
+        elif value == 'right':
+            index = self._faces[~self._lr_index, :]
+        self._index_buffer.set_data(index)
+        self.update()
+        self._hemisphere = value
 
     # # ----------- COLOR -----------
     # @property

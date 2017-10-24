@@ -124,7 +124,7 @@ def download_file(name, filename=None, to_path=None, unzip=False,
     return path_to_file
 
 
-def path_to_visbrain_data(folder=None, file=None):
+def path_to_visbrain_data(file=None, folder=None):
     """Get the path to the visbrain_data folder.
 
     Parameters
