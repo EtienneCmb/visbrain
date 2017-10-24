@@ -104,7 +104,7 @@ def download_file(name, filename=None, to_path=None, unzip=False,
         logger.info('Downloading %s' % path_to_file)
         # Check if directory exists else creates it
         if not os.path.exists(to_path):
-            logger.info('Foler %s created' % to_path)
+            logger.info('Folder %s created' % to_path)
             os.makedirs(to_path)
         # Download file :
         fh, _ = request.urlretrieve(url, path_to_file, reporthook=reporthook)
@@ -124,7 +124,7 @@ def download_file(name, filename=None, to_path=None, unzip=False,
     return path_to_file
 
 
-def path_to_visbrain_data(file=None):
+def path_to_visbrain_data(folder=None, file=None):
     """Get the path to the visbrain_data folder.
 
     Parameters
@@ -139,9 +139,6 @@ def path_to_visbrain_data(file=None):
         Path to the file or to the visbrain_data.
     """
     vb_path = os.path.expanduser('~')
-    if file is not None:
-        path = os.path.join(*(vb_path, 'visbrain_data', file))
-        assert os.path.isfile(path)
-    else:
-        path = os.path.join(*(vb_path, 'visbrain_data'))
-    return path
+    folder = '' if not isinstance(folder, str) else folder
+    file = '' if not isinstance(file, str) else file
+    return os.path.join(*(vb_path, 'visbrain_data', folder, file))

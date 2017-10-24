@@ -100,13 +100,13 @@ def vispy_array(data, dtype=np.float32):
     return data
 
 
-def convert_meshdata(vertices=None, faces=None, normals=None, meshdata=None,
+def convert_meshdata(vertices, faces=None, normals=None, meshdata=None,
                      invert_normals=False, transform=None):
     """Convert mesh data to be compatible with visbrain.
 
     Parameters
     ----------
-    vertices : array_like | None
+    vertices : array_like
         Vertices of the template of shape (N, 3) or (N, 3, 3) if indexed by
         faces.
     faces : array_like | None
@@ -123,15 +123,16 @@ def convert_meshdata(vertices=None, faces=None, normals=None, meshdata=None,
     Returns
     -------
     vertices : array_like
-        Vertices of shape (N, 3, 3)
+        Vertices of shape (N, 3)
     faces : array_like
         Faces of the template of shape (M, 3)
     normals : array_like
-        The normals of the template, with the same shape as vertices.
+        The normals of shape (M, 3, 3).
     """
+    assert vertices.ndim == 2
     # Priority to meshdata :
     if meshdata is not None:
-        vertices = meshdata.get_vertices(indexed='faces')
+        vertices = meshdata.get_vertices()
         faces = meshdata.get_faces()
         normals = meshdata.get_vertex_normals(indexed='faces')
     else:
@@ -139,11 +140,9 @@ def convert_meshdata(vertices=None, faces=None, normals=None, meshdata=None,
         if faces.min() != 0:
             faces -= faces.min()
         # Get normals if None :
-        if (normals is None) or (vertices.ndim == 2):
+        if (normals is None) or (normals.ndim == 2):
             md = MeshData(vertices=vertices, faces=faces)
             normals = md.get_vertex_normals(indexed='faces')
-            if vertices.ndim == 2:
-                vertices = md.get_vertices(indexed='faces')
 
     # Invert normals :
     norm_coef = -1. if invert_normals else 1.
