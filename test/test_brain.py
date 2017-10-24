@@ -23,7 +23,7 @@ path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 download_file('xyz_sample.npz', to_path=path_to_tmp)
 mat = np.load(os.path.join(path_to_tmp, 'xyz_sample.npz'))
 xyz_full = mat['xyz']
-mat.closed()
+mat.close()
 xyz_1, xyz_2 = xyz_full[20:30, :], xyz_full[10:20, :]
 
 
