@@ -3,10 +3,14 @@
 Make the bridge between GUI and deep functions. Add some usefull
 commands for the user
 """
-from PyQt5 import QtCore
 import numpy as np
+import logging
+from PyQt5 import QtCore
 
 from ....utils import mpl_cmap, mpl_cmap_index
+
+
+logger = logging.getLogger('visbrain')
 
 
 class UiAtlas(object):
@@ -126,7 +130,10 @@ class UiAtlas(object):
         # _____________________ TEMPLATE _____________________
         template = str(self._brain_template.currentText())
         hemisphere = str(self._brain_hemi.currentText())
+        logger.info(("Loading %s hemisphere of %s brain "
+                     "template") % (hemisphere, template))
         self.atlas.set_data(name=template, hemisphere=hemisphere)
+        self.atlas.rotate('top')
 
     def _fcn_brain_translucent(self):
         """Use translucent or opaque brain."""
