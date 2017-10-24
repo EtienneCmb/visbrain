@@ -134,6 +134,7 @@ def convert_meshdata(vertices=None, faces=None, normals=None, meshdata=None,
         vertices = meshdata.get_vertices()
         faces = meshdata.get_faces()
         normals = meshdata.get_vertex_normals(indexed='faces')
+        logger.debug('Indexed faces normals converted // extracted')
     else:
         # Check if faces index start at zero (Matlab like):
         if faces.min() != 0:
@@ -142,6 +143,7 @@ def convert_meshdata(vertices=None, faces=None, normals=None, meshdata=None,
         if (normals is None) or (normals.ndim == 2):
             md = MeshData(vertices=vertices, faces=faces)
             normals = md.get_vertex_normals(indexed='faces')
+            logger.debug('Indexed faces normals converted // extracted')
     assert vertices.ndim == 2
 
     # Invert normals :
