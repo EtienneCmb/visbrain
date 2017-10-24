@@ -59,6 +59,7 @@ class BrainObj(VisbrainObject):
         # Init Visbrain object base class :
         VisbrainObject.__init__(self, name, parent, transform)
         # Load brain template :
+        self._scale = 1.
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere)
         self.translucent = translucent
 
@@ -195,9 +196,9 @@ class BrainObj(VisbrainObject):
         if isinstance(elevation, (int, float)):
             self.mesh._camera.elevation = elevation
         if isinstance(scale_factor, (int, float)):
-            self.mesh._camera.scale_factor = margin * scale_factor
+            self.mesh._camera.scale_factor = margin * scale_factor * self.scale
         if isinstance(distance, (int, float)):
-            self.mesh._camera.distance = distance
+            self.mesh._camera.distance = distance * self.scale
         if (center is not None) and len(center) == 3:
             self.mesh._camera.center = center
         self.mesh._camera.update()
@@ -285,3 +286,15 @@ class BrainObj(VisbrainObject):
     def vertices(self):
         """Get the vertices value."""
         return self.mesh._vertices
+
+    # ----------- SCALE -----------
+    @property
+    def scale(self):
+        """Get the scale value."""
+        return self._scale
+
+    @scale.setter
+    def scale(self, value):
+        """Set scale value."""
+        self._scale = value
+        self.mesh._camera.center = self.mesh._center * value

@@ -73,6 +73,7 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         PyQtModule.__init__(self, verbose=verbose, to_describe='_vbNode',
                             icon='brain_icon.svg')
         self._userobj = {}
+        self._gl_scale = 800.  # fix appearance for small meshes
 
         # ====================== App creation ======================
         UiInit.__init__(self, bgcolor)  # GUI creation + canvas

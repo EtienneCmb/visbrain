@@ -33,6 +33,7 @@ class BaseVisual(Projections):
                                   hemisphere=hemisphere)
         else:
             self.atlas = kwargs['brain_obj']
+        self.atlas.scale = self._gl_scale
 
         # Projection arguments :
         pj = dict(cmap=kwargs.get('project_cmap', 'inferno'),
@@ -80,7 +81,7 @@ class BaseVisual(Projections):
 
         # Create a root node :
         self._vbNode = scene.Node(name='*Brain*')
-        # self._vbNode.transform = vist.STTransform(scale=(800., 800., 800.))
+        self._vbNode.transform = vist.STTransform(scale=[self._gl_scale] * 3)
         logging.debug("OpenGL bug with 3-D elements < (1., 1., 1.). To solve "
                       "this issue, add a scaling but need to update the camera"
                       " center.")
