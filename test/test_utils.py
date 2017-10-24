@@ -2,8 +2,8 @@
 import numpy as np
 from itertools import product
 from PyQt5 import QtWidgets, QtCore
-from warnings import warn
 import math
+import pytest
 
 from visbrain.utils.cameras import FixedCam
 from visbrain.utils.color import (color2vb, array2colormap, dynamic_color,
@@ -42,7 +42,7 @@ from visbrain.utils.sleep.hypnoprocessing import (transient, sleepstats)
 from visbrain.utils.transform import (vprescale, vprecenter, vpnormalize,
                                       array_to_stt)
 
-
+mark = pytest.mark.slowtest
 ###############################################################################
 ###############################################################################
 #                                cameras.py
@@ -358,32 +358,35 @@ class TestFiltering(object):
 ###############################################################################
 
 
-# class TestPopup(object):
-#     """Test functions in popup.py."""
+class TestPopup(object):
+    """Test functions in popup.py."""
 
-#     def test_shortcut_popup(self):
-#         """Test function ShortcutPopup."""
-#         sh = [('key1', 'Action1'), ('key2', 'Action2')]
-#         app = QtWidgets.QApplication([])
-#         pop = ShortcutPopup()
-#         pop.set_shortcuts(sh)
-#         # app.quit()
+    @pytest.mark.skip
+    def test_shortcut_popup(self):
+        """Test function ShortcutPopup."""
+        sh = [('key1', 'Action1'), ('key2', 'Action2')]
+        app = QtWidgets.QApplication([])
+        pop = ShortcutPopup()
+        pop.set_shortcuts(sh)
+        # app.quit()
 
-#     def test_screenshot_popup(self):
-#         """Test function ScreenshotPopup."""
-#         def fcn():
-#             pass
-#         app = QtWidgets.QApplication([])
-#         sc = ScreenshotPopup(fcn)
-#         sc._fcn_select_render()
-#         sc._fcn_resolution()
-#         sc.to_kwargs()
-#         sc._fcn_enable_bgcolor()
-#         # app.quit()
+    @pytest.mark.skip
+    def test_screenshot_popup(self):
+        """Test function ScreenshotPopup."""
+        def fcn():
+            pass
+        app = QtWidgets.QApplication([])
+        sc = ScreenshotPopup(fcn)
+        sc._fcn_select_render()
+        sc._fcn_resolution()
+        sc.to_kwargs()
+        sc._fcn_enable_bgcolor()
+        # app.quit()
 
-#     def test_help_menu(self):
-#         """Test function HelpMenu."""
-#         warn('No test for TestPopup::test_help_menu')
+    @pytest.mark.skip
+    def test_help_menu(self):
+        """Test function HelpMenu."""
+        pass
 
 
 ###############################################################################
@@ -415,12 +418,13 @@ class TestGuitools(object):
         textline2color('#ab4642')
         textline2color(None)
 
-    # def test_color2json(self):
-    #     """Test function color2json."""
-    #     app = QtWidgets.QApplication([])
-    #     line = QtWidgets.QLineEdit()
-    #     line.setText('green')
-    #     color2json(line)
+    @pytest.mark.skip
+    def test_color2json(self):
+        """Test function color2json."""
+        app = QtWidgets.QApplication([])
+        line = QtWidgets.QLineEdit()
+        line.setText('green')
+        color2json(line)
 
     def test_ndsubplot(self):
         """Test function ndsubplot."""
@@ -456,81 +460,90 @@ class TestGuitools(object):
         assert mec._is_modifier(me, 'ctrl')
         assert not mec._is_modifier(me, 'alt')
 
-    # def test_disconnect_all(self):
-    #     """Test function disconnect_all."""
-    #     app = QtWidgets.QApplication([])
-    #     f1 = self._get_connect_function()
-    #     spin = QtWidgets.QDoubleSpinBox()
-    #     spin.valueChanged.connect(f1)
-    #     disconnect_all(spin)
+    @pytest.mark.skip
+    def test_disconnect_all(self):
+        """Test function disconnect_all."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        spin = QtWidgets.QDoubleSpinBox()
+        spin.valueChanged.connect(f1)
+        disconnect_all(spin)
 
-    # def test_extend_combo_list(self):
-    #     """Test function extend_combo_list."""
-    #     app = QtWidgets.QApplication([])
-    #     f1 = self._get_connect_function()
-    #     cbox = QtWidgets.QComboBox()
-    #     cbox.currentIndexChanged.connect(f1)
-    #     extend_combo_list(cbox, 'NewItem', f1)
-    #     assert cbox.itemText(0) == 'NewItem'
+    @pytest.mark.skip
+    def test_extend_combo_list(self):
+        """Test function extend_combo_list."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        cbox = QtWidgets.QComboBox()
+        cbox.currentIndexChanged.connect(f1)
+        extend_combo_list(cbox, 'NewItem', f1)
+        assert cbox.itemText(0) == 'NewItem'
 
-    # def test_get_combo_list_index(self):
-    #     """Test function get_combo_list_index."""
-    #     app = QtWidgets.QApplication([])
-    #     cbox = QtWidgets.QComboBox()
-    #     extend_combo_list(cbox, 'NewItem1')
-    #     extend_combo_list(cbox, 'NewItem2')
-    #     assert get_combo_list_index(cbox, 'NewItem2') == 1
+    @pytest.mark.skip
+    def test_get_combo_list_index(self):
+        """Test function get_combo_list_index."""
+        app = QtWidgets.QApplication([])
+        cbox = QtWidgets.QComboBox()
+        extend_combo_list(cbox, 'NewItem1')
+        extend_combo_list(cbox, 'NewItem2')
+        assert get_combo_list_index(cbox, 'NewItem2') == 1
 
-    # def test_safely_set_cbox(self):
-    #     """Test function safely_set_cbox."""
-    #     app = QtWidgets.QApplication([])
-    #     f1 = self._get_connect_function()
-    #     cbox = QtWidgets.QComboBox()
-    #     cbox.currentIndexChanged.connect(f1)
-    #     extend_combo_list(cbox, 'NewItem1', f1)
-    #     extend_combo_list(cbox, 'NewItem2', f1)
-    #     safely_set_cbox(cbox, 1, f1)
-    #     assert int(cbox.currentIndex()) == 1
+    @pytest.mark.skip
+    def test_safely_set_cbox(self):
+        """Test function safely_set_cbox."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        cbox = QtWidgets.QComboBox()
+        cbox.currentIndexChanged.connect(f1)
+        extend_combo_list(cbox, 'NewItem1', f1)
+        extend_combo_list(cbox, 'NewItem2', f1)
+        safely_set_cbox(cbox, 1, f1)
+        assert int(cbox.currentIndex()) == 1
 
-    # def test_safely_set_spin(self):
-    #     """Test function safely_set_spin."""
-    #     app = QtWidgets.QApplication([])
-    #     f1 = self._get_connect_function()
-    #     spin = QtWidgets.QDoubleSpinBox()
-    #     spin.valueChanged.connect(f1)
-    #     safely_set_spin(spin, 2., [f1])
-    #     assert float(spin.value()) == 2.
+    @pytest.mark.skip
+    def test_safely_set_spin(self):
+        """Test function safely_set_spin."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        spin = QtWidgets.QDoubleSpinBox()
+        spin.valueChanged.connect(f1)
+        safely_set_spin(spin, 2., [f1])
+        assert float(spin.value()) == 2.
 
-    # def test_safely_set_slider(self):
-    #     """Test function safely_set_slider."""
-    #     app = QtWidgets.QApplication([])
-    #     f1 = self._get_connect_function()
-    #     slider = QtWidgets.QSlider()
-    #     slider.valueChanged.connect(f1)
-    #     safely_set_slider(slider, 2., [f1])
-    #     assert float(slider.value()) == 2.
+    @pytest.mark.skip
+    def test_safely_set_slider(self):
+        """Test function safely_set_slider."""
+        app = QtWidgets.QApplication([])
+        f1 = self._get_connect_function()
+        slider = QtWidgets.QSlider()
+        slider.valueChanged.connect(f1)
+        safely_set_slider(slider, 2., [f1])
+        assert float(slider.value()) == 2.
 
-    # def test_toggle_enable_tab(self):
-    #     """Test function toggle_enable_tab."""
-    #     app = QtWidgets.QApplication([])
-    #     _translate = QtCore.QCoreApplication.translate
-    #     tab = QtWidgets.QTabWidget()
-    #     tab_2 = QtWidgets.QWidget()
-    #     tab.addTab(tab_2, "")
-    #     tab.setTabText(tab.indexOf(tab_2), _translate("MainWindow", "TabName"))
-    #     toggle_enable_tab(tab, 'TabName', False)
-    #     assert not tab.isTabEnabled(0)
+    @pytest.mark.skip
+    def test_toggle_enable_tab(self):
+        """Test function toggle_enable_tab."""
+        app = QtWidgets.QApplication([])
+        _translate = QtCore.QCoreApplication.translate
+        tab = QtWidgets.QTabWidget()
+        tab_2 = QtWidgets.QWidget()
+        tab.addTab(tab_2, "")
+        tab.setTabText(tab.indexOf(tab_2), _translate("MainWindow", "TabName"))
+        toggle_enable_tab(tab, 'TabName', False)
+        assert not tab.isTabEnabled(0)
 
-    # def test_get_screen_size(self):
-    #     """Test function get_screen_size."""
-    #     app = QtWidgets.QApplication([])
-    #     get_screen_size(app)
+    @pytest.mark.skip
+    def test_get_screen_size(self):
+        """Test function get_screen_size."""
+        app = QtWidgets.QApplication([])
+        get_screen_size(app)
 
-    # def test_set_widget_size(self):
-    #     """Test function set_widget_size."""
-    #     app = QtWidgets.QApplication([])
-    #     w = QtWidgets.QWidget()
-    #     set_widget_size(app, w)
+    @pytest.mark.skip
+    def test_set_widget_size(self):
+        """Test function set_widget_size."""
+        app = QtWidgets.QApplication([])
+        w = QtWidgets.QWidget()
+        set_widget_size(app, w)
 
 
 ###############################################################################

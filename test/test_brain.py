@@ -2,6 +2,7 @@
 import os
 import shutil
 from PyQt5 import QtWidgets
+import pytest
 from warnings import warn
 
 import numpy as np
@@ -121,9 +122,10 @@ class TestBrain(object):
     ###########################################################################
     #                                 VOLUME
     ###########################################################################
+    @pytest.mark.skip
     def test_add_volume(self):
         """Test method add_volume."""
-        warn('add_volume() not tested')
+        pass
 
     def test_volume_list(self):
         """Test method volume_list."""
@@ -292,6 +294,7 @@ class TestBrain(object):
         vb.background_color('#ab4642')
         vb.background_color((.1, .1, .1))
 
+    @pytest.mark.slow
     def test_screenshot(self):
         """Test method screenshot."""
         # On travis, test failed fo jpg figures only.
@@ -322,15 +325,15 @@ class TestBrain(object):
         except:
             warn("Screenshot failed for region and factor")
 
+    @pytest.mark.skip
     def test_save_config(self):
         """Test method save_config."""
-        warn("Config not tested for *Brain*")
-        # vb.save_config(self._path_to_tmp('config.txt'))
+        vb.save_config(self._path_to_tmp('config.txt'))
 
+    @pytest.mark.skip
     def test_load_config(self):
         """Test method load_config."""
-        warn("Config not tested for *Brain*")
-        # vb.load_config(self._path_to_tmp('config.txt'))
+        vb.load_config(self._path_to_tmp('config.txt'))
 
     ###########################################################################
     #                                  UI_FILES
