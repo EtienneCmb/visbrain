@@ -22,7 +22,10 @@ install:
   # Install dependencies :
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
   - source activate testenv
-  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate codecov pytest pytest-cov pandas
+  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pandas
+
+  # Install testing librairies :
+  - pip install codecov pytest pytest-cov pytest-html
   # ------------------- VISPY -------------------
   - cd ../
   # Install the developper version of VisPy :
@@ -34,7 +37,7 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
-script: py.test --cov --verbose
+script: py.test --cov --verbose --cov-report=html --html=report.html
 cache:
   apt: true
 notifications:
