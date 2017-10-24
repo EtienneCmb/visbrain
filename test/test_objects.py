@@ -538,7 +538,6 @@ class TestBrainObj(ObjectMethods):
             b_obj.set_data(k)
         # Test custom (vertices, faces) :
         b_obj.set_data(name='UserBrain', vertices=vertices, faces=faces)
-        b_obj.set_data(name='UserBrain', vertices=vertices_x3, faces=faces)
 
     def test_preview(self):
         """Test function preview."""
