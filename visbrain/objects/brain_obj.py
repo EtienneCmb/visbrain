@@ -25,7 +25,7 @@ class BrainObj(VisbrainObject):
         and faces must be defined.
     vertices : array_like | None
         Mesh vertices to use for the brain. Must be an array of shape
-        (n_vertices, 3) or (n_vertices, 3, 3) if index faced.
+        (n_vertices, 3).
     faces : array_like | None
         Mesh faces of shape (n_faces, 3).
     normals : array_like | None
@@ -78,7 +78,7 @@ class BrainObj(VisbrainObject):
         # _______________________ CHECKING _______________________
         assert all([isinstance(k, np.ndarray) for k in (vertices, faces)])
         if normals is not None:  # vertex normals
-            assert normals.shape == vertices.shape
+            assert isinstance(normals, np.ndarray)
         assert (lr_index is None) or isinstance(lr_index, np.ndarray)
         assert hemisphere in ['both', 'left', 'right']
 
@@ -168,9 +168,8 @@ class BrainObj(VisbrainObject):
 
     def _optimal_camera_properties(self, with_distance=True):
         """Get the optimal camera properties."""
-        logger.debug("Wrong center and scale_factor (brain_obj.py)")
         center = self.mesh._center
-        sc = 1.08 * (self.mesh._vertices.max() - self.mesh._vertices.min())
+        sc = 1.08 * self.mesh._camratio[-1]
         prop = {'center': center, 'scale_factor': sc, 'azimuth': 0.,
                 'elevation': 90, 'distance': 4 * sc}
         if with_distance:
@@ -190,6 +189,7 @@ class BrainObj(VisbrainObject):
     def set_state(self, azimuth=None, elevation=None, scale_factor=None,
                   distance=None, center=None, margin=1.08):
         """Set the camera state."""
+        distance = scale_factor * 4.
         if isinstance(azimuth, (int, float)):
             self.mesh._camera.azimuth = azimuth
         if isinstance(elevation, (int, float)):
@@ -223,22 +223,22 @@ class BrainObj(VisbrainObject):
         scale_factor = None
         if fixed in ['sagittal_0', 'left']:     # left
             azimuth, elevation = -90, 0
-            scale_factor = self.mesh._camratio[0]
+            scale_factor = self.mesh._camratio[-1]
         elif fixed in ['sagittal_1', 'right']:  # right
             azimuth, elevation = 90, 0
-            scale_factor = self.mesh._camratio[0]
+            scale_factor = self.mesh._camratio[-1]
         elif fixed in ['coronal_0', 'front']:   # front
             azimuth, elevation = 180, 0
-            scale_factor = self.mesh._camratio[1]
+            scale_factor = self.mesh._camratio[-1]
         elif fixed in ['coronal_1', 'back']:    # back
             azimuth, elevation = 0, 0
-            scale_factor = self.mesh._camratio[1]
+            scale_factor = self.mesh._camratio[-1]
         elif fixed in ['axial_0', 'top']:       # top
             azimuth, elevation = 0, 90
-            scale_factor = self.mesh._camratio[2]
+            scale_factor = self.mesh._camratio[1]
         elif fixed in ['axial_1', 'bottom']:    # bottom
             azimuth, elevation = 0, -90
-            scale_factor = self.mesh._camratio[2]
+            scale_factor = self.mesh._camratio[1]
 
         if isinstance(custom, (tuple, list)) and (len(custom) == 2):
             azimuth, elevation = tuple(custom)
