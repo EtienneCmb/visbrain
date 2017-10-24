@@ -31,14 +31,18 @@ class UiAtlas(object):
         self._brain_grp.clicked.connect(self._fcn_brain_visible)
         # Template :
         all_templates = self.atlas._get_all_available_templates()
-        if self.atlas.name in all_templates:
+        enable_template = self.atlas.name in all_templates
+        if enable_template:
             self._brain_template.addItems(all_templates)
             idx = all_templates.index(self.atlas.name)
             self._brain_template.setCurrentIndex(idx)
             self._brain_template.currentIndexChanged.connect(
                 self._fcn_brain_template)
-        # Hemisphere :
-        self._brain_hemi.currentIndexChanged.connect(self._fcn_brain_template)
+            # Hemisphere :
+            self._brain_hemi.currentIndexChanged.connect(
+                self._fcn_brain_template)
+        self._brain_template.setEnabled(enable_template)
+        self._brain_hemi.setEnabled(enable_template)
         # Translucent :
         self._brain_translucent.setChecked(self.atlas.translucent)
         self._brain_translucent.clicked.connect(self._fcn_brain_translucent)
