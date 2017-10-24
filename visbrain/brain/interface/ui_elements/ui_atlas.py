@@ -39,8 +39,10 @@ class UiAtlas(object):
             self._brain_template.currentIndexChanged.connect(
                 self._fcn_brain_template)
             # Hemisphere :
+            idx = ['both', 'left', 'right'].index(self.atlas.mesh.hemisphere)
+            self._brain_hemi.setCurrentIndex(idx)
             self._brain_hemi.currentIndexChanged.connect(
-                self._fcn_brain_template)
+                self._fcn_brain_hemisphere)
         self._brain_template.setEnabled(enable_template)
         self._brain_hemi.setEnabled(enable_template)
         # Translucent :
@@ -140,6 +142,10 @@ class UiAtlas(object):
         self.atlas.set_data(name=template, hemisphere=hemisphere)
         self.atlas.rotate('top')
         self.atlas.scale = self._gl_scale
+
+    def _fcn_brain_hemisphere(self):
+        """Change the hemisphere."""
+        self.atlas.mesh.hemisphere = str(self._brain_hemi.currentText())
 
     def _fcn_brain_translucent(self):
         """Use translucent or opaque brain."""
