@@ -4,7 +4,7 @@ import numpy as np
 
 from .ui_objects import _run_method_if_needed
 from ....utils import (textline2color, safely_set_cbox, fill_pyqt_table,
-                       toggle_enable_tab)
+                       color2tuple)
 from ....io import dialog_color
 
 
@@ -50,7 +50,7 @@ class UiSources(object):
         self._s_proj_radius.setValue(self._proj_radius)
         self._s_proj_contribute.setChecked(self._proj_contribute)
         safely_set_cbox(self._s_proj_type, self._proj_type)
-        self._s_proj_mask_color.setText(str(self._proj_mask_color))
+        self._s_proj_mask_color.setText(str(color2tuple(self._proj_mask_color)))
         self._s_proj_mask_color_p.clicked.connect(self._fcn_mask_color_p)
         self._s_proj_apply.clicked.connect(self._fcn_source_proj)
 
