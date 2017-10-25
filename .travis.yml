@@ -26,18 +26,14 @@ install:
 
   # Install testing librairies :
   - pip install codecov pytest pytest-cov pytest-html
-  # ------------------- VISPY -------------------
-  - cd ../
-  # Install the developper version of VisPy :
-  - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
-  - cd visbrain/
+
   # ------------------- VISBRAIN -------------------
   - pip install -e .
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
-script: py.test --cov --verbose --cov-report=html --html=report.html
+script: py.test --cov --verbose
 cache:
   apt: true
 notifications:
@@ -50,3 +46,4 @@ after_success:
 # before_install:
 #   - sudo apt-get -qq install libfreetype6-dev libjpeg-turbo-progs
 # sudo: required
+# py.test --cov --verbose --cov-report=html --html=report.html
