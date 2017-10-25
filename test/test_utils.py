@@ -613,7 +613,7 @@ class TestOthers(object):
         import vispy.visuals.transforms as vist
         # Force creation of vertices, faces and normals :
         self._creation()
-        tup = (self.vertices, self.faces, self.normals)
+        tup = (self.vertices, self.faces)
         # Compare (vertices + faces) Vs. MeshData :
         mesh1 = convert_meshdata(*tup)
         mesh2 = convert_meshdata(meshdata=MeshData(*tup))

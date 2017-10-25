@@ -15,7 +15,7 @@ Right now, visbrain contains five modules :
 * Colorbar : a colorbar editor
 * Topo : topographic representations
 
-See etiennecmb.github.io/visbrain for a complete and step-by step documentation
+See http://visbrain.org/ for a complete and step-by step documentation
 """
 import sys
 
