@@ -258,7 +258,7 @@ class BrainVisual(Visual):
         # ____________________ HEMISPHERE ____________________
         if lr_index is None or len(lr_index) != vertices.shape[0]:
             lr_index = vertices[:, 0] <= vertices[:, 0].mean()
-        self._lr_index = lr_index[faces[:, 0]]
+        self._lr_index = lr_index
 
         # ____________________ ASSIGN ____________________
         color = np.ones((vertices.shape[0], 4), dtype=np.float32)
@@ -395,9 +395,9 @@ class BrainVisual(Visual):
         if value == 'both':
             index = self._faces
         elif value == 'left':
-            index = self._faces[self._lr_index, :]
+            index = self._faces[self._lr_index[self._faces[:, 0]], :]
         elif value == 'right':
-            index = self._faces[~self._lr_index, :]
+            index = self._faces[~self._lr_index[self._faces[:, 0]], :]
         self._index_buffer.set_data(index)
         self.update()
         self._hemisphere = value
