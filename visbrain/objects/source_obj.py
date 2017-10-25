@@ -250,6 +250,8 @@ class SourceObj(VisbrainObject, SourceProjection):
         VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         Markers object parent.
+    verbose : string
+        Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
     """
@@ -265,10 +267,10 @@ class SourceObj(VisbrainObject, SourceProjection):
                  edge_color='black', system='mni', mask=None, mask_color='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
                  text_translate=(0., 2., 0.), visible=True, transform=None,
-                 parent=None, _z=-10., **kwargs):
+                 parent=None, verbose=None, _z=-10., **kwargs):
         """Init."""
         # Init Visbrain object base class and SourceProjection :
-        VisbrainObject.__init__(self, name, parent, transform)
+        VisbrainObject.__init__(self, name, parent, transform, verbose)
         SourceProjection.__init__(self, **kwargs)
         # _______________________ CHECKING _______________________
         # XYZ :

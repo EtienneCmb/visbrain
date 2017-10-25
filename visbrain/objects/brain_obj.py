@@ -44,6 +44,8 @@ class BrainObj(VisbrainObject):
         VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         Brain object parent.
+    verbose : string
+        Verbosity level.
     """
 
     ###########################################################################
@@ -54,10 +56,10 @@ class BrainObj(VisbrainObject):
 
     def __init__(self, name, vertices=None, faces=None, normals=None,
                  lr_index=None, hemisphere='both', translucent=True,
-                 transform=None, parent=None):
+                 transform=None, parent=None, verbose=None):
         """Init."""
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent, transform)
+        VisbrainObject.__init__(self, name, parent, transform, verbose)
         # Load brain template :
         self._scale = 1.
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere)

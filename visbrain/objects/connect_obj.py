@@ -51,6 +51,8 @@ class ConnectObj(VisbrainObject, CbarArgs):
         VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         Line object parent.
+    verbose : string
+        Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
     """
@@ -65,9 +67,9 @@ class ConnectObj(VisbrainObject, CbarArgs):
                  color_by='strength', custom_colors=None, alpha=1.,
                  dynamic=None, cmap='viridis', clim=None, vmin=None, vmax=None,
                  under='gray', over='red', transform=None, parent=None,
-                 _z=-10.):
+                 verbose=None, _z=-10.):
         """Init."""
-        VisbrainObject.__init__(self, name, parent, transform)
+        VisbrainObject.__init__(self, name, parent, transform, verbose)
         isvmin, isvmax = vmin is not None, vmax is not None
         CbarArgs.__init__(self, cmap, clim, isvmin, vmin, isvmax, vmax, under,
                           over)

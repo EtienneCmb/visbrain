@@ -5,7 +5,7 @@ import vispy
 import vispy.visuals.transforms as vist
 
 from .scene_obj import VisbrainCanvas
-from ..utils import color2vb
+from ..utils import color2vb, set_log_level
 
 
 class VisbrainObject(object):
@@ -21,7 +21,7 @@ class VisbrainObject(object):
         VisPy transformation to set to the parent node.
     """
 
-    def __init__(self, name, parent=None, transform=None):
+    def __init__(self, name, parent=None, transform=None, verbose=None):
         """Init."""
         self._node = vispy.scene.Node(name=name)
         self._node.parent = parent
@@ -32,6 +32,8 @@ class VisbrainObject(object):
         if transform is None:
             transform = vist.NullTransform()
         self._node.transform = transform
+        # Verbose :
+        set_log_level(verbose)
 
     def __repr__(self):
         """Represent ClassName(name='object_name')."""
