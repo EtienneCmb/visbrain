@@ -35,7 +35,6 @@ class Projections(object):
         self._proj_type = project_type
         self._proj_contribute = project_contribute
         self._proj_mask_color = color2vb(project_mask_color)
-        self._proj_mask_idx = None
         self._proj_data = None
 
     # ======================================================================
@@ -76,9 +75,13 @@ class Projections(object):
         self.sources._minmax = (mod.min(), mod.max())
 
         # ============= MASKED =============
-        if self.sources.is_masked and (self._proj_mask_idx is None):
-            self._proj_mask_idx = self.sources.get_masked_index(
-                v, self._proj_radius, c)
+        mesh = self._proj_obj[self._proj_on].mesh
+        mask = np.zeros((len(mesh)), dtype=np.float32)
+        mask[~mod.mask] = 1.
+        if self.sources.is_masked:
+            mask_idx = self.sources.get_masked_index(v, self._proj_radius, c)
+            mask[mask_idx] = 2.
+        self._proj_obj[self._proj_on].mesh.mask = mask
 
         # ============= COLOR =============
         self._projection_to_color()
@@ -89,18 +92,10 @@ class Projections(object):
         kwargs = self.cbobjs._objs['Projection'].to_kwargs()
         # Get the colormap :
         color = array2colormap(self._proj_data, **kwargs)
-        color[self._proj_data.mask, ...] = 1.
-
-        if self.sources.is_masked:
-            # Find only non-colored vertex :
-            idxcol = np.logical_and(self._proj_mask_idx, self._proj_data.mask)
-            # Set them color to the mask color :
-            color[idxcol, ...] = self._proj_mask_color
 
         # ============= MESH =============
-        self._proj_obj[self._proj_on].mesh.set_color(data=color)
+        self._proj_obj[self._proj_on].mesh.color = color
 
     def _clean_source_projection(self):
         """Clean projection variables."""
-        self._proj_mask_idx = None
         self._proj_data = None
