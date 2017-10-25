@@ -135,7 +135,8 @@ class RoiBase(object):
             # Extract the vertices / faces of non-zero values :
             self.vert, self.faces = isosurface(self._smooth(vol), level=.5)
             # Turn the unique color tuple into a faces compatible ndarray:
-            self.vertex_colors = self._color_roi[0]
+            self.vertex_colors = np.tile(self._color_roi[0],
+                                         (self.vert.shape[0], 1))
             # Unique color per ROI :
             self._color_idx = np.zeros((self.faces.shape[0],))
 
@@ -167,6 +168,7 @@ class RoiBase(object):
                 self._color_idx = np.concatenate(
                     (self._color_idx, idxt)) if self._color_idx.size else idxt
                 color = self._color_roi[num]
+                color = np.tile(self._color_roi[num], (vertT.shape[0], 1))
                 self.vertex_colors = np.concatenate(
                     (self.vertex_colors,
                      color)) if self.vertex_colors.size else color
@@ -207,6 +209,7 @@ class RoiBase(object):
             self.name_roi = 'ROI'
         else:
             self.mesh.set_data(vertices=self.vert, faces=self.faces)
+        print(self.vert.shape, self.vertex_colors.shape)
         self.mesh.color = self.vertex_colors
 
     def _get_idx_mask(self, index):

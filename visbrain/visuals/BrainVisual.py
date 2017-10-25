@@ -436,8 +436,6 @@ class BrainVisual(Visual):
     @wrap_properties
     def color(self, value):
         """Set color value."""
-        if value.shape[0] == 1:
-            value = np.tile(value, (len(self), 1))
         assert isinstance(value, np.ndarray) and value.ndim == 2
         assert value.shape[0] == len(self)
         self._color_buffer.set_data(value.astype(np.float32))
