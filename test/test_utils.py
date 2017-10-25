@@ -21,9 +21,11 @@ from visbrain.utils.guitools import (slider2opacity, textline2color,
                                      toggle_enable_tab, get_screen_size,
                                      set_widget_size)
 from visbrain.utils.memory import arrays_share_data, id, code_timer
-from visbrain.utils.others import (get_dsf, vispy_array, convert_meshdata,
-                                   volume_to_mesh, add_brain_template,
-                                   remove_brain_template, set_if_not_none)
+from visbrain.utils.mesh import (add_brain_template, remove_brain_template,
+                                 convert_meshdata, vispy_array, volume_to_mesh,
+                                 mesh_edges, smoothing_matrix)
+from visbrain.utils.others import (set_log_level, get_dsf, set_if_not_none,
+                                   get_data_path)
 from visbrain.utils.physio import (find_non_eeg, rereferencing, bipolarization,
                                    commonaverage, tal2mni, mni2tal,
                                    generate_eeg)
@@ -571,15 +573,16 @@ class TestMemory(object):
         code_timer(start, unit='ms')
         code_timer(start, unit='us')
 
+
 ###############################################################################
 ###############################################################################
-#                                others.py
+#                                mesh.py
 ###############################################################################
 ###############################################################################
 
 
-class TestOthers(object):
-    """Test functions in others.py."""
+class TestMesh(object):
+    """Test functions in mesh.py."""
 
     def _creation(self):
         """Create vertices, faces and normals."""
@@ -594,11 +597,6 @@ class TestOthers(object):
                                  [-4., -5., -4.]])
         self.faces = np.array([[0, 1, 2], [0, 1, 3], [1, 2, 3]])
         self.template = 'TestTemplate.npz'
-
-    def test_get_dsf(self):
-        """Test function get_dsf."""
-        assert get_dsf(100, 1000.) == (10, 100.)
-        assert get_dsf(100, None) == (1, 100.)
 
     def test_vispy_array(self):
         """Test vispy_array function."""
@@ -648,12 +646,49 @@ class TestOthers(object):
         self._creation()
         remove_brain_template(self.template)
 
+    def test_mesh_edges(self):
+        """Test function mesh_edges."""
+        self._creation()
+        mesh_edges(self.faces)
+
+    def test_smoothing_matrix(self):
+        """Test function smoothing_matrix."""
+        self._creation()
+        vertices = np.array([1, 3])
+        smoothing_matrix(vertices, mesh_edges(self.faces))
+
+###############################################################################
+###############################################################################
+#                                others.py
+###############################################################################
+###############################################################################
+
+
+class TestOthers(object):
+    """Test functions in others.py."""
+
+    def test_get_dsf(self):
+        """Test function get_dsf."""
+        assert get_dsf(100, 1000.) == (10, 100.)
+        assert get_dsf(100, None) == (1, 100.)
+
     def test_set_if_not_none(self):
         """Test function set_if_not_none."""
         a = 5.
         assert set_if_not_none(a, None) == 5.
         assert set_if_not_none(a, 10., False) == 5.
         assert set_if_not_none(a, 10.) == 10.
+
+    def test_set_log_level(self):
+        """Test function set_log_level."""
+        levels = [True, False, 'warning', 'error', 'critical', 'debug', 'info',
+                  None]
+        for k in levels:
+            set_log_level(k)
+
+    def test_get_data_path(self):
+        """Test function get_data_path."""
+        assert isinstance(get_data_path(), str)
 
 ###############################################################################
 ###############################################################################
