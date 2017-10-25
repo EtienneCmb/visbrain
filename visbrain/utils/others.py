@@ -133,7 +133,7 @@ def convert_meshdata(vertices=None, faces=None, normals=None, meshdata=None,
     if meshdata is not None:
         vertices = meshdata.get_vertices()
         faces = meshdata.get_faces()
-        normals = meshdata.get_vertex_normals(indexed='faces')
+        normals = meshdata.get_vertex_normals()
         logger.debug('Indexed faces normals converted // extracted')
     else:
         # Check if faces index start at zero (Matlab like):
