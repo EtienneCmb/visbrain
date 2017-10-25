@@ -277,17 +277,22 @@ class BrainObj(VisbrainObject):
         assert isinstance(data, np.ndarray) and (data.ndim == 1)
         assert isinstance(vertices, np.ndarray) and (vertices.ndim == 1)
         assert isinstance(smoothing_steps, int)
-        # Get smoothed vertices
+        # Get smoothed vertices // data :
         smooth_mat = smoothing_matrix(vertices, mesh_edges(self.mesh._faces),
                                       smoothing_steps=smoothing_steps)
+        smooth_data = data[smooth_mat.col]
+        # Fix clim :
+        clim = (smooth_data.min(), smooth_data.max()) if clim is None else clim
+        assert len(clim) == 2
         # Convert into colormap :
-        smooth_map = array2colormap(data[smooth_mat.col], cmap=cmap, clim=clim,
+        smooth_map = array2colormap(smooth_data, cmap=cmap, clim=clim,
                                     vmin=vmin, vmax=vmax, under=under,
                                     over=over)
         color = np.ones((len(self.mesh), 4), dtype=np.float32)
         color[smooth_mat.row, :] = smooth_map
         # Set color to the mesh :
-        self.mesh._color_buffer.set_data(color, convert=True)
+        self.mesh.color = color
+        self.mesh.mask = smooth_mat.row[smooth_data >= clim[0]]
 
     ###########################################################################
     ###########################################################################
