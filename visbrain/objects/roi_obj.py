@@ -36,6 +36,8 @@ class RoiObj(VisbrainObject):
         VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         ROI object parent.
+    verbose : string
+        Verbosity level.
     """
 
     ###########################################################################
@@ -45,10 +47,10 @@ class RoiObj(VisbrainObject):
     ###########################################################################
 
     def __init__(self, name, vol=None, label=None, index=None, hdr=None,
-                 system='mni', transform=None, parent=None):
+                 system='mni', transform=None, parent=None, verbose=None):
         """Init."""
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent, transform)
+        VisbrainObject.__init__(self, name, parent, transform, verbose)
         self.change_roi_object(name, vol, label, index, hdr, system)
 
     def __len__(self):

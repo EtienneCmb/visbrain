@@ -39,16 +39,19 @@ class TimeSeriesObj(VisbrainObject):
         VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         Line object parent.
+    verbose : string
+        Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
     """
 
     def __init__(self, name, data, xyz, select=None, line_width=1.5,
                  color='white', amplitude=6., width=20., alpha=1.,
-                 translate=(0., 0., 1.), transform=None, parent=None, _z=-10.):
+                 translate=(0., 0., 1.), transform=None, parent=None,
+                 verbose=None, _z=-10.):
         """Init."""
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent, transform)
+        VisbrainObject.__init__(self, name, parent, transform, verbose)
         # _______________________ CHECKING _______________________
         # Data :
         assert isinstance(data, np.ndarray) and data.ndim == 2

@@ -50,7 +50,11 @@ class UiSources(object):
         self._s_proj_radius.setValue(self._proj_radius)
         self._s_proj_contribute.setChecked(self._proj_contribute)
         safely_set_cbox(self._s_proj_type, self._proj_type)
-        self._s_proj_mask_color.setText(str(color2tuple(self._proj_mask_color)))
+        mask_color = color2tuple(self._proj_mask_color)
+        self.atlas.mesh.mask_color = mask_color
+        self._s_proj_mask_color.setText(str(mask_color))
+        self._s_proj_mask_color.editingFinished.connect(
+            self._fcn_proj_mask_color)
         self._s_proj_mask_color_p.clicked.connect(self._fcn_mask_color_p)
         self._s_proj_apply.clicked.connect(self._fcn_source_proj)
 
@@ -184,10 +188,16 @@ class UiSources(object):
         self._s_proj_on.clear()
         self._s_proj_on.addItems(list(self._proj_obj.keys()))
 
+    def _fcn_proj_mask_color(self):
+        """Change the color for projected masked sources."""
+        color = textline2color(str(self._s_proj_mask_color.text()))[1]
+        self.atlas.mesh.mask_color = color
+
     def _fcn_mask_color_p(self):
         """Use color picker to update mask color."""
         color = dialog_color()
         self._s_proj_mask_color.setText(str(color))
+        self._fcn_proj_mask_color()
 
     def _fcn_source_proj(self):
         """Apply source projection."""

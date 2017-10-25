@@ -39,7 +39,7 @@ kwargs['alpha'] = 0.5
 """
 Now we attach data to each source.
 """
-kwargs['data'] = np.random.uniform(low=-100., high=100., size=(len(subjects)),)
+kwargs['data'] = np.arange(len(subjects))
 
 """
 The source's radius is proportional to the data attached. But this proportion
@@ -52,10 +52,10 @@ kwargs['edge_width'] = .5              # Width of the edges
 kwargs['symbol'] = 'square'            # Source's symbol
 
 """
-Next, we mask source's data that are comprised between [-20, 20] and color
+Next, we mask source's data that are comprised between [20, 40] and color
 each source to orange
 """
-mask = np.logical_and(kwargs['data'] >= -20, kwargs['data'] <= 20)
+mask = np.logical_and(kwargs['data'] >= 20., kwargs['data'] <= 40)
 kwargs['mask'] = mask
 kwargs['mask_color'] = 'orange'
 
@@ -71,11 +71,11 @@ display the colorbar.
 """
 kw_proj = dict(project_radius=12.,
                project_contribute=True,
-               project_mask_color='blue',
-               project_cmap='inferno',
-               project_clim=(-90., 90.),
-               project_vmin=-60.,
-               project_vmax=60.,
+               project_mask_color='orange',
+               project_cmap='viridis',
+               project_clim=(kwargs['data'].min(), kwargs['data'].max()),
+               project_vmin=20,
+               project_vmax=500,
                project_under='gray',
                project_over='red'
                )

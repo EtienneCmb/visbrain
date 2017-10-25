@@ -43,6 +43,8 @@ class PictureObj(VisbrainObject, CbarArgs):
         VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         Line object parent.
+    verbose : string
+        Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
     """
@@ -56,9 +58,9 @@ class PictureObj(VisbrainObject, CbarArgs):
     def __init__(self, name, data, xyz, select=None, width=7., height=7.,
                  alpha=1., cmap='viridis', clim=None, vmin=None, vmax=None,
                  under='gray', over='red', translate=(0., 0., 1.),
-                 transform=None, parent=None, _z=-10.):
+                 transform=None, parent=None, verbose=None, _z=-10.):
         """Init."""
-        VisbrainObject.__init__(self, name, parent, transform)
+        VisbrainObject.__init__(self, name, parent, transform, verbose)
         isvmin, isvmax = vmin is not None, vmax is not None
         CbarArgs.__init__(self, cmap, clim, isvmin, vmin, isvmax, vmax, under,
                           over)
