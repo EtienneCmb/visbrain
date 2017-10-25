@@ -12,6 +12,7 @@ Authors: Etienne Combrisson <e.combrisson@gmail.com>
 License: BSD (3-clause)
 """
 import numpy as np
+import logging
 
 from vispy import gloo
 from vispy.visuals import Visual
@@ -20,6 +21,9 @@ from vispy.scene.visuals import create_visual_node
 
 from ..utils import (array2colormap, color2vb, convert_meshdata, vispy_array,
                      wrap_properties)
+
+
+logger = logging.getLogger('visbrain')
 
 
 # Vertex shader : executed code for individual vertices. The transformation
@@ -33,7 +37,20 @@ varying vec3 v_normal;
 void main() {
     v_position = $a_position;
     v_normal = $a_normal;
-    v_color = $a_color * $u_light_color;
+
+    // Custom colors (0. = white, 1. = color, 2. = mask_color)
+    if ($a_mask == 0.)
+    {
+        v_color = vec4(1., 1., 1., 1.) * $u_light_color;
+    }
+    else if ($a_mask == 1.)
+    {
+        v_color = $a_color * $u_light_color;
+    }
+    else if ($a_mask == 2.)
+    {
+        v_color = $u_mask_color * $u_light_color;
+    }
     gl_Position = $transform(vec4($a_position, 1));
 }
 """
@@ -108,14 +125,13 @@ void main() {
 
 
 class BrainVisual(Visual):
-    """Create and control a mesh of a 3D object.
+    """Visual object for brain mesh.
 
-    This class can be used to create a vispy compatible object. This object
-    can then be wrap with a vispy.Node (which is convenient for adding
-    transformations to it).
-    The BrainVisual is the lowest level class to create a 3D MNI brain (or any
-    type of 3D objects). Light is automatically ajust acording to camera
-    rotations.
+    The brain visual color rndering use threen levels :
+
+        * 0. : default brain color (white)
+        * 1. : custom colors (e.g projection, activation...)
+        * 2. : uniform mask color (e.g non-significant p-values...)
 
     Parameters
     ----------
@@ -164,10 +180,10 @@ class BrainVisual(Visual):
         pass
 
     def __init__(self, vertices=None, faces=None, normals=None, lr_index=None,
-                 hemisphere='both', alpha=1., light_position=[100.] * 3,
-                 light_color=[1.] * 4, light_intensity=[1.] * 3,
-                 coef_ambient=.05, coef_specular=.5, vertfcn=None, camera=None,
-                 meshdata=None):
+                 hemisphere='both', alpha=1., mask_color='orange',
+                 light_position=[100.] * 3, light_color=[1.] * 4,
+                 light_intensity=[1.] * 3, coef_ambient=.05, coef_specular=.5,
+                 vertfcn=None, camera=None, meshdata=None):
         """Init."""
         self._camera = None
         self._camera_transform = vist.NullTransform()
@@ -186,9 +202,10 @@ class BrainVisual(Visual):
         def_3 = np.zeros((0, 3), dtype=np.float32)
         def_4 = np.zeros((0, 4), dtype=np.float32)
         self._vert_buffer = gloo.VertexBuffer(def_3)
-        self._index_buffer = gloo.IndexBuffer()
         self._color_buffer = gloo.VertexBuffer(def_4)
         self._normals_buffer = gloo.VertexBuffer(def_3)
+        self._mask_buffer = gloo.VertexBuffer()
+        self._index_buffer = gloo.IndexBuffer()
 
         # _________________ PROGRAMS _________________
         self.shared_program.vert['a_position'] = self._vert_buffer
@@ -199,6 +216,7 @@ class BrainVisual(Visual):
         # _________________ DATA / CAMERA / LIGHT _________________
         self.set_data(vertices, faces, normals, hemisphere, lr_index)
         self.set_camera(camera)
+        self.mask_color = mask_color
         self.light_color = light_color
         self.light_position = light_position
         self.light_intensity = light_intensity
@@ -261,13 +279,18 @@ class BrainVisual(Visual):
         self._lr_index = lr_index
 
         # ____________________ ASSIGN ____________________
-        color = np.ones((vertices.shape[0], 4), dtype=np.float32)
 
         # ____________________ BUFFERS ____________________
+        # Vertices // faces // normals :
         self._vert_buffer.set_data(vertices, convert=True)
         self._normals_buffer.set_data(normals, convert=True)
-        self._color_buffer.set_data(color, convert=True)
         self.hemisphere = hemisphere
+        # Mask :
+        self._mask = np.zeros((len(self),), dtype=np.float32)
+        self._mask_buffer.set_data(self._mask, convert=True)
+        self.shared_program.vert['a_mask'] = self._mask_buffer
+        # Color :
+        self.color = np.ones((len(self), 4), dtype=np.float32)
 
     def set_color(self, data=None, color='white', alpha=1.0, **kwargs):
         """Set specific colors on the brain.
@@ -402,23 +425,47 @@ class BrainVisual(Visual):
         self.update()
         self._hemisphere = value
 
-    # # ----------- COLOR -----------
-    # @property
-    # def color(self):
-    #     """Get the color value."""
-    #     return self._color
+    # ----------- COLOR -----------
+    @property
+    def color(self):
+        """Get the color value."""
+        pass
+        # return self._color
 
-    # @color.setter
-    # @wrap_properties
-    # def color(self, value):
-    #     """Set color value."""
-    #     n_faces = self._shapes['faces'][0]
-    #     if isinstance(value, str):
-    #         value = color2vb(value, length=n_faces, faces_index=True)
-    #     assert isinstance(value, np.ndarray) and value.ndim == 3
-    #     assert value.shape[0] == n_faces
-    #     self._color_buffer.set_data(value.astype(np.float32))
-    #     self._colFaces = value
+    @color.setter
+    @wrap_properties
+    def color(self, value):
+        """Set color value."""
+        if value.shape[0] == 1:
+            value = np.tile(value, (len(self), 1))
+        assert isinstance(value, np.ndarray) and value.ndim == 2
+        assert value.shape[0] == len(self)
+        self._color_buffer.set_data(value.astype(np.float32))
+        self.update()
+        # self._color = value
+
+    # ----------- MASK -----------
+    @property
+    def mask(self):
+        """Get the mask value."""
+        pass
+        # return self._mask
+
+    @mask.setter
+    @wrap_properties
+    def mask(self, value):
+        """Set mask value."""
+        if isinstance(value, (int, float, bool)):
+            value = np.full((len(self),), np.float(value), dtype=np.float32)
+        if len(value) != len(self):
+            to_mask = value.copy()
+            logger.debug("Reset brain mask")
+            value = np.zeros((len(self),), dtype=np.float32)
+            value[to_mask] = 1.
+        assert isinstance(value, np.ndarray) and len(value) == len(self)
+        self._mask_buffer.set_data(value.astype(np.float32), convert=True)
+        self.update()
+        # self._mask = value
 
     # ----------- TRANSPARENT -----------
     @property
@@ -455,6 +502,21 @@ class BrainVisual(Visual):
         value = min(value, .1) if self._translucent else 1.
         self._alpha = value
         self.shared_program.frag['u_alpha'] = value
+        self.update()
+
+    # ----------- MASK_COLOR -----------
+    @property
+    def mask_color(self):
+        """Get the mask_color value."""
+        return self._mask_color
+
+    @mask_color.setter
+    @wrap_properties
+    def mask_color(self, value):
+        """Set mask_color value."""
+        value = color2vb(value)
+        self.shared_program.vert['u_mask_color'] = value.ravel()
+        self._mask_color = value
         self.update()
 
     # ----------- LIGHT_POSITION -----------
