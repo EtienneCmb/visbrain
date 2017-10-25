@@ -152,8 +152,8 @@ class BrainVisual(Visual):
     """
 
     def __len__(self):
-        """Return the length of faces."""
-        return len(self._vertices)
+        """Return the number of vertices."""
+        return self._vertices.shape[0]
 
     def __iter__(self):
         """Iteration function."""
