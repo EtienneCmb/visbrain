@@ -7,7 +7,7 @@ from vispy import scene
 
 from .visbrain_obj import VisbrainObject
 from ..visuals import BrainMesh
-from ..utils import get_data_path
+from ..utils import get_data_path, mesh_edges, smoothing_matrix, array2colormap
 from ..io import download_file
 
 logger = logging.getLogger('visbrain')
@@ -245,6 +245,49 @@ class BrainObj(VisbrainObject):
             azimuth, elevation = tuple(custom)
 
         self.set_state(azimuth, elevation, scale_factor=scale_factor)
+
+    def add_activation(self, data, vertices, smoothing_steps=20,
+                       cmap='viridis', clim=None, vmin=None, vmax=None,
+                       under='gray', over='red'):
+        """Add activation to specific vertices.
+
+        Parameters
+        ----------
+        data : array_like
+            Vector array of data of shape (n_data,).
+        vertices : array_like
+            Vector array of vertices of shape (n_vtx). Must be an array of
+            integers.
+        smoothing_steps : int | 20
+            Number of smoothing steps (smoothing is used if n_data < n_vtx)
+        cmap : string | 'viridis'
+            The colormap to use.
+        clim : tuple | None
+            The colorbar limits. If None, (data.min(), data.max()) will be used
+            instead.
+        vmin : float | None
+            Minimum threshold.
+        vmax : float | None
+            Maximum threshold.
+        under : string/tuple/array_like | 'gray'
+            The color to use for values under vmin.
+        over : string/tuple/array_like | 'red'
+            The color to use for values over vmax.
+        """
+        assert isinstance(data, np.ndarray) and (data.ndim == 1)
+        assert isinstance(vertices, np.ndarray) and (vertices.ndim == 1)
+        assert isinstance(smoothing_steps, int)
+        # Get smoothed vertices
+        smooth_mat = smoothing_matrix(vertices, mesh_edges(self.mesh._faces),
+                                      smoothing_steps=smoothing_steps)
+        # Convert into colormap :
+        smooth_map = array2colormap(data[smooth_mat.col], cmap=cmap, clim=clim,
+                                    vmin=vmin, vmax=vmax, under=under,
+                                    over=over)
+        color = np.ones((len(self.mesh), 4), dtype=np.float32)
+        color[smooth_mat.row, :] = smooth_map
+        # Set color to the mesh :
+        self.mesh._color_buffer.set_data(color, convert=True)
 
     ###########################################################################
     ###########################################################################
