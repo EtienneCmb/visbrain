@@ -302,6 +302,24 @@ class BrainObj(VisbrainObject):
     ###########################################################################
     ###########################################################################
 
+    # ----------- VERTICES -----------
+    @property
+    def vertices(self):
+        """Get the vertices value."""
+        return self.mesh._vertices
+
+    # ----------- FACES -----------
+    @property
+    def faces(self):
+        """Get the faces value."""
+        return self.mesh._faces
+
+    # ----------- NORMALS -----------
+    @property
+    def normals(self):
+        """Get the normals value."""
+        return self.mesh._normals
+
     # ----------- TRANSLUCENT -----------
     @property
     def translucent(self):
@@ -330,12 +348,6 @@ class BrainObj(VisbrainObject):
     def camera(self):
         """Get the camera value."""
         return self.mesh._camera
-
-    # ----------- VERTICES -----------
-    @property
-    def vertices(self):
-        """Get the vertices value."""
-        return self.mesh._vertices
 
     # ----------- SCALE -----------
     @property
