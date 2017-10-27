@@ -263,6 +263,7 @@ class BrainVisual(Visual):
                                                     meshdata, invert_normals)
         self._vertices = vertices
         self._faces = faces
+        self._normals = normals
         # Keep shapes :
         self._shapes = np.zeros(1, dtype=[('vert', int), ('faces', int)])
         self._shapes['vert'] = vertices.shape[0]
