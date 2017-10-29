@@ -302,23 +302,32 @@ class BrainObj(VisbrainObject):
     ###########################################################################
     ###########################################################################
 
+    def __hemisphere_correction(self, arr, indexed_faces=False):
+        mesh, hemi = self.mesh, self.mesh.hemisphere
+        if hemi == 'both':
+            return arr
+        elif hemi in ['left', 'right']:
+            lr = mesh._lr_index if hemi == 'left' else ~mesh._lr_index
+            lr = mesh._lr_index[mesh._faces[:, 0]] if indexed_faces else lr
+            return arr[lr, ...]
+
     # ----------- VERTICES -----------
     @property
     def vertices(self):
         """Get the vertices value."""
-        return self.mesh._vertices
+        return self.__hemisphere_correction(self.mesh._vertices)
 
     # ----------- FACES -----------
     @property
     def faces(self):
         """Get the faces value."""
-        return self.mesh._faces
+        return self.__hemisphere_correction(self.mesh._faces, True)
 
     # ----------- NORMALS -----------
     @property
     def normals(self):
         """Get the normals value."""
-        return self.mesh._normals
+        return self.__hemisphere_correction(self.mesh._normals)
 
     # ----------- TRANSLUCENT -----------
     @property
