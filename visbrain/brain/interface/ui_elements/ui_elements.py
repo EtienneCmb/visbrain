@@ -9,11 +9,12 @@ from .ui_connectivity import UiConnectivity
 from .ui_sources import UiSources
 from .ui_timeseries import UiTimeSeries
 from .ui_pictures import UiPictures
+from .ui_vectors import UiVectors
 from .ui_objects import UiObjects
 
 
 class UiElements(UiAtlas, UiSources, UiConnectivity, UiTimeSeries,
-                 UiPictures, UiConfig, UiMenu, UiScreenshot,
+                 UiPictures, UiVectors, UiConfig, UiMenu, UiScreenshot,
                  UiObjects):
     """Inherit from the diffrent ui files and initialize them."""
 
@@ -24,6 +25,7 @@ class UiElements(UiAtlas, UiSources, UiConnectivity, UiTimeSeries,
         UiConnectivity.__init__(self)
         UiTimeSeries.__init__(self)
         UiPictures.__init__(self)
+        UiVectors.__init__(self)
         UiConfig.__init__(self)
         UiMenu.__init__(self)
         UiScreenshot.__init__(self)

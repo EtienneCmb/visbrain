@@ -17,7 +17,7 @@ class UiPictures(object):
         self._pic_dz.valueChanged.connect(self._fcn_pic_translate)
 
     def _pic_to_gui(self):
-        """Send time-series object properties to the GUI."""
+        """Send pictures object properties to the GUI."""
         obj = self._get_select_object()
         self._pic_grp.setChecked(obj.visible_obj)
         self._pic_width.setValue(obj.width)
