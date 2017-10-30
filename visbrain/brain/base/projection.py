@@ -77,10 +77,10 @@ class Projections(object):
         # ============= MASKED =============
         mesh = self._proj_obj[self._proj_on].mesh
         mask = np.zeros((len(mesh)), dtype=np.float32)
-        mask[~mod.mask] = 1.
         if self.sources.is_masked:
             mask_idx = self.sources.get_masked_index(v, self._proj_radius, c)
             mask[mask_idx] = 2.
+        mask[~mod.mask] = 1.
         self._proj_obj[self._proj_on].mesh.mask = mask
 
         # ============= COLOR =============
