@@ -1,5 +1,5 @@
 """This script contains some usefull signal processing functions."""
-from warnings import warn
+import logging
 
 import numpy as np
 from scipy.signal import fftconvolve
@@ -7,6 +7,8 @@ from scipy.signal import fftconvolve
 
 __all__ = ('normalize', 'derivative', 'tkeo', 'zerocrossing', 'power_of_ten',
            'averaging', 'normalization', 'smoothing', 'smooth_3d')
+
+logger = logging.getLogger('visbrain')
 
 
 def normalize(x, tomin=0., tomax=1.):
@@ -38,8 +40,8 @@ def normalize(x, tomin=0., tomax=1.):
             return x
             # return tomax - (((tomax - tomin) * (xM - x)) / (xM-xm))
         else:
-            warn('Normalization has been ignored because minimum '
-                 'and maximum are both equal to ' + str(xm))
+            logger.debug("Normalization has been ignored because minimum and "
+                         "maximum are both equal to " + str(xm))
             np.multiply(x, tomax, out=x)
             np.divide(x, xM, out=x)
             return x
