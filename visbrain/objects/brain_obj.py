@@ -65,6 +65,10 @@ class BrainObj(VisbrainObject):
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere)
         self.translucent = translucent
 
+    def __len__(self):
+        """Get the number of vertices."""
+        return self.vertices.shape[0]
+
     def set_data(self, name=None, vertices=None, faces=None, normals=None,
                  lr_index=None, hemisphere='both'):
         """Load a brain template."""
@@ -328,6 +332,17 @@ class BrainObj(VisbrainObject):
     def normals(self):
         """Get the normals value."""
         return self.__hemisphere_correction(self.mesh._normals)
+
+    # ----------- HEMISPHERE -----------
+    @property
+    def hemisphere(self):
+        """Get the hemisphere value."""
+        return self.mesh.hemisphere
+
+    @hemisphere.setter
+    def hemisphere(self, value):
+        """Set hemisphere value."""
+        self.mesh.hemisphere = value
 
     # ----------- TRANSLUCENT -----------
     @property
