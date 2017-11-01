@@ -37,9 +37,9 @@ Dependencies
 
 Visbrain requires :
 
-* NumPy
+* NumPy >= 1.13
 * SciPy
-* VisPy (*development version*)
+* VisPy >= 0.5.0
 * Matplotlib >= 1.5.5
 * PyQt5
 * Pillow
@@ -47,13 +47,7 @@ Visbrain requires :
 User installation
 -----------------
 
-Install the latest VisPy version from Github :
-
-.. code-block:: shell
-
-    pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
-
-Then, install Visbrain :
+Install Visbrain :
 
 .. code-block:: shell
 
