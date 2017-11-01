@@ -21,18 +21,30 @@ logger = logging.getLogger('visbrain')
 
 class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
             BrainUserMethods):
-    """Visualization of neuroscientic data on a standard MNI brain.
+    """Visualization of brain-data on a standard MNI brain.
+
+    By default the Brain module display a standard MNI brain. Then, this brain
+    can interact with several objects :
+
+        * Sources (source_obj)
+        * Connectivity (connect_obj)
+        * Time-series (time_series_obj)
+        * Pictures (picture_obj)
+        * Vectors (vector_obj)
+
+    Alternatively, if an other brain template is needed, a brain object
+    (BrainObj) can also be used (see brain_obj).
 
     Parameters
     ----------
-    bgcolor : string/tuple | 'black'
-        Background color of the GUI.
     brain_template : string | 'B1'
         The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
     brain_translucent : bool | True
         Use translucent or opaque brain.
     brain_hemisphere : {'left', 'both', 'right'}
         Specify which brain hemisphere to use. Default is 'both'.
+    brain_obj : BrainObj | None
+        A brain object.
     source_obj : SourceObj | None
         An object (or list of objects) of type source (SourceObj).
     connect_obj : ConnectObj | None
@@ -41,6 +53,8 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         An object (or list of objects) of type time-series (TimeSeriesObj).
     picture_obj : PictureObj | None
         An object (or list of objects) of type pictures (PictureObj).
+    vector_obj : VectorObj | None
+        An object (or list of objects) of type vector (VectorObj).
     project_radius : float | 10.
         The projection radius to use.
     project_type : {'activity', 'repartition'}
@@ -65,6 +79,8 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         Maximum threshold for the projection colorbar.
     project_over : string/tuple/array_like | 'red'
         Color to use for values over project_vmax.
+    bgcolor : string/tuple | 'black'
+        Background color of the GUI.
     """
 
     def __init__(self, bgcolor='black', verbose=None, **kwargs):
