@@ -18,6 +18,8 @@ class PictureObj(VisbrainObject, CbarArgs):
         The name of the connectivity object.
     data : array_like
         Array of data pictures of shape (n_sources, n_rows, n_columns).
+    xyz : array_like
+        The 3-d position of each picture of shape (n_sources, 3).
     select : array_like | None
         Select the pictures to display. Should be a vector of bolean values
         of shape (n_sources,).
@@ -47,6 +49,16 @@ class PictureObj(VisbrainObject, CbarArgs):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain.objects import PictureObj
+    >>> n_rows, n_cols, n_pic = 10, 20, 5
+    >>> data = np.random.rand(n_pic, n_rows, n_cols)
+    >>> xyz = np.random.uniform(-10, 10, (n_pic, 3))
+    >>> pic = PictureObj('Pic', data, xyz, cmap='plasma')
+    >>> pic.preview(axis=True)
     """
 
     ###########################################################################
@@ -100,7 +112,7 @@ class PictureObj(VisbrainObject, CbarArgs):
     def _get_camera(self):
         """Get the most adapted camera."""
         d_mean = self._xyz.mean(0)
-        dist = np.sqrt(np.sum(d_mean ** 2))
+        dist = np.linalg.norm(self._xyz, axis=1).max()
         return scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
 
     def update(self):

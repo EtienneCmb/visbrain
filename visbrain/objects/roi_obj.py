@@ -38,6 +38,15 @@ class RoiObj(VisbrainObject):
         ROI object parent.
     verbose : string
         Verbosity level.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain.objects import RoiObj
+    >>> r = RoiObj('brodmann')
+    >>> r.get_roi_vertices(level=[4, 6, 38], unique_color=True, plot=True,
+    >>>                    smooth=7)
+    >>> r.preview(axis=True)
     """
 
     ###########################################################################
@@ -224,7 +233,19 @@ class RoiObj(VisbrainObject):
 
     def get_roi_vertices(self, level=.5, unique_color=False, smooth=3,
                          plot=False):
-        """"""
+        """Get the vertices of ROI's.
+
+        Parameters
+        ----------
+        level : int, float, list | .5
+            Threshold for extracting vertices from isosuface method.
+        unique_color : bool | False
+            Use a random unique color for each ROI.
+        smooth : int | 3
+            Smoothing level. Must be an odd integer (smooth % 2 = 1).
+        plot : bool | False
+            Specify if a mesh object have to be defined.
+        """
         # Get vertices / faces :
         if not unique_color:
             vert, faces = self._get_roi_vertices(self.vol, level, smooth)
@@ -235,22 +256,21 @@ class RoiObj(VisbrainObject):
             # Generate a (n_levels, 3, 4) array of unique colors :
             col_unique = np.random.uniform(.1, .9, (len(level), 4))
             col_unique[..., -1] = 1.
-            col_unique = np.tile(col_unique[:, np.newaxis, :], (1, 3, 1))
             for i, k in enumerate(level):
                 v, f = self._get_roi_vertices(self.vol, k, smooth)
                 # Concatenate vertices / faces :
                 faces = np.r_[faces, f + faces.max() + 1] if faces.size else f
                 vert = np.r_[vert, v] if vert.size else v
                 # Concatenate color :
-                col = np.tile(col_unique[[i], ...], (f.shape[0], 1, 1))
+                col = np.tile(col_unique[[i], ...], (v.shape[0], 1))
                 color = np.r_[color, col] if color.size else col
         if plot and vert.size:
             if not hasattr(self, 'mesh'):
                 self.mesh = BrainMesh(vertices=vert, faces=faces,
-                                      scale_factor=800., parent=self._node,
-                                      recenter=True)
+                                      parent=self._node)
                 self.mesh.set_camera(scene.cameras.TurntableCamera())
                 if unique_color:
+                    self.mesh.mask = 1.
                     self.mesh.color = color
 
     @staticmethod
@@ -280,7 +300,6 @@ class RoiObj(VisbrainObject):
         """Set translucent value."""
         if hasattr(self, 'mesh'):
             self.mesh.translucent = value
-
 
 
 class CombineRoi(CombineObjects):

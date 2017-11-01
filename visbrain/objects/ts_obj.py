@@ -33,6 +33,8 @@ class TimeSeriesObj(VisbrainObject):
         Graphical width of the time-series.
     alpha : float | 1.
         Time-series transparency.
+    antialias : bool | False
+        Use smooth lines.
     translate : tuple | (0., 0., 1.)
         Translate the time-series over the (x, y, z) axes.
     transform : VisPy.visuals.transforms | None
@@ -43,12 +45,25 @@ class TimeSeriesObj(VisbrainObject):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain.objects import TimeSeriesObj
+    >>> n_pts, n_ts = 100, 5
+    >>> time = np.arange(n_pts)
+    >>> phy = np.random.uniform(2, 30, (n_ts))
+    >>> data = np.sin(2 * np.pi * time.reshape(1, -1) * phy.reshape(-1, 1))
+    >>> xyz = np.random.uniform(-20, 20, (n_ts, 3))
+    >>> ts = TimeSeriesObj('Ts', data, xyz, antialias=True, color='red',
+    >>>                    line_width=3.)
+    >>> ts.preview(axis=True)
     """
 
     def __init__(self, name, data, xyz, select=None, line_width=1.5,
                  color='white', amplitude=6., width=20., alpha=1.,
-                 translate=(0., 0., 1.), transform=None, parent=None,
-                 verbose=None, _z=-10.):
+                 antialias=False, translate=(0., 0., 1.), transform=None,
+                 parent=None, verbose=None, _z=-10.):
         """Init."""
         # Init Visbrain object base class :
         VisbrainObject.__init__(self, name, parent, transform, verbose)
@@ -81,7 +96,8 @@ class TimeSeriesObj(VisbrainObject):
 
         # _______________________ LINE _______________________
         self._ts = visuals.Line(name='TimeSeriesObjLine', parent=self._node,
-                                width=line_width, color=self._color)
+                                width=line_width, color=self._color,
+                                antialias=antialias)
         self._ts.transform = tr
         self._build_line()
 

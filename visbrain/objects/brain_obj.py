@@ -46,6 +46,12 @@ class BrainObj(VisbrainObject):
         Brain object parent.
     verbose : string
         Verbosity level.
+
+    Examples
+    --------
+    >>> from visbrain.objects import BrainObj
+    >>> b = BrainObj('WhiteMatter', hemisphere='right', translucent=False)
+    >>> b.preview(axis=True)
     """
 
     ###########################################################################

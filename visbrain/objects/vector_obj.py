@@ -76,6 +76,16 @@ class VectorObj(VisbrainObject, CbarArgs):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain.objects import VectorObj
+    >>> n_vector = 10
+    >>> arrows = [np.random.rand(n_vector, 3), np.random.rand(n_vector, 3)]
+    >>> data = np.random.uniform(-10, 10, (n_vector))
+    >>> v = VectorObj('Vector', arrows, data=data, antialias=True)
+    >>> v.preview(axis=True)
     """
 
     ###########################################################################

@@ -59,6 +59,18 @@ class ConnectObj(VisbrainObject, CbarArgs):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain.objects import ConnectObj
+    >>> n_nodes = 100
+    >>> nodes = np.random.rand(n_nodes, 3)
+    >>> edges = np.random.uniform(low=-10., high=10., size=(n_nodes, n_nodes))
+    >>> select = np.logical_and(edges >= 0, edges <= 1.)
+    >>> c = ConnectObj('Connect', nodes, edges, select=select, cmap='inferno',
+    >>>                antialias=True)
+    >>> c.preview(axis=True)
     """
 
     ###########################################################################
