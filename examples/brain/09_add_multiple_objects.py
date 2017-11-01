@@ -37,9 +37,7 @@ data_l = np.random.uniform(-10, 10, s_xyz_l.shape[0])
 
 
 ###############################################################################
-###############################################################################
 #                                 SOURCES
-###############################################################################
 ###############################################################################
 """Create a first source object with uniform red square markers
 """
@@ -83,9 +81,7 @@ s_obj_rf.color_sources(df, 'lobe', roi_to_color=custom_color,
                        color_others=color_others, hide_others=hide_others)
 
 ###############################################################################
-###############################################################################
 #                            CONNECTIVITY
-###############################################################################
 ###############################################################################
 
 # Function in order to create random connection dataset for each
@@ -105,7 +101,8 @@ def create_connect(xyz, min, max):
                                connect.data > max)] = True
     return connect
 
-"""Create two connectivity objects
+
+"""Create two connectivity objects.
 """
 connect_l = create_connect(s_xyz_l, -.5, .2)
 c_obl_l = ConnectObj('C_left', s_xyz_l, connect_l, color_by='strength',
