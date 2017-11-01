@@ -148,6 +148,12 @@ class VisbrainCanvas(object):
         """Set the default state of the camera."""
         self.camera.set_default_state()
 
+    # ----------- PARENT -----------
+    @property
+    def parent(self):
+        """Get the parent value."""
+        return self.wc.scene
+
     # ----------- VISIBLE -----------
     @property
     def visible(self):

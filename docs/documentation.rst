@@ -13,5 +13,6 @@ Documentation
     topo
     colorbar
     figure
+    objects
     utils
     io

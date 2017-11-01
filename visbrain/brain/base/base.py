@@ -7,7 +7,7 @@ import vispy.visuals.transforms as vist
 from .VolumeBase import VolumeBase
 from .projection import Projections
 from ...objects import (CombineSources, CombineConnect, CombineTimeSeries,
-                        CombinePictures, BrainObj)
+                        CombinePictures, CombineVectors, BrainObj)
 
 logger = logging.getLogger('visbrain')
 
@@ -49,6 +49,7 @@ class BaseVisual(Projections):
         self.connect = CombineConnect(kwargs.get('connect_obj', None))
         self.tseries = CombineTimeSeries(kwargs.get('time_series_obj', None))
         self.pic = CombinePictures(kwargs.get('picture_obj', None))
+        self.vectors = CombineVectors(kwargs.get('vector_obj', None))
 
         # Add projections :
         Projections.__init__(self, **kwargs)
@@ -75,16 +76,17 @@ class BaseVisual(Projections):
         if self.pic.name is None:
             self._obj_type_lst.model().item(3).setEnabled(False)
 
+        # Vectors panel :
+        if self.vectors.name is None:
+            self._obj_type_lst.model().item(4).setEnabled(False)
         # ---------- Put everything in a root node ----------
         # Here, each object is put in a root node so that each transformation
         # can be applied to all elements.
 
         # Create a root node :
         self._vbNode = scene.Node(name='*Brain*')
+        logger.debug("Brain rescaled " + str([self._gl_scale] * 3))
         self._vbNode.transform = vist.STTransform(scale=[self._gl_scale] * 3)
-        logging.debug("OpenGL bug with 3-D elements < (1., 1., 1.). To solve "
-                      "this issue, add a scaling but need to update the camera"
-                      " center.")
 
         # Make this root node the parent of others Brain objects :
         self.volume.parent = self._vbNode
@@ -92,6 +94,7 @@ class BaseVisual(Projections):
         self.connect.parent = self._vbNode
         self.tseries.parent = self._vbNode
         self.pic.parent = self._vbNode
+        self.vectors.parent = self._vbNode
         self.atlas.parent = self._vbNode
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)

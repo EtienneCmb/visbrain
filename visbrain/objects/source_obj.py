@@ -254,6 +254,20 @@ class SourceObj(VisbrainObject, SourceProjection):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain.objects import SourceObj
+    >>> n_sources = 100
+    >>> pos = np.random.uniform(-10, 10, (n_sources, 3))
+    >>> color = ['orange'] * 50 + ['red'] * 50
+    >>> data = np.random.rand(n_sources)
+    >>> text = ['s' + str(k) for k in range(n_sources)]
+    >>> s = SourceObj('test', pos, color=color, data=data, radius_min=10.,
+    >>>               radius_max=20., edge_color='black', edge_width=1.,
+    >>>               text=text, text_size=10.)
+    >>> s.preview(axis=True)
     """
 
     ###########################################################################
@@ -419,7 +433,7 @@ class SourceObj(VisbrainObject, SourceProjection):
     def _get_camera(self):
         """Get the most adapted camera."""
         d_mean = self._xyz.mean(0)
-        dist = np.sqrt(np.sum(d_mean ** 2))
+        dist = 1.1 * np.linalg.norm(self._xyz, axis=1).max()
         return scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
 
     ###########################################################################

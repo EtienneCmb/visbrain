@@ -9,13 +9,8 @@ import numpy as np
 from scipy.spatial import ConvexHull
 
 from ..visuals import BrainMesh
-# from .base.SourcesBase import SourcesBase
-# from .base.ConnectBase import ConnectBase
-# from .base.TimeSeriesBase import TimeSeriesBase
-# from .base.PicBase import PicBase
 from ..utils import (color2vb, extend_combo_list, safely_set_cbox,
-                     get_combo_list_index, safely_set_spin, safely_set_slider,
-                     set_if_not_none)
+                     get_combo_list_index, safely_set_spin, safely_set_slider)
 from ..io import save_config_json, write_fig_canvas
 
 __all__ = ('BrainUserMethods')
@@ -520,8 +515,8 @@ class BrainUserMethods(object):
             The select parameter can be 'all', 'none', 'left', 'right',
             'inside' or 'outside'.
 
-        Seel also
-        ---------
+        See also
+        --------
         sources_control : Set data to sources and control source's properties.
         """
         if name is None:

@@ -46,6 +46,12 @@ class BrainObj(VisbrainObject):
         Brain object parent.
     verbose : string
         Verbosity level.
+
+    Examples
+    --------
+    >>> from visbrain.objects import BrainObj
+    >>> b = BrainObj('WhiteMatter', hemisphere='right', translucent=False)
+    >>> b.preview(axis=True)
     """
 
     ###########################################################################
@@ -64,6 +70,10 @@ class BrainObj(VisbrainObject):
         self._scale = 1.
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere)
         self.translucent = translucent
+
+    def __len__(self):
+        """Get the number of vertices."""
+        return self.vertices.shape[0]
 
     def set_data(self, name=None, vertices=None, faces=None, normals=None,
                  lr_index=None, hemisphere='both'):
@@ -302,6 +312,44 @@ class BrainObj(VisbrainObject):
     ###########################################################################
     ###########################################################################
 
+    def __hemisphere_correction(self, arr, indexed_faces=False):
+        mesh, hemi = self.mesh, self.mesh.hemisphere
+        if hemi == 'both':
+            return arr
+        elif hemi in ['left', 'right']:
+            lr = mesh._lr_index if hemi == 'left' else ~mesh._lr_index
+            lr = mesh._lr_index[mesh._faces[:, 0]] if indexed_faces else lr
+            return arr[lr, ...]
+
+    # ----------- VERTICES -----------
+    @property
+    def vertices(self):
+        """Get the vertices value."""
+        return self.__hemisphere_correction(self.mesh._vertices)
+
+    # ----------- FACES -----------
+    @property
+    def faces(self):
+        """Get the faces value."""
+        return self.__hemisphere_correction(self.mesh._faces, True)
+
+    # ----------- NORMALS -----------
+    @property
+    def normals(self):
+        """Get the normals value."""
+        return self.__hemisphere_correction(self.mesh._normals)
+
+    # ----------- HEMISPHERE -----------
+    @property
+    def hemisphere(self):
+        """Get the hemisphere value."""
+        return self.mesh.hemisphere
+
+    @hemisphere.setter
+    def hemisphere(self, value):
+        """Set hemisphere value."""
+        self.mesh.hemisphere = value
+
     # ----------- TRANSLUCENT -----------
     @property
     def translucent(self):
@@ -330,12 +378,6 @@ class BrainObj(VisbrainObject):
     def camera(self):
         """Get the camera value."""
         return self.mesh._camera
-
-    # ----------- VERTICES -----------
-    @property
-    def vertices(self):
-        """Get the vertices value."""
-        return self.mesh._vertices
 
     # ----------- SCALE -----------
     @property

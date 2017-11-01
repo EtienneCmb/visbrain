@@ -68,7 +68,7 @@ print('1 and 2 equivalent :', np.array_equal(select, ~connect.mask + 0))
 c_obj = ConnectObj('ConnectObj1', xyz, connect, color_by='strength',
                    dynamic=(.1, 1.), cmap='gnuplot', vmin=umin + .2,
                    vmax=umax - .1, under='red', over='green',
-                   clim=(umin, umax))
+                   clim=(umin, umax))  # , antialias=True
 
 """Finally, pass source and connectivity objects to Brain :
 """

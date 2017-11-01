@@ -34,6 +34,10 @@ class ConnectObj(VisbrainObject, CbarArgs):
         Use a dictionary to colorize edges. For example, {1.2: 'red',
         2.8: 'green', None: 'black'} turn connections that have a 1.2 and 2.8
         strength into red and green. All others connections are set to black.
+    alpha : float | 1.
+        Transparency level (if dynamic is None).
+    antialias : bool | False
+        Use smoothed lines.
     dynamic : tuple | None
         Control the dynamic opacity. For example, if dynamic=(0, 1),
         strong connections will be more opaque than weaker connections.
@@ -55,6 +59,18 @@ class ConnectObj(VisbrainObject, CbarArgs):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain.objects import ConnectObj
+    >>> n_nodes = 100
+    >>> nodes = np.random.rand(n_nodes, 3)
+    >>> edges = np.random.uniform(low=-10., high=10., size=(n_nodes, n_nodes))
+    >>> select = np.logical_and(edges >= 0, edges <= 1.)
+    >>> c = ConnectObj('Connect', nodes, edges, select=select, cmap='inferno',
+    >>>                antialias=True)
+    >>> c.preview(axis=True)
     """
 
     ###########################################################################
@@ -65,9 +81,9 @@ class ConnectObj(VisbrainObject, CbarArgs):
 
     def __init__(self, name, nodes, edges, select=None, line_width=3.,
                  color_by='strength', custom_colors=None, alpha=1.,
-                 dynamic=None, cmap='viridis', clim=None, vmin=None, vmax=None,
-                 under='gray', over='red', transform=None, parent=None,
-                 verbose=None, _z=-10.):
+                 antialias=False, dynamic=None, cmap='viridis', clim=None,
+                 vmin=None, vmax=None, under='gray', over='red',
+                 transform=None, parent=None, verbose=None, _z=-10.):
         """Init."""
         VisbrainObject.__init__(self, name, parent, transform, verbose)
         isvmin, isvmax = vmin is not None, vmax is not None
@@ -109,8 +125,8 @@ class ConnectObj(VisbrainObject, CbarArgs):
         self._alpha = alpha
 
         # _______________________ LINE _______________________
-        self._connect = visuals.Line(name='ConnectObjLine', antialias=False,
-                                     width=line_width, parent=self._node,
+        self._connect = visuals.Line(name='ConnectObjLine', width=line_width,
+                                     antialias=antialias, parent=self._node,
                                      connect='segments')
         self._connect.set_gl_state('translucent')
         self._build_line()

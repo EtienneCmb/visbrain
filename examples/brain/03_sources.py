@@ -34,7 +34,7 @@ unique color (u_color) per subject.
 """
 u_color = ["#9b59b6", "#3498db", "white", "#e74c3c", "#34495e", "#2ecc71"]
 kwargs['color'] = [u_color[int(k[1])] for k in subjects]
-kwargs['alpha'] = 0.5
+kwargs['alpha'] = 0.7
 
 """
 Now we attach data to each source.
@@ -100,5 +100,4 @@ s_obj = SourceObj('SourceExample', xyz, **kwargs)
 
 # Pass all arguments in the dictionnary :
 vb = Brain(source_obj=s_obj, brain_template='B3', **kw_proj)
-
 vb.show()

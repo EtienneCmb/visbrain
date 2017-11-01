@@ -20,7 +20,7 @@ class Projections(object):
 
     def __init__(self, project_radius=10.0, project_on='brain',
                  project_contribute=False, project_type='activity',
-                 project_mask_color='orange', **kwargs):
+                 project_mask_color='gray', **kwargs):
         """Init."""
         logger.debug("Problème avec proj_obj : on enregistre les mesh dans "
                      "proj_obj pour récupérer les vertices + définir ensuite "
@@ -77,10 +77,10 @@ class Projections(object):
         # ============= MASKED =============
         mesh = self._proj_obj[self._proj_on].mesh
         mask = np.zeros((len(mesh)), dtype=np.float32)
-        mask[~mod.mask] = 1.
         if self.sources.is_masked:
             mask_idx = self.sources.get_masked_index(v, self._proj_radius, c)
             mask[mask_idx] = 2.
+        mask[~mod.mask] = 1.
         self._proj_obj[self._proj_on].mesh.mask = mask
 
         # ============= COLOR =============

@@ -9,9 +9,10 @@ from visbrain.objects.source_obj import SourceObj, CombineSources
 from visbrain.objects.connect_obj import ConnectObj, CombineConnect
 from visbrain.objects.picture_obj import PictureObj, CombinePictures
 from visbrain.objects.ts_obj import TimeSeriesObj, CombineTimeSeries
+from visbrain.objects.vector_obj import VectorObj, CombineVectors
 from visbrain.objects.brain_obj import BrainObj
 
-from visbrain.utils import remove_brain_template, get_data_path
+# from visbrain.utils import remove_brain_template, get_data_path
 
 
 ###############################################################################
@@ -94,6 +95,16 @@ ts_select = np.random.randint(0, n_sources, (int(n_sources / 2),))
 
 ts_obj = TimeSeriesObj('TS1', ts_data, ts_xyz, select=ts_select, )
 
+
+###############################################################################
+#                               VECTOR
+###############################################################################
+n_arrows = 10
+arrows = [np.random.rand(n_arrows, 3), np.random.rand(n_arrows, 3)]
+data = np.random.rand(n_arrows)
+
+v_obj = VectorObj('V1', arrows, data=data)
+v_comb = CombineVectors([v_obj, v_obj])
 
 ###############################################################################
 #                               BRAIN
@@ -515,6 +526,58 @@ class TestCombineTimeSeries(ObjectMethods):
         """Test function definition."""
         CombineTimeSeries(ts_obj)
         CombineTimeSeries([ts_obj, ts_obj])
+
+
+###############################################################################
+###############################################################################
+#                              VECTOR
+###############################################################################
+###############################################################################
+
+
+class TestVectorObj(ObjectMethods):
+    """Test vector object."""
+
+    def test_definition(self):
+        """Test function definition."""
+        # List of positions :
+        VectorObj('V1_0', arrows, data=data)
+        VectorObj('V1_1', arrows, inferred_data=True)
+        # Dtype (start, end) :
+        dt_se = np.dtype([('start', float, 3), ('end', float, 3)])
+        arr = np.zeros(10, dtype=dt_se)
+        arr['start'] = np.random.rand(10, 3)
+        arr['end'] = np.random.rand(10, 3)
+        VectorObj('V1_2', arr)
+
+    def test_preview(self):
+        """Test function preview."""
+        v_obj.preview(show=False, axis=False)
+
+    def test_builtin_methods(self):
+        """Test function connect_builtin_methods."""
+        assert len(v_obj) == n_arrows
+
+    def test_get_camera(self):
+        """Test function connect_camera."""
+        v_obj._get_camera()
+
+    def test_attributes(self):
+        """Test function connect_attributes."""
+        from visbrain.visuals.arrow import ARROW_TYPES
+        self._assert_and_test('v_obj', 'line_width', 4.4)
+        for k in ARROW_TYPES:
+            self._assert_and_test('v_obj', 'arrow_type', k)
+        self._assert_and_test('v_obj', 'arrow_size', 21)
+
+
+class TestCombineVector(ObjectMethods):
+    """Test combine conectivity objects."""
+
+    def test_definition(self):
+        """Test object definition."""
+        CombineVectors(v_obj)
+        CombineVectors([v_obj, v_obj])
 
 
 ###############################################################################
