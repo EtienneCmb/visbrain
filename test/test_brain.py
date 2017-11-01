@@ -103,7 +103,7 @@ class TestBrain(object):
 
     def test_brain_control(self):
         """Test method brain_control."""
-        template = ['B1', 'B2', 'B3', 'WhiteMatter']
+        template = ['B1', 'B2', 'B3', 'white']
         hemi = ['left', 'right', 'both']
         translucent = [False, True]
         alpha = [.1, 1.]

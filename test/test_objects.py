@@ -597,7 +597,7 @@ class TestBrainObj(ObjectMethods):
         for k, i in zip(['B1', 'B2', 'B3'], ['left', 'both', 'right']):
             b_obj.set_data(name=k, hemisphere=i)
         # Test downloadable templates :
-        for k in ['Inflated', 'WhiteMatter', 'Sphere']:
+        for k in ['inflated', 'white', 'sphere']:
             b_obj.set_data(k)
         # Test custom (vertices, faces) :
         b_obj.set_data(name='UserBrain', vertices=vertices, faces=faces)

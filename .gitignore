@@ -78,9 +78,9 @@ atlas_B2.npz
 atlas_B3.npz
 AAL_label_bck.npz
 # *.todo
-Inflated.npz
-WhiteMatter.npz
-Sphere.npz
+inflated.npz
+white.npz
+sphere.npz
 
 docs/generated/
 docs/auto_examples/
