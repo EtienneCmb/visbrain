@@ -20,9 +20,9 @@ class BrainObj(VisbrainObject):
     ----------
     name : string
         Name of the brain object. If brain is 'B1' or 'B2' or 'B3' use a
-        default brain template. If name is 'WhiteMatter', 'Inflated' or
-        'Sphere'download the template (if needed). Otherwise, at least vertices
-        and faces must be defined.
+        default brain template. If name is 'white', 'inflated' or
+        'sphere' download the template (if needed). Otherwise, at least
+        vertices and faces must be defined.
     vertices : array_like | None
         Mesh vertices to use for the brain. Must be an array of shape
         (n_vertices, 3).
@@ -50,7 +50,7 @@ class BrainObj(VisbrainObject):
     Examples
     --------
     >>> from visbrain.objects import BrainObj
-    >>> b = BrainObj('WhiteMatter', hemisphere='right', translucent=False)
+    >>> b = BrainObj('white', hemisphere='right', translucent=False)
     >>> b.preview(axis=True)
     """
 
@@ -153,7 +153,7 @@ class BrainObj(VisbrainObject):
     def _get_downloadable_templates(self):
         """Get the list of brain that can be downloaded."""
         logger.debug("hdr transformation missing for downloadable templates")
-        return ['WhiteMatter', 'Inflated', 'Sphere']
+        return ['white', 'inflated', 'sphere']
 
     def _get_installed_templates(self):
         """Get the list of available brain templates."""
