@@ -419,7 +419,7 @@ class SourceObj(VisbrainObject, SourceProjection):
     def _get_camera(self):
         """Get the most adapted camera."""
         d_mean = self._xyz.mean(0)
-        dist = np.sqrt(np.sum(d_mean ** 2))
+        dist = 1.1 * np.linalg.norm(self._xyz, axis=1).max()
         return scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
 
     ###########################################################################
