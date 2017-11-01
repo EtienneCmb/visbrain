@@ -20,16 +20,16 @@ Brain templates
 
 Convert mesh data
 ~~~~~~~~~~~~~~~~~
-.. autofunction:: visbrain.utils.others.convert_meshdata
+.. autofunction:: visbrain.utils.mesh.convert_meshdata
 
 .. _AddBrainTemplate:
 
 Add brain template
 ~~~~~~~~~~~~~~~~~~
-.. autofunction:: visbrain.utils.others.add_brain_template
+.. autofunction:: visbrain.utils.mesh.add_brain_template
 
 .. _RemoveBrainTemplate:
 
 Remove brain template
 ~~~~~~~~~~~~~~~~~~~~~
-.. autofunction:: visbrain.utils.others.remove_brain_template
+.. autofunction:: visbrain.utils.mesh.remove_brain_template

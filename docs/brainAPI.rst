@@ -12,38 +12,39 @@ Main *Brain* class inputs
 
     .. autosummary::
         ~Brain.show
-        ~visbrain.brain.user.BrainUserMethods.quit
         ~visbrain.brain.user.BrainUserMethods.rotate
         ~visbrain.brain.user.BrainUserMethods.background_color
         ~visbrain.brain.user.BrainUserMethods.screenshot
         ~visbrain.brain.user.BrainUserMethods.load_config
         ~visbrain.brain.user.BrainUserMethods.save_config
+
         ~visbrain.brain.user.BrainUserMethods.brain_control
         ~visbrain.brain.user.BrainUserMethods.brain_list
         ~visbrain.brain.user.BrainUserMethods.add_mesh
+
         ~visbrain.brain.user.BrainUserMethods.volume_control
         ~visbrain.brain.user.BrainUserMethods.add_volume
         ~visbrain.brain.user.BrainUserMethods.volume_list
+
         ~visbrain.brain.user.BrainUserMethods.cross_sections_control
+
         ~visbrain.brain.user.BrainUserMethods.sources_control
-        ~visbrain.brain.user.BrainUserMethods.sources_opacity
         ~visbrain.brain.user.BrainUserMethods.sources_display
-        ~visbrain.brain.user.BrainUserMethods.add_sources
-        ~visbrain.brain.user.BrainUserMethods.sources_fit
+        ~visbrain.brain.user.BrainUserMethods.sources_fit_to_vertices
         ~visbrain.brain.user.BrainUserMethods.sources_to_convex_hull
+
         ~visbrain.brain.user.BrainUserMethods.cortical_projection
         ~visbrain.brain.user.BrainUserMethods.cortical_repartition
-        ~visbrain.brain.user.BrainUserMethods.sources_colormap
+
         ~visbrain.brain.user.BrainUserMethods.time_series_control
-        ~visbrain.brain.user.BrainUserMethods.add_time_series
+
         ~visbrain.brain.user.BrainUserMethods.pictures_control
-        ~visbrain.brain.user.BrainUserMethods.add_pictures
+
         ~visbrain.brain.user.BrainUserMethods.connect_control
-        ~visbrain.brain.user.BrainUserMethods.add_connect
+
         ~visbrain.brain.user.BrainUserMethods.roi_control
         ~visbrain.brain.user.BrainUserMethods.roi_list
-        ~visbrain.brain.user.BrainUserMethods.roi_opacity
-        ~visbrain.brain.user.BrainUserMethods.roi_light_reflection
+
         ~visbrain.brain.user.BrainUserMethods.cbar_control
         ~visbrain.brain.user.BrainUserMethods.cbar_select
         ~visbrain.brain.user.BrainUserMethods.cbar_list
@@ -62,11 +63,7 @@ Set of functions for an interactive control of the graphical user interface elem
 
 Show graphical interface
 ++++++++++++++++++++++++
-.. automethod:: visbrain.brain.brain.Brain.show
-
-Quit graphical interface
-++++++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.quit
+.. automethod:: visbrain.pyqt_module.PyQtModule.show
 
 Rotation
 ++++++++
@@ -159,21 +156,13 @@ Control sources
 +++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.sources_control
 
-Opacity
-+++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.sources_opacity
-
 Select sources
 ++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.sources_display
 
-Add source object
-+++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.add_sources
-
 Fit to an object
 ++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.sources_fit
+.. automethod:: visbrain.brain.user.BrainUserMethods.sources_fit_to_vertices
 
 Convert into convex hull
 ++++++++++++++++++++++++
@@ -192,10 +181,6 @@ Cortical repartition
 ++++++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.cortical_repartition
 
-Colormap
-++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.sources_colormap
-
 .. ##########################################################################
 ..                               TIME-SERIES
 .. ##########################################################################
@@ -208,11 +193,6 @@ Time-series methods
 Time-series control
 +++++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.time_series_control
-
-
-Add time-series
-+++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.add_time_series
 
 
 .. ##########################################################################
@@ -228,10 +208,6 @@ Pictures control
 ++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.pictures_control
 
-Add pictures
-++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.add_pictures
-
 .. ##########################################################################
 ..                           CONNECTIVITY
 .. ##########################################################################
@@ -246,10 +222,6 @@ Set of functions for an interactive control of connectivity object. Use the meth
 Control Connectivity
 ++++++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.connect_control
-
-Add connectivity object
-+++++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.add_connect
 
 .. ##########################################################################
 ..                                    ROI
@@ -269,14 +241,6 @@ ROI control
 List of suported ROI
 ++++++++++++++++++++
 .. automethod:: visbrain.brain.user.BrainUserMethods.roi_list
-
-Opacity
-+++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.roi_opacity
-
-Light reflection
-++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.roi_light_reflection
 
 .. ##########################################################################
 ..                              COLORBAR
