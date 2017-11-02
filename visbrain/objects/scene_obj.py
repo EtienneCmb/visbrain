@@ -56,7 +56,7 @@ class VisbrainCanvas(object):
                  tick_font_size=10., name=None, x_height_max=80,
                  y_width_max=80, axis_label_margin=50, tick_label_margin=5,
                  rpad=20., bgcolor='white', add_cbar=False, cargs={}, xargs={},
-                 yargs={}, cbargs={}, show=False):
+                 yargs={}, cbargs={}, show=False, camera=None):
         """Init."""
         self._axis = axis
         self._title = title
@@ -113,7 +113,7 @@ class VisbrainCanvas(object):
             grid.add_widget(self.xaxis, row=2, col=1)
 
             # ----------- MAIN -----------
-            self.wc = grid.add_view(row=1, col=1)
+            self.wc = grid.add_view(row=1, col=1, camera=camera)
             self.grid = grid
 
             # ----------- CBAR -----------
@@ -129,7 +129,7 @@ class VisbrainCanvas(object):
             self._rpad.width_max = rpad
 
         else:  # Ignore axis
-            self.wc = self.canvas.central_widget.add_view()
+            self.wc = self.canvas.central_widget.add_view(camera=camera)
 
     def __bool__(self):
         """Return if there's an axis attached to the canvas."""
