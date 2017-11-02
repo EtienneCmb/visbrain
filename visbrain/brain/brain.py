@@ -14,7 +14,7 @@ from .interface import UiInit, UiElements, BrainShortcuts
 from .base import BaseVisual, BrainCbar
 from .user import BrainUserMethods
 from ..pyqt_module import PyQtModule
-
+from ..config import profiler
 
 logger = logging.getLogger('visbrain')
 
@@ -86,32 +86,45 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
     def __init__(self, bgcolor='black', verbose=None, **kwargs):
         """Init."""
         # ====================== Verbose ======================
-        PyQtModule.__init__(self, verbose=verbose, to_describe='_vbNode',
+        PyQtModule.__init__(self, verbose=verbose, to_describe='view.wc',
                             icon='brain_icon.svg')
         self._userobj = {}
         self._gl_scale = 100.  # fix appearance for small meshes
+        self._camera = viscam.TurntableCamera(name='MainBrainCamera')
+
+        # ====================== Canvas creation ======================
+        UiInit.__init__(self, bgcolor)  # GUI creation + canvas
+        profiler("Canvas creation")
 
         # ====================== App creation ======================
-        UiInit.__init__(self, bgcolor)  # GUI creation + canvas
+        profiler("Visual elements", as_type='title')
         BaseVisual.__init__(self, self.view.wc, self._csGrid, **kwargs)
+
+        # ====================== Ui interactions ======================
         UiElements.__init__(self)  # GUI interactions
+        profiler("Ui interactions")
         self._shpopup.set_shortcuts(self.sh)  # shortcuts dict
 
         # ====================== Cameras ======================
         # Main camera :
-        self.view.wc.camera = self.atlas.camera
+        self.view.wc.camera = self._camera
         self._vbNode.parent = self.view.wc.scene
+        self.atlas.camera = self._camera
         self.atlas.rotate('top')
         self.atlas.camera.set_default_state()
+        profiler("Cameras creation")
 
         # ====================== Colorbar ======================
-        # Cbar creation + camera:
         camera = viscam.PanZoomCamera(rect=(-.2, -2.5, 1, 5))
         BrainCbar.__init__(self, camera)
-        # Add shortcuts on it :
+        profiler("Colorbar and panzoom creation")
+
+        # ====================== Colorbar ======================
         BrainShortcuts.__init__(self, self.cbqt.cbviz._canvas)
+        profiler("Set brain shortcuts")
 
         self._fcn_on_load()
+        profiler("Functions on load")
 
     def _fcn_on_load(self):
         """Function that need to be executed on load."""
