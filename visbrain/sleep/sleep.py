@@ -9,6 +9,7 @@ from .tools import Tools
 from ..pyqt_module import PyQtModule
 from ..utils import (FixedCam, color2vb, MouseEventControl)
 from ..io import ReadSleepData
+from ..config import profiler
 
 
 class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
@@ -101,6 +102,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         MouseEventControl.__init__(self)
 
         # ====================== LOAD FILE ======================
+        profiler("Import file", as_type='title')
         ReadSleepData.__init__(self, data, channels, sf, hypno, href, preload,
                                use_mne, downsample, kwargs_mne,
                                annotations)
@@ -149,22 +151,27 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         self._peaksym = 'disc'
         # Get some data info (min / max / std / mean)
         self._get_data_info()
+        profiler("Data info")
 
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
+        profiler("Initialize GUI interactions", as_type='title')
         UiElements.__init__(self)
 
         # ====================== CAMERAS ======================
         self._cam_creation()
 
         # ====================== OBJECTS CREATION ======================
+        profiler("Initialize visual elements", as_type='title')
         Visuals.__init__(self)
 
         # ====================== TOOLS ======================
         Tools.__init__(self)
+        profiler("Initialize tools")
 
         # ====================== FUNCTIONS ON LOAD ======================
         self._fcns_on_creation()
+        profiler("Functions on creation")
 
     def __len__(self):
         """Return the number of channels."""
