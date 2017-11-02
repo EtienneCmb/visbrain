@@ -1,4 +1,5 @@
 """File for Cross-sections object."""
+import logging
 import numpy as np
 
 from vispy import scene
@@ -7,9 +8,11 @@ import vispy.visuals.transforms as vist
 from vispy.util.transforms import rotate
 
 from ...utils import array2colormap
-# from ..interface.uiInit import vbCanvas
 
 __all__ = ('CrossSections')
+
+
+logger = logging.getLogger('visbrain')
 
 
 class ImageSection(visu.Image):
@@ -85,6 +88,8 @@ class CrossSectionsSplit(object):
 
     def __init__(self, parent=None):
         """Init."""
+        logger.debug("Splitted cross-section should be a single image and not "
+                     "three.")
         # Add PanZoom cameras to each box :
         parent['Sagit'].camera = scene.PanZoomCamera()
         parent['Coron'].camera = scene.PanZoomCamera()

@@ -10,7 +10,6 @@ This file contain functions to load :
 - NIFTI
 """
 import numpy as np
-from scipy.io import loadmat
 # import os
 
 from ..utils.transform import array_to_stt
@@ -18,7 +17,7 @@ from .dependencies import is_nibabel_installed
 from .rw_utils import get_file_ext
 
 __all__ = ('switch_data', 'read_mat', 'read_pickle', 'read_npy', 'read_npz',
-           'read_txt', 'read_csv', 'read_json', 'read_nifti')
+           'read_txt', 'read_csv', 'read_json', 'read_nifti', 'read_stc')
 
 
 def switch_data(path, *args, **kwargs):
@@ -60,6 +59,7 @@ def switch_data(path, *args, **kwargs):
 
 def read_mat(path, vars=None):
     """Read data from a Matlab (mat) file."""
+    from scipy.io import loadmat
     return loadmat(path, variable_names=vars)
 
 
@@ -125,3 +125,63 @@ def read_nifti(path):
     else:
         raise IOError("The python package Nibabel must be installed to load "
                       "the Nifti file.")
+
+
+def read_stc(path):
+    """Read an STC file from the MNE package.
+
+    STC files contain activations or source reconstructions
+    obtained from EEG and MEG data.
+
+    This function is a copy from the PySurfer package. See :
+    https://github.com/nipy/PySurfer/blob/master/surfer/io.py
+
+    Parameters
+    ----------
+    path : string
+        Path to STC file
+
+    Returns
+    -------
+    data : dict
+        The STC structure. It has the following keys:
+           tmin           The first time point of the data in seconds
+           tstep          Time between frames in seconds
+           vertices       vertex indices (0 based)
+           data           The data matrix (nvert * ntime)
+    """
+    fid = open(path, 'rb')
+
+    stc = dict()
+
+    fid.seek(0, 2)  # go to end of file
+    file_length = fid.tell()
+    fid.seek(0, 0)  # go to beginning of file
+
+    # read tmin in ms
+    stc['tmin'] = float(np.fromfile(fid, dtype=">f4", count=1))
+    stc['tmin'] /= 1000.0
+
+    # read sampling rate in ms
+    stc['tstep'] = float(np.fromfile(fid, dtype=">f4", count=1))
+    stc['tstep'] /= 1000.0
+
+    # read number of vertices/sources
+    vertices_n = int(np.fromfile(fid, dtype=">u4", count=1))
+
+    # read the source vector
+    stc['vertices'] = np.fromfile(fid, dtype=">u4", count=vertices_n)
+
+    # read the number of timepts
+    data_n = int(np.fromfile(fid, dtype=">u4", count=1))
+
+    if ((file_length / 4 - 4 - vertices_n) % (data_n * vertices_n)) != 0:
+        raise ValueError('incorrect stc file size')
+
+    # read the data matrix
+    stc['data'] = np.fromfile(fid, dtype=">f4", count=vertices_n * data_n)
+    stc['data'] = stc['data'].reshape([data_n, vertices_n]).T
+
+    # close the file
+    fid.close()
+    return stc

@@ -63,7 +63,7 @@ vb.rotate(custom=(-125., 0.))
 vb.screenshot('repartition.jpg', autocrop=True)
 
 vb.sources_display('all')
-vb.roi_control(selection=[4, 6], subdivision='Brodmann', smooth=5)
+vb.roi_control(selection=[4, 6], roi_type='Brodmann', smooth=5)
 vb.cortical_projection(project_on='roi', radius=12., cmap='inferno',
                        clim=(.1, .5), vmin=0., vmax=6.)
 vb.sources_display('none')

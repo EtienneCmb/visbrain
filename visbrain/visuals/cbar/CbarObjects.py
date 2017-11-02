@@ -82,7 +82,7 @@ class CbarObjetcs(object):
 
     def keys(self):
         """Return the list of entries in the object dict."""
-        return self._objs.keys()
+        return list(self._objs.keys())
 
     def save(self, filename):
         """Save all colorbar configurations.

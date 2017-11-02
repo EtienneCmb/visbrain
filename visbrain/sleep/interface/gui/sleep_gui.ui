@@ -61,16 +61,7 @@
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
@@ -91,7 +82,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>4</number>
+           <number>1</number>
           </property>
           <property name="movable">
            <bool>true</bool>
@@ -114,8 +105,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>303</width>
-                 <height>285</height>
+                 <width>349</width>
+                 <height>301</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -172,24 +163,15 @@
                        <rect>
                         <x>0</x>
                         <y>0</y>
-                        <width>96</width>
-                        <height>26</height>
+                        <width>321</width>
+                        <height>70</height>
                        </rect>
                       </property>
                       <layout class="QVBoxLayout" name="verticalLayout_14">
                        <item>
                         <widget class="QWidget" name="widget" native="true">
                          <layout class="QVBoxLayout" name="verticalLayout_5">
-                          <property name="leftMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="topMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="bottomMargin">
+                          <property name="margin">
                            <number>0</number>
                           </property>
                           <item>
@@ -403,8 +385,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>361</width>
-                 <height>932</height>
+                 <width>404</width>
+                 <height>896</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -420,16 +402,7 @@
                    </size>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_10">
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
+                   <property name="margin">
                     <number>0</number>
                    </property>
                    <item>
@@ -897,16 +870,7 @@ channel</string>
                           </size>
                          </property>
                          <layout class="QGridLayout" name="gridLayout_5">
-                          <property name="leftMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="topMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="bottomMargin">
+                          <property name="margin">
                            <number>0</number>
                           </property>
                           <property name="spacing">
@@ -1052,8 +1016,8 @@ channel</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>278</width>
-                 <height>208</height>
+                 <width>313</width>
+                 <height>237</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1075,16 +1039,7 @@ channel</string>
                    <property name="spacing">
                     <number>0</number>
                    </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
+                   <property name="margin">
                     <number>0</number>
                    </property>
                    <item>
@@ -1140,16 +1095,7 @@ channel</string>
                         <property name="spacing">
                          <number>0</number>
                         </property>
-                        <property name="leftMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="bottomMargin">
+                        <property name="margin">
                          <number>0</number>
                         </property>
                         <item>
@@ -1213,16 +1159,7 @@ channel</string>
                         <property name="spacing">
                          <number>0</number>
                         </property>
-                        <property name="leftMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="bottomMargin">
+                        <property name="margin">
                          <number>0</number>
                         </property>
                         <item>
@@ -1239,16 +1176,7 @@ channel</string>
                              <property name="spacing">
                               <number>0</number>
                              </property>
-                             <property name="leftMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="topMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="rightMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="bottomMargin">
+                             <property name="margin">
                               <number>0</number>
                              </property>
                              <item>
@@ -1443,15 +1371,15 @@ channel</string>
                <enum>QFrame::NoFrame</enum>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="page">
                <property name="geometry">
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>289</width>
-                 <height>54</height>
+                 <width>377</width>
+                 <height>938</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -1470,16 +1398,7 @@ channel</string>
                    <property name="spacing">
                     <number>6</number>
                    </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
+                   <property name="margin">
                     <number>0</number>
                    </property>
                    <item>
@@ -1542,16 +1461,7 @@ channel</string>
                         </size>
                        </property>
                        <layout class="QGridLayout" name="gridLayout_16">
-                        <property name="leftMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="bottomMargin">
+                        <property name="margin">
                          <number>0</number>
                         </property>
                         <property name="spacing">
@@ -1701,7 +1611,7 @@ re-referenced</string>
                        <rect>
                         <x>0</x>
                         <y>0</y>
-                        <width>98</width>
+                        <width>357</width>
                         <height>998</height>
                        </rect>
                       </property>
@@ -1789,14 +1699,72 @@ re-referenced</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>300</width>
-                 <height>341</height>
+                 <width>377</width>
+                 <height>938</height>
                 </rect>
                </property>
                <attribute name="label">
                 <string>Signal processing</string>
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_17">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_14">
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_76">
+                    <property name="font">
+                     <font>
+                      <italic>true</italic>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Apply preprocessing
+to</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="Line" name="line_36">
+                    <property name="minimumSize">
+                     <size>
+                      <width>10</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QComboBox" name="_SigFiltChan">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display the signal, in a specific frequency band as :&lt;/p&gt;&lt;p&gt;- &amp;quot;filter&amp;quot; : simply, the filtered signal&lt;/p&gt;&lt;p&gt;- &amp;quot;amplitude&amp;quot; : the amplitude of the signal&lt;/p&gt;&lt;p&gt;- &amp;quot;power&amp;quot; : the power of the signal&lt;/p&gt;&lt;p&gt;- &amp;quot;phase&amp;quot; : the phase of the signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>all channels</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <spacer name="horizontalSpacer_43">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
                 <item>
                  <widget class="QGroupBox" name="groupBox_5">
                   <property name="title">
@@ -1838,9 +1806,15 @@ re-referenced</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QGroupBox" name="groupBox_6">
+                 <widget class="QGroupBox" name="_SigFilt">
                   <property name="title">
                    <string>Filtering</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_8">
                    <property name="leftMargin">
@@ -1857,16 +1831,6 @@ re-referenced</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QCheckBox" name="_SigFilt">
-                     <property name="toolTip">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter your data and spectrogram :&lt;/p&gt;&lt;p&gt;- Select the filter type (bandpass / bandstop / highpass / lowpass)&lt;/p&gt;&lt;p&gt;- Select the frequencies for filtering&lt;/p&gt;&lt;p&gt;- Select the filter method (butterworth or bessel) and its order&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                     </property>
-                     <property name="text">
-                      <string>Enable</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
                     <widget class="QWidget" name="_SigFiltW" native="true">
                      <property name="enabled">
                       <bool>false</bool>
@@ -1875,16 +1839,7 @@ re-referenced</string>
                       <property name="spacing">
                        <number>0</number>
                       </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
+                      <property name="margin">
                        <number>0</number>
                       </property>
                       <item>
@@ -1892,7 +1847,134 @@ re-referenced</string>
                         <property name="spacing">
                          <number>9</number>
                         </property>
-                        <item row="5" column="0" colspan="5">
+                        <item row="0" column="2">
+                         <widget class="QComboBox" name="_SigFiltDisp">
+                          <property name="toolTip">
+                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display the signal, in a specific frequency band as :&lt;/p&gt;&lt;p&gt;- &amp;quot;filter&amp;quot; : simply, the filtered signal&lt;/p&gt;&lt;p&gt;- &amp;quot;amplitude&amp;quot; : the amplitude of the signal&lt;/p&gt;&lt;p&gt;- &amp;quot;power&amp;quot; : the power of the signal&lt;/p&gt;&lt;p&gt;- &amp;quot;phase&amp;quot; : the phase of the signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          </property>
+                          <item>
+                           <property name="text">
+                            <string>filter</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>amplitude</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>power</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>phase</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                        <item row="1" column="0">
+                         <widget class="QLabel" name="label_18">
+                          <property name="font">
+                           <font>
+                            <italic>true</italic>
+                           </font>
+                          </property>
+                          <property name="text">
+                           <string>Filter type</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="0">
+                         <widget class="QLabel" name="label_7">
+                          <property name="font">
+                           <font>
+                            <italic>true</italic>
+                           </font>
+                          </property>
+                          <property name="text">
+                           <string>Frequency</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="1">
+                         <widget class="Line" name="line_24">
+                          <property name="minimumSize">
+                           <size>
+                            <width>10</width>
+                            <height>0</height>
+                           </size>
+                          </property>
+                          <property name="orientation">
+                           <enum>Qt::Vertical</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1">
+                         <widget class="Line" name="line_23">
+                          <property name="minimumSize">
+                           <size>
+                            <width>10</width>
+                            <height>0</height>
+                           </size>
+                          </property>
+                          <property name="orientation">
+                           <enum>Qt::Vertical</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_68">
+                          <property name="font">
+                           <font>
+                            <italic>true</italic>
+                           </font>
+                          </property>
+                          <property name="text">
+                           <string>Display</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="1">
+                         <widget class="Line" name="line_26">
+                          <property name="minimumSize">
+                           <size>
+                            <width>10</width>
+                            <height>0</height>
+                           </size>
+                          </property>
+                          <property name="orientation">
+                           <enum>Qt::Vertical</enum>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="3" column="0">
+                         <widget class="QLabel" name="label_58">
+                          <property name="font">
+                           <font>
+                            <italic>true</italic>
+                           </font>
+                          </property>
+                          <property name="text">
+                           <string>Settings</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="4" column="2">
+                         <spacer name="horizontalSpacer_40">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>0</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                        <item row="5" column="0" colspan="3">
                          <widget class="QWidget" name="widget_5" native="true">
                           <property name="minimumSize">
                            <size>
@@ -1940,130 +2022,7 @@ re-referenced</string>
                           </layout>
                          </widget>
                         </item>
-                        <item row="1" column="0">
-                         <widget class="QLabel" name="label_18">
-                          <property name="font">
-                           <font>
-                            <italic>true</italic>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>Filter type</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="3" column="0" rowspan="2">
-                         <widget class="QLabel" name="label_58">
-                          <property name="font">
-                           <font>
-                            <italic>true</italic>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>Settings</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="2" column="0">
-                         <widget class="QLabel" name="label_7">
-                          <property name="font">
-                           <font>
-                            <italic>true</italic>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>Frequency</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="2" column="2" colspan="3">
-                         <widget class="QWidget" name="widget_4" native="true">
-                          <layout class="QHBoxLayout" name="horizontalLayout_7">
-                           <property name="leftMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="topMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="rightMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="bottomMargin">
-                            <number>0</number>
-                           </property>
-                           <item>
-                            <widget class="QLabel" name="label_9">
-                             <property name="text">
-                              <string>Fmin</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QDoubleSpinBox" name="_SigFiltFrom">
-                             <property name="decimals">
-                              <number>1</number>
-                             </property>
-                             <property name="minimum">
-                              <double>0.100000000000000</double>
-                             </property>
-                             <property name="maximum">
-                              <double>200.000000000000000</double>
-                             </property>
-                             <property name="value">
-                              <double>12.000000000000000</double>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <spacer name="horizontalSpacer_15">
-                             <property name="orientation">
-                              <enum>Qt::Horizontal</enum>
-                             </property>
-                             <property name="sizeType">
-                              <enum>QSizePolicy::Fixed</enum>
-                             </property>
-                             <property name="sizeHint" stdset="0">
-                              <size>
-                               <width>20</width>
-                               <height>20</height>
-                              </size>
-                             </property>
-                            </spacer>
-                           </item>
-                           <item>
-                            <widget class="QLabel" name="label_8">
-                             <property name="text">
-                              <string>Fmax</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QDoubleSpinBox" name="_SigFiltTo">
-                             <property name="decimals">
-                              <number>1</number>
-                             </property>
-                             <property name="minimum">
-                              <double>0.100000000000000</double>
-                             </property>
-                             <property name="maximum">
-                              <double>200.000000000000000</double>
-                             </property>
-                             <property name="value">
-                              <double>16.000000000000000</double>
-                             </property>
-                            </widget>
-                           </item>
-                          </layout>
-                         </widget>
-                        </item>
-                        <item row="3" column="2">
-                         <widget class="QLabel" name="label_10">
-                          <property name="text">
-                           <string>Method</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="1" column="2" colspan="2">
+                        <item row="1" column="2">
                          <widget class="QComboBox" name="_SigFiltBand">
                           <property name="toolTip">
                            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;- bandpass: keep only frequencies between [fmin, fmax]&lt;/p&gt;&lt;p&gt;- bandstop: remove frequencies between [fmin, fmax]&lt;/p&gt;&lt;p&gt;- lowpass: keep only frequencies under fmax&lt;/p&gt;&lt;p&gt;- highpass: keep only frequencies over fmin&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -2090,70 +2049,85 @@ re-referenced</string>
                           </item>
                          </widget>
                         </item>
-                        <item row="4" column="3">
-                         <widget class="QSpinBox" name="_SigFiltOrder">
-                          <property name="toolTip">
-                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose filter order and control narrow band. It is not recommended to use filter order over 3 (can provoc distorsion).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                          </property>
-                          <property name="minimum">
-                           <number>1</number>
-                          </property>
-                          <property name="maximum">
-                           <number>20</number>
-                          </property>
-                          <property name="value">
-                           <number>3</number>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="2" column="1">
-                         <widget class="Line" name="line_24">
-                          <property name="minimumSize">
-                           <size>
-                            <width>10</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="orientation">
-                           <enum>Qt::Vertical</enum>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="1" column="1">
-                         <widget class="Line" name="line_23">
-                          <property name="minimumSize">
-                           <size>
-                            <width>10</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="orientation">
-                           <enum>Qt::Vertical</enum>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="3" column="3">
-                         <widget class="QComboBox" name="_SigFiltMeth">
-                          <item>
-                           <property name="text">
-                            <string>butterworth</string>
+                        <item row="2" column="2">
+                         <widget class="QWidget" name="widget_4" native="true">
+                          <layout class="QHBoxLayout" name="horizontalLayout_7">
+                           <property name="margin">
+                            <number>0</number>
                            </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>bessel</string>
-                           </property>
-                          </item>
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_5">
+                             <property name="topMargin">
+                              <number>0</number>
+                             </property>
+                             <item>
+                              <widget class="QLabel" name="label_9">
+                               <property name="text">
+                                <string>Fmin</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QDoubleSpinBox" name="_SigFiltFrom">
+                               <property name="decimals">
+                                <number>1</number>
+                               </property>
+                               <property name="minimum">
+                                <double>0.100000000000000</double>
+                               </property>
+                               <property name="maximum">
+                                <double>200.000000000000000</double>
+                               </property>
+                               <property name="value">
+                                <double>12.000000000000000</double>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <spacer name="horizontalSpacer_15">
+                               <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                               </property>
+                               <property name="sizeType">
+                                <enum>QSizePolicy::Fixed</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>20</width>
+                                 <height>20</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                             <item>
+                              <widget class="QDoubleSpinBox" name="_SigFiltTo">
+                               <property name="decimals">
+                                <number>1</number>
+                               </property>
+                               <property name="minimum">
+                                <double>0.100000000000000</double>
+                               </property>
+                               <property name="maximum">
+                                <double>200.000000000000000</double>
+                               </property>
+                               <property name="value">
+                                <double>16.000000000000000</double>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_8">
+                               <property name="text">
+                                <string>Fmax</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                          </layout>
                          </widget>
                         </item>
-                        <item row="4" column="2">
-                         <widget class="QLabel" name="label_11">
-                          <property name="text">
-                           <string>order</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="3" column="1" rowspan="2">
+                        <item row="3" column="1">
                          <widget class="Line" name="line_25">
                           <property name="minimumSize">
                            <size>
@@ -2166,57 +2140,69 @@ re-referenced</string>
                           </property>
                          </widget>
                         </item>
-                        <item row="0" column="0">
-                         <widget class="QLabel" name="label_68">
-                          <property name="font">
-                           <font>
-                            <italic>true</italic>
-                           </font>
+                        <item row="3" column="2">
+                         <layout class="QGridLayout" name="gridLayout_10">
+                          <property name="topMargin">
+                           <number>0</number>
                           </property>
-                          <property name="text">
-                           <string>Display</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="0" column="1">
-                         <widget class="Line" name="line_26">
-                          <property name="minimumSize">
-                           <size>
-                            <width>10</width>
-                            <height>0</height>
-                           </size>
-                          </property>
-                          <property name="orientation">
-                           <enum>Qt::Vertical</enum>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="0" column="2" colspan="2">
-                         <widget class="QComboBox" name="_SigFiltDisp">
-                          <property name="toolTip">
-                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display the signal, in a specific frequency band as :&lt;/p&gt;&lt;p&gt;- &amp;quot;filter&amp;quot; : simply, the filtered signal&lt;/p&gt;&lt;p&gt;- &amp;quot;amplitude&amp;quot; : the amplitude of the signal&lt;/p&gt;&lt;p&gt;- &amp;quot;power&amp;quot; : the power of the signal&lt;/p&gt;&lt;p&gt;- &amp;quot;phase&amp;quot; : the phase of the signal&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                          </property>
-                          <item>
-                           <property name="text">
-                            <string>filter</string>
-                           </property>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_10">
+                            <property name="text">
+                             <string>Method</string>
+                            </property>
+                           </widget>
                           </item>
-                          <item>
-                           <property name="text">
-                            <string>amplitude</string>
-                           </property>
+                          <item row="1" column="0">
+                           <widget class="QLabel" name="label_11">
+                            <property name="text">
+                             <string>order</string>
+                            </property>
+                           </widget>
                           </item>
-                          <item>
-                           <property name="text">
-                            <string>power</string>
-                           </property>
+                          <item row="1" column="1">
+                           <widget class="QSpinBox" name="_SigFiltOrder">
+                            <property name="toolTip">
+                             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose filter order and control narrow band. It is not recommended to use filter order over 3 (can provoc distorsion).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                            </property>
+                            <property name="minimum">
+                             <number>1</number>
+                            </property>
+                            <property name="maximum">
+                             <number>20</number>
+                            </property>
+                            <property name="value">
+                             <number>3</number>
+                            </property>
+                           </widget>
                           </item>
-                          <item>
-                           <property name="text">
-                            <string>phase</string>
-                           </property>
+                          <item row="0" column="1">
+                           <widget class="QComboBox" name="_SigFiltMeth">
+                            <item>
+                             <property name="text">
+                              <string>butterworth</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>bessel</string>
+                             </property>
+                            </item>
+                           </widget>
                           </item>
-                         </widget>
+                          <item row="2" column="1">
+                           <spacer name="horizontalSpacer_41">
+                            <property name="orientation">
+                             <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>40</width>
+                              <height>0</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                         </layout>
                         </item>
                        </layout>
                       </item>
@@ -2581,16 +2567,7 @@ on</string>
                       </size>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_34">
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
+                      <property name="margin">
                        <number>0</number>
                       </property>
                       <item>
@@ -2706,16 +2683,7 @@ on</string>
                       </size>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_35">
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
+                      <property name="margin">
                        <number>0</number>
                       </property>
                       <item>
@@ -2991,16 +2959,7 @@ on</string>
                       <property name="spacing">
                        <number>0</number>
                       </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
+                      <property name="margin">
                        <number>0</number>
                       </property>
                       <item>
@@ -3089,25 +3048,16 @@ on</string>
                       <property name="spacing">
                        <number>0</number>
                       </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
+                      <property name="margin">
                        <number>0</number>
                       </property>
                       <item>
                        <layout class="QGridLayout" name="gridLayout_8">
-                        <property name="topMargin">
-                         <number>0</number>
-                        </property>
                         <property name="verticalSpacing">
                          <number>9</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
                         </property>
                         <item row="4" column="2" colspan="4">
                          <widget class="QWidget" name="widget_8" native="true">
@@ -3121,16 +3071,7 @@ on</string>
                            <property name="spacing">
                             <number>0</number>
                            </property>
-                           <property name="leftMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="topMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="rightMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="bottomMargin">
+                           <property name="margin">
                             <number>0</number>
                            </property>
                            <item>
@@ -3266,16 +3207,7 @@ on</string>
                            <property name="spacing">
                             <number>0</number>
                            </property>
-                           <property name="leftMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="topMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="rightMargin">
-                            <number>0</number>
-                           </property>
-                           <property name="bottomMargin">
+                           <property name="margin">
                             <number>0</number>
                            </property>
                            <item>
@@ -3366,16 +3298,7 @@ on</string>
                       </size>
                      </property>
                      <layout class="QVBoxLayout" name="verticalLayout_47">
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
+                      <property name="margin">
                        <number>0</number>
                       </property>
                       <item>
@@ -3836,16 +3759,7 @@ display</string>
            <property name="spacing">
             <number>0</number>
            </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
+           <property name="margin">
             <number>0</number>
            </property>
            <item>
@@ -3942,28 +3856,19 @@ display</string>
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
+             <property name="margin">
               <number>0</number>
              </property>
              <item>
               <layout class="QGridLayout" name="gridLayout_7">
-               <property name="topMargin">
-                <number>0</number>
-               </property>
                <property name="horizontalSpacing">
                 <number>7</number>
                </property>
                <property name="verticalSpacing">
                 <number>9</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
                </property>
                <item row="2" column="8">
                 <widget class="QLabel" name="label_5">
@@ -4278,7 +4183,7 @@ display</string>
      <x>0</x>
      <y>0</y>
      <width>1359</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFiles">

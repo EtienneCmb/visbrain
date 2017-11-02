@@ -22,12 +22,11 @@ install:
   # Install dependencies :
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
   - source activate testenv
-  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate codecov pytest pytest-cov
-  # ------------------- VISPY -------------------
-  - cd ../
-  # Install the developper version of VisPy :
-  - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
-  - cd visbrain/
+  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pandas
+
+  # Install testing librairies :
+  - pip install codecov pytest pytest-cov pytest-html
+
   # ------------------- VISBRAIN -------------------
   - pip install -e .
 before_script:
@@ -47,3 +46,4 @@ after_success:
 # before_install:
 #   - sudo apt-get -qq install libfreetype6-dev libjpeg-turbo-progs
 # sudo: required
+# py.test --cov --verbose --cov-report=html --html=report.html

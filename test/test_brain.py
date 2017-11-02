@@ -1,28 +1,42 @@
 """Test Brain module and related methods."""
 import os
 import shutil
+from PyQt5 import QtWidgets
+import pytest
 from warnings import warn
 
-from PyQt5 import QtWidgets
 import numpy as np
 from itertools import product
 
+from vispy.app.canvas import MouseEvent, KeyEvent
+# from vispy.util.keys import Key
+
 from visbrain import Brain
+from visbrain.objects import SourceObj, ConnectObj, TimeSeriesObj, PictureObj
+from visbrain.io import download_file
 
 
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 
-# Create empty argument dictionary :
-kwargs = {}
+# Download intrcranial xyz :
+download_file('xyz_sample.npz', to_path=path_to_tmp)
+mat = np.load(os.path.join(path_to_tmp, 'xyz_sample.npz'))
+xyz_full = mat['xyz']
+mat.close()
+xyz_1, xyz_2 = xyz_full[20:30, :], xyz_full[10:20, :]
+
 
 # ---------------- Sources ----------------
 # Define some random sources :
-kwargs['s_xyz'] = np.random.randint(-20, 20, (10, 3))
-kwargs['s_data'] = 100 * np.random.rand(10)
-kwargs['s_color'] = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
-kwargs['s_mask'] = np.array([True + False] + [True] * 9)
+s_data = 100 * np.random.rand(10)
+s_color = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
+s_mask = np.array([True] + [False] * 9)
+
+s_obj1 = SourceObj('S1', xyz_1, data=s_data, color=s_color, mask=s_mask)
+s_obj2 = SourceObj('S2', xyz_2, data=2 * s_data, color=s_color,
+                   mask=s_mask)
 
 # ---------------- Connectivity ----------------
 # Connectivity array :
@@ -31,19 +45,30 @@ c_connect[np.tril_indices_from(c_connect)] = 0
 c_connect = np.ma.masked_array(c_connect, mask=True)
 nz = np.where((c_connect > -5) & (c_connect < 5))
 c_connect.mask[nz] = False
-kwargs['c_connect'] = c_connect
+c_connect = c_connect
+
+c_obj = ConnectObj('C1', xyz_1, c_connect)
+c_obj2 = ConnectObj('C2', xyz_2, c_connect)
 
 # ---------------- Time-series ----------------
-kwargs['ts_data'] = 100. * np.random.rand(10, 100)
-kwargs['ts_select'] = np.ones((10,), dtype=bool)
-kwargs['ts_select'][[3, 4, 7]] = False
+ts_data = 100. * np.random.rand(10, 100)
+ts_select = np.ones((10,), dtype=bool)
+ts_select[[3, 4, 7]] = False
+
+ts_obj1 = TimeSeriesObj('TS1', ts_data, xyz_1, select=ts_select)
+ts_obj2 = TimeSeriesObj('TS2', ts_data, xyz_2, select=ts_select)
 
 # ---------------- Pictures ----------------
-kwargs['pic_data'] = 100. * np.random.rand(10, 20, 17)
+pic_data = 100. * np.random.rand(10, 20, 17)
+
+p_obj1 = PictureObj('P1', pic_data, xyz_1)
+p_obj2 = PictureObj('P2', 2 * pic_data, xyz_2)
 
 # ---------------- Application  ----------------
 app = QtWidgets.QApplication([])
-vb = Brain(**kwargs)
+vb = Brain(source_obj=[s_obj1, s_obj2], connect_obj=[c_obj, c_obj2],
+           time_series_obj=[ts_obj1, ts_obj2], picture_obj=[p_obj1, p_obj2],
+           verbose='debug')
 
 
 class TestBrain(object):
@@ -66,9 +91,9 @@ class TestBrain(object):
     ###########################################################################
     def test_scene_rotation(self):
         """Test scene rotations/."""
-        rotations = ['axial', 'coronal', 'sagittal',
-                     'axial_0', 'coronal_0', 'sagittal_0',
-                     'axial_1', 'coronal_1', 'sagittal_1']
+        rotations = ['axial_0', 'coronal_0', 'sagittal_0',
+                     'axial_1', 'coronal_1', 'sagittal_1', 'top', 'bottom',
+                     'back', 'front', 'left', 'right']
         customs = [(90., 0.), (-90, 90.), (180., 180.)]
         # Fixed rotations :
         for k in rotations:
@@ -78,33 +103,33 @@ class TestBrain(object):
 
     def test_brain_control(self):
         """Test method brain_control."""
-        template = ['B1', 'B2', 'B3']
+        template = ['B1', 'B2', 'B3', 'white']
         hemi = ['left', 'right', 'both']
-        transparent = [False, True]
+        translucent = [False, True]
         alpha = [.1, 1.]
-        color = [(1., 1., 1.), 'white', '#ab4642']
         visible = [True, False]
         # Test brain template / hemisphere :
         for k in product(template, hemi):
             vb.brain_control(*k)
         # TEst transparency / alpha / color / visible :
-        for k in product(transparent, alpha, color, visible):
+        for k in product(translucent, alpha, visible):
             vb.brain_control(None, None, *k)
 
     def test_brain_list(self):
         """Test method brain_list."""
-        assert vb.brain_list() == ['B1', 'B2', 'B3']
+        vb.brain_list() == ['B1', 'B2', 'B3']
 
     ###########################################################################
     #                                 VOLUME
     ###########################################################################
+    @pytest.mark.skip
     def test_add_volume(self):
         """Test method add_volume."""
-        warn('add_volume() not tested')
+        pass
 
     def test_volume_list(self):
         """Test method volume_list."""
-        assert vb.volume_list() == ['Brodmann', 'AAL']
+        assert vb.volume_list() == ['Brodmann', 'AAL', 'Talairach']
 
     def test_cross_sections_control(self):
         """Test method cross_sections_control."""
@@ -125,7 +150,7 @@ class TestBrain(object):
     #                                 SOURCES
     ###########################################################################
     @staticmethod
-    def _get_projection_cmap():
+    def _get_cmap_properties():
         skw = {'vmin': .1, 'vmax': .8, 'isvmin': True, 'isvmax': True,
                'under': 'gray', 'over': 'red', 'clim': (0., 1.),
                'cmap': 'Spectral_r'}
@@ -134,150 +159,122 @@ class TestBrain(object):
     def test_sources_control(self):
         """Test method sources_control."""
         s_kwargs = {'data': np.random.rand(10), 'color': 'orange',
-                    'symbol': 'square', 'radiusmax': 50., 'radiusmin': 20.,
-                    'edgecolor': 'white', 'edgewidth': .6, 'scaling': True,
-                    'alpha': .1, 'mask': None, 'maskcolor': 'gray'}
+                    'symbol': 'square', 'radius_max': 50., 'radius_min': 20.,
+                    'edge_color': 'white', 'edge_width': .6,
+                    'alpha': .1, 'mask': None, 'mask_color': 'gray',
+                    'visible': True}
         for item, value in s_kwargs.items():
-            vb.sources_control(**{item: value})
-
-    def test_sources_opacity(self):
-        """Test method sources_opacity."""
-        vb.sources_opacity(alpha=.4, show=False)
-        vb.sources_opacity(alpha=1., show=True)
-        warn("Merge source_control(), source_opacity() and potentially "
-             "source_display()")
+            vb.sources_control('S1', **{item: value})
 
     def test_sources_display(self):
         """Test method sources_display."""
         for k in ['outside', 'none', 'left', 'right', 'inside', 'all']:
-            vb.sources_display(k)
+            vb.sources_display(name='S1', select=k)
+        vb.sources_display(name='S2', select='all')
 
     def test_sources_fit(self):
-        """Test method sources_fit."""
-        vb.sources_fit()
+        """Test method sources_fit_to_vertices."""
+        vb.sources_fit_to_vertices()
+        vb.sources_fit_to_vertices(name='S1')
 
     def test_cortical_projection(self):
         """Test method cortical_projection."""
-        vb.cortical_projection(contribute=False)
-        vb.cortical_projection(contribute=True, **self._get_projection_cmap())
+        vb.sources_display(select='all')
+        vb.cortical_projection(radius=10., contribute=False)
+        vb.cortical_projection(contribute=True, **self._get_cmap_properties())
 
     def test_cortical_repartition(self):
         """Test method cortical_repartition."""
+        vb.sources_display(select='all')
         vb.cortical_repartition(contribute=False)
-        vb.cortical_repartition(contribute=True, **self._get_projection_cmap())
-
-    def test_sources_colormap(self):
-        """Test method sources_colormap."""
-        vb.sources_colormap(**self._get_projection_cmap())
+        vb.cortical_repartition(contribute=True, **self._get_cmap_properties())
 
     def test_sources_to_convex_hull(self):
         """Test method sources_to_convex_hull."""
         s_xyz = 20 * np.random.randn(10, 3)
         vb.sources_to_convex_hull(s_xyz)
 
-    def test_add_sources(self):
-        """Test method add_sources."""
-        s_xyz = 20 * np.random.randn(10, 3)
-        s_data = np.random.rand(10)
-        vb.add_sources('NewSources', s_xyz=s_xyz, s_data=s_data)
-
     ###########################################################################
     #                              TIME-SERIES
     ###########################################################################
     def test_time_series_control(self):
         """Test method time_series_control."""
-        vb.time_series_control('green', 1., 10., 20., (1., 2., 3.), True)
-
-    def test_add_time_series(self):
-        """Test method add_time_series."""
-        ts_xyz = np.random.rand(20, 3)
-        ts_data = np.random.rand(20, 200)
-        vb.add_time_series('NewTimeSeries', ts_xyz, ts_data)
+        vb.time_series_control('TS1', color='green', line_width=1., width=10.,
+                               amplitude=20., translate=[5.] * 3,
+                               visible=True)
 
     ###########################################################################
     #                              PICTURES
     ###########################################################################
     def test_pictures_control(self):
         """Test method pictures_control."""
-        vb.pictures_control(20., 10., (1., 2., 3.))
-
-    def test_add_pictures(self):
-        """Test method add_pictures."""
-        pic_xyz = np.random.rand(20, 3)
-        pic_data = np.random.rand(20, 7, 8)
-        vb.add_pictures('NewPictures', pic_xyz, pic_data)
+        vb.pictures_control('P1', width=20., height=10., translate=[5.] * 3,
+                            **self._get_cmap_properties())
 
     ###########################################################################
     #                                 CONNECTIVITY
     ###########################################################################
     def test_connect_control(self):
         """Test method connect_control."""
-        colorby = ['strength', 'count', 'density']
+        colorby = ['strength', 'count']
         for k in colorby:
-            vb.connect_control(k)
-        vb.connect_control(dynamic=(.4, .95), show=False,
-                           **self._get_projection_cmap())
-
-    def test_add_connect(self):
-        """Test method add_connect."""
-        vb.add_connect('NewConnect', c_xyz=np.random.rand(7, 3))
+            vb.connect_control('C1', color_by=k)
+        vb.connect_control('C2', dynamic=(.4, .95), show=False,
+                           **self._get_cmap_properties())
 
     ###########################################################################
     #                                 ROI
     ###########################################################################
     def test_roi_control(self):
         """Test method roi_control."""
-        vb.roi_control([7, 11], 'AAL', 7, 'Roi_7-11_AAL')
-        vb.roi_control([3, 5], 'Brodmann', 5, 'Roi_3-5_Brodmann')
+        # vb.roi_control([10], roi_type='Talairach', smooth=3,
+        #                name='Tal_10&11', translucent=True)
+        vb.roi_control([3, 5], roi_type='Brodmann', smooth=5,
+                       name='Roi_3-5_Brodmann', translucent=True, alpha=.05)
+        vb.roi_control([7, 11], roi_type='AAL', smooth=7,
+                       name='Roi_7-11_AAL')
 
     def test_roi_fit(self):
         """Test method roi_fit."""
-        vb.sources_fit('Roi_7-11_AAL')
-
-    def test_roi_repartition(self):
-        """Test method roi_repartition."""
-        vb.cortical_repartition(project_on='Roi_3-5_Brodmann')
+        vb.sources_fit_to_vertices(fit_to='Roi_7-11_AAL')
 
     def test_roi_projection(self):
         """Test method roi_projection."""
-        vb.cortical_projection(project_on='Roi_3-5_Brodmann')
+        vb.sources_display(select='all')
+        vb.cortical_projection(radius=20., project_on='Roi_7-11_AAL')
 
-    def test_roi_light_reflection(self):
-        """Test method roi_light_reflection."""
-        vb.roi_light_reflection('external')
-        vb.roi_light_reflection('internal')
-        warn('Merge roi_light_reflection() and roi_opacity()')
-
-    def test_roi_opacity(self):
-        """Test method roi_opacity."""
-        vb.roi_opacity(alpha=.8, show=False)
+    def test_roi_repartition(self):
+        """Test method roi_repartition."""
+        vb.sources_display(select='all')
+        vb.cortical_repartition(radius=20., project_on='Roi_7-11_AAL')
 
     def test_roi_list(self):
         """Test function roi_list."""
         vb.roi_list('Brodmann')
         vb.roi_list('AAL')
+        vb.roi_list('Talairach')
 
     ###########################################################################
     #                                 COLORBAR
     ###########################################################################
-    def test_cbar_select(self):
-        """Test method cbar_select."""
-        for k in ['Projection', 'Connectivity', 'Pictures']:
-            vb.cbar_select(k)
-
     def test_cbar_list(self):
         """Test method cbar_list."""
         vb.cbar_list()
 
+    def test_cbar_select(self):
+        """Test method cbar_select."""
+        for k in vb.cbar_list():
+            vb.cbar_select(k)
+
     def test_cbar_autoscale(self):
         """Test method cbar_autoscale."""
-        for k in ['Projection', 'Connectivity', 'Pictures']:
+        for k in vb.cbar_list():
             vb.cbar_autoscale(k)
 
     def test_colorbar_control(self):
         """Test method colorbar_control."""
-        for k in ['Projection', 'Connectivity', 'Pictures']:
-            vb.cbar_control(k, **self._get_projection_cmap())
+        for k in vb.cbar_list():
+            vb.cbar_control(k, **self._get_cmap_properties())
 
     def test_add_mesh(self):
         """Test method add_mesh."""
@@ -297,6 +294,7 @@ class TestBrain(object):
         vb.background_color('#ab4642')
         vb.background_color((.1, .1, .1))
 
+    @pytest.mark.slow
     def test_screenshot(self):
         """Test method screenshot."""
         # On travis, test failed fo jpg figures only.
@@ -327,10 +325,12 @@ class TestBrain(object):
         except:
             warn("Screenshot failed for region and factor")
 
+    @pytest.mark.skip('Not configured')
     def test_save_config(self):
         """Test method save_config."""
         vb.save_config(self._path_to_tmp('config.txt'))
 
+    @pytest.mark.skip('Not configured')
     def test_load_config(self):
         """Test method load_config."""
         vb.load_config(self._path_to_tmp('config.txt'))
@@ -373,93 +373,103 @@ class TestBrain(object):
         vb.menuCamFly.setChecked(False)
         vb._fcn_set_cam_fly()
 
+    def test_gui_uiobjects(self):
+        """Test function gui_uiobjects."""
+        for k in [3, 2, 1, 0]:
+            vb._obj_type_lst.setCurrentIndex(k)
+            vb._fcn_obj_type()
+
+    @staticmethod
+    def _preselect_object(name):
+        if name == 'sources':
+            vb._obj_type_lst.setCurrentIndex(0)
+        elif name == 'connectivity':
+            vb._obj_type_lst.setCurrentIndex(1)
+        elif name == 'time-series':
+            vb._obj_type_lst.setCurrentIndex(2)
+        elif name == 'pictures':
+            vb._obj_type_lst.setCurrentIndex(3)
+        vb._fcn_obj_type()
+
     def test_gui_uisources_markers(self):
         """Test markers functions in ui_sources."""
-        # Display sources (all / none / left / right / inside / outside)
-        for k in range(6):
-            vb._sourcesPickdisp.setCurrentIndex(k)
-            vb._fcn_sources_display()
-        # Test marker look :
-        vb.s_Symbol.setCurrentIndex(5)
-        vb.s_EdgeColor.setText('green')
-        vb.s_EdgeWidth.setValue(3.2)
-        vb._fcn_sources_look()
-        # Radius :
-        vb.s_Scaling.setChecked(True)
-        vb.s_radiusMin.setValue(1.2)
-        vb.s_radiusMax.setValue(10.4)
-        vb._fcn_sources_radius()
-        # Projection :
-        vb._fcn_update_proj_list()
-        vb._uitRadius.setValue(17.)
-        vb._uitContribute.setChecked(True)
-        vb._uitPickProj.setCurrentIndex(1)
-        vb._fcn_sources_proj()
-        # Cross-sections :
+        self._preselect_object('sources')
+        vb._sources_to_gui()
+        vb._fcn_source_visible()
+        vb._fcn_source_select()
+        vb._fcn_source_symbol()
+        vb._fcn_source_radius()
+        vb._fcn_source_edgecolor()
+        vb._fcn_source_edgewidth()
+        vb._fcn_source_alpha()
+        vb._fcn_text_fontsize()
+        vb._fcn_text_color()
+        vb._fcn_text_translate()
+        # Analyse / Cross-sections :
+        vb._fcn_analyse_sources()
         vb._fcn_goto_cs()
-
-    def test_gui_uisources_text(self):
-        """Test text functions in ui_sources."""
-        vb.x_text.setValue(1.2)
-        vb.y_text.setValue(2.2)
-        vb.z_text.setValue(3.2)
-        vb.q_stextcolor.setText('darkblue')
-        vb.q_stextsize.setValue(10.2)
-        vb._fcn_textupdate()
 
     def test_gui_uisources_ts(self):
         """Test time-series functions in ui_sources."""
-        vb._tsWidth.setValue(1.2)
-        vb._tsAmp.setValue(2.2)
-        vb._tsLw.setValue(2.2)
-        vb._tsDx.setValue(1.2)
-        vb._tsDy.setValue(2.2)
-        vb._tsDz.setValue(3.2)
-        vb._tsColor.setText('yellow')
-        vb.grpTs.setChecked(True)
-        vb._fcn_ts_update()
+        self._preselect_object('time-series')
+        vb._ts_to_gui()
+        vb._fcn_ts_visible()
+        vb._fcn_ts_width()
+        vb._fcn_ts_amp()
+        vb._fcn_ts_line_width()
+        vb._fcn_ts_color()
+        vb._fcn_ts_alpha()
+        vb._fcn_ts_translate()
 
     def test_gui_uisources_pic(self):
         """Test pictures functions in ui_sources."""
-        vb.grpPic.setChecked(True)
-        vb._picWidth.setValue(10.2)
-        vb._picHeight.setValue(12.2)
-        vb._picDx.setValue(1.2)
-        vb._picDy.setValue(2.2)
-        vb._picDz.setValue(3.2)
-        vb._fcn_pic_update()
+        self._preselect_object('pictures')
+        vb._pic_to_gui()
+        vb._fcn_pic_visible()
+        vb._fcn_pic_width()
+        vb._fcn_pic_height()
+        vb._fcn_pic_alpha()
+        vb._fcn_pic_translate()
 
     def test_gui_uiconnect(self):
         """Test functions in ui_connect."""
-        # Line-width :
-        vb.uiConnect_lw.setValue(2.5)
+        self._preselect_object('connectivity')
+        vb._connect_to_gui()
+        vb._fcn_connect_visible()
+        vb._fcn_connect_colorby()
+        vb._fcn_connect_transparency_meth()
+        vb._fcn_connect_alpha()
+        vb._fcn_connect_dyn_alpha()
         vb._fcn_connect_lw()
-        # Change colorby :
-        for k in range(3):
-            vb.uiConnect_colorby.setCurrentIndex(k)
-            vb._fcn_connect_colorby()
-        # Set the color :
-        vb._fcn_connect_set_color(update=True)
-        # Bundling :
-        for k in [True, False]:
-            vb._conBlEnable.setChecked(k)
-            vb._fcn_connect_bundle()
-
-    def test_gui_uiopacity(self):
-        """Test functions in ui_opacity."""
-        # (min, max) slices :
-        vb._fcn_minmax_slice()
-        # Opacity :
-        vb.o_Brain.setChecked(True)
-        vb.o_Sources.setChecked(True)
-        vb.o_Text.setChecked(True)
-        vb.o_Connect.setChecked(True)
-        vb.o_Areas.setChecked(True)
-        vb._fcn_opacity()
-        # XYZ slice :
-        vb.o_Areas.setChecked(False)
-        vb._fcn_xyz_slice()
 
     def test_delete_tmp_folder(self):
         """Delete tmp/folder."""
         shutil.rmtree(path_to_tmp)
+
+    ###########################################################################
+    #                             SHORTCUTS
+    ###########################################################################
+
+    @staticmethod
+    def _key_pressed(canvas, ktype='key_press', key='', **kwargs):
+        """Test VisPy KeyEvent."""
+        k = KeyEvent(ktype, text=key, **kwargs)
+        eval('canvas.events.' + ktype + '(k)')
+
+    @staticmethod
+    def _mouse_event(canvas, etype='mouse_press', **kwargs):
+        """Test a VisPy mouse event."""
+        e = MouseEvent(etype, **kwargs)
+        eval('canvas.events.' + etype + '(e)')
+
+    def test_key_events(self):
+        """Test function events."""
+        for k in ['0', '1', '2', '3', '4', '5', 'b', 'x', 'v', 's', 't', 'r',
+                  'c', 'a', '+', '-', ' ']:
+            self._key_pressed(vb.view.canvas, key=k)
+
+    def test_mouse_events(self):
+        """Test function mouse_events."""
+        for k in ['mouse_release', 'mouse_double_click', 'mouse_move',
+                  'mouse_press']:
+            self._mouse_event(vb.view.canvas, etype=k)

@@ -1,4 +1,9 @@
-"""Time-frequency maps visual base class."""
+"""Time-frequency maps visual base class.
+
+Authors: Etienne Combrisson <e.combrisson@gmail.com>
+
+License: BSD (3-clause)
+"""
 import numpy as np
 
 import vispy.visuals.transforms as vist

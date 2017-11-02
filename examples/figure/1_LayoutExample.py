@@ -8,13 +8,14 @@ Download the archive :
 https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1
 """
 from visbrain import Figure
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
 download_file("figure.zip", unzip=True)
 
 # Files to load :
 files = ['default.png', 'inside.png', 'count.png', 'density.png',
          'repartition.jpg', 'roi.jpg']
+files = [path_to_visbrain_data(k) for k in files]
 
 # Titles :
 titles = ['Default view', 'Select sources inside', 'Connectivity',

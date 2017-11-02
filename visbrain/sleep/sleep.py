@@ -1,24 +1,18 @@
 """Top level Sleep class."""
 import numpy as np
-import sip
 
-from PyQt5 import QtGui, QtWidgets
-import sys
-import os
-
-import vispy.app as visapp
 import vispy.scene.cameras as viscam
 
 from .interface import UiInit, UiElements
 from .visuals import Visuals
 from .tools import Tools
-from ..utils import (FixedCam, color2vb, MouseEventControl, set_widget_size)
+from ..pyqt_module import PyQtModule
+from ..utils import (FixedCam, color2vb, MouseEventControl)
 from ..io import ReadSleepData
+from ..config import profiler
 
-sip.setdestroyonexit(False)
 
-
-class Sleep(ReadSleepData, UiInit, Visuals, UiElements, Tools,
+class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
             MouseEventControl):
     """Visualize and edit sleep data.
 
@@ -95,11 +89,10 @@ class Sleep(ReadSleepData, UiInit, Visuals, UiElements, Tools,
                  annotations=None, channels=None, sf=None, downsample=100.,
                  axis=False, line='gl', hedit=False, use_tf=False,
                  href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
-                 preload=True, use_mne=False, kwargs_mne={}):
+                 preload=True, use_mne=False, kwargs_mne={}, verbose=None):
         """Init."""
+        PyQtModule.__init__(self, verbose=verbose, icon='sleep_icon.svg')
         # ====================== APP CREATION ======================
-        # Create the app and initialize all graphical elements :
-        self._app = QtWidgets.QApplication(sys.argv)
         UiInit.__init__(self)
 
         # Set default GUI state :
@@ -109,6 +102,7 @@ class Sleep(ReadSleepData, UiInit, Visuals, UiElements, Tools,
         MouseEventControl.__init__(self)
 
         # ====================== LOAD FILE ======================
+        profiler("Import file", as_type='title')
         ReadSleepData.__init__(self, data, channels, sf, hypno, href, preload,
                                use_mne, downsample, kwargs_mne,
                                annotations)
@@ -157,22 +151,27 @@ class Sleep(ReadSleepData, UiInit, Visuals, UiElements, Tools,
         self._peaksym = 'disc'
         # Get some data info (min / max / std / mean)
         self._get_data_info()
+        profiler("Data info")
 
         # ====================== USER & GUI INTERACTION  ======================
         # User <-> GUI :
+        profiler("Initialize GUI interactions", as_type='title')
         UiElements.__init__(self)
 
         # ====================== CAMERAS ======================
         self._cam_creation()
 
         # ====================== OBJECTS CREATION ======================
+        profiler("Initialize visual elements", as_type='title')
         Visuals.__init__(self)
 
         # ====================== TOOLS ======================
         Tools.__init__(self)
+        profiler("Initialize tools")
 
         # ====================== FUNCTIONS ON LOAD ======================
         self._fcns_on_creation()
+        profiler("Functions on creation")
 
     def __len__(self):
         """Return the number of channels."""
@@ -194,17 +193,9 @@ class Sleep(ReadSleepData, UiInit, Visuals, UiElements, Tools,
     def _set_default_state(self):
         """Set the default window state."""
         # ================= TAB =================
-        set_widget_size(self._app, self.q_widget, 23)
-        self.QuickSettings.setCurrentIndex(0)
         self.toolBox.setCurrentIndex(1)
         self.toolBox_2.setCurrentIndex(0)
         self._DetectionTab.setCurrentIndex(0)
-
-        # ================= ICON =================
-        pathfile = sys.modules[__name__].__file__.split('sleep.py')[0]
-        app_icon = QtGui.QIcon()
-        app_icon.addFile(os.path.join(pathfile, 'sleep_icon.svg'))
-        self.setWindowIcon(app_icon)
 
     def _cam_creation(self):
         """Create a set of cameras."""
@@ -247,9 +238,3 @@ class Sleep(ReadSleepData, UiInit, Visuals, UiElements, Tools,
             self.loadConfig(filename=self._config_file)
         if self._annot_file is not None:   # Annotation file
             self.loadAnnotationTable(filename=self._annot_file)
-
-    def show(self):
-        """Display the graphical user interface."""
-        # This function has to be placed here (and not in the user.py script)
-        self.showMaximized()
-        visapp.run()

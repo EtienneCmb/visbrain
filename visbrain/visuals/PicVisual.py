@@ -1,3 +1,9 @@
+"""Visual class for 3-D pictures.
+
+Authors: Etienne Combrisson <e.combrisson@gmail.com>
+
+License: BSD (3-clause)
+"""
 import numpy as np
 
 from vispy import gloo, visuals, scene
@@ -23,7 +29,7 @@ FRAG_SHADER = """
 varying vec4 v_color;
 
 void main() {
-    gl_FragColor = vec4(v_color.rgb, v_color.a);
+    gl_FragColor = vec4(v_color.rgb, $u_alpha);
 }
 """
 
@@ -36,8 +42,9 @@ class PicVisual(visuals.Visual):
         return self.n
 
     def __init__(self, data, pos, width=1., height=1., dxyz=(0., 0., 0.,),
-                 select=None, **kwargs):
+                 select=None, alpha=1., **kwargs):
         """Init."""
+        # self.unfreeze()
         self.w = width
         self.h = height
         self._pos = pos
@@ -47,7 +54,7 @@ class PicVisual(visuals.Visual):
         visuals.Visual.__init__(self, VERT_SHADER, FRAG_SHADER)
 
         # Select pictures :
-        if (select is not None) and (len(select) == pos.shape[0]):
+        if isinstance(select, (list, np.ndarray)):
             data = data[select, ...]
             pos = pos[select, ...]
 
@@ -69,6 +76,8 @@ class PicVisual(visuals.Visual):
         color = np.zeros((self._data.shape[0], 4), dtype=np.float32)
         self._color_buffer = gloo.VertexBuffer(color)
         self.shared_program.vert['a_color'] = self._color_buffer
+        self.shared_program.frag['u_alpha'] = alpha
+        self.alpha = alpha
         self.set_data(**kwargs)
 
         # Define drawing mode :
@@ -137,7 +146,6 @@ class PicVisual(visuals.Visual):
         index : array_like
             Array of indices for the triangles of shape
             (n_centers * 2 * (n_rows - 1) * (n_cols - 1), 3)
-
         select : array_like
             Array to select data in the correct order with the same shape as
             the index array.
@@ -194,6 +202,21 @@ class PicVisual(visuals.Visual):
         color = array2colormap(self._data, **kwargs)
         # Send the color to the buffer :
         self._color_buffer.set_data(color)
+        self.update()
+
+    # ----------- ALPHA -----------
+    @property
+    def alpha(self):
+        """Get the alpha value."""
+        return self._alpha
+
+    @alpha.setter
+    def alpha(self, value):
+        """Set alpha value."""
+        self.shared_program.frag['u_alpha'] = value
+        self._alpha = value
+        self.update()
+
 
 # Auto-generate a Visual+Node class for use in the scenegraph.
 PicMesh = scene.visuals.create_visual_node(PicVisual)

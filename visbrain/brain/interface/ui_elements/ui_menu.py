@@ -25,7 +25,7 @@ class UiMenu(HelpMenu):
         # Config :
         self.menuLoadGuiConfig.triggered.connect(self._fcn_loadConfig)
         # Exit :
-        self.actionExit.triggered.connect(QtWidgets.qApp.quit)
+        self.actionExit.triggered.connect(self.closeEvent)
 
         # =============================================================
         # DISPLAY
@@ -83,9 +83,8 @@ class UiMenu(HelpMenu):
     def _fcn_menu_disp_brain(self):
         """Display/hide the main Brain."""
         viz = self.menuDispBrain.isChecked()
-        self.atlas.mesh.visible = viz
-        self.o_Brain.setEnabled(viz)
-        self.o_Brain.setChecked(viz)
+        self._brain_grp.setChecked(viz)
+        self.atlas.visible_obj = viz
 
     def _fcn_menu_disp_crossec(self):
         """Display/hide the Cross-sections."""
@@ -111,28 +110,15 @@ class UiMenu(HelpMenu):
 
     def _fcn_menu_disp_sources(self):
         """Display/hide sources."""
-        inn = self.sources.mesh.name != 'NoneSources'
-        viz = self.menuDispSources.isChecked() and inn
-        self.sources.mesh.visible = viz
-        self.sources.stextmesh.visible = viz
-        self.grpText.setChecked(viz)
-        self.toolBox.setEnabled(viz)
-        self.toolBox.setEnabled(viz)
-        self.groupBox_6.setEnabled(viz)
-        self.o_Sources.setEnabled(viz)
-        self.o_Sources.setChecked(viz)
-        self.o_Text.setEnabled(viz)
-        self.o_Text.setChecked(viz)
+        viz = self.menuDispSources.isChecked()
+        self.sources.visible_obj = viz
+        self._s_grp.setChecked(viz)
 
     def _fcn_menu_disp_connect(self):
         """Display/hide connectivity."""
-        inn = self.connect.mesh.name != 'NoneConnect'
-        viz = self.menuDispConnect.isChecked() and inn
-        self.connect.mesh.visible = viz
-        self.toolBox_5.setEnabled(viz)
-        self.toolBox_6.setEnabled(viz)
-        self.o_Connect.setEnabled(viz)
-        self.o_Connect.setChecked(viz)
+        viz = self.menuDispConnect.isChecked()
+        self.connect.visible_obj = viz
+        self._c_grp.setChecked(viz)
 
     def _fcn_menu_disp_roi(self):
         """Display/hide ROI."""
@@ -146,39 +132,33 @@ class UiMenu(HelpMenu):
         viz = self.menuDispCbar.isChecked()
         toggle_enable_tab(self.QuickSettings, 'Cbar', viz)
         self.cbpanelW.setVisible(viz)
-        # Get enabled objects :
-        cbox = self.cbqt.cbui.object
-        objs = [cbox.model().item(k).isEnabled() for k in range(cbox.count())]
-        if sum(objs) == 1:
-            # Select the name of the enabled object :
-            self.cbqt.select(cbox.itemText(objs.index(True)))
 
     ###########################################################################
     #                                ROTATION
     ###########################################################################
     def _fcn_rotate_top(self):
         """Display top scene."""
-        self._rotate('axial_0')
+        self.atlas.rotate('top')
 
     def _fcn_rotate_bottom(self):
         """Display bottom scene."""
-        self._rotate('axial_1')
+        self.atlas.rotate('bottom')
 
     def _fcn_rotate_left(self):
         """Display left scene."""
-        self._rotate('sagittal_0')
+        self.atlas.rotate('left')
 
     def _fcn_rotate_right(self):
         """Display ritgh scene."""
-        self._rotate('sagittal_1')
+        self.atlas.rotate('right')
 
     def _fcn_rotate_front(self):
         """Display front scene."""
-        self._rotate('coronal_0')
+        self.atlas.rotate('front')
 
     def _fcn_rotate_back(self):
         """Display back scene."""
-        self._rotate('coronal_1')
+        self.atlas.rotate('back')
 
     ###########################################################################
     #                                CAMERA
@@ -206,17 +186,17 @@ class UiMenu(HelpMenu):
             self.volume.mesh.set_camera(camera)
         self.view.wc.update()
         if camera.name == 'turntable':
-            self._rotate(fixed='axial_0')
+            self.atlas.rotate(fixed='axial_0')
 
     ###########################################################################
     #                           PROJECTIONS
     ###########################################################################
     def _fcn_menu_projection(self):
         """Run the cortical projection."""
-        self._tprojectas = 'activity'
-        self._sourcesProjection()
+        self._s_proj_type.setCurrentIndex(0)
+        self._fcn_source_proj()
 
     def _fcn_menu_repartition(self):
         """Run the cortical projection."""
-        self._tprojectas = 'repartition'
-        self._sourcesProjection()
+        self._s_proj_type.setCurrentIndex(1)
+        self._fcn_source_proj()

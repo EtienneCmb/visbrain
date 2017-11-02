@@ -9,13 +9,8 @@ import numpy as np
 from scipy.spatial import ConvexHull
 
 from ..visuals import BrainMesh
-from .base.SourcesBase import SourcesBase
-from .base.ConnectBase import ConnectBase
-from .base.TimeSeriesBase import TimeSeriesBase
-from .base.PicBase import PicBase
 from ..utils import (color2vb, extend_combo_list, safely_set_cbox,
-                     get_combo_list_index, safely_set_spin, safely_set_slider,
-                     set_if_not_none)
+                     get_combo_list_index, safely_set_spin, safely_set_slider)
 from ..io import save_config_json, write_fig_canvas
 
 __all__ = ('BrainUserMethods')
@@ -45,26 +40,25 @@ class BrainUserMethods(object):
     #                             SETTINGS
     # =========================================================================
     # =========================================================================
-    def rotate(self, fixed=None, custom=None):
+    def rotate(self, fixed='top', custom=None):
         """Rotate the scene elements using a predefined or a custom rotation.
 
         The rotation is applied on every objects on the scene.
 
         Parameters
         ----------
-        fixed : string | 'axial'
-            Predefined rotation. Use either 'axial', 'coronal' or
-            'sagittal'. As a complement, use the suffixe '_0' or
-            '_1' to switch between possible views.
+        fixed : str | 'top'
+            Use a fixed rotation :
 
-            * 'axial_0/1': switch between top/bottom view
-            * 'coronal_0/1': switch between front/back view
-            * 'sagittal_0/1': switch between left/right view
-
+                * Top view : 'top' or 'axial_0'
+                * Bottom view : 'bottom' or 'axial_1'
+                * Left : 'left' or 'sagittal_0'
+                * Right : 'right' or 'sagittal_1'
+                * Front : 'front' or 'coronal_0'
+                * Back : 'back' or 'coronal_1'
         custom : tuple | None
-            Custom rotation. The custom parameter must be a
-            tuple of two float respectively for azimuth and
-            elevation.
+            Custom rotation. This parameter must be a tuple of two floats
+            respectively describing the (azimuth, elevation).
 
         Examples
         --------
@@ -77,7 +71,7 @@ class BrainUserMethods(object):
         >>> # Show the GUI :
         >>> vb.show()
         """
-        self._rotate(fixed=fixed, custom=custom)
+        self.atlas.rotate(fixed=fixed, custom=custom)
 
     def background_color(self, color=(.1, .1, .1)):
         """Set the background color of the main canvas and the colorbar.
@@ -195,10 +189,6 @@ class BrainUserMethods(object):
         # Render the canvas :
         write_fig_canvas(saveas, canvas, widget, **kwargs)
 
-    def quit(self):
-        """Quit the interface."""
-        self._app.quit()
-
     def load_config(self, config):
         """Load a configuration file.
 
@@ -224,8 +214,8 @@ class BrainUserMethods(object):
     #                                  BRAIN
     # =========================================================================
     # =========================================================================
-    def brain_control(self, template=None, hemisphere=None, transparent=None,
-                      alpha=None, color=None, visible=True):
+    def brain_control(self, template=None, hemisphere=None, translucent=None,
+                      alpha=None, visible=True):
         """Control the type of brain to use.
 
         Use this method to switch between several brain templates. Then, you
@@ -241,12 +231,10 @@ class BrainUserMethods(object):
         hemisphere : {'both', 'left', 'ritgh'}
             Define if you want to see only 'left' or 'right' hemisphere.
             Otherwise use 'both'.
-        transparent : bool | None
-            Set the brain transparent (True) or opaque (False).
+        translucent : bool | None
+            Set the brain translucent (True) or opaque (False).
         alpha : float | None
             Transparency level.
-        color : string/tuple | None
-            Brain color.
         visible : bool | True
             Display or hide the brain.
 
@@ -263,36 +251,32 @@ class BrainUserMethods(object):
         --------
         brain_list : Get the list of available mesh brain templates.
         """
-        _brain_update = _light_update = False
+        _brain_update = False
         # Template :
         if template in self.brain_list():
-            safely_set_cbox(self._brainTemplate, template,
-                            [self._brain_control])
+            safely_set_cbox(self._brain_template, template,
+                            [self._fcn_brain_template])
             _brain_update = True
         # Hemisphere :
-        if hemisphere in ['both', 'left', 'right']:
-            safely_set_cbox(self._brainPickHemi, hemisphere,
-                            [self._brain_control])
+        if hemisphere in ['left', 'both', 'right']:
+            safely_set_cbox(self._brain_hemi, hemisphere,
+                            [self._fcn_brain_template])
             _brain_update = True
+        # Transparent / opaque :
+        if isinstance(translucent, bool):
+            self._brain_translucent.setChecked(translucent)
+            self._fcn_brain_translucent()
         # Opacity :
         if isinstance(alpha, (int, float)):
-            self.atlas.mesh.projection('internal')
-            self.atlas.mesh.set_alpha(alpha)
-        # Transparent / opaque :
-        if isinstance(transparent, bool):
-            self._brainTransp.setChecked(transparent)
-            _light_update = True
+            self._brain_alpha.setValue(alpha * 100.)
+            self._fcn_brain_alpha()
         # Visible :
         self.menuDispBrain.setChecked(visible)
-        self.atlas.mesh.visible = visible
+        self._brain_grp.setChecked(visible)
+        self._fcn_brain_visible()
         # Update :
         if _brain_update:
-            self._brain_control()
-        if _light_update:
-            self._light_reflection()
-        # Color :
-        if color is not None:
-            self.atlas.mesh.set_color(color=color)
+            self._fcn_brain_template()
 
     def brain_list(self):
         """Get the list of available mesh brain templates.
@@ -308,7 +292,7 @@ class BrainUserMethods(object):
         >>> vb = Brain()
         >>> print(vb.brain_list())
         """
-        return self.atlas._surf_list
+        return self.atlas._get_all_available_templates()
 
     def add_mesh(self, name, vertices, faces, **kwargs):
         """Add a mesh to the scene.
@@ -330,7 +314,7 @@ class BrainUserMethods(object):
         self._userobj[name].set_camera(self.view.wc.camera)
         self._userobj[name].parent = self._vbNode
         # Add mesh for projection :
-        self._tobj[name] = AddMesh(self._userobj[name])
+        self._proj_obj[name] = AddMesh(self._userobj[name])
 
     def add_volume(self, name, vol, transform=None, roi_values=None,
                    roi_labels=None):
@@ -493,153 +477,64 @@ class BrainUserMethods(object):
     #                              SOURCES
     # =========================================================================
     # =========================================================================
-    def sources_control(self, data=None, color='#ab4652', symbol=None,
-                        radiusmin=None, radiusmax=None, edgecolor='white',
-                        edgewidth=None, scaling=None, alpha=None, mask=None,
-                        maskcolor='gray'):
+    def sources_control(self, name, data=None, color=None, symbol=None,
+                        radius_min=None, radius_max=None, edge_color=None,
+                        edge_width=None, alpha=None, mask=None,
+                        mask_color=None, visible=True):
         """Set data to sources and control source's properties.
 
-        Parameters
-        ----------
-        data : None
-            Vector of data for each source. Le length of this vector must
-            be same as the number of sources.
-        color : string/list/ndarray | '#ab4652'
-            Color of each source sphere. If s_color is a single string,
-            all sphere will have the same color. If it's' a list of
-            strings, the length must be N. Alternatively, s_color can be a
-            (N, 3) RGB or (N, 4) RGBA colors.
-        symbol : string | None
-            Symbol to use for sources. Allowed style strings are: disc,
-            arrow, ring, clobber, square, diamond, vbar, hbar, cross,
-            tailed_arrow, x, triangle_up, triangle_down, and star.
-        radiusmin/radiusmax : int/float | (None, None)
-            Define the minimum and maximum source's possible radius. By
-            default if all sources have the same value, the radius will be
-            radiusmin.
-        edgecolor : string/list/ndarray | 'white'
-            Add an edge to sources
-        edgewidth : float | None
-            Edge width of sources
-        scaling : bool | None
-            If set to True, marker scales when rezooming.
-        alpha : int/float | None
-            Transparency of all sources. Must be between 0 and 1.
-        mask : ndarray | None
-            Vector of boolean values, with the same length as the length of
-            xyz. Use this parameter to mask some sources but keep it
-            displayed.
-        maskcolor : list/tuple | 'gray'
-            Color of masked sources when projected on surface.
+        See the definition of SourceObj for the description of input
+        parameters.
 
-        Examples
+        See also
         --------
-        >>> # Define a Brain instance with 10 random sources:
-        >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
-        >>> # Define some random data :
-        >>> data = 100 * np.random.rand(10)
-        >>> # Define some color :
-        >>> color = ['blue'] * 3 + ['white'] * 3 + ['red'] * 4
-        >>> # Set data and properties :
-        >>> vb.sources_control(data=data, symbol='x', radiusmin=1.,
-        >>>                    radiusmax=20., color=color, edgecolor='orange',
-        >>>                    edgewidth=2)
-        >>> # Show the GUI :
-        >>> vb.show()
+        sources_display : Select sources to display.
         """
-        s = self.sources
-        # Update only if sources are already plotted :
-        if s.xyz is not None:
-            # Get inputs :
-            s.data = set_if_not_none(s.data, data)
-            s.color = color2vb(color)
-            s.edgecolor = color2vb(edgecolor)
-            s.edgewidth = set_if_not_none(s.edgewidth, edgewidth)
-            s.alpha = set_if_not_none(s.alpha, alpha)
-            s.scaling = set_if_not_none(s.scaling, scaling)
-            radiusmin = 1.5 * radiusmin if radiusmin is not None else radiusmin
-            radiusmax = 1.5 * radiusmax if radiusmax is not None else radiusmax
-            s.radiusmin = set_if_not_none(s.radiusmin, radiusmin)
-            s.radiusmax = set_if_not_none(s.radiusmax, radiusmax)
-            s.symbol = set_if_not_none(s.symbol, symbol)
-            s.smask = set_if_not_none(s.smask, mask)
-            s.smaskcolor = color2vb(maskcolor)
+        obj = self.sources[name]
+        obj.data = data
+        obj.color = color
+        obj.symbol = symbol
+        obj.radius_min = radius_min
+        obj.radius_max = radius_max
+        obj.edge_color = edge_color
+        obj.edge_width = edge_width
+        obj.mask = mask
+        obj.mask_color = mask_color
+        obj.alpha = alpha
+        obj.visible = visible
 
-            # Check arguments and update plot:
-            s.prepare2plot()
-            s.update()
-        else:
-            raise ValueError("No sources detected. Please, add some sources "
-                             "before trying to update data")
-
-    def sources_opacity(self, alpha=1., show=True):
-        """Set the level of transparency of sources.
-
-        Parameters
-        ----------
-        alpha : float | 1.
-            Transparency level (usually between 0 and 1).
-        show : bool | True
-            Specify if sources has be shown.
-
-        Examples
-        --------
-        >>> # Define a Brain instance with 10 random sources:
-        >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
-        >>> # Set transparency :
-        >>> vb.sources_opacity(alpha=0.1, show=True)
-        >>> # Show the GUI :
-        >>> vb.show()
-        """
-        if alpha >= 0.95:
-            self.sources.mesh.set_gl_state('translucent', depth_test=False)
-        else:
-            self.sources.mesh.set_gl_state('translucent', depth_test=True)
-        self.sources.sColor[:, 3] = alpha
-        self.sources.edgecolor[:, 3] = alpha
-        self.sources.update()
-        self.sources.mesh.visible = show
-
-    def sources_display(self, select='all'):
+    def sources_display(self, name=None, select='all'):
         """Select sources to display.
 
-        The selected sources can be then used to project activity or
-        repartition.
-
         Parameters
         ----------
+        name : string | None
+            Name of the source object to control. If None, the selection is
+            applied to all sources.
         select : {'all', 'none', 'left', 'right', 'inside', 'outside'}
             The select parameter can be 'all', 'none', 'left', 'right',
             'inside' or 'outside'.
 
-        Examples
+        See also
         --------
-        >>> # Define a Brain instance with 10 random sources:
-        >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
-        >>> # Set transparency :
-        >>> vb.sources_display(select='right')
-        >>> # Show the GUI :
-        >>> vb.show()
+        sources_control : Set data to sources and control source's properties.
         """
-        # Display either All / None :
-        if select in ['all', 'none', 'left', 'right']:
-            self.sources.display(select)
-
-        # Display sources that are either in the inside / outside the brain :
-        elif select in ['inside', 'outside']:
-            vert = self.atlas.mesh.get_vertices
-            self.sources._isInside(vert, select, self.progressbar)
-
+        if name is None:
+            obj = self.sources
         else:
-            raise ValueError("The select parameter must either be 'all', "
-                             "'none', 'left', 'right', 'inside' or 'outside'")
+            obj = self.sources[name]
+        if select in ['all', 'none', 'left', 'right', None]:
+            obj.set_visible_sources(select=select)
+        elif select in ['inside', 'outside']:
+            vert = self.atlas.vertices
+            obj.set_visible_sources(select=select, v=vert)
 
     def cortical_projection(self, radius=10., project_on='brain',
-                            contribute=False, **kwargs):
+                            contribute=False, mask_color='orange', **kwargs):
         """Project sources activity.
 
         This method can be used to project the sources activity either onto the
-        brain or on deep areas (like gyrus or brodmann areas).
+        brain or on region of interest.
 
         Parameters
         ----------
@@ -651,121 +546,67 @@ class BrainUserMethods(object):
             brain or 'roi' to project on region of interest (if defined).
         contribute : bool | False
             Specify if sources contribute on both hemisphere.
+        mask_color : string/tuple/array_like | 'orange'
+            The color to assign to vertex for masked sources.
         kwargs : dict
             Further arguments are be passed to the cbar_control method.
 
-        Examples
-        --------
-        >>> # Define a Brain instance with 10 random sources:
-        >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
-        >>> # Set transparency :
-        >>> vb.sources_opacity(alpha=0.1, show=True)
-        >>> # Run the cortical projection :
-        >>> vb.cortical_projection()
-        >>> # Show the GUI :
-        >>> vb.show()
-
         See also
         --------
+        cortical_repartition : project number of contributing sources.
         roi_control : add a region of interest.
         sources_colormap : Change the colormap properties.
         """
-        # Update variables :
-        self._tradius = float(radius)
-        self._tprojecton = project_on
-        self._tcontribute = contribute
-        self._tprojectas = 'activity'
-        # Run the corticale projection :
-        self._sourcesProjection()
+        self._s_proj_radius.setValue(float(radius))
+        self._s_proj_contribute.setChecked(contribute)
+        self._s_proj_type.setCurrentIndex(0)
+        self._s_proj_mask_color.setText(str(mask_color))
+        safely_set_cbox(self._s_proj_on, project_on)
         # Colormap control :
-        self.sources_colormap(**kwargs)
+        self.cbar_control('Projection', **kwargs)
+        self._fcn_source_proj()
 
     def cortical_repartition(self, radius=10., project_on='brain',
-                             contribute=False, **kwargs):
-        """Get the number of contributing sources per vertex.
+                             contribute=False, mask_color='orange', **kwargs):
+        """Project the number of contributing sources per vertex.
 
         Parameters
         ----------
         radius : float | 10.
             Projection radius.
         project_on : string | 'brain'
-            Define on which object to project the sources repartition.
-            Chose either 'brain' for projecting onto the brain or 'roi'
-            to project on region of interest (if defined).
+            Define on which object to project the sources activity. Chose
+            either 'brain' for projecting the sources activity onto the
+            brain or 'roi' to project on region of interest (if defined).
         contribute : bool | False
             Specify if sources contribute on both hemisphere.
+        mask_color : string/tuple/array_like | 'orange'
+            The color to assign to vertex for masked sources.
         kwargs : dict
-            Further arguments are be passed to the cbar_control method.
-
-        Examples
-        --------
-        >>> # Define a Brain instance with 10 random sources:
-        >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
-        >>> # Set transparency :
-        >>> vb.sources_opacity(alpha=0.1, show=True)
-        >>> # Run the cortical projection :
-        >>> vb.cortical_repartition()
-        >>> # Show the GUI :
-        >>> vb.show()
+            Further arguments are be passed to the cbar_control method
         """
-        # Update variables :
-        self._tradius = float(radius)
-        self._tprojecton = project_on
-        self._tcontribute = contribute
-        self._tprojectas = 'repartition'
-        # Run the corticale repartition :
-        self._sourcesProjection()
+        self._s_proj_radius.setValue(float(radius))
+        self._s_proj_contribute.setChecked(contribute)
+        self._s_proj_type.setCurrentIndex(1)
+        self._s_proj_mask_color.setText(str(mask_color))
+        safely_set_cbox(self._s_proj_on, project_on)
         # Colormap control :
-        self.sources_colormap(**kwargs)
-
-    def sources_colormap(self, **kwargs):
-        """Change the colormap of cortical projection / repartition.
-
-        This method can be used to update paramaters of the colormap. But it's
-        only going to work if the source's activity has been projected (using
-        the cortical projection or repartition).
-
-        Parameters
-        ----------
-        kwargs : dict | {}
-            Further arguments are be passed to the cbar_control method.
-
-        Examples
-        --------
-        >>> # Define a Brain instance with 10 random sources:
-        >>> vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))
-        >>> # Define some random data :
-        >>> data = 100 * np.random.rand(10)
-        >>> # Set data and properties :
-        >>> vb.sources_control(data=data)
-        >>> # Run the cortical projection :
-        >>> vb.cortical_projection()
-        >>> # Set colormap proprties :
-        >>> vb.sources_colormap(cmap='Spectral', vmin=20, vmax=60,
-        >>>                     under='orange', over='black', clim=(10, 80))
-        >>> # Show the GUI :
-        >>> vb.show()
-
-        See also
-        --------
-        cbar_control : control the colorbar of a specific object
-        cortical_projection : project source activity onto the cortex
-        cortical_repartition : project the source's repartition onto the cortex
-        """
         self.cbar_control('Projection', **kwargs)
+        self._fcn_source_proj()
 
-    def sources_fit(self, obj='brain'):
+    def sources_fit_to_vertices(self, name=None, fit_to='brain'):
         """Force sources coordinates to fit to a selected object.
 
         Parameters
         ----------
-        obj : {'brain', 'roi'}
+        name : string | None
+            If name is None, all sources across objects are going to be used.
+        fit_to : {'brain', 'roi'}
             The object name to fit. Use 'brain' or 'roi'.
         """
-        # Get vertices of the selected object :
-        v = self._findVertices(obj)
-        # fit sources to the selected vertices :
-        self.sources._fit(v, self.progressbar)
+        obj = self.sources[name] if name is not None else self.sources
+        v = self._get_obj_vertices(fit_to)
+        obj.fit_to_vertices(v)
 
     def sources_to_convex_hull(self, xyz):
         """Convert a set of sources into a convex hull.
@@ -786,79 +627,46 @@ class BrainUserMethods(object):
         """
         return ConvexHull(xyz).simplices
 
-    def add_sources(self, name, **kwargs):
-        """Add a supplementar source's object.
-
-        Warning : sources that are adding usnig this methos cannot be controled
-        using the GUI.
-
-        Parameters
-        ----------
-        name : string
-            Your source's object name.
-        kwargs : dict
-            Pass every further arguments starting with "s" (like s_xyz,
-            s_data, s_cmap, s_symbol...)
-
-        Examples
-        --------
-        >>> vb = Brain()
-        >>> s_xyz = np.random.randint(-20, 20, (10, 3))
-        >>> vb.add_sources(s_xyz=s_xyz, s_radiusmin=10, s_radiusmax=21,
-        >>>                s_opacity=.8, s_symbol='x')
-        """
-        self._userobj[name] = SourcesBase(**kwargs)
-        self._userobj[name].mesh.parent = self._vbNode
-
     # =========================================================================
     # =========================================================================
     #                            TIME-SERIES
     # =========================================================================
     # =========================================================================
-    def time_series_control(self, color=None, lw=None, amp=None, width=None,
-                            dxyz=None, visible=True):
+    def time_series_control(self, name, color=None, line_width=None,
+                            amplitude=None, width=None, translate=None,
+                            visible=True):
         """Control time-series settings.
 
         Parameters
         ----------
+        name : string
+            Name of the time-series object to control.
         color : string/list/tuple/array_like | None
             Color of the time-series.
-        amp : float | None
+        amplitude : float | None
             Graphical amplitude of the time-series.
         width : float | None
             Graphical width of th time-series.
-        lw : float | None
+        line_width : float | None
             Line width of the time-series.
-        dxyz : tuple | None
-            Offset along the (x, y, z) axis for the time-series.
+        translate : tuple | None
+            Translation along the (x, y, z) axis for the time-series.
         """
-        self.tseries.set_data(color, lw, amp, width, dxyz, visible)
-        self.tseries.mesh.update()
-
-    def add_time_series(self, name, ts_xyz, ts_data, **kwargs):
-        """Add time-series (TS) object.
-
-        Parameters
-        ----------
-        name : string
-            Name of the TS object.
-        ts_xyz : array_like
-            Array of (x, y, z) coordinates of shape (n_sources, 3).
-        ts_data : array_like
-            Array of time-serie's data of shape (n_sources, n_time_points).
-        kwargs : dict | {}
-            Further arguments starting with *ts_*.
-        """
-        self._userobj[name] = TimeSeriesBase(ts_xyz, ts_data, **kwargs)
-        self._userobj[name].mesh.parent = self._vbNode
-        self.grpTs.setEnabled(True)
+        obj = self.tseries[name]
+        obj.color = color
+        obj.line_width = line_width
+        obj.amplitude = amplitude
+        obj.width = width
+        obj.translate = translate
+        obj.visible_obj = visible
 
     # =========================================================================
     # =========================================================================
     #                             PICTURES
     # =========================================================================
     # =========================================================================
-    def pictures_control(self, width=None, height=None, dxyz=None, **kwargs):
+    def pictures_control(self, name, width=None, height=None, translate=None,
+                         visible=True, **kwargs):
         """Control pictures settings.
 
         Parameters
@@ -867,45 +675,33 @@ class BrainUserMethods(object):
             Width of each picture.
         height : float | 7.
             Height of each picture.
-        dxyz : float | (0., 0., 1.)
+        translate : tuple | None
             Offset along the (x, y, z) axis for the pictures.
         kwargs : dict | {}
             Further arguments can be used to control the colorbar (clim, cmap,
             vmin, under, vmax, over).
         """
-        self.pic.mesh.set_data(width, height, dxyz, **kwargs)
-
-    def add_pictures(self, name, pic_xyz, pic_data, **kwargs):
-        """Add pictures object.
-
-        Parameters
-        ----------
-        name : string
-            Name of the pictures object.
-        pic_xyz : array_like
-            Array of (x, y, z) coordinates of shape (n_sources, 3).
-        pic_data : array_like
-            Array of pictures data of shape (n_sources, n_rows, n_cols).
-        kwargs : dict | {}
-            Further arguments starting with *pic_*.
-        """
-        self._userobj[name] = PicBase(pic_xyz, pic_data, **kwargs)
-        self._userobj[name].mesh.parent = self._vbNode
-        self._userobj[name].set_camera(self.view.wc.camera)
-        self.grpPic.setEnabled(True)
+        obj = self.pic[name]
+        obj.width = width
+        obj.height = height
+        obj.translate = translate
+        obj.visible_obj = visible
+        self.cbar_control(name, **kwargs)
 
     # =========================================================================
     # =========================================================================
     #                            CONNECTIVITY
     # =========================================================================
     # =========================================================================
-    def connect_control(self, colorby=None, dynamic=None, show=True,
-                        **kwargs):
+    def connect_control(self, name, color_by=None, dynamic=None, alpha=None,
+                        line_width=None, visible=True, **kwargs):
         """Update connectivity object.
 
         Parameters
         ----------
-        colorby : string | {'strength', 'count', 'density'}
+        name : string
+            Name of the connectivity object to control.
+        colorby : string | {'strength', 'count'}
             Define how to color connexions. Use 'strength' if the color has
             to be modulate by the connectivity strength. Use 'count' if the
             color depends on the number of connexions per node. Use
@@ -917,60 +713,28 @@ class BrainUserMethods(object):
         show : bool | True
             Display or hide connectivity.
         kwargs : dict | {}
-            Further arguments are be passed to the cbar_control method.
-
-        Examples
-        --------
-        >>> Generate 10 sources :
-        >>> nsources = 10
-        >>> s_xyz = np.random.randint(-20, 20, (nsources, 3))  # coordinates
-        >>> Create a (N, N) matrix of connectivity strength :
-        >>> c_connect = np.random.rand(nsources, nsources)
-        >>> c_connect[np.tril_indices_from(c_connect)] = 0
-        >>> Mask the connectivity matrix for every values <.6 and >.7
-        >>> c_connect = np.ma.masked_array(c_connect, mask=True)
-        >>> nz = np.where((c_connect > .7) & (c_connect < .6))
-        >>> c_connect.mask[nz] = False
-        >>> Define a brain instance :
-        >>> vb = Brain(s_xyz=s_xyz, c_connect=c_connect)
+            Further arguments can be used to control the colorbar (clim, cmap,
+            vmin, under, vmax, over).
 
         See also
         --------
         cbar_control : control the colormap of a specific object
         """
-        if colorby is not None:
-            self.connect.colorby = colorby
-        if dynamic is not None:
-            self.connect.dynamic = dynamic
-        # Optional parameters are send to cbar_control :
-        self.cbar_control('Connectivity', **kwargs)
-        self.connect.mesh.visible = show
-        self.connect.update()
-
-    def add_connect(self, name, **kwargs):
-        """Add a supplementar connectivity object.
-
-        Warning : connectivity lines that are adding usnig this methos cannot
-        be controled using the GUI.
-
-        Parameters
-        ----------
-        name : string
-            Your connectivity lines object name.
-        kwargs : dict
-            Pass every further arguments starting with *c_* (like c_xyz,
-            c_connect, c_select, c_colorby...)
-        """
-        self._userobj[name] = ConnectBase(**kwargs)
-        self._userobj[name].mesh.parent = self._vbNode
+        obj = self.connect[name]
+        obj.color_by = color_by
+        obj.dynamic = dynamic
+        obj.alpha = alpha
+        obj.line_width = line_width
+        obj.visible_obj = visible
+        self.cbar_control(name, **kwargs)
 
     # =========================================================================
     # =========================================================================
     #                                 ROI
     # =========================================================================
     # =========================================================================
-    def roi_control(self, selection=[], subdivision='Brodmann', smooth=3,
-                    name='roi'):
+    def roi_control(self, selection=[], roi_type='Brodmann', smooth=3,
+                    name='roi', translucent=False, alpha=None):
         """Select Region Of Interest (ROI) to plot.
 
         Parameters
@@ -979,22 +743,13 @@ class BrainUserMethods(object):
             List of integers where each one refer to a particular roi. The
             corresponding list can be found in the graphical interface in
             the ROI tab or using the function roi_list.
-        subdivision : {'Brodmann', 'AAL'}
+        roi_type : {'Brodmann', 'AAL', 'Talairach'}
             Select the sub-division method i.e 'Brodmann' (for brodmann areas)
-            or 'AAL' (Anatomical Automatic Labeling)
+            or 'AAL' (Anatomical Automatic Labeling) or 'Talairach'.
         smoth : int | 3
             Define smooth proportion.
         name : string | 'roi'
             Name of the displayed ROI.
-
-        Examples
-        --------
-        >>> # Define a Brain instance :
-        >>> vb = Brain()
-        >>> # Display brodmann area 4 and 6 :
-        >>> vb.roi_control(selection=[4, 6], subdivision='Brodmann', smooth=5)
-        >>> # Show the GUI :
-        >>> vb.show()
 
         See also
         --------
@@ -1005,8 +760,8 @@ class BrainUserMethods(object):
             raise ValueError("The selection parameter must be a list of "
                              "integers")
         selection = np.unique(selection)
-        # Select subdivision in the combo list :
-        idx = get_combo_list_index(self._roiDiv, subdivision)
+        # Select roi_type in the combo list :
+        idx = get_combo_list_index(self._roiDiv, roi_type)
         self._roiDiv.setCurrentIndex(idx)
         # Update the list of structures :
         self._fcn_build_roi_list()
@@ -1015,74 +770,17 @@ class BrainUserMethods(object):
         # Apply selection :
         self._fcn_apply_roi_selection()
         # Add ROI to mesh list :
-        self._tobj[name] = self.volume
+        self._proj_obj[name] = self.volume
         self._fcn_update_proj_list()
+        self.volume.mesh.translucent = translucent
+        self.volume.mesh.alpha = alpha
 
-    def roi_light_reflection(self, reflect_on=None):
-        """Change how light is reflecting onto roi.
-
-        This function can be used to see either the surface only (external) or
-        deep voxels inside roi (internal).
-
-        Parameters
-        ----------
-        reflect_on : {'internal', 'external'}
-            Choose either to reflect on 'internal' or 'external'.
-
-        Examples
-        --------
-        >>> # Define a Brain instance :
-        >>> vb = Brain()
-        >>> # Display brodmann area 4 and 6 :
-        >>> vb.roi_control(selection=[4, 6], subdivision='Brodmann')
-        >>> # Display the external surface :
-        >>> vb.roi_light_reflection(reflect_on='internal')
-        >>> # Hide the brain :
-        >>> vb.brain_opacity(show=False)
-        >>> # Show the GUI :
-        >>> vb.show()
-        """
-        if reflect_on is not None:
-            if reflect_on not in ['internal', 'external']:
-                raise ValueError("The reflect_on parameter must be either "
-                                 "'internal' or 'external'")
-            else:
-                self._roiTransp.setChecked(reflect_on == 'internal')
-
-        self._area_light_reflection()
-
-    def roi_opacity(self, alpha=0.1, show=True):
-        """Set the level of transparency of the deep structures.
-
-        Parameters
-        ----------
-        alpha : float | 0.1
-            Transparency level (usually between 0 and 1).
-        show : bool | True
-            Specify if roi(s) has be shown.
-
-        Examples
-        --------
-        >>> # Define a Brain instance :
-        >>> vb = Brain()
-        >>> # Display brodmann area 4 and 6 :
-        >>> vb.roi_control(selection=[4, 6], subdivision='Brodmann')
-        >>> # Set transparency :
-        >>> vb.roi_opacity(alpha=0.1, show=True)
-        >>> # Show the GUI :
-        >>> vb.show()
-        """
-        # Force to have internal projection :
-        self.volume.mesh.projection('internal')
-        self.volume.mesh.visible = show
-        self.volume.mesh.set_alpha(alpha)
-
-    def roi_list(self, subdivision='Brodmann'):
+    def roi_list(self, roi_type='Brodmann'):
         """Get the list of supported ROI.
 
         Parameters
         ----------
-        subdivision : str | 'Brodmann'
+        roi_type : str | 'Brodmann'
             Select the sub-division method i.e 'Brodmann' (for brodmann areas)
             or 'AAL' (Anatomical Automatic Labeling)
 
@@ -1090,17 +788,8 @@ class BrainUserMethods(object):
         -------
         roi_labels : array_like
             The currently supported ROI's labels.
-
-        Examples
-        --------
-        >>> # Define a Brain instance :
-        >>> vb = Brain()
-        >>> # Get list of ROI for AAL :
-        >>> lst = vb.roi_list(subdivision='AAL')
-        >>> # Print this list :
-        >>> print(lst)
         """
-        return self.volume._vols[subdivision].roi_labels
+        return self.volume._vols[roi_type].roi_labels
 
     # =========================================================================
     # =========================================================================
@@ -1178,6 +867,8 @@ class BrainUserMethods(object):
         ndigits : int | None
             Number of digits for the text.
         """
+        # kwargs['isvmin'] = isinstance(kwargs.get('vmin', None), (int, float))
+        # kwargs['isvmax'] = isinstance(vmax, (int, float))
         # Test if the item "name" is enabled :
         self._cbar_item_is_enable(name)
         # Select the object :
@@ -1186,10 +877,10 @@ class BrainUserMethods(object):
         for k, i in kwargs.items():
             if i is not None:
                 self.cbqt.cbobjs._objs[name][k] = i
-        self.cbqt._fcn_ChangeObj()
+        self.cbqt._fcn_change_object()
 
     def cbar_select(self, name, visible=True):
-        """Select and disply a colorbar.
+        """Select and display a colorbar.
 
         Parameters
         ----------
@@ -1234,7 +925,7 @@ class BrainUserMethods(object):
         # Test if the item "name" is enabled :
         self._cbar_item_is_enable(name)
         # Autoscale :
-        self.cbqt._fcn_cbAutoscale(name=name)
+        self.cbqt._fcn_cb_autoscale(name=name)
 
     def cbar_export(self, filename=None, export_only=None, get_dict=False):
         """Export colorbars in a text file or in a dictionary.

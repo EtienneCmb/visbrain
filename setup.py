@@ -6,7 +6,7 @@ import pip
 from pip.req import parse_requirements
 from optparse import Option
 
-__version__ = "0.3.5"
+__version__ = "0.3.6"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
 MAINTAINER = "Etienne Combrisson"
@@ -14,14 +14,16 @@ EMAIL = 'e.combrisson@gmail.com'
 KEYWORDS = "brain MNI GPU visualization data OpenGL vispy neuroscience " + \
            "sleep data-mining"
 DESCRIPTION = "Hardware-accelerated visualization suite for " + \
-              "neuroscientific data in Python"
-URL = 'http://etiennecmb.github.io/visbrain/'
+              "brain-data in Python"
+URL = 'http://visbrain.org/'
 DOWNLOAD_URL = "https://github.com/EtienneCmb/visbrain/archive/" + \
                "v" + __version__ + ".tar.gz"
 # Data path :
-PACKAGE_DATA = {'visbrain.brain.base.template': ['*.npz'],
-                'visbrain.sleep.ico': ['*.svg'],
-                'visbrain.utils.topo': ['*.npz']
+PACKAGE_DATA = {'visbrain.data.templates': ['B1.npz', 'B2.npz', 'B3.npz'],
+                'visbrain.data.roi': ['aal.npz', 'brodmann.npz',
+                                      'talairach.npz'],
+                'visbrain.data.topo': ['eegref.npz'],
+                'visbrain.data.icons': ['*.svg'],
                 }
 
 
@@ -46,13 +48,6 @@ else:
 
 REQS = [str(ir.req) for ir in install_reqs]
 
-# Try to import vispy :
-try:
-    from vispy.scene.visuals import ColorBar
-except:
-    raise ValueError("You should install the developer version of vispy. In a "
-                     "terminal, run : pip install -e git+https://github.com"
-                     "/vispy/vispy#egg=vispy-dev")
 
 setup(
     name=NAME,

@@ -20,12 +20,7 @@ install:
   # Activate testing environnement :
   - activate testenv
   # Install dependencies :
-  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pytest pytest-cov
-  # ------------------- VISPY -------------------
-  - cd ../
-  - pip install -e git+https://github.com/vispy/vispy#egg=vispy-dev
-  - ls
-  - cd visbrain/
+  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pytest pytest-cov pandas
   # ------------------- VISBRAIN -------------------
   - pip install -e .
 

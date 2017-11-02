@@ -45,6 +45,7 @@ class UiTools(object):
         # =====================================================================
         # FILTERING
         # =====================================================================
+        self._SigFiltChan.addItems(self._channels)
         self._SigFiltDisp.currentIndexChanged.connect(self._fcn_filtDispAs)
         self._SigFiltApply.clicked.connect(self._fcn_sigProcessing)
         self._SigFilt.clicked.connect(self._fcn_filtViz)
@@ -166,8 +167,15 @@ class UiTools(object):
         filtorder = self._SigFiltOrder.value()
         filtband = str(self._SigFiltBand.currentText())
 
+        # Filt a specific channel :
+        channel = int(self._SigFiltChan.currentIndex()) - 1
+        if channel >= 0:
+            self._chanChecks[channel].setChecked(True)
+            self._fcn_chanViz()
+
         # ========== CHANNELS ==========
         # ---- Demean / detrend ----
+        self._chan._preproc_channel = channel
         self._chan.demean = demean
         self._chan.detrend = detrend
         # ---- Filtering ----
@@ -182,13 +190,13 @@ class UiTools(object):
         self._chan.update()
 
         # ========== SPECTROGRAM ==========
+        chan = self._PanSpecChan.currentIndex()
         # ---- Demean / detrend ----
         self._spec.demean = demean
         self._spec.detrend = detrend
         # ---- Filtering ----
         self._spec.dispas = dispas
-        self._spec.filt = filt
-        self._spec.filt = filt
+        self._spec.filt = filt and channel in [-1, chan]
         self._spec.fstart = fstart
         self._spec.fend = fend
         self._spec.forder = filtorder

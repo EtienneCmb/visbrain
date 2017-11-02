@@ -6,11 +6,12 @@ import numpy as np
 
 from .color import color2vb, color2tuple
 
-__all__ = ('slider2opacity', 'textline2color', 'color2json', 'set_spin_values',
+__all__ = ('slider2opacity', 'textline2color', 'color2json',
            'ndsubplot', 'combo', 'is_color', 'MouseEventControl',
            'disconnect_all', 'extend_combo_list', 'get_combo_list_index',
            'safely_set_cbox', 'safely_set_spin', 'safely_set_slider',
-           'toggle_enable_tab', 'get_screen_size', 'set_widget_size')
+           'toggle_enable_tab', 'get_screen_size', 'set_widget_size',
+           'fill_pyqt_table')
 
 
 def slider2opacity(value, thmin=0.0, thmax=100.0, vmin=-5.0, vmax=105.0,
@@ -133,22 +134,6 @@ def is_color(color, comefrom='color'):
         raise ValueError("The comefrom must either be 'color' or 'textline'.")
 
     return iscol
-
-
-def set_spin_values(elements, values):
-    """Set a list of value to a list of elements.
-
-    Parameters
-    ----------
-    elements : QtSpin
-        List of Qt spin elements.
-    values : list
-        List of values per element.
-    """
-    if len(elements) != len(values):
-        raise ValueError("List of Qt spins must have the same length "
-                         "as values")
-    [k.setValue(i) for k, i in zip(elements, values)]
 
 
 def ndsubplot(n, line=4, force_col=None, max_rows=100, max_on_line=True):
@@ -439,3 +424,39 @@ def set_widget_size(app, widget, width=100., height=100.):
     # Set maximum size to the widget :
     size = QtCore.QSize(s_width, s_height)
     widget.resize(size)
+
+
+def fill_pyqt_table(table, col_names=None, col=None, df=None):
+    """Fill a PyQt table widget.
+
+    Parameters
+    ----------
+    col_names : list | None
+        List of name of each columns.
+    col : list | None
+        List of columns values.
+    df : pandas.DataFrame or dict | None
+        Alternatively, a pandas DataFrame or a dictionary can also be used.
+    """
+    from PyQt5.QtWidgets import QTableWidgetItem
+
+    # ________________________ Checking ________________________
+    # Dictionary / pandas.DataFrame :
+    if df is not None:
+        col_names = list(df.keys())
+        col = []
+        for k in col_names:
+            col.append(df[k])
+    assert len(col_names) == len(col)
+    assert all([isinstance(k, str) for k in col_names])
+
+    # ________________________ Define table ________________________
+    table.clear()
+    table.setColumnCount(len(col_names))
+    table.setHorizontalHeaderLabels(col_names)
+    table.setRowCount(len(col[0]))
+
+    # ________________________ Pre-allocate ________________________
+    for i in range(table.rowCount()):
+        for k in range(table.columnCount()):
+            table.setItem(i, k, QTableWidgetItem(str(col[k][i])))

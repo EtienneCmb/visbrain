@@ -1,16 +1,16 @@
 """Group of functions for physiological processing."""
 from re import findall
 import os
-import sys
 
 import numpy as np
 from itertools import product
 from scipy.stats import zscore
 
 from .sigproc import smoothing
+from .others import get_data_path
 
 __all__ = ('find_non_eeg', 'rereferencing', 'bipolarization', 'commonaverage',
-           'tal2mni', 'mni2tal', 'find_roi', 'generate_eeg')
+           'tal2mni', 'mni2tal', 'load_predefined_roi', 'generate_eeg')
 
 
 def find_non_eeg(channels, pattern=['eog', 'emg', 'ecg', 'abd']):
@@ -319,59 +319,39 @@ def mni2tal(xyz):
     xyz[:, ~tmp] = up_t * xyz[:, ~tmp]
     return np.array(xyz[0:3, :].T)
 
-def find_roi(xyz, r=5., nearest=True):
-    # Check xyz to be (n_sources, 3) :
-    if (xyz.ndim != 2) or (xyz.shape[1] != 3):
-        raise ValueError("The shape of xyz must be (N, 3).")
-    # xyz = tal2mni(xyz)
-    n_sources = xyz.shape[0]
-    xyz = np.c_[xyz, np.ones((n_sources,))].T
 
-    # Load ROI atlas :
-    pathfile = sys.modules[__name__].__file__.split('utils')[0]
-    path_to_template = os.path.join(*('brain', 'base', 'templates', 'roi.npz'))
-    path = os.path.join(pathfile, path_to_template)
-    atlas = np.load(path)
+def load_predefined_roi(name):
+    """Load a predefined ROI template.
 
-    # Get volumes :
-    aal_label, aal_idx = atlas['aal_label'], atlas['aal_idx']
-    vol, hdr, brod_idx = atlas['vol'], atlas['hdr'], atlas['brod_idx']
-    sh = vol.shape
+    Parameters
+    ----------
+    name : {'brodmann', 'aal', 'talairach'}
+        Name of the ROI atlas to load.
 
-    # Build AAL label for left and right :
-    left = np.full((len(aal_label),), ' (L)')
-    right = np.full((len(aal_label),), ' (R)')
-    aal_l = np.core.defchararray.add(aal_label, left)
-    aal_r = np.core.defchararray.add(aal_label, right)
-    aal_label = np.c_[aal_l, aal_r].flatten()
-    # print(aal_label.shape, aal_idx.shape, 'AAl : ', aal_idx.min(), aal_idx.max(), 'VOL : ', vol.min(), vol.max())
+    Returns
+    -------
+    vol : array_like
+        The volume of shape (nx, ny, nz).
+    labels : array_like
+        Array of labels of type object and of length n_labels.
+    index : array_like
+        Array of index corresponding to the labels of type np.int and of length
+        n_labels.
+    hdr : array_like
+        The matrix of transformation of shape (4, 4).
+    system : {'mni', 'tal'}
+        The system used by the volume.
+    """
+    name = name.lower()
+    assert name in ['brodmann', 'aal', 'talairach']
+    # Load archive :
+    file = get_data_path(folder='roi', file=name + '.npz')
+    arch = np.load(file)
+    # Extract informations :
+    vol, hdr = arch['vol'], arch['hdr']
+    labels, index = arch['labels'], arch['index']
 
-    # Loop over source :
-    info = np.full((n_sources, 5), '-', dtype=object)
-    for k in range(n_sources):
-        info[k, 2::] = xyz[0:-1, k].ravel()
-        # Apply HDR transformation :
-        pos = np.linalg.lstsq(hdr, xyz[:, [k]])[0].reshape(-1)
-        sub = list(np.around(pos).astype(int))
-
-        if (sub[0] <= sh[0]) and (sub[1] <= sh[1]) and (sub[2] <= sh[2]):
-
-            if nearest:
-                pass
-            else:
-                # Find the Brodmann area :
-                brod = brod_idx[sub[0], sub[1], sub[2]]
-                if brod:
-                    info[k, 0] = 'Brodmann area ' + str(brod)
-                # Find the AAL :
-                aal = vol[sub[0], sub[1], sub[2]]
-                if aal:
-                    info[k, 1] = aal_label[aal - 1]
-        else:
-            pass
-            # print('BAD')
-
-    # print(info)
+    return vol, labels, index, hdr, 'tal' if name == 'talairach' else 'mni'
 
 
 def generate_eeg(sf=512., n_pts=1000, n_channels=1, n_trials=1, n_sines=100,

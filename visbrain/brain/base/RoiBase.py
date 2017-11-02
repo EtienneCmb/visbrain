@@ -135,8 +135,8 @@ class RoiBase(object):
             # Extract the vertices / faces of non-zero values :
             self.vert, self.faces = isosurface(self._smooth(vol), level=.5)
             # Turn the unique color tuple into a faces compatible ndarray:
-            self.vertex_colors = color2faces(self._color_roi[0],
-                                             self.faces.shape[0])
+            self.vertex_colors = np.tile(self._color_roi[0],
+                                         (self.vert.shape[0], 1))
             # Unique color per ROI :
             self._color_idx = np.zeros((self.faces.shape[0],))
 
@@ -167,7 +167,8 @@ class RoiBase(object):
                 idxt = np.full((facesT.shape[0],), k, dtype=np.int64)
                 self._color_idx = np.concatenate(
                     (self._color_idx, idxt)) if self._color_idx.size else idxt
-                color = color2faces(self._color_roi[num], facesT.shape[0])
+                color = self._color_roi[num]
+                color = np.tile(self._color_roi[num], (vertT.shape[0], 1))
                 self.vertex_colors = np.concatenate(
                     (self.vertex_colors,
                      color)) if self.vertex_colors.size else color
@@ -203,13 +204,12 @@ class RoiBase(object):
         """
         if not hasattr(self, 'mesh'):
             self.mesh = BrainMesh(vertices=self.vert, faces=self.faces,
-                                  scale_factor=1., name=self.name_roi,
-                                  recenter=False, parent=self._parent,
+                                  name=self.name_roi, parent=self._parent,
                                   vertfcn=self.transform)
             self.name_roi = 'ROI'
         else:
             self.mesh.set_data(vertices=self.vert, faces=self.faces)
-        self.mesh.set_color(self.vertex_colors)
+        self.mesh.color = self.vertex_colors
 
     def _get_idx_mask(self, index):
         """Get a boolean array where each structure is located.
