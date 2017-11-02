@@ -105,14 +105,9 @@ class BrainObj(VisbrainObject):
                                   normals=normals, lr_index=lr_index,
                                   hemisphere=hemisphere, parent=self._node,
                                   name='Mesh')
-            # Send camera to the mesh (light adaptation) :
-            camera = scene.cameras.TurntableCamera(name='turntable')
-            self.mesh.set_camera(camera)
         else:
             self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                                lr_index=lr_index, hemisphere=hemisphere)
-        # Optimal camera state :
-        self.reset_camera()
 
     def _load_brain_template(self, name, path=None):
         """Load the brain template.
@@ -177,11 +172,15 @@ class BrainObj(VisbrainObject):
 
     def _get_camera(self):
         """Get the most adapted camera."""
+        if self.mesh._camera is None:
+            camera = scene.cameras.TurntableCamera(name='turntable')
+            self.mesh.set_camera(camera)
+            self.reset_camera()
         return self.camera
 
     def _optimal_camera_properties(self, with_distance=True):
         """Get the optimal camera properties."""
-        center = self.mesh._center
+        center = self.mesh._center * self._scale
         sc = 1.08 * self.mesh._camratio[-1]
         prop = {'center': center, 'scale_factor': sc, 'azimuth': 0.,
                 'elevation': 90, 'distance': 4 * sc}
@@ -379,6 +378,12 @@ class BrainObj(VisbrainObject):
         """Get the camera value."""
         return self.mesh._camera
 
+    @camera.setter
+    def camera(self, value):
+        """Set camera value."""
+        self.mesh.set_camera(value)
+        self.reset_camera()
+
     # ----------- SCALE -----------
     @property
     def scale(self):
@@ -389,4 +394,3 @@ class BrainObj(VisbrainObject):
     def scale(self, value):
         """Set scale value."""
         self._scale = value
-        self.mesh._camera.center = self.mesh._center * value
