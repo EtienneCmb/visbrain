@@ -29,7 +29,7 @@ from .signal import Signal
 from .utils import set_log_level
 
 __all__ = ['Brain', 'Colorbar', 'Figure', 'Signal', 'Sleep', 'Topo']
-__version__ = "0.3.5"
+__version__ = "0.3.6"
 
 set_log_level('info')
 
