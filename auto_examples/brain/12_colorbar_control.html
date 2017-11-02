@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Colorbar control &mdash; visbrain 0.3.5 documentation</title>
+  <title>Colorbar control &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Load Graphical User Interface configuration" href="13_load_gui_config.html"/>
         <link rel="prev" title="Convert mesh data" href="11_convert_mesh_data.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Colorbar control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -237,7 +238,8 @@ parameters to control each colorbar :</p>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span><span class="p">,</span> <span class="n">Colorbar</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">SourceObj</span><span class="p">,</span> <span class="n">ConnectObj</span><span class="p">,</span> <span class="n">PictureObj</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -245,8 +247,10 @@ parameters to control each colorbar :</p>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">n_sources</span> <span class="o">=</span> <span class="mi">50</span>
 <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">s_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)[</span><span class="s1">&#39;xyz&#39;</span><span class="p">][:</span><span class="n">n_sources</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">s_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))[</span><span class="s1">&#39;xyz&#39;</span><span class="p">][:</span><span class="n">n_sources</span><span class="p">,</span> <span class="p">:]</span>
 <span class="n">s_data</span> <span class="o">=</span> <span class="mf">100.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_sources</span><span class="p">)</span>
+
+<span class="n">s_obj</span> <span class="o">=</span> <span class="n">SourceObj</span><span class="p">(</span><span class="s1">&#39;Sources&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">s_data</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Define random connectivity with connectivity strength between [12.1 and 15.23].</span>
@@ -257,24 +261,26 @@ parameters to control each colorbar :</p>
 <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="mf">12.1</span> <span class="o">&lt;=</span> <span class="n">c_connect</span><span class="p">,</span> <span class="n">c_connect</span> <span class="o">&lt;</span> <span class="mf">15.23</span><span class="p">)</span>
 <span class="n">c_connect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">c_connect</span><span class="p">,</span> <span class="n">mask</span><span class="o">=~</span><span class="n">mask</span><span class="p">)</span>
 
+<span class="n">c_obj</span> <span class="o">=</span> <span class="n">ConnectObj</span><span class="p">(</span><span class="s1">&#39;Connectivity&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">c_connect</span><span class="p">)</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Define random pictures with values between [0, 50]. Each picture have 10 rows</span>
 <span class="sd">and 20 columns</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">pic_data</span> <span class="o">=</span> <span class="mf">50.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_sources</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">pic_obj</span> <span class="o">=</span> <span class="n">PictureObj</span><span class="p">(</span><span class="s1">&#39;Pictures&#39;</span><span class="p">,</span> <span class="n">pic_data</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">)</span>
 
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Define the Brain instance and pass variables for sources, pictures and</span>
 <span class="sd">connections</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyz</span><span class="p">,</span> <span class="n">s_data</span><span class="o">=</span><span class="n">s_data</span><span class="p">,</span> <span class="n">a_template</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="n">c_connect</span><span class="p">,</span>
-           <span class="n">pic_data</span><span class="o">=</span><span class="n">pic_data</span><span class="p">)</span>
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">source_obj</span><span class="o">=</span><span class="n">s_obj</span><span class="p">,</span> <span class="n">connect_obj</span><span class="o">=</span><span class="n">c_obj</span><span class="p">,</span> <span class="n">picture_obj</span><span class="o">=</span><span class="n">pic_obj</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Set the Brain opaque to visualize the cortical projection :</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">transparent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The colormap of the projection can&#39;t be controlled without running it. So we</span>
@@ -389,7 +395,7 @@ parameters to control each colorbar :</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

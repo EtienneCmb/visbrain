@@ -27,28 +27,21 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     import numpy as np
 
     from visbrain import Brain
-    from visbrain.io import download_file
-
-    # Define a empty dictionnary :
-    kwargs = {}
+    from visbrain.objects import SourceObj
+    from visbrain.io import download_file, path_to_visbrain_data
 
     # Load the xyz coordinates and corresponding subject name :
     download_file('xyz_sample.npz')
-    mat = np.load('xyz_sample.npz')
-    kwargs['s_xyz'], subjects = mat['xyz'], mat['subjects']
+    s_xyz = np.load(path_to_visbrain_data('xyz_sample.npz'))['xyz']
 
     # Now, create some random data between [-50,50]
-    kwargs['s_data'] = 50. * np.random.rand(kwargs['s_xyz'].shape[0])
-    kwargs['s_color'] = 'darkred'
-    kwargs['s_opacity'] = .5
+    s_data = np.random.uniform(-50, 50, s_xyz.shape[0])
 
-    # Control the dynamic range of sources radius :
-    kwargs['s_radiusmin'] = 2               # Minimum radius
-    kwargs['s_radiusmax'] = 8               # Maximum radius
-    kwargs['s_edgewidth'] = 0.              # Width of the edges
+    s_obj = SourceObj('Sobj', s_xyz, data=s_data, color='darkred', alpha=.5,
+                      radius_min=2., radius_max=8., edge_width=0.)
 
     # Create a brain instance :
-    vb = Brain(**kwargs)
+    vb = Brain(source_obj=s_obj)
 
     """First, make a basic screenshot of the scene.
 
@@ -62,9 +55,9 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     vb.cortical_projection(clim=(0, 50), cmap='Spectral_r', vmin=10.1,
                            isvmin=True, under='black', vmax=41.2, over='green',
                            isvmax=True)
-    vb.sources_opacity(show=False)        # Hide sources
-    vb.rotate(custom=(-160., 10.))        # Rotate the brain
-    vb.brain_control(transparent=False)   # Make the brain opaque
+    vb.sources_control('Sobj', visible=False)        # Hide sources
+    vb.rotate(custom=(-160., 10.))                   # Rotate the brain
+    vb.brain_control(translucent=False)              # Make the brain opaque
 
     """Now, we take a screenthot of the scene but this time, we used the
     autocrop argument to crop the image as close as possible to the brain.
@@ -94,7 +87,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 
     """Cross-sections splitted-view screenshot
     """
-    vb.cross_sections_control(pos=kwargs['s_xyz'][10, :], split_view=True,
+    vb.cross_sections_control(pos=s_xyz[10, :], split_view=True,
                               cmap='viridis', show_text=False)
     vb.screenshot('2_cross_sections.png', canvas='cross-sections',
                   print_size=(200, 100), unit='millimeter', dpi=600.)
@@ -102,14 +95,15 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 
     """Background color and transparency control of ROI screenshot
     """
-    vb.roi_control(selection=[3, 5, 32], subdivision='Brodmann', smooth=7)
+    vb.roi_control(name='BA3-4-32', selection=[3, 5, 32], roi_type='Brodmann',
+                   smooth=7)
 
     # Run the cortical repartition
-    vb.cortical_repartition(radius=20., project_on='roi', clim=(1, 48),
+    vb.cortical_repartition(radius=20., project_on='BA3-4-32', clim=(1, 48),
                             isvmin=True, vmin=7, under='gray', cmap='viridis',
                             cblabel='Roi colorbar')
     vb.cbar_select('Projection')                # Select the Projection colorbar
-    vb.sources_opacity(show=False)              # Display sources
+    vb.sources_control('Sobj', visible=False)   # Display sources
     vb.rotate(custom=(-210, 10.))               # Rotate the brain
     vb.brain_control(visible=False)             # Hide the brain
 

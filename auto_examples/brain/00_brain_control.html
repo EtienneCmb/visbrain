@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Brain control &mdash; visbrain 0.3.5 documentation</title>
+  <title>Brain control &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Cross-sections and volume control" href="01_cross_sections_and_volume.html"/>
         <link rel="prev" title="Examples" href="../index.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -203,12 +204,12 @@ executed.</p>
 <p>Fixed parameters for rotation :</p>
 <blockquote>
 <div><ul class="simple">
-<li>‘axial_0’: top view</li>
-<li>‘axial_1’: bottom view</li>
-<li>‘coronal_0’: front</li>
-<li>‘coronal_1’: back view</li>
-<li>‘sagittal_0’: left view</li>
-<li>‘sagittal_1’: right view</li>
+<li>Top view : ‘top’ or ‘axial_0’</li>
+<li>Bottom view : ‘bottom’ or ‘axial_1’</li>
+<li>Left : ‘left’ or ‘sagittal_0’</li>
+<li>Right : ‘right’ or ‘sagittal_1’</li>
+<li>Front : ‘front’ or ‘coronal_0’</li>
+<li>Back : ‘back’ or ‘coronal_1’</li>
 </ul>
 </div></blockquote>
 <p>Custom rotation consist of a tuple of two floats repsectively for azimuth and
@@ -220,29 +221,24 @@ elevation.</p>
 <span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Display opaque B1 :</span>
+<span class="sd">Display opaque right hemisphere of B3 :</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="c1"># vb.brain_control(template=&#39;B1&#39;, transparent=False)</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Display tranparent right hemisphere of B3 :</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="c1"># vb.brain_control(template=&#39;B3&#39;, hemisphere=&#39;right&#39;, alpha=.1)</span>
+<span class="c1"># vb.brain_control(template=&#39;B3&#39;, hemisphere=&#39;right&#39;, translucent=False)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Fixed frontal view</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="c1"># vb.rotate(fixed=&#39;coronal_0&#39;)</span>
+<span class="c1"># vb.rotate(fixed=&#39;front&#39;)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Display transparent left hemisphere of B2</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="c1"># vb.brain_control(template=&#39;B2&#39;, hemisphere=&#39;left&#39;, alpha=.5)</span>
+<span class="c1"># vb.brain_control(template=&#39;B2&#39;, hemisphere=&#39;left&#39;, alpha=.05)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Custom rotation</span>
-<span class="sd">    * azimuth=-34°</span>
-<span class="sd">    * elevation=74°</span>
+<span class="sd">    * azimuth = -34°</span>
+<span class="sd">    * elevation = 74°</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># vb.rotate(custom=(-34, 74))  # Custom rotation</span>
 
@@ -250,14 +246,6 @@ elevation.</p>
 <span class="sd">Hide the brain</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># vb.brain_control(visible=False)</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Change the color of the brain. You define three colors using :</span>
-<span class="sd">    * Matplotlib colors (&#39;red&#39;, &#39;white&#39;, &#39;slateblue&#39;...)</span>
-<span class="sd">    * RGB tuple ((1., 0., 0.), (1., 1., 1.)...)</span>
-<span class="sd">    # Hexadecimal (&#39;#ab4642&#39;...)</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="c1"># vb.brain_control(color=(0.9, 0.29, 0.24))</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Change background color</span>
@@ -321,7 +309,7 @@ elevation.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

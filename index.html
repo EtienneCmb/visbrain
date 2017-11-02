@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Visbrain documentation &mdash; visbrain 0.3.5 documentation</title>
+  <title>Visbrain documentation &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="#"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="#"/>
         <link rel="next" title="Community" href="community.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -190,25 +190,22 @@
 <h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
 <p>Here’s the list of visbrain’s dependencies :</p>
 <ul class="simple">
-<li>Numpy</li>
+<li>Numpy (&gt;= 1.13)</li>
 <li>Scipy</li>
-<li>Vispy : fast graphics rendering</li>
-<li>Matplotlib : mainly for colors and colormaps integration</li>
+<li>Vispy (&gt;= 0.5.0) : fast graphics rendering</li>
+<li>Matplotlib (&gt;= 1.5.5): mainly for colors and colormaps integration</li>
 <li>PyQt5 : Graphical User Interface components</li>
 <li>Pillow : for screenshots and image file format support.</li>
 </ul>
-<p>We also strongly recommend to install <em>pyopengl</em> :</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install PyOpenGL PyOpenGL_accelerate
+<p>We also strongly recommend to install <em>pandas</em> and <em>pyopengl</em> :</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install pandas PyOpenGL PyOpenGL_accelerate
 </pre></div>
 </div>
 </div>
-<div class="section" id="pyqt5-version">
-<h3>PyQt5 version<a class="headerlink" href="#pyqt5-version" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Installation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>For the PyQt5 version, Matplotlib’s version should be &gt;= 1.5.5. If PyQt is not installed, run either <strong>pip install pyqt5</strong> or <strong>conda install pyqt</strong>. Then, in a terminal run :</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>pip install -e git+https://github.com/vispy/vispy#egg<span class="o">=</span>vispy-dev
-</pre></div>
-</div>
-<p>Finally, install Visbrain :</p>
+<p>Install Visbrain :</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>pip install visbrain
 </pre></div>
 </div>
@@ -286,7 +283,7 @@ python setup.py develop
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -17,7 +17,7 @@ The nibabel package should also be installed.
 .. code-block:: python
 
     from visbrain import Brain
-    from visbrain.io import read_nifti, download_file
+    from visbrain.io import read_nifti, download_file, path_to_visbrain_data
 
     """Import the volume and the associated affine transformation
     """
@@ -26,7 +26,7 @@ The nibabel package should also be installed.
     """Download the file. 
     """
     download_file(volume_name)
-    data, header, tf = read_nifti(volume_name)
+    data, header, tf = read_nifti(path_to_visbrain_data(volume_name))
 
     vb = Brain()
 

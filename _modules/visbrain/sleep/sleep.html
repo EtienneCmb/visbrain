@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.sleep.sleep &mdash; visbrain 0.3.5 documentation</title>
+  <title>visbrain.sleep.sleep &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -167,25 +167,19 @@
   <h1>Source code for visbrain.sleep.sleep</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Top level Sleep class.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">sip</span>
 
-<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtWidgets</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="kn">import</span> <span class="nn">vispy.app</span> <span class="k">as</span> <span class="nn">visapp</span>
 <span class="kn">import</span> <span class="nn">vispy.scene.cameras</span> <span class="k">as</span> <span class="nn">viscam</span>
 
 <span class="kn">from</span> <span class="nn">.interface</span> <span class="k">import</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span>
 <span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">Visuals</span>
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="n">Tools</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">FixedCam</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">MouseEventControl</span><span class="p">,</span> <span class="n">set_widget_size</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..pyqt_module</span> <span class="k">import</span> <span class="n">PyQtModule</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">FixedCam</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">MouseEventControl</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">ReadSleepData</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">profiler</span>
 
-<span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-
-<div class="viewcode-block" id="Sleep"><a class="viewcode-back" href="../../../sleep.html#visbrain.sleep.sleep.Sleep">[docs]</a><span class="k">class</span> <span class="nc">Sleep</span><span class="p">(</span><span class="n">ReadSleepData</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">Tools</span><span class="p">,</span>
+<div class="viewcode-block" id="Sleep"><a class="viewcode-back" href="../../../sleep.html#visbrain.sleep.sleep.Sleep">[docs]</a><span class="k">class</span> <span class="nc">Sleep</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">ReadSleepData</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">Tools</span><span class="p">,</span>
             <span class="n">MouseEventControl</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Visualize and edit sleep data.</span>
 
@@ -262,11 +256,10 @@
                  <span class="n">annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">downsample</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span>
                  <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;gl&#39;</span><span class="p">,</span> <span class="n">hedit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_tf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">href</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;art&#39;</span><span class="p">,</span> <span class="s1">&#39;wake&#39;</span><span class="p">,</span> <span class="s1">&#39;rem&#39;</span><span class="p">,</span> <span class="s1">&#39;n1&#39;</span><span class="p">,</span> <span class="s1">&#39;n2&#39;</span><span class="p">,</span> <span class="s1">&#39;n3&#39;</span><span class="p">],</span>
-                 <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_mne</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kwargs_mne</span><span class="o">=</span><span class="p">{}):</span>
+                 <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_mne</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">kwargs_mne</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">PyQtModule</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;sleep_icon.svg&#39;</span><span class="p">)</span>
         <span class="c1"># ====================== APP CREATION ======================</span>
-        <span class="c1"># Create the app and initialize all graphical elements :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
         <span class="n">UiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># Set default GUI state :</span>
@@ -276,6 +269,7 @@
         <span class="n">MouseEventControl</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># ====================== LOAD FILE ======================</span>
+        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Import file&quot;</span><span class="p">,</span> <span class="n">as_type</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
         <span class="n">ReadSleepData</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">hypno</span><span class="p">,</span> <span class="n">href</span><span class="p">,</span> <span class="n">preload</span><span class="p">,</span>
                                <span class="n">use_mne</span><span class="p">,</span> <span class="n">downsample</span><span class="p">,</span> <span class="n">kwargs_mne</span><span class="p">,</span>
                                <span class="n">annotations</span><span class="p">)</span>
@@ -324,22 +318,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_peaksym</span> <span class="o">=</span> <span class="s1">&#39;disc&#39;</span>
         <span class="c1"># Get some data info (min / max / std / mean)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_get_data_info</span><span class="p">()</span>
+        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Data info&quot;</span><span class="p">)</span>
 
         <span class="c1"># ====================== USER &amp; GUI INTERACTION  ======================</span>
         <span class="c1"># User &lt;-&gt; GUI :</span>
+        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Initialize GUI interactions&quot;</span><span class="p">,</span> <span class="n">as_type</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
         <span class="n">UiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># ====================== CAMERAS ======================</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cam_creation</span><span class="p">()</span>
 
         <span class="c1"># ====================== OBJECTS CREATION ======================</span>
+        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Initialize visual elements&quot;</span><span class="p">,</span> <span class="n">as_type</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
         <span class="n">Visuals</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># ====================== TOOLS ======================</span>
         <span class="n">Tools</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Initialize tools&quot;</span><span class="p">)</span>
 
         <span class="c1"># ====================== FUNCTIONS ON LOAD ======================</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcns_on_creation</span><span class="p">()</span>
+        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Functions on creation&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of channels.&quot;&quot;&quot;</span>
@@ -361,17 +360,9 @@
     <span class="k">def</span> <span class="nf">_set_default_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the default window state.&quot;&quot;&quot;</span>
         <span class="c1"># ================= TAB =================</span>
-        <span class="n">set_widget_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">QuickSettings</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBox</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBox_2</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_DetectionTab</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-        <span class="c1"># ================= ICON =================</span>
-        <span class="n">pathfile</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="vm">__file__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;sleep.py&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">app_icon</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QIcon</span><span class="p">()</span>
-        <span class="n">app_icon</span><span class="o">.</span><span class="n">addFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathfile</span><span class="p">,</span> <span class="s1">&#39;sleep_icon.svg&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">app_icon</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_cam_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a set of cameras.&quot;&quot;&quot;</span>
@@ -413,13 +404,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Config file</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loadConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_file</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annot_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># Annotation file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loadAnnotationTable</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_file</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Display the graphical user interface.&quot;&quot;&quot;</span>
-        <span class="c1"># This function has to be placed here (and not in the user.py script)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
-        <span class="n">visapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loadAnnotationTable</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_file</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
@@ -456,7 +441,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

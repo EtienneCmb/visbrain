@@ -15,10 +15,9 @@ https://brainder.org/download/flair/
 """
 from __future__ import print_function
 import numpy as np
-import os
 
 from visbrain import Brain
-from visbrain.io import read_nifti, download_file
+from visbrain.io import read_nifti, download_file, path_to_visbrain_data
 
 # Define four sources sources :
 s_xyz = np.array([[29.9, -37.3, -19.3],
@@ -38,7 +37,7 @@ transformation to convert data into the MNI space :
 """
 nifti1 = 'GG-853-GM-0.7mm.nii.gz'
 download_file(nifti1)
-data1, header1, tf1 = read_nifti(nifti1)
+data1, header1, tf1 = read_nifti(path_to_visbrain_data(nifti1))
 # print(header1)
 
 # Add the volume to the GUI :
@@ -48,7 +47,7 @@ print('Add Volume1 to the list of volumes : ', vb.volume_list())
 # You can add multiple volumes :
 nifti2 = 'GG-853-WM-0.7mm.nii.gz'
 download_file(nifti2)
-data2, header2, tf2 = read_nifti(nifti2)
+data2, header2, tf2 = read_nifti(path_to_visbrain_data(nifti2))
 vb.add_volume('Volume2', data2, transform=tf2)
 print('Add Volume2 to the list of volumes : ', vb.volume_list())
 

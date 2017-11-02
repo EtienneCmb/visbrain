@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add Region of interest (ROI) &mdash; visbrain 0.3.5 documentation</title>
+  <title>Add Region of interest (ROI) &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add time series" href="06_add_time_series.html"/>
         <link rel="prev" title="Connect deep sources" href="04_connectivity.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -207,20 +208,22 @@ project the source’s activity on it.</p>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">SourceObj</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 <span class="c1"># Load thalamus sources :</span>
 <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;thalamus.txt&#39;</span><span class="p">)</span>
-<span class="n">s_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;thalamus.txt&#39;</span><span class="p">)</span>
+<span class="n">s_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;thalamus.txt&#39;</span><span class="p">))</span>
 <span class="c1"># Load alpha power. In fact, the PX.npy contains the power across several time</span>
 <span class="c1"># windows. So we take the mean across time :</span>
 <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;Px.npy&#39;</span><span class="p">)</span>
-<span class="n">s_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;Px.npy&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">10e26</span>
+<span class="n">s_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;Px.npy&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">10e26</span>
+
+<span class="n">s_obj</span> <span class="o">=</span> <span class="n">SourceObj</span><span class="p">(</span><span class="s1">&#39;ThalamusSources&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">s_data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ab4642&#39;</span><span class="p">,</span>
+                  <span class="n">radius_min</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="mf">20.</span><span class="p">)</span>
 
 <span class="c1"># Define a Brain instance :</span>
-<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyz</span><span class="p">,</span> <span class="n">s_data</span><span class="o">=</span><span class="n">s_data</span><span class="p">,</span> <span class="n">s_cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
-<span class="c1"># Rotate the brain in axial view :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">fixed</span><span class="o">=</span><span class="s1">&#39;axial_0&#39;</span><span class="p">)</span>
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">source_obj</span><span class="o">=</span><span class="n">s_obj</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Select the thalamus index (76 for the left and 77 for the right). If you</span>
@@ -228,18 +231,20 @@ project the source’s activity on it.</p>
 <span class="sd">number in front of the name. Otherwise, un comment the following line :</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># print(vb.roi_list(&#39;AAL&#39;))</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">76</span><span class="p">,</span> <span class="mi">77</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;AAL&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-               <span class="n">name</span><span class="o">=</span><span class="s1">&#39;thalamus&#39;</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">76</span><span class="p">,</span> <span class="mi">77</span><span class="p">],</span> <span class="n">roi_type</span><span class="o">=</span><span class="s1">&#39;AAL&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+               <span class="n">name</span><span class="o">=</span><span class="s1">&#39;thalamus&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
-<span class="c1"># Project the source&#39;s activity onto ROI directly :</span>
+<span class="c1"># Project the source&#39;s activity onto the thalamus :</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">cortical_projection</span><span class="p">(</span><span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;thalamus&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span>
-                       <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2300</span><span class="p">))</span>
+                       <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">11.</span><span class="p">,</span> <span class="mf">18.</span><span class="p">),</span> <span class="n">cblabel</span><span class="o">=</span><span class="s2">&quot;Alpha power&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">11.7</span><span class="p">,</span>
+                       <span class="n">vmax</span><span class="o">=</span><span class="mf">17.1</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">,</span> <span class="n">isvmin</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                       <span class="n">isvmax</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;The displayed sources can be forced to fit to the roi. To this end, the</span>
 <span class="sd">sources_fit() method find the closest roi vertex to each source and change the</span>
 <span class="sd">source&#39;s coordinate for it.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="c1"># vb.sources_fit(obj=&#39;roi&#39;)</span>
+<span class="c1"># vb.sources_fit_to_vertices(fit_to=&#39;thalamus&#39;)</span>
 
 <span class="c1"># Eventualy, take a screenshot :</span>
 <span class="c1"># vb.screenshot(&#39;thalamus.png&#39;, autocrop=True)</span>
@@ -302,7 +307,7 @@ project the source’s activity on it.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

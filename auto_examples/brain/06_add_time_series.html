@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add time series &mdash; visbrain 0.3.5 documentation</title>
+  <title>Add time series &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add pictures" href="07_add_pictures.html"/>
         <link rel="prev" title="Add Region of interest (ROI)" href="05_region_of_interest.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -202,11 +203,12 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">TimeSeriesObj</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 <span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
 <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">s_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
+<span class="n">s_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
 <span class="n">s_xyz</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="mi">4</span><span class="p">::</span><span class="mi">25</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 <span class="n">s_text</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s_xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
 <span class="n">s_textsize</span> <span class="o">=</span> <span class="mf">1.5</span>
@@ -235,11 +237,12 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
 <span class="n">ts_dxyz</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">)</span>  <span class="c1"># TS offset along the (x, y, z) axes</span>
 <span class="n">ts_lw</span> <span class="o">=</span> <span class="mf">2.2</span>             <span class="c1"># TS line-width</span>
 
+<span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeriesObj</span><span class="p">(</span><span class="s1">&#39;Ts1&#39;</span><span class="p">,</span> <span class="n">ts_data</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">ts_select</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">ts_amp</span><span class="p">,</span>
+                   <span class="n">width</span><span class="o">=</span><span class="n">ts_width</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="n">ts_lw</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="n">ts_dxyz</span><span class="p">,</span>
+                   <span class="n">color</span><span class="o">=</span><span class="n">ts_color</span><span class="p">)</span>
 
-<span class="n">b</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyz</span><span class="p">,</span> <span class="n">s_text</span><span class="o">=</span><span class="n">s_text</span><span class="p">,</span> <span class="n">ts_data</span><span class="o">=</span><span class="n">ts_data</span><span class="p">,</span> <span class="n">s_textsize</span><span class="o">=</span><span class="n">s_textsize</span><span class="p">,</span>
-          <span class="n">ts_amp</span><span class="o">=</span><span class="n">ts_amp</span><span class="p">,</span> <span class="n">ts_width</span><span class="o">=</span><span class="n">ts_width</span><span class="p">,</span> <span class="n">ts_color</span><span class="o">=</span><span class="n">ts_color</span><span class="p">,</span> <span class="n">ts_dxyz</span><span class="o">=</span><span class="n">ts_dxyz</span><span class="p">,</span>
-          <span class="n">ts_lw</span><span class="o">=</span><span class="n">ts_lw</span><span class="p">,</span> <span class="n">ts_select</span><span class="o">=</span><span class="n">ts_select</span><span class="p">)</span>
-<span class="n">b</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">time_series_obj</span><span class="o">=</span><span class="n">ts</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -296,7 +299,7 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

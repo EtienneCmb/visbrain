@@ -16,12 +16,12 @@ executed.
 
 Fixed parameters for rotation :
 
-    * 'axial_0': top view
-    * 'axial_1': bottom view
-    * 'coronal_0': front
-    * 'coronal_1': back view
-    * 'sagittal_0': left view
-    * 'sagittal_1': right view
+    * Top view : 'top' or 'axial_0'
+    * Bottom view : 'bottom' or 'axial_1'
+    * Left : 'left' or 'sagittal_0'
+    * Right : 'right' or 'sagittal_1'
+    * Front : 'front' or 'coronal_0'
+    * Back : 'back' or 'coronal_1'
 
 Custom rotation consist of a tuple of two floats repsectively for azimuth and
 elevation.
@@ -38,29 +38,24 @@ elevation.
     vb = Brain()
 
     """
-    Display opaque B1 :
+    Display opaque right hemisphere of B3 :
     """
-    # vb.brain_control(template='B1', transparent=False)
-
-    """
-    Display tranparent right hemisphere of B3 :
-    """
-    # vb.brain_control(template='B3', hemisphere='right', alpha=.1)
+    # vb.brain_control(template='B3', hemisphere='right', translucent=False)
 
     """
     Fixed frontal view
     """
-    # vb.rotate(fixed='coronal_0')
+    # vb.rotate(fixed='front')
 
     """
     Display transparent left hemisphere of B2
     """
-    # vb.brain_control(template='B2', hemisphere='left', alpha=.5)
+    # vb.brain_control(template='B2', hemisphere='left', alpha=.05)
 
     """
     Custom rotation
-        * azimuth=-34°
-        * elevation=74°
+        * azimuth = -34°
+        * elevation = 74°
     """
     # vb.rotate(custom=(-34, 74))  # Custom rotation
 
@@ -68,14 +63,6 @@ elevation.
     Hide the brain
     """
     # vb.brain_control(visible=False)
-
-    """
-    Change the color of the brain. You define three colors using :
-        * Matplotlib colors ('red', 'white', 'slateblue'...)
-        * RGB tuple ((1., 0., 0.), (1., 1., 1.)...)
-        # Hexadecimal ('#ab4642'...)
-    """
-    # vb.brain_control(color=(0.9, 0.29, 0.24))
 
     """
     Change background color

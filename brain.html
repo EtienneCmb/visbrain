@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>1. Brain &mdash; visbrain 0.3.5 documentation</title>
+  <title>1. Brain &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
         <link rel="next" title="1.3.1. Main Brain class inputs" href="brainAPI.html"/>
         <link rel="prev" title="Documentation" href="documentation.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -138,8 +138,9 @@
 <li class="toctree-l2"><a class="reference internal" href="topo.html">4. Topo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. Colorbar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="figure.html">6. Figure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html">7. Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html">8. I/O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html">7. Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">8. Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html">9. I/O</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -702,10 +703,9 @@
 <li class="toctree-l1"><a class="reference internal" href="brainAPI.html">1.3.1. Main <em>Brain</em> class inputs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="brainAPI.html#gui-functions-and-settings">1.3.2. GUI functions and settings</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="brainAPI.html#show-graphical-interface">1.3.2.1. Show graphical interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#quit-graphical-interface">1.3.2.2. Quit graphical interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#rotation">1.3.2.3. Rotation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#background-color">1.3.2.4. Background color</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#screenshot">1.3.2.5. Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#rotation">1.3.2.2. Rotation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#background-color">1.3.2.3. Background color</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#screenshot">1.3.2.4. Screenshot</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="brainAPI.html#load-and-save-gui-configuration">1.3.3. Load and save GUI configuration</a><ul>
@@ -728,36 +728,28 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="brainAPI.html#sources-methods">1.3.6. Sources methods</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="brainAPI.html#control-sources">1.3.6.1. Control sources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#opacity">1.3.6.2. Opacity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#select-sources">1.3.6.3. Select sources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#add-source-object">1.3.6.4. Add source object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#fit-to-an-object">1.3.6.5. Fit to an object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#convert-into-convex-hull">1.3.6.6. Convert into convex hull</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#cortical-projection">1.3.6.7. Cortical projection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#cortical-repartition">1.3.6.8. Cortical repartition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#colormap">1.3.6.9. Colormap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#select-sources">1.3.6.2. Select sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#fit-to-an-object">1.3.6.3. Fit to an object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#convert-into-convex-hull">1.3.6.4. Convert into convex hull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#cortical-projection">1.3.6.5. Cortical projection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#cortical-repartition">1.3.6.6. Cortical repartition</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="brainAPI.html#time-series-methods">1.3.7. Time-series methods</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="brainAPI.html#time-series-control">1.3.7.1. Time-series control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#add-time-series">1.3.7.2. Add time-series</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="brainAPI.html#pictures-methods">1.3.8. Pictures methods</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="brainAPI.html#pictures-control">1.3.8.1. Pictures control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#add-pictures">1.3.8.2. Add pictures</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="brainAPI.html#connectivity-methods">1.3.9. Connectivity methods</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="brainAPI.html#control-connectivity">1.3.9.1. Control Connectivity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#add-connectivity-object">1.3.9.2. Add connectivity object</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="brainAPI.html#region-of-interest-roi-methods">1.3.10. Region Of Interest (ROI) methods</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="brainAPI.html#roi-control">1.3.10.1. ROI control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="brainAPI.html#list-of-suported-roi">1.3.10.2. List of suported ROI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#id1">1.3.10.3. Opacity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="brainAPI.html#light-reflection">1.3.10.4. Light reflection</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="brainAPI.html#colorbar-methods">1.3.11. Colorbar methods</a><ul>
@@ -817,7 +809,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

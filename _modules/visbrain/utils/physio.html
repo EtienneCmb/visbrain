@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.utils.physio &mdash; visbrain 0.3.5 documentation</title>
+  <title>visbrain.utils.physio &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -168,16 +168,16 @@
 <span></span><span class="sd">&quot;&quot;&quot;Group of functions for physiological processing.&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">re</span> <span class="k">import</span> <span class="n">findall</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">zscore</span>
 
 <span class="kn">from</span> <span class="nn">.sigproc</span> <span class="k">import</span> <span class="n">smoothing</span>
+<span class="kn">from</span> <span class="nn">.others</span> <span class="k">import</span> <span class="n">get_data_path</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;find_non_eeg&#39;</span><span class="p">,</span> <span class="s1">&#39;rereferencing&#39;</span><span class="p">,</span> <span class="s1">&#39;bipolarization&#39;</span><span class="p">,</span> <span class="s1">&#39;commonaverage&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;tal2mni&#39;</span><span class="p">,</span> <span class="s1">&#39;mni2tal&#39;</span><span class="p">,</span> <span class="s1">&#39;find_roi&#39;</span><span class="p">,</span> <span class="s1">&#39;generate_eeg&#39;</span><span class="p">)</span>
+           <span class="s1">&#39;tal2mni&#39;</span><span class="p">,</span> <span class="s1">&#39;mni2tal&#39;</span><span class="p">,</span> <span class="s1">&#39;load_predefined_roi&#39;</span><span class="p">,</span> <span class="s1">&#39;generate_eeg&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">find_non_eeg</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;eog&#39;</span><span class="p">,</span> <span class="s1">&#39;emg&#39;</span><span class="p">,</span> <span class="s1">&#39;ecg&#39;</span><span class="p">,</span> <span class="s1">&#39;abd&#39;</span><span class="p">]):</span>
@@ -486,59 +486,39 @@
     <span class="n">xyz</span><span class="p">[:,</span> <span class="o">~</span><span class="n">tmp</span><span class="p">]</span> <span class="o">=</span> <span class="n">up_t</span> <span class="o">*</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="o">~</span><span class="n">tmp</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">find_roi</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">nearest</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="c1"># Check xyz to be (n_sources, 3) :</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The shape of xyz must be (N, 3).&quot;</span><span class="p">)</span>
-    <span class="c1"># xyz = tal2mni(xyz)</span>
-    <span class="n">n_sources</span> <span class="o">=</span> <span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xyz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_sources</span><span class="p">,))]</span><span class="o">.</span><span class="n">T</span>
 
-    <span class="c1"># Load ROI atlas :</span>
-    <span class="n">pathfile</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="vm">__file__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;utils&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">path_to_template</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span> <span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="s1">&#39;templates&#39;</span><span class="p">,</span> <span class="s1">&#39;roi.npz&#39;</span><span class="p">))</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathfile</span><span class="p">,</span> <span class="n">path_to_template</span><span class="p">)</span>
-    <span class="n">atlas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">load_predefined_roi</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load a predefined ROI template.</span>
 
-    <span class="c1"># Get volumes :</span>
-    <span class="n">aal_label</span><span class="p">,</span> <span class="n">aal_idx</span> <span class="o">=</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;aal_label&#39;</span><span class="p">],</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;aal_idx&#39;</span><span class="p">]</span>
-    <span class="n">vol</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">brod_idx</span> <span class="o">=</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;vol&#39;</span><span class="p">],</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;hdr&#39;</span><span class="p">],</span> <span class="n">atlas</span><span class="p">[</span><span class="s1">&#39;brod_idx&#39;</span><span class="p">]</span>
-    <span class="n">sh</span> <span class="o">=</span> <span class="n">vol</span><span class="o">.</span><span class="n">shape</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : {&#39;brodmann&#39;, &#39;aal&#39;, &#39;talairach&#39;}</span>
+<span class="sd">        Name of the ROI atlas to load.</span>
 
-    <span class="c1"># Build AAL label for left and right :</span>
-    <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">aal_label</span><span class="p">),),</span> <span class="s1">&#39; (L)&#39;</span><span class="p">)</span>
-    <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">aal_label</span><span class="p">),),</span> <span class="s1">&#39; (R)&#39;</span><span class="p">)</span>
-    <span class="n">aal_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">defchararray</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">aal_label</span><span class="p">,</span> <span class="n">left</span><span class="p">)</span>
-    <span class="n">aal_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">defchararray</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">aal_label</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
-    <span class="n">aal_label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">aal_l</span><span class="p">,</span> <span class="n">aal_r</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="c1"># print(aal_label.shape, aal_idx.shape, &#39;AAl : &#39;, aal_idx.min(), aal_idx.max(), &#39;VOL : &#39;, vol.min(), vol.max())</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    vol : array_like</span>
+<span class="sd">        The volume of shape (nx, ny, nz).</span>
+<span class="sd">    labels : array_like</span>
+<span class="sd">        Array of labels of type object and of length n_labels.</span>
+<span class="sd">    index : array_like</span>
+<span class="sd">        Array of index corresponding to the labels of type np.int and of length</span>
+<span class="sd">        n_labels.</span>
+<span class="sd">    hdr : array_like</span>
+<span class="sd">        The matrix of transformation of shape (4, 4).</span>
+<span class="sd">    system : {&#39;mni&#39;, &#39;tal&#39;}</span>
+<span class="sd">        The system used by the volume.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="s1">&#39;aal&#39;</span><span class="p">,</span> <span class="s1">&#39;talairach&#39;</span><span class="p">]</span>
+    <span class="c1"># Load archive :</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
+    <span class="n">arch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="c1"># Extract informations :</span>
+    <span class="n">vol</span><span class="p">,</span> <span class="n">hdr</span> <span class="o">=</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;vol&#39;</span><span class="p">],</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;hdr&#39;</span><span class="p">]</span>
+    <span class="n">labels</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
 
-    <span class="c1"># Loop over source :</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">n_sources</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sources</span><span class="p">):</span>
-        <span class="n">info</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">::]</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-        <span class="c1"># Apply HDR transformation :</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="p">[</span><span class="n">k</span><span class="p">]])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">sub</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">sub</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sub</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sub</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
-
-            <span class="k">if</span> <span class="n">nearest</span><span class="p">:</span>
-                <span class="k">pass</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># Find the Brodmann area :</span>
-                <span class="n">brod</span> <span class="o">=</span> <span class="n">brod_idx</span><span class="p">[</span><span class="n">sub</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sub</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sub</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
-                <span class="k">if</span> <span class="n">brod</span><span class="p">:</span>
-                    <span class="n">info</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Brodmann area &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">brod</span><span class="p">)</span>
-                <span class="c1"># Find the AAL :</span>
-                <span class="n">aal</span> <span class="o">=</span> <span class="n">vol</span><span class="p">[</span><span class="n">sub</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sub</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sub</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
-                <span class="k">if</span> <span class="n">aal</span><span class="p">:</span>
-                    <span class="n">info</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">aal_label</span><span class="p">[</span><span class="n">aal</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">pass</span>
-            <span class="c1"># print(&#39;BAD&#39;)</span>
-
-    <span class="c1"># print(info)</span>
+    <span class="k">return</span> <span class="n">vol</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="s1">&#39;tal&#39;</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;talairach&#39;</span> <span class="k">else</span> <span class="s1">&#39;mni&#39;</span>
 
 
 <div class="viewcode-block" id="generate_eeg"><a class="viewcode-back" href="../../../utils.html#visbrain.utils.physio.generate_eeg">[docs]</a><span class="k">def</span> <span class="nf">generate_eeg</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="mf">512.</span><span class="p">,</span> <span class="n">n_pts</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_sines</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
@@ -626,7 +606,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

@@ -24,14 +24,14 @@ https://www.dropbox.com/s/o0ljy16mpz7mmxu/brain_config.txt?dl=1
 .. code-block:: python
 
     from visbrain import Brain
-    from visbrain.io import download_file
+    from visbrain.io import download_file, path_to_visbrain_data
 
     # Define an empty Brain instance
     vb = Brain()
 
     # Load the configuration file :
     download_file('brain_config.txt')
-    vb.load_config('brain_config.txt')
+    vb.load_config(path_to_visbrain_data('brain_config.txt'))
 
     """
     Alternatively, if you want you can use the following method to save a new

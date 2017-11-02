@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Page layout example &mdash; visbrain 0.3.5 documentation</title>
+  <title>Page layout example &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Plot a 1D signal" href="../signal/00_1d_signal.html"/>
         <link rel="prev" title="Generate pictures" href="0_GeneratePictures.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -186,13 +186,14 @@
 <p>Download the archive :
 <a class="reference external" href="https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1">https://www.dropbox.com/s/jsjct54ynvdjzfq/figure.zip?dl=1</a></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Figure</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 <span class="n">download_file</span><span class="p">(</span><span class="s2">&quot;figure.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="c1"># Files to load :</span>
 <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;default.png&#39;</span><span class="p">,</span> <span class="s1">&#39;inside.png&#39;</span><span class="p">,</span> <span class="s1">&#39;count.png&#39;</span><span class="p">,</span> <span class="s1">&#39;density.png&#39;</span><span class="p">,</span>
          <span class="s1">&#39;repartition.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;roi.jpg&#39;</span><span class="p">]</span>
+<span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
 
 <span class="c1"># Titles :</span>
 <span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Default view&#39;</span><span class="p">,</span> <span class="s1">&#39;Select sources inside&#39;</span><span class="p">,</span> <span class="s1">&#39;Connectivity&#39;</span><span class="p">,</span>
@@ -302,7 +303,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

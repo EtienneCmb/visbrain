@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.utils.others &mdash; visbrain 0.3.5 documentation</title>
+  <title>visbrain.utils.others &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -181,7 +181,8 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="s1">&#39;vis_args&#39;</span><span class="p">,</span> <span class="s1">&#39;check_downsampling&#39;</span><span class="p">,</span> <span class="s1">&#39;get_dsf&#39;</span><span class="p">,</span>
            <span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span> <span class="s1">&#39;volume_to_mesh&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;set_if_not_none&#39;</span><span class="p">)</span>
+           <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;set_if_not_none&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;get_data_path&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -476,6 +477,28 @@
 <span class="sd">        The value if not None else to_set</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">cond</span> <span class="k">else</span> <span class="n">to_set</span>
+
+
+<span class="k">def</span> <span class="nf">get_data_path</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the path to the visbrain data folder.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file : string | None</span>
+<span class="sd">        File name.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    path : string</span>
+<span class="sd">        Path to the data folder or to the file if file is not None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cur_path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="vm">__file__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;utils&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">cur_path</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">cur_path</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">path</span>
 </pre></div>
 
            </div>
@@ -512,7 +535,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

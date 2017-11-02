@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.signal.signal &mdash; visbrain 0.3.5 documentation</title>
+  <title>visbrain.signal.signal &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -167,27 +167,23 @@
   <h1>Source code for visbrain.signal.signal</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Signal module.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sip</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtWidgets</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">vispy.app</span> <span class="k">as</span> <span class="nn">visapp</span>
 <span class="kn">import</span> <span class="nn">vispy.scene.cameras</span> <span class="k">as</span> <span class="nn">viscam</span>
 
 <span class="kn">from</span> <span class="nn">.ui_elements</span> <span class="k">import</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">UiInit</span>
 <span class="kn">from</span> <span class="nn">.visuals</span> <span class="k">import</span> <span class="n">Visuals</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">set_widget_size</span><span class="p">,</span> <span class="n">safely_set_cbox</span><span class="p">,</span> <span class="n">color2tuple</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span>
-                     <span class="n">mpl_cmap</span><span class="p">,</span> <span class="n">toggle_enable_tab</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">safely_set_cbox</span><span class="p">,</span> <span class="n">color2tuple</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">mpl_cmap</span><span class="p">,</span>
+                     <span class="n">toggle_enable_tab</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
+<span class="kn">from</span> <span class="nn">..pyqt_module</span> <span class="k">import</span> <span class="n">PyQtModule</span>
 <span class="c1"># get_screen_size</span>
 
-<span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Signal&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">(</span><span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Signal inspection module (data mining).</span>
 
 <span class="sd">    The Signal module can be used to relatively large datasets of</span>
@@ -304,14 +300,15 @@
                  <span class="n">annot_txtsz</span><span class="o">=</span><span class="mf">18.</span><span class="p">,</span> <span class="n">annot_marksz</span><span class="o">=</span><span class="mf">16.</span><span class="p">,</span> <span class="n">annot_color</span><span class="o">=</span><span class="s1">&#39;#2ecc71&#39;</span><span class="p">,</span>
                  <span class="n">grid_lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">grid_smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">grid_titles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">grid_font_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">grid_color</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">grid_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">grid_titles_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="n">grid_titles_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">dscb</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_grid_canvas.canvas.scene&#39;</span><span class="p">,</span> <span class="s1">&#39;_signal_canvas.canvas.scene&#39;</span><span class="p">]</span>
+        <span class="n">PyQtModule</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">to_describe</span><span class="o">=</span><span class="n">dscb</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_enable_grid</span> <span class="o">=</span> <span class="n">enable_grid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_previous_form</span> <span class="o">=</span> <span class="n">form</span>
         <span class="n">display_grid</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">display_grid</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_grid</span><span class="p">)</span>
 
         <span class="c1"># ==================== APP CREATION ====================</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
         <span class="n">UiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># ==================== DATA CHECKING ====================</span>
@@ -464,9 +461,6 @@
 
     <span class="k">def</span> <span class="nf">_fcn_on_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run on GUI creation.&quot;&quot;&quot;</span>
-        <span class="c1"># Settings :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">QuickSettings</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">set_widget_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
         <span class="c1"># Fix proportion of canvas :</span>
         <span class="c1"># w, g = get_screen_size(self._app)</span>
         <span class="c1"># self._signal_canvas.wc.width_max = w / 2</span>
@@ -588,12 +582,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="s1">&#39;marker&#39;</span><span class="p">,</span> <span class="s1">&#39;histogram&#39;</span><span class="p">,</span> <span class="s1">&#39;tf&#39;</span><span class="p">,</span> <span class="s1">&#39;psd&#39;</span><span class="p">,</span>
                <span class="s1">&#39;butterfly&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_form</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Signal.show"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Display the graphical user interface.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
-        <span class="n">visapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig_form</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -630,7 +619,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

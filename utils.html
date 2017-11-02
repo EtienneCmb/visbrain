@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>7. Utils &mdash; visbrain 0.3.5 documentation</title>
+  <title>8. Utils &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,10 +39,10 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="index.html"/>
         <link rel="up" title="Documentation" href="documentation.html"/>
-        <link rel="next" title="8. I/O" href="io.html"/>
-        <link rel="prev" title="6. Figure" href="figure.html"/> 
+        <link rel="next" title="9. I/O" href="io.html"/>
+        <link rel="prev" title="7. Objects" href="objects.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -107,20 +107,21 @@
 <li class="toctree-l2"><a class="reference internal" href="topo.html">4. Topo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. Colorbar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="figure.html">6. Figure</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">7. Utils</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#eeg-datasets">7.1. EEG datasets</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#generate-a-random-eeg-dataset">7.1.1. Generate a random EEG dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html">7. Objects</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">8. Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eeg-datasets">8.1. EEG datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#generate-a-random-eeg-dataset">8.1.1. Generate a random EEG dataset</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#brain-templates">7.2. Brain templates</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#convert-mesh-data">7.2.1. Convert mesh data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#add-brain-template">7.2.2. Add brain template</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#remove-brain-template">7.2.3. Remove brain template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brain-templates">8.2. Brain templates</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#convert-mesh-data">8.2.1. Convert mesh data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#add-brain-template">8.2.2. Add brain template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#remove-brain-template">8.2.3. Remove brain template</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="io.html">8. I/O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html">9. I/O</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -171,7 +172,7 @@
         
           <li><a href="documentation.html">Documentation</a> &raquo;</li>
         
-      <li>7. Utils</li>
+      <li>8. Utils</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -191,11 +192,11 @@
            <div itemprop="articleBody">
             
   <div class="section" id="utils">
-<span id="id1"></span><h1>7. Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>8. Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="eeg-datasets">
-<h2>7.1. EEG datasets<a class="headerlink" href="#eeg-datasets" title="Permalink to this headline">¶</a></h2>
+<h2>8.1. EEG datasets<a class="headerlink" href="#eeg-datasets" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="generate-a-random-eeg-dataset">
-<span id="randomeeg"></span><h3>7.1.1. Generate a random EEG dataset<a class="headerlink" href="#generate-a-random-eeg-dataset" title="Permalink to this headline">¶</a></h3>
+<span id="randomeeg"></span><h3>8.1.1. Generate a random EEG dataset<a class="headerlink" href="#generate-a-random-eeg-dataset" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="visbrain.utils.physio.generate_eeg">
 <code class="descclassname">visbrain.utils.physio.</code><code class="descname">generate_eeg</code><span class="sig-paren">(</span><em>sf=512.0</em>, <em>n_pts=1000</em>, <em>n_channels=1</em>, <em>n_trials=1</em>, <em>n_sines=100</em>, <em>f_min=0.5</em>, <em>f_max=160.0</em>, <em>smooth=50</em>, <em>noise=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/utils/physio.html#generate_eeg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.utils.physio.generate_eeg" title="Permalink to this definition">¶</a></dt>
@@ -259,12 +260,12 @@
 </div>
 </div>
 <div class="section" id="brain-templates">
-<h2>7.2. Brain templates<a class="headerlink" href="#brain-templates" title="Permalink to this headline">¶</a></h2>
+<h2>8.2. Brain templates<a class="headerlink" href="#brain-templates" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="convert-mesh-data">
-<span id="convertmeshdata"></span><h3>7.2.1. Convert mesh data<a class="headerlink" href="#convert-mesh-data" title="Permalink to this headline">¶</a></h3>
+<span id="convertmeshdata"></span><h3>8.2.1. Convert mesh data<a class="headerlink" href="#convert-mesh-data" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="visbrain.utils.others.convert_meshdata">
-<code class="descclassname">visbrain.utils.others.</code><code class="descname">convert_meshdata</code><span class="sig-paren">(</span><em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>meshdata=None</em>, <em>invert_normals=False</em>, <em>transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/utils/others.html#convert_meshdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.utils.others.convert_meshdata" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.utils.mesh.convert_meshdata">
+<code class="descclassname">visbrain.utils.mesh.</code><code class="descname">convert_meshdata</code><span class="sig-paren">(</span><em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>meshdata=None</em>, <em>invert_normals=False</em>, <em>transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/utils/mesh.html#convert_meshdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.utils.mesh.convert_meshdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert mesh data to be compatible with visbrain.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -299,7 +300,7 @@ faces.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>vertices</strong> : array_like</p>
 <blockquote>
-<div><p>Vertices of shape (N, 3, 3)</p>
+<div><p>Vertices of shape (N, 3)</p>
 </div></blockquote>
 <p><strong>faces</strong> : array_like</p>
 <blockquote>
@@ -307,7 +308,7 @@ faces.</p>
 </div></blockquote>
 <p><strong>normals</strong> : array_like</p>
 <blockquote class="last">
-<div><p>The normals of the template, with the same shape as vertices.</p>
+<div><p>The normals of shape (M, 3, 3).</p>
 </div></blockquote>
 </td>
 </tr>
@@ -317,10 +318,10 @@ faces.</p>
 
 </div>
 <div class="section" id="add-brain-template">
-<span id="addbraintemplate"></span><h3>7.2.2. Add brain template<a class="headerlink" href="#add-brain-template" title="Permalink to this headline">¶</a></h3>
+<span id="addbraintemplate"></span><h3>8.2.2. Add brain template<a class="headerlink" href="#add-brain-template" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="visbrain.utils.others.add_brain_template">
-<code class="descclassname">visbrain.utils.others.</code><code class="descname">add_brain_template</code><span class="sig-paren">(</span><em>name</em>, <em>vertices</em>, <em>faces</em>, <em>normals</em>, <em>lr_index=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/utils/others.html#add_brain_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.utils.others.add_brain_template" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.utils.mesh.add_brain_template">
+<code class="descclassname">visbrain.utils.mesh.</code><code class="descname">add_brain_template</code><span class="sig-paren">(</span><em>name</em>, <em>vertices</em>, <em>faces</em>, <em>normals=None</em>, <em>lr_index=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/utils/mesh.html#add_brain_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.utils.mesh.add_brain_template" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a brain template to the default list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -356,10 +357,10 @@ x_left &lt;= lr_index and right &gt; lr_index</p>
 
 </div>
 <div class="section" id="remove-brain-template">
-<span id="removebraintemplate"></span><h3>7.2.3. Remove brain template<a class="headerlink" href="#remove-brain-template" title="Permalink to this headline">¶</a></h3>
+<span id="removebraintemplate"></span><h3>8.2.3. Remove brain template<a class="headerlink" href="#remove-brain-template" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="visbrain.utils.others.remove_brain_template">
-<code class="descclassname">visbrain.utils.others.</code><code class="descname">remove_brain_template</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/utils/others.html#remove_brain_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.utils.others.remove_brain_template" title="Permalink to this definition">¶</a></dt>
+<dt id="visbrain.utils.mesh.remove_brain_template">
+<code class="descclassname">visbrain.utils.mesh.</code><code class="descname">remove_brain_template</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/utils/mesh.html#remove_brain_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.utils.mesh.remove_brain_template" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove brain template from the default list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -389,10 +390,10 @@ x_left &lt;= lr_index and right &gt; lr_index</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="io.html" class="btn btn-neutral float-right" title="8. I/O" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="io.html" class="btn btn-neutral float-right" title="9. I/O" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="figure.html" class="btn btn-neutral" title="6. Figure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="objects.html" class="btn btn-neutral" title="7. Objects" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -423,7 +424,7 @@ x_left &lt;= lr_index and right &gt; lr_index</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

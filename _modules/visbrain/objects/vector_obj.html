@@ -1,0 +1,467 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.objects.vector_obj &mdash; visbrain 0.3.6 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.objects.vector_obj</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.objects.vector_obj</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Base class for objects of type source.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
+
+<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CombineObjects</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">array2colormap</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">wrap_properties</span><span class="p">,</span> <span class="n">normalize</span>
+<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">CbarArgs</span><span class="p">,</span> <span class="n">Arrow</span>
+<span class="kn">from</span> <span class="nn">..visuals.arrow</span> <span class="k">import</span> <span class="n">ARROW_TYPES</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
+<span class="n">ARROW_DTYPES</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="s1">&#39;vertices&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;normals&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="mi">3</span><span class="p">)])]</span>
+
+
+<div class="viewcode-block" id="VectorObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.vector_obj.VectorObj">[docs]</a><span class="k">class</span> <span class="nc">VectorObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CbarArgs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a vector object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : string</span>
+<span class="sd">        Name of the vector object.</span>
+<span class="sd">    arrows : array_like, tuple, list</span>
+<span class="sd">        The position of arrows. Use either :</span>
+
+<span class="sd">            * A list (or tuple) of two arrays with identical shapes (N, 3).</span>
+<span class="sd">              The first array specify the (x, y, z) position where arrows start</span>
+<span class="sd">              and the second the (x, y, z) position of the end of each arrow.</span>
+<span class="sd">            * Alternatively to the point above, an array of type</span>
+<span class="sd">              [(&#39;start&#39;, float, 3), (&#39;end&#39;, float, 3)] can also be used.</span>
+<span class="sd">            * An array of type [(&#39;vertices&#39;, float, 3), (&#39;normals&#39;, float, 3)].</span>
+<span class="sd">              This method use the normals to vertices to inferred the arrow</span>
+<span class="sd">              locations. In addition, if `data` is not None, `data` is used to</span>
+<span class="sd">              inferred the arrow length.</span>
+<span class="sd">    data : array_like | None</span>
+<span class="sd">        Attach some data to each vector. This data can be used to inferred the</span>
+<span class="sd">        color.</span>
+<span class="sd">    inferred_data : bool | False</span>
+<span class="sd">        If the `arrows` input use the (start, end) method and if inferred_data</span>
+<span class="sd">        is set to True, the magnitude of each vector is used as data.</span>
+<span class="sd">    select : array_like | None</span>
+<span class="sd">        An array of boolean values to select some specifics arrows.</span>
+<span class="sd">    color : array_like/tuple/string | &#39;black&#39;</span>
+<span class="sd">        If no data are provided, use this parameter to set a unique color for</span>
+<span class="sd">        all vectors.</span>
+<span class="sd">    line_width : float | 5.</span>
+<span class="sd">        Line width of each vector.</span>
+<span class="sd">    arrow_size : float | 10.</span>
+<span class="sd">        Size of the arrow-head.</span>
+<span class="sd">    arrow_type : string | &#39;stealth&#39;</span>
+<span class="sd">        The arrow-head type. Use either &#39;stealth&#39;, &#39;curved&#39;, &#39;angle_30&#39;,</span>
+<span class="sd">        &#39;angle_60&#39;, &#39;angle_90&#39;, &#39;triangle_30&#39;, &#39;triangle_60&#39;, &#39;triangle_90&#39;</span>
+<span class="sd">        or &#39;inhibitor_round&#39;.</span>
+<span class="sd">    antialias : bool | False</span>
+<span class="sd">        Use smoothed lines.</span>
+<span class="sd">    cmap : string | &#39;viridis&#39;</span>
+<span class="sd">        The colormap to use (if data is not None).</span>
+<span class="sd">    clim : tuple | None</span>
+<span class="sd">        Colorbar limits. If None, the (max, min) of data is used (if data is</span>
+<span class="sd">        not None).</span>
+<span class="sd">    vmin : float | None</span>
+<span class="sd">        Minimum threshold (if data is not None).</span>
+<span class="sd">    under : string | &#39;gray&#39;</span>
+<span class="sd">        Color for values under vmin (if data is not None).</span>
+<span class="sd">    vmax : float | None</span>
+<span class="sd">        Maximum threshold (if data is not None).</span>
+<span class="sd">    over : string | &#39;red&#39;</span>
+<span class="sd">        Color for values over vmax (if data is not None).</span>
+<span class="sd">    transform : VisPy.visuals.transforms | None</span>
+<span class="sd">        VisPy transformation to set to the parent node.</span>
+<span class="sd">    parent : VisPy.parent | None</span>
+<span class="sd">        Markers object parent.</span>
+<span class="sd">    verbose : string</span>
+<span class="sd">        Verbosity level.</span>
+<span class="sd">    _z : float | 10.</span>
+<span class="sd">        In case of (n_sources, 2) use _z to specify the elevation.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from visbrain.objects import VectorObj</span>
+<span class="sd">    &gt;&gt;&gt; n_vector = 10</span>
+<span class="sd">    &gt;&gt;&gt; arrows = [np.random.rand(n_vector, 3), np.random.rand(n_vector, 3)]</span>
+<span class="sd">    &gt;&gt;&gt; data = np.random.uniform(-10, 10, (n_vector))</span>
+<span class="sd">    &gt;&gt;&gt; v = VectorObj(&#39;Vector&#39;, arrows, data=data, antialias=True)</span>
+<span class="sd">    &gt;&gt;&gt; v.preview(axis=True)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                BUILT IN</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">arrows</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inferred_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">arrow_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+                 <span class="n">arrow_type</span><span class="o">=</span><span class="s1">&#39;stealth&#39;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+                 <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="c1"># Init Visbrain object base class and SourceProjection :</span>
+        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="c1"># Initialize colorbar arguments :</span>
+        <span class="n">isvmin</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="n">isvmax</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vmax</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="n">CbarArgs</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">isvmin</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">isvmax</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span>
+                          <span class="n">over</span><span class="p">)</span>
+        <span class="c1"># _______________________ START // END _______________________</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arrows</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrows</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">arrows</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">arrows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ARROW_DTYPES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arrows</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+        <span class="c1"># Select :</span>
+        <span class="n">n_arrows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrows</span><span class="p">)</span>
+        <span class="n">select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_arrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span> <span class="k">if</span> <span class="n">select</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">select</span>
+        <span class="n">arrows</span> <span class="o">=</span> <span class="n">arrows</span><span class="p">[</span><span class="n">select</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">select</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="k">else</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_arrows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrows</span><span class="p">)</span>
+        <span class="c1"># Build (arrow_start, arrow_end)</span>
+        <span class="k">assert</span> <span class="n">select</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">bool</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_arrows</span>
+        <span class="k">if</span> <span class="n">arrows</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">ARROW_DTYPES</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>    <span class="c1"># (start, end)</span>
+            <span class="n">arrow_start</span><span class="p">,</span> <span class="n">arrow_end</span> <span class="o">=</span> <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">],</span> <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">inferred_data</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">arrow_end</span> <span class="o">-</span> <span class="n">arrow_start</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">arrows</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">ARROW_DTYPES</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># (vertices, normals)</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_arrows</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="k">else</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">arrow_start</span> <span class="o">=</span> <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">]</span>
+            <span class="n">arrow_end</span> <span class="o">=</span> <span class="n">arrow_start</span> <span class="o">+</span> <span class="n">norm</span> <span class="o">*</span> <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;normals&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Undefined type for the `arrows` input.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># _______________________ CHECKING _______________________</span>
+        <span class="c1"># Line width // arrow type / size :</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line_width</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="n">arrow_type</span> <span class="ow">in</span> <span class="n">ARROW_TYPES</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arrow_size</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line_width</span> <span class="o">=</span> <span class="n">line_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrow_size</span> <span class="o">=</span> <span class="n">arrow_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrow_type</span> <span class="o">=</span> <span class="n">arrow_type</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">clim</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="k">if</span> <span class="n">clim</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">clim</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">clim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">array2colormap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+                                   <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="n">over</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">color2vb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># _______________________ ARROWS _______________________</span>
+        <span class="c1"># Build arrows :</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">arrow_start</span><span class="p">,</span> <span class="n">arrow_end</span><span class="p">]</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">line_color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrows</span> <span class="o">=</span> <span class="n">Arrow</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">line</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">line_color</span><span class="p">,</span> <span class="n">arrows</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span>
+                             <span class="n">arrow_type</span><span class="o">=</span><span class="n">arrow_type</span><span class="p">,</span> <span class="n">arrow_size</span><span class="o">=</span><span class="n">arrow_size</span><span class="p">,</span>
+                             <span class="n">antialias</span><span class="o">=</span><span class="n">antialias</span><span class="p">,</span> <span class="n">arrow_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                             <span class="n">connect</span><span class="o">=</span><span class="s1">&#39;segments&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">line_width</span><span class="p">,</span>
+                             <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the number of arrows.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_arrows</span>
+
+    <span class="k">def</span> <span class="nf">_get_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the most adapted camera.&quot;&quot;&quot;</span>
+        <span class="n">d_mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arrows</span><span class="o">.</span><span class="n">_pos</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_arrows</span><span class="o">.</span><span class="n">_pos</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">TurntableCamera</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">d_mean</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="n">dist</span><span class="p">)</span>
+
+    <span class="c1"># ----------- LINE_WIDTH -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">line_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the line_width value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_line_width</span>
+
+    <span class="nd">@line_width</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">line_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set line_width value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrows</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line_width</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrows</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="c1"># ----------- ARROW_TYPE -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">arrow_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the arrow_type value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arrow_type</span>
+
+    <span class="nd">@arrow_type</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">arrow_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set arrow_type value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrows</span><span class="o">.</span><span class="n">arrow_type</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrow_type</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrows</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="c1"># ----------- ARROW_SIZE -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">arrow_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the arrow_size value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arrow_size</span>
+
+    <span class="nd">@arrow_size</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">arrow_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set arrow_size value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrows</span><span class="o">.</span><span class="n">arrow_size</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrow_size</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arrows</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+
+
+<span class="k">class</span> <span class="nc">CombineVectors</span><span class="p">(</span><span class="n">CombineObjects</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Combine vectors objects.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vobjs : VectorObj/list | None</span>
+<span class="sd">        List of vector objects.</span>
+<span class="sd">    select : string | None</span>
+<span class="sd">        The name of the vector object to select.</span>
+<span class="sd">    parent : VisPy.parent | None</span>
+<span class="sd">        Images object parent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vobjs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">CombineObjects</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">VectorObj</span><span class="p">,</span> <span class="n">vobjs</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.6',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.io.write_image &mdash; visbrain 0.3.5 documentation</title>
+  <title>visbrain.io.write_image &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -171,10 +171,13 @@
 <span class="sd">- write_fig_canvas : Export a canvas as a figure</span>
 <span class="sd">- write_fig_pyqt : Export a GUI window as a figure</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">splitext</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="c1"># from os.path import splitext</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">..utils.color</span> <span class="k">import</span> <span class="n">color2vb</span>
 
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;write_fig_hyp&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_canvas&#39;</span><span class="p">,</span> <span class="s1">&#39;write_fig_pyqt&#39;</span><span class="p">)</span>
 
@@ -301,6 +304,7 @@
 
     <span class="c1"># Save as 600 dpi .png</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Image successfully saved (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">file</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
@@ -425,6 +429,7 @@
         <span class="n">img</span> <span class="o">=</span> <span class="n">piccrop</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
     <span class="c1"># Save it :</span>
     <span class="n">imsave</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Image successfully saved (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
 
     <span class="c1"># Set to the canvas it&#39;s previous size :</span>
     <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="n">backup_size</span>
@@ -450,6 +455,7 @@
         <span class="n">screen</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="o">.</span><span class="n">primaryScreen</span><span class="p">()</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">screen</span><span class="o">.</span><span class="n">grabWindow</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Image successfully saved (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
     <span class="c1"># Take screenshot if filename :</span>
     <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
         <span class="c1"># Timer (avoid shooting the saving window)</span>
@@ -494,7 +500,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

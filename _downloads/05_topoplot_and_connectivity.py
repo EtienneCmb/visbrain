@@ -12,11 +12,11 @@ https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1
 import numpy as np
 
 from visbrain import Topo
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
 
 # Load the data :
 download_file('topoplot_data.npz')
-mat = np.load('topoplot_data.npz')
+mat = np.load(path_to_visbrain_data('topoplot_data.npz'))
 xyz, data = mat['xyz'], mat['data']
 channels = [str(k) for k in range(len(data))]
 n_channels = len(channels)

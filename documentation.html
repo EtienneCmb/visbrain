@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Documentation &mdash; visbrain 0.3.5 documentation</title>
+  <title>Documentation &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="index.html"/>
         <link rel="next" title="1. Brain" href="brain.html"/>
         <link rel="prev" title="Community" href="community.html"/> 
 
@@ -73,7 +73,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -106,8 +106,9 @@
 <li class="toctree-l2"><a class="reference internal" href="topo.html">4. Topo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. Colorbar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="figure.html">6. Figure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html">7. Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html">8. I/O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html">7. Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">8. Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html">9. I/O</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
@@ -214,16 +215,26 @@
 <li class="toctree-l2"><a class="reference internal" href="figure.html#api">6.3. API</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">7. Utils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#eeg-datasets">7.1. EEG datasets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#brain-templates">7.2. Brain templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="objects.html">7. Objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="objects.html#brain-object">7.1. Brain object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html#source-object">7.2. Source object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html#connectivity-object">7.3. Connectivity object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html#vector-object">7.4. Vector object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html#time-series-object">7.5. Time-series object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html#pictures-object">7.6. Pictures object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html#region-of-interest-object">7.7. Region Of Interest object</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="io.html">8. I/O</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="io.html#gui-dialog">8.1. GUI dialog</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html#mne">8.2. MNE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html#configuration-file">8.3. Configuration file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html#image">8.4. Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">8. Utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#eeg-datasets">8.1. EEG datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html#brain-templates">8.2. Brain templates</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">9. I/O</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="io.html#gui-dialog">9.1. GUI dialog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#mne">9.2. MNE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#configuration-file">9.3. Configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#image">9.4. Image</a></li>
 </ul>
 </li>
 </ul>
@@ -274,7 +285,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

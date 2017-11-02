@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add a brain template &mdash; visbrain 0.3.5 documentation</title>
+  <title>Add a brain template &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add deep sources" href="03_sources.html"/>
         <link rel="prev" title="Cross-sections and volume control" href="01_cross_sections_and_volume.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -195,24 +196,22 @@
   <div class="section" id="add-a-brain-template">
 <span id="sphx-glr-auto-examples-brain-02-add-brain-template-py"></span><h1>Add a brain template<a class="headerlink" href="#add-a-brain-template" title="Permalink to this headline">¶</a></h1>
 <p>Add a new brain template to the interface.</p>
-<p>As an example, download the WhiteMatter.npz file :
+<p>As an example, download the white.npz file :
 <a class="reference external" href="https://drive.google.com/open?id=0B6vtJiCQZUBvd0xfTHJqcHg2bTA">https://drive.google.com/open?id=0B6vtJiCQZUBvd0xfTHJqcHg2bTA</a></p>
 <img alt="../../_images/ex_add_brain_template.png" src="../../_images/ex_add_brain_template.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
 <span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">add_brain_template</span><span class="p">,</span> <span class="n">remove_brain_template</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
-<span class="sd">&quot;&quot;&quot;Download the brain template. Use either &#39;WhiteMatter&#39;, &#39;Inflated&#39; or</span>
-<span class="sd">&#39;Sphere&#39;</span>
+<span class="sd">&quot;&quot;&quot;Download the brain template. Use either &#39;white&#39;, &#39;inflated&#39; or &#39;sphere&#39;</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;WhiteMatter&#39;</span>
+<span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span>
 <span class="n">download_file</span><span class="p">(</span><span class="n">template</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
-<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">template</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
+<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">template</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">))</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Get variables for defining a new template. Vertices are nodes connected by the</span>
@@ -297,7 +296,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

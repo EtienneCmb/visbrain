@@ -71,7 +71,7 @@ pictures are going to be set in a layout in the 1_LayoutExample.py script.
     vb.screenshot('repartition.jpg', autocrop=True)
 
     vb.sources_display('all')
-    vb.roi_control(selection=[4, 6], subdivision='Brodmann', smooth=5)
+    vb.roi_control(selection=[4, 6], roi_type='Brodmann', smooth=5)
     vb.cortical_projection(project_on='roi', radius=12., cmap='inferno',
                            clim=(.1, .5), vmin=0., vmax=6.)
     vb.sources_display('none')

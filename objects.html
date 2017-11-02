@@ -1,0 +1,1645 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>7. Objects &mdash; visbrain 0.3.6 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="index.html"/>
+        <link rel="up" title="Documentation" href="documentation.html"/>
+        <link rel="next" title="8. Utils" href="utils.html"/>
+        <link rel="prev" title="6. Figure" href="figure.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="community.html">Community</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="documentation.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="brain.html">1. Brain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sleep.html">2. Sleep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="signal.html">3. Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="topo.html">4. Topo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colorbar.html">5. Colorbar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="figure.html">6. Figure</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">7. Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#brain-object">7.1. Brain object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-object">7.2. Source object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connectivity-object">7.3. Connectivity object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vector-object">7.4. Vector object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#time-series-object">7.5. Time-series object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pictures-object">7.6. Pictures object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#region-of-interest-object">7.7. Region Of Interest object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">8. Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html">9. I/O</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="documentation.html">Documentation</a> &raquo;</li>
+        
+      <li>7. Objects</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/objects.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="objects">
+<span id="id1"></span><h1>7. Objects<a class="headerlink" href="#objects" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="#brainobj"><span class="std std-ref">Brain object</span></a></li>
+<li><a class="reference internal" href="#sourceobj"><span class="std std-ref">Source object</span></a></li>
+<li><a class="reference internal" href="#connectobj"><span class="std std-ref">Connectivity object</span></a></li>
+<li><a class="reference internal" href="#vectorobj"><span class="std std-ref">Vector object</span></a></li>
+<li><a class="reference internal" href="#tsobj"><span class="std std-ref">Time-series object</span></a></li>
+<li><a class="reference internal" href="#picobj"><span class="std std-ref">Pictures object</span></a></li>
+<li><a class="reference internal" href="#roiobj"><span class="std std-ref">Region Of Interest object</span></a></li>
+</ul>
+<div class="section" id="brain-object">
+<span id="brainobj"></span><h2>7.1. Brain object<a class="headerlink" href="#brain-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id2">
+<img alt="_images/pic_brain_obj.png" src="_images/pic_brain_obj.png" />
+<p class="caption"><span class="caption-text">Brain object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.brain_obj.BrainObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.brain_obj.</code><code class="descname">BrainObj</code><span class="sig-paren">(</span><em>name</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere=’both’</em>, <em>translucent=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.brain_obj.BrainObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a brain object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the brain object. If brain is ‘B1’ or ‘B2’ or ‘B3’ use a
+default brain template. If name is ‘white’, ‘inflated’ or
+‘sphere’ download the template (if needed). Otherwise, at least
+vertices and faces must be defined.</p>
+</div></blockquote>
+<p><strong>vertices</strong> : array_like | None</p>
+<blockquote>
+<div><p>Mesh vertices to use for the brain. Must be an array of shape
+(n_vertices, 3).</p>
+</div></blockquote>
+<p><strong>faces</strong> : array_like | None</p>
+<blockquote>
+<div><p>Mesh faces of shape (n_faces, 3).</p>
+</div></blockquote>
+<p><strong>normals</strong> : array_like | None</p>
+<blockquote>
+<div><p>Normals to each vertex. If None, the program will try to compute it.
+Must be an array with the same shape as vertices.</p>
+</div></blockquote>
+<p><strong>lr_index</strong> : array_like | None</p>
+<blockquote>
+<div><p>Left / Right index for hemispheres. Must be a vector of length
+n_vertices. This vector must be a boolean array where True refer to
+vertices that belong to the left hemisphere and False, the right
+hemisphere.</p>
+</div></blockquote>
+<p><strong>hemisphere</strong> : {‘left’, ‘both’, ‘right’}</p>
+<blockquote>
+<div><p>The hemisphere to plot.</p>
+</div></blockquote>
+<p><strong>translucent</strong> : bool | True</p>
+<blockquote>
+<div><p>Use translucent (True) or opaque (False) brain.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>Brain object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote class="last">
+<div><p>Verbosity level.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">BrainObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BrainObj</span><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.brain_obj.BrainObj.preview" title="visbrain.objects.brain_obj.BrainObj.preview"><code class="xref py py-obj docutils literal"><span class="pre">preview</span></code></a>([bgcolor,&nbsp;axis,&nbsp;show])</td>
+<td>Previsualize the result.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.brain_obj.BrainObj.set_data" title="visbrain.objects.brain_obj.BrainObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>([name,&nbsp;vertices,&nbsp;faces,&nbsp;normals,&nbsp;…])</td>
+<td>Load a brain template.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.brain_obj.BrainObj.set_state" title="visbrain.objects.brain_obj.BrainObj.set_state"><code class="xref py py-obj docutils literal"><span class="pre">set_state</span></code></a>([azimuth,&nbsp;elevation,&nbsp;…])</td>
+<td>Set the camera state.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.brain_obj.BrainObj.rotate" title="visbrain.objects.brain_obj.BrainObj.rotate"><code class="xref py py-obj docutils literal"><span class="pre">rotate</span></code></a>([fixed,&nbsp;custom,&nbsp;margin])</td>
+<td>Rotate the brain using predefined rotations or a custom one.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.brain_obj.BrainObj.add_activation" title="visbrain.objects.brain_obj.BrainObj.add_activation"><code class="xref py py-obj docutils literal"><span class="pre">add_activation</span></code></a>(data,&nbsp;vertices[,&nbsp;…])</td>
+<td>Add activation to specific vertices.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.brain_obj.BrainObj.preview">
+<code class="descclassname">BrainObj.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor=’white’</em>, <em>axis=False</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#visbrain.objects.brain_obj.BrainObj.preview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Previsualize the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bgcolor</strong> : array_like/string/tuple | ‘white’</p>
+<blockquote class="last">
+<div><p>Background color for the preview.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.brain_obj.BrainObj.set_data">
+<code class="descclassname">BrainObj.</code><code class="descname">set_data</code><span class="sig-paren">(</span><em>name=None</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere=’both’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.set_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.brain_obj.BrainObj.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a brain template.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.brain_obj.BrainObj.set_state">
+<code class="descclassname">BrainObj.</code><code class="descname">set_state</code><span class="sig-paren">(</span><em>azimuth=None</em>, <em>elevation=None</em>, <em>scale_factor=None</em>, <em>distance=None</em>, <em>center=None</em>, <em>margin=1.08</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.set_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.brain_obj.BrainObj.set_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the camera state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.brain_obj.BrainObj.rotate">
+<code class="descclassname">BrainObj.</code><code class="descname">rotate</code><span class="sig-paren">(</span><em>fixed=’top’</em>, <em>custom=None</em>, <em>margin=0.08</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.rotate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.brain_obj.BrainObj.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate the brain using predefined rotations or a custom one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fixed</strong> : str | ‘top’</p>
+<blockquote>
+<div><p>Use a fixed rotation :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Top view : ‘axial_0’, ‘top’</li>
+<li>Bottom view : ‘axial_1’, ‘bottom’</li>
+<li>Left : ‘sagittal_0’, ‘left’</li>
+<li>Right : ‘sagittal_1’, ‘right’</li>
+<li>Front : ‘coronal_0’, ‘front’</li>
+<li>Back : ‘coronal_1’, ‘back’</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p><strong>custom</strong> : tuple | None</p>
+<blockquote class="last">
+<div><p>Custom rotation. This parameter must be a tuple of two floats
+respectively describing the (azimuth, elevation).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.brain_obj.BrainObj.add_activation">
+<code class="descclassname">BrainObj.</code><code class="descname">add_activation</code><span class="sig-paren">(</span><em>data</em>, <em>vertices</em>, <em>smoothing_steps=20</em>, <em>cmap=’viridis’</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under=’gray’</em>, <em>over=’red’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.add_activation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.brain_obj.BrainObj.add_activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add activation to specific vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>Vector array of data of shape (n_data,).</p>
+</div></blockquote>
+<p><strong>vertices</strong> : array_like</p>
+<blockquote>
+<div><p>Vector array of vertices of shape (n_vtx). Must be an array of
+integers.</p>
+</div></blockquote>
+<p><strong>smoothing_steps</strong> : int | 20</p>
+<blockquote>
+<div><p>Number of smoothing steps (smoothing is used if n_data &lt; n_vtx)</p>
+</div></blockquote>
+<p><strong>cmap</strong> : string | ‘viridis’</p>
+<blockquote>
+<div><p>The colormap to use.</p>
+</div></blockquote>
+<p><strong>clim</strong> : tuple | None</p>
+<blockquote>
+<div><p>The colorbar limits. If None, (data.min(), data.max()) will be used
+instead.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Minimum threshold.</p>
+</div></blockquote>
+<p><strong>vmax</strong> : float | None</p>
+<blockquote>
+<div><p>Maximum threshold.</p>
+</div></blockquote>
+<p><strong>under</strong> : string/tuple/array_like | ‘gray’</p>
+<blockquote>
+<div><p>The color to use for values under vmin.</p>
+</div></blockquote>
+<p><strong>over</strong> : string/tuple/array_like | ‘red’</p>
+<blockquote class="last">
+<div><p>The color to use for values over vmax.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="source-object">
+<span id="sourceobj"></span><h2>7.2. Source object<a class="headerlink" href="#source-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id3">
+<img alt="_images/pic_source_obj.png" src="_images/pic_source_obj.png" />
+<p class="caption"><span class="caption-text">Source object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.source_obj.SourceObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.source_obj.</code><code class="descname">SourceObj</code><span class="sig-paren">(</span><em>name</em>, <em>xyz</em>, <em>data=None</em>, <em>color=’black’</em>, <em>alpha=1.0</em>, <em>symbol=’disc’</em>, <em>radius_min=5.0</em>, <em>radius_max=10.0</em>, <em>edge_width=0.0</em>, <em>edge_color=’black’</em>, <em>system=’mni’</em>, <em>mask=None</em>, <em>mask_color=’red’</em>, <em>text=None</em>, <em>text_size=3.0</em>, <em>text_color=’black’</em>, <em>text_bold=False</em>, <em>text_translate=(0.0</em>, <em>2.0</em>, <em>0.0)</em>, <em>visible=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/source_obj.html#SourceObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.source_obj.SourceObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a source object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the source object.</p>
+</div></blockquote>
+<p><strong>xyz</strong> : array_like</p>
+<blockquote>
+<div><p>Array of positions of shape (n_sources, 2) or (n_sources, 3).</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of weights of shape (n_sources,).</p>
+</div></blockquote>
+<p><strong>color</strong> : array_like/string/tuple | ‘black’</p>
+<blockquote>
+<div><p>Marker’s color. Use a string (i.e ‘green’) to use the same color across
+markers or a list of colors of length n_sources to use different colors
+for markers.</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float | 1.</p>
+<blockquote>
+<div><p>Transparency level.</p>
+</div></blockquote>
+<p><strong>symbol</strong> : string | ‘disc’</p>
+<blockquote>
+<div><p>Symbol to use for sources. Allowed style strings are: disc, arrow,
+ring, clobber, square, diamond, vbar, hbar, cross, tailed_arrow, x,
+triangle_up, triangle_down, and star.</p>
+</div></blockquote>
+<p><strong>radius_min / radius_max</strong> : float | 5.0/10.0</p>
+<blockquote>
+<div><p>Define the minimum and maximum source’s possible radius. By default
+if all sources have the same value, the radius will be radius_min.</p>
+</div></blockquote>
+<p><strong>edge_color</strong> : string/list/array_like | ‘black’</p>
+<blockquote>
+<div><p>Edge color of source’s markers.</p>
+</div></blockquote>
+<p><strong>edge_width</strong> : float | 0.</p>
+<blockquote>
+<div><p>Edge width source’s markers.</p>
+</div></blockquote>
+<p><strong>system</strong> : {‘mni’, ‘tal’}</p>
+<blockquote>
+<div><p>Specify if the coodinates are in the MNI space (‘mni’) or Talairach
+(‘tal’).</p>
+</div></blockquote>
+<p><strong>mask</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of boolean values to specify masked sources. For example, if data
+are p-values, mask could be non-significant sources.</p>
+</div></blockquote>
+<p><strong>mask_color</strong> : array_like/tuple/string | ‘red’</p>
+<blockquote>
+<div><p>Color to use for masked sources.</p>
+</div></blockquote>
+<p><strong>text</strong> : list | None</p>
+<blockquote>
+<div><p>Text to attach to each source. For example, text could be the name of
+each source.</p>
+</div></blockquote>
+<p><strong>text_size</strong> : float | 3.</p>
+<blockquote>
+<div><p>Text size attached to sources.</p>
+</div></blockquote>
+<p><strong>text_color</strong> : array_like/string/tuple | ‘black’</p>
+<blockquote>
+<div><p>Text color attached to sources.</p>
+</div></blockquote>
+<p><strong>text_bold</strong> : bool | False</p>
+<blockquote>
+<div><p>Specify if the text attached to sources should be bold.</p>
+</div></blockquote>
+<p><strong>text_translate</strong> : tuple | (0., 2., 0.)</p>
+<blockquote>
+<div><p>Translate the text along the (x, y, z) axis.</p>
+</div></blockquote>
+<p><strong>visible</strong> : bool/array_like | True</p>
+<blockquote>
+<div><p>Specify which source’s have to be displayed. If visible is True, all
+sources are displayed, False all sources are hiden. Alternatively, use
+an array of shape (n_sources,) to select which sources to display.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>Markers object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote>
+<div><p>Verbosity level.</p>
+</div></blockquote>
+<p><strong>_z</strong> : float | 10.</p>
+<blockquote class="last">
+<div><p>In case of (n_sources, 2) use _z to specify the elevation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">SourceObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_sources</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="n">n_sources</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">50</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">50</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_sources</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sources</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SourceObj</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>              <span class="n">radius_max</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>              <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">text_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.source_obj.SourceObj.preview" title="visbrain.objects.source_obj.SourceObj.preview"><code class="xref py py-obj docutils literal"><span class="pre">preview</span></code></a>([bgcolor,&nbsp;axis,&nbsp;show])</td>
+<td>Previsualize the result.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.source_obj.SourceObj.analyse_sources" title="visbrain.objects.source_obj.SourceObj.analyse_sources"><code class="xref py py-obj docutils literal"><span class="pre">analyse_sources</span></code></a>([roi_obj,&nbsp;replace_bad,&nbsp;…])</td>
+<td>Analyse sources using Region of interest (ROI).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.source_obj.SourceObj.color_sources" title="visbrain.objects.source_obj.SourceObj.color_sources"><code class="xref py py-obj docutils literal"><span class="pre">color_sources</span></code></a>(analysis,&nbsp;color_by[,&nbsp;…])</td>
+<td>Color sources according to ROI analysis.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.source_obj.SourceObj.set_visible_sources" title="visbrain.objects.source_obj.SourceObj.set_visible_sources"><code class="xref py py-obj docutils literal"><span class="pre">set_visible_sources</span></code></a>([select,&nbsp;v,&nbsp;distance])</td>
+<td>Select sources that are either inside or outside the mesh.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.source_obj.SourceObj.fit_to_vertices" title="visbrain.objects.source_obj.SourceObj.fit_to_vertices"><code class="xref py py-obj docutils literal"><span class="pre">fit_to_vertices</span></code></a>(v)</td>
+<td>Move sources to the closest vertex.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.source_obj.SourceObj.project_modulation" title="visbrain.objects.source_obj.SourceObj.project_modulation"><code class="xref py py-obj docutils literal"><span class="pre">project_modulation</span></code></a>(v,&nbsp;radius[,&nbsp;contribute])</td>
+<td>Project source’s data onto vertices.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.source_obj.SourceObj.project_repartition" title="visbrain.objects.source_obj.SourceObj.project_repartition"><code class="xref py py-obj docutils literal"><span class="pre">project_repartition</span></code></a>(v,&nbsp;radius[,&nbsp;contribute])</td>
+<td>Project source’s repartition onto vertices.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.source_obj.SourceObj.preview">
+<code class="descclassname">SourceObj.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor=’white’</em>, <em>axis=False</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#visbrain.objects.source_obj.SourceObj.preview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Previsualize the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bgcolor</strong> : array_like/string/tuple | ‘white’</p>
+<blockquote class="last">
+<div><p>Background color for the preview.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.source_obj.SourceObj.analyse_sources">
+<code class="descclassname">SourceObj.</code><code class="descname">analyse_sources</code><span class="sig-paren">(</span><em>roi_obj=’talairach’, replace_bad=True, bad_patterns=[-1, ‘undefined’, ‘None’], replace_with=’Not found’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/source_obj.html#SourceObj.analyse_sources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.source_obj.SourceObj.analyse_sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analyse sources using Region of interest (ROI).</p>
+<p>This method can be used to identify in which structure is located a
+source.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>roi_obj</strong> : string/list | ‘talairach’</p>
+<blockquote>
+<div><p>The ROI object to use. Use either ‘talairach’, ‘brodmann’ or ‘aal’
+to use a predefined ROI template. Otherwise, use a RoiObj object or
+a list of RoiObj.</p>
+</div></blockquote>
+<p><strong>replace_bad</strong> : bool | True</p>
+<blockquote>
+<div><p>Replace bad values (True) or not (False).</p>
+</div></blockquote>
+<p><strong>bad_patterns</strong> : list | [-1, ‘undefined’, ‘None’]</p>
+<blockquote>
+<div><p>Bad patterns to replace if replace_bad is True.</p>
+</div></blockquote>
+<p><strong>replace_with</strong> : string | ‘Not found’</p>
+<blockquote>
+<div><p>Replace bad patterns with this string.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>df</strong> : pandas.DataFrames</p>
+<blockquote class="last">
+<div><p>A Pandas DataFrame or a list of DataFrames if roi_obj is a list.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.source_obj.SourceObj.color_sources">
+<code class="descclassname">SourceObj.</code><code class="descname">color_sources</code><span class="sig-paren">(</span><em>analysis</em>, <em>color_by</em>, <em>roi_to_color=None</em>, <em>color_others=’black’</em>, <em>hide_others=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/source_obj.html#SourceObj.color_sources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.source_obj.SourceObj.color_sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color sources according to ROI analysis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>analysis</strong> : pandas.DataFrames</p>
+<blockquote>
+<div><p>ROI analysis runned using the analyse_sources method.</p>
+</div></blockquote>
+<p><strong>color_by</strong> : string</p>
+<blockquote>
+<div><p>A column name of the analysis DataFrames. This columns is then used
+to identify the color to set to each source inside ROI.</p>
+</div></blockquote>
+<p><strong>roi_to_color</strong> : dict | None</p>
+<blockquote>
+<div><p>Define custom colors to ROI. For example use {‘BA4’: ‘red’,
+‘BA32’: ‘blue’} to define custom colors. If roi_to_color is None,
+random colors will be used instead.</p>
+</div></blockquote>
+<p><strong>color_others</strong> : array_like/tuple/string | ‘black’</p>
+<blockquote>
+<div><p>Specify how to color sources that are not found using the
+roi_to_color dictionary.</p>
+</div></blockquote>
+<p><strong>hide_others</strong> : bool | False</p>
+<blockquote class="last">
+<div><p>Show or hide sources that are not found using the
+roi_to_color dictionary.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.source_obj.SourceObj.set_visible_sources">
+<code class="descclassname">SourceObj.</code><code class="descname">set_visible_sources</code><span class="sig-paren">(</span><em>select=’all’</em>, <em>v=None</em>, <em>distance=5.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/source_obj.html#SourceObj.set_visible_sources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.source_obj.SourceObj.set_visible_sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select sources that are either inside or outside the mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>select</strong> : {‘inside’, ‘outside’, ‘close’, ‘all’, ‘none’, ‘left’, ‘right’}</p>
+<blockquote>
+<div><p>Custom source selection. Use ‘inside’ or ‘outside’ to select
+sources respectively inside or outside the volume. Use ‘close’ to
+select sources that are closed to the surface (see the distance
+parameter below). Finally, use ‘all’ (or True), ‘none’ (or None,
+False) to show or hide all of the sources.</p>
+</div></blockquote>
+<p><strong>v</strong> : array_like | None</p>
+<blockquote>
+<div><p>The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.</p>
+</div></blockquote>
+<p><strong>distance</strong> : float | 5.</p>
+<blockquote class="last">
+<div><p>Distance between the source and the surface.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.source_obj.SourceObj.fit_to_vertices">
+<code class="descclassname">SourceObj.</code><code class="descname">fit_to_vertices</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/source_obj.html#SourceObj.fit_to_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.source_obj.SourceObj.fit_to_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move sources to the closest vertex.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>v</strong> : array_like</p>
+<blockquote class="last">
+<div><p>The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.source_obj.SourceObj.project_modulation">
+<code class="descclassname">SourceObj.</code><code class="descname">project_modulation</code><span class="sig-paren">(</span><em>v</em>, <em>radius</em>, <em>contribute=False</em><span class="sig-paren">)</span><a class="headerlink" href="#visbrain.objects.source_obj.SourceObj.project_modulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project source’s data onto vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>v</strong> : array_like</p>
+<blockquote>
+<div><p>The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.</p>
+</div></blockquote>
+<p><strong>radius</strong> : float</p>
+<blockquote>
+<div><p>The radius under which activity is projected on vertices.</p>
+</div></blockquote>
+<p><strong>contribute: bool | False</strong></p>
+<blockquote>
+<div><p>Specify if sources contribute on both hemisphere.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>modulation</strong> : array_like</p>
+<blockquote class="last">
+<div><p>The modulations of shape (nv, 3) or (nv, 3, 3) if index faced. This
+is a masked array where the mask refer to sources that are over the
+radius.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.source_obj.SourceObj.project_repartition">
+<code class="descclassname">SourceObj.</code><code class="descname">project_repartition</code><span class="sig-paren">(</span><em>v</em>, <em>radius</em>, <em>contribute=False</em><span class="sig-paren">)</span><a class="headerlink" href="#visbrain.objects.source_obj.SourceObj.project_repartition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project source’s repartition onto vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>v</strong> : array_like</p>
+<blockquote>
+<div><p>The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.</p>
+</div></blockquote>
+<p><strong>radius</strong> : float</p>
+<blockquote>
+<div><p>The radius under which activity is projected on vertices.</p>
+</div></blockquote>
+<p><strong>contribute: bool | False</strong></p>
+<blockquote>
+<div><p>Specify if sources contribute on both hemisphere.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">repartition: array_like</p>
+<blockquote class="last">
+<div><p>The repartition of shape (nv, 3) or (nv, 3, 3) if index faced. This
+is a masked array where the mask refer to sources that are over the
+radius.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="connectivity-object">
+<span id="connectobj"></span><h2>7.3. Connectivity object<a class="headerlink" href="#connectivity-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id4">
+<img alt="_images/pic_connect_obj.png" src="_images/pic_connect_obj.png" />
+<p class="caption"><span class="caption-text">Connectivity object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.connect_obj.ConnectObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.connect_obj.</code><code class="descname">ConnectObj</code><span class="sig-paren">(</span><em>name</em>, <em>nodes</em>, <em>edges</em>, <em>select=None</em>, <em>line_width=3.0</em>, <em>color_by=’strength’</em>, <em>custom_colors=None</em>, <em>alpha=1.0</em>, <em>antialias=False</em>, <em>dynamic=None</em>, <em>cmap=’viridis’</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under=’gray’</em>, <em>over=’red’</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/connect_obj.html#ConnectObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.connect_obj.ConnectObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a connectivity object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>The name of the connectivity object.</p>
+</div></blockquote>
+<p><strong>nodes</strong> : array_like</p>
+<blockquote>
+<div><p>Array of nodes coordinates of shape (n_nodes, 3).</p>
+</div></blockquote>
+<p><strong>edges</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of ponderations for edges of shape (n_nodes, n_nodes).</p>
+</div></blockquote>
+<p><strong>select</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array to select edges to display. This should be an array of boolean
+values of shape (n_nodes, n_nodes).</p>
+</div></blockquote>
+<p><strong>line_width</strong> : float | 3.</p>
+<blockquote>
+<div><p>Connectivity line width.</p>
+</div></blockquote>
+<p><strong>color_by</strong> : {‘strength’, ‘count’}</p>
+<blockquote>
+<div><p>Coloring method. Use ‘strength’ to color edges according to their
+connection strength define by the edges input. Use ‘count’ to color
+edges according to the number of connections per node.</p>
+</div></blockquote>
+<p><strong>custom_colors</strong> : dict | None</p>
+<blockquote>
+<div><p>Use a dictionary to colorize edges. For example, {1.2: ‘red’,
+2.8: ‘green’, None: ‘black’} turn connections that have a 1.2 and 2.8
+strength into red and green. All others connections are set to black.</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float | 1.</p>
+<blockquote>
+<div><p>Transparency level (if dynamic is None).</p>
+</div></blockquote>
+<p><strong>antialias</strong> : bool | False</p>
+<blockquote>
+<div><p>Use smoothed lines.</p>
+</div></blockquote>
+<p><strong>dynamic</strong> : tuple | None</p>
+<blockquote>
+<div><p>Control the dynamic opacity. For example, if dynamic=(0, 1),
+strong connections will be more opaque than weaker connections.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : string | ‘viridis’</p>
+<blockquote>
+<div><p>Colormap to use if custom_colors is None.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Lower threshold of the colormap if custom_colors is None.</p>
+</div></blockquote>
+<p><strong>under</strong> : string | None</p>
+<blockquote>
+<div><p>Color to use for values under vmin if custom_colors is None.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Higher threshold of the colormap if custom_colors is None.</p>
+</div></blockquote>
+<p><strong>over</strong> : string | None</p>
+<blockquote>
+<div><p>Color to use for values over vmax if custom_colors is None.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>Line object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote>
+<div><p>Verbosity level.</p>
+</div></blockquote>
+<p><strong>_z</strong> : float | 10.</p>
+<blockquote class="last">
+<div><p>In case of (n_sources, 2) use _z to specify the elevation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">ConnectObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_nodes</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">n_nodes</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">edges</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">edges</span> <span class="o">&lt;=</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">ConnectObj</span><span class="p">(</span><span class="s1">&#39;Connect&#39;</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.connect_obj.ConnectObj.preview" title="visbrain.objects.connect_obj.ConnectObj.preview"><code class="xref py py-obj docutils literal"><span class="pre">preview</span></code></a>([bgcolor,&nbsp;axis,&nbsp;show])</td>
+<td>Previsualize the result.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.connect_obj.ConnectObj.preview">
+<code class="descclassname">ConnectObj.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor=’white’</em>, <em>axis=False</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#visbrain.objects.connect_obj.ConnectObj.preview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Previsualize the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bgcolor</strong> : array_like/string/tuple | ‘white’</p>
+<blockquote class="last">
+<div><p>Background color for the preview.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="vector-object">
+<span id="vectorobj"></span><h2>7.4. Vector object<a class="headerlink" href="#vector-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id5">
+<img alt="_images/pic_vector_obj.png" src="_images/pic_vector_obj.png" />
+<p class="caption"><span class="caption-text">Vector object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.vector_obj.VectorObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.vector_obj.</code><code class="descname">VectorObj</code><span class="sig-paren">(</span><em>name</em>, <em>arrows</em>, <em>data=None</em>, <em>inferred_data=False</em>, <em>select=None</em>, <em>color=’black’</em>, <em>line_width=5.0</em>, <em>arrow_size=10.0</em>, <em>arrow_type=’stealth’</em>, <em>antialias=False</em>, <em>cmap=’viridis’</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under=’gray’</em>, <em>vmax=None</em>, <em>over=’red’</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/vector_obj.html#VectorObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.vector_obj.VectorObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a vector object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the vector object.</p>
+</div></blockquote>
+<p><strong>arrows</strong> : array_like, tuple, list</p>
+<blockquote>
+<div><p>The position of arrows. Use either :</p>
+<blockquote>
+<div><ul class="simple">
+<li>A list (or tuple) of two arrays with identical shapes (N, 3).
+The first array specify the (x, y, z) position where arrows start
+and the second the (x, y, z) position of the end of each arrow.</li>
+<li>Alternatively to the point above, an array of type
+[(‘start’, float, 3), (‘end’, float, 3)] can also be used.</li>
+<li>An array of type [(‘vertices’, float, 3), (‘normals’, float, 3)].
+This method use the normals to vertices to inferred the arrow
+locations. In addition, if <cite>data</cite> is not None, <cite>data</cite> is used to
+inferred the arrow length.</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p><strong>data</strong> : array_like | None</p>
+<blockquote>
+<div><p>Attach some data to each vector. This data can be used to inferred the
+color.</p>
+</div></blockquote>
+<p><strong>inferred_data</strong> : bool | False</p>
+<blockquote>
+<div><p>If the <cite>arrows</cite> input use the (start, end) method and if inferred_data
+is set to True, the magnitude of each vector is used as data.</p>
+</div></blockquote>
+<p><strong>select</strong> : array_like | None</p>
+<blockquote>
+<div><p>An array of boolean values to select some specifics arrows.</p>
+</div></blockquote>
+<p><strong>color</strong> : array_like/tuple/string | ‘black’</p>
+<blockquote>
+<div><p>If no data are provided, use this parameter to set a unique color for
+all vectors.</p>
+</div></blockquote>
+<p><strong>line_width</strong> : float | 5.</p>
+<blockquote>
+<div><p>Line width of each vector.</p>
+</div></blockquote>
+<p><strong>arrow_size</strong> : float | 10.</p>
+<blockquote>
+<div><p>Size of the arrow-head.</p>
+</div></blockquote>
+<p><strong>arrow_type</strong> : string | ‘stealth’</p>
+<blockquote>
+<div><p>The arrow-head type. Use either ‘stealth’, ‘curved’, ‘angle_30’,
+‘angle_60’, ‘angle_90’, ‘triangle_30’, ‘triangle_60’, ‘triangle_90’
+or ‘inhibitor_round’.</p>
+</div></blockquote>
+<p><strong>antialias</strong> : bool | False</p>
+<blockquote>
+<div><p>Use smoothed lines.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : string | ‘viridis’</p>
+<blockquote>
+<div><p>The colormap to use (if data is not None).</p>
+</div></blockquote>
+<p><strong>clim</strong> : tuple | None</p>
+<blockquote>
+<div><p>Colorbar limits. If None, the (max, min) of data is used (if data is
+not None).</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Minimum threshold (if data is not None).</p>
+</div></blockquote>
+<p><strong>under</strong> : string | ‘gray’</p>
+<blockquote>
+<div><p>Color for values under vmin (if data is not None).</p>
+</div></blockquote>
+<p><strong>vmax</strong> : float | None</p>
+<blockquote>
+<div><p>Maximum threshold (if data is not None).</p>
+</div></blockquote>
+<p><strong>over</strong> : string | ‘red’</p>
+<blockquote>
+<div><p>Color for values over vmax (if data is not None).</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>Markers object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote>
+<div><p>Verbosity level.</p>
+</div></blockquote>
+<p><strong>_z</strong> : float | 10.</p>
+<blockquote class="last">
+<div><p>In case of (n_sources, 2) use _z to specify the elevation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">VectorObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_vector</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrows</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_vector</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_vector</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="n">n_vector</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">VectorObj</span><span class="p">(</span><span class="s1">&#39;Vector&#39;</span><span class="p">,</span> <span class="n">arrows</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.vector_obj.VectorObj.preview" title="visbrain.objects.vector_obj.VectorObj.preview"><code class="xref py py-obj docutils literal"><span class="pre">preview</span></code></a>([bgcolor,&nbsp;axis,&nbsp;show])</td>
+<td>Previsualize the result.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.vector_obj.VectorObj.preview">
+<code class="descclassname">VectorObj.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor=’white’</em>, <em>axis=False</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#visbrain.objects.vector_obj.VectorObj.preview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Previsualize the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bgcolor</strong> : array_like/string/tuple | ‘white’</p>
+<blockquote class="last">
+<div><p>Background color for the preview.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="time-series-object">
+<span id="tsobj"></span><h2>7.5. Time-series object<a class="headerlink" href="#time-series-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id6">
+<img alt="_images/pic_ts_obj.png" src="_images/pic_ts_obj.png" />
+<p class="caption"><span class="caption-text">3-D time-series object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.ts_obj.TimeSeriesObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.ts_obj.</code><code class="descname">TimeSeriesObj</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz</em>, <em>select=None</em>, <em>line_width=1.5</em>, <em>color=’white’</em>, <em>amplitude=6.0</em>, <em>width=20.0</em>, <em>alpha=1.0</em>, <em>antialias=False</em>, <em>translate=(0.0</em>, <em>0.0</em>, <em>1.0)</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/ts_obj.html#TimeSeriesObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.ts_obj.TimeSeriesObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a  3-D time-series object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the time-series object.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>Array of time-series of shape (n_sources, n_time_points)</p>
+</div></blockquote>
+<p><strong>xyz</strong> : array_like</p>
+<blockquote>
+<div><p>The 3-D center location  of each time-series of shape (n_sources, 3).</p>
+</div></blockquote>
+<p><strong>select</strong> : array_like | None</p>
+<blockquote>
+<div><p>Select the time-series to display. Should be a vector of bolean values
+of shape (n_sources,).</p>
+</div></blockquote>
+<p><strong>line_width</strong> : float | 1.5</p>
+<blockquote>
+<div><p>Time-series’ line width.</p>
+</div></blockquote>
+<p><strong>color</strong> : array_like/tuple/string | ‘white’</p>
+<blockquote>
+<div><p>Time-series’ color.</p>
+</div></blockquote>
+<p><strong>amplitude</strong> : float | 6.</p>
+<blockquote>
+<div><p>Graphical amplitude of the time-series.</p>
+</div></blockquote>
+<p><strong>width</strong> : float | 20.</p>
+<blockquote>
+<div><p>Graphical width of the time-series.</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float | 1.</p>
+<blockquote>
+<div><p>Time-series transparency.</p>
+</div></blockquote>
+<p><strong>antialias</strong> : bool | False</p>
+<blockquote>
+<div><p>Use smooth lines.</p>
+</div></blockquote>
+<p><strong>translate</strong> : tuple | (0., 0., 1.)</p>
+<blockquote>
+<div><p>Translate the time-series over the (x, y, z) axes.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>Line object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote>
+<div><p>Verbosity level.</p>
+</div></blockquote>
+<p><strong>_z</strong> : float | 10.</p>
+<blockquote class="last">
+<div><p>In case of (n_sources, 2) use _z to specify the elevation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">TimeSeriesObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_pts</span><span class="p">,</span> <span class="n">n_ts</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_pts</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="p">(</span><span class="n">n_ts</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">time</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">phy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="p">(</span><span class="n">n_ts</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeriesObj</span><span class="p">(</span><span class="s1">&#39;Ts&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                   <span class="n">line_width</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.ts_obj.TimeSeriesObj.preview" title="visbrain.objects.ts_obj.TimeSeriesObj.preview"><code class="xref py py-obj docutils literal"><span class="pre">preview</span></code></a>([bgcolor,&nbsp;axis,&nbsp;show])</td>
+<td>Previsualize the result.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.ts_obj.TimeSeriesObj.preview">
+<code class="descclassname">TimeSeriesObj.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor=’white’</em>, <em>axis=False</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#visbrain.objects.ts_obj.TimeSeriesObj.preview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Previsualize the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bgcolor</strong> : array_like/string/tuple | ‘white’</p>
+<blockquote class="last">
+<div><p>Background color for the preview.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="pictures-object">
+<span id="picobj"></span><h2>7.6. Pictures object<a class="headerlink" href="#pictures-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id7">
+<img alt="_images/pic_picture_obj.png" src="_images/pic_picture_obj.png" />
+<p class="caption"><span class="caption-text">3-D pictures object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.picture_obj.PictureObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.picture_obj.</code><code class="descname">PictureObj</code><span class="sig-paren">(</span><em>name</em>, <em>data</em>, <em>xyz</em>, <em>select=None</em>, <em>width=7.0</em>, <em>height=7.0</em>, <em>alpha=1.0</em>, <em>cmap=’viridis’</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>under=’gray’</em>, <em>over=’red’</em>, <em>translate=(0.0</em>, <em>0.0</em>, <em>1.0)</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/picture_obj.html#PictureObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.picture_obj.PictureObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a connectivity object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>The name of the connectivity object.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>Array of data pictures of shape (n_sources, n_rows, n_columns).</p>
+</div></blockquote>
+<p><strong>xyz</strong> : array_like</p>
+<blockquote>
+<div><p>The 3-d position of each picture of shape (n_sources, 3).</p>
+</div></blockquote>
+<p><strong>select</strong> : array_like | None</p>
+<blockquote>
+<div><p>Select the pictures to display. Should be a vector of bolean values
+of shape (n_sources,).</p>
+</div></blockquote>
+<p><strong>width</strong> : float | 7.</p>
+<blockquote>
+<div><p>Width of each picture.</p>
+</div></blockquote>
+<p><strong>height</strong> : float | 7.</p>
+<blockquote>
+<div><p>Height of each picture.</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float | 1.</p>
+<blockquote>
+<div><p>Image transparency.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : string | ‘viridis’</p>
+<blockquote>
+<div><p>Colormap to use.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Lower threshold of the colormap.</p>
+</div></blockquote>
+<p><strong>under</strong> : string | None</p>
+<blockquote>
+<div><p>Color to use for values under vmin.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float | None</p>
+<blockquote>
+<div><p>Higher threshold of the colormap.</p>
+</div></blockquote>
+<p><strong>over</strong> : string | None</p>
+<blockquote>
+<div><p>Color to use for values over vmax.</p>
+</div></blockquote>
+<p><strong>translate</strong> : tuple | (0., 0., 1.)</p>
+<blockquote>
+<div><p>Translation over the (x, y, z) axis.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>Line object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote>
+<div><p>Verbosity level.</p>
+</div></blockquote>
+<p><strong>_z</strong> : float | 10.</p>
+<blockquote class="last">
+<div><p>In case of (n_sources, 2) use _z to specify the elevation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">PictureObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span><span class="p">,</span> <span class="n">n_pic</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_pic</span><span class="p">,</span> <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="n">n_pic</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pic</span> <span class="o">=</span> <span class="n">PictureObj</span><span class="p">(</span><span class="s1">&#39;Pic&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pic</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.picture_obj.PictureObj.preview" title="visbrain.objects.picture_obj.PictureObj.preview"><code class="xref py py-obj docutils literal"><span class="pre">preview</span></code></a>([bgcolor,&nbsp;axis,&nbsp;show])</td>
+<td>Previsualize the result.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.picture_obj.PictureObj.preview">
+<code class="descclassname">PictureObj.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor=’white’</em>, <em>axis=False</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#visbrain.objects.picture_obj.PictureObj.preview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Previsualize the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bgcolor</strong> : array_like/string/tuple | ‘white’</p>
+<blockquote class="last">
+<div><p>Background color for the preview.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="region-of-interest-object">
+<span id="roiobj"></span><h2>7.7. Region Of Interest object<a class="headerlink" href="#region-of-interest-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id8">
+<img alt="_images/pic_roi_obj.png" src="_images/pic_roi_obj.png" />
+<p class="caption"><span class="caption-text">Region Of Interest object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.roi_obj.RoiObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.roi_obj.</code><code class="descname">RoiObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>label=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system=’mni’</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.roi_obj.RoiObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Region Of Interest (ROI) object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the ROI object. If name is ‘brodmann’, ‘aal’ or ‘talairach’ a
+predefined ROI object is used and vol, index and label are ignored.</p>
+</div></blockquote>
+<p><strong>vol</strong> : array_like | None</p>
+<blockquote>
+<div><p>ROI volume. Sould be an array with three dimensions.</p>
+</div></blockquote>
+<p><strong>label</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of labels. A structured array can be used (i.e
+label=np.zeros(n_sources, dtype=[(‘brodmann’, int), (‘aal’, object)])).</p>
+</div></blockquote>
+<p><strong>index</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of index that make the correspondance between the volumne values
+and labels. The length of index must be the same as label.</p>
+</div></blockquote>
+<p><strong>hdr</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of transform source’s coordinates into the volume space. Must be
+a (4, 4) array.</p>
+</div></blockquote>
+<p><strong>system</strong> : {‘mni’, ‘tal’}</p>
+<blockquote>
+<div><p>The system of the volumne. Can either be MNI (‘mni’) or Talairach
+(‘tal’).</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote>
+<div><p>ROI object parent.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : string</p>
+<blockquote class="last">
+<div><p>Verbosity level.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">RoiObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">RoiObj</span><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">get_roi_vertices</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">38</span><span class="p">],</span> <span class="n">unique_color</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                   <span class="n">smooth</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.roi_obj.RoiObj.preview" title="visbrain.objects.roi_obj.RoiObj.preview"><code class="xref py py-obj docutils literal"><span class="pre">preview</span></code></a>([bgcolor,&nbsp;axis,&nbsp;show])</td>
+<td>Previsualize the result.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.roi_obj.RoiObj.change_roi_object" title="visbrain.objects.roi_obj.RoiObj.change_roi_object"><code class="xref py py-obj docutils literal"><span class="pre">change_roi_object</span></code></a>(name[,&nbsp;vol,&nbsp;label,&nbsp;index,&nbsp;…])</td>
+<td>Load an roi object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.roi_obj.RoiObj.localize_sources" title="visbrain.objects.roi_obj.RoiObj.localize_sources"><code class="xref py py-obj docutils literal"><span class="pre">localize_sources</span></code></a>(xyz[,&nbsp;source_name,&nbsp;…])</td>
+<td>Localize source’s using this ROI object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.roi_obj.RoiObj.get_roi_vertices" title="visbrain.objects.roi_obj.RoiObj.get_roi_vertices"><code class="xref py py-obj docutils literal"><span class="pre">get_roi_vertices</span></code></a>([level,&nbsp;unique_color,&nbsp;…])</td>
+<td>Get the vertices of ROI’s.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.roi_obj.RoiObj.preview">
+<code class="descclassname">RoiObj.</code><code class="descname">preview</code><span class="sig-paren">(</span><em>bgcolor=’white’</em>, <em>axis=False</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#visbrain.objects.roi_obj.RoiObj.preview" title="Permalink to this definition">¶</a></dt>
+<dd><p>Previsualize the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bgcolor</strong> : array_like/string/tuple | ‘white’</p>
+<blockquote class="last">
+<div><p>Background color for the preview.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.roi_obj.RoiObj.change_roi_object">
+<code class="descclassname">RoiObj.</code><code class="descname">change_roi_object</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>label=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system=’mni’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.change_roi_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.roi_obj.RoiObj.change_roi_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an roi object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the ROI object. If name is ‘brodmann’, ‘aal’ or
+‘talairach’ a predefined ROI object is used and vol, index and
+label are ignored.</p>
+</div></blockquote>
+<p><strong>vol</strong> : array_like | None</p>
+<blockquote>
+<div><p>ROI volume. Sould be an array with three dimensions.</p>
+</div></blockquote>
+<p><strong>label</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of labels. A structured array can be used (i.e
+label=np.zeros(n_sources, dtype=[(‘brodmann’, int),
+(‘aal’, object)])).</p>
+</div></blockquote>
+<p><strong>index</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of index that make the correspondance between the volumne
+values and labels. The length of index must be the same as label.</p>
+</div></blockquote>
+<p><strong>hdr</strong> : array_like | None</p>
+<blockquote>
+<div><p>Array of transform source’s coordinates into the volume space.
+Must be a (4, 4) array.</p>
+</div></blockquote>
+<p><strong>system</strong> : {‘mni’, ‘tal’}</p>
+<blockquote class="last">
+<div><p>The system of the volumne. Can either be MNI (‘mni’) or Talairach
+(‘tal’).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.roi_obj.RoiObj.localize_sources">
+<code class="descclassname">RoiObj.</code><code class="descname">localize_sources</code><span class="sig-paren">(</span><em>xyz, source_name=None, replace_bad=True, bad_patterns=[-1, ‘undefined’, ‘None’], replace_with=’Not found’</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.localize_sources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.roi_obj.RoiObj.localize_sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Localize source’s using this ROI object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xyz</strong> : array_like</p>
+<blockquote>
+<div><p>Array of source’s coordinates of shape (n_sources, 3)</p>
+</div></blockquote>
+<p><strong>source_name</strong> : array_like/list | None</p>
+<blockquote>
+<div><p>List of source’s names.</p>
+</div></blockquote>
+<p><strong>replace_bad</strong> : bool | True</p>
+<blockquote>
+<div><p>Replace bad values (True) or not (False).</p>
+</div></blockquote>
+<p><strong>bad_patterns</strong> : list | [None, -1, ‘undefined’, ‘None’]</p>
+<blockquote>
+<div><p>Bad patterns to replace if replace_bad is True.</p>
+</div></blockquote>
+<p><strong>replace_with</strong> : string | ‘Not found’</p>
+<blockquote class="last">
+<div><p>Replace bad patterns with this string.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.roi_obj.RoiObj.get_roi_vertices">
+<code class="descclassname">RoiObj.</code><code class="descname">get_roi_vertices</code><span class="sig-paren">(</span><em>level=0.5</em>, <em>unique_color=False</em>, <em>smooth=3</em>, <em>plot=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.get_roi_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.roi_obj.RoiObj.get_roi_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the vertices of ROI’s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>level</strong> : int, float, list | .5</p>
+<blockquote>
+<div><p>Threshold for extracting vertices from isosuface method.</p>
+</div></blockquote>
+<p><strong>unique_color</strong> : bool | False</p>
+<blockquote>
+<div><p>Use a random unique color for each ROI.</p>
+</div></blockquote>
+<p><strong>smooth</strong> : int | 3</p>
+<blockquote>
+<div><p>Smoothing level. Must be an odd integer (smooth % 2 = 1).</p>
+</div></blockquote>
+<p><strong>plot</strong> : bool | False</p>
+<blockquote class="last">
+<div><p>Specify if a mesh object have to be defined.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="utils.html" class="btn btn-neutral float-right" title="8. Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="figure.html" class="btn btn-neutral" title="6. Figure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.3.6',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

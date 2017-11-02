@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.topo.topo &mdash; visbrain 0.3.5 documentation</title>
+  <title>visbrain.topo.topo &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -166,41 +166,34 @@
             
   <h1>Source code for visbrain.topo.topo</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Topo class for topographic representations.&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">sip</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtWidgets</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">vispy.app</span> <span class="k">as</span> <span class="nn">visapp</span>
 <span class="kn">import</span> <span class="nn">vispy.scene.cameras</span> <span class="k">as</span> <span class="nn">viscam</span>
 <span class="kn">from</span> <span class="nn">vispy.scene</span> <span class="k">import</span> <span class="n">Node</span>
 
+<span class="kn">from</span> <span class="nn">..pyqt_module</span> <span class="k">import</span> <span class="n">PyQtModule</span>
 <span class="kn">from</span> <span class="nn">.ui_init</span> <span class="k">import</span> <span class="n">UiInit</span>
 <span class="kn">from</span> <span class="nn">.ui_elements</span> <span class="k">import</span> <span class="n">UiElements</span>
-<span class="kn">from</span> <span class="nn">..brain.base.ConnectBase</span> <span class="k">import</span> <span class="n">ConnectBase</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">set_widget_size</span>
+<span class="kn">from</span> <span class="nn">..objects</span> <span class="k">import</span> <span class="n">ConnectObj</span>
 <span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">TopoMesh</span><span class="p">,</span> <span class="n">CbarVisual</span>
 
-<span class="n">sip</span><span class="o">.</span><span class="n">setdestroyonexit</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Topo&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Topo"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo">[docs]</a><span class="k">class</span> <span class="nc">Topo</span><span class="p">(</span><span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">):</span>
+<div class="viewcode-block" id="Topo"><a class="viewcode-back" href="../../../topo.html#visbrain.topo.topo.Topo">[docs]</a><span class="k">class</span> <span class="nc">Topo</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Display topographic representation.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">PyQtModule</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">to_describe</span><span class="o">=</span><span class="s1">&#39;_grid&#39;</span><span class="p">,</span>
+                            <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;topo_icon.svg&#39;</span><span class="p">,</span> <span class="n">show_settings</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_topos</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_topoGrid</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># ====================== App creation ======================</span>
-        <span class="c1"># Create the app and initialize all graphical elements :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
         <span class="n">UiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">UiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="n">set_widget_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the object name.&quot;&quot;&quot;</span>
@@ -317,7 +310,7 @@
 <span class="sd">        margin : float | .05</span>
 <span class="sd">            Margin percentage between the topoplot and the edge of the subplot.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Check if name is avaible :</span>
+        <span class="c1"># Check if name is available :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_name_for</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;topoplot&#39;</span><span class="p">)</span>
         <span class="c1"># Create the topoplot and set the data :</span>
         <span class="n">topo</span> <span class="o">=</span> <span class="n">TopoMesh</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">title_color</span><span class="p">,</span>
@@ -331,10 +324,9 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c_connect</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="k">assert</span> <span class="n">c_connect</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">topo</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">topo</span><span class="p">))</span>
             <span class="n">xyz</span> <span class="o">=</span> <span class="n">topo</span><span class="o">.</span><span class="n">_xyz</span><span class="p">[</span><span class="n">topo</span><span class="o">.</span><span class="n">_keeponly</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span> <span class="o">=</span> <span class="n">ConnectBase</span><span class="p">(</span><span class="n">c_xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="n">c_connect</span><span class="p">,</span>
-                                       <span class="n">c_cmap</span><span class="o">=</span><span class="n">c_cmap</span><span class="p">,</span> <span class="n">c_linewidth</span><span class="o">=</span><span class="n">c_linewidth</span><span class="p">,</span>
-                                       <span class="n">c_select</span><span class="o">=</span><span class="n">c_select</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">topo</span><span class="o">.</span><span class="n">node_chan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span> <span class="o">=</span> <span class="n">ConnectObj</span><span class="p">(</span><span class="s1">&#39;TopoConnect&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">c_connect</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                                      <span class="n">select</span><span class="o">=</span><span class="n">c_select</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="n">c_linewidth</span><span class="p">,</span>
+                                      <span class="n">parent</span><span class="o">=</span><span class="n">topo</span><span class="o">.</span><span class="n">node_chan</span><span class="p">)</span>
         <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">topo</span>
         <span class="c1"># Create a PanZoom camera :</span>
         <span class="n">cam</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">aspect</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="n">topo</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
@@ -437,12 +429,7 @@
                              <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">use</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_topos</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;&#39; already exist. Use a different&quot;</span>
-                             <span class="s2">&quot; name for this &quot;</span> <span class="o">+</span> <span class="n">use</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Display the graphical user interface.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
-        <span class="n">visapp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+                             <span class="s2">&quot; name for this &quot;</span> <span class="o">+</span> <span class="n">use</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
@@ -479,7 +466,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

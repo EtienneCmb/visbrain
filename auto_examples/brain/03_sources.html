@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add deep sources &mdash; visbrain 0.3.5 documentation</title>
+  <title>Add deep sources &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Connect deep sources" href="04_connectivity.html"/>
         <link rel="prev" title="Add a brain template" href="02_add_brain_template.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -205,50 +206,48 @@ which is defined as the number of contributing sources per vertex.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">SourceObj</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
-<span class="c1"># Define a empty dictionnary :</span>
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Load the xyz coordinates and corresponding subject name</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">],</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
+<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))</span>
+<span class="n">xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The &quot;subjects&quot; list is composed of 6 diffrents subjects and here we set one</span>
-<span class="sd">unique color (u_color) per subject and send it to the interface (s_color).</span>
-<span class="sd">We also set the source&#39;s opacity to 0.5.</span>
+<span class="sd">unique color (u_color) per subject.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">u_color</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#9b59b6&quot;</span><span class="p">,</span> <span class="s2">&quot;#3498db&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;#e74c3c&quot;</span><span class="p">,</span> <span class="s2">&quot;#34495e&quot;</span><span class="p">,</span> <span class="s2">&quot;#2ecc71&quot;</span><span class="p">]</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">u_color</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">subjects</span><span class="p">]</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_opacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">u_color</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">subjects</span><span class="p">]</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.7</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Now we attach data to each source. To illustrate this functionality, the data</span>
-<span class="sd">attached is the x coordinate so that data increase from left to right.</span>
+<span class="sd">Now we attach data to each source.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">subjects</span><span class="p">))</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The source&#39;s radius is proportional to the data attached. But this proportion</span>
 <span class="sd">can be controlled using a minimum and maximum radius (s_radiusmin, s_radiusmax)</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_radiusmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>               <span class="c1"># Minimum radius</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_radiusmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">15</span>              <span class="c1"># Maximum radius</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_edgecolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Color of the edges</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_edgewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>              <span class="c1"># Width of the edges</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_symbol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;square&#39;</span>           <span class="c1"># Source&#39;s symbol</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;radius_min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>               <span class="c1"># Minimum radius</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;radius_max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">15</span>              <span class="c1"># Maximum radius</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edge_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Color of the edges</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;edge_width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>              <span class="c1"># Width of the edges</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;symbol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;square&#39;</span>            <span class="c1"># Source&#39;s symbol</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Next, we mask source&#39;s data that are comprised between [-20, 20] and color</span>
+<span class="sd">Next, we mask source&#39;s data that are comprised between [20, 40] and color</span>
 <span class="sd">each source to orange</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_data&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_data&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">)</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mask</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_maskcolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;orange&#39;</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">20.</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mask</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;mask_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;orange&#39;</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">After defining sources, it&#39;s possible to run the cortical projection and/or the</span>
@@ -260,12 +259,16 @@ which is defined as the number of contributing sources per vertex.</p>
 <span class="sd">Use CTRL + D to hide/display the quick-settings panel, the shortcut C to</span>
 <span class="sd">display the colorbar.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;viridis&#39;</span>           <span class="c1"># Matplotlib colormap</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_vmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">60</span>                 <span class="c1"># Define a minimum</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_vmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">60</span>                  <span class="c1"># Define a maximum</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_under&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>             <span class="c1"># Values under vmin are set to gray</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Values over vmax are set to black</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_clim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span>
+<span class="n">kw_proj</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">project_radius</span><span class="o">=</span><span class="mf">12.</span><span class="p">,</span>
+               <span class="n">project_contribute</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+               <span class="n">project_mask_color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+               <span class="n">project_cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+               <span class="n">project_clim</span><span class="o">=</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span>
+               <span class="n">project_vmin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+               <span class="n">project_vmax</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+               <span class="n">project_under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+               <span class="n">project_over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span>
+               <span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">It&#39;s also possible to add text to each source. Here, we show the name of the</span>
@@ -273,13 +276,20 @@ which is defined as the number of contributing sources per vertex.</p>
 <span class="sd">To avoid a superposition between the text and sources sphere, we introduce an</span>
 <span class="sd">offset to the text using the s_textshift input</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">subjects</span>             <span class="c1"># Name of the subject</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_textcolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#f39c12&quot;</span>       <span class="c1"># Set to yellow the text color</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_textsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>              <span class="c1"># Size of the text</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_textshift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">subjects</span>              <span class="c1"># Name of the subject</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#f39c12&quot;</span>       <span class="c1"># Set to yellow the text color</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>              <span class="c1"># Size of the text</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text_translate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;text_bold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="sd">&quot;&quot;&quot;Create the source object. If you want to previsualize the result without</span>
+<span class="sd">opening Brain, use s_obj.preview()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_obj</span> <span class="o">=</span> <span class="n">SourceObj</span><span class="p">(</span><span class="s1">&#39;SourceExample&#39;</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="c1"># s_obj.preview()</span>
 
 <span class="c1"># Pass all arguments in the dictionnary :</span>
-<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">source_obj</span><span class="o">=</span><span class="n">s_obj</span><span class="p">,</span> <span class="n">brain_template</span><span class="o">=</span><span class="s1">&#39;B3&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_proj</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -337,7 +347,7 @@ which is defined as the number of contributing sources per vertex.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

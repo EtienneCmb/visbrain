@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Screenshot example &mdash; visbrain 0.3.5 documentation</title>
+  <title>Screenshot example &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add multiple objects to the scene" href="09_add_multiple_objects.html"/>
         <link rel="prev" title="Add pictures" href="07_add_pictures.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -206,28 +207,21 @@ take screenshots without opening the interface.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
-
-<span class="c1"># Define a empty dictionnary :</span>
-<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">SourceObj</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 <span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
 <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">],</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
+<span class="n">s_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
 
 <span class="c1"># Now, create some random data between [-50,50]</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">50.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;darkred&#39;</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_opacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span>
+<span class="n">s_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">s_xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="c1"># Control the dynamic range of sources radius :</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_radiusmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>               <span class="c1"># Minimum radius</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_radiusmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span>               <span class="c1"># Maximum radius</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_edgewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>              <span class="c1"># Width of the edges</span>
+<span class="n">s_obj</span> <span class="o">=</span> <span class="n">SourceObj</span><span class="p">(</span><span class="s1">&#39;Sobj&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">s_data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span>
+                  <span class="n">radius_min</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="mf">8.</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
 
 <span class="c1"># Create a brain instance :</span>
-<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">source_obj</span><span class="o">=</span><span class="n">s_obj</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;First, make a basic screenshot of the scene.</span>
 
@@ -241,9 +235,9 @@ take screenshots without opening the interface.</p>
 <span class="n">vb</span><span class="o">.</span><span class="n">cortical_projection</span><span class="p">(</span><span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">10.1</span><span class="p">,</span>
                        <span class="n">isvmin</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">41.2</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
                        <span class="n">isvmax</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">sources_opacity</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>        <span class="c1"># Hide sources</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">160.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">))</span>        <span class="c1"># Rotate the brain</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">transparent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>   <span class="c1"># Make the brain opaque</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">sources_control</span><span class="p">(</span><span class="s1">&#39;Sobj&#39;</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>        <span class="c1"># Hide sources</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">160.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">))</span>                   <span class="c1"># Rotate the brain</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>              <span class="c1"># Make the brain opaque</span>
 
 <span class="sd">&quot;&quot;&quot;Now, we take a screenthot of the scene but this time, we used the</span>
 <span class="sd">autocrop argument to crop the image as close as possible to the brain.</span>
@@ -273,7 +267,7 @@ take screenshots without opening the interface.</p>
 
 <span class="sd">&quot;&quot;&quot;Cross-sections splitted-view screenshot</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">cross_sections_control</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_xyz&#39;</span><span class="p">][</span><span class="mi">10</span><span class="p">,</span> <span class="p">:],</span> <span class="n">split_view</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">cross_sections_control</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">s_xyz</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="p">:],</span> <span class="n">split_view</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                           <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">show_text</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">&#39;2_cross_sections.png&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;cross-sections&#39;</span><span class="p">,</span>
               <span class="n">print_size</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;millimeter&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">600.</span><span class="p">)</span>
@@ -281,14 +275,15 @@ take screenshots without opening the interface.</p>
 
 <span class="sd">&quot;&quot;&quot;Background color and transparency control of ROI screenshot</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">roi_control</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;BA3-4-32&#39;</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">roi_type</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span>
+               <span class="n">smooth</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 
 <span class="c1"># Run the cortical repartition</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">cortical_repartition</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">48</span><span class="p">),</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">cortical_repartition</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;BA3-4-32&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">48</span><span class="p">),</span>
                         <span class="n">isvmin</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
                         <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Roi colorbar&#39;</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">cbar_select</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">)</span>                <span class="c1"># Select the Projection colorbar</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">sources_opacity</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>              <span class="c1"># Display sources</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">sources_control</span><span class="p">(</span><span class="s1">&#39;Sobj&#39;</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>   <span class="c1"># Display sources</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">custom</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">210</span><span class="p">,</span> <span class="mf">10.</span><span class="p">))</span>               <span class="c1"># Rotate the brain</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">brain_control</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>             <span class="c1"># Hide the brain</span>
 
@@ -356,7 +351,7 @@ take screenshots without opening the interface.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

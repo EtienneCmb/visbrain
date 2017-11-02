@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add pictures &mdash; visbrain 0.3.5 documentation</title>
+  <title>Add pictures &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Screenshot example" href="08_screenshot.html"/>
         <link rel="prev" title="Add time series" href="06_add_time_series.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -117,6 +117,7 @@
 <li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -202,15 +203,14 @@ pictures can then be controlled from the GUI in the Sources/Pictures tab.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">PictureObj</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
 <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">s_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
+<span class="n">s_xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))[</span><span class="s1">&#39;xyz&#39;</span><span class="p">]</span>
 <span class="n">s_xyz</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="mi">4</span><span class="p">::</span><span class="mi">10</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s_xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;s_textsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>
 <span class="n">n_sources</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="n">sf</span> <span class="o">=</span> <span class="mf">1024.</span>
@@ -220,28 +220,31 @@ pictures can then be controlled from the GUI in the Sources/Pictures tab.</p>
 <span class="n">time</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">sf</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="p">(</span><span class="n">n_sources</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 <span class="n">coef</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pic_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">coef</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pic_data&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="o">.</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pic_data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">coef</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">time</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">+=</span> <span class="o">.</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
 <span class="c1"># If you want to remove some pictures, define a pic_select array of boolean</span>
 <span class="c1"># values and specify if those pictures has to be hide or displayed :</span>
 <span class="n">pic_select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_sources</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 <span class="n">pic_to_hide</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">55</span><span class="p">]</span>
 <span class="n">pic_select</span><span class="p">[</span><span class="n">pic_to_hide</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pic_select&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pic_select</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;select&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pic_select</span>
 
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pic_width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.</span>            <span class="c1"># Width</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pic_height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.</span>           <span class="c1"># Height</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pic_dxyz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>   <span class="c1"># Offset along (x, y, z) axis</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pic_clim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">.</span><span class="mo">01</span><span class="p">,</span> <span class="mf">1.12</span><span class="p">)</span>    <span class="c1"># Colorbar limits</span>
-<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pic_cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;viridis&#39;</span>      <span class="c1"># Colormap</span>
-<span class="c1"># kwargs[&#39;pic_vmin&#39;] = .1             # Vmin</span>
-<span class="c1"># kwargs[&#39;pic_under&#39;] = &#39;gray&#39;        # Color under vmin</span>
-<span class="c1"># kwargs[&#39;pic_vmax&#39;] = .9             # Vmax</span>
-<span class="c1"># kwargs[&#39;pic_over&#39;] = &#39;#ab4642&#39;      # Color over vmax</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.</span>            <span class="c1"># Width</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.</span>           <span class="c1"># Height</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;translate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>   <span class="c1"># Offset along (x, y, z) axis</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;clim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">.</span><span class="mo">01</span><span class="p">,</span> <span class="mf">1.12</span><span class="p">)</span>    <span class="c1"># Colorbar limits</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;viridis&#39;</span>      <span class="c1"># Colormap</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">.</span><span class="mi">1</span>             <span class="c1"># Vmin</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;under&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>        <span class="c1"># Color under vmin</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">.</span><span class="mi">9</span>             <span class="c1"># Vmax</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;#ab4642&#39;</span>      <span class="c1"># Color over vmax</span>
 
-<span class="n">b</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyz</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="n">b</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">pic</span> <span class="o">=</span> <span class="n">PictureObj</span><span class="p">(</span><span class="s1">&#39;Pic&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">picture_obj</span><span class="o">=</span><span class="n">pic</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">pictures_control</span><span class="p">(</span><span class="s1">&#39;Pic&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">)</span>
+<span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -298,7 +301,7 @@ pictures can then be controlled from the GUI in the Sources/Pictures tab.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

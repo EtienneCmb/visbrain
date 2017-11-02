@@ -21,11 +21,12 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     import numpy as np
 
     from visbrain import Brain
-    from visbrain.io import download_file
+    from visbrain.objects import TimeSeriesObj
+    from visbrain.io import download_file, path_to_visbrain_data
 
     # Load the xyz coordinates and corresponding subject name :
     download_file('xyz_sample.npz')
-    s_xyz = np.load('xyz_sample.npz')['xyz']
+    s_xyz = np.load(path_to_visbrain_data('xyz_sample.npz'))['xyz']
     s_xyz = s_xyz[4::25, ...]
     s_text = [str(k) for k in range(s_xyz.shape[0])]
     s_textsize = 1.5
@@ -54,11 +55,12 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     ts_dxyz = (1., 2., 5.)  # TS offset along the (x, y, z) axes
     ts_lw = 2.2             # TS line-width
 
+    ts = TimeSeriesObj('Ts1', ts_data, s_xyz, select=ts_select, amplitude=ts_amp,
+                       width=ts_width, line_width=ts_lw, translate=ts_dxyz,
+                       color=ts_color)
 
-    b = Brain(s_xyz=s_xyz, s_text=s_text, ts_data=ts_data, s_textsize=s_textsize,
-              ts_amp=ts_amp, ts_width=ts_width, ts_color=ts_color, ts_dxyz=ts_dxyz,
-              ts_lw=ts_lw, ts_select=ts_select)
-    b.show()
+    vb = Brain(time_series_obj=ts)
+    vb.show()
 
 **Total running time of the script:** ( 0 minutes  0.000 seconds)
 

@@ -205,7 +205,7 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrate how to display connectivity. To this end, we will define some deep sou...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Add multiple source&#x27;s and connectivity object to the scene.">
 
 .. only:: html
 
@@ -302,6 +302,26 @@ Examples demonstrating visualizations on a standard 3D-MNI brain.
    :hidden:
 
    /auto_examples/brain/13_load_gui_config
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Add vectors to the scene. This example demonstrate the two methods to defined vectors :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/brain/images/thumb/sphx_glr_14_add_vectors_thumb.png
+
+        :ref:`sphx_glr_auto_examples_brain_14_add_vectors.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/brain/14_add_vectors
 .. raw:: html
 
     <div style='clear:both'></div>

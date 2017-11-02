@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Add multiple objects to the scene &mdash; visbrain 0.3.5 documentation</title>
+  <title>Add multiple objects to the scene &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Add Nifti volume" href="10_add_nifti_volume.html"/>
         <link rel="prev" title="Screenshot example" href="08_screenshot.html"/> 
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -112,11 +112,16 @@
 <li class="toctree-l3"><a class="reference internal" href="06_add_time_series.html">Add time series</a></li>
 <li class="toctree-l3"><a class="reference internal" href="07_add_pictures.html">Add pictures</a></li>
 <li class="toctree-l3"><a class="reference internal" href="08_screenshot.html">Screenshot example</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Add multiple objects to the scene</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Add multiple objects to the scene</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sources">SOURCES</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#connectivity">CONNECTIVITY</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="10_add_nifti_volume.html">Add Nifti volume</a></li>
 <li class="toctree-l3"><a class="reference internal" href="11_convert_mesh_data.html">Convert mesh data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="12_colorbar_control.html">Colorbar control</a></li>
 <li class="toctree-l3"><a class="reference internal" href="13_load_gui_config.html">Load Graphical User Interface configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_add_vectors.html">Add vectors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
@@ -194,9 +199,7 @@
             
   <div class="section" id="add-multiple-objects-to-the-scene">
 <span id="sphx-glr-auto-examples-brain-09-add-multiple-objects-py"></span><h1>Add multiple objects to the scene<a class="headerlink" href="#add-multiple-objects-to-the-scene" title="Permalink to this headline">¶</a></h1>
-<p>This example demonstrate how to display connectivity. To this end,
-we will define some deep sources and connect them. See 2_Sources.py
-to defined sources</p>
+<p>Add multiple source’s and connectivity object to the scene.</p>
 <p>Download source’s coordinates (xyz_sample.npz) :
 <a class="reference external" href="https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1">https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1</a></p>
 <img alt="../../_images/ex_add_multiple_objects.png" src="../../_images/ex_add_multiple_objects.png" />
@@ -204,31 +207,84 @@ to defined sources</p>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">SourceObj</span><span class="p">,</span> <span class="n">ConnectObj</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 <span class="c1"># Create an empty kwargs dictionnary :</span>
 <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
 <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
-<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">)</span>
+<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="s1">&#39;xyz_sample.npz&#39;</span><span class="p">))</span>
 <span class="n">s_xyz</span><span class="p">,</span> <span class="n">subjects</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;xyz&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;subjects&#39;</span><span class="p">]</span>
 
-<span class="c1"># Separate source&#39;s coodinates : in this part, first we find where sources</span>
-<span class="c1"># are in the left hemisphere, then in the right hemisphere and in front and</span>
-<span class="c1"># finally right hemisphere back :</span>
-<span class="n">s_xyzL</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
-<span class="n">s_xyzRB</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">),</span> <span class="p">:]</span>
-<span class="n">s_xyzRF</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="p">:]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Separate source&#39;s coodinates : in this part, first we find where sources</span>
+<span class="sd">are in the left hemisphere, then in the right hemisphere and in front and</span>
+<span class="sd">finally right hemisphere back :</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_xyz_l</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">s_xyz_rb</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">),</span> <span class="p">:]</span>
+<span class="n">s_xyz_rf</span> <span class="o">=</span> <span class="n">s_xyz</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="p">:]</span>
 
-<span class="c1"># Function in order to create random connection dataset for each</span>
+<span class="n">data_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">s_xyz_l</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="section" id="sources">
+<h2>SOURCES<a class="headerlink" href="#sources" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Create a first source object with uniform red square markers</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_obj_l</span> <span class="o">=</span> <span class="n">SourceObj</span><span class="p">(</span><span class="s1">&#39;S_left&#39;</span><span class="p">,</span> <span class="n">s_xyz_l</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_l</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                    <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+                    <span class="n">radius_min</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Create a second source object. Then, we analyse where are located the</span>
+<span class="sd">sources using the AAL region of interest and used color according to gyrus</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_obj_rb</span> <span class="o">=</span> <span class="n">SourceObj</span><span class="p">(</span><span class="s1">&#39;S_right_back&#39;</span><span class="p">,</span> <span class="n">s_xyz_rb</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;arrow&#39;</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span>
+                     <span class="n">edge_width</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">text_size</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                     <span class="n">text_bold</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Analyse where the source are located using the Brodmann area (BA) atlas.</span>
+<span class="sd">This method returns a pandas.DataFrame</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">s_obj_rb</span><span class="o">.</span><span class="n">analyse_sources</span><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>
+<span class="c1"># print(df.keys())</span>
+<span class="sd">&quot;&quot;&quot;Then, color the sources according to the BA. Without further arguments,</span>
+<span class="sd">this function use random colors for each BA :</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_obj_rb</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Finally, set the name of the BA for the text :</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_obj_rb</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;brodmann&#39;</span><span class="p">]</span>
+
+<span class="sd">&quot;&quot;&quot;Create a third source object</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_obj_rf</span> <span class="o">=</span> <span class="n">SourceObj</span><span class="p">(</span><span class="s1">&#39;S_right_front&#39;</span><span class="p">,</span> <span class="n">s_xyz_rf</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;ring&#39;</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+                     <span class="n">edge_width</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">8</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Analyse source&#39;s locations using the Talairach atlas</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">s_obj_rf</span><span class="o">.</span><span class="n">analyse_sources</span><span class="p">(</span><span class="s1">&#39;talairach&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Color source&#39;s according to the lobe location. This time we set different</span>
+<span class="sd">colors to lobes :</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">custom_color</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Frontal&#39;</span><span class="p">:</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;Temporal&#39;</span><span class="p">:</span> <span class="s1">&#39;olive&#39;</span><span class="p">}</span>
+<span class="n">color_others</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>  <span class="c1"># color of every sources that are not in custom_color</span>
+<span class="n">hide_others</span> <span class="o">=</span> <span class="bp">False</span>    <span class="c1"># hide every sources that are not in custom_color</span>
+<span class="n">s_obj_rf</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;lobe&#39;</span><span class="p">,</span> <span class="n">roi_to_color</span><span class="o">=</span><span class="n">custom_color</span><span class="p">,</span>
+                       <span class="n">color_others</span><span class="o">=</span><span class="n">color_others</span><span class="p">,</span> <span class="n">hide_others</span><span class="o">=</span><span class="n">hide_others</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="connectivity">
+<h2>CONNECTIVITY<a class="headerlink" href="#connectivity" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Function in order to create random connection dataset for each</span>
 <span class="c1"># source object :</span>
 
 
 <span class="k">def</span> <span class="nf">create_connect</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create connectivity dataset.&quot;&quot;&quot;</span>
     <span class="c1"># Create a random connection dataset :</span>
-    <span class="n">connect</span> <span class="o">=</span> <span class="mf">100.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">))</span>
+    <span class="n">connect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">xyz</span><span class="p">)))</span>
     <span class="c1"># Mask the connection aray :</span>
     <span class="n">connect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
     <span class="c1"># Hide lower triangle :</span>
@@ -239,48 +295,21 @@ to defined sources</p>
     <span class="k">return</span> <span class="n">connect</span>
 
 
-<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;Create two connectivity objects.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">connect_l</span> <span class="o">=</span> <span class="n">create_connect</span><span class="p">(</span><span class="n">s_xyz_l</span><span class="p">,</span> <span class="o">-.</span><span class="mi">5</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">c_obl_l</span> <span class="o">=</span> <span class="n">ConnectObj</span><span class="p">(</span><span class="s1">&#39;C_left&#39;</span><span class="p">,</span> <span class="n">s_xyz_l</span><span class="p">,</span> <span class="n">connect_l</span><span class="p">,</span> <span class="n">color_by</span><span class="o">=</span><span class="s1">&#39;strength&#39;</span><span class="p">,</span>
+                     <span class="n">dynamic</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 
+<span class="n">connect_rb</span> <span class="o">=</span> <span class="n">create_connect</span><span class="p">(</span><span class="n">s_xyz_rb</span><span class="p">,</span> <span class="o">-.</span><span class="mi">5</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">c_obj_rb</span> <span class="o">=</span> <span class="n">ConnectObj</span><span class="p">(</span><span class="s1">&#39;C_right_back&#39;</span><span class="p">,</span> <span class="n">s_xyz_rb</span><span class="p">,</span> <span class="n">connect_rb</span><span class="p">,</span> <span class="n">color_by</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span>
+                      <span class="n">alpha</span><span class="o">=.</span><span class="mi">7</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">)</span>
 
-<span class="c1"># ================ ADD SOURCE OBJECTS ================</span>
-<span class="c1"># Add left hemisphere sources :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">add_sources</span><span class="p">(</span><span class="s1">&#39;sources_L&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyzL</span><span class="p">,</span> <span class="n">s_symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span>
-               <span class="n">s_color</span><span class="o">=</span><span class="s1">&#39;#ab4642&#39;</span><span class="p">,</span> <span class="n">s_edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">s_scaling</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-               <span class="n">s_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">s_xyzL</span><span class="p">)),</span> <span class="n">s_radiusmin</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-               <span class="n">s_radiusmax</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">s_opacity</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
-
-<span class="c1"># Add right / front sources :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">add_sources</span><span class="p">(</span><span class="s1">&#39;sources_RF&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyzRF</span><span class="p">,</span> <span class="n">s_symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">,</span>
-               <span class="n">s_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">s_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">s_xyzRF</span><span class="p">)),</span>
-               <span class="n">s_radiusmin</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">s_radiusmax</span><span class="o">=</span><span class="mf">7.</span><span class="p">,</span> <span class="n">s_opacity</span><span class="o">=.</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c1"># Add right / back sources :</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">add_sources</span><span class="p">(</span><span class="s1">&#39;sources_RB&#39;</span><span class="p">,</span> <span class="n">s_xyz</span><span class="o">=</span><span class="n">s_xyzRB</span><span class="p">,</span> <span class="n">s_symbol</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span>
-               <span class="n">s_color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">s_edgewidth</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">s_scaling</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-               <span class="n">s_data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">s_xyzRB</span><span class="p">)),</span>
-               <span class="n">s_radiusmin</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">s_radiusmax</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">s_opacity</span><span class="o">=.</span><span class="mi">7</span><span class="p">)</span>
-
-<span class="c1"># ================ ADD CONNECTIVITY OBJECTS ================</span>
-<span class="c1"># Add left hemisphere connectivity :</span>
-<span class="n">connectL</span> <span class="o">=</span> <span class="n">create_connect</span><span class="p">(</span><span class="n">s_xyzL</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">add_connect</span><span class="p">(</span><span class="s1">&#39;connect_L&#39;</span><span class="p">,</span> <span class="n">c_xyz</span><span class="o">=</span><span class="n">s_xyzL</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="n">connectL</span><span class="p">,</span>
-               <span class="n">c_cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">c_linewidth</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">c_colorby</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span>
-               <span class="n">c_dynamic</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
-
-<span class="c1"># Add right / front connectivity :</span>
-<span class="n">connectL</span> <span class="o">=</span> <span class="n">create_connect</span><span class="p">(</span><span class="n">s_xyzRF</span><span class="p">,</span> <span class="mf">31.</span><span class="p">,</span> <span class="mf">31.5</span><span class="p">)</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">add_connect</span><span class="p">(</span><span class="s1">&#39;connect_L&#39;</span><span class="p">,</span> <span class="n">c_xyz</span><span class="o">=</span><span class="n">s_xyzRF</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="n">connectL</span><span class="p">,</span>
-               <span class="n">c_cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">c_colorby</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">c_linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-               <span class="n">c_dynamic</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
-
-<span class="c1"># Add right / front connectivity :</span>
-<span class="n">connectL</span> <span class="o">=</span> <span class="n">create_connect</span><span class="p">(</span><span class="n">s_xyzRB</span><span class="p">,</span> <span class="mf">31.</span><span class="p">,</span> <span class="mf">32.</span><span class="p">)</span>
-<span class="n">vb</span><span class="o">.</span><span class="n">add_connect</span><span class="p">(</span><span class="s1">&#39;connect_L&#39;</span><span class="p">,</span> <span class="n">c_xyz</span><span class="o">=</span><span class="n">s_xyzRB</span><span class="p">,</span> <span class="n">c_connect</span><span class="o">=</span><span class="n">connectL</span><span class="p">,</span>
-               <span class="n">c_cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">c_colorby</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">c_vmin</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
-               <span class="n">c_under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">c_vmax</span><span class="o">=</span><span class="mf">4.</span><span class="p">,</span> <span class="n">c_over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
-               <span class="n">c_dynamic</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
-
-
+<span class="sd">&quot;&quot;&quot;Finally, open _Brain_ with those list of objects</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">source_obj</span><span class="o">=</span><span class="p">[</span><span class="n">s_obj_l</span><span class="p">,</span> <span class="n">s_obj_rb</span><span class="p">,</span> <span class="n">s_obj_rf</span><span class="p">],</span>
+           <span class="n">connect_obj</span><span class="o">=</span><span class="p">[</span><span class="n">c_obl_l</span><span class="p">,</span> <span class="n">c_obj_rb</span><span class="p">])</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -292,6 +321,7 @@ to defined sources</p>
 <a class="reference download internal" href="../../_downloads/09_add_multiple_objects.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">09_add_multiple_objects.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
 </div>
 
 
@@ -338,7 +368,7 @@ to defined sources</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

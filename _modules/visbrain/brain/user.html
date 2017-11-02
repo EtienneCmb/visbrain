@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.brain.user &mdash; visbrain 0.3.5 documentation</title>
+  <title>visbrain.brain.user &mdash; visbrain 0.3.6 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.5 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -176,13 +176,8 @@
 <span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">ConvexHull</span>
 
 <span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">BrainMesh</span>
-<span class="kn">from</span> <span class="nn">.base.SourcesBase</span> <span class="k">import</span> <span class="n">SourcesBase</span>
-<span class="kn">from</span> <span class="nn">.base.ConnectBase</span> <span class="k">import</span> <span class="n">ConnectBase</span>
-<span class="kn">from</span> <span class="nn">.base.TimeSeriesBase</span> <span class="k">import</span> <span class="n">TimeSeriesBase</span>
-<span class="kn">from</span> <span class="nn">.base.PicBase</span> <span class="k">import</span> <span class="n">PicBase</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">color2vb</span><span class="p">,</span> <span class="n">extend_combo_list</span><span class="p">,</span> <span class="n">safely_set_cbox</span><span class="p">,</span>
-                     <span class="n">get_combo_list_index</span><span class="p">,</span> <span class="n">safely_set_spin</span><span class="p">,</span> <span class="n">safely_set_slider</span><span class="p">,</span>
-                     <span class="n">set_if_not_none</span><span class="p">)</span>
+                     <span class="n">get_combo_list_index</span><span class="p">,</span> <span class="n">safely_set_spin</span><span class="p">,</span> <span class="n">safely_set_slider</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">save_config_json</span><span class="p">,</span> <span class="n">write_fig_canvas</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;BrainUserMethods&#39;</span><span class="p">)</span>
@@ -212,26 +207,25 @@
     <span class="c1">#                             SETTINGS</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.rotate"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fixed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.rotate"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fixed</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Rotate the scene elements using a predefined or a custom rotation.</span>
 
 <span class="sd">        The rotation is applied on every objects on the scene.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        fixed : string | &#39;axial&#39;</span>
-<span class="sd">            Predefined rotation. Use either &#39;axial&#39;, &#39;coronal&#39; or</span>
-<span class="sd">            &#39;sagittal&#39;. As a complement, use the suffixe &#39;_0&#39; or</span>
-<span class="sd">            &#39;_1&#39; to switch between possible views.</span>
+<span class="sd">        fixed : str | &#39;top&#39;</span>
+<span class="sd">            Use a fixed rotation :</span>
 
-<span class="sd">            * &#39;axial_0/1&#39;: switch between top/bottom view</span>
-<span class="sd">            * &#39;coronal_0/1&#39;: switch between front/back view</span>
-<span class="sd">            * &#39;sagittal_0/1&#39;: switch between left/right view</span>
-
+<span class="sd">                * Top view : &#39;top&#39; or &#39;axial_0&#39;</span>
+<span class="sd">                * Bottom view : &#39;bottom&#39; or &#39;axial_1&#39;</span>
+<span class="sd">                * Left : &#39;left&#39; or &#39;sagittal_0&#39;</span>
+<span class="sd">                * Right : &#39;right&#39; or &#39;sagittal_1&#39;</span>
+<span class="sd">                * Front : &#39;front&#39; or &#39;coronal_0&#39;</span>
+<span class="sd">                * Back : &#39;back&#39; or &#39;coronal_1&#39;</span>
 <span class="sd">        custom : tuple | None</span>
-<span class="sd">            Custom rotation. The custom parameter must be a</span>
-<span class="sd">            tuple of two float respectively for azimuth and</span>
-<span class="sd">            elevation.</span>
+<span class="sd">            Custom rotation. This parameter must be a tuple of two floats</span>
+<span class="sd">            respectively describing the (azimuth, elevation).</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -244,7 +238,7 @@
 <span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
 <span class="sd">        &gt;&gt;&gt; vb.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_rotate</span><span class="p">(</span><span class="n">fixed</span><span class="o">=</span><span class="n">fixed</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">custom</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">fixed</span><span class="o">=</span><span class="n">fixed</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">custom</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.background_color"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.background_color">[docs]</a>    <span class="k">def</span> <span class="nf">background_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot;Set the background color of the main canvas and the colorbar.</span>
@@ -362,10 +356,6 @@
         <span class="c1"># Render the canvas :</span>
         <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BrainUserMethods.quit"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.quit">[docs]</a>    <span class="k">def</span> <span class="nf">quit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Quit the interface.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span></div>
-
 <div class="viewcode-block" id="BrainUserMethods.load_config"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.load_config">[docs]</a>    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a configuration file.</span>
 
@@ -391,8 +381,8 @@
     <span class="c1">#                                  BRAIN</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.brain_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.brain_control">[docs]</a>    <span class="k">def</span> <span class="nf">brain_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.brain_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.brain_control">[docs]</a>    <span class="k">def</span> <span class="nf">brain_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Control the type of brain to use.</span>
 
 <span class="sd">        Use this method to switch between several brain templates. Then, you</span>
@@ -408,12 +398,10 @@
 <span class="sd">        hemisphere : {&#39;both&#39;, &#39;left&#39;, &#39;ritgh&#39;}</span>
 <span class="sd">            Define if you want to see only &#39;left&#39; or &#39;right&#39; hemisphere.</span>
 <span class="sd">            Otherwise use &#39;both&#39;.</span>
-<span class="sd">        transparent : bool | None</span>
-<span class="sd">            Set the brain transparent (True) or opaque (False).</span>
+<span class="sd">        translucent : bool | None</span>
+<span class="sd">            Set the brain translucent (True) or opaque (False).</span>
 <span class="sd">        alpha : float | None</span>
 <span class="sd">            Transparency level.</span>
-<span class="sd">        color : string/tuple | None</span>
-<span class="sd">            Brain color.</span>
 <span class="sd">        visible : bool | True</span>
 <span class="sd">            Display or hide the brain.</span>
 
@@ -430,36 +418,32 @@
 <span class="sd">        --------</span>
 <span class="sd">        brain_list : Get the list of available mesh brain templates.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_brain_update</span> <span class="o">=</span> <span class="n">_light_update</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">_brain_update</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1"># Template :</span>
         <span class="k">if</span> <span class="n">template</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">brain_list</span><span class="p">():</span>
-            <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_brainTemplate</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span>
-                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_brain_control</span><span class="p">])</span>
+            <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_brain_template</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span>
+                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_brain_template</span><span class="p">])</span>
             <span class="n">_brain_update</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1"># Hemisphere :</span>
-        <span class="k">if</span> <span class="n">hemisphere</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]:</span>
-            <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_brainPickHemi</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">,</span>
-                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_brain_control</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">hemisphere</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]:</span>
+            <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_brain_hemi</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">,</span>
+                            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_brain_template</span><span class="p">])</span>
             <span class="n">_brain_update</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># Transparent / opaque :</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">translucent</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_brain_translucent</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">translucent</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_brain_translucent</span><span class="p">()</span>
         <span class="c1"># Opacity :</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">projection</span><span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-        <span class="c1"># Transparent / opaque :</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transparent</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_brainTransp</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">transparent</span><span class="p">)</span>
-            <span class="n">_light_update</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_brain_alpha</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="mf">100.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_brain_alpha</span><span class="p">()</span>
         <span class="c1"># Visible :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menuDispBrain</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">visible</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_brain_grp</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_brain_visible</span><span class="p">()</span>
         <span class="c1"># Update :</span>
         <span class="k">if</span> <span class="n">_brain_update</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_brain_control</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">_light_update</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_light_reflection</span><span class="p">()</span>
-        <span class="c1"># Color :</span>
-        <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_brain_template</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.brain_list"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.brain_list">[docs]</a>    <span class="k">def</span> <span class="nf">brain_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the list of available mesh brain templates.</span>
@@ -475,7 +459,7 @@
 <span class="sd">        &gt;&gt;&gt; vb = Brain()</span>
 <span class="sd">        &gt;&gt;&gt; print(vb.brain_list())</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">_surf_list</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">_get_all_available_templates</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.add_mesh"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.add_mesh">[docs]</a>    <span class="k">def</span> <span class="nf">add_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a mesh to the scene.</span>
@@ -497,7 +481,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">set_camera</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vbNode</span>
         <span class="c1"># Add mesh for projection :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">AddMesh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proj_obj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">AddMesh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.add_volume"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.add_volume">[docs]</a>    <span class="k">def</span> <span class="nf">add_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">roi_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">roi_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -660,153 +644,64 @@
     <span class="c1">#                              SOURCES</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.sources_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_control">[docs]</a>    <span class="k">def</span> <span class="nf">sources_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ab4652&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">radiusmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">radiusmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
-                        <span class="n">edgewidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">maskcolor</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.sources_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_control">[docs]</a>    <span class="k">def</span> <span class="nf">sources_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">radius_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">edge_width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">mask_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set data to sources and control source&#39;s properties.</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        data : None</span>
-<span class="sd">            Vector of data for each source. Le length of this vector must</span>
-<span class="sd">            be same as the number of sources.</span>
-<span class="sd">        color : string/list/ndarray | &#39;#ab4652&#39;</span>
-<span class="sd">            Color of each source sphere. If s_color is a single string,</span>
-<span class="sd">            all sphere will have the same color. If it&#39;s&#39; a list of</span>
-<span class="sd">            strings, the length must be N. Alternatively, s_color can be a</span>
-<span class="sd">            (N, 3) RGB or (N, 4) RGBA colors.</span>
-<span class="sd">        symbol : string | None</span>
-<span class="sd">            Symbol to use for sources. Allowed style strings are: disc,</span>
-<span class="sd">            arrow, ring, clobber, square, diamond, vbar, hbar, cross,</span>
-<span class="sd">            tailed_arrow, x, triangle_up, triangle_down, and star.</span>
-<span class="sd">        radiusmin/radiusmax : int/float | (None, None)</span>
-<span class="sd">            Define the minimum and maximum source&#39;s possible radius. By</span>
-<span class="sd">            default if all sources have the same value, the radius will be</span>
-<span class="sd">            radiusmin.</span>
-<span class="sd">        edgecolor : string/list/ndarray | &#39;white&#39;</span>
-<span class="sd">            Add an edge to sources</span>
-<span class="sd">        edgewidth : float | None</span>
-<span class="sd">            Edge width of sources</span>
-<span class="sd">        scaling : bool | None</span>
-<span class="sd">            If set to True, marker scales when rezooming.</span>
-<span class="sd">        alpha : int/float | None</span>
-<span class="sd">            Transparency of all sources. Must be between 0 and 1.</span>
-<span class="sd">        mask : ndarray | None</span>
-<span class="sd">            Vector of boolean values, with the same length as the length of</span>
-<span class="sd">            xyz. Use this parameter to mask some sources but keep it</span>
-<span class="sd">            displayed.</span>
-<span class="sd">        maskcolor : list/tuple | &#39;gray&#39;</span>
-<span class="sd">            Color of masked sources when projected on surface.</span>
+<span class="sd">        See the definition of SourceObj for the description of input</span>
+<span class="sd">        parameters.</span>
 
-<span class="sd">        Examples</span>
+<span class="sd">        See also</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance with 10 random sources:</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))</span>
-<span class="sd">        &gt;&gt;&gt; # Define some random data :</span>
-<span class="sd">        &gt;&gt;&gt; data = 100 * np.random.rand(10)</span>
-<span class="sd">        &gt;&gt;&gt; # Define some color :</span>
-<span class="sd">        &gt;&gt;&gt; color = [&#39;blue&#39;] * 3 + [&#39;white&#39;] * 3 + [&#39;red&#39;] * 4</span>
-<span class="sd">        &gt;&gt;&gt; # Set data and properties :</span>
-<span class="sd">        &gt;&gt;&gt; vb.sources_control(data=data, symbol=&#39;x&#39;, radiusmin=1.,</span>
-<span class="sd">        &gt;&gt;&gt;                    radiusmax=20., color=color, edgecolor=&#39;orange&#39;,</span>
-<span class="sd">        &gt;&gt;&gt;                    edgewidth=2)</span>
-<span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
-<span class="sd">        &gt;&gt;&gt; vb.show()</span>
+<span class="sd">        sources_display : Select sources to display.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span>
-        <span class="c1"># Update only if sources are already plotted :</span>
-        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">xyz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># Get inputs :</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">edgecolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">edgecolor</span><span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">edgewidth</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">edgewidth</span><span class="p">,</span> <span class="n">edgewidth</span><span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">scaling</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">scaling</span><span class="p">,</span> <span class="n">scaling</span><span class="p">)</span>
-            <span class="n">radiusmin</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">radiusmin</span> <span class="k">if</span> <span class="n">radiusmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">radiusmin</span>
-            <span class="n">radiusmax</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">radiusmax</span> <span class="k">if</span> <span class="n">radiusmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">radiusmax</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">radiusmin</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">radiusmin</span><span class="p">,</span> <span class="n">radiusmin</span><span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">radiusmax</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">radiusmax</span><span class="p">,</span> <span class="n">radiusmax</span><span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span> <span class="n">symbol</span><span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">smask</span> <span class="o">=</span> <span class="n">set_if_not_none</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">smask</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">smaskcolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">maskcolor</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="n">symbol</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">radius_min</span> <span class="o">=</span> <span class="n">radius_min</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">radius_max</span> <span class="o">=</span> <span class="n">radius_max</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">edge_color</span> <span class="o">=</span> <span class="n">edge_color</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">edge_width</span> <span class="o">=</span> <span class="n">edge_width</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">mask_color</span> <span class="o">=</span> <span class="n">mask_color</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">visible</span></div>
 
-            <span class="c1"># Check arguments and update plot:</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">prepare2plot</span><span class="p">()</span>
-            <span class="n">s</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No sources detected. Please, add some sources &quot;</span>
-                             <span class="s2">&quot;before trying to update data&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="BrainUserMethods.sources_opacity"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_opacity">[docs]</a>    <span class="k">def</span> <span class="nf">sources_opacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the level of transparency of sources.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        alpha : float | 1.</span>
-<span class="sd">            Transparency level (usually between 0 and 1).</span>
-<span class="sd">        show : bool | True</span>
-<span class="sd">            Specify if sources has be shown.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance with 10 random sources:</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))</span>
-<span class="sd">        &gt;&gt;&gt; # Set transparency :</span>
-<span class="sd">        &gt;&gt;&gt; vb.sources_opacity(alpha=0.1, show=True)</span>
-<span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
-<span class="sd">        &gt;&gt;&gt; vb.show()</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">alpha</span> <span class="o">&gt;=</span> <span class="mf">0.95</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_gl_state</span><span class="p">(</span><span class="s1">&#39;translucent&#39;</span><span class="p">,</span> <span class="n">depth_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_gl_state</span><span class="p">(</span><span class="s1">&#39;translucent&#39;</span><span class="p">,</span> <span class="n">depth_test</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">sColor</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">edgecolor</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">show</span></div>
-
-<div class="viewcode-block" id="BrainUserMethods.sources_display"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_display">[docs]</a>    <span class="k">def</span> <span class="nf">sources_display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.sources_display"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_display">[docs]</a>    <span class="k">def</span> <span class="nf">sources_display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select sources to display.</span>
 
-<span class="sd">        The selected sources can be then used to project activity or</span>
-<span class="sd">        repartition.</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        name : string | None</span>
+<span class="sd">            Name of the source object to control. If None, the selection is</span>
+<span class="sd">            applied to all sources.</span>
 <span class="sd">        select : {&#39;all&#39;, &#39;none&#39;, &#39;left&#39;, &#39;right&#39;, &#39;inside&#39;, &#39;outside&#39;}</span>
 <span class="sd">            The select parameter can be &#39;all&#39;, &#39;none&#39;, &#39;left&#39;, &#39;right&#39;,</span>
 <span class="sd">            &#39;inside&#39; or &#39;outside&#39;.</span>
 
-<span class="sd">        Examples</span>
+<span class="sd">        See also</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance with 10 random sources:</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))</span>
-<span class="sd">        &gt;&gt;&gt; # Set transparency :</span>
-<span class="sd">        &gt;&gt;&gt; vb.sources_display(select=&#39;right&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
-<span class="sd">        &gt;&gt;&gt; vb.show()</span>
+<span class="sd">        sources_control : Set data to sources and control source&#39;s properties.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Display either All / None :</span>
-        <span class="k">if</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">select</span><span class="p">)</span>
-
-        <span class="c1"># Display sources that are either in the inside / outside the brain :</span>
-        <span class="k">elif</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;inside&#39;</span><span class="p">,</span> <span class="s1">&#39;outside&#39;</span><span class="p">]:</span>
-            <span class="n">vert</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">get_vertices</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">_isInside</span><span class="p">(</span><span class="n">vert</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">)</span>
-
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The select parameter must either be &#39;all&#39;, &quot;</span>
-                             <span class="s2">&quot;&#39;none&#39;, &#39;left&#39;, &#39;right&#39;, &#39;inside&#39; or &#39;outside&#39;&quot;</span><span class="p">)</span></div>
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">set_visible_sources</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;inside&#39;</span><span class="p">,</span> <span class="s1">&#39;outside&#39;</span><span class="p">]:</span>
+            <span class="n">vert</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">vertices</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">set_visible_sources</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">vert</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.cortical_projection"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cortical_projection">[docs]</a>    <span class="k">def</span> <span class="nf">cortical_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span>
-                            <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                            <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Project sources activity.</span>
 
 <span class="sd">        This method can be used to project the sources activity either onto the</span>
-<span class="sd">        brain or on deep areas (like gyrus or brodmann areas).</span>
+<span class="sd">        brain or on region of interest.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -818,121 +713,67 @@
 <span class="sd">            brain or &#39;roi&#39; to project on region of interest (if defined).</span>
 <span class="sd">        contribute : bool | False</span>
 <span class="sd">            Specify if sources contribute on both hemisphere.</span>
+<span class="sd">        mask_color : string/tuple/array_like | &#39;orange&#39;</span>
+<span class="sd">            The color to assign to vertex for masked sources.</span>
 <span class="sd">        kwargs : dict</span>
 <span class="sd">            Further arguments are be passed to the cbar_control method.</span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance with 10 random sources:</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))</span>
-<span class="sd">        &gt;&gt;&gt; # Set transparency :</span>
-<span class="sd">        &gt;&gt;&gt; vb.sources_opacity(alpha=0.1, show=True)</span>
-<span class="sd">        &gt;&gt;&gt; # Run the cortical projection :</span>
-<span class="sd">        &gt;&gt;&gt; vb.cortical_projection()</span>
-<span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
-<span class="sd">        &gt;&gt;&gt; vb.show()</span>
-
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
+<span class="sd">        cortical_repartition : project number of contributing sources.</span>
 <span class="sd">        roi_control : add a region of interest.</span>
 <span class="sd">        sources_colormap : Change the colormap properties.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Update variables :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tradius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tprojecton</span> <span class="o">=</span> <span class="n">project_on</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tcontribute</span> <span class="o">=</span> <span class="n">contribute</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tprojectas</span> <span class="o">=</span> <span class="s1">&#39;activity&#39;</span>
-        <span class="c1"># Run the corticale projection :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sourcesProjection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_radius</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_contribute</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">contribute</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_type</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_mask_color</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mask_color</span><span class="p">))</span>
+        <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_on</span><span class="p">,</span> <span class="n">project_on</span><span class="p">)</span>
         <span class="c1"># Colormap control :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sources_colormap</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_source_proj</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.cortical_repartition"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cortical_repartition">[docs]</a>    <span class="k">def</span> <span class="nf">cortical_repartition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span>
-                             <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the number of contributing sources per vertex.</span>
+                             <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Project the number of contributing sources per vertex.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        radius : float | 10.</span>
 <span class="sd">            Projection radius.</span>
 <span class="sd">        project_on : string | &#39;brain&#39;</span>
-<span class="sd">            Define on which object to project the sources repartition.</span>
-<span class="sd">            Chose either &#39;brain&#39; for projecting onto the brain or &#39;roi&#39;</span>
-<span class="sd">            to project on region of interest (if defined).</span>
+<span class="sd">            Define on which object to project the sources activity. Chose</span>
+<span class="sd">            either &#39;brain&#39; for projecting the sources activity onto the</span>
+<span class="sd">            brain or &#39;roi&#39; to project on region of interest (if defined).</span>
 <span class="sd">        contribute : bool | False</span>
 <span class="sd">            Specify if sources contribute on both hemisphere.</span>
+<span class="sd">        mask_color : string/tuple/array_like | &#39;orange&#39;</span>
+<span class="sd">            The color to assign to vertex for masked sources.</span>
 <span class="sd">        kwargs : dict</span>
-<span class="sd">            Further arguments are be passed to the cbar_control method.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance with 10 random sources:</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))</span>
-<span class="sd">        &gt;&gt;&gt; # Set transparency :</span>
-<span class="sd">        &gt;&gt;&gt; vb.sources_opacity(alpha=0.1, show=True)</span>
-<span class="sd">        &gt;&gt;&gt; # Run the cortical projection :</span>
-<span class="sd">        &gt;&gt;&gt; vb.cortical_repartition()</span>
-<span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
-<span class="sd">        &gt;&gt;&gt; vb.show()</span>
+<span class="sd">            Further arguments are be passed to the cbar_control method</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Update variables :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tradius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tprojecton</span> <span class="o">=</span> <span class="n">project_on</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tcontribute</span> <span class="o">=</span> <span class="n">contribute</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tprojectas</span> <span class="o">=</span> <span class="s1">&#39;repartition&#39;</span>
-        <span class="c1"># Run the corticale repartition :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sourcesProjection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_radius</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_contribute</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">contribute</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_type</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_mask_color</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mask_color</span><span class="p">))</span>
+        <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_on</span><span class="p">,</span> <span class="n">project_on</span><span class="p">)</span>
         <span class="c1"># Colormap control :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sources_colormap</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_source_proj</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BrainUserMethods.sources_colormap"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_colormap">[docs]</a>    <span class="k">def</span> <span class="nf">sources_colormap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Change the colormap of cortical projection / repartition.</span>
-
-<span class="sd">        This method can be used to update paramaters of the colormap. But it&#39;s</span>
-<span class="sd">        only going to work if the source&#39;s activity has been projected (using</span>
-<span class="sd">        the cortical projection or repartition).</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        kwargs : dict | {}</span>
-<span class="sd">            Further arguments are be passed to the cbar_control method.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance with 10 random sources:</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain(s_xyz=np.random.randint(-20, 20, (10, 3)))</span>
-<span class="sd">        &gt;&gt;&gt; # Define some random data :</span>
-<span class="sd">        &gt;&gt;&gt; data = 100 * np.random.rand(10)</span>
-<span class="sd">        &gt;&gt;&gt; # Set data and properties :</span>
-<span class="sd">        &gt;&gt;&gt; vb.sources_control(data=data)</span>
-<span class="sd">        &gt;&gt;&gt; # Run the cortical projection :</span>
-<span class="sd">        &gt;&gt;&gt; vb.cortical_projection()</span>
-<span class="sd">        &gt;&gt;&gt; # Set colormap proprties :</span>
-<span class="sd">        &gt;&gt;&gt; vb.sources_colormap(cmap=&#39;Spectral&#39;, vmin=20, vmax=60,</span>
-<span class="sd">        &gt;&gt;&gt;                     under=&#39;orange&#39;, over=&#39;black&#39;, clim=(10, 80))</span>
-<span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
-<span class="sd">        &gt;&gt;&gt; vb.show()</span>
-
-<span class="sd">        See also</span>
-<span class="sd">        --------</span>
-<span class="sd">        cbar_control : control the colorbar of a specific object</span>
-<span class="sd">        cortical_projection : project source activity onto the cortex</span>
-<span class="sd">        cortical_repartition : project the source&#39;s repartition onto the cortex</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="BrainUserMethods.sources_fit"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_fit">[docs]</a>    <span class="k">def</span> <span class="nf">sources_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.sources_fit_to_vertices"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_fit_to_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">sources_fit_to_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_to</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Force sources coordinates to fit to a selected object.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        obj : {&#39;brain&#39;, &#39;roi&#39;}</span>
+<span class="sd">        name : string | None</span>
+<span class="sd">            If name is None, all sources across objects are going to be used.</span>
+<span class="sd">        fit_to : {&#39;brain&#39;, &#39;roi&#39;}</span>
 <span class="sd">            The object name to fit. Use &#39;brain&#39; or &#39;roi&#39;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Get vertices of the selected object :</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findVertices</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="c1"># fit sources to the selected vertices :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">_fit</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">)</span></div>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_obj_vertices</span><span class="p">(</span><span class="n">fit_to</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">fit_to_vertices</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.sources_to_convex_hull"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_to_convex_hull">[docs]</a>    <span class="k">def</span> <span class="nf">sources_to_convex_hull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Convert a set of sources into a convex hull.</span>
@@ -953,79 +794,46 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">xyz</span><span class="p">)</span><span class="o">.</span><span class="n">simplices</span></div>
 
-<div class="viewcode-block" id="BrainUserMethods.add_sources"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.add_sources">[docs]</a>    <span class="k">def</span> <span class="nf">add_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a supplementar source&#39;s object.</span>
-
-<span class="sd">        Warning : sources that are adding usnig this methos cannot be controled</span>
-<span class="sd">        using the GUI.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        name : string</span>
-<span class="sd">            Your source&#39;s object name.</span>
-<span class="sd">        kwargs : dict</span>
-<span class="sd">            Pass every further arguments starting with &quot;s&quot; (like s_xyz,</span>
-<span class="sd">            s_data, s_cmap, s_symbol...)</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain()</span>
-<span class="sd">        &gt;&gt;&gt; s_xyz = np.random.randint(-20, 20, (10, 3))</span>
-<span class="sd">        &gt;&gt;&gt; vb.add_sources(s_xyz=s_xyz, s_radiusmin=10, s_radiusmax=21,</span>
-<span class="sd">        &gt;&gt;&gt;                s_opacity=.8, s_symbol=&#39;x&#39;)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">SourcesBase</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vbNode</span></div>
-
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                            TIME-SERIES</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.time_series_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.time_series_control">[docs]</a>    <span class="k">def</span> <span class="nf">time_series_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                            <span class="n">dxyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.time_series_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.time_series_control">[docs]</a>    <span class="k">def</span> <span class="nf">time_series_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">amplitude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Control time-series settings.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        name : string</span>
+<span class="sd">            Name of the time-series object to control.</span>
 <span class="sd">        color : string/list/tuple/array_like | None</span>
 <span class="sd">            Color of the time-series.</span>
-<span class="sd">        amp : float | None</span>
+<span class="sd">        amplitude : float | None</span>
 <span class="sd">            Graphical amplitude of the time-series.</span>
 <span class="sd">        width : float | None</span>
 <span class="sd">            Graphical width of th time-series.</span>
-<span class="sd">        lw : float | None</span>
+<span class="sd">        line_width : float | None</span>
 <span class="sd">            Line width of the time-series.</span>
-<span class="sd">        dxyz : tuple | None</span>
-<span class="sd">            Offset along the (x, y, z) axis for the time-series.</span>
+<span class="sd">        translate : tuple | None</span>
+<span class="sd">            Translation along the (x, y, z) axis for the time-series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">dxyz</span><span class="p">,</span> <span class="n">visible</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="BrainUserMethods.add_time_series"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.add_time_series">[docs]</a>    <span class="k">def</span> <span class="nf">add_time_series</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ts_xyz</span><span class="p">,</span> <span class="n">ts_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add time-series (TS) object.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        name : string</span>
-<span class="sd">            Name of the TS object.</span>
-<span class="sd">        ts_xyz : array_like</span>
-<span class="sd">            Array of (x, y, z) coordinates of shape (n_sources, 3).</span>
-<span class="sd">        ts_data : array_like</span>
-<span class="sd">            Array of time-serie&#39;s data of shape (n_sources, n_time_points).</span>
-<span class="sd">        kwargs : dict | {}</span>
-<span class="sd">            Further arguments starting with *ts_*.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">TimeSeriesBase</span><span class="p">(</span><span class="n">ts_xyz</span><span class="p">,</span> <span class="n">ts_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vbNode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grpTs</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tseries</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">line_width</span> <span class="o">=</span> <span class="n">line_width</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">amplitude</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="n">translate</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="n">visible</span></div>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                             PICTURES</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.pictures_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.pictures_control">[docs]</a>    <span class="k">def</span> <span class="nf">pictures_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dxyz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.pictures_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.pictures_control">[docs]</a>    <span class="k">def</span> <span class="nf">pictures_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                         <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Control pictures settings.</span>
 
 <span class="sd">        Parameters</span>
@@ -1034,45 +842,33 @@
 <span class="sd">            Width of each picture.</span>
 <span class="sd">        height : float | 7.</span>
 <span class="sd">            Height of each picture.</span>
-<span class="sd">        dxyz : float | (0., 0., 1.)</span>
+<span class="sd">        translate : tuple | None</span>
 <span class="sd">            Offset along the (x, y, z) axis for the pictures.</span>
 <span class="sd">        kwargs : dict | {}</span>
 <span class="sd">            Further arguments can be used to control the colorbar (clim, cmap,</span>
 <span class="sd">            vmin, under, vmax, over).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pic</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">dxyz</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="BrainUserMethods.add_pictures"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.add_pictures">[docs]</a>    <span class="k">def</span> <span class="nf">add_pictures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">pic_xyz</span><span class="p">,</span> <span class="n">pic_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add pictures object.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        name : string</span>
-<span class="sd">            Name of the pictures object.</span>
-<span class="sd">        pic_xyz : array_like</span>
-<span class="sd">            Array of (x, y, z) coordinates of shape (n_sources, 3).</span>
-<span class="sd">        pic_data : array_like</span>
-<span class="sd">            Array of pictures data of shape (n_sources, n_rows, n_cols).</span>
-<span class="sd">        kwargs : dict | {}</span>
-<span class="sd">            Further arguments starting with *pic_*.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">PicBase</span><span class="p">(</span><span class="n">pic_xyz</span><span class="p">,</span> <span class="n">pic_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vbNode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">set_camera</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grpPic</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pic</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="n">translate</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="n">visible</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                            CONNECTIVITY</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.connect_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.connect_control">[docs]</a>    <span class="k">def</span> <span class="nf">connect_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colorby</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.connect_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.connect_control">[docs]</a>    <span class="k">def</span> <span class="nf">connect_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">line_width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update connectivity object.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        colorby : string | {&#39;strength&#39;, &#39;count&#39;, &#39;density&#39;}</span>
+<span class="sd">        name : string</span>
+<span class="sd">            Name of the connectivity object to control.</span>
+<span class="sd">        colorby : string | {&#39;strength&#39;, &#39;count&#39;}</span>
 <span class="sd">            Define how to color connexions. Use &#39;strength&#39; if the color has</span>
 <span class="sd">            to be modulate by the connectivity strength. Use &#39;count&#39; if the</span>
 <span class="sd">            color depends on the number of connexions per node. Use</span>
@@ -1084,60 +880,28 @@
 <span class="sd">        show : bool | True</span>
 <span class="sd">            Display or hide connectivity.</span>
 <span class="sd">        kwargs : dict | {}</span>
-<span class="sd">            Further arguments are be passed to the cbar_control method.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; Generate 10 sources :</span>
-<span class="sd">        &gt;&gt;&gt; nsources = 10</span>
-<span class="sd">        &gt;&gt;&gt; s_xyz = np.random.randint(-20, 20, (nsources, 3))  # coordinates</span>
-<span class="sd">        &gt;&gt;&gt; Create a (N, N) matrix of connectivity strength :</span>
-<span class="sd">        &gt;&gt;&gt; c_connect = np.random.rand(nsources, nsources)</span>
-<span class="sd">        &gt;&gt;&gt; c_connect[np.tril_indices_from(c_connect)] = 0</span>
-<span class="sd">        &gt;&gt;&gt; Mask the connectivity matrix for every values &lt;.6 and &gt;.7</span>
-<span class="sd">        &gt;&gt;&gt; c_connect = np.ma.masked_array(c_connect, mask=True)</span>
-<span class="sd">        &gt;&gt;&gt; nz = np.where((c_connect &gt; .7) &amp; (c_connect &lt; .6))</span>
-<span class="sd">        &gt;&gt;&gt; c_connect.mask[nz] = False</span>
-<span class="sd">        &gt;&gt;&gt; Define a brain instance :</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain(s_xyz=s_xyz, c_connect=c_connect)</span>
+<span class="sd">            Further arguments can be used to control the colorbar (clim, cmap,</span>
+<span class="sd">            vmin, under, vmax, over).</span>
 
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
 <span class="sd">        cbar_control : control the colormap of a specific object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">colorby</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="o">.</span><span class="n">colorby</span> <span class="o">=</span> <span class="n">colorby</span>
-        <span class="k">if</span> <span class="n">dynamic</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="o">.</span><span class="n">dynamic</span> <span class="o">=</span> <span class="n">dynamic</span>
-        <span class="c1"># Optional parameters are send to cbar_control :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Connectivity&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">show</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="BrainUserMethods.add_connect"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.add_connect">[docs]</a>    <span class="k">def</span> <span class="nf">add_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a supplementar connectivity object.</span>
-
-<span class="sd">        Warning : connectivity lines that are adding usnig this methos cannot</span>
-<span class="sd">        be controled using the GUI.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        name : string</span>
-<span class="sd">            Your connectivity lines object name.</span>
-<span class="sd">        kwargs : dict</span>
-<span class="sd">            Pass every further arguments starting with *c_* (like c_xyz,</span>
-<span class="sd">            c_connect, c_select, c_colorby...)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ConnectBase</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vbNode</span></div>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">color_by</span> <span class="o">=</span> <span class="n">color_by</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">dynamic</span> <span class="o">=</span> <span class="n">dynamic</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">line_width</span> <span class="o">=</span> <span class="n">line_width</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="n">visible</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                                 ROI</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.roi_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.roi_control">[docs]</a>    <span class="k">def</span> <span class="nf">roi_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="p">[],</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.roi_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.roi_control">[docs]</a>    <span class="k">def</span> <span class="nf">roi_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="p">[],</span> <span class="n">roi_type</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select Region Of Interest (ROI) to plot.</span>
 
 <span class="sd">        Parameters</span>
@@ -1146,22 +910,13 @@
 <span class="sd">            List of integers where each one refer to a particular roi. The</span>
 <span class="sd">            corresponding list can be found in the graphical interface in</span>
 <span class="sd">            the ROI tab or using the function roi_list.</span>
-<span class="sd">        subdivision : {&#39;Brodmann&#39;, &#39;AAL&#39;}</span>
+<span class="sd">        roi_type : {&#39;Brodmann&#39;, &#39;AAL&#39;, &#39;Talairach&#39;}</span>
 <span class="sd">            Select the sub-division method i.e &#39;Brodmann&#39; (for brodmann areas)</span>
-<span class="sd">            or &#39;AAL&#39; (Anatomical Automatic Labeling)</span>
+<span class="sd">            or &#39;AAL&#39; (Anatomical Automatic Labeling) or &#39;Talairach&#39;.</span>
 <span class="sd">        smoth : int | 3</span>
 <span class="sd">            Define smooth proportion.</span>
 <span class="sd">        name : string | &#39;roi&#39;</span>
 <span class="sd">            Name of the displayed ROI.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance :</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain()</span>
-<span class="sd">        &gt;&gt;&gt; # Display brodmann area 4 and 6 :</span>
-<span class="sd">        &gt;&gt;&gt; vb.roi_control(selection=[4, 6], subdivision=&#39;Brodmann&#39;, smooth=5)</span>
-<span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
-<span class="sd">        &gt;&gt;&gt; vb.show()</span>
 
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
@@ -1172,8 +927,8 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The selection parameter must be a list of &quot;</span>
                              <span class="s2">&quot;integers&quot;</span><span class="p">)</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
-        <span class="c1"># Select subdivision in the combo list :</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">get_combo_list_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roiDiv</span><span class="p">,</span> <span class="n">subdivision</span><span class="p">)</span>
+        <span class="c1"># Select roi_type in the combo list :</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">get_combo_list_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roiDiv</span><span class="p">,</span> <span class="n">roi_type</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_roiDiv</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
         <span class="c1"># Update the list of structures :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_build_roi_list</span><span class="p">()</span>
@@ -1182,74 +937,17 @@
         <span class="c1"># Apply selection :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_apply_roi_selection</span><span class="p">()</span>
         <span class="c1"># Add ROI to mesh list :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_update_proj_list</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proj_obj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_update_proj_list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">translucent</span> <span class="o">=</span> <span class="n">translucent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span></div>
 
-<div class="viewcode-block" id="BrainUserMethods.roi_light_reflection"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.roi_light_reflection">[docs]</a>    <span class="k">def</span> <span class="nf">roi_light_reflection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reflect_on</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Change how light is reflecting onto roi.</span>
-
-<span class="sd">        This function can be used to see either the surface only (external) or</span>
-<span class="sd">        deep voxels inside roi (internal).</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        reflect_on : {&#39;internal&#39;, &#39;external&#39;}</span>
-<span class="sd">            Choose either to reflect on &#39;internal&#39; or &#39;external&#39;.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance :</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain()</span>
-<span class="sd">        &gt;&gt;&gt; # Display brodmann area 4 and 6 :</span>
-<span class="sd">        &gt;&gt;&gt; vb.roi_control(selection=[4, 6], subdivision=&#39;Brodmann&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; # Display the external surface :</span>
-<span class="sd">        &gt;&gt;&gt; vb.roi_light_reflection(reflect_on=&#39;internal&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; # Hide the brain :</span>
-<span class="sd">        &gt;&gt;&gt; vb.brain_opacity(show=False)</span>
-<span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
-<span class="sd">        &gt;&gt;&gt; vb.show()</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">reflect_on</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">reflect_on</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;internal&#39;</span><span class="p">,</span> <span class="s1">&#39;external&#39;</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The reflect_on parameter must be either &quot;</span>
-                                 <span class="s2">&quot;&#39;internal&#39; or &#39;external&#39;&quot;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_roiTransp</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">reflect_on</span> <span class="o">==</span> <span class="s1">&#39;internal&#39;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_area_light_reflection</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="BrainUserMethods.roi_opacity"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.roi_opacity">[docs]</a>    <span class="k">def</span> <span class="nf">roi_opacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the level of transparency of the deep structures.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        alpha : float | 0.1</span>
-<span class="sd">            Transparency level (usually between 0 and 1).</span>
-<span class="sd">        show : bool | True</span>
-<span class="sd">            Specify if roi(s) has be shown.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance :</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain()</span>
-<span class="sd">        &gt;&gt;&gt; # Display brodmann area 4 and 6 :</span>
-<span class="sd">        &gt;&gt;&gt; vb.roi_control(selection=[4, 6], subdivision=&#39;Brodmann&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; # Set transparency :</span>
-<span class="sd">        &gt;&gt;&gt; vb.roi_opacity(alpha=0.1, show=True)</span>
-<span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
-<span class="sd">        &gt;&gt;&gt; vb.show()</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Force to have internal projection :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">projection</span><span class="p">(</span><span class="s1">&#39;internal&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">show</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="BrainUserMethods.roi_list"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.roi_list">[docs]</a>    <span class="k">def</span> <span class="nf">roi_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subdivision</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainUserMethods.roi_list"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.roi_list">[docs]</a>    <span class="k">def</span> <span class="nf">roi_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roi_type</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the list of supported ROI.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        subdivision : str | &#39;Brodmann&#39;</span>
+<span class="sd">        roi_type : str | &#39;Brodmann&#39;</span>
 <span class="sd">            Select the sub-division method i.e &#39;Brodmann&#39; (for brodmann areas)</span>
 <span class="sd">            or &#39;AAL&#39; (Anatomical Automatic Labeling)</span>
 
@@ -1257,17 +955,8 @@
 <span class="sd">        -------</span>
 <span class="sd">        roi_labels : array_like</span>
 <span class="sd">            The currently supported ROI&#39;s labels.</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; # Define a Brain instance :</span>
-<span class="sd">        &gt;&gt;&gt; vb = Brain()</span>
-<span class="sd">        &gt;&gt;&gt; # Get list of ROI for AAL :</span>
-<span class="sd">        &gt;&gt;&gt; lst = vb.roi_list(subdivision=&#39;AAL&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; # Print this list :</span>
-<span class="sd">        &gt;&gt;&gt; print(lst)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_vols</span><span class="p">[</span><span class="n">subdivision</span><span class="p">]</span><span class="o">.</span><span class="n">roi_labels</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_vols</span><span class="p">[</span><span class="n">roi_type</span><span class="p">]</span><span class="o">.</span><span class="n">roi_labels</span></div>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
@@ -1345,6 +1034,8 @@
 <span class="sd">        ndigits : int | None</span>
 <span class="sd">            Number of digits for the text.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># kwargs[&#39;isvmin&#39;] = isinstance(kwargs.get(&#39;vmin&#39;, None), (int, float))</span>
+        <span class="c1"># kwargs[&#39;isvmax&#39;] = isinstance(vmax, (int, float))</span>
         <span class="c1"># Test if the item &quot;name&quot; is enabled :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cbar_item_is_enable</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="c1"># Select the object :</span>
@@ -1353,10 +1044,10 @@
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbobjs</span><span class="o">.</span><span class="n">_objs</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">_fcn_ChangeObj</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">_fcn_change_object</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.cbar_select"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_select">[docs]</a>    <span class="k">def</span> <span class="nf">cbar_select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Select and disply a colorbar.</span>
+        <span class="sd">&quot;&quot;&quot;Select and display a colorbar.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1401,7 +1092,7 @@
         <span class="c1"># Test if the item &quot;name&quot; is enabled :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cbar_item_is_enable</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="c1"># Autoscale :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">_fcn_cbAutoscale</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">_fcn_cb_autoscale</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.cbar_export"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_export">[docs]</a>    <span class="k">def</span> <span class="nf">cbar_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">export_only</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">get_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Export colorbars in a text file or in a dictionary.</span>
@@ -1468,7 +1159,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.5',
+            VERSION:'0.3.6',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
