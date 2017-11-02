@@ -128,7 +128,8 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, BrainShortcuts):
         #######################################################################
         cdict = {'bgcolor': bgcolor, 'cargs': {'size': (800, 600), 'dpi': 600,
                  'fullscreen': True, 'resizable': True}}
-        self.view = VisbrainCanvas(name='MainCanvas', **cdict)
+        self.view = VisbrainCanvas(name='MainCanvas', camera=self._camera,
+                                   **cdict)
         self.vBrain.addWidget(self.view.canvas.native)
 
         #######################################################################
