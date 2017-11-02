@@ -209,7 +209,6 @@ class RoiBase(object):
             self.name_roi = 'ROI'
         else:
             self.mesh.set_data(vertices=self.vert, faces=self.faces)
-        print(self.vert.shape, self.vertex_colors.shape)
         self.mesh.color = self.vertex_colors
 
     def _get_idx_mask(self, index):
