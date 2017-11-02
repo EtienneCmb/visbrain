@@ -31,7 +31,7 @@ from .utils import set_log_level
 __all__ = ['Brain', 'Colorbar', 'Figure', 'Signal', 'Sleep', 'Topo']
 __version__ = "0.3.5"
 
-set_log_level()
+set_log_level('info')
 
 # PyQt5 crash if an error occured. This small function fix it for all modules
 # to retrieve the PyQt4 behavior :
