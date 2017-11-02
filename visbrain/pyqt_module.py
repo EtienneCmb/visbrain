@@ -7,7 +7,8 @@ import logging
 
 import vispy.app as visapp
 
-from .utils import set_widget_size, set_log_level, get_data_path
+from .utils import set_widget_size, set_log_level, get_data_path, Profiler
+from .config import profiler
 
 sip.setdestroyonexit(False)
 logger = logging.getLogger('visbrain')
@@ -30,13 +31,23 @@ class PyQtModule(object):
     def __init__(self, verbose=None, to_describe=None, icon=None,
                  show_settings=True):
         """Init."""
+        # Log level and profiler creation (if verbose='debug')
+        set_log_level(verbose)
         self._app = QtWidgets.QApplication(sys.argv)
         self._need_description = to_describe
         if isinstance(self._need_description, str):
             self._need_description = [self._need_description]
         self._module_icon = icon
         self._show_settings = show_settings
-        set_log_level(verbose)
+
+    def _pyqt_title(self, title, symbol='='):
+        """Define a PyQt title."""
+        assert isinstance(title, str) and isinstance(symbol, str)
+        n_symbol = 60
+        start_title = int((n_symbol / 2) - (len(title) / 2)) - 1
+        print('\n' + symbol * n_symbol)
+        print(' ' * start_title + title)
+        print(symbol * n_symbol)
 
     def show(self):
         """Display the graphical user interface."""
@@ -60,11 +71,13 @@ class PyQtModule(object):
             logger.debug("No icon passed as an input.")
         # Tree description if log level is on debug :
         if isinstance(self._need_description, list) and (logger.level == 10):
-            print('\n' + '=' * 60)
+            self._pyqt_title('Tree')
             for k in self._need_description:
                 print(eval('self.%s.describe_tree()' % k))
-            print('=' * 60 + '\n')
         # Show and maximized the window :
+        if profiler:
+            self._pyqt_title('Profiler')
+            profiler.finish()
         self.showMaximized()
         visapp.run()
 
