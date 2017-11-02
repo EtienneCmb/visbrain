@@ -2,7 +2,6 @@
 import os
 import numpy as np
 
-import vispy.app as visapp
 import vispy.scene.cameras as viscam
 
 from .ui_elements import UiElements, UiInit
