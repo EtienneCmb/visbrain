@@ -21,6 +21,7 @@ from .mneio import mne_switch
 from .dependencies import is_mne_installed
 from ..utils import get_dsf, vispy_array
 from ..io import merge_annotations
+from ..config import profiler
 
 logger = logging.getLogger('visbrain')
 
@@ -74,6 +75,7 @@ class ReadSleepData(object):
             # Get output arguments :
             (sf, downsample, dsf, data, channels, n, offset, annot) = args
             logger.info("File successfully loaded (%s)" % (file + ext))
+            profiler("Data file loladed", level=1)
 
         elif isinstance(data, np.ndarray):  # array of data is defined
             if not isinstance(sf, (int, float)):
@@ -118,6 +120,7 @@ class ReadSleepData(object):
             hypno, _ = read_hypno(hypno)
             # Oversample then downsample :
             hypno = oversample_hypno(hypno, self._N)[::dsf]
+            profiler("Hypnogram file loaded", level=1)
 
         # ========================== CHECKING ==========================
         # ---------- DATA ----------
@@ -197,6 +200,7 @@ class ReadSleepData(object):
         self._channels = chanc
         self._href = href
         self._hconv = conv
+        profiler("Check data", level=1)
 
 
 def sleep_switch(file, ext, downsample):
