@@ -140,8 +140,9 @@ class UiAtlas(object):
         logger.info(("Loading %s hemisphere of %s brain "
                      "template") % (hemisphere, template))
         self.atlas.set_data(name=template, hemisphere=hemisphere)
-        self.atlas.rotate('top')
         self.atlas.scale = self._gl_scale
+        self.atlas.reset_camera()
+        self.atlas.rotate('top')
 
     def _fcn_brain_hemisphere(self):
         """Change the hemisphere."""
