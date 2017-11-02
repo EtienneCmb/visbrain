@@ -5,9 +5,11 @@ import os
 import logging
 
 import numpy as np
+from vispy.util import profiler
 
 
-__all__ = ('set_log_level', 'get_dsf', 'set_if_not_none', 'get_data_path')
+__all__ = ('set_log_level', 'Profiler', 'get_dsf', 'set_if_not_none',
+           'get_data_path')
 
 
 logger = logging.getLogger('visbrain')
@@ -31,9 +33,9 @@ def set_log_level(verbose=None):
     return_old_level : bool
         If True, return the old verbosity level.
     """
-    if verbose is None:
-        verbose = "INFO"
-    elif isinstance(verbose, bool):
+    # if verbose is None:
+    #     verbose = "INFO"
+    if isinstance(verbose, bool):
         verbose = 'INFO' if verbose else 'WARNING'
     if isinstance(verbose, str):
         verbose = verbose.upper()
@@ -43,9 +45,55 @@ def set_log_level(verbose=None):
         if verbose not in logging_types:
             raise ValueError('verbose must be of a valid type')
         verbose = logging_types[verbose]
-    format = "%(levelname)s : %(message)s"
-    logging.basicConfig(format=format)
-    logger.setLevel(verbose)
+        format = "%(levelname)s : %(message)s"
+        logging.basicConfig(format=format)
+        logger.setLevel(verbose)
+
+
+class Profiler(object):
+    """Visbrain profiler.
+
+    The visbrain profiler add some basic functionalities to the vispy profiler.
+    """
+
+    def __init__(self, delayed=True):
+        """Init."""
+        self._delayed = delayed
+        logger = logging.getLogger('visbrain')
+        enable = logger.level == 10  # enable for DEBUG
+        if enable and not hasattr(self, '_vp_profiler'):
+            self._vp_profiler = profiler.Profiler(disabled=not enable,
+                                                  delayed=self._delayed)
+
+    def __bool__(self):
+        """Return if the profiler is enable."""
+        if hasattr(self, '_vp_profiler'):
+            return not isinstance(self._vp_profiler,
+                                  profiler.Profiler.DisabledProfiler)
+        else:
+            return False
+
+    def __call__(self, msg=None, level=0, as_type='msg'):
+        """Call the vispy profiler."""
+        self.__init__(delayed=self._delayed)
+        if self:
+            if as_type == 'msg':
+                if isinstance(msg, str) and isinstance(level, int):
+                    msg = '    ' * level + '> ' + msg
+                self._vp_profiler(self._new_msg(msg))
+            elif as_type == 'title':
+                depth = type(self._vp_profiler)._depth
+                msg = "  " * depth + '-' * 6 + ' ' + msg + ' ' + '-' * 6
+                self._vp_profiler._new_msg(self._new_msg(msg))
+
+    def finish(self, msg=None):
+        """Finish the profiler."""
+        self._vp_profiler.finish(msg)
+
+    @staticmethod
+    def _new_msg(msg):
+        msg += ' ' if msg[-1] != ' ' else ''
+        return msg
 
 
 def get_dsf(downsample, sf):
