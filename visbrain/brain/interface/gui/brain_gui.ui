@@ -1304,8 +1304,8 @@ name</string>
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>316</width>
-                         <height>569</height>
+                         <width>312</width>
+                         <height>392</height>
                         </rect>
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -3555,13 +3555,13 @@ type</string>
       </widget>
       <widget class="QStackedWidget" name="_objsPage">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
          <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="_BrainPage">
         <layout class="QHBoxLayout" name="horizontalLayout_7">

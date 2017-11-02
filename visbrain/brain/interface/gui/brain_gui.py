@@ -565,7 +565,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 316, 569))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 312, 392))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout_12.setContentsMargins(0, 0, 0, 0)
@@ -1522,7 +1522,7 @@ class Ui_MainWindow(object):
         self.progressBar.setObjectName("progressBar")
         self.verticalLayout_4.addWidget(self.progressBar)
         self._objsPage = QtWidgets.QStackedWidget(self.splitter)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self._objsPage.sizePolicy().hasHeightForWidth())
@@ -1767,7 +1767,7 @@ class Ui_MainWindow(object):
         self._obj_stack.setCurrentIndex(4)
         self._source_tab.setCurrentIndex(0)
         self._c_alpha_stack.setCurrentIndex(0)
-        self._objsPage.setCurrentIndex(1)
+        self._objsPage.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
