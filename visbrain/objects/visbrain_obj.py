@@ -63,6 +63,10 @@ class VisbrainObject(object):
         # Reset orignial parent :
         self._node.parent = parent_bck
 
+    def describe_tree(self):
+        """Tree description."""
+        return self._node.describe_tree()
+
     # ----------- PARENT -----------
     @property
     def parent(self):
