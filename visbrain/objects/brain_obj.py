@@ -176,6 +176,7 @@ class BrainObj(VisbrainObject):
             camera = scene.cameras.TurntableCamera(name='turntable')
             self.mesh.set_camera(camera)
             self.reset_camera()
+            self.rotate('top')
         return self.camera
 
     def _optimal_camera_properties(self, with_distance=True):
@@ -232,6 +233,8 @@ class BrainObj(VisbrainObject):
             Custom rotation. This parameter must be a tuple of two floats
             respectively describing the (azimuth, elevation).
         """
+        # Create the camera if needed :
+        self._get_camera()
         scale_factor = None
         if fixed in ['sagittal_0', 'left']:     # left
             azimuth, elevation = -90, 0

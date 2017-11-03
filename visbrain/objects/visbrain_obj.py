@@ -5,6 +5,7 @@ import vispy
 import vispy.visuals.transforms as vist
 
 from .scene_obj import VisbrainCanvas
+from ..io import write_fig_canvas
 from ..utils import color2vb, set_log_level
 
 
@@ -43,25 +44,94 @@ class VisbrainObject(object):
         """Return the object name."""
         return self._name
 
-    def preview(self, bgcolor='white', axis=False, show=True):
+    def _get_parent(self, bgcolor, axis, show):
+        """Get the object parent for preview and screenshot."""
+        camera = self._get_camera()
+        canvas = VisbrainCanvas(axis=axis, show=show, name=self._name,
+                                bgcolor=color2vb(bgcolor), camera=camera)
+        self._node.parent = canvas.wc.scene
+        return canvas
+
+    def preview(self, bgcolor='white', axis=False, xyz=False, show=True):
         """Previsualize the result.
 
         Parameters
         ----------
         bgcolor : array_like/string/tuple | 'white'
             Background color for the preview.
+        axis : bool | False
+            Add x and y axis with ticks.
+        xyz : bool | False
+            Add an (x, y, z) axis to the scene.
         """
         parent_bck = self._node.parent
-        canvas = VisbrainCanvas(axis=axis, show=show, name=self._name,
-                                bgcolor=color2vb(bgcolor))
-        self._node.parent = canvas.wc.scene
-        canvas.camera = self._get_camera()
-        # vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)
+        canvas = self._get_parent(bgcolor, axis, show)
+        if xyz:
+            vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)
         # view.camera = camera
         if (sys.flags.interactive != 1) and show:
             vispy.app.run()
         # Reset orignial parent :
         self._node.parent = parent_bck
+
+    def describe_tree(self):
+        """Tree description."""
+        return self._node.describe_tree()
+
+    def screenshot(self, saveas, print_size=None, dpi=300.,
+                   unit='centimeter', factor=None, region=None, autocrop=False,
+                   bgcolor=None, transparent=False):
+        """Take a screeshot of the scene.
+
+        By default, the rendered canvas will have the size of your screen.
+        The screenshot() method provides two ways to increase to exported image
+        resolution :
+
+            * Using print_size, unit and dpi inputs : specify the size of the
+              image at a specific dpi level. For example, you might want to
+              have an (10cm, 15cm) image at 300 dpi.
+            * Using the factor input : multiply the default image size by this
+              factor. For example, if you have a (1920, 1080) monitor and if
+              factor is 2, the exported image should have a shape of
+              (3840, 2160) pixels.
+
+        Parameters
+        ----------
+        saveas : str
+            The name of the file to be saved. This file must contains a
+            extension like .png, .tiff, .jpg...
+        print_size : tuple | None
+            The desired print size. This argument should be used in association
+            with the dpi and unit inputs. print_size describe should be a tuple
+            of two floats describing (width, height) of the exported image for
+            a specific dpi level. The final image might not have the exact
+            desired size but will try instead to find a compromize
+            regarding to the proportion of width/height of the original image.
+        dpi : float | 300.
+            Dots per inch for printing the image.
+        unit : {'centimeter', 'millimeter', 'pixel', 'inch'}
+            Unit of the printed size.
+        factor : float | None
+            If you don't want to use the print_size input, factor simply
+            multiply the resolution of your screen.
+        region : tuple | None
+            Select a specific region. Must be a tuple of four integers each one
+            describing (x_start, y_start, width, height).
+        autocrop : bool | False
+            Automaticaly crop the figure in order to have the smallest
+            space between the brain and the border of the picture.
+        bgcolor : array_like/string | None
+            The background color of the image.
+        transparent : bool | False
+            Specify if the exported figure have to contains a transparent
+            background.
+        """
+        kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
+                      autocrop=autocrop, unit=unit, region=region,
+                      bgcolor=bgcolor, transparent=transparent)
+        canvas = self._get_parent(bgcolor, False, False)
+        write_fig_canvas(saveas, canvas.canvas, **kwargs)
+        self._node.parent = None
 
     # ----------- PARENT -----------
     @property

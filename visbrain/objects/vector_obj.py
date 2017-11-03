@@ -98,7 +98,7 @@ class VectorObj(VisbrainObject, CbarArgs):
                  select=None, color='black', line_width=5., arrow_size=10.,
                  arrow_type='stealth', antialias=False, cmap='viridis',
                  clim=None, vmin=None, under='gray', vmax=None, over='red',
-                 transform=None, parent=None, verbose=None, _z=-10., **kwargs):
+                 transform=None, parent=None, verbose=None, _z=-10.):
         """Init."""
         # Init Visbrain object base class and SourceProjection :
         VisbrainObject.__init__(self, name, parent, transform, verbose)
