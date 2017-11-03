@@ -277,9 +277,7 @@ class BrainVisual(Visual):
         # ____________________ HEMISPHERE ____________________
         if lr_index is None or len(lr_index) != vertices.shape[0]:
             lr_index = vertices[:, 0] <= vertices[:, 0].mean()
-        self._lr_index = lr_index
-
-        # ____________________ ASSIGN ____________________
+        self._lr_index = lr_index.astype(bool)
 
         # ____________________ BUFFERS ____________________
         # Vertices // faces // normals :

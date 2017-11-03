@@ -8,7 +8,7 @@ from vispy import scene
 from .visbrain_obj import VisbrainObject
 from ..visuals import BrainMesh
 from ..utils import get_data_path, mesh_edges, smoothing_matrix, array2colormap
-from ..io import download_file
+from ..io import download_file, is_nibabel_installed
 
 logger = logging.getLogger('visbrain')
 
@@ -260,20 +260,33 @@ class BrainObj(VisbrainObject):
 
         self.set_state(azimuth, elevation, scale_factor=scale_factor)
 
-    def add_activation(self, data, vertices, smoothing_steps=20,
+    def add_activation(self, data=None, vertices=None, smoothing_steps=20,
+                       file=None, hemisphere=None, hide_under=None,
                        cmap='viridis', clim=None, vmin=None, vmax=None,
                        under='gray', over='red'):
-        """Add activation to specific vertices.
+        """Add activation to the brain template.
+
+        This method can be used for :
+
+            * Add activations to specific vertices (`data` and `vertices`)
+            * Add an overlay (`file` input)
 
         Parameters
         ----------
-        data : array_like
+        data : array_like | None
             Vector array of data of shape (n_data,).
-        vertices : array_like
+        vertices : array_like | None
             Vector array of vertices of shape (n_vtx). Must be an array of
             integers.
         smoothing_steps : int | 20
             Number of smoothing steps (smoothing is used if n_data < n_vtx)
+        file : string | None
+            Full path to the overlay file.
+        hemisphrere : {None, 'both', 'left', 'right'}
+            The hemisphere to use to add the overlay. If None, the method try
+            to inferred the hemisphere from the file name.
+        hide_under : float | None
+            Hide activations under a certain threshold.
         cmap : string | 'viridis'
             The colormap to use.
         clim : tuple | None
@@ -288,25 +301,73 @@ class BrainObj(VisbrainObject):
         over : string/tuple/array_like | 'red'
             The color to use for values over vmax.
         """
-        assert isinstance(data, np.ndarray) and (data.ndim == 1)
-        assert isinstance(vertices, np.ndarray) and (vertices.ndim == 1)
-        assert isinstance(smoothing_steps, int)
-        # Get smoothed vertices // data :
-        smooth_mat = smoothing_matrix(vertices, mesh_edges(self.mesh._faces),
-                                      smoothing_steps=smoothing_steps)
-        smooth_data = data[smooth_mat.col]
-        # Fix clim :
-        clim = (smooth_data.min(), smooth_data.max()) if clim is None else clim
-        assert len(clim) == 2
-        # Convert into colormap :
-        smooth_map = array2colormap(smooth_data, cmap=cmap, clim=clim,
-                                    vmin=vmin, vmax=vmax, under=under,
-                                    over=over)
-        color = np.ones((len(self.mesh), 4), dtype=np.float32)
-        color[smooth_mat.row, :] = smooth_map
-        # Set color to the mesh :
+        col_kw = dict(cmap=cmap, vmin=vmin, vmax=vmax, under=under, over=over,
+                      clim=clim)
+        is_under = isinstance(hide_under, (int, float))
+        # ============================= METHOD =============================
+        if isinstance(data, np.ndarray) and isinstance(vertices, np.ndarray):
+            logger.info("Add data to secific vertices.")
+            assert (data.ndim == 1) and (vertices.ndim == 1)
+            assert isinstance(smoothing_steps, int)
+            # Get smoothed vertices // data :
+            edges = mesh_edges(self.mesh._faces)
+            sm_mat = smoothing_matrix(vertices, edges, smoothing_steps)
+            sm_data = data[sm_mat.col]
+            # Clim :
+            clim = (sm_data.min(), sm_data.max()) if clim is None else clim
+            assert len(clim) == 2
+            col_kw['clim'] = clim
+            # Convert into colormap :
+            smooth_map = array2colormap(sm_data, **col_kw)
+            color = np.ones((len(self.mesh), 4), dtype=np.float32)
+            color[sm_mat.row, :] = smooth_map
+            # Mask :
+            mask = sm_mat.row[sm_data >= hide_under] if is_under else 1.
+        elif isinstance(file, str):
+            assert os.path.isfile(file)
+            logger.info("Add overlay to the {} brain template "
+                        "({})".format(self._name, file))
+            assert is_nibabel_installed()
+            import nibabel as nib
+            # Load data using Nibabel :
+            sc = nib.load(file).get_data().ravel(order="F")
+            hemisphere = 'both' if len(sc) == len(self.mesh) else hemisphere
+            # Hemisphere :
+            if hemisphere is None:
+                _, filename = os.path.split(file)
+                if any(k in filename for k in ['left', 'lh']):
+                    hemisphere = 'left'
+                elif any(k in filename for k in ['right', 'rh']):
+                    hemisphere = 'right'
+                else:
+                    hemisphere = 'both'
+                logger.warning("%s hemisphere(s) inferred from "
+                               "filename" % hemisphere)
+            if hemisphere == 'left':
+                idx = self.mesh._lr_index
+            elif hemisphere == 'right':
+                idx = ~self.mesh._lr_index
+            else:
+                idx = np.ones((len(self.mesh),), dtype=bool)
+            assert len(sc) == idx.sum()
+            # Clim :
+            clim = (sc.min(), sc.max()) if clim is None else clim
+            assert len(clim) == 2
+            col_kw['clim'] = clim
+            # Convert into colormap :
+            color = np.zeros((len(self.mesh), 4))
+            color[idx, :] = array2colormap(sc, **col_kw)
+            # Mask :
+            mask = np.zeros((len(self.mesh),))
+            mask[idx] = 1.
+            if is_under:
+                sub_idx = np.where(idx)[0][sc < hide_under]
+                mask[sub_idx] = 0.
+        else:
+            raise ValueError("Unknown activation type.")
+        # Set color and mask to the mesh :
         self.mesh.color = color
-        self.mesh.mask = smooth_mat.row[smooth_data >= clim[0]]
+        self.mesh.mask = mask
 
     ###########################################################################
     ###########################################################################
