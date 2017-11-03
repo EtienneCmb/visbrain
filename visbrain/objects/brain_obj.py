@@ -70,6 +70,8 @@ class BrainObj(VisbrainObject):
         self._scale = 1.
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere)
         self.translucent = translucent
+        self._data_color = []
+        self._data_mask = []
 
     def __len__(self):
         """Get the number of vertices."""
@@ -371,9 +373,14 @@ class BrainObj(VisbrainObject):
                 mask[sub_idx] = 0.
         else:
             raise ValueError("Unknown activation type.")
+        # Build mask color :
+        col_mask = ~np.tile(mask.reshape(-1, 1).astype(bool), (1, 4))
+        # Keep a copy of each overlay color and ask :
+        self._data_color.append(np.ma.masked_array(color, mask=col_mask))
+        self._data_mask.append(mask)
         # Set color and mask to the mesh :
-        self.mesh.color = color
-        self.mesh.mask = mask
+        self.mesh.color = np.ma.array(self._data_color).mean(0)
+        self.mesh.mask = np.array(self._data_mask).max(0)
 
     @staticmethod
     def _data_to_contour(data, clim, n_contours):
