@@ -38,6 +38,7 @@ cache:
   apt: true
 notifications:
     email: false
+    slack: visbrainteam:lHdzZcFmXQczGlxJEDtQYqv9
 after_success:
   - codecov
 
