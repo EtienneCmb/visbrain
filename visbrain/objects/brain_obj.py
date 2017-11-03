@@ -308,6 +308,8 @@ class BrainObj(VisbrainObject):
         col_kw = dict(cmap=cmap, vmin=vmin, vmax=vmax, under=under, over=over,
                       clim=clim)
         is_under = isinstance(hide_under, (int, float))
+        color = np.zeros((len(self.mesh), 4), dtype=np.float32)
+        mask = np.zeros((len(self.mesh),), dtype=float)
         # ============================= METHOD =============================
         if isinstance(data, np.ndarray) and isinstance(vertices, np.ndarray):
             logger.info("Add data to secific vertices.")
@@ -328,7 +330,10 @@ class BrainObj(VisbrainObject):
             color = np.ones((len(self.mesh), 4), dtype=np.float32)
             color[sm_mat.row, :] = smooth_map
             # Mask :
-            mask = sm_mat.row[sm_data >= hide_under] if is_under else 1.
+            if is_under:
+                mask[sm_mat.row[sm_data >= hide_under]] = 1.
+            else:
+                mask[:] = 0.
         elif isinstance(file, str):
             assert os.path.isfile(file)
             logger.info("Add overlay to the {} brain template "
@@ -363,10 +368,8 @@ class BrainObj(VisbrainObject):
             # Contour :
             sc = self._data_to_contour(sc, clim, n_contours)
             # Convert into colormap :
-            color = np.zeros((len(self.mesh), 4))
             color[idx, :] = array2colormap(sc, **col_kw)
             # Mask :
-            mask = np.zeros((len(self.mesh),))
             mask[idx] = 1.
             if is_under:
                 sub_idx = np.where(idx)[0][sc < hide_under]
@@ -375,7 +378,7 @@ class BrainObj(VisbrainObject):
             raise ValueError("Unknown activation type.")
         # Build mask color :
         col_mask = ~np.tile(mask.reshape(-1, 1).astype(bool), (1, 4))
-        # Keep a copy of each overlay color and ask :
+        # Keep a copy of each overlay color and mask :
         self._data_color.append(np.ma.masked_array(color, mask=col_mask))
         self._data_mask.append(mask)
         # Set color and mask to the mesh :
