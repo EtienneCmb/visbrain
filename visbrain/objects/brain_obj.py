@@ -262,8 +262,8 @@ class BrainObj(VisbrainObject):
 
     def add_activation(self, data=None, vertices=None, smoothing_steps=20,
                        file=None, hemisphere=None, hide_under=None,
-                       cmap='viridis', clim=None, vmin=None, vmax=None,
-                       under='gray', over='red'):
+                       n_contours=None, cmap='viridis', clim=None, vmin=None,
+                       vmax=None, under='gray', over='red'):
         """Add activation to the brain template.
 
         This method can be used for :
@@ -287,6 +287,8 @@ class BrainObj(VisbrainObject):
             to inferred the hemisphere from the file name.
         hide_under : float | None
             Hide activations under a certain threshold.
+        n_contours : int | None
+            Display activations as contour.
         cmap : string | 'viridis'
             The colormap to use.
         clim : tuple | None
@@ -317,6 +319,8 @@ class BrainObj(VisbrainObject):
             clim = (sm_data.min(), sm_data.max()) if clim is None else clim
             assert len(clim) == 2
             col_kw['clim'] = clim
+            # Contours :
+            sm_data = self._data_to_contour(sm_data, clim, n_contours)
             # Convert into colormap :
             smooth_map = array2colormap(sm_data, **col_kw)
             color = np.ones((len(self.mesh), 4), dtype=np.float32)
@@ -354,6 +358,8 @@ class BrainObj(VisbrainObject):
             clim = (sc.min(), sc.max()) if clim is None else clim
             assert len(clim) == 2
             col_kw['clim'] = clim
+            # Contour :
+            sc = self._data_to_contour(sc, clim, n_contours)
             # Convert into colormap :
             color = np.zeros((len(self.mesh), 4))
             color[idx, :] = array2colormap(sc, **col_kw)
@@ -368,6 +374,15 @@ class BrainObj(VisbrainObject):
         # Set color and mask to the mesh :
         self.mesh.color = color
         self.mesh.mask = mask
+
+    @staticmethod
+    def _data_to_contour(data, clim, n_contours):
+        if isinstance(n_contours, int):
+            _range = np.linspace(clim[0], clim[1], n_contours)
+            for k in range(len(_range) - 1):
+                d_idx = np.logical_and(data >= _range[k], data < _range[k + 1])
+                data[d_idx] = _range[k]
+        return data
 
     ###########################################################################
     ###########################################################################
