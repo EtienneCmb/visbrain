@@ -59,15 +59,14 @@ before_script:
 
 script:
     - if [ "${TEST}" == "standard" ]; then
-        py.test --cov --verbose;
+        pytest --cov --verbose;
       fi;
-    # - if [ "${TEST}" == "examples" ]; then
-    #     ls;
-    #     # make examples;
-    #   fi;
-    # - if [ "${TEST}" == "minimal" ]; then
-    #     ls;
-    #   fi;
+    - if [ "${TEST}" == "examples" ]; then
+        ls;
+      fi;
+    - if [ "${TEST}" == "minimal" ]; then
+        ls;
+      fi;
 cache:
   apt: true
 notifications:
