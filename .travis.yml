@@ -8,16 +8,23 @@ addons:
     - &full_apt [libegl1-mesa, cmake, xorg-dev, libglu1-mesa-dev, mercurial, libdbus-1-dev, libgl1-mesa-dev, libglu1-mesa-dev, libpulse-dev, libx11-dev, libxcursor-dev, libxext-dev, libxi-dev, libxinerama-dev, libxrandr-dev, libxss-dev, libxt-dev, libxv-dev, libxxf86vm-dev, libasound2-dev, libts-dev, libudev-dev, libsdl2-2.0-0]
 matrix:
   include:
-    - env: PYTHON=3.6
+    - env: PYTHON=3.6 TEST=standard
       os: linux
-    - env: PYTHON=3.6
+    - env: PYTHON=3.6 TEST=minimal
+      os: linux
+    - env: PYTHON=3.6 TEST=examples
+      os: linux
+    - env: PYTHON=3.6 TEST=standard
       os: osx
       language: generic
 python:
   - "3.6"
 before_install:
   # Fix screen resolution to 1280x1024x16 :
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+      /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render;
+    fi;
+  # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 install:
   - pushd $PWD
   # ------------------- PYTHON ENVIRONNEMENT -------------------
@@ -51,14 +58,25 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
-script: py.test --cov --verbose
+script:
+  - if [ "${TEST}" == "standard" ]; then
+      py.test --cov --verbose
+    fi;
+  - if [ "${TEST}" == "examples" ]; then
+      # make examples;
+    fi;
+  - if [ "${TEST}" == "minimal" ]; then
+      make osmesa;
+    fi;
 cache:
   apt: true
 notifications:
     email: false
     slack: visbrainteam:lHdzZcFmXQczGlxJEDtQYqv9
 after_success:
-  - codecov
+  - if [ "${TEST}" == "standard" ]; then
+      codecov
+    fi;
 
 # screenshot tests are really slow on travis... but installing image librairies
 # does't fix it.
