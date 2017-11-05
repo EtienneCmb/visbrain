@@ -24,7 +24,11 @@ install:
   # Deactivate travis environnement :
   - deactivate
   # Miniconda installation :
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
+        wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+      else
+        wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+    fi;
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
@@ -36,6 +40,7 @@ install:
   - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
   - source activate testenv
   - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pandas
+  - pip install -q freetype-py husl pypng cassowary imageio;
 
   # Install testing librairies :
   - pip install codecov pytest pytest-cov pytest-html
