@@ -18,56 +18,53 @@ matrix:
       os: osx
       language: generic
 python:
-  - "3.6"
-before_install:
-  # Fix screen resolution to 1280x1024x16 :
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render;
-    fi;
-  # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+    - "3.6"
 install:
-  - pushd $PWD
-  # ------------------- PYTHON ENVIRONNEMENT -------------------
-  # Deactivate travis environnement :
-  - deactivate
-  # Miniconda installation :
-  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
-        wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
-      else
-        wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
-    fi;
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  - conda info -a
+    - pushd $PWD
+    # ------------------- PYTHON ENVIRONNEMENT -------------------
+    # Deactivate travis environnement :
+    - deactivate
+    # Miniconda installation :
+    - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
+          wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+        else
+          wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+      fi;
+    - bash miniconda.sh -b -p $HOME/miniconda
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - hash -r
+    - conda config --set always_yes yes --set changeps1 no
+    - conda update -q conda
+    - conda info -a
 
-  # Install dependencies :
-  - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
-  - source activate testenv
-  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pandas
-  - pip install -q freetype-py husl pypng cassowary imageio;
+    # Install dependencies :
+    - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
+    - source activate testenv
+    - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pandas
+    - pip install -q freetype-py husl pypng cassowary imageio;
 
-  # Install testing librairies :
-  - pip install codecov pytest pytest-cov pytest-html
+    # Install testing librairies :
+    - pip install codecov pytest pytest-cov pytest-html
 
-  # ------------------- VISBRAIN -------------------
-  - pip install -e .
+    # ------------------- VISBRAIN -------------------
+    - pip install -e .
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
+    # Fix screen resolution to 1280x1024x16 :
+    - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+        /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render;
+      fi;
+    # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 script:
-  - if [ "${TEST}" == "standard" ]; then
-      py.test --cov --verbose
-    fi;
-  - if [ "${TEST}" == "examples" ]; then
-      # make examples;
-    fi;
-  - if [ "${TEST}" == "minimal" ]; then
-      make osmesa;
-    fi;
+    - if [ "${TEST}" == "standard" ]; then
+        py.test --cov --verbose;
+      fi;
+    - if [ "${TEST}" == "examples" ]; then
+        ls;
+        # make examples;
+      fi;
+    - if [ "${TEST}" == "minimal" ]; then
+        ls;
+      fi;
 cache:
   apt: true
 notifications:
