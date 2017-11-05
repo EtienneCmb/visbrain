@@ -41,7 +41,6 @@ before_install:
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
     - conda info -a
-    - SRC_DIR=$(pwd)
 
 
 install:
@@ -55,8 +54,8 @@ install:
     - pip install codecov pytest pytest-cov pytest-html
 
     # ------------------- VISBRAIN -------------------
-    - cd ${SRC_DIR}
     - pip install -e .
+    - SRC_DIR=$(pwd)
 
 
 before_script:
@@ -69,6 +68,7 @@ before_script:
 
 script:
     - cd ${SRC_DIR}
+    - ls
     - if [ "${TEST}" == "standard" ]; then
         py.test --cov --verbose;
       fi;
