@@ -31,7 +31,7 @@ python:
 
 before_install:
     # Deactivate travis environnement :
-      - deactivate
+    - deactivate
     - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
           wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
       else
