@@ -1,7 +1,17 @@
 language: python
+sudo : false
 dist: trusty
-python:
-  - "3.6"
+addons:
+  apt:
+    packages:
+    - &mesa_apt [libgl1-mesa-dri]
+    - &full_apt [libegl1-mesa, cmake, xorg-dev, libglu1-mesa-dev, mercurial, libdbus-1-dev, libgl1-mesa-dev, libglu1-mesa-dev, libpulse-dev, libx11-dev, libxcursor-dev, libxext-dev, libxi-dev, libxinerama-dev, libxrandr-dev, libxss-dev, libxt-dev, libxv-dev, libxxf86vm-dev, libasound2-dev, libts-dev, libudev-dev, libsdl2-2.0-0]
+matrix:
+  include:
+    - env: PYTHON=3.6
+      os: linux
+    - env: PYTHON=3.6
+      os: osx
 before_install:
   # Fix screen resolution to 1280x1024x16 :
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
