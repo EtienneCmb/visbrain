@@ -68,6 +68,7 @@ before_script:
 
 script:
     - cd ${SRC_DIR}
+    - cd test
     - ls
     - if [ "${TEST}" == "standard" ]; then
         py.test --cov --verbose;
