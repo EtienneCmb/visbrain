@@ -1,11 +1,17 @@
 language: python
+
+
 sudo : false
 dist: trusty
+
+
 addons:
   apt:
     packages:
     - &mesa_apt [libgl1-mesa-dri]
     - &full_apt [libegl1-mesa, cmake, xorg-dev, libglu1-mesa-dev, mercurial, libdbus-1-dev, libgl1-mesa-dev, libglu1-mesa-dev, libpulse-dev, libx11-dev, libxcursor-dev, libxext-dev, libxi-dev, libxinerama-dev, libxrandr-dev, libxss-dev, libxt-dev, libxv-dev, libxxf86vm-dev, libasound2-dev, libts-dev, libudev-dev, libsdl2-2.0-0]
+
+
 matrix:
   include:
     - env: PYTHON=3.6 TEST=standard
@@ -17,26 +23,28 @@ matrix:
     - env: PYTHON=3.6 TEST=standard
       os: osx
       language: generic
+
+
 python:
     - "3.6"
-install:
-    - pushd $PWD
-    # ------------------- PYTHON ENVIRONNEMENT -------------------
-    # Deactivate travis environnement :
-    - deactivate
-    # Miniconda installation :
+
+
+before_install:
     - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
-          wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
-        else
-          wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+        wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+      else
+        wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
       fi;
-    - bash miniconda.sh -b -p $HOME/miniconda
-    - export PATH="$HOME/miniconda/bin:$PATH"
-    - hash -r
-    - conda config --set always_yes yes --set changeps1 no
-    - conda update -q conda
+
+    - chmod +x miniconda.sh
+    - ./miniconda.sh -b -p ~/anaconda
+    - export PATH=~/anaconda/bin:$PATH
+    - conda config --add channels conda-forge
+    - conda update --yes --quiet conda
     - conda info -a
 
+
+install:
     # Install dependencies :
     - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
     - source activate testenv
@@ -48,6 +56,8 @@ install:
 
     # ------------------- VISBRAIN -------------------
     - pip install -e .
+
+
 before_script:
     # Fix screen resolution to 1280x1024x16 :
     - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
@@ -56,10 +66,9 @@ before_script:
     # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
 
-
 script:
     - if [ "${TEST}" == "standard" ]; then
-        pytest --cov --verbose;
+        "py.test --cov --verbose";
       fi;
     - if [ "${TEST}" == "examples" ]; then
         ls;
@@ -67,11 +76,17 @@ script:
     - if [ "${TEST}" == "minimal" ]; then
         ls;
       fi;
+
+
 cache:
   apt: true
+
+
 notifications:
     email: false
     slack: visbrainteam:lHdzZcFmXQczGlxJEDtQYqv9
+
+
 after_success:
   - if [ "${TEST}" == "standard" ]; then
       codecov
