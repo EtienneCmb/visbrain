@@ -1,7 +1,7 @@
 language: python
 
 
-sudo : true
+sudo : false
 dist: trusty
 
 
@@ -41,11 +41,12 @@ before_install:
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
     - conda info -a
+    - SRC_DIR=$(pwd)
 
 
 install:
     # Install dependencies :
-    - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
+    - conda create -q -n testenv python=$PYTHON numpy scipy matplotlib pip
     - source activate testenv
     - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pandas
     - pip install -q freetype-py husl pypng cassowary imageio;
@@ -54,6 +55,7 @@ install:
     - pip install codecov pytest pytest-cov pytest-html
 
     # ------------------- VISBRAIN -------------------
+    - cd ${SRC_DIR}
     - pip install -e .
 
 
@@ -66,6 +68,7 @@ before_script:
 
 
 script:
+    - cd ${SRC_DIR}
     - if [ "${TEST}" == "standard" ]; then
         py.test --cov --verbose;
       fi;
