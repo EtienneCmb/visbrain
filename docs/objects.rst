@@ -24,6 +24,7 @@ Brain object
 .. currentmodule:: visbrain.objects.brain_obj
 
 .. autoclass:: BrainObj
+  :template: class.rst
 
     .. rubric:: Methods
 
