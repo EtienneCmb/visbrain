@@ -229,24 +229,23 @@ class TestBrain(object):
         """Test method roi_control."""
         # vb.roi_control([10], roi_type='Talairach', smooth=3,
         #                name='Tal_10&11', translucent=True)
-        vb.roi_control([3, 5], roi_type='Brodmann', smooth=5,
+        vb.roi_control([3], roi_type='Brodmann', smooth=3,
                        name='Roi_3-5_Brodmann', translucent=True, alpha=.05)
-        vb.roi_control([7, 11], roi_type='AAL', smooth=7,
-                       name='Roi_7-11_AAL')
+        vb.roi_control([7], roi_type='AAL', smooth=3, name='Roi_7_AAL')
 
     def test_roi_fit(self):
         """Test method roi_fit."""
-        vb.sources_fit_to_vertices(fit_to='Roi_7-11_AAL')
+        vb.sources_fit_to_vertices(fit_to='Roi_7_AAL')
 
     def test_roi_projection(self):
         """Test method roi_projection."""
         vb.sources_display(select='all')
-        vb.cortical_projection(radius=20., project_on='Roi_7-11_AAL')
+        vb.cortical_projection(radius=20., project_on='Roi_7_AAL')
 
     def test_roi_repartition(self):
         """Test method roi_repartition."""
         vb.sources_display(select='all')
-        vb.cortical_repartition(radius=20., project_on='Roi_7-11_AAL')
+        vb.cortical_repartition(radius=20., project_on='Roi_7_AAL')
 
     def test_roi_list(self):
         """Test function roi_list."""
