@@ -16,12 +16,15 @@ matrix:
   include:
     - env: PYTHON=3.6 TEST=standard
       os: linux
-    - env: PYTHON=3.6 TEST=minimal
-      os: linux
-    - env: PYTHON=3.6 TEST=examples
-      os: linux
+      language: generic
     - env: PYTHON=3.6 TEST=standard
       os: osx
+      language: generic
+    - env: PYTHON=3.6 TEST=minimal
+      os: linux
+      language: generic
+    - env: PYTHON=3.6 TEST=examples
+      os: linux
       language: generic
 
 
@@ -49,10 +52,10 @@ install:
     - source activate testenv
     # Install dependencies :
     - if [ "${TEST}" == "standard" ]; then
-      pip install mne nibabel setuptools pandas
-      # pip install PyOpenGL PyOpenGL_accelerate 
-      # pip install -q freetype-py husl pypng cassowary imageio;
-      pip install codecov pytest pytest-cov pytest-html pytest-sugar
+          pip install mne nibabel setuptools pandas
+          # pip install PyOpenGL PyOpenGL_accelerate 
+          # pip install -q freetype-py husl pypng cassowary imageio;
+          pip install codecov pytest pytest-cov pytest-html pytest-sugar
       fi;
     # ------------------- VISBRAIN -------------------
     - pip install -e .
