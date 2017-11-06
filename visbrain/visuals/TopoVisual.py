@@ -441,7 +441,7 @@ class TopoMesh(object):
         xyz = np.zeros((len(chan), 3), dtype=np.float32)
         for num, k in enumerate(chan):
             # Find if the channel is present :
-            idx = np.where(nameRef == k)[0]
+            idx = np.where(nameRef == k.lower())[0]
             if idx.size:
                 xyz[num, 0:2] = np.array(xyzRef[idx[0], :])
             else:
