@@ -51,7 +51,7 @@ install:
     - pip install -q freetype-py husl pypng cassowary imageio;
 
     # Install testing librairies :
-    - pip install codecov pytest pytest-cov pytest-html
+    - pip install codecov pytest pytest-cov pytest-html pytest-sugar
 
     # ------------------- VISBRAIN -------------------
     - pip install -e .
@@ -70,7 +70,7 @@ before_script:
 
 script:
     - if [ "${TEST}" == "standard" ]; then
-        py.test --verbose --cov visbrain test/;
+        py.test --verbose --duration=10 --cov visbrain test/;
       fi;
     - if [ "${TEST}" == "examples" ]; then
         ls;
