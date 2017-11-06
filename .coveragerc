@@ -4,3 +4,8 @@ source = visbrain
 include = */visbrain/*
 omit =
     */setup.py
+    test/*
+
+[report]
+show_missing = False
+sort = Cover

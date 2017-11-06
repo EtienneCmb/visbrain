@@ -33,7 +33,7 @@ before_install:
     - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
           wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
       else
-        wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+          wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
       fi;
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
@@ -44,15 +44,16 @@ before_install:
 
 
 install:
-    # Install dependencies :
+    # Create the environnement :
     - conda create -q -n testenv python=$PYTHON numpy scipy matplotlib pip
     - source activate testenv
-    - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pandas
-    - pip install -q freetype-py husl pypng cassowary imageio;
-
-    # Install testing librairies :
-    - pip install codecov pytest pytest-cov pytest-html pytest-sugar
-
+    # Install dependencies :
+    - if [ "${TEST}" == "standard" ]; then
+      pip install mne nibabel setuptools pandas
+      # pip install PyOpenGL PyOpenGL_accelerate 
+      # pip install -q freetype-py husl pypng cassowary imageio;
+      pip install codecov pytest pytest-cov pytest-html pytest-sugar
+      fi;
     # ------------------- VISBRAIN -------------------
     - pip install -e .
     - SRC_DIR=$(pwd)
@@ -69,13 +70,13 @@ before_script:
 
 script:
     - if [ "${TEST}" == "standard" ]; then
-        python setup.py test && coverage report;
+          python setup.py test && coverage report;
       fi;
     - if [ "${TEST}" == "examples" ]; then
-        ls;
+          ls;
       fi;
     - if [ "${TEST}" == "minimal" ]; then
-        ls;
+          ls;
       fi;
 
 
