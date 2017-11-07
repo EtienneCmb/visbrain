@@ -5,7 +5,6 @@ import shutil
 import numpy as np
 from vispy.app.canvas import MouseEvent, KeyEvent
 from vispy.util.keys import Key
-from PyQt5 import QtWidgets
 
 from visbrain import Sleep
 from visbrain.io import download_file
@@ -24,7 +23,6 @@ def path_to_edf(name):
     return os.path.join(path_to_tmp, name)
 
 # Create Sleep application :
-app = QtWidgets.QApplication([])
 sp = Sleep(data=path_to_edf('excerpt2.edf'),
            hypno=path_to_edf('Hypnogram_excerpt2.txt'), axis=True, hedit=True,
            annotations=onset)
@@ -216,10 +214,6 @@ class TestSleep(object):
     ###########################################################################
     #                          DELETE TMP FOLDER
     ###########################################################################
-
-    def test_close_sleep_app(self):
-        """Close Sleep application."""
-        app.quit()
 
     def test_delete_tmp_folder(self):
         """Delete tmp/folder."""

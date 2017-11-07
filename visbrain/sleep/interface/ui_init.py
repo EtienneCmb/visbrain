@@ -14,6 +14,7 @@ import vispy.visuals.transforms as vist
 from .gui import Ui_MainWindow
 from ..visuals.marker import Markers
 from ...utils import color2vb
+from ...config import vispy_app
 
 
 class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
@@ -35,7 +36,8 @@ class TimeAxis(object):
                  xargs={}, indic_color='darkred', fcn=[]):
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=False, title=name, **cargs)
+                                        show=False, title=name, app=vispy_app,
+                                        **cargs)
         _ = [self.canvas.connect(k) for k in fcn]
 
         # Create a grid :
@@ -122,7 +124,8 @@ class AxisCanvas(object):
 
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=False, title=name, **cargs)
+                                        show=False, title=name, app=vispy_app,
+                                        **cargs)
         _ = [self.canvas.connect(k) for k in fcn]
 
         # Add axis :

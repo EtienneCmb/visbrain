@@ -1,7 +1,6 @@
 """Test Brain module and related methods."""
 import os
 import shutil
-from PyQt5 import QtWidgets
 import pytest
 from warnings import warn
 
@@ -65,7 +64,6 @@ p_obj1 = PictureObj('P1', pic_data, xyz_1)
 p_obj2 = PictureObj('P2', 2 * pic_data, xyz_2)
 
 # ---------------- Application  ----------------
-app = QtWidgets.QApplication([])
 vb = Brain(source_obj=[s_obj1, s_obj2], connect_obj=[c_obj, c_obj2],
            time_series_obj=[ts_obj1, ts_obj2], picture_obj=[p_obj1, p_obj2],
            verbose='debug')

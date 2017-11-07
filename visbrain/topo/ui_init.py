@@ -9,6 +9,7 @@ from PyQt5 import QtWidgets
 from vispy import app, scene
 
 from .gui import Ui_MainWindow
+from ..config import vispy_app
 
 
 class TopoCanvas(object):
@@ -20,7 +21,7 @@ class TopoCanvas(object):
         self.canvas = scene.SceneCanvas(keys='interactive', show=False,
                                         dpi=600, bgcolor=bgcolor,
                                         fullscreen=True, resizable=True,
-                                        title=title)
+                                        title=title, app=vispy_app)
 
 
 class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
