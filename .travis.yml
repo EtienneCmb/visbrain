@@ -1,24 +1,25 @@
 language: python
 
 
-sudo : false
 dist: trusty
 
 
-addons:
-  apt:
-    packages:
-    - &mesa_apt [libgl1-mesa-dri]
-    - &full_apt [libegl1-mesa, cmake, xorg-dev, libglu1-mesa-dev, mercurial, libdbus-1-dev, libgl1-mesa-dev, libglu1-mesa-dev, libpulse-dev, libx11-dev, libxcursor-dev, libxext-dev, libxi-dev, libxinerama-dev, libxrandr-dev, libxss-dev, libxt-dev, libxv-dev, libxxf86vm-dev, libasound2-dev, libts-dev, libudev-dev, libsdl2-2.0-0]
+# addons:
+#   apt:
+#     packages:
+#     - &mesa_apt [libgl1-mesa-dri]
+#     - &full_apt [libegl1-mesa, cmake, xorg-dev, libglu1-mesa-dev, mercurial, libdbus-1-dev, libgl1-mesa-dev, libglu1-mesa-dev, libpulse-dev, libx11-dev, libxcursor-dev, libxext-dev, libxi-dev, libxinerama-dev, libxrandr-dev, libxss-dev, libxt-dev, libxv-dev, libxxf86vm-dev, libasound2-dev, libts-dev, libudev-dev, libsdl2-2.0-0]
 
 
 matrix:
   include:
     - env: PYTHON=3.6 TEST=standard
       os: osx
+      sudo: true
       language: generic
     - env: PYTHON=3.6 TEST=standard
       os: linux
+      sudo: true
       language: generic
     - env: PYTHON=3.6 TEST=minimal
       os: linux
