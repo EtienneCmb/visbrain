@@ -7,8 +7,9 @@ import logging
 
 import vispy.app as visapp
 
-from .utils import set_widget_size, set_log_level, get_data_path, Profiler
+from .utils import set_widget_size, set_log_level, get_data_path
 from .config import profiler
+from .io import is_faulthandler_installed
 
 sip.setdestroyonexit(False)
 logger = logging.getLogger('visbrain')
@@ -33,6 +34,10 @@ class PyQtModule(object):
         """Init."""
         # Log level and profiler creation (if verbose='debug')
         set_log_level(verbose)
+        if (logger.level == 10) and is_faulthandler_installed():
+            import faulthandler
+            faulthandler.enable()
+            logger.debug("Faulthandler enabled")
         self._app = QtWidgets.QApplication(sys.argv)
         self._need_description = to_describe
         if isinstance(self._need_description, str):
