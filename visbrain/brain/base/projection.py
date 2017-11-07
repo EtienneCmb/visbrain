@@ -80,6 +80,7 @@ class Projections(object):
         if self.sources.is_masked:
             mask_idx = self.sources.get_masked_index(v, self._proj_radius, c)
             mask[mask_idx] = 2.
+            mesh.mask_color = self._proj_mask_color
         mask[~mod.mask] = 1.
         self._proj_obj[self._proj_on].mesh.mask = mask
 
