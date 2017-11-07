@@ -7,6 +7,7 @@ import vispy.visuals.transforms as vist
 from .scene_obj import VisbrainCanvas
 from ..io import write_fig_canvas
 from ..utils import color2vb, set_log_level
+from ..config import vispy_app
 
 
 class VisbrainObject(object):
@@ -70,7 +71,7 @@ class VisbrainObject(object):
             vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)
         # view.camera = camera
         if (sys.flags.interactive != 1) and show:
-            vispy.app.run()
+            vispy_app.run()
         # Reset orignial parent :
         self._node.parent = parent_bck
 

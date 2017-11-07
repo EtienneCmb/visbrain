@@ -1,10 +1,8 @@
 """Test Colorbar module and related methods."""
 import os
 import shutil
-from warnings import warn
 import pytest
 
-from PyQt5 import QtWidgets
 
 from visbrain import Colorbar
 
@@ -33,7 +31,6 @@ kw['bgcolor'] = '#ab4642'
 kw['ndigits'] = 4
 
 # ---------------- Application  ----------------
-app = QtWidgets.QApplication([])
 cb = Colorbar(**kw)
 
 

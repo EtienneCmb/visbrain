@@ -2,8 +2,6 @@
 import os
 import shutil
 
-from PyQt5 import QtWidgets
-
 from vispy.app.canvas import MouseEvent, KeyEvent
 
 from visbrain import Signal
@@ -26,7 +24,6 @@ kwargs = {'xlabel': 'My xlabel', 'ylabel': 'My ylabel', 'title': 'My title',
           'display_signal': True, 'form': 'psd'}
 
 # ---------------- Application  ----------------
-app = QtWidgets.QApplication([])
 sig = Signal(data, sf=sf, axis=-1, time=time)
 
 
