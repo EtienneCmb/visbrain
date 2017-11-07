@@ -1,7 +1,7 @@
 """Test if dependencies are installed."""
 
 __all__ = ('is_mne_installed', 'is_nibabel_installed', 'is_opengl_installed',
-           'is_pandas_installed')
+           'is_pandas_installed', 'is_faulthandler_installed')
 
 
 def is_mne_installed():
@@ -35,6 +35,15 @@ def is_pandas_installed():
     """Test if pandas is installed."""
     try:
         import pandas
+        return True
+    except:
+        return False
+
+
+def is_faulthandler_installed():
+    """Test if faulthandler is installed."""
+    try:
+        import faulthandler
         return True
     except:
         return False
