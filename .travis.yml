@@ -50,12 +50,12 @@ install:
     - conda create -q -n testenv python=$PYTHON numpy scipy matplotlib pip
     - source activate testenv
     # Install dependencies :
-    # - if [ "${TEST}" == "standard" ]; then
-    - pip install mne nibabel setuptools pandas
-    # pip install PyOpenGL PyOpenGL_accelerate 
-    # pip install -q freetype-py husl pypng cassowary imageio;
-    - pip install codecov pytest pytest-cov pytest-html pytest-sugar
-      # fi;
+    - if [ "${TEST}" == "standard" ]; then
+          pip install mne nibabel pandas;
+          pip install PyOpenGL PyOpenGL_accelerate;
+          pip install -q freetype-py husl pypng cassowary imageio;
+          pip install codecov pytest pytest-cov pytest-html pytest-sugar;
+      fi;
     # ------------------- VISBRAIN -------------------
     - pip install -e .
     - SRC_DIR=$(pwd)
@@ -93,7 +93,7 @@ notifications:
 
 after_success:
   - if [ "${TEST}" == "standard" ]; then
-      codecov
+      codecov;
     fi;
 
 # screenshot tests are really slow on travis... but installing image librairies
