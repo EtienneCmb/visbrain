@@ -73,7 +73,7 @@ before_script:
 
 script:
     - if [ "${TEST}" == "standard" ]; then
-          python setup.py test && coverage report;
+          py.test --cov;
       fi;
     - if [ "${TEST}" == "examples" ]; then
           ls;
@@ -96,7 +96,7 @@ after_success:
   - if [ "${TEST}" == "standard" ]; then
       codecov;
     fi;
-
+# python setup.py test && coverage report
 # screenshot tests are really slow on travis... but installing image librairies
 # does't fix it.
 # before_install:
