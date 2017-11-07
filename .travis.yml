@@ -15,10 +15,10 @@ addons:
 matrix:
   include:
     - env: PYTHON=3.6 TEST=standard
-      os: linux
+      os: osx
       language: generic
     - env: PYTHON=3.6 TEST=standard
-      os: osx
+      os: linux
       language: generic
     - env: PYTHON=3.6 TEST=minimal
       os: linux
