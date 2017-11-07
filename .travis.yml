@@ -51,6 +51,7 @@ install:
     - conda create -q -n testenv python=$PYTHON numpy scipy matplotlib pip
     - source activate testenv
     # Install dependencies :
+    - pip install faulthandler
     - if [ "${TEST}" == "standard" ]; then
           pip install mne nibabel pandas;
           pip install PyOpenGL PyOpenGL_accelerate;
