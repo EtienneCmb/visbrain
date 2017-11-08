@@ -21,6 +21,7 @@ matrix:
 
 
 before_install:
+    - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
     - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
         wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
       else
@@ -53,12 +54,12 @@ install:
     - pip install -e .
 
 
-before_script:
-    # Fix screen resolution to 1280x1024x16 :
-    # - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    #     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render;
-    #   fi;
-    - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+# before_script:
+#     # Fix screen resolution to 1280x1024x16 :
+#     # - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+#     #     /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render;
+#     #   fi;
+#     - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
 
 script:
