@@ -92,7 +92,7 @@ class SourceProjection(CbarArgs):
         prop = np.zeros_like(modulation.data)
         minmax = np.zeros((index_faced, 2), dtype=np.float32)
         if len(data) == 0:
-            logger.error("Projection ignored because no sources visibles and "
+            logger.warn("Projection ignored because no sources visibles and "
                          "not masked")
             return np.squeeze(np.ma.masked_array(modulation, True))
 
@@ -151,7 +151,7 @@ class SourceProjection(CbarArgs):
         # Corticale repartition :
         repartition = np.ma.zeros((v.shape[0], index_faced), dtype=np.int)
         if not xyz.size:
-            logger.error("Repartition ignored because no sources visibles and "
+            logger.warn("Repartition ignored because no sources visibles and "
                          "not masked")
             return np.squeeze(np.ma.masked_array(repartition, True))
 
