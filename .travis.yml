@@ -80,15 +80,13 @@ before_script:
 
 
 script:
-    - if [ "${TEST}" == "standard" ]; then
+    - if [[ "${TEST}" == "standard" ]]; then
         make test;
-      fi;
-    - if [ "${TEST}" == "examples" ]; then
-        make examples;
-      fi;
-    - if [ "${TEST}" == "minimal" ]; then
+      elif [[ "${TEST}" == "minimal" ]]; then
         make flake;
-      fi;
+      elif [[ "${TEST}" == "examples" ]]; then
+        make examples;
+      fi
 
 
 notifications:
@@ -99,4 +97,4 @@ notifications:
 after_success:
   - if [ "${TEST}" == "standard" ]; then
       codecov;
-    fi;
+    fi
