@@ -72,7 +72,7 @@ before_script:
     - cd ${SRC_DIR}
     # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
-script: py.test --cov --verbose
+script: py.test
 
 
 # script:
@@ -96,10 +96,3 @@ after_success:
   - if [ "${TEST}" == "standard" ]; then
       codecov;
     fi;
-# python setup.py test && coverage report
-# screenshot tests are really slow on travis... but installing image librairies
-# does't fix it.
-# before_install:
-#   - sudo apt-get -qq install libfreetype6-dev libjpeg-turbo-progs
-# sudo: required
-# py.test --cov --verbose --cov-report=html --html=report.html
