@@ -3,6 +3,7 @@ language: python
 
 sudo: false
 dist: trusty
+cache: pip
 
 
 # addons:
@@ -30,8 +31,6 @@ matrix:
 
 
 before_install:
-    - SRC_DIR=$(pwd)
-    - cd ~
     - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
         wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
       else
@@ -43,9 +42,11 @@ before_install:
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
     - conda info -a
+    - SRC_DIR=$(pwd)
 
 
 install:
+    - source deactivate
     - conda create -q -n testenv python=$PYTHON numpy scipy pip
     - source activate testenv
     # Install dependencies :
@@ -55,16 +56,12 @@ install:
     - if [ "${TEST}" == "minimal" ]; then
         pip install flake8 pep8-naming;
       fi;
-          # pip install mne nibabel pandas;
-          # pip install PyOpenGL PyOpenGL_accelerate;
-          # pip install -q freetype-py husl pypng cassowary imageio;
+    - pip install mne nibabel pandas
+    - pip install PyOpenGL PyOpenGL_accelerate
+    # - pip install -q freetype-py husl pypng cassowary imageio
     # ------------------- VISBRAIN -------------------
-    - ls -a
-    - pwd
     - cd ${SRC_DIR}
     - pip install -e .
-    - ls -a
-    - pwd
 
 
 # before_script:
