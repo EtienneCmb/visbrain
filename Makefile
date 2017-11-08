@@ -28,3 +28,6 @@ clean-test: clean-build clean-pyc clean-ctags clean-cache
 
 test: clean-test
 	python setup.py test
+
+flake: clean-test
+	flake8
