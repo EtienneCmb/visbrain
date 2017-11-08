@@ -1,6 +1,7 @@
 language: python
 
 
+sudo: required
 dist: trusty
 
 
@@ -15,7 +16,6 @@ matrix:
   include:
     - env: PYTHON=3.6 TEST=standard
       os: linux
-      sudo: false
       language: generic
     - env: PYTHON=3.6 TEST=minimal
       os: linux
