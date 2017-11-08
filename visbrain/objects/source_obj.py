@@ -91,6 +91,10 @@ class SourceProjection(CbarArgs):
         modulation = np.ma.zeros((v.shape[0], index_faced), dtype=np.float32)
         prop = np.zeros_like(modulation.data)
         minmax = np.zeros((index_faced, 2), dtype=np.float32)
+        if len(data) == 0:
+            logger.error("Projection ignored because no sources visibles and "
+                         "not masked")
+            return np.squeeze(np.ma.masked_array(modulation, True))
 
         # For each triangle :
         for k in range(index_faced):
@@ -146,6 +150,10 @@ class SourceProjection(CbarArgs):
         index_faced = v.shape[1]
         # Corticale repartition :
         repartition = np.ma.zeros((v.shape[0], index_faced), dtype=np.int)
+        if not xyz.size:
+            logger.error("Repartition ignored because no sources visibles and "
+                         "not masked")
+            return np.squeeze(np.ma.masked_array(repartition, True))
 
         # For each triangle :
         for k in range(index_faced):
