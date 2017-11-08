@@ -3,21 +3,20 @@ language: python
 
 sudo: false
 dist: trusty
-cache: pip
+python:
+    - '3.6'
+
 
 matrix:
   include:
-    - env: PYTHON=3.6 TEST=standard
+    - env: TEST=standard
       os: linux
-    - env: PYTHON=3.6 TEST=minimal
+    - env: TEST=minimal
       os: linux
-    # - env: PYTHON=3.6 TEST=standard
-    #   os: osx
-    #   sudo: false
-    #   language: generic
-    # - env: PYTHON=3.6 TEST=examples
-    #   os: linux
-    #   language: generic
+    - env: TEST=standard
+      os: osx
+    - env: TEST=examples
+      os: linux
 
 
 before_install:
@@ -36,7 +35,7 @@ before_install:
 
 
 install:
-    - conda create -q -n testenv python=$PYTHON numpy scipy pip
+    - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy pip
     - source activate testenv
     # Install dependencies :
     - if [ "${TEST}" == "standard" ]; then
