@@ -5,21 +5,11 @@ sudo: false
 dist: trusty
 cache: pip
 
-
-# addons:
-#   apt:
-#     packages:
-#     - &mesa_apt [libgl1-mesa-dri]
-#     - &full_apt [libegl1-mesa, cmake, xorg-dev, libglu1-mesa-dev, mercurial, libdbus-1-dev, libgl1-mesa-dev, libglu1-mesa-dev, libpulse-dev, libx11-dev, libxcursor-dev, libxext-dev, libxi-dev, libxinerama-dev, libxrandr-dev, libxss-dev, libxt-dev, libxv-dev, libxxf86vm-dev, libasound2-dev, libts-dev, libudev-dev, libsdl2-2.0-0]
-
-
 matrix:
   include:
-    - python: 3.6 
-      env: PYTHON=3.6 TEST=standard
+    - env: PYTHON=3.6 TEST=standard
       os: linux
-    - python: 3.6 
-      env: PYTHON=3.6 TEST=minimal
+    - env: PYTHON=3.6 TEST=minimal
       os: linux
     # - env: PYTHON=3.6 TEST=standard
     #   os: osx
@@ -32,7 +22,7 @@ matrix:
 
 before_install:
     - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
-        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+        wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
       else
         wget http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
       fi;
@@ -46,7 +36,6 @@ before_install:
 
 
 install:
-    - source deactivate
     - conda create -q -n testenv python=$PYTHON numpy scipy pip
     - source activate testenv
     # Install dependencies :
@@ -57,7 +46,7 @@ install:
         pip install flake8 pep8-naming;
       fi;
     - pip install mne nibabel pandas
-    - pip install PyOpenGL PyOpenGL_accelerate
+    # - pip install PyOpenGL PyOpenGL_accelerate
     # - pip install -q freetype-py husl pypng cassowary imageio
     # ------------------- VISBRAIN -------------------
     - cd ${SRC_DIR}
@@ -72,15 +61,22 @@ install:
     # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
 
-script: ./build_travis.sh
+script:
+    - if [[ "${TEST}" == "standard" ]]; then
+          make test;
+      elif [[ "${TEST}" == "minimal" ]]; then
+          make flake;
+      elif [[ "${TEST}" == "examples" ]]; then
+          make examples;
+      fi
 
 
-# notifications:
-#     email: false
-#     slack: visbrainteam:lHdzZcFmXQczGlxJEDtQYqv9
+notifications:
+    email: false
+    slack: visbrainteam:lHdzZcFmXQczGlxJEDtQYqv9
 
 
-# after_success:
-#     - if [ "${TEST}" == "standard" ]; then
-#         codecov;
-#       fi
+after_success:
+    - if [ "${TEST}" == "standard" ]; then
+        codecov;
+      fi
