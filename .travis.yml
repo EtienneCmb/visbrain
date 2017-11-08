@@ -48,17 +48,19 @@ before_install:
 
 
 install:
-    - conda create -q -n testenv python=$PYTHON numpy scipy matplotlib pip
+    - conda create -q -n testenv python=$PYTHON numpy scipy pip
     - source activate testenv
     # Install dependencies :
     - if [ "${TEST}" == "standard" ]; then
           pip install mne nibabel pandas;
-          pip install PyOpenGL PyOpenGL_accelerate;
-          pip install -q freetype-py husl pypng cassowary imageio;
           pip install codecov pytest pytest-cov pytest-html pytest-sugar;
       fi;
+          # pip install PyOpenGL PyOpenGL_accelerate;
+          # pip install -q freetype-py husl pypng cassowary imageio;
     # ------------------- VISBRAIN -------------------
+    - ls
     - pip install -e .
+    - ls
     - SRC_DIR=$(pwd)
 
 
