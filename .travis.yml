@@ -13,10 +13,11 @@ matrix:
       os: linux
     - env: TEST=minimal
       os: linux
-    - env: TEST=standard
-      os: osx
     - env: TEST=examples
       os: linux
+    # - env: TEST=standard
+    #   os: osx
+    #   language: generic
 
 
 before_install:
@@ -67,7 +68,7 @@ script:
           make flake;
       elif [[ "${TEST}" == "examples" ]]; then
           make examples;
-      fi
+      fi;
 
 
 notifications:
