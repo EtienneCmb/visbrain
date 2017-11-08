@@ -14,12 +14,12 @@ dist: trusty
 
 matrix:
   include:
-    - env: PYTHON=3.6 TEST=standard
+    - python: 3.6 
+      env: PYTHON=3.6 TEST=standard
       os: linux
-      language: generic
-    - env: PYTHON=3.6 TEST=minimal
+    - python: 3.6 
+      env: PYTHON=3.6 TEST=minimal
       os: linux
-      language: generic
     # - env: PYTHON=3.6 TEST=standard
     #   os: osx
     #   sudo: false
@@ -27,10 +27,6 @@ matrix:
     # - env: PYTHON=3.6 TEST=examples
     #   os: linux
     #   language: generic
-
-
-python:
-    - "3.6"
 
 
 before_install:
