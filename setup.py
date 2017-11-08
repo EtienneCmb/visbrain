@@ -6,11 +6,6 @@ import pip
 from pip.req import parse_requirements
 from optparse import Option
 
-###############################################################################
-import faulthandler
-faulthandler.enable()
-###############################################################################
-
 __version__ = "0.3.6"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
