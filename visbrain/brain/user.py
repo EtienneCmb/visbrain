@@ -773,7 +773,7 @@ class BrainUserMethods(object):
         # Set selection :
         self._fcn_set_selected_rois(selection)
         # Apply selection :
-        self._fcn_apply_roi_selection()
+        self._fcn_apply_roi_selection(name)
         # Add ROI to mesh list :
         self._proj_obj[name] = self.volume
         self._fcn_update_proj_list()
