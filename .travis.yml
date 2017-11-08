@@ -14,19 +14,19 @@ dist: trusty
 matrix:
   include:
     - env: PYTHON=3.6 TEST=standard
-      os: osx
-      sudo: false
-      language: generic
-    - env: PYTHON=3.6 TEST=standard
       os: linux
       sudo: false
       language: generic
-    - env: PYTHON=3.6 TEST=minimal
-      os: linux
-      language: generic
-    - env: PYTHON=3.6 TEST=examples
-      os: linux
-      language: generic
+    # - env: PYTHON=3.6 TEST=standard
+    #   os: osx
+    #   sudo: false
+    #   language: generic
+    # - env: PYTHON=3.6 TEST=minimal
+    #   os: linux
+    #   language: generic
+    # - env: PYTHON=3.6 TEST=examples
+    #   os: linux
+    #   language: generic
 
 
 python:
@@ -34,7 +34,6 @@ python:
 
 
 before_install:
-    - deactivate
     - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
           wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
       else
