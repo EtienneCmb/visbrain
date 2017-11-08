@@ -567,8 +567,8 @@ class BrainUserMethods(object):
         self._s_proj_mask_color.setText(str(mask_color))
         safely_set_cbox(self._s_proj_on, project_on)
         # Colormap control :
-        self.cbar_control('Projection', **kwargs)
         self._fcn_source_proj()
+        self.cbar_control('Projection', **kwargs)
 
     def cortical_repartition(self, radius=10., project_on='brain',
                              contribute=False, mask_color='orange', **kwargs):
@@ -773,7 +773,7 @@ class BrainUserMethods(object):
         # Set selection :
         self._fcn_set_selected_rois(selection)
         # Apply selection :
-        self._fcn_apply_roi_selection()
+        self._fcn_apply_roi_selection(name)
         # Add ROI to mesh list :
         self._proj_obj[name] = self.volume
         self._fcn_update_proj_list()
