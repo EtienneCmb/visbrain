@@ -567,8 +567,8 @@ class BrainUserMethods(object):
         self._s_proj_mask_color.setText(str(mask_color))
         safely_set_cbox(self._s_proj_on, project_on)
         # Colormap control :
-        self.cbar_control('Projection', **kwargs)
         self._fcn_source_proj()
+        self.cbar_control('Projection', **kwargs)
 
     def cortical_repartition(self, radius=10., project_on='brain',
                              contribute=False, mask_color='orange', **kwargs):
