@@ -54,10 +54,10 @@ install:
     - source activate testenv
     # Install dependencies :
     - if [ "${TEST}" == "standard" ]; then
-          pip install codecov pytest pytest-cov pytest-html pytest-sugar pytest-travis-fold;
+        pip install codecov pytest pytest-cov pytest-html pytest-sugar pytest-travis-fold;
       fi;
     - if [ "${TEST}" == "minimal" ]; then
-          pip install flake8 pep8-naming;
+        pip install flake8 pep8-naming;
       fi;
           # pip install mne nibabel pandas;
           # pip install PyOpenGL PyOpenGL_accelerate;
@@ -81,13 +81,13 @@ before_script:
 
 script:
     - if [ "${TEST}" == "standard" ]; then
-          make test;
+        make test;
       fi;
     - if [ "${TEST}" == "examples" ]; then
-          make examples;
+        make examples;
       fi;
     - if [ "${TEST}" == "minimal" ]; then
-          make flake;
+        make flake;
       fi;
 
 
