@@ -15,9 +15,11 @@ matrix:
       os: linux
     - env: TEST=examples
       os: linux
-    # - env: TEST=standard
-    #   os: osx
-    #   language: generic
+    - env: TEST=standard
+      os: osx
+      language: generic
+  allow_failures:
+    - env: TEST=minimal
 
 
 before_install:

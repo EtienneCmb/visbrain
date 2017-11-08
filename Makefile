@@ -35,4 +35,3 @@ flake: clean-test
 
 examples: clean
 	@echo "NOT CONFIGURED YET"
-	python -c "import visbrain"
