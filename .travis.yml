@@ -23,7 +23,9 @@ matrix:
 
 
 before_install:
+    # See https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI :
     - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+    # Instal miniconda3 :
     - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
         wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
       else
@@ -39,6 +41,7 @@ before_install:
 
 
 install:
+    # Create the py3 environnement ;
     - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy pip
     - source activate testenv
     # Install dependencies :
@@ -57,6 +60,7 @@ install:
 
 
 before_script:
+    # See https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI :
     - "export DISPLAY=:99.0"
     - "sh -e /etc/init.d/xvfb start"
     - sleep 3 # give xvfb some time to start
