@@ -17,12 +17,12 @@ matrix:
       os: linux
       sudo: false
       language: generic
+    - env: PYTHON=3.6 TEST=minimal
+      os: linux
+      language: generic
     # - env: PYTHON=3.6 TEST=standard
     #   os: osx
     #   sudo: false
-    #   language: generic
-    # - env: PYTHON=3.6 TEST=minimal
-    #   os: linux
     #   language: generic
     # - env: PYTHON=3.6 TEST=examples
     #   os: linux
@@ -54,7 +54,7 @@ install:
     - source activate testenv
     # Install dependencies :
     - if [ "${TEST}" == "standard" ]; then
-          pip install codecov pytest pytest-cov pytest-html pytest-sugar pytest-travis-fold;
+          pip install codecov pytest pytest-cov pytest-html pytest-sugar pytest-travis-fold flake8 pep8-naming;
       fi;
           # pip install mne nibabel pandas;
           # pip install PyOpenGL PyOpenGL_accelerate;
@@ -75,21 +75,17 @@ before_script:
     #   fi;
     # - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
+
 script:
-    - cd ${SRC_DIR}
-    - make test
-
-
-# script:
-#     - if [ "${TEST}" == "standard" ]; then
-#           py.test --cov;
-#       fi;
-#     - if [ "${TEST}" == "examples" ]; then
-#           ls;
-#       fi;
-#     - if [ "${TEST}" == "minimal" ]; then
-#           ls;
-#       fi;
+    - if [ "${TEST}" == "standard" ]; then
+          make test;
+      fi;
+    - if [ "${TEST}" == "examples" ]; then
+          ls;
+      fi;
+    - if [ "${TEST}" == "minimal" ]; then
+          make flake;
+      fi;
 
 
 notifications:
