@@ -32,3 +32,6 @@ test: clean-test
 
 flake: clean-test
 	flake8
+
+examples: clean
+	@echo "NOT CONFIGURED YET"
