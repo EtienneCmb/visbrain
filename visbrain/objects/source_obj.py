@@ -53,10 +53,10 @@ class SourceProjection(CbarArgs):
             v = v[:, np.newaxis, :]
 
         # =============== PRE-ALLOCATION ===============
-        if not_masked:  # get only visible and not masked sources
+        if not_masked:  # get visible and not masked sources
             mask = self.visible_and_not_masked
-        else:           # get only not visible and masked sources
-            mask = ~self.visible_and_not_masked
+        else:           # get visible and masked sources
+            mask = np.logical_and(self.mask, self.visible)
         xyz, data = self._xyz[mask, :], self._data[mask]
         # Get sign of the x coordinate :
         xsign = np.sign(xyz[:, 0]).reshape(1, -1)
