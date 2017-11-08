@@ -30,15 +30,16 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
 class TimeAxis(object):
     """Create a unique time axis."""
 
-    def __init__(self, axis=True, x_label='', x_heightMax=40,
+    def __init__(self, axis=True, x_label='', x_heightmax=40,
                  font_size=12, color='white', title='', axis_label_margin=50,
                  tick_label_margin=5, name='', bgcolor=(.9, .9, .9), cargs={},
                  xargs={}, indic_color='darkred', fcn=[]):
+        """Init."""
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
                                         show=False, title=name, app=vispy_app,
                                         **cargs)
-        _ = [self.canvas.connect(k) for k in fcn]
+        _ = [self.canvas.connect(k) for k in fcn]  # noqa
 
         # Create a grid :
         grid = self.canvas.central_widget.add_grid(margin=0)
@@ -50,7 +51,7 @@ class TimeAxis(object):
                                       axis_label_margin=axis_label_margin,
                                       tick_label_margin=tick_label_margin,
                                       **xargs)
-        self.xaxis.height_max = x_heightMax
+        self.xaxis.height_max = x_heightmax
         grid.add_widget(self.xaxis, row=1, col=0)
 
         # Main plot :
@@ -111,8 +112,8 @@ class TimeAxis(object):
 class AxisCanvas(object):
     """Create a canvas with an embeded axis."""
 
-    def __init__(self, axis=True, x_label='', x_heightMax=40, y_label='',
-                 y_widthMax=80, font_size=14, color='white', title='',
+    def __init__(self, axis=True, x_label='', x_heightmax=40, y_label='',
+                 y_widthmax=80, font_size=14, color='white', title='',
                  axis_label_margin=50, tick_label_margin=5, name='',
                  bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}, fcn=[]):
         """Init."""
@@ -126,7 +127,7 @@ class AxisCanvas(object):
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
                                         show=False, title=name, app=vispy_app,
                                         **cargs)
-        _ = [self.canvas.connect(k) for k in fcn]
+        _ = [self.canvas.connect(k) for k in fcn]  # noqa
 
         # Add axis :
         if axis:
@@ -141,7 +142,7 @@ class AxisCanvas(object):
                                           axis_label_margin=axis_label_margin,
                                           tick_label_margin=tick_label_margin,
                                           **yargs)
-            self.yaxis.width_max = y_widthMax
+            self.yaxis.width_max = y_widthmax
             grid.add_widget(self.yaxis, row=0, col=0)
 
             # Add x-axis :
@@ -151,7 +152,7 @@ class AxisCanvas(object):
                                           axis_label_margin=axis_label_margin,
                                           tick_label_margin=tick_label_margin,
                                           **xargs)
-            self.xaxis.height_max = x_heightMax
+            self.xaxis.height_max = x_heightmax
             grid.add_widget(self.xaxis, row=1, col=1)
 
             # Add right padding :

@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 from ....utils import HelpMenu
 from ....io import (dialogSave, dialogLoad, write_fig_hyp, write_csv,
                     write_txt, write_hypno_txt, write_hypno_hyp, read_hypno,
-                    is_mne_installed, annotations_to_array, oversample_hypno)
+                    annotations_to_array, oversample_hypno)
 
 
 class UiMenu(HelpMenu):
@@ -93,7 +93,7 @@ class UiMenu(HelpMenu):
     ###########################################################################
 
     # ______________________ HYPNOGRAM ______________________
-    def saveHypData(self, *args, filename=None):
+    def saveHypData(self, *args, filename=None):  # noqa
         """Save the hypnogram data either in a hyp or txt file."""
         if filename is None:
             filename = dialogSave(self, 'Save File', 'hypno', "Text file ""(*"

@@ -1,5 +1,4 @@
 """GUI interactions with the contextual menu."""
-from PyQt5 import QtWidgets
 import vispy.scene.cameras as viscam
 
 from ....utils import toggle_enable_tab, HelpMenu

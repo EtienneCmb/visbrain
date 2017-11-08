@@ -52,10 +52,8 @@ class UiScoring(object):
         if self._scoreSet:
             # Reset hypnogram :
             self._hypno = np.zeros((len(self._time)), dtype=np.float32)
-            # Get the current number of rows :
-            l = self._scoreTable.rowCount()
             # Loop over table row :
-            for k in range(l):
+            for k in range(self._scoreTable.rowCount()):
                 # Get tstart / tend / stage :
                 tstart, tend, stage = self._get_scoreMarker(k)
                 # Update pos if not None :

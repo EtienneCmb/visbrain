@@ -29,11 +29,7 @@ __all__ = ['ReadSleepData']
 
 
 class ReadSleepData(object):
-    """Main class for reading sleep data.
-
-    Parameters
-    ----------
-    """
+    """Main class for reading sleep data."""
 
     def __init__(self, data, channels, sf, hypno, href, preload, use_mne,
                  downsample, kwargs_mne, annotations):

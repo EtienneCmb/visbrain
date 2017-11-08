@@ -356,11 +356,7 @@ class SignalVisual(SignalAnnotations):
 
 
 class Visuals(object):
-    """Create visual objects for th grid and the signal.
-
-    Parameters
-    ----------
-    """
+    """Create visual objects for th grid and the signal."""
 
     def __init__(self, data, time, sf, axis, grid_titles, grid_color,
                  grid_shape, grid_parent, signal_parent):

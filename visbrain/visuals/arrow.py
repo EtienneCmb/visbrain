@@ -345,4 +345,4 @@ class ArrowVisual(LineVisual):
         """Get the arrows coordinates."""
         return self._arrows
 
-Arrow = create_visual_node(ArrowVisual)
+Arrow = create_visual_node(ArrowVisual)  # noqa

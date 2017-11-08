@@ -147,11 +147,11 @@ def power_of_ten(x, e=3):
             return float(sp[0]), -int(sp[1])
         else:  # Format : 0.000x
             sp = stx.split('.')[1]
-            l = 0
-            while sp[l] == '0':
-                l += 1
-            l += 1
-            return (sign * x) * (10 ** l), -l
+            id_l = 0
+            while sp[id_l] == '0':
+                id_l += 1
+            id_l += 1
+            return (sign * x) * (10 ** id_l), -id_l
     elif x >= 10 ** e:  # x is a power of e :
         if stx.find('e') + 1:  # Format : 'xey'
             sp = stx.split('e')

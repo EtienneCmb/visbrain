@@ -11,6 +11,7 @@ from .ui_annotate import UiAnnotate
 from .ui_screenshot import UiScreenshot
 from ....config import profiler
 
+
 class UiElements(UiSettings, UiPanels, UiInfo, UiTools, UiScoring,
                  UiDetection, UiAnnotate, UiMenu, UiScreenshot):
     """Inherit from the diffrent Ui files and initialize them."""

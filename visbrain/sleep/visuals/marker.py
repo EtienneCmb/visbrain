@@ -1,11 +1,4 @@
-# -*- coding: utf-8 -*-
-# -----------------------------------------------------------------------------
-# Copyright (c) 2015, Vispy Development Team.
-# Distributed under the (new) BSD License. See LICENSE.txt for more info.
-# -----------------------------------------------------------------------------
-"""
-Marker Visual and shader definitions.
-"""
+"""Marker Visual and shader definitions."""
 
 import numpy as np
 
@@ -43,7 +36,7 @@ void main (void) {
     float edgewidth = max(v_edgewidth, 1.0);
     gl_PointSize = $v_size + 4*(edgewidth + 1.5*v_antialias);
 
-    // Save vertex shader output -> will be used in fragment shader to calculate gl_PointCoord
+    // Save vertex shader output -> fragment shader to calculate gl_PointCoord
     v_Vertex    = gl_Position;
     v_PointSize = gl_PointSize;
 
@@ -64,9 +57,9 @@ void main()
 {
     // Calculate gl_PointCoord by hand
     // Calculate fragment position in normalized space
-    vec2 normalizedCoord = v_Vertex.xy / v_Vertex.w;
+    vec2 normCoord = v_Vertex.xy / v_Vertex.w;
     // Calculate fragment position in screen space
-    vec2 screenCoord = (normalizedCoord*0.5 + 0.5)*u_viewport.zw + u_viewport.xy;
+    vec2 screenCoord = (normCoord*0.5 + 0.5)*u_viewport.zw + u_viewport.xy;
     // Calculate point coordinate (= gl_PointCoord)
     vec2 v_PointCoord  = (screenCoord-gl_FragCoord.xy)/(v_PointSize) + 0.5;
 
@@ -579,7 +572,7 @@ class MarkersVisual(Visual):
         if edge_width is not None:
             data['a_edgewidth'] = edge_width
         else:
-            data['a_edgewidth'] = size*edge_width_rel
+            data['a_edgewidth'] = size * edge_width_rel
         data['a_position'][:, :pos.shape[1]] = pos
         data['a_size'] = size
         self.shared_program['u_antialias'] = self.antialias  # XXX make prop
@@ -634,4 +627,4 @@ class MarkersVisual(Visual):
         else:
             return (0, 0)
 
-Markers = visuals.create_visual_node(MarkersVisual)
+Markers = visuals.create_visual_node(MarkersVisual)  # noqa
