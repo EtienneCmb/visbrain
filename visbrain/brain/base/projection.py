@@ -84,7 +84,8 @@ class Projections(object):
             mesh.mask_color = self._proj_mask_color
             logger.info("Set masked sources cortical activity to the "
                         "color %s" % str(list(mesh.mask_color.ravel())[0:-1]))
-        mask[~mod.mask] = 1.
+        if mod.mask.sum():
+            mask[~mod.mask] = 1.
         self._proj_obj[self._proj_on].mesh.mask = mask
 
         # ============= COLOR =============
