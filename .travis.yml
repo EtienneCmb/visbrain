@@ -34,6 +34,8 @@ python:
 
 
 before_install:
+    - SRC_DIR=$(pwd)
+    - cd ~
     - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
           wget -q http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
       else
@@ -48,8 +50,6 @@ before_install:
 
 
 install:
-    - SRC_DIR=$(pwd)
-    - cd ~
     - conda create -q -n testenv python=$PYTHON numpy scipy pip
     - source activate testenv
     # Install dependencies :
