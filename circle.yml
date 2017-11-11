@@ -1,8 +1,19 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
+    only:
+      - master
+      - develop
+
+
 machine:
   environment:
     # We need to set this variable to let Anaconda take precedence
-    PATH: "/home/ubuntu/miniconda/envs/circleenv/bin:/home/ubuntu/miniconda/bin:$PATH"
+    PATH: "/home/ubuntu/miniconda3/envs/circleenv/bin:/home/ubuntu/miniconda3/bin:$PATH"
     DISPLAY: ":99.0"
+  python:
+      version: 3.6.0
 
 dependencies:
   cache_directories:
@@ -16,7 +27,7 @@ dependencies:
     - rm -rf ~/virtualenvs;
     # Get Anaconda and conda-based requirements
     - >
-      if [ ! -d "/home/ubuntu/miniconda" ]; then
+      if [ ! -d "/home/ubuntu/miniconda3" ]; then
         echo "Setting up conda";
         wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
         chmod +x ~/miniconda.sh;
