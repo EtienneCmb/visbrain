@@ -32,44 +32,33 @@ class MouseEmulation(object):
 class HypnoEdition(object):
     """Hypnogram edition.
 
-    Args:
-        sf: float
-            The sampling frequency.
-
-        hypno_obj: Hypnogram
-            The hypnogram object.
-
-        data: np.ndarray
-            Hypnogram data.
-
-        canvas: AxisCanvas.canvas
-            The canvas on which mouse will be active.
-
-        yaxis: tuple
-            Tuple describing where y-axis of the hypnogram start and finish.
-
-    Kargs:
-        enable: bool, optional, (def: False)
-            Enable editing.
-
-        color_cursor: string/tuple, optional, (def: 'red')
-            Color of the traveling cursor.
-
-        color_static: string/tuple, optional, (def: 'gray')
-            Color of defined markers.
-
-        color_active: string/tuple, optional, (def: 'green')
-            Color of active marker.
-
-        color_dragge: string/tuple, optional, (def: 'blue')
-            Color of dragged marker.
-
-        size: float, optional, (def: 9.)
-            Marker size.
-
-        fcn: list, optional, (def: None)
-            List of executed function on mouse released. This is usefull to
-            update stats info or editing table.
+    Parameters
+    ----------
+    sf : float
+        The sampling frequency.
+    hypno_obj : Hypnogram
+        The hypnogram object.
+    data : array_like
+        Hypnogram data.
+    canvas : AxisCanvas.canvas
+        The canvas on which mouse will be active.
+    yaxis : tuple
+        Tuple describing where y-axis of the hypnogram start and finish.
+    enable : bool | False
+        Enable editing.
+    color_cursor : string/tuple | 'red'
+        Color of the traveling cursor.
+    color_static : string/tuple | 'gray'
+        Color of defined markers.
+    color_active : string/tuple | 'green'
+        Color of active marker.
+    color_dragge : string/tuple | 'blue'
+        Color of dragged marker.
+    size : float | 9.
+        Marker size.
+    fcn: list | None
+        List of executed function on mouse released. This is usefull to
+        update stats info or editing table.
     """
 
     def __init__(self, sf, hypno_obj, data, time, canvas, yaxis, enable=False,
@@ -87,7 +76,7 @@ class HypnoEdition(object):
             """
             # Stop dragging point :
             self.keep = False
-            _ = [k() for k in fcn]
+            _ = [k() for k in fcn]  # noqa
 
         @canvas.events.mouse_double_click.connect
         def on_mouse_double_click(event):
@@ -125,14 +114,14 @@ class HypnoEdition(object):
                 # Find current position :
                 xpos_z = np.where(xpos_sorted == xpos[self.keep_idx])[0]
                 # Find previous / next marker position :
-                xprev = self.pos[xpos == xpos_sorted[xpos_z-1], 0]
-                xnext = self.pos[xpos == xpos_sorted[xpos_z+1], 0]
+                xprev = self.pos[xpos == xpos_sorted[xpos_z - 1], 0]
+                xnext = self.pos[xpos == xpos_sorted[xpos_z + 1], 0]
                 # Find their position in the time vector :
                 # xtprev = np.abs(time - xprev).argmin()
                 xtnext = np.abs(time - xnext).argmin()
                 # Move cursor only if xprev <= x < xnext and if -4 <= y <= 1:
-                if all([cpos[0, 0] >= xprev,  cpos[0, 0] <= xnext,
-                       cpos[0, 1] <= 1, cpos[0, 1] >= -4]):
+                if all([cpos[0, 0] >= xprev, cpos[0, 0] <= xnext,
+                        cpos[0, 1] <= 1, cpos[0, 1] >= -4]):
                     # Force to be on the grid :
                     cpos[0, 1] = float(round(cpos[0, 1]))
                     # Update position :
@@ -143,13 +132,15 @@ class HypnoEdition(object):
                                             edge_color='white')
                     # Stream inv-converted hypno data :
                     posh = self.pos.copy()
-                    posh[self.keep_idx, 1] = hypno_obj.pos_to_gui_inv(cpos)[0, 1]
-                    xtpos = np.abs(time-posh[self.keep_idx, 0]).argmin()
-                    data[xtpos:xtnext+1] = cpos[0, 1]
+                    posh[self.keep_idx, 1] = hypno_obj.pos_to_gui_inv(cpos)[
+                        0, 1]
+                    xtpos = np.abs(time - posh[self.keep_idx, 0]).argmin()
+                    data[xtpos:xtnext + 1] = cpos[0, 1]
                     hypno_obj.set_data(sf, -data, time)
                     # Temporaly turn dragged point to color_dragge :
                     cbackup[self.keep_idx, :] = self.color_dragge
-                    self.pos[self.keep_idx, 1] = hypno_obj.pos_to_gui(cpos)[0, 1]
+                    self.pos[self.keep_idx, 1] = hypno_obj.pos_to_gui(cpos)[
+                        0, 1]
             else:
                 cpos = self.convert(cpos)
                 # Display moving point :
@@ -183,19 +174,19 @@ class HypnoEdition(object):
         def _get_cursor(pos, force=True):
             """Get the cursor position.
 
-            Arg:
-                pos: tuple
-                    The position of the mouse (in pixel coordinates)
+            Parameters
+            ----------
+            pos : tuple
+                The position of the mouse (in pixel coordinates)
+            force : bool | True
+                Force the returned mouse cursor position to fit to the
+                hypnogram values.
 
-            Kargs:
-                force: bool, optional, (def: True)
-                    Force the returned mouse cursor position to fit to the
-                    hypnogram values.
-
-            Return:
-                pos: np.ndarray
-                    The mouse position converted in canvas unit
-                    (i.e. time, hypno -1.).
+            Returns
+            -------
+            pos: array_like
+                The mouse position converted in canvas unit
+                (i.e. time, hypno -1.).
             """
             # Get latest time :
             tm, tM = time_update()
@@ -207,7 +198,8 @@ class HypnoEdition(object):
                 val = -hypno_obj.gui_to_hyp()[np.abs(time - cursor).argmin()]
             else:
                 # Return converted y axis :
-                val = (yaxis[0]-yaxis[1]) * pos[1] / canvas.size[1] + yaxis[1]
+                val = (yaxis[0] - yaxis[1]) * pos[1] / canvas.size[
+                    1] + yaxis[1]
             # Set to marker position :
             pos = np.array([cursor, val, -1.])[np.newaxis, ...]
 
@@ -216,23 +208,22 @@ class HypnoEdition(object):
         def _get_close_marker(event, perc=1.):
             """Get closest marker from the cursor.
 
-            Arg:
-                event: mouse.event
-                    Mouse event.
+            Parameters
+            ----------
+            event : mouse.event
+                Mouse event.
+            perc : float | .1
+                The distance under which the point is selected (in time
+                length percentage).
 
-            Kargs:
-                perc: float, optional, (def: .1)
-                    The distance under which the point is selected (in time
-                    length percentage).
-
-            Returns:
-                color: np.ndarray
-                    The array of new color (with color_active in case of
-                    selected point).
-
-                idx: int/None
-                    The index of the closest marker (or None if no marker
-                    position is under dist).
+            Returns
+            -------
+            color : array_like
+                The array of new color (with color_active in case of
+                selected point).
+            idx : int/None
+                The index of the closest marker (or None if no marker
+                position is under dist).
             """
             # Get latest time :
             tm, tM = time_update()
@@ -241,11 +232,11 @@ class HypnoEdition(object):
             cursor = _get_cursor(event.pos, force=False)
             color = self.color.copy()
             # Get distance between all markers and cursor :
-            l = np.abs(np.square(self.pos - cursor).mean(1))
+            d_mark_cursor = np.abs(np.square(self.pos - cursor).mean(1))
             # Select points under dist :
-            under = l <= dist
+            under = d_mark_cursor <= dist
             if any(under):
-                idx = l.argmin()
+                idx = d_mark_cursor.argmin()
                 # Ignore first and last points of hypnogram :
                 if idx not in (0, 1):
                     color[idx, :] = self.color_active
@@ -266,9 +257,9 @@ class HypnoEdition(object):
 
         def time_update():
             """Get time extreme."""
-            tm = hypno_obj._camera.rect.left
-            tM = hypno_obj._camera.rect.right
-            return tm, tM
+            t_min = hypno_obj._camera.rect.left
+            t_max = hypno_obj._camera.rect.right
+            return t_min, t_max
 
         # =================== VARIABLES ===================
         self.event = MouseEmulation()
@@ -286,7 +277,7 @@ class HypnoEdition(object):
 
         # ============ VARIABLES ============
         if fcn is None:
-            def fcnt(): pass
+            def fcnt(): pass  # noqa
             fcn = [fcnt]
         self.keep = False
         self.keep_idx = -1
@@ -303,17 +294,17 @@ class HypnoEdition(object):
         This function is runned only on start to find if there's already
         predifined markers.
 
-        Args:
-            data: np.ndarray
-                The hypnogram data.
-
-            time: np.ndarray
-                The time vector.
+        Parameters
+        ----------
+        data : array_like
+            The hypnogram data.
+        time : array_like
+            The time vector.
         """
         # Transient detection :
         tr = transient(data, time)[0] + 1
         # tr = np.append(tr, tr + 1)
-        tr = np.array([0, len(data)-1] + list(tr))
+        tr = np.array([0, len(data) - 1] + list(tr))
         # Predefined positions :
         self.pos = np.array([time[tr], data[tr], np.full_like(tr, -1.)]).T
         self.pos = self.convert(self.pos)

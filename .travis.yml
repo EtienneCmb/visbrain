@@ -1,49 +1,86 @@
 language: python
+
+
+sudo: false
 dist: trusty
 python:
-  - "3.6"
+    - '3.6'
+
+
+matrix:
+  include:
+    - env: TEST=standard
+      os: linux
+    - env: TEST=minimal
+      os: linux
+    - env: TEST=examples
+      os: linux
+    # - env: TEST=standard
+    #   os: osx
+    #   language: generic
+  allow_failures:
+    - env: TEST=minimal
+
+
 before_install:
-  # Fix screen resolution to 1280x1024x16 :
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+    # See https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI :
+    - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
+    # Instal miniconda3 :
+    - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
+        wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+      else
+        wget http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+      fi;
+    - bash miniconda.sh -b -p $HOME/miniconda
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - hash -r
+    - conda config --set always_yes yes --set changeps1 no
+    - conda update -q conda
+    - conda info -a
+    - SRC_DIR=$(pwd)
+
+
 install:
-  - pushd $PWD
-  # ------------------- PYTHON ENVIRONNEMENT -------------------
-  # Deactivate travis environnement :
-  - deactivate
-  # Miniconda installation :
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  - conda info -a
+    # Create the py3 environnement ;
+    - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy pip
+    - source activate testenv
+    # Install dependencies :
+    - if [ "${TEST}" == "standard" ]; then
+        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold;
+        pip install mne nibabel pandas;
+      fi;
+    - if [ "${TEST}" == "minimal" ]; then
+        pip install flake8 pep8-naming;
+      fi;
+    # - pip install PyOpenGL PyOpenGL_accelerate
+    # - pip install -q freetype-py husl pypng cassowary imageio
+    # ------------------- VISBRAIN -------------------
+    - cd ${SRC_DIR}
+    - pip install -e .
 
-  # Install dependencies :
-  - conda create -q -n testenv python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pip
-  - source activate testenv
-  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pandas
 
-  # Install testing librairies :
-  - pip install codecov pytest pytest-cov pytest-html
-
-  # ------------------- VISBRAIN -------------------
-  - pip install -e .
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
-script: py.test --cov --verbose
-cache:
-  apt: true
+    # See https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI :
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    - sleep 3 # give xvfb some time to start
+
+script:
+    - if [[ "${TEST}" == "standard" ]]; then
+          make test;
+      elif [[ "${TEST}" == "minimal" ]]; then
+          make flake;
+      elif [[ "${TEST}" == "examples" ]]; then
+          make examples;
+      fi;
+
+
 notifications:
     email: false
-after_success:
-  - codecov
+    slack: visbrainteam:lHdzZcFmXQczGlxJEDtQYqv9
 
-# screenshot tests are really slow on travis... but installing image librairies
-# does't fix it.
-# before_install:
-#   - sudo apt-get -qq install libfreetype6-dev libjpeg-turbo-progs
-# sudo: required
-# py.test --cov --verbose --cov-report=html --html=report.html
+
+after_success:
+    - if [ "${TEST}" == "standard" ]; then
+        codecov;
+      fi

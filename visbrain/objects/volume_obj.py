@@ -4,7 +4,7 @@ import numpy as np
 from vispy import scene
 from vispy.scene import visuals
 from vispy.color import BaseColormap
-import vispy.visuals.transforms as vist
+# import vispy.visuals.transforms as vist
 
 from .visbrain_obj import VisbrainObject
 from ..utils import load_predefined_roi, array_to_stt
@@ -49,6 +49,7 @@ class OpaqueGrays(BaseColormap):
     }
     """
 
+
 volume_cmaps = {'TransFire': TransFire(), 'OpaqueFire': OpaqueFire(),
                 'TransGrays': TransGrays(), 'OpaqueGrays': OpaqueGrays()}
 
@@ -72,9 +73,8 @@ class VolumeBaseObject(object):
 
     def _check_predefined_volume(self, name, vol, vol_type=True):
         if name in self._predefined_volumes():
-            args = load_predefined_roi(name)
-
-
+            pass
+            # args = load_predefined_roi(name)
 
     def _volume_update(self):
         raise NotImplementedError
@@ -135,7 +135,7 @@ class VolumeObj(VolumeBaseObject, VisbrainObject):
         return scene.cameras.TurntableCamera()
 
     def _volume_update(self):
-        """"""
+        """Update the volume."""
         vol, _, _, tr, _ = load_predefined_roi(self.name)
         assert isinstance(vol, np.ndarray) and (vol.ndim == 3)
         self._vol3d.set_data(vol)

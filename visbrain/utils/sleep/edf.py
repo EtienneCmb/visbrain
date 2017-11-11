@@ -13,7 +13,7 @@ from logging import getLogger
 from datetime import datetime
 from math import floor
 from re import findall
-from numpy import empty, asarray, fromstring, iinfo, abs, max
+from numpy import empty, asarray, fromstring, iinfo
 
 
 lg = getLogger(__name__)
@@ -24,9 +24,7 @@ DIGITAL_MIN = -1 * edf_iinfo.max  # so that digital 0 = physical 0
 
 
 def _assert_all_the_same(items):
-    """Check that all the items in a list are the same.
-
-    """
+    """Check that all the items in a list are the same."""
     assert all(items[0] == x for x in items)
 
 
@@ -240,5 +238,5 @@ class Edf:
         return dat
 
     def return_markers(self):
-        """"""
+        """Return markers."""
         return []

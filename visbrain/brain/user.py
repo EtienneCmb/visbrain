@@ -5,6 +5,8 @@ order to run commands without the necessity of opening the interface. This is
 really convenient for generating a large number of pictures by looping over a
 Brain instance.
 """
+import logging
+
 import numpy as np
 from scipy.spatial import ConvexHull
 
@@ -12,6 +14,8 @@ from ..visuals import BrainMesh
 from ..utils import (color2vb, extend_combo_list, safely_set_cbox,
                      get_combo_list_index, safely_set_spin, safely_set_slider)
 from ..io import save_config_json, write_fig_canvas
+
+logger = logging.getLogger('visbrain')
 
 __all__ = ('BrainUserMethods')
 
@@ -563,8 +567,8 @@ class BrainUserMethods(object):
         self._s_proj_mask_color.setText(str(mask_color))
         safely_set_cbox(self._s_proj_on, project_on)
         # Colormap control :
-        self.cbar_control('Projection', **kwargs)
         self._fcn_source_proj()
+        self.cbar_control('Projection', **kwargs)
 
     def cortical_repartition(self, radius=10., project_on='brain',
                              contribute=False, mask_color='orange', **kwargs):
@@ -760,6 +764,7 @@ class BrainUserMethods(object):
             raise ValueError("The selection parameter must be a list of "
                              "integers")
         selection = np.unique(selection)
+        logger.info("Select {} ROI of {} template".format(selection, roi_type))
         # Select roi_type in the combo list :
         idx = get_combo_list_index(self._roiDiv, roi_type)
         self._roiDiv.setCurrentIndex(idx)
@@ -768,7 +773,7 @@ class BrainUserMethods(object):
         # Set selection :
         self._fcn_set_selected_rois(selection)
         # Apply selection :
-        self._fcn_apply_roi_selection()
+        self._fcn_apply_roi_selection(name)
         # Add ROI to mesh list :
         self._proj_obj[name] = self.volume
         self._fcn_update_proj_list()

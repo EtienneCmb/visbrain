@@ -29,11 +29,7 @@ __all__ = ['ReadSleepData']
 
 
 class ReadSleepData(object):
-    """Main class for reading sleep data.
-
-    Parameters
-    ----------
-    """
+    """Main class for reading sleep data."""
 
     def __init__(self, data, channels, sf, hypno, href, preload, use_mne,
                  downsample, kwargs_mne, annotations):
@@ -75,7 +71,7 @@ class ReadSleepData(object):
             # Get output arguments :
             (sf, downsample, dsf, data, channels, n, offset, annot) = args
             logger.info("File successfully loaded (%s)" % (file + ext))
-            profiler("Data file loladed", level=1)
+            profiler("Data file loaded", level=1)
 
         elif isinstance(data, np.ndarray):  # array of data is defined
             if not isinstance(sf, (int, float)):

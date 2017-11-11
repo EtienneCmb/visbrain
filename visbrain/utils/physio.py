@@ -1,6 +1,5 @@
 """Group of functions for physiological processing."""
 from re import findall
-import os
 
 import numpy as np
 from itertools import product

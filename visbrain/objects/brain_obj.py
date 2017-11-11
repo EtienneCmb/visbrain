@@ -8,7 +8,7 @@ from vispy import scene
 from .visbrain_obj import VisbrainObject
 from ..visuals import BrainMesh
 from ..utils import get_data_path, mesh_edges, smoothing_matrix, array2colormap
-from ..io import download_file
+from ..io import download_file, is_nibabel_installed
 
 logger = logging.getLogger('visbrain')
 
@@ -70,6 +70,8 @@ class BrainObj(VisbrainObject):
         self._scale = 1.
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere)
         self.translucent = translucent
+        self._data_color = []
+        self._data_mask = []
 
     def __len__(self):
         """Get the number of vertices."""
@@ -176,6 +178,7 @@ class BrainObj(VisbrainObject):
             camera = scene.cameras.TurntableCamera(name='turntable')
             self.mesh.set_camera(camera)
             self.reset_camera()
+            self.rotate('top')
         return self.camera
 
     def _optimal_camera_properties(self, with_distance=True):
@@ -232,6 +235,8 @@ class BrainObj(VisbrainObject):
             Custom rotation. This parameter must be a tuple of two floats
             respectively describing the (azimuth, elevation).
         """
+        # Create the camera if needed :
+        self._get_camera()
         scale_factor = None
         if fixed in ['sagittal_0', 'left']:     # left
             azimuth, elevation = -90, 0
@@ -257,20 +262,35 @@ class BrainObj(VisbrainObject):
 
         self.set_state(azimuth, elevation, scale_factor=scale_factor)
 
-    def add_activation(self, data, vertices, smoothing_steps=20,
-                       cmap='viridis', clim=None, vmin=None, vmax=None,
-                       under='gray', over='red'):
-        """Add activation to specific vertices.
+    def add_activation(self, data=None, vertices=None, smoothing_steps=20,
+                       file=None, hemisphere=None, hide_under=None,
+                       n_contours=None, cmap='viridis', clim=None, vmin=None,
+                       vmax=None, under='gray', over='red'):
+        """Add activation to the brain template.
+
+        This method can be used for :
+
+            * Add activations to specific vertices (`data` and `vertices`)
+            * Add an overlay (`file` input)
 
         Parameters
         ----------
-        data : array_like
+        data : array_like | None
             Vector array of data of shape (n_data,).
-        vertices : array_like
+        vertices : array_like | None
             Vector array of vertices of shape (n_vtx). Must be an array of
             integers.
         smoothing_steps : int | 20
             Number of smoothing steps (smoothing is used if n_data < n_vtx)
+        file : string | None
+            Full path to the overlay file.
+        hemisphrere : {None, 'both', 'left', 'right'}
+            The hemisphere to use to add the overlay. If None, the method try
+            to inferred the hemisphere from the file name.
+        hide_under : float | None
+            Hide activations under a certain threshold.
+        n_contours : int | None
+            Display activations as contour.
         cmap : string | 'viridis'
             The colormap to use.
         clim : tuple | None
@@ -285,25 +305,94 @@ class BrainObj(VisbrainObject):
         over : string/tuple/array_like | 'red'
             The color to use for values over vmax.
         """
-        assert isinstance(data, np.ndarray) and (data.ndim == 1)
-        assert isinstance(vertices, np.ndarray) and (vertices.ndim == 1)
-        assert isinstance(smoothing_steps, int)
-        # Get smoothed vertices // data :
-        smooth_mat = smoothing_matrix(vertices, mesh_edges(self.mesh._faces),
-                                      smoothing_steps=smoothing_steps)
-        smooth_data = data[smooth_mat.col]
-        # Fix clim :
-        clim = (smooth_data.min(), smooth_data.max()) if clim is None else clim
-        assert len(clim) == 2
-        # Convert into colormap :
-        smooth_map = array2colormap(smooth_data, cmap=cmap, clim=clim,
-                                    vmin=vmin, vmax=vmax, under=under,
-                                    over=over)
-        color = np.ones((len(self.mesh), 4), dtype=np.float32)
-        color[smooth_mat.row, :] = smooth_map
-        # Set color to the mesh :
-        self.mesh.color = color
-        self.mesh.mask = smooth_mat.row[smooth_data >= clim[0]]
+        col_kw = dict(cmap=cmap, vmin=vmin, vmax=vmax, under=under, over=over,
+                      clim=clim)
+        is_under = isinstance(hide_under, (int, float))
+        color = np.zeros((len(self.mesh), 4), dtype=np.float32)
+        mask = np.zeros((len(self.mesh),), dtype=float)
+        # ============================= METHOD =============================
+        if isinstance(data, np.ndarray) and isinstance(vertices, np.ndarray):
+            logger.info("Add data to secific vertices.")
+            assert (data.ndim == 1) and (vertices.ndim == 1)
+            assert isinstance(smoothing_steps, int)
+            # Get smoothed vertices // data :
+            edges = mesh_edges(self.mesh._faces)
+            sm_mat = smoothing_matrix(vertices, edges, smoothing_steps)
+            sm_data = data[sm_mat.col]
+            # Clim :
+            clim = (sm_data.min(), sm_data.max()) if clim is None else clim
+            assert len(clim) == 2
+            col_kw['clim'] = clim
+            # Contours :
+            sm_data = self._data_to_contour(sm_data, clim, n_contours)
+            # Convert into colormap :
+            smooth_map = array2colormap(sm_data, **col_kw)
+            color = np.ones((len(self.mesh), 4), dtype=np.float32)
+            color[sm_mat.row, :] = smooth_map
+            # Mask :
+            if is_under:
+                mask[sm_mat.row[sm_data >= hide_under]] = 1.
+            else:
+                mask[:] = 0.
+        elif isinstance(file, str):
+            assert os.path.isfile(file)
+            logger.info("Add overlay to the {} brain template "
+                        "({})".format(self._name, file))
+            assert is_nibabel_installed()
+            import nibabel as nib
+            # Load data using Nibabel :
+            sc = nib.load(file).get_data().ravel(order="F")
+            hemisphere = 'both' if len(sc) == len(self.mesh) else hemisphere
+            # Hemisphere :
+            if hemisphere is None:
+                _, filename = os.path.split(file)
+                if any(k in filename for k in ['left', 'lh']):
+                    hemisphere = 'left'
+                elif any(k in filename for k in ['right', 'rh']):
+                    hemisphere = 'right'
+                else:
+                    hemisphere = 'both'
+                logger.warning("%s hemisphere(s) inferred from "
+                               "filename" % hemisphere)
+            if hemisphere == 'left':
+                idx = self.mesh._lr_index
+            elif hemisphere == 'right':
+                idx = ~self.mesh._lr_index
+            else:
+                idx = np.ones((len(self.mesh),), dtype=bool)
+            assert len(sc) == idx.sum()
+            # Clim :
+            clim = (sc.min(), sc.max()) if clim is None else clim
+            assert len(clim) == 2
+            col_kw['clim'] = clim
+            # Contour :
+            sc = self._data_to_contour(sc, clim, n_contours)
+            # Convert into colormap :
+            color[idx, :] = array2colormap(sc, **col_kw)
+            # Mask :
+            mask[idx] = 1.
+            if is_under:
+                sub_idx = np.where(idx)[0][sc < hide_under]
+                mask[sub_idx] = 0.
+        else:
+            raise ValueError("Unknown activation type.")
+        # Build mask color :
+        col_mask = ~np.tile(mask.reshape(-1, 1).astype(bool), (1, 4))
+        # Keep a copy of each overlay color and mask :
+        self._data_color.append(np.ma.masked_array(color, mask=col_mask))
+        self._data_mask.append(mask)
+        # Set color and mask to the mesh :
+        self.mesh.color = np.ma.array(self._data_color).mean(0)
+        self.mesh.mask = np.array(self._data_mask).max(0)
+
+    @staticmethod
+    def _data_to_contour(data, clim, n_contours):
+        if isinstance(n_contours, int):
+            _range = np.linspace(clim[0], clim[1], n_contours)
+            for k in range(len(_range) - 1):
+                d_idx = np.logical_and(data >= _range[k], data < _range[k + 1])
+                data[d_idx] = _range[k]
+        return data
 
     ###########################################################################
     ###########################################################################

@@ -1,9 +1,7 @@
 """Test Topo module and related methods."""
 import numpy as np
-from PyQt5 import QtWidgets
 from visbrain import Topo
 
-app = QtWidgets.QApplication([])
 tp = Topo()
 
 

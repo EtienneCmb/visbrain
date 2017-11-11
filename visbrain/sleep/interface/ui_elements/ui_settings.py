@@ -167,7 +167,7 @@ class UiSettings(object):
         self._SlVal.setMinimum(self._time.min())
         # Set maximum :
         step = self._SigSlStep.value()
-        self._SlVal.setMaximum(((self._time.max() - win)/step) + 1)
+        self._SlVal.setMaximum(((self._time.max() - win) / step) + 1)
         self._SlVal.setTickInterval(step)
         self._SlVal.setSingleStep(step)
         self._SlGoto.setMaximum((self._time.max() - win))
@@ -238,7 +238,7 @@ class UiSettings(object):
         win = self._SigWin.value()
         val = self._SlVal.value()
         step = self._SigSlStep.value()
-        xlim = (val*step, val*step+win)
+        xlim = (val * step, val * step + win)
         # Find closest time index :
         t = [0, 0]
         t[0] = int(round(np.abs(self._time - xlim[0]).argmin()))

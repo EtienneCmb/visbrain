@@ -20,7 +20,7 @@ install:
   # Activate testing environnement :
   - activate testenv
   # Install dependencies :
-  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pytest pytest-cov pandas
+  - pip install mne nibabel setuptools PyOpenGL PyOpenGL_accelerate pytest pytest-cov pytest-sugar pandas
   # ------------------- VISBRAIN -------------------
   - pip install -e .
 

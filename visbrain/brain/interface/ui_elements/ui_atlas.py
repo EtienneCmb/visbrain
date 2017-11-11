@@ -199,7 +199,7 @@ class UiAtlas(object):
             item = self._roiToAdd.item(k)
             item.setCheckState(QtCore.Qt.Checked)
 
-    def _fcn_apply_roi_selection(self):
+    def _fcn_apply_roi_selection(self, _, roi_name='roi'):
         """Apply ROI selection."""
         # Get the list of selected ROIs :
         _roiToAdd = self._fcn_get_selected_rois()
@@ -211,7 +211,7 @@ class UiAtlas(object):
             # Plot areas and set parent :
             self.volume.plot_roi()
             self.volume.mesh.parent = self.volume._node
-            self._proj_obj['roi'] = self.volume
+            self._proj_obj[roi_name] = self.volume
             self.volume.set_roi_camera(self.view.wc.camera)
             # Enable projection on ROI and related buttons :
             self._s_proj_on.model().item(1).setEnabled(True)

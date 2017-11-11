@@ -1,7 +1,6 @@
 """Test Brain module and related methods."""
 import os
 import shutil
-from PyQt5 import QtWidgets
 import pytest
 from warnings import warn
 
@@ -65,7 +64,6 @@ p_obj1 = PictureObj('P1', pic_data, xyz_1)
 p_obj2 = PictureObj('P2', 2 * pic_data, xyz_2)
 
 # ---------------- Application  ----------------
-app = QtWidgets.QApplication([])
 vb = Brain(source_obj=[s_obj1, s_obj2], connect_obj=[c_obj, c_obj2],
            time_series_obj=[ts_obj1, ts_obj2], picture_obj=[p_obj1, p_obj2],
            verbose='debug')
@@ -225,28 +223,28 @@ class TestBrain(object):
     ###########################################################################
     #                                 ROI
     ###########################################################################
+    @pytest.mark.slow
     def test_roi_control(self):
         """Test method roi_control."""
         # vb.roi_control([10], roi_type='Talairach', smooth=3,
         #                name='Tal_10&11', translucent=True)
-        vb.roi_control([3, 5], roi_type='Brodmann', smooth=5,
+        vb.roi_control([3], roi_type='Brodmann', smooth=3,
                        name='Roi_3-5_Brodmann', translucent=True, alpha=.05)
-        vb.roi_control([7, 11], roi_type='AAL', smooth=7,
-                       name='Roi_7-11_AAL')
+        vb.roi_control([7], roi_type='AAL', smooth=3, name='Roi_7_AAL')
 
     def test_roi_fit(self):
         """Test method roi_fit."""
-        vb.sources_fit_to_vertices(fit_to='Roi_7-11_AAL')
+        vb.sources_fit_to_vertices(fit_to='Roi_7_AAL')
 
     def test_roi_projection(self):
         """Test method roi_projection."""
         vb.sources_display(select='all')
-        vb.cortical_projection(radius=20., project_on='Roi_7-11_AAL')
+        vb.cortical_projection(radius=20., project_on='Roi_7_AAL')
 
     def test_roi_repartition(self):
         """Test method roi_repartition."""
         vb.sources_display(select='all')
-        vb.cortical_repartition(radius=20., project_on='Roi_7-11_AAL')
+        vb.cortical_repartition(radius=20., project_on='Roi_7_AAL')
 
     def test_roi_list(self):
         """Test function roi_list."""
@@ -295,6 +293,8 @@ class TestBrain(object):
         vb.background_color((.1, .1, .1))
 
     @pytest.mark.slow
+    @pytest.mark.xfail(reason="Failed if display not correctly configured",
+                       run=True, strict=False)
     def test_screenshot(self):
         """Test method screenshot."""
         # On travis, test failed fo jpg figures only.
@@ -305,25 +305,15 @@ class TestBrain(object):
         # Standard screenshot :
         for k, i in zip(canvas, formats):
             name = self._path_to_tmp(k + '_transparent_' + i)
-            try:
-                vb.screenshot(name, canvas=k, transparent=True, dpi=50)
-            except:
-                warn("Screenshot failed for " + k + " transparent canvas")
+            vb.screenshot(name, canvas=k, transparent=True, dpi=50)
         # Test print_size and unit at 50 dpi :
         for k, i in zip(print_size, unit):
             name = self._path_to_tmp('main_' + i + '.png')
-            try:
-                vb.screenshot(name, print_size=k, unit=i, dpi=50)
-            except:
-                warn("Screenshot failed for print size" + str(k) + " and unit"
-                     " " + i + " transparent canvas")
+            vb.screenshot(name, print_size=k, unit=i, dpi=50)
         # Test factor :
         name = self._path_to_tmp('main_factor.png')
-        try:
-            vb.screenshot(name, factor=2., region=(100, 100, 1000, 1000),
-                          bgcolor='#ab4642', dpi=50)
-        except:
-            warn("Screenshot failed for region and factor")
+        vb.screenshot(name, factor=2., region=(100, 100, 1000, 1000),
+                      bgcolor='#ab4642', dpi=50)
 
     @pytest.mark.skip('Not configured')
     def test_save_config(self):

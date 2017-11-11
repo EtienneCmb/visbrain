@@ -4,6 +4,9 @@
 .. image:: https://ci.appveyor.com/api/projects/status/fdxhhmpagms1so8l?svg=true
     :target: https://ci.appveyor.com/project/EtienneCmb/visbrain/branch/master
 
+.. image:: https://circleci.com/gh/EtienneCmb/visbrain/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/EtienneCmb/visbrain/tree/master
+
 .. image:: https://codecov.io/gh/EtienneCmb/visbrain/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/EtienneCmb/visbrain
 

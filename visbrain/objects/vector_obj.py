@@ -45,6 +45,10 @@ class VectorObj(VisbrainObject, CbarArgs):
     color : array_like/tuple/string | 'black'
         If no data are provided, use this parameter to set a unique color for
         all vectors.
+    dynamic : tuple | None
+        Use a dynamic transparency method. The dynamic input must be a tuple
+        of two float between [0, 1]. Vectors with stronger associated data are
+        going to be set more opaque.
     line_width : float | 5.
         Line width of each vector.
     arrow_size : float | 10.
@@ -53,6 +57,9 @@ class VectorObj(VisbrainObject, CbarArgs):
         The arrow-head type. Use either 'stealth', 'curved', 'angle_30',
         'angle_60', 'angle_90', 'triangle_30', 'triangle_60', 'triangle_90'
         or 'inhibitor_round'.
+    arrow_coef : float | 1.
+        Use this coefficient to define longer arrows. Must be a float superior
+        to 1.
     antialias : bool | False
         Use smoothed lines.
     cmap : string | 'viridis'
@@ -95,10 +102,11 @@ class VectorObj(VisbrainObject, CbarArgs):
     ###########################################################################
 
     def __init__(self, name, arrows, data=None, inferred_data=False,
-                 select=None, color='black', line_width=5., arrow_size=10.,
-                 arrow_type='stealth', antialias=False, cmap='viridis',
-                 clim=None, vmin=None, under='gray', vmax=None, over='red',
-                 transform=None, parent=None, verbose=None, _z=-10., **kwargs):
+                 select=None, color='black', dynamic=None, line_width=5.,
+                 arrow_size=10., arrow_type='stealth', arrow_coef=1.,
+                 antialias=False, cmap='viridis', clim=None, vmin=None,
+                 under='gray', vmax=None, over='red', transform=None,
+                 parent=None, verbose=None, _z=-10.):
         """Init."""
         # Init Visbrain object base class and SourceProjection :
         VisbrainObject.__init__(self, name, parent, transform, verbose)
@@ -134,6 +142,8 @@ class VectorObj(VisbrainObject, CbarArgs):
             arrow_end = arrow_start + norm * arrows['normals']
         else:
             raise ValueError("Undefined type for the `arrows` input.")
+        assert arrow_coef >= 1.
+        arrow_end *= arrow_coef
 
         # _______________________ CHECKING _______________________
         # Line width // arrow type / size :
@@ -142,12 +152,18 @@ class VectorObj(VisbrainObject, CbarArgs):
         self._line_width = line_width
         self._arrow_size = arrow_size
         self._arrow_type = arrow_type
-        #
+        # Get color :
         if isinstance(data, np.ndarray):
+            # Clim :
             clim = (data.min(), data.max()) if clim is None else clim
             assert len(clim) == 2
+            # Color :
             color = array2colormap(data, cmap=cmap, clim=clim, vmin=vmin,
                                    vmax=vmax, under=under, over=over)
+            # Dynamic transparency :
+            if isinstance(dynamic, (tuple, list)) and len(dynamic) == 2:
+                assert all(x >= 0. and x <= 1. for x in dynamic)
+                color[..., -1] = normalize(data.copy(), dynamic[0], dynamic[1])
         else:
             color = np.tile(color2vb(color).reshape(1, -1), (len(self), 1))
 

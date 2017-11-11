@@ -1,14 +1,12 @@
 """All visbrain modules based on PyQt5 should inherit from PyQtModule."""
-import sys
 import os
 import sip
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtGui
 import logging
 
-import vispy.app as visapp
-
-from .utils import set_widget_size, set_log_level, get_data_path, Profiler
-from .config import profiler
+from .utils import set_widget_size, set_log_level, get_data_path
+from .config import profiler, app, vispy_app
+from .io import is_faulthandler_installed
 
 sip.setdestroyonexit(False)
 logger = logging.getLogger('visbrain')
@@ -33,7 +31,10 @@ class PyQtModule(object):
         """Init."""
         # Log level and profiler creation (if verbose='debug')
         set_log_level(verbose)
-        self._app = QtWidgets.QApplication(sys.argv)
+        if (logger.level == 10) and is_faulthandler_installed():
+            import faulthandler
+            faulthandler.enable()
+            logger.debug("Faulthandler enabled")
         self._need_description = to_describe
         if isinstance(self._need_description, str):
             self._need_description = [self._need_description]
@@ -53,7 +54,7 @@ class PyQtModule(object):
         """Display the graphical user interface."""
         # Fixed size for the settings panel :
         if hasattr(self, 'q_widget'):
-            set_widget_size(self._app, self.q_widget, 23)
+            set_widget_size(app, self.q_widget, 23)
             self.q_widget.setVisible(self._show_settings)
         # Force the quick settings tab to be on the first tab :
         if hasattr(self, 'QuickSettings'):
@@ -79,9 +80,9 @@ class PyQtModule(object):
             self._pyqt_title('Profiler')
             profiler.finish()
         self.showMaximized()
-        visapp.run()
+        vispy_app.run()
 
     def closeEvent(self, event):
         """Executed method when the GUI closed."""
-        QtWidgets.qApp.quit()
+        app.quit()
         logger.debug("App closed.")

@@ -63,8 +63,9 @@ class Projections(object):
 
         # ============= MODULATIONS =============
         r, c = self._proj_radius, self._proj_contribute
-        log_str = ("Project {} onto the %s using a %s "
-                   "radius") % (self._proj_on, str(self._proj_radius))
+        log_str = ("Project {} onto the %s (radius=%f contribute="
+                   "%r" % (self._proj_on, float(self._proj_radius),
+                           self._proj_contribute))
         if self._proj_type == 'activity':
             logger.info(log_str.format("source's activity"))
             mod = self.sources.project_modulation(v, r, c)
@@ -80,7 +81,11 @@ class Projections(object):
         if self.sources.is_masked:
             mask_idx = self.sources.get_masked_index(v, self._proj_radius, c)
             mask[mask_idx] = 2.
-        mask[~mod.mask] = 1.
+            mesh.mask_color = self._proj_mask_color
+            logger.info("Set masked sources cortical activity to the "
+                        "color %s" % str(list(mesh.mask_color.ravel())[0:-1]))
+        if mod.mask.sum():
+            mask[~mod.mask] = 1.
         self._proj_obj[self._proj_on].mesh.mask = mask
 
         # ============= COLOR =============

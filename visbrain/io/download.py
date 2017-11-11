@@ -91,6 +91,8 @@ def download_file(name, filename=None, to_path=None, unzip=False,
     vb_path = os.getcwd() if use_pwd else vb_path
     print('\n----------------------------------------------------------------')
     if bool(name.find('http') + 1):
+        if filename is None:
+            filename = os.path.split(name)[1]
         assert isinstance(filename, str)
         url = name
     else:

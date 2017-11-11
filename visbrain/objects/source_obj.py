@@ -15,6 +15,7 @@ from ..visuals import CbarArgs
 
 
 logger = logging.getLogger('visbrain')
+PROJ_STR = "%i sources visibles and not masked used for the %s"
 
 
 class SourceProjection(CbarArgs):
@@ -53,10 +54,10 @@ class SourceProjection(CbarArgs):
             v = v[:, np.newaxis, :]
 
         # =============== PRE-ALLOCATION ===============
-        if not_masked:  # get only visible and not masked sources
+        if not_masked:  # get visible and not masked sources
             mask = self.visible_and_not_masked
-        else:           # get only not visible and masked sources
-            mask = ~self.visible_and_not_masked
+        else:           # get visible and masked sources
+            mask = np.logical_and(self.mask, self.visible)
         xyz, data = self._xyz[mask, :], self._data[mask]
         # Get sign of the x coordinate :
         xsign = np.sign(xyz[:, 0]).reshape(1, -1)
@@ -84,11 +85,16 @@ class SourceProjection(CbarArgs):
         """
         # Check inputs :
         xyz, data, v, xsign = self._check_projection(v, radius, contribute)
+        logger.info(PROJ_STR % (len(data), 'projection'))
         index_faced = v.shape[1]
         # Modulation / proportion / (Min, Max) :
         modulation = np.ma.zeros((v.shape[0], index_faced), dtype=np.float32)
         prop = np.zeros_like(modulation.data)
         minmax = np.zeros((index_faced, 2), dtype=np.float32)
+        if len(data) == 0:
+            logger.warn("Projection ignored because no sources visibles and "
+                         "not masked")
+            return np.squeeze(np.ma.masked_array(modulation, True))
 
         # For each triangle :
         for k in range(index_faced):
@@ -140,9 +146,14 @@ class SourceProjection(CbarArgs):
         """
         # Check inputs :
         xyz, _, v, xsign = self._check_projection(v, radius, contribute)
+        logger.info(PROJ_STR % (xyz.shape[0], 'repartition'))
         index_faced = v.shape[1]
         # Corticale repartition :
         repartition = np.ma.zeros((v.shape[0], index_faced), dtype=np.int)
+        if not xyz.size:
+            logger.warn("Repartition ignored because no sources visibles and "
+                         "not masked")
+            return np.squeeze(np.ma.masked_array(repartition, True))
 
         # For each triangle :
         for k in range(index_faced):
@@ -179,6 +190,7 @@ class SourceProjection(CbarArgs):
         # Check inputs and get masked xyz / data :
         xyz, data, v, xsign = self._check_projection(v, radius, contribute,
                                                      False)
+        logger.info("%i sources visibles and masked found" % len(data))
         # Predefined masked euclidian distance :
         nv, index_faced = v.shape[0], v.shape[1]
         fmask = np.ones((v.shape[0], index_faced, len(data)), dtype=bool)
@@ -475,6 +487,8 @@ class SourceObj(VisbrainObject, SourceProjection):
             roi_obj = [roi_obj]
         # Convert predefined ROI into RoiObj objects :
         roi_obj = [RoiObj(k) for k in roi_obj if k in proi]
+        logger.info("Analyse source's locations using the %s "
+                    "atlas" % ', '.join([k.name for k in roi_obj]))
         if isinstance(roi_obj, (list, tuple)):
             test_r = all([k in proi or isinstance(k, RoiObj) for k in roi_obj])
             if not test_r:
@@ -510,6 +524,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         """
         # Group analysis :
         assert color_by in list(analysis.columns)
+        logger.info("Color sources according to the %s" % color_by)
         gp = analysis.groupby(color_by).groups
         # Compute color :
         if roi_to_color is None:  # random color

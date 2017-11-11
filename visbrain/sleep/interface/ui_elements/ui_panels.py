@@ -10,7 +10,8 @@ from ....config import profiler
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    def _fromUtf8(s):
+    def _fromUtf8(s):  # noqa
+        """From utf8 pyqt function."""
         return s
 
 
@@ -114,7 +115,7 @@ class UiPanels(object):
         layout = QtWidgets.QVBoxLayout(self._hypLabel)
         layout.setContentsMargins(0, 0, 0, 0)
         self._hypYLabels = []
-        for k in self._href+['']:
+        for k in self._href + ['']:
             label = QtWidgets.QLabel()
             label.setText(self._addspace + k)
             label.setFont(self._font)
@@ -177,20 +178,20 @@ class UiPanels(object):
     # =====================================================================
     # CHANNELS
     # =====================================================================
-    def _createCompatibleW(self, nameWiget, nameLayout, visible=False):
+    def _createCompatibleW(self, name_wiget, name_layout, visible=False):
         """This function create a widget and a layout."""
-        Widget = QtWidgets.QWidget(self.centralwidget)
+        Widget = QtWidgets.QWidget(self.centralwidget)  # noqa
         Widget.setMinimumSize(QtCore.QSize(0, 0))
-        Widget.setObjectName(_fromUtf8(nameWiget))
+        Widget.setObjectName(_fromUtf8(name_wiget))
         Widget.setVisible(visible)
         vlay = QtWidgets.QVBoxLayout(Widget)
         vlay.setContentsMargins(9, 0, 9, 0)
         vlay.setSpacing(0)
         vlay.setObjectName(_fromUtf8("vlay"))
         # Create layout :
-        Layout = QtWidgets.QVBoxLayout()
+        Layout = QtWidgets.QVBoxLayout()  # noqa
         Layout.setSpacing(0)
-        Layout.setObjectName(_fromUtf8(nameLayout))
+        Layout.setObjectName(_fromUtf8(name_layout))
         vlay.addLayout(Layout)
 
         return Widget, Layout
@@ -221,9 +222,9 @@ class UiPanels(object):
             # Add a checkbox to the scrolling panel :
             self._chanChecks[i] = QtWidgets.QCheckBox(self._PanScrollChan)
             # Name checkbox with channel name :
-            self._chanChecks[i].setObjectName(_fromUtf8("_CheckChan"+k))
+            self._chanChecks[i].setObjectName(_fromUtf8("_CheckChan" + k))
             self._chanChecks[i].setText(k)
-            self._chanChecks[i].setShortcut("Ctrl+"+str(i))
+            self._chanChecks[i].setShortcut("Ctrl+" + str(i))
             # Add checkbox to the grid :
             self._PanChanLay.addWidget(self._chanChecks[i], i, 0, 1, 1)
             # Connect with the function :
@@ -258,8 +259,8 @@ class UiPanels(object):
 
             # ============ WIDGETS / LAYOUTS ============
             # Create a widget :
-            self._chanWidget[i], self._chanLayout[
-                i] = self._createCompatibleW("_widgetChan"+k, "_LayoutChan"+k)
+            self._chanWidget[i], self._chanLayout[i] = self._createCompatibleW(
+                "_widgetChan" + k, "_LayoutChan" + k)
             self._chanGrid.addWidget(self._chanWidget[i], i, 1, 1, 1)
             # Add channel label :
             self._chanLabels.append(QtWidgets.QLabel(self.centralwidget))
@@ -273,15 +274,15 @@ class UiPanels(object):
             self._chanCanvas[i] = AxisCanvas(axis=self._ax,
                                              bgcolor=(1., 1., 1.),
                                              y_label=None, x_label=None,
-                                             name='Canvas_'+k, color='black',
+                                             name='Canvas_' + k, color='black',
                                              yargs={'text_color': 'black'},
                                              xargs={'text_color': 'black'},
                                              fcn=[self.on_mouse_wheel])
             # Add the canvas to the layout :
             self._chanLayout[i].addWidget(self._chanCanvas[i].canvas.native)
 
-        self._PanChanLay.addItem(vspacer, i+1, 0, 1, 1)
-        self._chanGrid.addItem(hspacer, i+4, 1, 1, 1)
+        self._PanChanLay.addItem(vspacer, i + 1, 0, 1, 1)
+        self._chanGrid.addItem(hspacer, i + 4, 1, 1, 1)
 
     # =====================================================================
     # AMPLITUDES
@@ -443,7 +444,7 @@ class UiPanels(object):
         # Get nfft and overlap :
         nfft, _ = self._PanSpecNfft.value(), self._PanSpecStep.value()
         # Get starting / ending frequency :
-        _, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()
+        _, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()  # noqa
         # Enable / disable normalization :
         use_tf = int(self._PanSpecMethod.currentIndex() == 1)
         self._PanSpecNormW.setEnabled(use_tf)

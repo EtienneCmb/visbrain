@@ -1,5 +1,4 @@
 """Utility functions for MNE."""
-import numpy as np
 import datetime
 from ..utils import get_dsf
 

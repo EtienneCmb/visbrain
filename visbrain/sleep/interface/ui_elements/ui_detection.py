@@ -34,7 +34,7 @@ class UiDetection(object):
         # -------------------------------------------------
         # Location table :
         self._DetectChanSw.currentIndexChanged.connect(
-                                                   self._fcn_runSwitchLocation)
+            self._fcn_runSwitchLocation)
         self._DetectRm.clicked.connect(self._fcn_rmLocation)
         self._DetectViz.clicked.connect(self._fcn_vizLocation)
         self._DetecRmEvent.clicked.connect(self._fcn_rmSelectedEvent)
@@ -62,7 +62,7 @@ class UiDetection(object):
         # Get current selected text :
         viz = [str(self._ToolDetectType.currentText()) == k for k in ref]
         # Set widget visibility :
-        _ = [k.setVisible(i) for k, i in zip([self._ToolRemPanel,
+        _ = [k.setVisible(i) for k, i in zip([self._ToolRemPanel,  # noqa
                                               self._ToolSpinPanel,
                                               self._ToolPeakPanel,
                                               self._ToolWavePanel,
@@ -233,7 +233,7 @@ class UiDetection(object):
             lst = []
             for k in chans.keys():
                 for i in chans[k]:
-                    lst.append(k+' - '+i)
+                    lst.append(k + ' - ' + i)
             self._DetectChanSw.addItems(lst)
         self._fcn_runSwitchLocation()
         # Disable menu and detection tab if there is no detection :
@@ -244,7 +244,7 @@ class UiDetection(object):
         self._CheckDetectMenu()
         # Reconnect table :
         self._DetectChanSw.currentIndexChanged.connect(
-                                                   self._fcn_runSwitchLocation)
+            self._fcn_runSwitchLocation)
 
     # =====================================================================
     # FILL LOCATION TABLE

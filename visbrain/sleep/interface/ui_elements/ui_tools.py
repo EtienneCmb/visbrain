@@ -88,16 +88,16 @@ class UiTools(object):
             idchan = idx = self._ToolsRefLst.currentIndex()
             # Re-referencing :
             self._data, self._channels, consider = rereferencing(
-                                            self._data, self._channels, idchan,
-                                            to_ignore)
+                self._data, self._channels, idchan,
+                to_ignore)
             self._chanChecks[idx].setChecked(False)
         elif idx == 1:  # Common average
             self._data, self._channels, consider = commonaverage(
-                                     self._data, self._channels, to_ignore)
+                self._data, self._channels, to_ignore)
         elif idx == 2:  # Bipolarization
             self._data, self._channels, consider = bipolarization(
-                                                  self._data, self._channels,
-                                                  to_ignore)
+                self._data, self._channels,
+                to_ignore)
 
         # ____________________ Update ____________________
         aM = np.argmax(consider)

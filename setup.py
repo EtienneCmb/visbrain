@@ -6,7 +6,7 @@ import pip
 from pip.req import parse_requirements
 from optparse import Option
 
-__version__ = "0.3.6"
+__version__ = "0.3.7"
 NAME = 'visbrain'
 AUTHOR = "Visbrain developpers"
 MAINTAINER = "Etienne Combrisson"
@@ -59,7 +59,8 @@ setup(
     description=DESCRIPTION,
     long_description=read('README.rst'),
     platforms='any',
-    setup_requires=['numpy'],
+    setup_requires=['numpy', 'pytest-runner'],
+    tests_require=['pytest'],
     install_requires=REQS,
     dependency_links=[],
     author=AUTHOR,
