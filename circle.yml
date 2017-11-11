@@ -1,0 +1,63 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
+    only:
+      - master
+      - develop
+
+
+machine:
+  environment:
+    # We need to set this variable to let Anaconda take precedence
+    PATH: "/home/ubuntu/miniconda3/envs/circleenv/bin:/home/ubuntu/miniconda3/bin:$PATH"
+    DISPLAY: ":99.0"
+  python:
+      version: 3.6.0
+
+dependencies:
+  cache_directories:
+    - "~/miniconda"
+  # Various dependencies
+  pre:
+    # Get a running Python
+    - cd ~;
+    # Disable pyenv (no cleaner way provided by CircleCI as it prepends pyenv version to PATH)
+    - rm -rf ~/.pyenv;
+    - rm -rf ~/virtualenvs;
+    # Get Anaconda and conda-based requirements
+    - >
+      if [ ! -d "/home/ubuntu/miniconda3" ]; then
+        echo "Setting up conda";
+        wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
+        chmod +x ~/miniconda.sh;
+        ~/miniconda.sh -b -p /home/ubuntu/miniconda;
+        conda update --yes --quiet conda;
+      else
+        echo "Conda already set up.";
+      fi
+    - if ! conda env list | grep circleenv; then
+        conda create -n circleenv --yes pip python=3.6 pip;
+        sed -i "s/ENABLE_USER_SITE = .*/ENABLE_USER_SITE = False/g" /home/ubuntu/miniconda/envs/circleenv/lib/python3.6/site.py;
+      else
+        echo "Conda env already set up.";
+      fi;
+    - conda install -n circleenv --yes numpy scipy pip;
+    - pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold;
+    - pip install mne nibabel pandas;
+    - ls -al /home/ubuntu/miniconda;
+    - ls -al /home/ubuntu/miniconda/bin;
+    - echo $PATH;
+    - echo $CIRCLE_BRANCH
+    - which python;
+    - which pip;
+
+  override:
+    - cd /home/ubuntu/visbrain && pip install -e .;
+    - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x900x24 -ac +extension GLX +render -noreset;
+
+test:
+  override:
+    - make test;
+  post:
+    - codecov;
