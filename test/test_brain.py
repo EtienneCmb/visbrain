@@ -223,6 +223,7 @@ class TestBrain(object):
     ###########################################################################
     #                                 ROI
     ###########################################################################
+    @pytest.mark.slow
     def test_roi_control(self):
         """Test method roi_control."""
         # vb.roi_control([10], roi_type='Talairach', smooth=3,
@@ -292,6 +293,8 @@ class TestBrain(object):
         vb.background_color((.1, .1, .1))
 
     @pytest.mark.slow
+    @pytest.mark.xfail(reason="Failed if display not correctly configured",
+                       run=True, strict=False)
     def test_screenshot(self):
         """Test method screenshot."""
         # On travis, test failed fo jpg figures only.
@@ -302,25 +305,15 @@ class TestBrain(object):
         # Standard screenshot :
         for k, i in zip(canvas, formats):
             name = self._path_to_tmp(k + '_transparent_' + i)
-            try:
-                vb.screenshot(name, canvas=k, transparent=True, dpi=50)
-            except:
-                warn("Screenshot failed for " + k + " transparent canvas")
+            vb.screenshot(name, canvas=k, transparent=True, dpi=50)
         # Test print_size and unit at 50 dpi :
         for k, i in zip(print_size, unit):
             name = self._path_to_tmp('main_' + i + '.png')
-            try:
-                vb.screenshot(name, print_size=k, unit=i, dpi=50)
-            except:
-                warn("Screenshot failed for print size" + str(k) + " and unit"
-                     " " + i + " transparent canvas")
+            vb.screenshot(name, print_size=k, unit=i, dpi=50)
         # Test factor :
         name = self._path_to_tmp('main_factor.png')
-        try:
-            vb.screenshot(name, factor=2., region=(100, 100, 1000, 1000),
-                          bgcolor='#ab4642', dpi=50)
-        except:
-            warn("Screenshot failed for region and factor")
+        vb.screenshot(name, factor=2., region=(100, 100, 1000, 1000),
+                      bgcolor='#ab4642', dpi=50)
 
     @pytest.mark.skip('Not configured')
     def test_save_config(self):
