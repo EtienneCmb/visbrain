@@ -17,7 +17,7 @@ machine:
 
 dependencies:
   cache_directories:
-    - "~/miniconda"
+    - "~/miniconda3"
   # Various dependencies
   pre:
     # Get a running Python
@@ -38,15 +38,14 @@ dependencies:
       fi
     - if ! conda env list | grep circleenv; then
         conda create -n circleenv --yes pip python=3.6 pip;
-        # sed -i "s/ENABLE_USER_SITE = .*/ENABLE_USER_SITE = False/g" /home/ubuntu/miniconda/envs/circleenv/lib/python3.6/site.py;
       else
         echo "Conda env already set up.";
       fi;
     - conda install -n circleenv --yes numpy scipy pip;
     - pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold;
     - pip install mne nibabel pandas;
-    - ls -al /home/ubuntu/miniconda;
-    - ls -al /home/ubuntu/miniconda/bin;
+    - ls -al /home/ubuntu/miniconda3;
+    - ls -al /home/ubuntu/miniconda3/bin;
     - echo $PATH;
     - echo $CIRCLE_BRANCH
     - which python;
