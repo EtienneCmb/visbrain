@@ -31,14 +31,14 @@ dependencies:
         echo "Setting up conda";
         wget -q http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh;
         chmod +x ~/miniconda.sh;
-        ~/miniconda.sh -b -p /home/ubuntu/miniconda;
+        ~/miniconda.sh -b -p /home/ubuntu/miniconda3;
         conda update --yes --quiet conda;
       else
         echo "Conda already set up.";
       fi
     - if ! conda env list | grep circleenv; then
         conda create -n circleenv --yes pip python=3.6 pip;
-        sed -i "s/ENABLE_USER_SITE = .*/ENABLE_USER_SITE = False/g" /home/ubuntu/miniconda/envs/circleenv/lib/python3.6/site.py;
+        # sed -i "s/ENABLE_USER_SITE = .*/ENABLE_USER_SITE = False/g" /home/ubuntu/miniconda/envs/circleenv/lib/python3.6/site.py;
       else
         echo "Conda env already set up.";
       fi;
