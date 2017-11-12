@@ -204,7 +204,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">add_brain_template</span><span class="p">,</span> <span class="n">remove_brain_template</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
@@ -212,7 +212,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span>
 <span class="n">download_file</span><span class="p">(</span><span class="n">template</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
-<span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">template</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">))</span>
+<span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">template</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">))</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Get variables for defining a new template. Vertices are nodes connected by the</span>
@@ -233,7 +233,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Open the interface and select the added template</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">(</span><span class="n">a_template</span><span class="o">=</span><span class="n">template</span><span class="p">)</span>
+<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">(</span><span class="n">a_template</span><span class="o">=</span><span class="n">template</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Brain templates : &#39;</span><span class="p">,</span> <span class="n">vb</span><span class="o">.</span><span class="n">brain_list</span><span class="p">())</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 

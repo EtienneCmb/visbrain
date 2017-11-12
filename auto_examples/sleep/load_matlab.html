@@ -193,7 +193,7 @@
 <img alt="../../_images/ex_LoadMatlab.png" src="../../_images/ex_LoadMatlab.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">loadmat</span>
+<span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html#scipy.io.loadmat" title="View documentation for scipy.io.loadmat"><span class="n">loadmat</span></a>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
@@ -205,12 +205,12 @@
 <span class="n">download_file</span><span class="p">(</span><span class="s2">&quot;sleep_matlab.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">to_path</span><span class="o">=</span><span class="n">target_path</span><span class="p">)</span>
 
 <span class="c1"># Load the matlab file :</span>
-<span class="n">mat</span> <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;s2_sleep.mat&#39;</span><span class="p">))</span>
+<span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html#scipy.io.loadmat" title="View documentation for scipy.io.loadmat"><span class="n">loadmat</span></a><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;s2_sleep.mat&#39;</span><span class="p">))</span>
 
 <span class="c1"># Get the data, sampling frequency and channel names :</span>
 <span class="n">raw_data</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
 <span class="n">raw_sf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="s1">&#39;sf&#39;</span><span class="p">])</span>
-<span class="n">raw_channels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="s1">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">raw_channels</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html#numpy.concatenate" title="View documentation for numpy.concatenate"><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span></a><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="s1">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 <span class="n">raw_hypno</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;hypno&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
 <span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">raw_sf</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">raw_channels</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">raw_hypno</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>

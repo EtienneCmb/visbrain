@@ -200,7 +200,7 @@
 nifti volume downloadable at : <a class="reference external" href="https://brainder.org/download/flair/">https://brainder.org/download/flair/</a>
 The nibabel package should also be installed.</p>
 <img alt="../../_images/ex_crossec_and_volume.png" src="../../_images/ex_crossec_and_volume.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Brain</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">read_nifti</span><span class="p">,</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 <span class="sd">&quot;&quot;&quot;Import the volume and the associated affine transformation</span>
@@ -212,7 +212,7 @@ The nibabel package should also be installed.</p>
 <span class="n">download_file</span><span class="p">(</span><span class="n">volume_name</span><span class="p">)</span>
 <span class="n">data</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">read_nifti</span><span class="p">(</span><span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="n">volume_name</span><span class="p">))</span>
 
-<span class="n">vb</span> <span class="o">=</span> <span class="n">Brain</span><span class="p">()</span>
+<span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">()</span>
 
 <span class="c1"># Add the volume to the GUI</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">add_volume</span><span class="p">(</span><span class="n">volume_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">tf</span><span class="p">)</span>
