@@ -7,7 +7,7 @@ Documentation
     :maxdepth: 2
     :numbered:
 
-    brain
+    brain_doc
     sleep
     signal
     topo

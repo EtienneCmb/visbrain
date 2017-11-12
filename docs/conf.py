@@ -28,7 +28,7 @@ import visbrain
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 # sys.path.insert(0, os.path.abspath('../'))
-sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('sphinxext'))
 
 # -- General configuration ------------------------------------------------
 
@@ -40,27 +40,35 @@ sys.path.insert(0, os.path.abspath('../'))
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.coverage',
     'sphinx.ext.doctest',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.autosummary',
+    'sphinx.ext.linkcode',
     'sphinx_gallery.gen_gallery',
     'sphinx_click.ext',
-    'sphinx.ext.linkcode',
     'numpydoc',
 ]
     # , 'sphinx.ext.napoleon'
 #     'sphinx.ext.githubpages',
 
+autosummary_generate = True
+# autodoc_default_flags = ['inherited-members', 'no-undoc-members']
+
+
 sphinx_gallery_conf = {
     # path to your examples scripts
     'examples_dirs': '../examples',
+    'sphinx_gallery': None,
     # path where to save gallery generated examples
     'gallery_dirs': 'auto_examples',
     'backreferences_dir': 'generated',
     'default_thumb_file': 'picture/visbrain.png',
     'within_subsection_order': FileNameSortKey,
+    'doc_module': ('sphinx_gallery', 'visbrain'),
+    'thumbnail_size': (250, 250),
     }
 
 numpydoc_show_class_members = False
@@ -109,7 +117,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'templates']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -290,7 +298,7 @@ latex_documents = [
 intersphinx_mapping = {
     # 'python': ('http://docs.python.org/', None),
     'numpy': ('http://docs.scipy.org/doc/numpy-dev/', None),
-    # 'scipy': ('http://scipy.github.io/devdocs/', None),
+    'scipy': ('http://scipy.github.io/devdocs/', None),
     'matplotlib': ('http://matplotlib.org', None),
     'nibabel': ('http://nipy.org/nibabel', None),
 }
@@ -334,10 +342,27 @@ texinfo_documents = [
 
 numpydoc_class_members_toctree = False
 
+# from PyQt5.QtWidgets import QMainWindow
+# import inspect
+
+# tuple_of_bad_meth = inspect.getmembers(QMainWindow)
+# ignore = ['__init__']
+# list_of_bad_meth = [k[0] for k in tuple_of_bad_meth if k[0] not in ignore]
+
+# def skip(app, what, name, obj, skip, options):
+#     if name in list_of_bad_meth:
+#         return True
+#     return skip
+
+
+# def setup(app):
+#     app.connect("autodoc-skip-member", skip)
 
 # -----------------------------------------------------------------------------
 # Source code links (adapted from SciPy (doc/source/conf.py))
 # -----------------------------------------------------------------------------
+
+
 
 def linkcode_resolve(domain, info):
     """

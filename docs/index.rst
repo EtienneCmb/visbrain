@@ -32,7 +32,7 @@ Visbrain is an open-source python 3 package dedicated to brain signals visualiza
 
 Visbrain includes six visualization modules :
 
-* :ref:`Brain` : visualize EEG/MEG/Intracranial data, connectivity in a standard MNI 3D brain (see `Brain examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_).
+* :ref:`BrainModule` : visualize EEG/MEG/Intracranial data, connectivity in a standard MNI 3D brain (see `Brain examples <http://visbrain.org/auto_examples/index.html#brain-examples>`_).
 * :ref:`Sleep` : visualize polysomnographic data and hypnogram edition (see `Sleep examples <http://visbrain.org/auto_examples/index.html#sleep-examples>`_).
 * :ref:`Signal` : data-mining module for time-series inspection (see `Signal examples <http://visbrain.org/auto_examples/index.html#signal-examples>`_).
 * :ref:`Topo` : display topographical maps (see `Topo examples <http://visbrain.org/auto_examples/index.html#topoplot-examples>`_).
