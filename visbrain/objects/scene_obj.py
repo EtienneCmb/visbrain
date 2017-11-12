@@ -118,6 +118,10 @@ class VisbrainCanvas(object):
             self.wc = grid.add_view(row=1, col=1, camera=camera)
             self.grid = grid
 
+            # ----------- LINK -----------
+            self.xaxis.link_view(self.wc)
+            self.yaxis.link_view(self.wc)
+
             # ----------- CBAR -----------
             rpad_col = 0
             if add_cbar:

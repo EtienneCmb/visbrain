@@ -93,7 +93,7 @@ class SourceProjection(CbarArgs):
         minmax = np.zeros((index_faced, 2), dtype=np.float32)
         if len(data) == 0:
             logger.warn("Projection ignored because no sources visibles and "
-                         "not masked")
+                        "not masked")
             return np.squeeze(np.ma.masked_array(modulation, True))
 
         # For each triangle :
@@ -152,7 +152,7 @@ class SourceProjection(CbarArgs):
         repartition = np.ma.zeros((v.shape[0], index_faced), dtype=np.int)
         if not xyz.size:
             logger.warn("Repartition ignored because no sources visibles and "
-                         "not masked")
+                        "not masked")
             return np.squeeze(np.ma.masked_array(repartition, True))
 
         # For each triangle :
