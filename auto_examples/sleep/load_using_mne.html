@@ -197,7 +197,7 @@
 <img alt="../../_images/ex_LoadMNE.png" src="../../_images/ex_LoadMNE.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">io</span>
-<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../mod_sleep.html#visbrain.Sleep" title="View documentation for visbrain.Sleep"><span class="n">Sleep</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="n">current_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
@@ -216,7 +216,7 @@
 <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">chan</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">],</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">]</span>
 
 <span class="c1"># Now, pass all the arguments to the Sleep module :</span>
-<span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">chan</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">hfile</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<a href="../../mod_sleep.html#visbrain.Sleep" title="View documentation for visbrain.Sleep"><span class="n">Sleep</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">chan</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">hfile</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c1"># Alternatively, these steps can be done automatically by using the &#39;use_mne&#39;</span>
 <span class="c1"># input argument of sleep</span>

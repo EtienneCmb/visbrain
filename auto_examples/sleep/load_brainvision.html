@@ -192,7 +192,7 @@
 <a class="reference external" href="https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1">https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1</a></p>
 <img alt="../../_images/ex_LoadBrainVision.png" src="../../_images/ex_LoadBrainVision.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../mod_sleep.html#visbrain.Sleep" title="View documentation for visbrain.Sleep"><span class="n">Sleep</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="n">current_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
@@ -205,7 +205,7 @@
 <span class="n">hfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;sub-02.hyp&#39;</span><span class="p">)</span>
 <span class="n">cfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s1">&#39;sub-02_config.txt&#39;</span><span class="p">)</span>
 
-<span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dfile</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">hfile</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="n">cfile</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<a href="../../mod_sleep.html#visbrain.Sleep" title="View documentation for visbrain.Sleep"><span class="n">Sleep</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dfile</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">hfile</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="n">cfile</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>

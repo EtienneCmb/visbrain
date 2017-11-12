@@ -194,7 +194,7 @@ table to jump to it.</p>
 <p>Download an example of annotation file :
 <a class="reference external" href="https://drive.google.com/file/d/0B6vtJiCQZUBvMG95RHNXbDEwaGs/view?usp=sharing">https://drive.google.com/file/d/0B6vtJiCQZUBvMG95RHNXbDEwaGs/view?usp=sharing</a></p>
 <img alt="../../_images/ex_annotations.png" src="../../_images/ex_annotations.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Signal</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../mod_signal.html#visbrain.Signal" title="View documentation for visbrain.Signal"><span class="n">Signal</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="kn">import</span> <span class="n">generate_eeg</span>
 
 <span class="n">sf</span> <span class="o">=</span> <span class="mf">512.</span>  <span class="c1"># sampling frequency</span>
@@ -211,7 +211,7 @@ table to jump to it.</p>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">annotations</span> <span class="o">=</span> <span class="s1">&#39;signal_annotations.txt&#39;</span>
 
-<span class="n">Signal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">line_lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">annotations</span><span class="o">=</span><span class="n">annotations</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<a href="../../mod_signal.html#visbrain.Signal" title="View documentation for visbrain.Signal"><span class="n">Signal</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">line_lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">annotations</span><span class="o">=</span><span class="n">annotations</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>

@@ -195,7 +195,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html#scipy.io.loadmat" title="View documentation for scipy.io.loadmat"><span class="n">loadmat</span></a>
 
-<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <span class="n">Sleep</span>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../mod_sleep.html#visbrain.Sleep" title="View documentation for visbrain.Sleep"><span class="n">Sleep</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span>
 
 <span class="n">current_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
@@ -213,7 +213,7 @@
 <span class="n">raw_channels</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html#numpy.concatenate" title="View documentation for numpy.concatenate"><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span></a><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="s1">&#39;channels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 <span class="n">raw_hypno</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;hypno&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-<span class="n">Sleep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">raw_sf</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">raw_channels</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">raw_hypno</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<a href="../../mod_sleep.html#visbrain.Sleep" title="View documentation for visbrain.Sleep"><span class="n">Sleep</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">raw_sf</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">raw_channels</span><span class="p">,</span> <span class="n">hypno</span><span class="o">=</span><span class="n">raw_hypno</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
