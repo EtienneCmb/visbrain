@@ -13,7 +13,7 @@ Brain
 Description
 -----------
 
-*Brain* is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, connectivity, region of interest...
+:class:`Brain` is a flexible graphical user interface for 3D visualizations on an MNI brain. It can be use to display deep sources, connectivity, region of interest...
 
 .. figure::  picture/picbrain/brain_description.png
    :align:   center

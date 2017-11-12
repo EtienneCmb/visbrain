@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.signal.ui_elements.ui_menu &mdash; visbrain 0.3.7 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.signal.ui_elements.ui_menu</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.signal.ui_elements.ui_menu</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Manu interaction.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="k">import</span> <span class="n">ScreenshotPopup</span><span class="p">,</span> <span class="n">HelpMenu</span>
+<span class="kn">from</span> <span class="nn">...io</span> <span class="k">import</span> <span class="p">(</span><span class="n">dialogSave</span><span class="p">,</span> <span class="n">dialogLoad</span><span class="p">,</span> <span class="n">write_fig_pyqt</span><span class="p">,</span> <span class="n">write_fig_canvas</span><span class="p">,</span>
+                   <span class="n">write_csv</span><span class="p">,</span> <span class="n">write_txt</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">UiMenu</span><span class="p">(</span><span class="n">HelpMenu</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Interactions with the menu.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="c1"># Help menu :</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="s1">&#39;http://visbrain.org/signal.html&#39;</span>
+        <span class="n">sections</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Signal&#39;</span><span class="p">:</span> <span class="n">base</span><span class="p">}</span>
+        <span class="n">HelpMenu</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sections</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Save :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">saveAnnotations</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_save_annotations</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loadAnnotations</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_load_annotations</span><span class="p">)</span>
+        <span class="c1"># Display :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionQSP</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_qsp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionGrid</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_grid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionSignal</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_signal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuScreenshot</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_screenshot</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_save_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save annotations.&quot;&quot;&quot;</span>
+        <span class="c1"># Read Table</span>
+        <span class="n">rowCount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annot_table</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span>
+        <span class="n">time</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rowCount</span><span class="p">):</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_table</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">amp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_table</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">signal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_table</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_table</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="c1"># Get file name :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save annotations&#39;</span><span class="p">,</span> <span class="s1">&#39;annotations&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;CSV file (*.csv);;Text file (*.txt);;&quot;</span>
+                                  <span class="s2">&quot;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">kw</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;delimiter&#39;</span><span class="p">:</span> <span class="s1">&#39;_&#39;</span><span class="p">}</span>
+            <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;csv&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_csv</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">text</span><span class="p">),</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_txt</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">text</span><span class="p">),</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_load_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load annotations.&quot;&quot;&quot;</span>
+        <span class="c1"># Get file name :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Import annotations&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;CSV file (*.csv);;Text file (*.txt);;&quot;</span>
+                                  <span class="s2">&quot;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="c1"># Clean annotations :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annot_table</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Load the file :</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># &#39;file.txt&#39;</span>
+            <span class="c1"># Get starting/ending/annotation :</span>
+            <span class="n">time</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">,</span>
+                                                    <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">time</span><span class="p">,</span> <span class="n">amp</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="c1"># Fill table :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signal</span><span class="o">.</span><span class="n">clean_annotations</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annot_table</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># File the table :</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_annotate_event</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">coords</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_menu_disp_qsp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display quick settings panel.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionQSP</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_menu_disp_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display grid layout.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_GridWidget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionGrid</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_menu_disp_signal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display signal layout.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SignalWidget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionSignal</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_menu_disp_screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display screenshot window.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_gui_screenshot</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">UiScreenshot</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Initialize the screenshot GUI and functions to apply it.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">canvas_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Grid&#39;</span><span class="p">,</span> <span class="s1">&#39;Signal&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ssGui</span> <span class="o">=</span> <span class="n">ScreenshotPopup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_run_screenshot</span><span class="p">,</span>
+                                      <span class="n">canvas_names</span><span class="o">=</span><span class="n">canvas_names</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">show_gui_screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display the GUI screenhot.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ssGui</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_run_screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run the screenshot.&quot;&quot;&quot;</span>
+        <span class="c1"># Get filename :</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Screenshot&#39;</span><span class="p">,</span> <span class="s1">&#39;screenshot&#39;</span><span class="p">,</span> <span class="s2">&quot;PNG (*.PNG);;&quot;</span>
+                              <span class="s2">&quot;TIFF (*.tiff);;JPG (*.jpg);;&quot;&quot;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="c1"># Get screenshot arguments :</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ssGui</span><span class="o">.</span><span class="n">to_kwargs</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;entire&#39;</span><span class="p">]:</span>  <span class="c1"># Screenshot of the entire window</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ssGui</span><span class="o">.</span><span class="n">_ss</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">write_fig_pyqt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;canvas&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Grid&#39;</span><span class="p">,</span> <span class="s1">&#39;Signal&#39;</span><span class="p">]:</span>  <span class="c1"># Selected canvas</span>
+            <span class="c1"># Remove unsed entries :</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;canvas&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Grid&#39;</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_canvas</span><span class="o">.</span><span class="n">canvas</span>
+            <span class="k">elif</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;canvas&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Signal&#39;</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">canvas</span>
+            <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;entire&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;canvas&#39;</span><span class="p">]</span>
+            <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'0.3.7',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

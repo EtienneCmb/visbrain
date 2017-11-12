@@ -4,52 +4,77 @@
 Main *Brain* class inputs
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. currentmodule:: visbrain.brain.brain
+.. currentmodule:: visbrain
+
+.. .. autosummary::
+..     :toctree: generated
+..     :template: class.rst
+
+..     Brain
+
+.. .. autoclass:: Brain
+..     :members: rotate, background_color, screenshot
+
+..     .. rubric:: Methods
+
+..     .. autosummary::
+
+..         .. rubric:: Test
+
+..         ~Brain.show
+..         ~Brain.rotate
+..         ~Brain.background_color
+
+..         .. rubric:: Test2
+..         ~Brain.screenshot
+
+
 
 .. autoclass:: Brain
 
     .. rubric:: Methods
 
     .. autosummary::
+
         ~Brain.show
-        ~visbrain.brain.user.BrainUserMethods.rotate
-        ~visbrain.brain.user.BrainUserMethods.background_color
-        ~visbrain.brain.user.BrainUserMethods.screenshot
-        ~visbrain.brain.user.BrainUserMethods.load_config
-        ~visbrain.brain.user.BrainUserMethods.save_config
+        ~visbrain.Brain.rotate
+        ~visbrain.Brain.background_color
+        ~visbrain.Brain.screenshot
+        ~visbrain.Brain.load_config
+        ~visbrain.Brain.save_config
 
-        ~visbrain.brain.user.BrainUserMethods.brain_control
-        ~visbrain.brain.user.BrainUserMethods.brain_list
-        ~visbrain.brain.user.BrainUserMethods.add_mesh
+        ~visbrain.Brain.brain_control
+        ~visbrain.Brain.brain_list
+        ~visbrain.Brain.add_mesh
 
-        ~visbrain.brain.user.BrainUserMethods.volume_control
-        ~visbrain.brain.user.BrainUserMethods.add_volume
-        ~visbrain.brain.user.BrainUserMethods.volume_list
+        ~visbrain.Brain.volume_control
+        ~visbrain.Brain.add_volume
+        ~visbrain.Brain.volume_list
 
-        ~visbrain.brain.user.BrainUserMethods.cross_sections_control
+        ~visbrain.Brain.cross_sections_control
 
-        ~visbrain.brain.user.BrainUserMethods.sources_control
-        ~visbrain.brain.user.BrainUserMethods.sources_display
-        ~visbrain.brain.user.BrainUserMethods.sources_fit_to_vertices
-        ~visbrain.brain.user.BrainUserMethods.sources_to_convex_hull
+        ~visbrain.Brain.sources_control
+        ~visbrain.Brain.sources_display
+        ~visbrain.Brain.sources_fit_to_vertices
+        ~visbrain.Brain.sources_to_convex_hull
 
-        ~visbrain.brain.user.BrainUserMethods.cortical_projection
-        ~visbrain.brain.user.BrainUserMethods.cortical_repartition
+        ~visbrain.Brain.cortical_projection
+        ~visbrain.Brain.cortical_repartition
 
-        ~visbrain.brain.user.BrainUserMethods.time_series_control
+        ~visbrain.Brain.time_series_control
 
-        ~visbrain.brain.user.BrainUserMethods.pictures_control
+        ~visbrain.Brain.pictures_control
 
-        ~visbrain.brain.user.BrainUserMethods.connect_control
+        ~visbrain.Brain.connect_control
 
-        ~visbrain.brain.user.BrainUserMethods.roi_control
-        ~visbrain.brain.user.BrainUserMethods.roi_list
+        ~visbrain.Brain.roi_control
+        ~visbrain.Brain.roi_list
 
-        ~visbrain.brain.user.BrainUserMethods.cbar_control
-        ~visbrain.brain.user.BrainUserMethods.cbar_select
-        ~visbrain.brain.user.BrainUserMethods.cbar_list
-        ~visbrain.brain.user.BrainUserMethods.cbar_export
-        ~visbrain.brain.user.BrainUserMethods.cbar_autoscale
+        ~visbrain.Brain.cbar_control
+        ~visbrain.Brain.cbar_select
+        ~visbrain.Brain.cbar_list
+        ~visbrain.Brain.cbar_export
+        ~visbrain.Brain.cbar_autoscale
 
 
 .. ##########################################################################
@@ -63,19 +88,19 @@ Set of functions for an interactive control of the graphical user interface elem
 
 Show graphical interface
 ++++++++++++++++++++++++
-.. automethod:: visbrain.pyqt_module.PyQtModule.show
+.. automethod:: visbrain.Brain.show
 
 Rotation
 ++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.rotate
+.. automethod:: visbrain.Brain.rotate
 
 Background color
 ++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.background_color
+.. automethod:: visbrain.Brain.background_color
 
 Screenshot
 ++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.screenshot
+.. automethod:: visbrain.Brain.screenshot
 
 .. _LoadSaveConfig:
 
@@ -84,11 +109,11 @@ Load and save GUI configuration
 
 Load an existing configuration
 ++++++++++++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.load_config
+.. automethod:: visbrain.Brain.load_config
 
 Save the current configuration
 ++++++++++++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.save_config
+.. automethod:: visbrain.Brain.save_config
 
 .. ##########################################################################
 ..                                    BRAIN
@@ -103,16 +128,16 @@ Set of functions for an interactive control of the main brain object. Use the me
 
 Control the brain
 +++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.brain_control
+.. automethod:: visbrain.Brain.brain_control
 
 List of available templates
 +++++++++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.brain_list
+.. automethod:: visbrain.Brain.brain_list
 
 
 Add mesh to the scene
 +++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.add_mesh
+.. automethod:: visbrain.Brain.add_mesh
 
 .. ##########################################################################
 ..                       VOLUME AND CROSS-SECTIONS
@@ -126,20 +151,20 @@ Volume and cross-sections
 Control the volume
 ++++++++++++++++++
 
-.. automethod:: visbrain.brain.user.BrainUserMethods.volume_control
+.. automethod:: visbrain.Brain.volume_control
 
 Add volume
 ++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.add_volume
+.. automethod:: visbrain.Brain.add_volume
 
 Get the list of volumes
 +++++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.volume_list
+.. automethod:: visbrain.Brain.volume_list
 
 Control cross-sections
 ++++++++++++++++++++++
 
-.. automethod:: visbrain.brain.user.BrainUserMethods.cross_sections_control
+.. automethod:: visbrain.Brain.cross_sections_control
 
 .. ##########################################################################
 ..                                 SOURCES
@@ -154,32 +179,32 @@ Set of functions for an interactive control of sources object. Use the methods b
 
 Control sources
 +++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.sources_control
+.. automethod:: visbrain.Brain.sources_control
 
 Select sources
 ++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.sources_display
+.. automethod:: visbrain.Brain.sources_display
 
 Fit to an object
 ++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.sources_fit_to_vertices
+.. automethod:: visbrain.Brain.sources_fit_to_vertices
 
 Convert into convex hull
 ++++++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.sources_to_convex_hull
+.. automethod:: visbrain.Brain.sources_to_convex_hull
 
 .. _CortProj:
 
 Cortical projection
 +++++++++++++++++++
 
-.. automethod:: visbrain.brain.user.BrainUserMethods.cortical_projection
+.. automethod:: visbrain.Brain.cortical_projection
 
 .. _CortRepart:
 
 Cortical repartition
 ++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.cortical_repartition
+.. automethod:: visbrain.Brain.cortical_repartition
 
 .. ##########################################################################
 ..                               TIME-SERIES
@@ -192,7 +217,7 @@ Time-series methods
 
 Time-series control
 +++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.time_series_control
+.. automethod:: visbrain.Brain.time_series_control
 
 
 .. ##########################################################################
@@ -206,7 +231,7 @@ Pictures methods
 
 Pictures control
 ++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.pictures_control
+.. automethod:: visbrain.Brain.pictures_control
 
 .. ##########################################################################
 ..                           CONNECTIVITY
@@ -221,7 +246,7 @@ Set of functions for an interactive control of connectivity object. Use the meth
 
 Control Connectivity
 ++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.connect_control
+.. automethod:: visbrain.Brain.connect_control
 
 .. ##########################################################################
 ..                                    ROI
@@ -236,11 +261,11 @@ Set of functions for an interactive control of ROI (Region of interest) objects.
 
 ROI control
 +++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.roi_control
+.. automethod:: visbrain.Brain.roi_control
 
 List of suported ROI
 ++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.roi_list
+.. automethod:: visbrain.Brain.roi_list
 
 .. ##########################################################################
 ..                              COLORBAR
@@ -253,20 +278,20 @@ Colorbar methods
 
 Colorbar control
 ++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.cbar_control
+.. automethod:: visbrain.Brain.cbar_control
 
 Select a colorbar
 +++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.cbar_select
+.. automethod:: visbrain.Brain.cbar_select
 
 List of available colorbars
 +++++++++++++++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.cbar_list
+.. automethod:: visbrain.Brain.cbar_list
 
 Export colorbar
 +++++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.cbar_export
+.. automethod:: visbrain.Brain.cbar_export
 
 Auto-scaling
 ++++++++++++
-.. automethod:: visbrain.brain.user.BrainUserMethods.cbar_autoscale
+.. automethod:: visbrain.Brain.cbar_autoscale

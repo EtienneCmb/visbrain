@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.signal.signal &mdash; visbrain 0.3.6 documentation</title>
+  <title>visbrain.signal.signal &mdash; visbrain 0.3.7 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.6
+                0.3.7
               </div>
             
           
@@ -290,7 +290,7 @@
 <span class="sd">        platform.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">enable_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="viewcode-block" id="Signal.__init__"><a class="viewcode-back" href="../../../generated/visbrain.Signal.html#visbrain.signal.signal.Signal.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">enable_grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">form</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">line_lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">line_smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">marker_symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span> <span class="n">marker_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">hist_nbins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                  <span class="n">tf_norm</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tf_baseline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tf_interp</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
@@ -422,7 +422,7 @@
         <span class="c1"># ------------- Annotations -------------</span>
         <span class="k">if</span> <span class="n">annotations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">annotations</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_load_annotations</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">annotations</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_load_annotations</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">annotations</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Iterate over signal dimension.&quot;&quot;&quot;</span>
@@ -479,7 +479,7 @@
         <span class="c1"># Update cameras :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_cameras</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">update_cameras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g_rect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s_rect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal.update_cameras"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.update_cameras">[docs]</a>    <span class="k">def</span> <span class="nf">update_cameras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g_rect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s_rect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update cameras.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">update</span> <span class="o">==</span> <span class="s1">&#39;both&#39;</span><span class="p">:</span>
             <span class="n">update_grid</span> <span class="o">=</span> <span class="n">update_signal</span> <span class="o">=</span> <span class="kc">True</span>
@@ -496,7 +496,7 @@
             <span class="n">s_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signal</span><span class="o">.</span><span class="n">rect</span> <span class="k">if</span> <span class="n">s_rect</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">s_rect</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">s_rect</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Signal.screenshot"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;screenshot.png&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">,</span>
                    <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -619,7 +619,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.6',
+            VERSION:'0.3.7',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

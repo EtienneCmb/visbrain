@@ -1,0 +1,11 @@
+visbrain.Sleep
+==============
+.. currentmodule:: visbrain
+.. autoclass:: Sleep
+   
+   .. automethod:: __init__
+   
+   
+   
+   
+   

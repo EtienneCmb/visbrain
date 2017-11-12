@@ -1,0 +1,414 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.visuals.cbar.CbarBase &mdash; visbrain 0.3.7 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.visuals.cbar.CbarBase</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.visuals.cbar.CbarBase</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Most basic colorbar class.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="k">import</span> <span class="n">color2tuple</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;CbarArgs&#39;</span><span class="p">,</span> <span class="s1">&#39;CbarBase&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CbarArgs</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Manage the different inputs for the colormap creation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cmap : string | None</span>
+<span class="sd">        Matplotlib colormap (like &#39;viridis&#39;, &#39;inferno&#39;...).</span>
+<span class="sd">    clim : tuple/list | None</span>
+<span class="sd">        Colorbar limit. Every values under / over clim will</span>
+<span class="sd">        clip.</span>
+<span class="sd">    isvmin : bool | False</span>
+<span class="sd">        Activate/deactivate vmin.</span>
+<span class="sd">    vmin : float | None</span>
+<span class="sd">        Every values under vmin will have the color defined</span>
+<span class="sd">        using the under parameter.</span>
+<span class="sd">    isvmax : bool | False</span>
+<span class="sd">        Activate/deactivate vmax.</span>
+<span class="sd">    vmax : float | None</span>
+<span class="sd">        Every values over vmin will have the color defined</span>
+<span class="sd">        using the over parameter.</span>
+<span class="sd">    under : tuple/string | None</span>
+<span class="sd">        Matplotlib color under vmin.</span>
+<span class="sd">    over : tuple/string | None</span>
+<span class="sd">        Matplotlib color over vmax.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isvmin</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">isvmax</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="c1"># Cmap/Clim/Vmin/Vmax/Under/Over :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clim</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmax</span> <span class="o">=</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isvmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isvmax</span> <span class="o">=</span> <span class="n">isvmin</span><span class="p">,</span> <span class="n">isvmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_under</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_over</span> <span class="o">=</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span>
+
+    <span class="k">def</span> <span class="nf">to_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addisminmax</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a dictionary for input arguments.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        addisminmax : bool | False</span>
+<span class="sd">            Specify if the returned dictionary have to had the ismin and</span>
+<span class="sd">            ismax variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;clim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clim</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmin</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isvmin</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;under&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_under</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmax</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isvmax</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_over</span>
+        <span class="k">if</span> <span class="n">addisminmax</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;isvmin&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;isvmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isvmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isvmax</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
+
+    <span class="k">def</span> <span class="nf">update_from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update attributes from a dictionary.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">exec</span><span class="p">(</span><span class="s1">&#39;self._&#39;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">exec</span><span class="p">(</span><span class="s2">&quot;self._&quot;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s2">&quot;=&#39;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CbarBase</span><span class="p">(</span><span class="n">CbarArgs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for colorbar.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cblabel : string | &#39;&#39;</span>
+<span class="sd">        Colorbar label.</span>
+<span class="sd">    cbtxtsz : float | 5..</span>
+<span class="sd">        Text size of the colorbar label.</span>
+<span class="sd">    cbtxtsh : float | 2.3</span>
+<span class="sd">        Shift for the colorbar label.</span>
+<span class="sd">    txtcolor : string | &#39;white&#39;</span>
+<span class="sd">        Text color.</span>
+<span class="sd">    txtsz : float | 3.</span>
+<span class="sd">        Text size for clim/vmin/vmax text.</span>
+<span class="sd">    txtsh : float | 1.2</span>
+<span class="sd">        Shift for clim/vmin/vmax text.</span>
+<span class="sd">    border : bool | True</span>
+<span class="sd">        Display colorbar borders.</span>
+<span class="sd">    bw : float | 2.</span>
+<span class="sd">        Border width.</span>
+<span class="sd">    limtxt : bool | True</span>
+<span class="sd">        Display vmin/vmax text.</span>
+<span class="sd">    bgcolor : tuple/string | (0., 0., 0.)</span>
+<span class="sd">        Background color of the colorbar canvas.</span>
+<span class="sd">    ndigits : int | 2</span>
+<span class="sd">        Number of digits for the text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isvmin</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">isvmax</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">cbtxtsz</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">cbtxtsh</span><span class="o">=</span><span class="mf">2.3</span><span class="p">,</span> <span class="n">txtcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
+                 <span class="n">txtsh</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">17</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">limtxt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">ndigits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">minmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fcn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">minmaxfcn</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">CbarArgs</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">isvmin</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">isvmax</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span>
+                          <span class="n">over</span><span class="p">)</span>
+        <span class="c1"># Cb text :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cblabel</span> <span class="o">=</span> <span class="n">cblabel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cbtxtsz</span> <span class="o">=</span> <span class="n">cbtxtsz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cbtxtsh</span> <span class="o">=</span> <span class="n">cbtxtsh</span>
+        <span class="c1"># Text :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_txtcolor</span> <span class="o">=</span> <span class="n">txtcolor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_txtsz</span> <span class="o">=</span> <span class="n">txtsz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_txtsh</span> <span class="o">=</span> <span class="n">txtsh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_limtxt</span> <span class="o">=</span> <span class="n">limtxt</span>
+        <span class="c1"># Settings :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bgcolor</span> <span class="o">=</span> <span class="n">bgcolor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_border</span> <span class="o">=</span> <span class="n">border</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bw</span> <span class="o">=</span> <span class="n">bw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ndigits</span> <span class="o">=</span> <span class="n">ndigits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="k">if</span> <span class="n">fcn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">fcn</span><span class="p">():</span>
+                <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn</span> <span class="o">=</span> <span class="n">fcn</span>
+        <span class="k">if</span> <span class="n">minmaxfcn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">minmaxfcn</span><span class="p">():</span>
+                <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_minmaxfcn</span> <span class="o">=</span> <span class="n">minmaxfcn</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get item (usefull for CbarObjects).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;self._&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set self items.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">exec</span><span class="p">(</span><span class="s2">&quot;self._&quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">exec</span><span class="p">(</span><span class="s2">&quot;self._&quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;=&#39;&quot;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1">#                             USER METHODS</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a dictionary of all colorbar args.&quot;&quot;&quot;</span>
+        <span class="n">todict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># cmap/clim/vmin/vmax/under/over :</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;clim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clim</span><span class="p">]</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;isvmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isvmin</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;vmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmin</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;under&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">color2tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_under</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;isvmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isvmax</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;vmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmax</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">color2tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_over</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="c1"># Cblabel :</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;cblabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cblabel</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;cbtxtsz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cbtxtsz</span><span class="p">)</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;cbtxtsh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cbtxtsh</span><span class="p">)</span>
+        <span class="c1"># Text :</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;txtcolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">color2tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_txtcolor</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;txtsz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_txtsz</span><span class="p">)</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;txtsh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_txtsh</span><span class="p">)</span>
+        <span class="c1"># Settings :</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;border&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_border</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;bw&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bw</span><span class="p">)</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;limtxt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_limtxt</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;bgcolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">color2tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bgcolor</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;ndigits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ndigits</span><span class="p">)</span>
+        <span class="n">todict</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">todict</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fonction to run when an update is needed.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fcn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No updating function found.&quot;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'0.3.7',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

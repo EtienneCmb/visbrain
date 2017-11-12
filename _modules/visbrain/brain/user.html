@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.brain.user &mdash; visbrain 0.3.6 documentation</title>
+  <title>visbrain.brain.user &mdash; visbrain 0.3.7 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.6
+                0.3.7
               </div>
             
           
@@ -172,6 +172,8 @@
 <span class="sd">really convenient for generating a large number of pictures by looping over a</span>
 <span class="sd">Brain instance.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">ConvexHull</span>
 
@@ -179,6 +181,8 @@
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">color2vb</span><span class="p">,</span> <span class="n">extend_combo_list</span><span class="p">,</span> <span class="n">safely_set_cbox</span><span class="p">,</span>
                      <span class="n">get_combo_list_index</span><span class="p">,</span> <span class="n">safely_set_spin</span><span class="p">,</span> <span class="n">safely_set_slider</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">save_config_json</span><span class="p">,</span> <span class="n">write_fig_canvas</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;BrainUserMethods&#39;</span><span class="p">)</span>
 
@@ -730,8 +734,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_mask_color</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mask_color</span><span class="p">))</span>
         <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_on</span><span class="p">,</span> <span class="n">project_on</span><span class="p">)</span>
         <span class="c1"># Colormap control :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_source_proj</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_source_proj</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BrainUserMethods.cortical_repartition"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cortical_repartition">[docs]</a>    <span class="k">def</span> <span class="nf">cortical_repartition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span>
                              <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -927,6 +931,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The selection parameter must be a list of &quot;</span>
                              <span class="s2">&quot;integers&quot;</span><span class="p">)</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Select </span><span class="si">{}</span><span class="s2"> ROI of </span><span class="si">{}</span><span class="s2"> template&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="n">roi_type</span><span class="p">))</span>
         <span class="c1"># Select roi_type in the combo list :</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="n">get_combo_list_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roiDiv</span><span class="p">,</span> <span class="n">roi_type</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_roiDiv</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
@@ -935,7 +940,7 @@
         <span class="c1"># Set selection :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_set_selected_rois</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
         <span class="c1"># Apply selection :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_apply_roi_selection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_apply_roi_selection</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="c1"># Add ROI to mesh list :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_proj_obj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_update_proj_list</span><span class="p">()</span>
@@ -1159,7 +1164,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.6',
+            VERSION:'0.3.7',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

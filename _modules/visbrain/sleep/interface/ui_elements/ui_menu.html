@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.sleep.interface.ui_elements.ui_menu &mdash; visbrain 0.3.7 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../../index.html"/> 
+
+  
+  <script src="../../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.sleep.interface.ui_elements.ui_menu</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.sleep.interface.ui_elements.ui_menu</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Main class for sleep menus managment.&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtWidgets</span>
+
+<span class="kn">from</span> <span class="nn">....utils</span> <span class="k">import</span> <span class="n">HelpMenu</span>
+<span class="kn">from</span> <span class="nn">....io</span> <span class="k">import</span> <span class="p">(</span><span class="n">dialogSave</span><span class="p">,</span> <span class="n">dialogLoad</span><span class="p">,</span> <span class="n">write_fig_hyp</span><span class="p">,</span> <span class="n">write_csv</span><span class="p">,</span>
+                    <span class="n">write_txt</span><span class="p">,</span> <span class="n">write_hypno_txt</span><span class="p">,</span> <span class="n">write_hypno_hyp</span><span class="p">,</span> <span class="n">read_hypno</span><span class="p">,</span>
+                    <span class="n">annotations_to_array</span><span class="p">,</span> <span class="n">oversample_hypno</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">UiMenu</span><span class="p">(</span><span class="n">HelpMenu</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Main class for sleep menus managment.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="s1">&#39;http://visbrain.org/sleep.html&#39;</span>
+        <span class="n">sections</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Sleep&#39;</span><span class="p">:</span> <span class="n">base</span><span class="p">,</span>
+                    <span class="s1">&#39;Hypnogram scoring&#39;</span><span class="p">:</span> <span class="n">base</span> <span class="o">+</span> <span class="s1">&#39;#hypnogram-scoring&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;Detections&#39;</span><span class="p">:</span> <span class="n">base</span> <span class="o">+</span> <span class="s1">&#39;#apply-semi-automatic-detection&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;Annotations&#39;</span><span class="p">:</span> <span class="n">base</span> <span class="o">+</span> <span class="s1">&#39;#import-add-and-save-annotations&#39;</span><span class="p">}</span>
+        <span class="n">HelpMenu</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sections</span><span class="p">)</span>
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="c1">#                                 SAVE</span>
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="c1"># Hypnogram :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveHypnogramData</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveHypData</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveHypnogramFigure</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveHypFig</span><span class="p">)</span>
+        <span class="c1"># Stats info table :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveInfoTable</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveInfoTable</span><span class="p">)</span>
+        <span class="c1"># Scoring table :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveScoringTable</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveScoringTable</span><span class="p">)</span>
+        <span class="c1"># Detections :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveDetectAll</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveAllDetect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveDetectSelected</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveSelectDetect</span><span class="p">)</span>
+        <span class="c1"># Sleep GUI config :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveConfig</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveConfig</span><span class="p">)</span>
+        <span class="c1"># Annotations :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveAnnotations</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saveAnnotationTable</span><span class="p">)</span>
+        <span class="c1"># Screenshot :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveScreenshot</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_gui_screenshot</span><span class="p">)</span>
+
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="c1">#                                 LOAD</span>
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="c1"># Load hypnogram :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuLoadHypno</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loadHypno</span><span class="p">)</span>
+        <span class="c1"># Sleep GUI config :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuLoadConfig</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loadConfig</span><span class="p">)</span>
+        <span class="c1"># Detections :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuLoadDetectAll</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loadDetectAll</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuLoadDetectSelect</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loadDetectSelect</span><span class="p">)</span>
+        <span class="c1"># Annotations :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuLoadAnnotations</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loadAnnotationTable</span><span class="p">)</span>
+
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="c1">#                                 EXIT</span>
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuExit</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">qApp</span><span class="o">.</span><span class="n">quit</span><span class="p">)</span>
+
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="c1">#                              DISPLAY</span>
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="c1"># Quick settings panel :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispSettings</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_disptog_settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Spectrogram :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispSpec</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_disptog_spec</span><span class="p">)</span>
+        <span class="c1"># Hypnogram :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispHypno</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_disptog_hyp</span><span class="p">)</span>
+        <span class="c1"># Time axis :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispTimeax</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_disptog_timeax</span><span class="p">)</span>
+        <span class="c1"># Navigation bar :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispNavbar</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_disptog_navbar</span><span class="p">)</span>
+        <span class="c1"># Time indicators :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispIndic</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_disptog_indic</span><span class="p">)</span>
+        <span class="c1"># Topoplot :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispTopo</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_disptog_topo</span><span class="p">)</span>
+        <span class="c1"># Zoom :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispZoom</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_disptog_zoom</span><span class="p">)</span>
+
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="c1">#                               SETTINGS</span>
+        <span class="c1"># _____________________________________________________________________</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSettingCleanHyp</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settCleanHyp</span><span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                           SAVE</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="c1"># ______________________ HYPNOGRAM ______________________</span>
+    <span class="k">def</span> <span class="nf">saveHypData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># noqa</span>
+        <span class="sd">&quot;&quot;&quot;Save the hypnogram data either in a hyp or txt file.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save File&#39;</span><span class="p">,</span> <span class="s1">&#39;hypno&#39;</span><span class="p">,</span> <span class="s2">&quot;Text file &quot;&quot;(*&quot;</span>
+                                  <span class="s2">&quot;.txt);;Elan file (*.hyp);;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+            <span class="c1"># Switch between differents types :</span>
+            <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;.hyp&#39;</span><span class="p">:</span>
+                <span class="n">write_hypno_hyp</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sfori</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;.txt&#39;</span><span class="p">:</span>
+                <span class="n">write_hypno_txt</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sfori</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not a valid extension&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">saveHypFig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save a 600 dpi .png figure of the hypnogram.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save Hypnogram figure&#39;</span><span class="p">,</span> <span class="s1">&#39;hypno&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;PNG (*.png);;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">write_fig_hyp</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toffset</span><span class="p">,</span>
+                          <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># ______________________ STATS INFO TABLE ______________________</span>
+    <span class="k">def</span> <span class="nf">saveInfoTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Export stat info.&quot;&quot;&quot;</span>
+        <span class="c1"># Get file name :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save file&#39;</span><span class="p">,</span> <span class="s1">&#39;statsinfo&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;CSV file (*.csv);;Text file (*.txt);;&quot;</span>
+                                  <span class="s2">&quot;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;csv&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_csv</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_keysInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valInfo</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_txt</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_keysInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valInfo</span><span class="p">))</span>
+
+    <span class="c1"># ______________________ SCORING TABLE ______________________</span>
+    <span class="k">def</span> <span class="nf">saveScoringTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Export score info.&quot;&quot;&quot;</span>
+        <span class="c1"># Read Table</span>
+        <span class="n">rowCount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scoreTable</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span>
+        <span class="n">staInd</span><span class="p">,</span> <span class="n">endInd</span><span class="p">,</span> <span class="n">stage</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">rowCount</span><span class="p">):</span>
+            <span class="n">staInd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scoreTable</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+            <span class="n">endInd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scoreTable</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+            <span class="n">stage</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scoreTable</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+        <span class="c1"># Get file name :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save file&#39;</span><span class="p">,</span> <span class="s1">&#39;scoring_info&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;CSV file (*.csv);;Text file (*.txt);;&quot;</span>
+                                  <span class="s2">&quot;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;csv&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_csv</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">staInd</span><span class="p">,</span> <span class="n">endInd</span><span class="p">,</span> <span class="n">stage</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_txt</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">staInd</span><span class="p">,</span> <span class="n">endInd</span><span class="p">,</span> <span class="n">stage</span><span class="p">))</span>
+
+    <span class="c1"># ______________________ DETECTIONS ______________________</span>
+    <span class="k">def</span> <span class="nf">_CheckDetectMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Activate/Deactivate the saving detection menu.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuSaveDetections</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_detect</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">saveAllDetect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Export all detections.&quot;&quot;&quot;</span>
+        <span class="c1"># Get file name :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save all detections&#39;</span><span class="p">,</span> <span class="s1">&#39;detections&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;NumPy (*.npy);;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.npy&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_detect</span><span class="o">.</span><span class="n">dict</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">saveSelectDetect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Export selected detection.&quot;&quot;&quot;</span>
+        <span class="n">channel</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getCurrentChanType</span><span class="p">()</span>
+        <span class="c1"># Read Table</span>
+        <span class="n">rowCount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DetectLocations</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span>
+        <span class="n">staInd</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;Time index (s)&#39;</span><span class="p">]</span>
+        <span class="n">endInd</span> <span class="o">=</span> <span class="p">[</span><span class="n">method</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;Time index (s)&#39;</span><span class="p">]</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;Duration (s)&#39;</span><span class="p">]</span>
+        <span class="n">stage</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;Sleep stage&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">rowCount</span><span class="p">):</span>
+            <span class="n">staInd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_DetectLocations</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+            <span class="n">endInd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_DetectLocations</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+            <span class="n">duration</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_DetectLocations</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+            <span class="n">stage</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_DetectLocations</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+        <span class="c1"># Get file name :</span>
+        <span class="n">saveas</span> <span class="o">=</span> <span class="s2">&quot;locinfo&quot;</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">channel</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">method</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save &#39;</span> <span class="o">+</span> <span class="n">method</span> <span class="o">+</span> <span class="s1">&#39; detection&#39;</span><span class="p">,</span>
+                                  <span class="n">saveas</span><span class="p">,</span> <span class="s2">&quot;CSV file (*.csv);;Text file (*.txt)&quot;</span>
+                                  <span class="s2">&quot;;;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">file</span> <span class="o">+=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">channel</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="n">method</span>
+            <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;csv&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_csv</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">staInd</span><span class="p">,</span> <span class="n">endInd</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">stage</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_txt</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">staInd</span><span class="p">,</span> <span class="n">endInd</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">stage</span><span class="p">))</span>
+
+    <span class="c1"># ______________________ SLEEP GUI CONFIG ______________________</span>
+    <span class="k">def</span> <span class="nf">saveConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save a config file (*.txt) containing several display parameters.&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">json</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save config File&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;Text file (*.txt);;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="c1"># Get channels visibility / amplitude :</span>
+                <span class="n">viz</span><span class="p">,</span> <span class="n">amp</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_chanChecks</span><span class="p">):</span>
+                    <span class="n">viz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+                    <span class="n">amp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ymaxSpin</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Channel_Names&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Channel_Visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">viz</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Channel_Amplitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amp</span>
+                <span class="c1"># config[&#39;AllAmpMin&#39;] = self._PanAllAmpMin.value()</span>
+                <span class="c1"># config[&#39;AllAmpMax&#39;] = self._PanAllAmpMax.value()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SymAmp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanAmpSym</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;AutoAmp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanAmpAuto</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="c1"># Spectrogram :</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Spec_Visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispSpec</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Spec_Length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecNfft</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Spec_Overlap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecStep</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Spec_Cmap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecCmap</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Spec_Chan&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecChan</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Spec_Fstart&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecFstart</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Spec_Fend&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecFend</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Spec_Con&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecCon</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                <span class="c1"># Hypnogram/time axis/navigation/topo/indic/zoom :</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Hyp_Visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispHypno</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Time_Visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispTimeax</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Topo_Visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispTopo</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Nav_Visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispNavbar</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Indic_Visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispIndic</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Zoom_Visible&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispZoom</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="c1"># Navigation bar properties :</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Slider&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SigSlStep</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Window&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SigWin</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Goto&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SlGoto</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Magnify&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slMagnify</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;AbsTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slAbsTime</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slGrid</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Unit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slRules</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="c1"># ______________________ ANNOTATION TABLE ______________________</span>
+    <span class="k">def</span> <span class="nf">saveAnnotationTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Export annotation table.&quot;&quot;&quot;</span>
+        <span class="c1"># Read Table</span>
+        <span class="n">rowCount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateTable</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span>
+        <span class="n">staInd</span><span class="p">,</span> <span class="n">endInd</span><span class="p">,</span> <span class="n">annot</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">rowCount</span><span class="p">):</span>
+            <span class="n">staInd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateTable</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+            <span class="n">endInd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateTable</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+            <span class="n">annot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateTable</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+        <span class="c1"># Get file name :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save annotations&#39;</span><span class="p">,</span> <span class="s1">&#39;annotations&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;CSV file (*.csv);;Text file (*.txt);;&quot;</span>
+                                  <span class="s2">&quot;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">file</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;csv&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_csv</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">staInd</span><span class="p">,</span> <span class="n">endInd</span><span class="p">,</span> <span class="n">annot</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">ext</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">write_txt</span><span class="p">(</span><span class="n">file</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">staInd</span><span class="p">,</span> <span class="n">endInd</span><span class="p">,</span> <span class="n">annot</span><span class="p">))</span>
+
+    <span class="c1"># ______________________ SCREENSHOT ______________________</span>
+    <span class="k">def</span> <span class="nf">_fcn_gui_screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Screenshot using the GUI.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_gui_screenshot</span><span class="p">()</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                    LOAD</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">loadHypno</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a hypnogram.&quot;&quot;&quot;</span>
+        <span class="c1"># Get filename :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Load hypnogram File&#39;</span><span class="p">,</span> <span class="s1">&#39;hypno&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;Text file (*.txt);;Elan file (*.hyp);;&quot;</span>
+                                  <span class="s2">&quot;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="c1"># Load the hypnogram :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">read_hypno</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span> <span class="o">=</span> <span class="n">oversample_hypno</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">)[::</span><span class="bp">self</span><span class="o">.</span><span class="n">_dsf</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">)</span>
+            <span class="c1"># Update info table :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_infoUpdate</span><span class="p">()</span>
+            <span class="c1"># Update scoring table :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_Hypno2Score</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_Score2Hypno</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">loadConfig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a config file (*.txt) containing several display parameters.&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">json</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Load config File&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;Text file (*.txt);;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="c1"># Load the configuration file :</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+                <span class="k">def</span> <span class="nf">_try</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="bp">self</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">):</span>
+                    <span class="sd">&quot;&quot;&quot;Execute the string.</span>
+
+<span class="sd">                    This function insure backward compatibility for loading the</span>
+<span class="sd">                    configuration file.</span>
+<span class="sd">                    &quot;&quot;&quot;</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">exec</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+
+                <span class="c1"># Channels</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_chanChecks</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_chanChecks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span>
+                        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Channel_Visible&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ymaxSpin</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Channel_Amplitude&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                <span class="c1"># Amplitudes :</span>
+                <span class="c1"># _try(&quot;self._PanAllAmpMin.setValue(config[&#39;AllAmpMin&#39;])&quot;)</span>
+                <span class="c1"># _try(&quot;self._PanAllAmpMax.setValue(config[&#39;AllAmpMax&#39;])&quot;)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._PanAmpSym.setChecked(config[&#39;SymAmp&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._PanAmpAuto.setChecked(config[&#39;AutoAmp&#39;])&quot;</span><span class="p">)</span>
+                <span class="c1"># Spectrogram</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self.menuDispSpec.setChecked(config[&#39;Spec_Visible&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._PanSpecNfft.setValue(config[&#39;Spec_Length&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._PanSpecStep.setValue(config[&#39;Spec_Overlap&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._PanSpecCmap.setCurrentIndex(config[&#39;Spec_Cmap&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._PanSpecChan.setCurrentIndex(config[&#39;Spec_Chan&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._PanSpecFstart.setValue(config[&#39;Spec_Fstart&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._PanSpecFend.setValue(config[&#39;Spec_Fend&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._PanSpecCon.setValue(config[&#39;Spec_Con&#39;])&quot;</span><span class="p">)</span>
+                <span class="c1"># Hypnogram/time axis/navigation/topo/indic/zoom :</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self.menuDispHypno.setChecked(config[&#39;Hyp_Visible&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self.menuDispTimeax.setChecked(config[&#39;Time_Visible&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self.menuDispTopo.setChecked(config[&#39;Topo_Visible&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self.menuDispNavbar.setChecked(config[&#39;Nav_Visible&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self.menuDispIndic.setChecked(config[&#39;Indic_Visible&#39;])&quot;</span><span class="p">)</span>
+                <span class="c1"># Navigation bar properties :</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._SlVal.setValue(config[&#39;Slider&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._SigSlStep.setValue(config[&#39;Step&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._SigWin.setValue(config[&#39;Window&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._SlGoto.setValue(config[&#39;Goto&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._slMagnify.setChecked(config[&#39;Magnify&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._slAbsTime.setChecked(config[&#39;AbsTime&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._slGrid.setChecked(config[&#39;Grid&#39;])&quot;</span><span class="p">)</span>
+                <span class="n">_try</span><span class="p">(</span><span class="s2">&quot;self._slRules.setCurrentIndex(config[&#39;Unit&#39;])&quot;</span><span class="p">)</span>
+                <span class="c1"># Update display</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_chanViz</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_chanAmplitude</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_specSetData</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_disptog_spec</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_disptog_hyp</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_disptog_timeax</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_disptog_topo</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_disptog_indic</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_disptog_zoom</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_gridToggle</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_updateAmpInfo</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_chanAutoAmp</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_chanSymAmp</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">loadDetectAll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load all detections.&quot;&quot;&quot;</span>
+        <span class="c1"># Dialog window for detection file :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Import detections&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;NumPy (*.npy);;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_detect</span><span class="o">.</span><span class="n">dict</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">tolist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="c1"># Made canvas visbles :</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_detect</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_detect</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                <span class="c1"># Get channel number :</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">canvas_setVisible</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_chan</span><span class="o">.</span><span class="n">visible</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># Plot update :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_locLineReport</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_CheckDetectMenu</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">loadDetectSelect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a specific detection.&quot;&quot;&quot;</span>
+        <span class="c1"># Get file name :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Import table&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;CSV file (*.csv);;Text file (*.txt);;&quot;</span>
+                                  <span class="s2">&quot;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="c1"># Get channel / method from file name :</span>
+            <span class="p">(</span><span class="n">chan</span><span class="p">,</span> <span class="n">meth</span><span class="p">)</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+            <span class="c1"># Load the file :</span>
+            <span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">3</span><span class="p">::,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+            <span class="c1"># Sort by starting index :</span>
+            <span class="n">idxsort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+            <span class="n">st</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">st</span><span class="p">[</span><span class="n">idxsort</span><span class="p">],</span> <span class="n">end</span><span class="p">[</span><span class="n">idxsort</span><span class="p">]</span>
+            <span class="c1"># Concatenate (starting, ending) index :</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">st</span><span class="p">,</span> <span class="n">end</span><span class="p">]</span>
+            <span class="c1"># Convert into index :</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">index</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sf</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="c1"># Set index :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_detect</span><span class="p">[(</span><span class="n">chan</span><span class="p">,</span> <span class="n">meth</span><span class="p">)][</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="c1"># Plot update :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_locLineReport</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_CheckDetectMenu</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">loadAnnotationTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load annotations.&quot;&quot;&quot;</span>
+        <span class="c1"># Get file name :</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">dialogLoad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Import annotations&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;CSV file (*.csv);;Text file (*.txt);;&quot;</span>
+                                  <span class="s2">&quot;All files (*.*)&quot;</span><span class="p">)</span>
+        <span class="c1"># Clean annotations :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateTable</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">annot</span> <span class="o">=</span> <span class="n">annotations_to_array</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="c1"># Fill table :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateTable</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">start</span><span class="p">))</span>
+        <span class="c1"># File the table :</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">annot</span><span class="p">)):</span>
+            <span class="c1"># Starting index :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateTable</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span>
+                <span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidgetItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)))</span>
+            <span class="c1"># Ending index :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateTable</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span>
+                <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidgetItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+            <span class="c1"># Text :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateTable</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span>
+                <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QTableWidgetItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+            <span class="c1"># Set the current tab to the annotation tab :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">QuickSettings</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1"># Set markers :</span>
+        <span class="n">middle</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">+</span> <span class="n">end</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annot_mark</span> <span class="o">=</span> <span class="n">middle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">()</span>
+
+    <span class="c1">###########################################################</span>
+    <span class="c1">###########################################################</span>
+    <span class="c1">#                            DISPLAY</span>
+    <span class="c1">###########################################################</span>
+    <span class="c1">###########################################################</span>
+
+    <span class="k">def</span> <span class="nf">_disptog_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle method for display / hide the settings panel.</span>
+
+<span class="sd">        Shortcut : CTRL + D</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">viz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="o">.</span><span class="n">isVisible</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_widget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="ow">not</span> <span class="n">viz</span><span class="p">)</span>
+        <span class="c1"># Set topo widget larger if settings panel hide :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_topoW</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">300</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="o">.</span><span class="mi">7</span> <span class="o">*</span> <span class="n">viz</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_disptog_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle method for display / hide the spectrogram.</span>
+
+<span class="sd">        Shortcut : S</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">viz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispSpec</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SpecW</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specLabel</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecW</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_disptog_hyp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle method for display / hide the hypnogram.</span>
+
+<span class="sd">        Shortcut : H</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">viz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispHypno</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_HypW</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hypLabel</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_disptog_navbar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle method for display / hide the navigation bar.</span>
+
+<span class="sd">        Shortcut : P</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slFrame</span><span class="o">.</span><span class="n">hide</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slFrame</span><span class="o">.</span><span class="n">isVisible</span><span class="p">(</span>
+        <span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slFrame</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_disptog_timeax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle method for display / hide the time axis.</span>
+
+<span class="sd">        Shortcut : X</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">viz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispTimeax</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_TimeAxisW</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeLabel</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_disptog_topo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle method for display / hide the topoplot.</span>
+
+<span class="sd">        Shortcut : T</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">viz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispTopo</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_topoW</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_PanTopoVizW</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">viz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">viz</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_topoSettings</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_disptog_indic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle method for display / hide the time indicators.&quot;&quot;&quot;</span>
+        <span class="n">viz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispIndic</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specInd</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">viz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hypInd</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">viz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_TimeAxis</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">viz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_disptog_zoom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle zoom mode.&quot;&quot;&quot;</span>
+        <span class="n">activeIndic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispZoom</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">activeIndic</span><span class="p">:</span>
+            <span class="c1"># Spectrogram camera :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_speccam</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">freq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_specInd</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispIndic</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+            <span class="c1"># Hypnogram camera :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hypcam</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="o">-</span><span class="mf">5.</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mf">7.</span><span class="p">)</span>
+            <span class="c1"># Time camera :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timecam</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mf">0.</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mf">1.</span><span class="p">)</span>
+
+        <span class="c1"># Activate / Deactivate indicators :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispIndic</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="ow">not</span> <span class="n">activeIndic</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuDispIndic</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="ow">not</span> <span class="n">activeIndic</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hypInd</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">activeIndic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specInd</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">activeIndic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_TimeAxis</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">activeIndic</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderSettings</span><span class="p">()</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                            SETTINGS</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="k">def</span> <span class="nf">settCleanHyp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clean the hypnogram.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="p">),),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">)</span>
+        <span class="c1"># Update info table :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_infoUpdate</span><span class="p">()</span>
+        <span class="c1"># Update scoring table :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_Hypno2Score</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_Score2Hypno</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../../',
+            VERSION:'0.3.7',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -21,9 +21,10 @@ Brain object
 
    Brain object example
 
-.. currentmodule:: visbrain.objects.brain_obj
+.. currentmodule:: visbrain.objects
 
 .. autoclass:: BrainObj
+  :members: preview, set_data, set_state, rotate, add_activation
 
     .. rubric:: Methods
 
@@ -34,11 +35,10 @@ Brain object
         ~BrainObj.rotate
         ~BrainObj.add_activation
 
-.. automethod:: BrainObj.preview
-.. automethod:: BrainObj.set_data
-.. automethod:: BrainObj.set_state
-.. automethod:: BrainObj.rotate
-.. automethod:: BrainObj.add_activation
+.. include:: generated/visbrain.objects.BrainObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 .. _SourceObj:
 
@@ -50,9 +50,10 @@ Source object
 
    Source object example
 
-.. currentmodule:: visbrain.objects.source_obj
+.. currentmodule:: visbrain.objects
 
 .. autoclass:: SourceObj
+  :members: preview, analyse_sources, color_sources, set_visible_sources, fit_to_vertices, project_modulation, project_repartition
 
     .. rubric:: Methods
 
@@ -65,13 +66,10 @@ Source object
         ~SourceObj.project_modulation
         ~SourceObj.project_repartition
 
-.. automethod:: SourceObj.preview
-.. automethod:: SourceObj.analyse_sources
-.. automethod:: SourceObj.color_sources
-.. automethod:: SourceObj.set_visible_sources
-.. automethod:: SourceObj.fit_to_vertices
-.. automethod:: SourceObj.project_modulation
-.. automethod:: SourceObj.project_repartition
+.. include:: generated/visbrain.objects.SourceObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 .. _ConnectObj:
 
@@ -83,16 +81,20 @@ Connectivity object
 
    Connectivity object example
 
-.. currentmodule:: visbrain.objects.connect_obj
+.. currentmodule:: visbrain.objects
 
 .. autoclass:: ConnectObj
+  :members: preview
 
     .. rubric:: Methods
 
     .. autosummary::
         ~ConnectObj.preview
 
-.. automethod:: ConnectObj.preview
+.. include:: generated/visbrain.objects.ConnectObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 .. _VectorObj:
 
@@ -104,16 +106,20 @@ Vector object
 
    Vector object example
 
-.. currentmodule:: visbrain.objects.vector_obj
+.. currentmodule:: visbrain.objects
 
 .. autoclass:: VectorObj
+  :members: preview
 
     .. rubric:: Methods
 
     .. autosummary::
         ~VectorObj.preview
 
-.. automethod:: VectorObj.preview
+.. include:: generated/visbrain.objects.VectorObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 .. _TSObj:
 
@@ -125,16 +131,20 @@ Time-series object
 
    3-D time-series object example
 
-.. currentmodule:: visbrain.objects.ts_obj
+.. currentmodule:: visbrain.objects
 
 .. autoclass:: TimeSeriesObj
+  :members: preview
 
     .. rubric:: Methods
 
     .. autosummary::
         ~TimeSeriesObj.preview
 
-.. automethod:: TimeSeriesObj.preview
+.. include:: generated/visbrain.objects.TimeSeriesObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 .. _PicObj:
 
@@ -146,16 +156,20 @@ Pictures object
 
    3-D pictures object example
 
-.. currentmodule:: visbrain.objects.picture_obj
+.. currentmodule:: visbrain.objects
 
 .. autoclass:: PictureObj
+  :members: preview
 
     .. rubric:: Methods
 
     .. autosummary::
         ~PictureObj.preview
 
-.. automethod:: PictureObj.preview
+.. include:: generated/visbrain.objects.PictureObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 .. _RoiObj:
 
@@ -167,9 +181,10 @@ Region Of Interest object
 
    Region Of Interest object example
 
-.. currentmodule:: visbrain.objects.roi_obj
+.. currentmodule:: visbrain.objects
 
 .. autoclass:: RoiObj
+  :members: preview, change_roi_object, localize_sources, get_roi_vertices
 
     .. rubric:: Methods
 
@@ -178,8 +193,3 @@ Region Of Interest object
         ~RoiObj.change_roi_object
         ~RoiObj.localize_sources
         ~RoiObj.get_roi_vertices
-
-.. automethod:: RoiObj.preview
-.. automethod:: RoiObj.change_roi_object
-.. automethod:: RoiObj.localize_sources
-.. automethod:: RoiObj.get_roi_vertices

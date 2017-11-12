@@ -16,6 +16,8 @@ from visbrain import Brain
 from visbrain.objects import SourceObj, ConnectObj
 from visbrain.io import download_file, path_to_visbrain_data
 
+print(__doc__)
+
 # Create an empty kwargs dictionnary :
 kwargs = {}
 

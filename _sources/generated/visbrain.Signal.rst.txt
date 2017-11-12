@@ -1,0 +1,11 @@
+visbrain.Signal
+===============
+.. currentmodule:: visbrain
+.. autoclass:: Signal
+   
+   .. automethod:: __init__
+   
+   
+   
+   
+   

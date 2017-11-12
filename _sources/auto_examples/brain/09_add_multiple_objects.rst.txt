@@ -24,6 +24,8 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     from visbrain.objects import SourceObj, ConnectObj
     from visbrain.io import download_file, path_to_visbrain_data
 
+    print(__doc__)
+
     # Create an empty kwargs dictionnary :
     kwargs = {}
 

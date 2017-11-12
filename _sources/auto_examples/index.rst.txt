@@ -424,6 +424,99 @@ Examples demonstrating figure layout.
 
     <div style='clear:both'></div>
 
+Pysurfer Examples
+-----------------
+
+Reproduction of PySurfer examples.
+
+.. contents:: Contents
+   :local:
+   :depth: 2
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Display a conjunction map from a nii.gz file (NiBabel required).">
+
+.. only:: html
+
+    .. figure:: /auto_examples/pysurfer/images/thumb/sphx_glr_conjunction_map_thumb.png
+
+        :ref:`sphx_glr_auto_examples_pysurfer_conjunction_map.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/pysurfer/conjunction_map
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Display fMRI activations from a nii.gz file (NiBabel required).">
+
+.. only:: html
+
+    .. figure:: /auto_examples/pysurfer/images/thumb/sphx_glr_fmri_activation_thumb.png
+
+        :ref:`sphx_glr_auto_examples_pysurfer_fmri_activation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/pysurfer/fmri_activation
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot MEG inverse solution.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/pysurfer/images/thumb/sphx_glr_meg_inverse_solution_thumb.png
+
+        :ref:`sphx_glr_auto_examples_pysurfer_meg_inverse_solution.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/pysurfer/meg_inverse_solution
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot vector-valued MEG inverse solution.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/pysurfer/images/thumb/sphx_glr_vector_based_meg_inverse_thumb.png
+
+        :ref:`sphx_glr_auto_examples_pysurfer_vector_based_meg_inverse.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/pysurfer/vector_based_meg_inverse
+.. raw:: html
+
+    <div style='clear:both'></div>
+
 Signal Examples
 ---------------
 

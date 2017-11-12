@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.objects.vector_obj &mdash; visbrain 0.3.6 documentation</title>
+  <title>visbrain.objects.vector_obj &mdash; visbrain 0.3.7 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.6
+                0.3.7
               </div>
             
           
@@ -212,6 +212,10 @@
 <span class="sd">    color : array_like/tuple/string | &#39;black&#39;</span>
 <span class="sd">        If no data are provided, use this parameter to set a unique color for</span>
 <span class="sd">        all vectors.</span>
+<span class="sd">    dynamic : tuple | None</span>
+<span class="sd">        Use a dynamic transparency method. The dynamic input must be a tuple</span>
+<span class="sd">        of two float between [0, 1]. Vectors with stronger associated data are</span>
+<span class="sd">        going to be set more opaque.</span>
 <span class="sd">    line_width : float | 5.</span>
 <span class="sd">        Line width of each vector.</span>
 <span class="sd">    arrow_size : float | 10.</span>
@@ -220,6 +224,9 @@
 <span class="sd">        The arrow-head type. Use either &#39;stealth&#39;, &#39;curved&#39;, &#39;angle_30&#39;,</span>
 <span class="sd">        &#39;angle_60&#39;, &#39;angle_90&#39;, &#39;triangle_30&#39;, &#39;triangle_60&#39;, &#39;triangle_90&#39;</span>
 <span class="sd">        or &#39;inhibitor_round&#39;.</span>
+<span class="sd">    arrow_coef : float | 1.</span>
+<span class="sd">        Use this coefficient to define longer arrows. Must be a float superior</span>
+<span class="sd">        to 1.</span>
 <span class="sd">    antialias : bool | False</span>
 <span class="sd">        Use smoothed lines.</span>
 <span class="sd">    cmap : string | &#39;viridis&#39;</span>
@@ -262,10 +269,11 @@
     <span class="c1">###########################################################################</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">arrows</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inferred_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">arrow_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
-                 <span class="n">arrow_type</span><span class="o">=</span><span class="s1">&#39;stealth&#39;</span><span class="p">,</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
-                 <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
-                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span>
+                 <span class="n">arrow_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">arrow_type</span><span class="o">=</span><span class="s1">&#39;stealth&#39;</span><span class="p">,</span> <span class="n">arrow_coef</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># Init Visbrain object base class and SourceProjection :</span>
         <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
@@ -301,6 +309,8 @@
             <span class="n">arrow_end</span> <span class="o">=</span> <span class="n">arrow_start</span> <span class="o">+</span> <span class="n">norm</span> <span class="o">*</span> <span class="n">arrows</span><span class="p">[</span><span class="s1">&#39;normals&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Undefined type for the `arrows` input.&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">arrow_coef</span> <span class="o">&gt;=</span> <span class="mf">1.</span>
+        <span class="n">arrow_end</span> <span class="o">*=</span> <span class="n">arrow_coef</span>
 
         <span class="c1"># _______________________ CHECKING _______________________</span>
         <span class="c1"># Line width // arrow type / size :</span>
@@ -309,12 +319,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_line_width</span> <span class="o">=</span> <span class="n">line_width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_arrow_size</span> <span class="o">=</span> <span class="n">arrow_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_arrow_type</span> <span class="o">=</span> <span class="n">arrow_type</span>
-        <span class="c1">#</span>
+        <span class="c1"># Get color :</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="c1"># Clim :</span>
             <span class="n">clim</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="k">if</span> <span class="n">clim</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">clim</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">clim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+            <span class="c1"># Color :</span>
             <span class="n">color</span> <span class="o">=</span> <span class="n">array2colormap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
                                    <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="n">over</span><span class="p">)</span>
+            <span class="c1"># Dynamic transparency :</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dynamic</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dynamic</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mf">0.</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">1.</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dynamic</span><span class="p">)</span>
+                <span class="n">color</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">dynamic</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dynamic</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">color2vb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
 
@@ -436,7 +452,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.6',
+            VERSION:'0.3.7',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

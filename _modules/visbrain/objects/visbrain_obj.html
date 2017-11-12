@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>visbrain.objects.visbrain_obj &mdash; visbrain 0.3.6 documentation</title>
+  <title>visbrain.objects.visbrain_obj &mdash; visbrain 0.3.7 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="visbrain 0.3.6 documentation" href="../../../index.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.6
+                0.3.7
               </div>
             
           
@@ -172,7 +172,9 @@
 <span class="kn">import</span> <span class="nn">vispy.visuals.transforms</span> <span class="k">as</span> <span class="nn">vist</span>
 
 <span class="kn">from</span> <span class="nn">.scene_obj</span> <span class="k">import</span> <span class="n">VisbrainCanvas</span>
+<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">set_log_level</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">vispy_app</span>
 
 
 <span class="k">class</span> <span class="nc">VisbrainObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -210,25 +212,94 @@
         <span class="sd">&quot;&quot;&quot;Return the object name.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
-    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the object parent for preview and screenshot.&quot;&quot;&quot;</span>
+        <span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
+        <span class="n">canvas</span> <span class="o">=</span> <span class="n">VisbrainCanvas</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
+                                <span class="n">bgcolor</span><span class="o">=</span><span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">),</span> <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
+        <span class="k">return</span> <span class="n">canvas</span>
+
+    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Previsualize the result.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        bgcolor : array_like/string/tuple | &#39;white&#39;</span>
 <span class="sd">            Background color for the preview.</span>
+<span class="sd">        axis : bool | False</span>
+<span class="sd">            Add x and y axis with ticks.</span>
+<span class="sd">        xyz : bool | False</span>
+<span class="sd">            Add an (x, y, z) axis to the scene.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">parent_bck</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span>
-        <span class="n">canvas</span> <span class="o">=</span> <span class="n">VisbrainCanvas</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
-                                <span class="n">bgcolor</span><span class="o">=</span><span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
-        <span class="n">canvas</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
-        <span class="c1"># vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)</span>
+        <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_parent</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">show</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">xyz</span><span class="p">:</span>
+            <span class="n">vispy</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">XYZAxis</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span><span class="p">)</span>
         <span class="c1"># view.camera = camera</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">interactive</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">show</span><span class="p">:</span>
-            <span class="n">vispy</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">vispy_app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="c1"># Reset orignial parent :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent_bck</span>
+
+    <span class="k">def</span> <span class="nf">describe_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Tree description.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">describe_tree</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
+                   <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                   <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Take a screeshot of the scene.</span>
+
+<span class="sd">        By default, the rendered canvas will have the size of your screen.</span>
+<span class="sd">        The screenshot() method provides two ways to increase to exported image</span>
+<span class="sd">        resolution :</span>
+
+<span class="sd">            * Using print_size, unit and dpi inputs : specify the size of the</span>
+<span class="sd">              image at a specific dpi level. For example, you might want to</span>
+<span class="sd">              have an (10cm, 15cm) image at 300 dpi.</span>
+<span class="sd">            * Using the factor input : multiply the default image size by this</span>
+<span class="sd">              factor. For example, if you have a (1920, 1080) monitor and if</span>
+<span class="sd">              factor is 2, the exported image should have a shape of</span>
+<span class="sd">              (3840, 2160) pixels.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        saveas : str</span>
+<span class="sd">            The name of the file to be saved. This file must contains a</span>
+<span class="sd">            extension like .png, .tiff, .jpg...</span>
+<span class="sd">        print_size : tuple | None</span>
+<span class="sd">            The desired print size. This argument should be used in association</span>
+<span class="sd">            with the dpi and unit inputs. print_size describe should be a tuple</span>
+<span class="sd">            of two floats describing (width, height) of the exported image for</span>
+<span class="sd">            a specific dpi level. The final image might not have the exact</span>
+<span class="sd">            desired size but will try instead to find a compromize</span>
+<span class="sd">            regarding to the proportion of width/height of the original image.</span>
+<span class="sd">        dpi : float | 300.</span>
+<span class="sd">            Dots per inch for printing the image.</span>
+<span class="sd">        unit : {&#39;centimeter&#39;, &#39;millimeter&#39;, &#39;pixel&#39;, &#39;inch&#39;}</span>
+<span class="sd">            Unit of the printed size.</span>
+<span class="sd">        factor : float | None</span>
+<span class="sd">            If you don&#39;t want to use the print_size input, factor simply</span>
+<span class="sd">            multiply the resolution of your screen.</span>
+<span class="sd">        region : tuple | None</span>
+<span class="sd">            Select a specific region. Must be a tuple of four integers each one</span>
+<span class="sd">            describing (x_start, y_start, width, height).</span>
+<span class="sd">        autocrop : bool | False</span>
+<span class="sd">            Automaticaly crop the figure in order to have the smallest</span>
+<span class="sd">            space between the brain and the border of the picture.</span>
+<span class="sd">        bgcolor : array_like/string | None</span>
+<span class="sd">            The background color of the image.</span>
+<span class="sd">        transparent : bool | False</span>
+<span class="sd">            Specify if the exported figure have to contains a transparent</span>
+<span class="sd">            background.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">print_size</span><span class="o">=</span><span class="n">print_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="n">factor</span><span class="p">,</span>
+                      <span class="n">autocrop</span><span class="o">=</span><span class="n">autocrop</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
+                      <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="n">transparent</span><span class="p">)</span>
+        <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_parent</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># ----------- PARENT -----------</span>
     <span class="nd">@property</span>
@@ -437,7 +508,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.3.6',
+            VERSION:'0.3.7',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

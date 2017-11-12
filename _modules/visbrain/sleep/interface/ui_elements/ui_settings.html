@@ -1,0 +1,557 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.sleep.interface.ui_elements.ui_settings &mdash; visbrain 0.3.7 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../../index.html"/> 
+
+  
+  <script src="../../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.sleep.interface.ui_elements.ui_settings</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.sleep.interface.ui_elements.ui_settings</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Main class for settings managment.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">QObjectCleanupHandler</span>
+
+<span class="kn">import</span> <span class="nn">vispy.visuals.transforms</span> <span class="k">as</span> <span class="nn">vist</span>
+
+
+<span class="k">class</span> <span class="nc">UiSettings</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Main class for settings managment.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="c1"># =====================================================================</span>
+        <span class="c1"># SLIDER</span>
+        <span class="c1"># =====================================================================</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slFrame</span><span class="o">.</span><span class="n">setMaximumHeight</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="c1"># Function applied when the slider move :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slOnStart</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderSettings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">)</span>
+        <span class="c1"># Function applied when slider&#39;s settings changed :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SigWin</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SigWin</span><span class="o">.</span><span class="n">setKeyboardTracking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SigSlStep</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderSettings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SigSlStep</span><span class="o">.</span><span class="n">setKeyboardTracking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Spin box for window selection :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlGoto</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderWinSelection</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlGoto</span><span class="o">.</span><span class="n">setKeyboardTracking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Unit conversion :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slRules</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">)</span>
+        <span class="c1"># Grid toggle :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slGrid</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_gridToggle</span><span class="p">)</span>
+        <span class="c1"># Text format :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slTxtFormat</span> <span class="o">=</span> <span class="s2">&quot;Window : [ </span><span class="si">{start}</span><span class="s2"> ; </span><span class="si">{end}</span><span class="s2"> ] </span><span class="si">{unit}</span><span class="s2"> || &quot;</span> <span class="o">+</span> \
+                            <span class="s2">&quot;Sleep stage : </span><span class="si">{conv}</span><span class="s2">&quot;</span>
+        <span class="c1"># Absolute time :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slAbsTime</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">)</span>
+        <span class="c1"># Magnify :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slMagnify</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMagnify</span><span class="p">)</span>
+        <span class="c1"># Annotation from the navigation bar :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_AnnotateRun</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fcn_annotateNav</span><span class="p">)</span>
+
+    <span class="c1"># =====================================================================</span>
+    <span class="c1"># SLIDER</span>
+    <span class="c1"># =====================================================================</span>
+    <span class="k">def</span> <span class="nf">_fcn_sliderMove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function applied when the slider move.&quot;&quot;&quot;</span>
+        <span class="c1"># ================= INDEX =================</span>
+        <span class="c1"># Get slider variables :</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SigSlStep</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SigWin</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">xlim</span> <span class="o">=</span> <span class="p">(</span><span class="n">val</span> <span class="o">*</span> <span class="n">step</span><span class="p">,</span> <span class="n">val</span> <span class="o">*</span> <span class="n">step</span> <span class="o">+</span> <span class="n">win</span><span class="p">)</span>
+        <span class="n">iszoom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispZoom</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_slRules</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="c1"># Find closest time index :</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">-</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">argmin</span><span class="p">()))</span>
+        <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">-</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">argmin</span><span class="p">()))</span>
+        <span class="c1"># Hypnogram info :</span>
+        <span class="n">hypref</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="n">hypconv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hconv</span><span class="p">[</span><span class="n">hypref</span><span class="p">]</span>
+        <span class="n">hypcol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hypcolor</span><span class="p">[</span><span class="n">hypconv</span><span class="p">]</span>
+        <span class="n">stage</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hypYLabels</span><span class="p">[</span><span class="n">hypconv</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+
+        <span class="c1"># ================= MESH UPDATES =================</span>
+        <span class="c1"># ---------------------------------------</span>
+        <span class="c1"># Update display signal :</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_chan</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">,</span> <span class="n">sl</span><span class="o">=</span><span class="n">sl</span><span class="p">,</span>
+                            <span class="n">ylim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ylims</span><span class="p">)</span>
+
+        <span class="c1"># ---------------------------------------</span>
+        <span class="n">is_indic_checked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispIndic</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="c1"># Update spectrogram indicator :</span>
+        <span class="k">if</span> <span class="n">is_indic_checked</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">iszoom</span><span class="p">:</span>
+            <span class="n">ylim</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecFstart</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecFend</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_specInd</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="n">ylim</span><span class="p">)</span>
+
+        <span class="c1"># ---------------------------------------</span>
+        <span class="c1"># Update hypnogram indicator :</span>
+        <span class="k">if</span> <span class="n">is_indic_checked</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">iszoom</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hypInd</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">6.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">))</span>
+
+        <span class="c1"># ---------------------------------------</span>
+        <span class="c1"># Update topoplot if visible :</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_topoW</span><span class="o">.</span><span class="n">isVisible</span><span class="p">():</span>
+            <span class="c1"># Prepare data before plotting :</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_topo</span><span class="o">.</span><span class="n">_prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[:,</span> <span class="n">sl</span><span class="p">],</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">[</span><span class="n">sl</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># Set preprocessed sleep data :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_topo</span><span class="o">.</span><span class="n">set_sleep_topo</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="c1"># Update title :</span>
+            <span class="n">fm</span><span class="p">,</span> <span class="n">fM</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanTopoFmin</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanTopoFmax</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+            <span class="n">dispas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_PanTopoDisp</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+            <span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;Mean &#39;</span> <span class="o">+</span> <span class="n">dispas</span> <span class="o">+</span> <span class="s1">&#39; in</span><span class="se">\n</span><span class="s1">[&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">fm</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">fM</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;hz]&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_topoTitle</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_topoTitle</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;QLabel {color: &quot;</span> <span class="o">+</span>
+                                          <span class="n">hypcol</span> <span class="o">+</span> <span class="s2">&quot;;}&quot;</span><span class="p">)</span>
+
+        <span class="c1"># ---------------------------------------</span>
+        <span class="c1"># Update Time indicator :</span>
+        <span class="k">if</span> <span class="n">is_indic_checked</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_TimeAxis</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">win</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">,</span>
+                                    <span class="n">markers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_mark</span><span class="p">)</span>
+
+        <span class="c1"># ================= GUI =================</span>
+        <span class="c1"># Update Go to :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlGoto</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">val</span> <span class="o">*</span> <span class="n">step</span><span class="p">)</span>
+
+        <span class="c1"># ================= ZOOMING =================</span>
+        <span class="k">if</span> <span class="n">iszoom</span><span class="p">:</span>
+            <span class="n">xlim_diff</span> <span class="o">=</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># Histogram :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hypcam</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="n">xlim_diff</span><span class="p">,</span> <span class="mf">7.</span><span class="p">)</span>
+            <span class="c1"># Spectrogram :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_speccam</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xlim_diff</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">freq</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">freq</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c1"># Time axis :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_TimeAxis</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">win</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span>
+                                    <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;seconds&#39;</span><span class="p">,</span> <span class="n">markers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_annot_mark</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timecam</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">win</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+
+        <span class="c1"># ================= TEXT INFO =================</span>
+        <span class="c1"># Get unit and convert:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slAbsTime</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="n">xlim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toffset</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span>
+                <span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">stend</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span>
+                <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">txt</span> <span class="o">=</span> <span class="s2">&quot;Window : [ &quot;</span> <span class="o">+</span> <span class="n">start</span> <span class="o">+</span> <span class="s2">&quot; ; &quot;</span> <span class="o">+</span> <span class="n">stend</span> <span class="o">+</span> <span class="s2">&quot; ] || Sleep &quot;</span> <span class="o">+</span> \
+                <span class="s2">&quot;stage : &quot;</span> <span class="o">+</span> <span class="n">stage</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slRules</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;seconds&#39;</span><span class="p">:</span>
+                <span class="n">fact</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;minutes&#39;</span><span class="p">:</span>
+                <span class="n">fact</span> <span class="o">=</span> <span class="mf">60.</span>
+            <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;hours&#39;</span><span class="p">:</span>
+                <span class="n">fact</span> <span class="o">=</span> <span class="mf">3600.</span>
+            <span class="n">xconv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mf">1000.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span> <span class="o">/</span> <span class="n">fact</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1000.</span>
+            <span class="c1"># Format string :</span>
+            <span class="n">txt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slTxtFormat</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">xconv</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                           <span class="n">end</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">xconv</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">,</span>
+                                           <span class="n">conv</span><span class="o">=</span><span class="n">stage</span><span class="p">)</span>
+        <span class="c1"># Set text :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlText</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlText</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_font</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlText</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;QLabel {color: &quot;</span> <span class="o">+</span>
+                                   <span class="n">hypcol</span> <span class="o">+</span> <span class="s2">&quot;;}&quot;</span><span class="p">)</span>
+
+        <span class="c1"># ================= HYPNO LABELS =================</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hypYLabels</span><span class="p">:</span>
+            <span class="n">k</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;QLabel&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hypYLabels</span><span class="p">[</span><span class="n">hypconv</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;QLabel {color: &quot;</span> <span class="o">+</span>
+                                                    <span class="n">hypcol</span> <span class="o">+</span> <span class="s2">&quot;;}&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_sliderSettings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function applied to change slider settings.&quot;&quot;&quot;</span>
+        <span class="c1"># Get current slider value :</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">slmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">maximum</span><span class="p">()</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SigWin</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="c1"># Set minimum :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+        <span class="c1"># Set maximum :</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SigSlStep</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(((</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">win</span><span class="p">)</span> <span class="o">/</span> <span class="n">step</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">setTickInterval</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlGoto</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">win</span><span class="p">))</span>
+        <span class="c1"># Re-set slider value :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">sl</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">maximum</span><span class="p">()</span> <span class="o">/</span> <span class="n">slmax</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slOnStart</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_sliderMove</span><span class="p">()</span>
+            <span class="c1"># Update grid :</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuDispZoom</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="o">.</span><span class="n">set_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="o">.</span><span class="n">set_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">,</span> <span class="n">win</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_slOnStart</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_sliderWinSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Move slider using window spin.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_SlGoto</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SigSlStep</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_sliderMagnify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Magnify signals.&quot;&quot;&quot;</span>
+        <span class="c1"># Set transformation to each node parent :</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chan</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
+            <span class="c1"># Use either Magnify / Null transformation :</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slMagnify</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+                <span class="n">transform</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">nonlinear</span><span class="o">.</span><span class="n">Magnify1DTransform</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">transform</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">NullTransform</span><span class="p">()</span>
+            <span class="n">k</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
+
+    <span class="c1"># =====================================================================</span>
+    <span class="c1"># GRID</span>
+    <span class="c1"># =====================================================================</span>
+    <span class="k">def</span> <span class="nf">_fcn_gridToggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle grid visibility.&quot;&quot;&quot;</span>
+        <span class="n">viz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slGrid</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="c1"># Toggle hypno grid :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">viz</span>
+        <span class="c1"># Toggle grid for each channel :</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chan</span><span class="o">.</span><span class="n">grid</span><span class="p">:</span>
+            <span class="n">k</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">viz</span>
+
+    <span class="c1"># =====================================================================</span>
+    <span class="c1"># RULER</span>
+    <span class="c1"># =====================================================================</span>
+    <span class="k">def</span> <span class="nf">_get_factFromUnit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get factor conversion from current selected unit.&quot;&quot;&quot;</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_slRules</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;seconds&#39;</span><span class="p">:</span>
+            <span class="n">fact</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;minutes&#39;</span><span class="p">:</span>
+            <span class="n">fact</span> <span class="o">=</span> <span class="mf">60.</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;hours&#39;</span><span class="p">:</span>
+            <span class="n">fact</span> <span class="o">=</span> <span class="mf">3600.</span>
+        <span class="k">return</span> <span class="n">fact</span>
+
+    <span class="k">def</span> <span class="nf">on_mouse_wheel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Executed function on mouse wheel.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">+</span> <span class="n">event</span><span class="o">.</span><span class="n">delta</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># =====================================================================</span>
+    <span class="c1"># HYPNO</span>
+    <span class="c1"># =====================================================================</span>
+    <span class="k">def</span> <span class="nf">_add_stage_on_win</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the stage on the current window.&quot;&quot;&quot;</span>
+        <span class="c1"># Get the window :</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SigWin</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SlVal</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SigSlStep</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">xlim</span> <span class="o">=</span> <span class="p">(</span><span class="n">val</span> <span class="o">*</span> <span class="n">step</span><span class="p">,</span> <span class="n">val</span> <span class="o">*</span> <span class="n">step</span> <span class="o">+</span> <span class="n">win</span><span class="p">)</span>
+        <span class="c1"># Find closest time index :</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">-</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">argmin</span><span class="p">()))</span>
+        <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">-</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">argmin</span><span class="p">()))</span>
+        <span class="c1"># Set the stage :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hypno</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">stage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hyp</span><span class="o">.</span><span class="n">set_stage</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">stage</span><span class="p">)</span>
+        <span class="c1"># # Update info table :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_infoUpdate</span><span class="p">()</span>
+        <span class="c1"># Update scoring table :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_Hypno2Score</span><span class="p">()</span>
+        <span class="c1"># self._fcn_Score2Hypno()</span>
+
+    <span class="c1"># =====================================================================</span>
+    <span class="c1"># Annotate</span>
+    <span class="c1"># =====================================================================</span>
+    <span class="k">def</span> <span class="nf">_fcn_annotateNav</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Annotate from the selected window.&quot;&quot;&quot;</span>
+        <span class="c1"># Set the current tab to the annotation tab :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">QuickSettings</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1"># Run annotation :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_annotateAdd</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="c1"># =====================================================================</span>
+    <span class="c1"># CLEAN / RESET GUI</span>
+    <span class="c1"># =====================================================================</span>
+    <span class="k">def</span> <span class="nf">_fcn_cleanGui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clean the entire GUI.&quot;&quot;&quot;</span>
+        <span class="c1"># -------------- TABLES --------------</span>
+        <span class="c1"># Info :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_infoTable</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_infoTable</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Detection :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_DetectLocations</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_DetectLocations</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># -------------- LIST BOX --------------</span>
+        <span class="c1"># Disconnect :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecChan</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+        <span class="c1"># Clear items :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_PanSpecChan</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ToolDetectChan</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="c1"># -------------- VISUALS --------------</span>
+        <span class="c1"># Channels :</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+            <span class="c1"># Disconnect buttons :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chanChecks</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_yminSpin</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ymaxSpin</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="c1"># Delete elements :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chanChecks</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_yminSpin</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ymaxSpin</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chanWidget</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chanLayout</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chanLabels</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_amplitudeTxt</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chanCanvas</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">QObjectCleanupHandler</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_chanGrid</span><span class="p">)</span>
+        <span class="n">QObjectCleanupHandler</span><span class="p">()</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="c1"># Spectrogram :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specCanvas</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SpecW</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SpecLayout</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specLabel</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+        <span class="c1"># Hypnogram :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hypCanvas</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_HypW</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_HypLayout</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hypLabel</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+        <span class="c1"># Time axis :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_TimeAxis</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_TimeAxisW</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_TimeLayout</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeLabel</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_fcn_resetGui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset the GUI.&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.uiElements</span> <span class="k">import</span> <span class="n">uiElements</span>
+        <span class="kn">from</span> <span class="nn">...visuals</span> <span class="k">import</span> <span class="n">visuals</span>
+        <span class="kn">from</span> <span class="nn">...tools</span> <span class="k">import</span> <span class="n">Tools</span>
+        <span class="n">uiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cam_creation</span><span class="p">()</span>
+        <span class="n">visuals</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Tools</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcns_on_creation</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../../',
+            VERSION:'0.3.7',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
