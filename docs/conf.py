@@ -62,12 +62,17 @@ sphinx_gallery_conf = {
     # path to your examples scripts
     'examples_dirs': '../examples',
     'sphinx_gallery': None,
-    # path where to save gallery generated examples
+    'reference_url': {
+            'visbrain': None,
+            'matplotlib': 'http://matplotlib.org',
+            'numpy': 'http://docs.scipy.org/doc/numpy',
+            'scipy': 'http://docs.scipy.org/doc/scipy/reference',
+            },
     'gallery_dirs': 'auto_examples',
     'backreferences_dir': 'generated',
     'default_thumb_file': 'picture/visbrain.png',
     'within_subsection_order': FileNameSortKey,
-    'doc_module': ('sphinx_gallery', 'visbrain'),
+    'doc_module': ('visbrain'),
     'thumbnail_size': (250, 250),
     }
 
