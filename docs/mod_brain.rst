@@ -1,7 +1,7 @@
 .. _BrainModule:
 
-:class:`Brain` module
-=====================
+:class:`Brain`
+==============
 
 .. figure::  picture/ico/brain_ico.png
    :align:   center

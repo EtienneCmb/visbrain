@@ -1,12 +1,12 @@
-.. _Colorbar:
+.. _ColorbarModule:
 
-Colorbar
-========
+:py:class:`Colorbar`
+====================
 
 .. figure::  picture/ico/colorbar_ico.png
    :align:   center
 
-*Colorbar* is a GUI based module for colorbar control.
+:class:`Colorbar` is a GUI based module for colorbar control.
 
 .. code-block:: python
 
@@ -23,4 +23,6 @@ API
 Main class
 ~~~~~~~~~~
 
-.. autoclass:: visbrain.colorbar.colorbar.Colorbar
+.. currentmodule:: visbrain
+
+.. autoclass:: Colorbar

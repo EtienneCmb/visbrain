@@ -1,7 +1,7 @@
-.. _Sleep:
+.. _SleepModule:
 
-Sleep
-=====
+:py:class:`Sleep`
+=================
 
 .. figure::  picture/ico/sleep_ico.png
    :align:   center
@@ -15,7 +15,7 @@ Sleep
 Description
 -----------
 
-Sleep is a graphical user interface dedicated to visualization and scoring of sleep data. Sleep runs on `Vispy <http://vispy.org/>`_ excellent package and benefits thus from the high-performance of this latter (GPU-based computation).
+:class:`Sleep` is a graphical user interface dedicated to visualization and scoring of sleep data. :class:`Sleep` runs on `Vispy <http://vispy.org/>`_ excellent package and benefits thus from the high-performance of this latter (GPU-based computation).
 
 .. figure::  picture/picsleep/sleep_main.png
    :align:   center
@@ -23,7 +23,7 @@ Sleep is a graphical user interface dedicated to visualization and scoring of sl
 Help
 ~~~~
 
-If you need help with the *Sleep* module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
+If you need help with the :class:`Sleep` module, ask your questions in the dedicated `gitter Sleep chat <https://gitter.im/visbrain-python/Sleep?utm_source=share-link&utm_medium=link&utm_campaign=share-link>`_
 
 Main features
 ~~~~~~~~~~~~~
@@ -55,7 +55,7 @@ Main features
 Import and use sleep
 ~~~~~~~~~~~~~~~~~~~~
 
-The *Sleep* module can be imported as follow :
+The :class:`Sleep` module can be imported as follow :
 
 .. code-block:: python
 
@@ -74,7 +74,7 @@ GUI description
 Components
 ^^^^^^^^^^
 
-The *Sleep* interface is divided into N parts :
+The :class:`Sleep` interface is divided into N parts :
 
 * **Menu** : load and save files (GUI configuration, screenshot...), control which object to display / hide, open the documentation...
 * **Canvas** :
@@ -291,7 +291,7 @@ If MNE-python is installed, this list is extended to (see `also <https://martino
     If MNE-python is installed on your computer, the loading of these file formats is transparent for users. It means that you can load these file formats directly using Sleep graphical user interface or command-line, without any additional steps. We therefore strongly recommand to `install MNE-python <https://martinos.org/mne/stable/index.html>`_.
 
 .. note::
-   If you have a file format that is currently not supported, *Sleep* also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to `to load a Matlab <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ file and then pass the data directly to Sleep.
+   If you have a file format that is currently not supported, :class:`Sleep` also provide the ability to directly pass raw data (NumPy array). Please click see this example of how to `to load a Matlab <http://visbrain.org/auto_examples/sleep/load_matlab.html#sphx-glr-auto-examples-sleep-load-matlab-py>`_ file and then pass the data directly to Sleep.
 
 .. warning::
    Sleep applies an automatic downsampling to (100 Hz by default) upon loading. You can change this value with the “downsample” argument of Sleep.
@@ -410,7 +410,7 @@ Instead of leaving inputs arguments empty, send the path to the data :
 Load file using MNE-Python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Finally, it is possible to load several other file formats using `MNE Python package <http://martinos.org/mne/stable/>`_. The code below shows how to load either BDF, EGI or EEGLab files and pass them to *Sleep*.
+Finally, it is possible to load several other file formats using `MNE Python package <http://martinos.org/mne/stable/>`_. The code below shows how to load either BDF, EGI or EEGLab files and pass them to :class:`Sleep`.
 
 .. code-block:: python
 
@@ -608,8 +608,8 @@ Perform a peak detection.
 Load and save the GUI configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-From the **Files** menu, you can save the GUI configuration *Files/Save/Gui config*. This will save the state of all buttons and properties inside *Sleep*. Then, you can recharge the GUI configuration using *Files/Load/Gui config*.
-Alternatively, if you want to use a configuration when running *Sleep*, you can use the *config_file* argument to directly pass the path to a configuration file.
+From the **Files** menu, you can save the GUI configuration *Files/Save/Gui config*. This will save the state of all buttons and properties inside :class:`Sleep`. Then, you can recharge the GUI configuration using *Files/Load/Gui config*.
+Alternatively, if you want to use a configuration when running :class:`Sleep`, you can use the *config_file* argument to directly pass the path to a configuration file.
 
 .. code-block:: python
 
@@ -628,7 +628,7 @@ Alternatively, if you want to use a configuration when running *Sleep*, you can 
 Import, add and save annotations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-*Sleep* provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.
+:class:`Sleep` provides a table for annotations. In this table, specify where the event start, finish and the associated text. Selecting a row of this table center the window around the selected time-code. This allow to quickly navigate even in large files.
 
 .. figure::  picture/picsleep/sleep_annotations.png
    :align:   center
@@ -732,9 +732,10 @@ Sleep class
 
 Here is the list of default Sleep inputs :
 
-.. currentmodule:: visbrain.sleep.sleep
+.. currentmodule:: visbrain
 
 .. autoclass:: Sleep
+  :members: show
 
     .. rubric:: Methods
 

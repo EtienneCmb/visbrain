@@ -1,7 +1,7 @@
-.. _Figure:
+.. _FigureModule:
 
-Figure
-######
+:py:class:`Figure`
+##################
 
 .. figure::  picture/ico/figure_ico.png
    :align:   center
@@ -79,19 +79,15 @@ Example
 API
 ---
 
-Main *Figure* class inputs
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Main :class:`Figure` class inputs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-First, you will need to create a Figure objects with the files to load, titles, xlabels... Then, there's a list of embedded methods that provide further controls :
+First, you will need to create a Figure objects with the files to load, titles, xlabels...
 
-* :ref:`show` : display the final figure
-* :ref:`save` : save the final figure
-* :ref:`colorbar_to_axis` : add a colorbar to a specific axis
-* :ref:`shared_colorbar` : add a shared colorbar
-
-.. currentmodule:: visbrain.figure.figure
+.. currentmodule:: visbrain
 
 .. autoclass:: Figure
+  :members: show, save, colorbar_to_axis, shared_colorbar
 
     .. rubric:: Methods
 
@@ -100,34 +96,3 @@ First, you will need to create a Figure objects with the files to load, titles, 
         ~Figure.save
         ~Figure.colorbar_to_axis
         ~Figure.shared_colorbar
-
-
-Methods
-^^^^^^^
-
-.. _show:
-
-show
-~~~~
-
-.. automethod:: Figure.show
-
-.. _save:
-
-save
-~~~~
-.. automethod:: Figure.save
-
-.. _colorbar_to_axis:
-
-colorbar_to_axis
-~~~~~~~~~~~~~~~~
-
-.. automethod:: Figure.colorbar_to_axis
-
-.. _shared_colorbar:
-
-shared_colorbar
-~~~~~~~~~~~~~~~
-
-.. automethod:: Figure.shared_colorbar
