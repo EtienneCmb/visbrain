@@ -73,10 +73,11 @@ sphinx_gallery_conf = {
     'default_thumb_file': 'picture/visbrain.png',
     'within_subsection_order': FileNameSortKey,
     'doc_module': ('visbrain'),
-    'thumbnail_size': (250, 250),
+    'thumbnail_size': (150, 150),
     }
 
 numpydoc_show_class_members = False
+numpydoc_class_members_toctree = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -344,8 +345,6 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
 
-
-numpydoc_class_members_toctree = False
 
 # from PyQt5.QtWidgets import QMainWindow
 # import inspect

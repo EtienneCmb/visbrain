@@ -30,6 +30,9 @@ test: clean-test
 	python setup.py test
 	coverage report
 
+test-html: clean-test
+	py.test --cov-report html --showlocals --durations=10 
+
 flake: clean-test
 	flake8
 

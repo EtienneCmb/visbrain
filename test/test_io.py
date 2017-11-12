@@ -1,16 +1,21 @@
 import os
 import shutil
 import numpy as np
+import pytest
 
+from visbrain.io.dependencies import is_mne_installed, is_nibabel_installed
 from visbrain.io.download import get_data_url_file, download_file
+from visbrain.io.mneio import mne_switch
 from visbrain.io.read_annotations import (annotations_to_array,
                                           merge_annotations)
 from visbrain.io.rw_config import save_config_json, load_config_json
-from visbrain.io.dependencies import is_mne_installed, is_nibabel_installed
 from visbrain.io.rw_hypno import (oversample_hypno, write_hypno_txt,
                                   write_hypno_hyp, read_hypno, read_hypno_hyp,
                                   read_hypno_txt)
 from visbrain.io.rw_utils import get_file_ext, safety_save
+from visbrain.io.read_data import (read_mat, read_pickle, read_npy, read_npz,
+                                   read_txt, read_csv, read_json, read_nifti,
+                                   read_stc)
 from visbrain.io.write_data import (write_csv, write_txt)
 
 
@@ -50,11 +55,25 @@ class TestIO(object):
         name = "https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1"
         download_file(name, filename="text.npz", to_path=path_to_tmp)
 
-    # def test_download_files_from_dropbox(self):
-    #     """Test function download_file from dropbox."""
-    #     urls = get_data_url_file()
-    #     for name in list(urls.keys()):
-    #         download_file(name, to_path=path_to_tmp)
+    @pytest.mark.skip("Test downloading all files is too slow")
+    def test_download_files_from_dropbox(self):
+        """Test function download_file from dropbox."""
+        urls = get_data_url_file()
+        for name in list(urls.keys()):
+            download_file(name, to_path=path_to_tmp)
+
+    ###########################################################################
+    #                              MNE I/O
+    ###########################################################################
+
+    def test_mne_switch(self):
+        """Test function mne_switch."""
+        download_file('sleep_edf.zip', to_path=path_to_tmp, unzip=True)
+        to_exclude = ['VAB', 'NAF2P-A1', 'PCPAP', 'POS', 'FP2-A1', 'O2-A1',
+                      'CZ2-A1', 'event_pneumo', 'event_pneumo_aut']
+        kwargs = dict(exclude=to_exclude, stim_channel=False)
+        mne_switch(self._path_to_tmp('excerpt2'), '.edf', 100., preload=True,
+                   **kwargs)
 
     ###########################################################################
     #                              ANNOTATIONS
@@ -178,6 +197,20 @@ class TestIO(object):
         file = safety_save(self._path_to_tmp('hyp.txt'))
         file_txt, _ = get_file_ext(self._path_to_tmp('hyp.txt'))
         assert file == file_txt + '(1).txt'
+
+    ###########################################################################
+    #                              READ
+    ###########################################################################
+
+    def test_read_stc(self):
+        """Test function read_stc."""
+        download_file("meg_source_estimate-lh.stc", to_path=path_to_tmp)
+        read_stc(self._path_to_tmp("meg_source_estimate-lh.stc"))
+
+    def test_read_nifti(self):
+        """Test function read_nifti."""
+        download_file("GG-853-GM-0.7mm.nii.gz", to_path=path_to_tmp)
+        read_nifti(self._path_to_tmp("GG-853-GM-0.7mm.nii.gz"))
 
     def test_delete_tmp_folder(self):
         """Delete tmp/folder."""

@@ -14,47 +14,9 @@ import numpy as np
 
 from ..utils.transform import array_to_stt
 from .dependencies import is_nibabel_installed
-from .rw_utils import get_file_ext
 
-__all__ = ('switch_data', 'read_mat', 'read_pickle', 'read_npy', 'read_npz',
+__all__ = ('read_mat', 'read_pickle', 'read_npy', 'read_npz',
            'read_txt', 'read_csv', 'read_json', 'read_nifti', 'read_stc')
-
-
-def switch_data(path, *args, **kwargs):
-    """Switch between data files.
-
-    Parameters
-    ----------
-    path : string
-        Filename.
-    arg : tuple
-        Further arguments.
-    kargs : dict | {}
-        Further optional arguments.
-    """
-    # Find file extension :
-    file, ext = get_file_ext(path)
-
-    if ext == '.mat':  # Matlab
-        return read_mat(path, *args, **kwargs)
-
-    elif ext == '.pickle':  # Pickle
-        return read_pickle(path, *args, **kwargs)
-
-    elif ext == '.npy':  # NumPy (npy)
-        return read_npy(path, *args, **kwargs)
-
-    elif ext == '.npz':  # NumPy (npz)
-        return read_npz(path, *args, **kwargs)
-
-    elif ext == '.txt':  # Text file
-        return read_txt(path, *args, **kwargs)
-
-    elif ext == '.csv':  # CSV file
-        return read_csv(path, *args, **kwargs)
-
-    elif ext == '.json':  # JSON file
-        return read_json(path, *args, **kwargs)
 
 
 def read_mat(path, vars=None):
