@@ -10,4 +10,5 @@ from .spec_obj import SpectrogramObj
 from .tf_obj import TimeFrequencyMapObj
 from .ts_obj import TimeSeriesObj, CombineTimeSeries
 from .vector_obj import VectorObj, CombineVectors
+from .visbrain_obj import VisbrainObject, CombineObjects
 from .volume_obj import VolumeObj

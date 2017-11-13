@@ -3,6 +3,21 @@
 Objects
 =======
 
+Visbrain's objects are small pieces that can be used to accomplish basic visualizations or can be pass to other Visbrain modules (like :ref:`BrainModule`). Each object inherit to the following methods :
+
+.. currentmodule:: visbrain.objects
+
+.. autosummary::
+    ~VisbrainObject.describe_tree
+    ~VisbrainObject.preview
+    ~VisbrainObject.screenshot
+
+.. automethod:: VisbrainObject.describe_tree
+.. automethod:: VisbrainObject.preview
+.. automethod:: VisbrainObject.screenshot
+
+Here's the list of currently supported modules :
+
 * :ref:`BrainObj`
 * :ref:`SourceObj`
 * :ref:`ConnectObj`
@@ -27,12 +42,11 @@ Brain object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: BrainObj
-  :members: preview, set_data, set_state, rotate, add_activation
+  :members: set_data, set_state, rotate, add_activation
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~BrainObj.preview
         ~BrainObj.set_data
         ~BrainObj.set_state
         ~BrainObj.rotate
@@ -56,12 +70,11 @@ Source object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: SourceObj
-  :members: preview, analyse_sources, color_sources, set_visible_sources, fit_to_vertices, project_modulation, project_repartition
+  :members: analyse_sources, color_sources, set_visible_sources, fit_to_vertices, project_modulation, project_repartition
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~SourceObj.preview
         ~SourceObj.analyse_sources
         ~SourceObj.color_sources
         ~SourceObj.set_visible_sources
@@ -87,12 +100,6 @@ Connectivity object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: ConnectObj
-  :members: preview
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~ConnectObj.preview
 
 .. include:: generated/visbrain.objects.ConnectObj.examples
 .. raw:: html
@@ -112,12 +119,6 @@ Vector object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: VectorObj
-  :members: preview
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~VectorObj.preview
 
 .. include:: generated/visbrain.objects.VectorObj.examples
 .. raw:: html
@@ -137,12 +138,6 @@ Time-series object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: TimeSeriesObj
-  :members: preview
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~TimeSeriesObj.preview
 
 .. include:: generated/visbrain.objects.TimeSeriesObj.examples
 .. raw:: html
@@ -162,12 +157,6 @@ Pictures object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: PictureObj
-  :members: preview
-
-    .. rubric:: Methods
-
-    .. autosummary::
-        ~PictureObj.preview
 
 .. include:: generated/visbrain.objects.PictureObj.examples
 .. raw:: html
@@ -187,12 +176,11 @@ Region Of Interest object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: RoiObj
-  :members: preview, change_roi_object, localize_sources, get_roi_vertices
+  :members: change_roi_object, localize_sources, get_roi_vertices
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~RoiObj.preview
         ~RoiObj.change_roi_object
         ~RoiObj.localize_sources
         ~RoiObj.get_roi_vertices
@@ -211,12 +199,11 @@ Image object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: ImageObj
-  :members: preview, set_data
+  :members: set_data
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~ImageObj.preview
         ~ImageObj.set_data
 
 
@@ -234,12 +221,11 @@ Time-frequency map object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: TimeFrequencyMapObj
-  :members: preview, set_data
+  :members: set_data
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~TimeFrequencyMapObj.preview
         ~TimeFrequencyMapObj.set_data
 
 
@@ -256,10 +242,9 @@ Spectrogram object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: SpectrogramObj
-  :members: preview, set_data
+  :members: set_data
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~SpectrogramObj.preview
         ~SpectrogramObj.set_data
