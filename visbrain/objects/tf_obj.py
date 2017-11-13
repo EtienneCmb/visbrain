@@ -62,6 +62,16 @@ class TimeFrequencyMapObj(ImageObj):
         Markers object parent.
     verbose : string
         Verbosity level.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain.objects import TimeFrequencyMapObj
+    >>> n, sf = 512, 256  # number of time-points and sampling frequency
+    >>> time = np.arange(n) / sf  # time vector
+    >>> data = np.sin(2 * np.pi * 25. * time) + np.random.rand(n)
+    >>> tf = TimeFrequencyMapObj('tf', data, sf)
+    >>> tf.preview(axis=True)
     """
 
     def __init__(self, name, data=None, sf=1., f_min=1., f_max=160., f_step=1.,
