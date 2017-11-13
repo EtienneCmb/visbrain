@@ -8,7 +8,7 @@ from ..utils import (morlet, averaging, normalization)
 logger = logging.getLogger('visbrain')
 
 
-class TfObj(ImageObj):
+class TimeFrequencyMapObj(ImageObj):
     """Create a time-frequency map object.
 
     Parameters
@@ -17,7 +17,7 @@ class TfObj(ImageObj):
         Name of the time-frequency object.
     data : array_like
         Array of data of shape (N,)
-    sf : float
+    sf : float | 1.
         The sampling frequency.
     f_min : float | 1.
         Minimum frequency.
@@ -64,25 +64,28 @@ class TfObj(ImageObj):
         Verbosity level.
     """
 
-    def __init__(self, name, data, sf, f_min=1., f_max=160., f_step=1.,
+    def __init__(self, name, data=None, sf=1., f_min=1., f_max=160., f_step=1.,
                  baseline=None, norm=None, n_window=None, overlap=0.,
                  window='flat', cmap='viridis', clim=None, vmin=None,
                  under='gray', vmax=None, over='red', interpolation='nearest',
                  max_pts=-1, parent=None, transform=None, verbose=None):
         """Init."""
         # Initialize the image object :
-        ImageObj.__init__(self, name, parent=parent, transform=transform,
+        ImageObj.__init__(self, name, interpolation=interpolation,
+                          max_pts=max_pts, parent=parent, transform=transform,
                           verbose=verbose)
 
         # Compute TF and set data to the ImageObj :
-        self.set_data(data, sf, f_min, f_max, f_step, baseline, norm, n_window,
-                      overlap, window, clim, cmap, vmin, under, vmax, over)
+        if isinstance(data, np.ndarray):
+            self.set_data(data, sf, f_min, f_max, f_step, baseline, norm,
+                          n_window, overlap, window, clim, cmap, vmin, under,
+                          vmax, over)
 
-    def set_data(self, data, sf, f_min=1., f_max=160., f_step=1.,
+    def set_data(self, data, sf=1., f_min=1., f_max=160., f_step=1.,
                  baseline=None, norm=None, n_window=None, overlap=0.,
                  window='flat', clim=None, cmap=None, vmin=None, under=None,
                  vmax=None, over=None):
-        """Set data to the time frequency map."""
+        """Compute TF map and set data to the ImageObj."""
         # ======================= CHECKING =======================
         assert isinstance(data, np.ndarray) and data.ndim == 1
         assert isinstance(sf, (int, float))
