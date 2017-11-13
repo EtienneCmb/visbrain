@@ -1,5 +1,6 @@
 """Main class for Visbrain objects."""
 import sys
+import logging
 
 import vispy
 import vispy.visuals.transforms as vist
@@ -8,6 +9,8 @@ from .scene_obj import VisbrainCanvas
 from ..io import write_fig_canvas
 from ..utils import color2vb, set_log_level
 from ..config import vispy_app
+
+logger = logging.getLogger('visbrain')
 
 
 class VisbrainObject(object):
@@ -36,6 +39,7 @@ class VisbrainObject(object):
         self._node.transform = transform
         # Verbose :
         set_log_level(verbose)
+        logger.info('%s created' % repr(self))
 
     def __repr__(self):
         """Represent ClassName(name='object_name')."""
