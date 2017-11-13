@@ -11,52 +11,74 @@ from ..visuals import CbarArgs
 logger = logging.getLogger('visbrain')
 
 
-class _ImageObj(VisbrainObject, CbarArgs):
-    """Base class for image based objects."""
+class ImageObj(VisbrainObject, CbarArgs):
+    """Create a single image object.
 
-    def __init__(self, name, interpolation='nearest', cmap='viridis',
+    Parameters
+    ----------
+    data : array_like
+        Array of data. If data.ndim in [1, 2] the color is inferred from
+        the data. Otherwise, if data.ndim is 3, data is interpreted as
+        color if the last dimension is either 3 (RGB) or 4 (RGBA).
+    xaxis : array_like | None
+        Vector to use for the x-axis (number of columns in the image).
+        If None, `xaxis` is inferred from the second dimension of data.
+    yaxis : array_like | None
+        Vector to use for the y-axis (number of rows in the image).
+        If None, `yaxis` is inferred from the first dimension of data.
+    clim : tuple | None
+        Colorbar limits. If None, `clim=(data.min(), data.max())`
+    cmap : string | None
+        Colormap name.
+    vmin : float | None
+        Minimum threshold of the colorbar.
+    under : string/tuple/array_like | None
+        Color for values under vmin.
+    vmax : float | None
+        Maximum threshold of the colorbar.
+    under : string/tuple/array_like | None
+        Color for values over vmax.
+    interpolation : string | 'nearest'
+        Interpolation method for the image. See vispy.scene.visuals.Image for
+        availables interpolation methods.
+    max_pts : int | -1
+        Maximum number of points of the image along the x or y axis. This
+        parameter is essentially used to solve OpenGL issues with very large
+        images.
+    transform : VisPy.visuals.transforms | None
+        VisPy transformation to set to the parent node.
+    parent : VisPy.parent | None
+        Markers object parent.
+    verbose : string
+        Verbosity level.
+    """
+
+    def __init__(self, name, data=None, xaxis=None, yaxis=None, cmap='viridis',
                  clim=None, vmin=None, under='gray', vmax=None, over='red',
-                 nb_pts_limit=-1, parent=None, transform=None, verbose=None):
+                 interpolation='nearest', max_pts=-1, parent=None,
+                 transform=None, verbose=None):
         """Init."""
         VisbrainObject.__init__(self, name, parent, transform, verbose)
         CbarArgs.__init__(self, clim=clim, cmap=cmap, vmin=vmin, vmax=vmax,
                           under=under, over=over)
-        assert isinstance(nb_pts_limit, int)
-        self._n_limit = nb_pts_limit  # fix GL issues with large images
+
+        # _______________________ CHECKING _______________________
+        assert isinstance(max_pts, int)
+        self._n_limit = max_pts  # fix GL issues with large images
+
+        # _______________________ VISUAL _______________________
         self._image = scene.visuals.Image(parent=self._node, name="_ImageObj",
                                           interpolation=interpolation)
         self._image.transform = scene.transforms.STTransform()
 
-    def set_data_to_image(self, data, xaxis=None, yaxis=None, clim=None,
-                          cmap=None, vmin=None, under=None, vmax=None,
-                          over=None):
-        """Send data to the image.
+        # _______________________ SET DATA _______________________
+        if isinstance(data, np.ndarray):
+            self.set_data(data, xaxis, yaxis, clim, cmap, vmin, under, vmax,
+                          over)
 
-        Parameters
-        ----------
-        data : array_like
-            Array of data. If data.ndim in [1, 2] the color is inferred from
-            the data. Otherwise, if data.ndim is 3, data is interpreted as
-            color if the last dimension is either 3 (RGB) or 4 (RGBA).
-        xaxis : array_like | None
-            Vector to use for the x-axis (number of columns in the image).
-            If None, `xaxis` is inferred from the second dimension of data.
-        yaxis : array_like | None
-            Vector to use for the y-axis (number of rows in the image).
-            If None, `yaxis` is inferred from the first dimension of data.
-        clim : tuple | None
-            Colorbar limits. If None, `clim=(data.min(), data.max())`
-        cmap : string | None
-            Colormap name.
-        vmin : float | None
-            Minimum threshold of the colorbar.
-        under : string/tuple/array_like | None
-            Color for values under vmin.
-        vmax : float | None
-            Maximum threshold of the colorbar.
-        under : string/tuple/array_like | None
-            Color for values over vmax.
-        """
+    def set_data(self, data, xaxis=None, yaxis=None, clim=None, cmap=None,
+                 vmin=None, under=None, vmax=None, over=None):
+        """Set data to the image."""
         assert isinstance(data, np.ndarray) and data.ndim <= 3
         data = np.atleast_2d(data)
         # Get the x-axis and y-axis :
@@ -103,6 +125,12 @@ class _ImageObj(VisbrainObject, CbarArgs):
         rect = (self._dim[0], self._dim[2], self._dim[1] - self._dim[0],
                 self._dim[3] - self._dim[2])
         return scene.cameras.PanZoomCamera(rect=rect)
+
+    ###########################################################################
+    ###########################################################################
+    #                             PROPERTIES
+    ###########################################################################
+    ###########################################################################
 
     # ----------- INTERPOLATION -----------
     @property
