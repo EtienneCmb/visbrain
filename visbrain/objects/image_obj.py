@@ -51,6 +51,16 @@ class ImageObj(VisbrainObject, CbarArgs):
         Markers object parent.
     verbose : string
         Verbosity level.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from visbrain.objects import ImageObj
+    >>> n = 100
+    >>> time = np.r_[np.arange(n - 1), np.arange(n)[::-1]]
+    >>> time = time.reshape(-1, 1) + time.reshape(1, -1)
+    >>> im = ImageObj('im', time, cmap='Spectral_r', interpolation='bicubic')
+    >>> im.preview(axis=True)
     """
 
     def __init__(self, name, data=None, xaxis=None, yaxis=None, cmap='viridis',

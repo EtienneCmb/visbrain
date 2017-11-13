@@ -10,6 +10,7 @@ Objects
 * :ref:`TSObj`
 * :ref:`PicObj`
 * :ref:`RoiObj`
+* :ref:`ImageObj`
 * :ref:`TFObj`
 * :ref:`SpecObj`
 
@@ -195,6 +196,29 @@ Region Of Interest object
         ~RoiObj.change_roi_object
         ~RoiObj.localize_sources
         ~RoiObj.get_roi_vertices
+
+
+.. _ImageObj:
+
+Image object
+------------
+
+.. figure::  picture/picobjects/pic_image_obj.png
+   :align:   center
+
+   Image object example
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: ImageObj
+  :members: preview, set_data
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~ImageObj.preview
+        ~ImageObj.set_data
+
 
 
 .. _TFObj:
