@@ -10,6 +10,8 @@ Objects
 * :ref:`TSObj`
 * :ref:`PicObj`
 * :ref:`RoiObj`
+* :ref:`TFObj`
+* :ref:`SpecObj`
 
 .. _BrainObj:
 
@@ -193,3 +195,47 @@ Region Of Interest object
         ~RoiObj.change_roi_object
         ~RoiObj.localize_sources
         ~RoiObj.get_roi_vertices
+
+
+.. _TFObj:
+
+Time-frequency map object
+-------------------------
+
+.. figure::  picture/picobjects/pic_tf_obj.png
+   :align:   center
+
+   Time-frequency map object example
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: TimeFrequencyMapObj
+  :members: preview, set_data
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~TimeFrequencyMapObj.preview
+        ~TimeFrequencyMapObj.set_data
+
+
+.. _SpecObj:
+
+Spectrogram object
+------------------
+
+.. figure::  picture/picobjects/pic_spec_obj.png
+   :align:   center
+
+   Spectrogram object example
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: SpectrogramObj
+  :members: preview, set_data
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~SpectrogramObj.preview
+        ~SpectrogramObj.set_data
