@@ -595,8 +595,8 @@ class BrainUserMethods(object):
         self._s_proj_mask_color.setText(str(mask_color))
         safely_set_cbox(self._s_proj_on, project_on)
         # Colormap control :
-        self.cbar_control('Projection', **kwargs)
         self._fcn_source_proj()
+        self.cbar_control('Projection', **kwargs)
 
     def sources_fit_to_vertices(self, name=None, fit_to='brain'):
         """Force sources coordinates to fit to a selected object.
