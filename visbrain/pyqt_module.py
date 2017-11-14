@@ -5,7 +5,7 @@ from PyQt5 import QtGui
 import logging
 
 from .utils import set_widget_size, set_log_level, get_data_path
-from .config import profiler, app, vispy_app
+from .config import PROFILER, PYQT_APP, VISPY_APP
 from .io import is_faulthandler_installed
 
 sip.setdestroyonexit(False)
@@ -54,7 +54,7 @@ class PyQtModule(object):
         """Display the graphical user interface."""
         # Fixed size for the settings panel :
         if hasattr(self, 'q_widget'):
-            set_widget_size(app, self.q_widget, 23)
+            set_widget_size(PYQT_APP, self.q_widget, 23)
             self.q_widget.setVisible(self._show_settings)
         # Force the quick settings tab to be on the first tab :
         if hasattr(self, 'QuickSettings'):
@@ -76,13 +76,13 @@ class PyQtModule(object):
             for k in self._need_description:
                 print(eval('self.%s.describe_tree()' % k))
         # Show and maximized the window :
-        if profiler:
+        if PROFILER:
             self._pyqt_title('Profiler')
-            profiler.finish()
+            PROFILER.finish()
         self.showMaximized()
-        vispy_app.run()
+        VISPY_APP.run()
 
     def closeEvent(self, event):
         """Executed method when the GUI closed."""
-        app.quit()
+        PYQT_APP.quit()
         logger.debug("App closed.")

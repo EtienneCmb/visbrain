@@ -1,16 +1,21 @@
+"""Visbrain configurations."""
+import logging
+
 from PyQt5 import QtWidgets
 from vispy import app as visapp
 
 from .utils import Profiler
 
+logger = logging.getLogger('visbrain')
+
 """Visbrain profiler (derived from the VisPy profiler)
 """
-profiler = Profiler()
+PROFILER = Profiler()
 
 """PyQt application
 """
-app = QtWidgets.QApplication.instance()
-if app is None:
-    app = QtWidgets.QApplication([''])
+PYQT_APP = QtWidgets.QApplication.instance()
+if PYQT_APP is None:
+    PYQT_APP = QtWidgets.QApplication([''])
 
-vispy_app = visapp.application.Application()
+VISPY_APP = visapp.application.Application()
