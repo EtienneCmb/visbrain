@@ -42,7 +42,7 @@ Brain object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: BrainObj
-  :members: set_data, set_state, rotate, add_activation
+  :members: set_data, set_state, rotate, add_activation, get_parcellates, parcellize
 
     .. rubric:: Methods
 
@@ -51,6 +51,8 @@ Brain object
         ~BrainObj.set_state
         ~BrainObj.rotate
         ~BrainObj.add_activation
+        ~BrainObj.get_parcellates
+        ~BrainObj.parcellize
 
 .. include:: generated/visbrain.objects.BrainObj.examples
 .. raw:: html
