@@ -10,6 +10,8 @@ used in this example.
 
 .. image:: ../../picture/picbrain/ex_parcellates.png
 """
+import numpy as np
+
 from visbrain import Brain
 from visbrain.objects import BrainObj
 from visbrain.io import download_file, path_to_visbrain_data
@@ -45,8 +47,15 @@ df = b_obj.get_parcellates(path_to_file2)
 other atlas (Desikan-Killiany atlas)
 """
 select = ['insula', 'paracentral', 'precentral', 'precuneus', 'frontalpole',
-          'temporalpole', 'fusiform', 'cuneus']
-b_obj.parcellize(path_to_file2, hemisphere='right', select=select)
+          'temporalpole', 'fusiform', 'cuneus', 'inferiorparietal',
+          'inferiortemporal', 'precentral', 'superiorfrontal',
+          'superiortemporal']
+
+"""Instead of using predefined colors inside the annot file, we use some data
+"""
+data = np.arange(len(select))
+b_obj.parcellize(path_to_file2, hemisphere='right', select=select, data=data,
+                 cmap='Spectral_r')
 
 """Finally, pass the brain object to `Brain` and disply the GUI
 """

@@ -356,7 +356,7 @@ background.</p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.BrainObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">BrainObj</code><span class="sig-paren">(</span><em>name</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>translucent=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L17-L586"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">BrainObj</code><span class="sig-paren">(</span><em>name</em>, <em>vertices=None</em>, <em>faces=None</em>, <em>normals=None</em>, <em>lr_index=None</em>, <em>hemisphere='both'</em>, <em>translucent=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L17-L602"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a brain object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -443,7 +443,7 @@ hemisphere.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.BrainObj.get_parcellates" title="visbrain.objects.BrainObj.get_parcellates"><code class="xref py py-obj docutils literal"><span class="pre">get_parcellates</span></code></a>(file)</td>
 <td>Get the list of supported parcellates names and index.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.BrainObj.parcellize" title="visbrain.objects.BrainObj.parcellize"><code class="xref py py-obj docutils literal"><span class="pre">parcellize</span></code></a>(file[,&nbsp;select,&nbsp;hemisphere])</td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.BrainObj.parcellize" title="visbrain.objects.BrainObj.parcellize"><code class="xref py py-obj docutils literal"><span class="pre">parcellize</span></code></a>(file[,&nbsp;select,&nbsp;hemisphere,&nbsp;data,&nbsp;…])</td>
 <td>Parcellize the brain surface using a .annot file.</td>
 </tr>
 </tbody>
@@ -527,7 +527,7 @@ instead.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.get_parcellates">
-<code class="descname">get_parcellates</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.get_parcellates"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L440-L454"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.get_parcellates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_parcellates</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.get_parcellates"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L456-L470"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.get_parcellates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of supported parcellates names and index.</p>
 <p>This method require the pandas and nibabel packages to be installed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -546,7 +546,7 @@ instead.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.BrainObj.parcellize">
-<code class="descname">parcellize</code><span class="sig-paren">(</span><em>file</em>, <em>select=None</em>, <em>hemisphere=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.parcellize"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L374-L438"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.parcellize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parcellize</code><span class="sig-paren">(</span><em>file</em>, <em>select=None</em>, <em>hemisphere=None</em>, <em>data=None</em>, <em>cmap='viridis'</em>, <em>clim=None</em>, <em>vmin=None</em>, <em>under='gray'</em>, <em>vmax=None</em>, <em>over='red'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/brain_obj.html#BrainObj.parcellize"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/brain_obj.py#L374-L454"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.BrainObj.parcellize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parcellize the brain surface using a .annot file.</p>
 <p>This method require the nibabel package to be installed.</p>
 <table class="docutils field-list" frame="void" rules="none">

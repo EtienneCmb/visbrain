@@ -202,7 +202,9 @@ read the .annot file.</p>
 <p>See <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation">https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation</a> for files
 used in this example.</p>
 <img alt="../../_images/ex_parcellates.png" src="../../_images/ex_parcellates.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
@@ -237,8 +239,15 @@ used in this example.</p>
 <span class="sd">other atlas (Desikan-Killiany atlas)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">select</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;insula&#39;</span><span class="p">,</span> <span class="s1">&#39;paracentral&#39;</span><span class="p">,</span> <span class="s1">&#39;precentral&#39;</span><span class="p">,</span> <span class="s1">&#39;precuneus&#39;</span><span class="p">,</span> <span class="s1">&#39;frontalpole&#39;</span><span class="p">,</span>
-          <span class="s1">&#39;temporalpole&#39;</span><span class="p">,</span> <span class="s1">&#39;fusiform&#39;</span><span class="p">,</span> <span class="s1">&#39;cuneus&#39;</span><span class="p">]</span>
-<span class="n">b_obj</span><span class="o">.</span><span class="n">parcellize</span><span class="p">(</span><span class="n">path_to_file2</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">)</span>
+          <span class="s1">&#39;temporalpole&#39;</span><span class="p">,</span> <span class="s1">&#39;fusiform&#39;</span><span class="p">,</span> <span class="s1">&#39;cuneus&#39;</span><span class="p">,</span> <span class="s1">&#39;inferiorparietal&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;inferiortemporal&#39;</span><span class="p">,</span> <span class="s1">&#39;precentral&#39;</span><span class="p">,</span> <span class="s1">&#39;superiorfrontal&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;superiortemporal&#39;</span><span class="p">]</span>
+
+<span class="sd">&quot;&quot;&quot;Instead of using predefined colors inside the annot file, we use some data</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">data</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">))</span>
+<span class="n">b_obj</span><span class="o">.</span><span class="n">parcellize</span><span class="p">(</span><span class="n">path_to_file2</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                 <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;Finally, pass the brain object to `Brain` and disply the GUI</span>
 <span class="sd">&quot;&quot;&quot;</span>
