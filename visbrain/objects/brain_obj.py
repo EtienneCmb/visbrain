@@ -7,8 +7,9 @@ from vispy import scene
 
 from .visbrain_obj import VisbrainObject
 from ..visuals import BrainMesh
-from ..utils import get_data_path, mesh_edges, smoothing_matrix, array2colormap
-from ..io import download_file, is_nibabel_installed
+from ..utils import (get_data_path, mesh_edges, smoothing_matrix, color2vb,
+                     array2colormap)
+from ..io import download_file, is_nibabel_installed, is_pandas_installed
 
 logger = logging.getLogger('visbrain')
 
@@ -344,22 +345,7 @@ class BrainObj(VisbrainObject):
             sc = nib.load(file).get_data().ravel(order="F")
             hemisphere = 'both' if len(sc) == len(self.mesh) else hemisphere
             # Hemisphere :
-            if hemisphere is None:
-                _, filename = os.path.split(file)
-                if any(k in filename for k in ['left', 'lh']):
-                    hemisphere = 'left'
-                elif any(k in filename for k in ['right', 'rh']):
-                    hemisphere = 'right'
-                else:
-                    hemisphere = 'both'
-                logger.warning("%s hemisphere(s) inferred from "
-                               "filename" % hemisphere)
-            if hemisphere == 'left':
-                idx = self.mesh._lr_index
-            elif hemisphere == 'right':
-                idx = ~self.mesh._lr_index
-            else:
-                idx = np.ones((len(self.mesh),), dtype=bool)
+            hemisphere, idx = self._hemisphere_from_file(hemisphere, file)
             assert len(sc) == idx.sum()
             # Clim :
             clim = (sc.min(), sc.max()) if clim is None else clim
@@ -385,6 +371,88 @@ class BrainObj(VisbrainObject):
         self.mesh.color = np.ma.array(self._data_color).mean(0)
         self.mesh.mask = np.array(self._data_mask).max(0)
 
+    def parcellize(self, file, select=None, hemisphere=None):
+        """Parcellize the brain surface using a .annot file.
+
+        This method require the nibabel package to be installed.
+
+        Parameters
+        ----------
+        file : string
+            Path to the .annot file.
+        select : array_like | None
+            Select the structures to display. Use either a list a index or a
+            list of structure's names. If None, all structures are displayed.
+        hemisphere : string | None
+            The hemisphere for the parcellation. If None, the hemisphere will
+            be inferred from file name.
+        """
+        idx, u_colors, labels, u_idx = self._load_annot_file(file)
+        u_colors = u_colors.astype(float) / 255.
+        roi_labs = []
+        # Get the hemisphere and (left // right) boolean index :
+        hemisphere, h_idx = self._hemisphere_from_file(hemisphere, file)
+        # Select conversion :
+        if select is None:
+            select = u_idx
+        if isinstance(select, (np.ndarray, list)):
+            select = np.asarray(select)
+            if select.dtype != int:
+                logger.info('Search parcellates using labels')
+                select_str = select.copy()
+                select = []
+                for k in select_str:
+                    label_idx = np.where(labels == k)[0]
+                    if label_idx.size:
+                        select.append(u_idx[label_idx])
+                    else:
+                        logger.warning("%r ignored because not in predefined "
+                                       "parcellates list. Use `get_parcellates"
+                                       "` method to get the list of available "
+                                       "parcellates" % k)
+                        roi_labs.append('%s (ignored)' % k)
+                select = np.array(select).ravel()
+        if not select.size:
+            raise ValueError("No parcellates found")
+        # Prepare color variables :
+        color = np.zeros((len(self.mesh), 4))
+        mask = np.zeros((len(self.mesh),))
+        # Set roi color to the mesh :
+        sub_select = np.where(h_idx)[0]  # sub-hemisphere selection
+        for k in select:
+            sub_idx = np.where(u_idx == k)[0]  # index location in u_idx
+            if sub_idx:
+                color_index = sub_select[u_idx[idx] == k]
+                color[color_index, :] = u_colors[sub_idx, :]
+                roi_labs.append(labels[sub_idx][0])
+                mask[color_index] = 1.
+            else:
+                logger.error("An error occured for index %i" % k)
+                # roi_labs.append(labels[sub_idx][0])
+        logger.info("Selected parcellates : \n - %s" % "\n - ".join(roi_labs))
+        # Keep an eye on data color and mask :
+        self._data_color.append(color)
+        self._data_mask.append(mask)
+        # Set color and mask to the mesh :
+        self.mesh.color = np.array(self._data_color).sum(0)
+        self.mesh.mask = np.array(self._data_mask).sum(0)
+
+    def get_parcellates(self, file):
+        """Get the list of supported parcellates names and index.
+
+        This method require the pandas and nibabel packages to be installed.
+
+        Parameters
+        ----------
+        file : string
+            Path to the .annot file.
+        """
+        assert is_pandas_installed()
+        import pandas as pd
+        idx, u_colors, labels, u_idx = self._load_annot_file(file)
+        dico = dict(Index=u_idx, Labels=labels, Color=u_colors.tolist())
+        return pd.DataFrame(dico, columns=['Index', 'Labels', 'Color'])
+
     @staticmethod
     def _data_to_contour(data, clim, n_contours):
         if isinstance(n_contours, int):
@@ -393,6 +461,39 @@ class BrainObj(VisbrainObject):
                 d_idx = np.logical_and(data >= _range[k], data < _range[k + 1])
                 data[d_idx] = _range[k]
         return data
+
+    def _hemisphere_from_file(self, hemisphere, file):
+        """Infer hemisphere from filename."""
+        if hemisphere is None:
+            _, filename = os.path.split(file)
+            if any(k in filename for k in ['left', 'lh']):
+                hemisphere = 'left'
+            elif any(k in filename for k in ['right', 'rh']):
+                hemisphere = 'right'
+            else:
+                hemisphere = 'both'
+            logger.warning("%s hemisphere(s) inferred from "
+                           "filename" % hemisphere)
+        # Get index :
+        if hemisphere == 'left':
+            idx = self.mesh._lr_index
+        elif hemisphere == 'right':
+            idx = ~self.mesh._lr_index
+        else:
+            idx = np.ones((len(self.mesh),), dtype=bool)
+        return hemisphere, idx
+
+    @staticmethod
+    def _load_annot_file(file):
+        """Load a .annot file."""
+        assert is_nibabel_installed()
+        import nibabel
+        # Get index and labels :
+        assert os.path.isfile(file)
+        idx, u_col, labels = nibabel.freesurfer.read_annot(file)
+        idx, labels = np.array(idx).astype(int), np.array(labels).astype(str)
+        logger.info("Annot file loaded (%s)" % file)
+        return idx, u_col[:, 0:4], labels, u_col[..., -1]
 
     ###########################################################################
     ###########################################################################

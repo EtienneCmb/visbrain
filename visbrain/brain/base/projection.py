@@ -64,8 +64,8 @@ class Projections(object):
         # ============= MODULATIONS =============
         r, c = self._proj_radius, self._proj_contribute
         log_str = ("Project {} onto the %s (radius=%f contribute="
-                   "%r" % (self._proj_on, float(self._proj_radius),
-                           self._proj_contribute))
+                   "%r)" % (self._proj_on, float(self._proj_radius),
+                            self._proj_contribute))
         if self._proj_type == 'activity':
             logger.info(log_str.format("source's activity"))
             mod = self.sources.project_modulation(v, r, c)
