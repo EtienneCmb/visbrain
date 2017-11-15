@@ -152,8 +152,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-        
       </li>
     
   </ul>
@@ -385,7 +383,7 @@
 <span class="sd">        Array of positions of shape (n_sources, 2) or (n_sources, 3).</span>
 <span class="sd">    data : array_like | None</span>
 <span class="sd">        Array of weights of shape (n_sources,).</span>
-<span class="sd">    color : array_like/string/tuple | &#39;black&#39;</span>
+<span class="sd">    color : array_like/string/tuple | &#39;red&#39;</span>
 <span class="sd">        Marker&#39;s color. Use a string (i.e &#39;green&#39;) to use the same color across</span>
 <span class="sd">        markers or a list of colors of length n_sources to use different colors</span>
 <span class="sd">        for markers.</span>
@@ -455,7 +453,7 @@
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
                  <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                  <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s1">&#39;mni&#39;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
                  <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text_size</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">text_bold</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1216,6 +1214,7 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
             VERSION:'0.3.7',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

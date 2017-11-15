@@ -656,7 +656,7 @@ respectively describing the (azimuth, elevation).</p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.SourceObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">SourceObj</code><span class="sig-paren">(</span><em>name</em>, <em>xyz</em>, <em>data=None</em>, <em>color='black'</em>, <em>alpha=1.0</em>, <em>symbol='disc'</em>, <em>radius_min=5.0</em>, <em>radius_max=10.0</em>, <em>edge_width=0.0</em>, <em>edge_color='black'</em>, <em>system='mni'</em>, <em>mask=None</em>, <em>mask_color='red'</em>, <em>text=None</em>, <em>text_size=3.0</em>, <em>text_color='black'</em>, <em>text_bold=False</em>, <em>text_translate=(0.0</em>, <em>2.0</em>, <em>0.0)</em>, <em>visible=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/source_obj.html#SourceObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/source_obj.py#L210-L876"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SourceObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">SourceObj</code><span class="sig-paren">(</span><em>name</em>, <em>xyz</em>, <em>data=None</em>, <em>color='red'</em>, <em>alpha=1.0</em>, <em>symbol='disc'</em>, <em>radius_min=5.0</em>, <em>radius_max=10.0</em>, <em>edge_width=0.0</em>, <em>edge_color='black'</em>, <em>system='mni'</em>, <em>mask=None</em>, <em>mask_color='red'</em>, <em>text=None</em>, <em>text_size=3.0</em>, <em>text_color='black'</em>, <em>text_bold=False</em>, <em>text_translate=(0.0</em>, <em>2.0</em>, <em>0.0)</em>, <em>visible=True</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>_z=-10.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/source_obj.html#SourceObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/source_obj.py#L210-L876"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SourceObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a source object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -674,7 +674,7 @@ respectively describing the (azimuth, elevation).</p>
 <blockquote>
 <div><p>Array of weights of shape (n_sources,).</p>
 </div></blockquote>
-<p><strong>color</strong> : array_like/string/tuple | ‘black’</p>
+<p><strong>color</strong> : array_like/string/tuple | ‘red’</p>
 <blockquote>
 <div><p>Marker’s color. Use a string (i.e ‘green’) to use the same color across
 markers or a list of colors of length n_sources to use different colors
@@ -2160,6 +2160,7 @@ images.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'0.3.7',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
