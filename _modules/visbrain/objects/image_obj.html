@@ -1,0 +1,465 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.objects.image_obj &mdash; visbrain 0.3.7 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.objects.image_obj</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.objects.image_obj</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Base class for objects that need an iage (TF, Pacmap, spectro...).&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
+
+<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">array2colormap</span><span class="p">,</span> <span class="n">wrap_properties</span><span class="p">,</span> <span class="n">color2vb</span>
+<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">CbarArgs</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ImageObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.ImageObj">[docs]</a><span class="k">class</span> <span class="nc">ImageObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CbarArgs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a single image object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : array_like</span>
+<span class="sd">        Array of data. If data.ndim in [1, 2] the color is inferred from</span>
+<span class="sd">        the data. Otherwise, if data.ndim is 3, data is interpreted as</span>
+<span class="sd">        color if the last dimension is either 3 (RGB) or 4 (RGBA).</span>
+<span class="sd">    xaxis : array_like | None</span>
+<span class="sd">        Vector to use for the x-axis (number of columns in the image).</span>
+<span class="sd">        If None, `xaxis` is inferred from the second dimension of data.</span>
+<span class="sd">    yaxis : array_like | None</span>
+<span class="sd">        Vector to use for the y-axis (number of rows in the image).</span>
+<span class="sd">        If None, `yaxis` is inferred from the first dimension of data.</span>
+<span class="sd">    clim : tuple | None</span>
+<span class="sd">        Colorbar limits. If None, `clim=(data.min(), data.max())`</span>
+<span class="sd">    cmap : string | None</span>
+<span class="sd">        Colormap name.</span>
+<span class="sd">    vmin : float | None</span>
+<span class="sd">        Minimum threshold of the colorbar.</span>
+<span class="sd">    under : string/tuple/array_like | None</span>
+<span class="sd">        Color for values under vmin.</span>
+<span class="sd">    vmax : float | None</span>
+<span class="sd">        Maximum threshold of the colorbar.</span>
+<span class="sd">    under : string/tuple/array_like | None</span>
+<span class="sd">        Color for values over vmax.</span>
+<span class="sd">    interpolation : string | &#39;nearest&#39;</span>
+<span class="sd">        Interpolation method for the image. See vispy.scene.visuals.Image for</span>
+<span class="sd">        availables interpolation methods.</span>
+<span class="sd">    max_pts : int | -1</span>
+<span class="sd">        Maximum number of points of the image along the x or y axis. This</span>
+<span class="sd">        parameter is essentially used to solve OpenGL issues with very large</span>
+<span class="sd">        images.</span>
+<span class="sd">    transform : VisPy.visuals.transforms | None</span>
+<span class="sd">        VisPy transformation to set to the parent node.</span>
+<span class="sd">    parent : VisPy.parent | None</span>
+<span class="sd">        Markers object parent.</span>
+<span class="sd">    verbose : string</span>
+<span class="sd">        Verbosity level.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from visbrain.objects import ImageObj</span>
+<span class="sd">    &gt;&gt;&gt; n = 100</span>
+<span class="sd">    &gt;&gt;&gt; time = np.r_[np.arange(n - 1), np.arange(n)[::-1]]</span>
+<span class="sd">    &gt;&gt;&gt; time = time.reshape(-1, 1) + time.reshape(1, -1)</span>
+<span class="sd">    &gt;&gt;&gt; im = ImageObj(&#39;im&#39;, time, cmap=&#39;Spectral_r&#39;, interpolation=&#39;bicubic&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; im.preview(axis=True)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xaxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+                 <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                 <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">max_pts</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">CbarArgs</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="n">clim</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                          <span class="n">under</span><span class="o">=</span><span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="n">over</span><span class="p">)</span>
+
+        <span class="c1"># _______________________ CHECKING _______________________</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_pts</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_limit</span> <span class="o">=</span> <span class="n">max_pts</span>  <span class="c1"># fix GL issues with large images</span>
+
+        <span class="c1"># _______________________ VISUAL _______________________</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;_ImageObj&quot;</span><span class="p">,</span>
+                                          <span class="n">interpolation</span><span class="o">=</span><span class="n">interpolation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">STTransform</span><span class="p">()</span>
+
+        <span class="c1"># _______________________ SET DATA _______________________</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span>
+                          <span class="n">over</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ImageObj.set_data"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.ImageObj.set_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xaxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set data to the image.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;=</span> <span class="mi">3</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># Get the x-axis and y-axis :</span>
+        <span class="n">xaxis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">xaxis</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xaxis</span><span class="p">)</span>
+        <span class="n">yaxis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">yaxis</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yaxis</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xaxis</span><span class="p">)</span> <span class="o">==</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">yaxis</span><span class="p">)</span> <span class="o">==</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dim</span> <span class="o">=</span> <span class="p">(</span><span class="n">xaxis</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">xaxis</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">yaxis</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">yaxis</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+        <span class="c1"># Convert data to color (if data.ndim == 2)</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># infer color from data</span>
+            <span class="n">clim</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="k">if</span> <span class="n">clim</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">clim</span>
+            <span class="c1"># Limit the number of points :</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">k</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_limit</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">]):</span>
+                <span class="n">dsf_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_limit</span><span class="p">)))</span>
+                <span class="n">dsf_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_limit</span><span class="p">)))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Image size reduced along the x and y-axis with &quot;</span>
+                             <span class="s2">&quot;a down-sampling factor of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">([</span><span class="n">dsf_x</span><span class="p">,</span> <span class="n">dsf_y</span><span class="p">]))</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="n">dsf_x</span><span class="p">,</span> <span class="p">::</span><span class="n">dsf_y</span><span class="p">]</span>
+                <span class="n">xaxis</span><span class="p">,</span> <span class="n">yaxis</span> <span class="o">=</span> <span class="n">xaxis</span><span class="p">[::</span><span class="n">dsf_x</span><span class="p">],</span> <span class="n">yaxis</span><span class="p">[::</span><span class="n">dsf_y</span><span class="p">]</span>
+            <span class="c1"># Set properties :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clim</span> <span class="o">=</span> <span class="n">clim</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cmap</span> <span class="o">=</span> <span class="n">cmap</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_isvmin</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">under</span> <span class="o">=</span> <span class="n">under</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_isvmax</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vmax</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">over</span> <span class="o">=</span> <span class="n">over</span>
+            <span class="c1"># Get color :</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">array2colormap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">to_kwargs</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># data is already a compatible color</span>
+            <span class="k">assert</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="c1"># Set color to the image :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">fact_x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">xaxis</span><span class="p">)</span>
+        <span class="n">fact_y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">yaxis</span><span class="p">)</span>
+        <span class="n">sc</span> <span class="o">=</span> <span class="p">(</span><span class="n">fact_x</span><span class="p">,</span> <span class="n">fact_y</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">0.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">sc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="n">tr</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the most adapted camera.&quot;&quot;&quot;</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dim</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="n">rect</span><span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                             PROPERTIES</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="c1"># ----------- INTERPOLATION -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">interpolation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the interpolation value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="o">.</span><span class="n">interpolation</span>
+
+    <span class="nd">@interpolation</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">interpolation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set interpolation value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- CMAP -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cmap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the cmap value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span>
+
+    <span class="nd">@cmap</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">cmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set cmap value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- CLIM -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">clim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the clim value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clim</span>
+
+    <span class="nd">@clim</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">clim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set clim value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clim</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- VMIN -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vmin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the vmin value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmin</span>
+
+    <span class="nd">@vmin</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">vmin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set vmin value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vmin</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- VMAX -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vmax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the vmax value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vmax</span>
+
+    <span class="nd">@vmax</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">vmax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set vmax value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vmax</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- UNDER -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">under</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the under value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_under</span>
+
+    <span class="nd">@under</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">under</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set under value.&quot;&quot;&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_under</span> <span class="o">=</span> <span class="n">color</span>
+
+    <span class="c1"># ----------- OVER -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">over</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the over value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_over</span>
+
+    <span class="nd">@over</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">over</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set over value.&quot;&quot;&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_over</span> <span class="o">=</span> <span class="n">color</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.7',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

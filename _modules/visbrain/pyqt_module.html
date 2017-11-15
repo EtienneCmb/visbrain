@@ -217,7 +217,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="n">start_title</span> <span class="o">+</span> <span class="n">title</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">symbol</span> <span class="o">*</span> <span class="n">n_symbol</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PyQtModule.show"><a class="viewcode-back" href="../../brainAPI.html#visbrain.pyqt_module.PyQtModule.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Display the graphical user interface.&quot;&quot;&quot;</span>
         <span class="c1"># Fixed size for the settings panel :</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;q_widget&#39;</span><span class="p">):</span>
@@ -247,7 +247,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_pyqt_title</span><span class="p">(</span><span class="s1">&#39;Profiler&#39;</span><span class="p">)</span>
             <span class="n">profiler</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
-        <span class="n">vispy_app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+        <span class="n">vispy_app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Executed method when the GUI closed.&quot;&quot;&quot;</span>

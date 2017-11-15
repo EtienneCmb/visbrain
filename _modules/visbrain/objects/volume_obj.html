@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.objects.volume_obj &mdash; visbrain 0.3.7 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.objects.volume_obj</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.objects.volume_obj</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Volume object.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
+<span class="kn">from</span> <span class="nn">vispy.scene</span> <span class="k">import</span> <span class="n">visuals</span>
+<span class="kn">from</span> <span class="nn">vispy.color</span> <span class="k">import</span> <span class="n">BaseColormap</span>
+
+<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">load_predefined_roi</span><span class="p">,</span> <span class="n">array_to_stt</span><span class="p">,</span> <span class="n">get_data_path</span><span class="p">,</span>
+                     <span class="n">wrap_properties</span><span class="p">,</span> <span class="n">normalize</span><span class="p">)</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TransFire</span><span class="p">(</span><span class="n">BaseColormap</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transparent fire colormap.&quot;&quot;&quot;</span>
+
+    <span class="n">glsl_map</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    vec4 translucent_fire(float t) {</span>
+<span class="s2">        return vec4(pow(t, 0.5), t, t*t, t*0.05);</span>
+<span class="s2">    }</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">OpaqueFire</span><span class="p">(</span><span class="n">BaseColormap</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Opaque fire colormap.&quot;&quot;&quot;</span>
+
+    <span class="n">glsl_map</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    vec4 translucent_fire(float t) {</span>
+<span class="s2">        return vec4(pow(t, 0.5), t, t*t, max(0, t*1.05 - 0.05));</span>
+<span class="s2">    }</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">TransGrays</span><span class="p">(</span><span class="n">BaseColormap</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transparent gray colormap.&quot;&quot;&quot;</span>
+
+    <span class="n">glsl_map</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    vec4 translucent_grays(float t) {</span>
+<span class="s2">        return vec4(t*t, t*t, t*t, t*0.05);</span>
+<span class="s2">    }</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">OpaqueGrays</span><span class="p">(</span><span class="n">BaseColormap</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Opaque gray colormap.&quot;&quot;&quot;</span>
+
+    <span class="n">glsl_map</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    vec4 translucent_grays(float t) {</span>
+<span class="s2">        return vec4(t*t, t*t, t*t, max(0, t*1.05 - 0.05));</span>
+<span class="s2">    }</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+
+<span class="n">VOLUME_CMAPS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;TransFire&#39;</span><span class="p">:</span> <span class="n">TransFire</span><span class="p">(),</span> <span class="s1">&#39;OpaqueFire&#39;</span><span class="p">:</span> <span class="n">OpaqueFire</span><span class="p">(),</span>
+                <span class="s1">&#39;TransGrays&#39;</span><span class="p">:</span> <span class="n">TransGrays</span><span class="p">(),</span> <span class="s1">&#39;OpaqueGrays&#39;</span><span class="p">:</span> <span class="n">OpaqueGrays</span><span class="p">()}</span>
+<span class="n">KNOWN_METHODS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mip&#39;</span><span class="p">,</span> <span class="s1">&#39;translucent&#39;</span><span class="p">,</span> <span class="s1">&#39;additive&#39;</span><span class="p">,</span> <span class="s1">&#39;iso&#39;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">_Volume</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Manage loaded volumes.</span>
+
+<span class="sd">    Use : _Volume(&#39;aal&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a predefined volume.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predefined_volumes</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> volume loaded&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">load_predefined_roi</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> volume not in visbrain/data/roi/&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_predefined_volumes</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Get the list of predefined volumes.&quot;&quot;&quot;</span>
+        <span class="n">list_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">list_dir</span><span class="p">]</span>
+
+    <span class="c1"># ----------- NAME -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the name value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set name value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predefined_volumes</span><span class="p">():</span>
+            <span class="bp">self</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">value</span>
+
+
+<div class="viewcode-block" id="VolumeObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.VolumeObj">[docs]</a><span class="k">class</span> <span class="nc">VolumeObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">_Volume</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a 3-D volume object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : string</span>
+<span class="sd">        Name of the volume object. If name is &#39;brodmann&#39;, &#39;aal&#39; or &#39;talairach&#39;</span>
+<span class="sd">        a predefined volume object is used and vol, index and label are</span>
+<span class="sd">        ignored.</span>
+<span class="sd">    vol : array_like</span>
+<span class="sd">        The volume to use. Should be a 3-d array.</span>
+<span class="sd">    hdr : array_like | None</span>
+<span class="sd">        Matrix transformation to apply. hdr should be a (4, 4) array.</span>
+<span class="sd">    method : {&#39;mip&#39;, &#39;translucent&#39;, &#39;additive&#39;, &#39;iso&#39;}</span>
+<span class="sd">        Volume rendering method. Default is &#39;mip&#39;.</span>
+<span class="sd">    threshold : float | 0.</span>
+<span class="sd">        Threshold value for iso rendering method.</span>
+<span class="sd">    cmap : {&#39;Opaquegrays&#39;, &#39;TransFire&#39;, &#39;OpaqueFire&#39;, &#39;TransGrays&#39;}</span>
+<span class="sd">        Colormap to use.</span>
+<span class="sd">    select : list | None</span>
+<span class="sd">        Select some structures in the volume.</span>
+<span class="sd">    transform : VisPy.visuals.transforms | None</span>
+<span class="sd">        VisPy transformation to set to the parent node.</span>
+<span class="sd">    parent : VisPy.parent | None</span>
+<span class="sd">        Volume object parent.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from visbrain.objects import VolumeObj</span>
+<span class="sd">    &gt;&gt;&gt; select = [4, 6]  # select Brodmann area 4 and 6</span>
+<span class="sd">    &gt;&gt;&gt; v = VolumeObj(&#39;brodmann&#39;, method=&#39;iso&#39;, select=select)</span>
+<span class="sd">    &gt;&gt;&gt; v.preview(axis=True)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hdr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mip&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;OpaqueGrays&#39;</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">_Volume</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># _______________________ CHECKING _______________________</span>
+        <span class="c1"># Create 3-D volume :</span>
+        <span class="n">vol_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vol3d</span> <span class="o">=</span> <span class="n">visuals</span><span class="o">.</span><span class="n">Volume</span><span class="p">(</span><span class="n">vol_d</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">,</span>
+                                     <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;3-D Volume&#39;</span><span class="p">,</span>
+                                     <span class="n">cmap</span><span class="o">=</span><span class="n">VOLUME_CMAPS</span><span class="p">[</span><span class="n">cmap</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">select</span><span class="p">)</span>
+
+<div class="viewcode-block" id="VolumeObj.set_data"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.VolumeObj.set_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hdr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set data to the volume.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predefined_volumes</span><span class="p">():</span>
+            <span class="n">vol</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">vol</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">if</span> <span class="n">hdr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">hdr</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Extract structures </span><span class="si">%r</span><span class="s2"> from the volume&quot;</span> <span class="o">%</span> <span class="n">select</span><span class="p">)</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;(vol != </span><span class="si">%s</span><span class="s1">) &amp; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">vol</span><span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">st</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">select</span><span class="p">))]</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="n">vol</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">vol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vol3d</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">vol</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vol3d</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">array_to_stt</span><span class="p">(</span><span class="n">hdr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmap</span> <span class="o">=</span> <span class="n">cmap</span></div>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the volume.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vol3d</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the most adapted camera.&quot;&quot;&quot;</span>
+        <span class="n">sh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vol3d</span><span class="o">.</span><span class="n">_vol_shape</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vol3d</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">sh</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">TurntableCamera</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="n">dist</span><span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                             PROPERTIES</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="c1"># ----------- METHOD -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the method value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method</span>
+
+    <span class="nd">@method</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set method value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">KNOWN_METHODS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vol3d</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- CMAP -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cmap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the cmap value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span>
+
+    <span class="nd">@cmap</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">cmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set cmap value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">VOLUME_CMAPS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vol3d</span><span class="o">.</span><span class="n">cmap</span> <span class="o">=</span> <span class="n">VOLUME_CMAPS</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- THRESHOLD -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the threshold value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threshold</span>
+
+    <span class="nd">@threshold</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_properties</span>
+    <span class="k">def</span> <span class="nf">threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set threshold value.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;iso&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vol3d</span><span class="o">.</span><span class="n">shared_program</span><span class="p">[</span><span class="s1">&#39;u_threshold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threshold</span> <span class="o">=</span> <span class="n">value</span></div>
+
+    <span class="c1"># # ----------- ALPHA -----------</span>
+    <span class="c1"># @property</span>
+    <span class="c1"># def alpha(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;Get the alpha value.&quot;&quot;&quot;</span>
+    <span class="c1">#     return self._alpha</span>
+
+    <span class="c1"># @alpha.setter</span>
+    <span class="c1"># @wrap_properties</span>
+    <span class="c1"># def alpha(self, value):</span>
+    <span class="c1">#     &quot;&quot;&quot;Set alpha value.&quot;&quot;&quot;</span>
+    <span class="c1">#     assert isinstance(value, (int, float)) and (0. &lt;= value &lt;= 1.)</span>
+    <span class="c1">#     self._vol3d.opacity = value</span>
+    <span class="c1">#     self._alpha = value</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.7',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

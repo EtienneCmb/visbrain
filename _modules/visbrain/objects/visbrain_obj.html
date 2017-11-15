@@ -167,6 +167,7 @@
   <h1>Source code for visbrain.objects.visbrain_obj</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Main class for Visbrain objects.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">vispy</span>
 <span class="kn">import</span> <span class="nn">vispy.visuals.transforms</span> <span class="k">as</span> <span class="nn">vist</span>
@@ -175,6 +176,8 @@
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">set_log_level</span>
 <span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">vispy_app</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">VisbrainObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -203,6 +206,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
         <span class="c1"># Verbose :</span>
         <span class="n">set_log_level</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> created&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Represent ClassName(name=&#39;object_name&#39;).&quot;&quot;&quot;</span>
@@ -220,7 +224,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
         <span class="k">return</span> <span class="n">canvas</span>
 
-    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="VisbrainObject.preview"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.VisbrainObject.preview">[docs]</a>    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Previsualize the result.</span>
 
 <span class="sd">        Parameters</span>
@@ -240,13 +244,13 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">interactive</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">show</span><span class="p">:</span>
             <span class="n">vispy_app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="c1"># Reset orignial parent :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent_bck</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent_bck</span></div>
 
-    <span class="k">def</span> <span class="nf">describe_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="VisbrainObject.describe_tree"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.VisbrainObject.describe_tree">[docs]</a>    <span class="k">def</span> <span class="nf">describe_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Tree description.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">describe_tree</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">describe_tree</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
+<div class="viewcode-block" id="VisbrainObject.screenshot"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.VisbrainObject.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
                    <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                    <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Take a screeshot of the scene.</span>
@@ -299,7 +303,7 @@
                       <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="n">transparent</span><span class="p">)</span>
         <span class="n">canvas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_parent</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="c1"># ----------- PARENT -----------</span>
     <span class="nd">@property</span>

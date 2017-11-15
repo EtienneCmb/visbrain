@@ -211,7 +211,7 @@
     <span class="c1">#                             SETTINGS</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.rotate"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fixed</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fixed</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Rotate the scene elements using a predefined or a custom rotation.</span>
 
 <span class="sd">        The rotation is applied on every objects on the scene.</span>
@@ -242,9 +242,9 @@
 <span class="sd">        &gt;&gt;&gt; # Show the GUI :</span>
 <span class="sd">        &gt;&gt;&gt; vb.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">fixed</span><span class="o">=</span><span class="n">fixed</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">custom</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">fixed</span><span class="o">=</span><span class="n">fixed</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="n">custom</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BrainUserMethods.background_color"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.background_color">[docs]</a>    <span class="k">def</span> <span class="nf">background_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">)):</span>
+    <span class="k">def</span> <span class="nf">background_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot;Set the background color of the main canvas and the colorbar.</span>
 
 <span class="sd">        The main canvas is defined as the canvas where all objects are</span>
@@ -272,9 +272,9 @@
 <span class="sd">        &gt;&gt;&gt; vb.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">bckcolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">bckcolor</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">bckcolor</span>
 
-<div class="viewcode-block" id="BrainUserMethods.screenshot"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
                    <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                    <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Take a screeshot of the selected canvas.</span>
@@ -358,9 +358,9 @@
                              <span class="s2">&quot;either &#39;main&#39;, &#39;colorbar&#39; or &#39;cross-sections&#39;&quot;</span><span class="p">)</span>
 
         <span class="c1"># Render the canvas :</span>
-        <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BrainUserMethods.load_config"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.load_config">[docs]</a>    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a configuration file.</span>
 
 <span class="sd">        Parameters</span>
@@ -368,9 +368,9 @@
 <span class="sd">        config : string</span>
 <span class="sd">            File name of the configuration file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_loadConfig</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_loadConfig</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BrainUserMethods.save_config"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.save_config">[docs]</a>    <span class="k">def</span> <span class="nf">save_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">save_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save a configuration file.</span>
 
 <span class="sd">        Parameters</span>
@@ -378,14 +378,14 @@
 <span class="sd">        config : string</span>
 <span class="sd">            File name of the configuration file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_saveConfig</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_saveConfig</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                                  BRAIN</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.brain_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.brain_control">[docs]</a>    <span class="k">def</span> <span class="nf">brain_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">brain_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Control the type of brain to use.</span>
 
@@ -447,9 +447,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_brain_visible</span><span class="p">()</span>
         <span class="c1"># Update :</span>
         <span class="k">if</span> <span class="n">_brain_update</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_brain_template</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_brain_template</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BrainUserMethods.brain_list"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.brain_list">[docs]</a>    <span class="k">def</span> <span class="nf">brain_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">brain_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the list of available mesh brain templates.</span>
 
 <span class="sd">        Returns</span>
@@ -463,9 +463,9 @@
 <span class="sd">        &gt;&gt;&gt; vb = Brain()</span>
 <span class="sd">        &gt;&gt;&gt; print(vb.brain_list())</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">_get_all_available_templates</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">_get_all_available_templates</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BrainUserMethods.add_mesh"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.add_mesh">[docs]</a>    <span class="k">def</span> <span class="nf">add_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a mesh to the scene.</span>
 
 <span class="sd">        Parameters</span>
@@ -485,9 +485,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">set_camera</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vbNode</span>
         <span class="c1"># Add mesh for projection :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_proj_obj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">AddMesh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proj_obj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">AddMesh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_userobj</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
 
-<div class="viewcode-block" id="BrainUserMethods.add_volume"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.add_volume">[docs]</a>    <span class="k">def</span> <span class="nf">add_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">roi_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">add_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">roi_values</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">roi_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a new volume to the interface.</span>
 
@@ -525,9 +525,9 @@
             <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_labels_to_gui</span><span class="p">(</span><span class="n">roi_labels</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_vols</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">roi_labels</span> <span class="o">=</span> <span class="n">label</span>
             <span class="c1"># Extend ROI combo list :</span>
-            <span class="n">extend_combo_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roiDiv</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_build_roi_lst</span><span class="p">)</span></div>
+            <span class="n">extend_combo_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_roiDiv</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_build_roi_lst</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BrainUserMethods.volume_list"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.volume_list">[docs]</a>    <span class="k">def</span> <span class="nf">volume_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">volume_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the list of volumes available.</span>
 
 <span class="sd">        Returns</span>
@@ -535,9 +535,9 @@
 <span class="sd">        volume_list : list</span>
 <span class="sd">            List of volumes availables.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_vols</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_vols</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-<div class="viewcode-block" id="BrainUserMethods.cross_sections_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cross_sections_control">[docs]</a>    <span class="k">def</span> <span class="nf">cross_sections_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">cross_sections_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                <span class="n">volume</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">split_view</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">show_text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -606,9 +606,9 @@
         <span class="c1"># Update the volume to use and split-view :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_crossec_change</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_crossec_split</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_crossec_viz</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_crossec_viz</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BrainUserMethods.volume_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.volume_control">[docs]</a>    <span class="k">def</span> <span class="nf">volume_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">rendering</span><span class="o">=</span><span class="s1">&#39;mip&#39;</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">volume_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">rendering</span><span class="o">=</span><span class="s1">&#39;mip&#39;</span><span class="p">,</span>
                        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;OpaqueGrays&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Control the 3-D volume.</span>
 
@@ -641,14 +641,14 @@
         <span class="c1"># Visible :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menuDispVol</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grpVol</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_vol3d_change</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_vol3d_change</span><span class="p">()</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                              SOURCES</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.sources_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_control">[docs]</a>    <span class="k">def</span> <span class="nf">sources_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">sources_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">radius_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">edge_width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">mask_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -672,9 +672,9 @@
         <span class="n">obj</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">mask_color</span> <span class="o">=</span> <span class="n">mask_color</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
-        <span class="n">obj</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">visible</span></div>
+        <span class="n">obj</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">visible</span>
 
-<div class="viewcode-block" id="BrainUserMethods.sources_display"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_display">[docs]</a>    <span class="k">def</span> <span class="nf">sources_display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sources_display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select sources to display.</span>
 
 <span class="sd">        Parameters</span>
@@ -698,9 +698,9 @@
             <span class="n">obj</span><span class="o">.</span><span class="n">set_visible_sources</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;inside&#39;</span><span class="p">,</span> <span class="s1">&#39;outside&#39;</span><span class="p">]:</span>
             <span class="n">vert</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">vertices</span>
-            <span class="n">obj</span><span class="o">.</span><span class="n">set_visible_sources</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">vert</span><span class="p">)</span></div>
+            <span class="n">obj</span><span class="o">.</span><span class="n">set_visible_sources</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">vert</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BrainUserMethods.cortical_projection"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cortical_projection">[docs]</a>    <span class="k">def</span> <span class="nf">cortical_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">cortical_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span>
                             <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Project sources activity.</span>
 
@@ -735,9 +735,9 @@
         <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_on</span><span class="p">,</span> <span class="n">project_on</span><span class="p">)</span>
         <span class="c1"># Colormap control :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_source_proj</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BrainUserMethods.cortical_repartition"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cortical_repartition">[docs]</a>    <span class="k">def</span> <span class="nf">cortical_repartition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">cortical_repartition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">project_on</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">,</span>
                              <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Project the number of contributing sources per vertex.</span>
 
@@ -762,10 +762,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_mask_color</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">mask_color</span><span class="p">))</span>
         <span class="n">safely_set_cbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_s_proj_on</span><span class="p">,</span> <span class="n">project_on</span><span class="p">)</span>
         <span class="c1"># Colormap control :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_source_proj</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="s1">&#39;Projection&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_source_proj</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BrainUserMethods.sources_fit_to_vertices"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_fit_to_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">sources_fit_to_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_to</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sources_fit_to_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_to</span><span class="o">=</span><span class="s1">&#39;brain&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Force sources coordinates to fit to a selected object.</span>
 
 <span class="sd">        Parameters</span>
@@ -777,9 +777,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_obj_vertices</span><span class="p">(</span><span class="n">fit_to</span><span class="p">)</span>
-        <span class="n">obj</span><span class="o">.</span><span class="n">fit_to_vertices</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
+        <span class="n">obj</span><span class="o">.</span><span class="n">fit_to_vertices</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BrainUserMethods.sources_to_convex_hull"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.sources_to_convex_hull">[docs]</a>    <span class="k">def</span> <span class="nf">sources_to_convex_hull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sources_to_convex_hull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Convert a set of sources into a convex hull.</span>
 
 <span class="sd">        Parameters</span>
@@ -796,14 +796,14 @@
 <span class="sd">        --------</span>
 <span class="sd">        add_mesh : add a mesh to the scene</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">xyz</span><span class="p">)</span><span class="o">.</span><span class="n">simplices</span></div>
+        <span class="k">return</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">xyz</span><span class="p">)</span><span class="o">.</span><span class="n">simplices</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                            TIME-SERIES</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.time_series_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.time_series_control">[docs]</a>    <span class="k">def</span> <span class="nf">time_series_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">time_series_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">amplitude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Control time-series settings.</span>
@@ -829,14 +829,14 @@
         <span class="n">obj</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">amplitude</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="n">translate</span>
-        <span class="n">obj</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="n">visible</span></div>
+        <span class="n">obj</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="n">visible</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                             PICTURES</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.pictures_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.pictures_control">[docs]</a>    <span class="k">def</span> <span class="nf">pictures_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">pictures_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                          <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Control pictures settings.</span>
 
@@ -857,14 +857,14 @@
         <span class="n">obj</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="n">translate</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="n">visible</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                            CONNECTIVITY</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.connect_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.connect_control">[docs]</a>    <span class="k">def</span> <span class="nf">connect_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">connect_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">line_width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update connectivity object.</span>
 
@@ -897,14 +897,14 @@
         <span class="n">obj</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">line_width</span> <span class="o">=</span> <span class="n">line_width</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="n">visible</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbar_control</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1">#                                 ROI</span>
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
-<div class="viewcode-block" id="BrainUserMethods.roi_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.roi_control">[docs]</a>    <span class="k">def</span> <span class="nf">roi_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="p">[],</span> <span class="n">roi_type</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">roi_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="p">[],</span> <span class="n">roi_type</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select Region Of Interest (ROI) to plot.</span>
 
@@ -945,9 +945,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_proj_obj</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_update_proj_list</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">translucent</span> <span class="o">=</span> <span class="n">translucent</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
 
-<div class="viewcode-block" id="BrainUserMethods.roi_list"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.roi_list">[docs]</a>    <span class="k">def</span> <span class="nf">roi_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roi_type</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">roi_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roi_type</span><span class="o">=</span><span class="s1">&#39;Brodmann&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the list of supported ROI.</span>
 
 <span class="sd">        Parameters</span>
@@ -961,7 +961,7 @@
 <span class="sd">        roi_labels : array_like</span>
 <span class="sd">            The currently supported ROI&#39;s labels.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_vols</span><span class="p">[</span><span class="n">roi_type</span><span class="p">]</span><span class="o">.</span><span class="n">roi_labels</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">_vols</span><span class="p">[</span><span class="n">roi_type</span><span class="p">]</span><span class="o">.</span><span class="n">roi_labels</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># =========================================================================</span>
@@ -986,7 +986,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; cannot be controlled. Use &quot;</span>
                              <span class="s2">&quot;either : &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">availables</span><span class="p">))</span>
 
-<div class="viewcode-block" id="BrainUserMethods.cbar_control"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_control">[docs]</a>    <span class="k">def</span> <span class="nf">cbar_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cbar_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Control the colorbar of a specific object.</span>
 
 <span class="sd">        Optional parameters let to None are going to be ignored.</span>
@@ -1049,9 +1049,9 @@
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbobjs</span><span class="o">.</span><span class="n">_objs</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">_fcn_change_object</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">_fcn_change_object</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BrainUserMethods.cbar_select"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_select">[docs]</a>    <span class="k">def</span> <span class="nf">cbar_select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cbar_select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select and display a colorbar.</span>
 
 <span class="sd">        Parameters</span>
@@ -1069,9 +1069,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="c1"># Display / hide the colorbar :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">menuDispCbar</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_cbar</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_menu_disp_cbar</span><span class="p">()</span>
 
-<div class="viewcode-block" id="BrainUserMethods.cbar_list"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_list">[docs]</a>    <span class="k">def</span> <span class="nf">cbar_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cbar_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the list of objects for which the colorbar can be controlled.</span>
 
 <span class="sd">        Returns</span>
@@ -1082,9 +1082,9 @@
         <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbui</span><span class="o">.</span><span class="n">object</span>
         <span class="n">allitems</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">itemText</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">count</span><span class="p">())</span> <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">model</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">()]</span>
-        <span class="k">return</span> <span class="n">allitems</span></div>
+        <span class="k">return</span> <span class="n">allitems</span>
 
-<div class="viewcode-block" id="BrainUserMethods.cbar_autoscale"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_autoscale">[docs]</a>    <span class="k">def</span> <span class="nf">cbar_autoscale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cbar_autoscale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Autoscale the colorbar to the best limits.</span>
 
 <span class="sd">        Parameters</span>
@@ -1097,9 +1097,9 @@
         <span class="c1"># Test if the item &quot;name&quot; is enabled :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cbar_item_is_enable</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="c1"># Autoscale :</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">_fcn_cb_autoscale</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">_fcn_cb_autoscale</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BrainUserMethods.cbar_export"><a class="viewcode-back" href="../../../brainAPI.html#visbrain.brain.user.BrainUserMethods.cbar_export">[docs]</a>    <span class="k">def</span> <span class="nf">cbar_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">export_only</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">get_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cbar_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">export_only</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">get_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Export colorbars in a text file or in a dictionary.</span>
 
 <span class="sd">        Parameters</span>
@@ -1127,7 +1127,7 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">save_config_json</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">get_dict</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">config</span></div>
+            <span class="k">return</span> <span class="n">config</span>
 </pre></div>
 
            </div>
