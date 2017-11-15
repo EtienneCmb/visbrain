@@ -73,7 +73,7 @@ sphinx_gallery_conf = {
     'default_thumb_file': 'picture/visbrain.png',
     'within_subsection_order': FileNameSortKey,
     'doc_module': ('visbrain'),
-    'thumbnail_size': (150, 150),
+    # 'thumbnail_size': (100, 100),
     }
 
 numpydoc_show_class_members = False
