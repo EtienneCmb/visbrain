@@ -218,7 +218,7 @@ class SourceObj(VisbrainObject, SourceProjection):
         Array of positions of shape (n_sources, 2) or (n_sources, 3).
     data : array_like | None
         Array of weights of shape (n_sources,).
-    color : array_like/string/tuple | 'black'
+    color : array_like/string/tuple | 'red'
         Marker's color. Use a string (i.e 'green') to use the same color across
         markers or a list of colors of length n_sources to use different colors
         for markers.
@@ -288,7 +288,7 @@ class SourceObj(VisbrainObject, SourceProjection):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, xyz, data=None, color='black', alpha=1.,
+    def __init__(self, name, xyz, data=None, color='red', alpha=1.,
                  symbol='disc', radius_min=5., radius_max=10., edge_width=0.,
                  edge_color='black', system='mni', mask=None, mask_color='red',
                  text=None, text_size=3., text_color='black', text_bold=False,
