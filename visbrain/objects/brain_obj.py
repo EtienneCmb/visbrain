@@ -371,7 +371,9 @@ class BrainObj(VisbrainObject):
         self.mesh.color = np.ma.array(self._data_color).mean(0)
         self.mesh.mask = np.array(self._data_mask).max(0)
 
-    def parcellize(self, file, select=None, hemisphere=None):
+    def parcellize(self, file, select=None, hemisphere=None, data=None,
+                   cmap='viridis', clim=None, vmin=None, under='gray',
+                   vmax=None, over='red'):
         """Parcellize the brain surface using a .annot file.
 
         This method require the nibabel package to be installed.
@@ -388,13 +390,26 @@ class BrainObj(VisbrainObject):
             be inferred from file name.
         """
         idx, u_colors, labels, u_idx = self._load_annot_file(file)
-        u_colors = u_colors.astype(float) / 255.
         roi_labs = []
         # Get the hemisphere and (left // right) boolean index :
         hemisphere, h_idx = self._hemisphere_from_file(hemisphere, file)
         # Select conversion :
         if select is None:
+            logger.info("Select all parcellates")
             select = u_idx
+        # Manage color if data is an array :
+        if isinstance(data, (np.ndarray, list, tuple)):
+            data = np.asarray(data)
+            assert data.ndim == 1 and len(data) == len(select)
+            logger.info("Color inferred from data")
+            u_colors = np.zeros((len(u_idx), 4), dtype=float)
+            data_color = array2colormap(data, clim=clim, cmap=cmap, vmin=vmin,
+                                        vmax=vmax, under=under, over=over)
+        else:
+            logger.info("Use default color included in the file")
+            u_colors = u_colors.astype(float) / 255.
+            data_color = None
+        # Build the select variable :
         if isinstance(select, (np.ndarray, list)):
             select = np.asarray(select)
             if select.dtype != int:
@@ -406,9 +421,8 @@ class BrainObj(VisbrainObject):
                     if label_idx.size:
                         select.append(u_idx[label_idx])
                     else:
-                        logger.warning("%r ignored because not in predefined "
-                                       "parcellates list. Use `get_parcellates"
-                                       "` method to get the list of available "
+                        logger.warning("%r ignored. Use `get_parcellates` "
+                                       "method to get the list of available "
                                        "parcellates" % k)
                         roi_labs.append('%s (ignored)' % k)
                 select = np.array(select).ravel()
@@ -419,16 +433,18 @@ class BrainObj(VisbrainObject):
         mask = np.zeros((len(self.mesh),))
         # Set roi color to the mesh :
         sub_select = np.where(h_idx)[0]  # sub-hemisphere selection
-        for k in select:
+        for i, k in enumerate(select):
             sub_idx = np.where(u_idx == k)[0]  # index location in u_idx
             if sub_idx:
                 color_index = sub_select[u_idx[idx] == k]
-                color[color_index, :] = u_colors[sub_idx, :]
+                if data_color is None:
+                    color[color_index, :] = u_colors[sub_idx, :]
+                else:
+                    color[color_index, :] = data_color[i, :]
                 roi_labs.append(labels[sub_idx][0])
                 mask[color_index] = 1.
             else:
                 logger.error("An error occured for index %i" % k)
-                # roi_labs.append(labels[sub_idx][0])
         logger.info("Selected parcellates : \n - %s" % "\n - ".join(roi_labs))
         # Keep an eye on data color and mask :
         self._data_color.append(color)
