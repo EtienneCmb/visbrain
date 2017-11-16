@@ -89,7 +89,6 @@ def download_file(name, filename=None, to_path=None, unzip=False,
     # Default visbrain-path to data (HOME/visbrain_data):
     vb_path = os.path.join(os.path.expanduser('~'), 'visbrain_data')
     vb_path = os.getcwd() if use_pwd else vb_path
-    print('\n----------------------------------------------------------------')
     if bool(name.find('http') + 1):
         if filename is None:
             filename = os.path.split(name)[1]
@@ -122,7 +121,6 @@ def download_file(name, filename=None, to_path=None, unzip=False,
                 os.remove(path_to_file)
     else:
         logger.info("File already dowloaded (%s)." % path_to_file)
-    print('----------------------------------------------------------------\n')
     return path_to_file
 
 
