@@ -387,7 +387,8 @@ class TopoMesh(object):
         if any(keeponly):
             if not all(keeponly):
                 ignore = list(np.array(channels)[np.invert(keeponly)])
-                logger.info("Channels " + str(ignore) + " have been ignored")
+                logger.warning("Ignored channels for topoplot :"
+                               " %s" % ', '.join(ignore))
 
             # ----------- Conversion -----------
             if isinstance(xyz, np.ndarray):

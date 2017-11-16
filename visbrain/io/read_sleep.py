@@ -70,7 +70,16 @@ class ReadSleepData(object):
                 args = sleep_switch(file, ext, downsample)
             # Get output arguments :
             (sf, downsample, dsf, data, channels, n, offset, annot) = args
-            logger.info("File successfully loaded (%s)" % (file + ext))
+            info = ("File successfully loaded (%s):"
+                    "\n- Sampling-frequency : %.2fHz"
+                    "\n- Number of time points (before down-sampling): %i"
+                    "\n- Down-sampling frequency : %.2fHz"
+                    "\n- Number of time points (after down-sampling): %i"
+                    "\n- Number of channels : %i"
+                    )
+            n_channels, n_pts_after = data.shape
+            logger.info(info % (file + ext, sf, n, downsample, n_pts_after,
+                                n_channels))
             PROFILER("Data file loaded", level=1)
 
         elif isinstance(data, np.ndarray):  # array of data is defined
