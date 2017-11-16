@@ -1,7 +1,7 @@
-.. _Figure:
+.. _FigureModule:
 
-Figure
-######
+:py:class:`Figure`
+##################
 
 .. figure::  picture/ico/figure_ico.png
    :align:   center
@@ -79,8 +79,8 @@ Example
 API
 ---
 
-Main *Figure* class inputs
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Main :class:`Figure` class inputs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 First, you will need to create a Figure objects with the files to load, titles, xlabels...
 

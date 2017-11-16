@@ -181,7 +181,7 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Signal&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../mod_signal.html#visbrain.signal.signal.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">(</span><span class="n">PyQtModule</span><span class="p">,</span> <span class="n">UiInit</span><span class="p">,</span> <span class="n">UiElements</span><span class="p">,</span> <span class="n">Visuals</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Signal inspection module (data mining).</span>
 
 <span class="sd">    The Signal module can be used to relatively large datasets of</span>
@@ -496,7 +496,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Signal.screenshot"><a class="viewcode-back" href="../../../mod_signal.html#visbrain.signal.signal.Signal.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;screenshot.png&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="Signal.screenshot"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.screenshot">[docs]</a>    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;screenshot.png&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">,</span>
                    <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -538,7 +538,7 @@
         <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">autocrop</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">print_size</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span>
                          <span class="n">dpi</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">,</span> <span class="n">transparent</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Signal.set_xlim"><a class="viewcode-back" href="../../../mod_signal.html#visbrain.signal.signal.Signal.set_xlim">[docs]</a>    <span class="k">def</span> <span class="nf">set_xlim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xstart</span><span class="p">,</span> <span class="n">xend</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal.set_xlim"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.set_xlim">[docs]</a>    <span class="k">def</span> <span class="nf">set_xlim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xstart</span><span class="p">,</span> <span class="n">xend</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fix limits of the x-axis.</span>
 
 <span class="sd">        Parameters</span>
@@ -552,7 +552,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">xend</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Signal.set_ylim"><a class="viewcode-back" href="../../../mod_signal.html#visbrain.signal.signal.Signal.set_ylim">[docs]</a>    <span class="k">def</span> <span class="nf">set_ylim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ystart</span><span class="p">,</span> <span class="n">yend</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal.set_ylim"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.set_ylim">[docs]</a>    <span class="k">def</span> <span class="nf">set_ylim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ystart</span><span class="p">,</span> <span class="n">yend</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fix limits of the y-axis.</span>
 
 <span class="sd">        Parameters</span>
@@ -566,11 +566,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">yend</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_signal_canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Signal.set_signal_index"><a class="viewcode-back" href="../../../mod_signal.html#visbrain.signal.signal.Signal.set_signal_index">[docs]</a>    <span class="k">def</span> <span class="nf">set_signal_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal.set_signal_index"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.set_signal_index">[docs]</a>    <span class="k">def</span> <span class="nf">set_signal_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the index of the signal.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_safely_set_index</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Signal.set_signal_form"><a class="viewcode-back" href="../../../mod_signal.html#visbrain.signal.signal.Signal.set_signal_form">[docs]</a>    <span class="k">def</span> <span class="nf">set_signal_form</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal.set_signal_form"><a class="viewcode-back" href="../../../signal.html#visbrain.signal.signal.Signal.set_signal_form">[docs]</a>    <span class="k">def</span> <span class="nf">set_signal_form</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set plotting method.</span>
 
 <span class="sd">        Parameters</span>

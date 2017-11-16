@@ -190,7 +190,7 @@
 <span id="sphx-glr-auto-examples-signal-03-interface-customization-py"></span><h1>Interface customization<a class="headerlink" href="#interface-customization" title="Permalink to this headline">¶</a></h1>
 <p>Use custom color, font size…</p>
 <img alt="../../_images/ex_custom_interface.png" src="../../_images/ex_custom_interface.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../mod_signal.html#visbrain.Signal" title="View documentation for visbrain.Signal"><span class="n">Signal</span></a>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../signal.html#visbrain.Signal" title="View documentation for visbrain.Signal"><span class="n">Signal</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.utils</span> <span class="kn">import</span> <span class="n">generate_eeg</span>
 
 <span class="n">sf</span> <span class="o">=</span> <span class="mf">512.</span>  <span class="c1"># sampling frequency</span>
@@ -218,7 +218,7 @@
           <span class="s1">&#39;grid_titles&#39;</span><span class="p">:</span> <span class="n">gtitles</span><span class="p">,</span> <span class="s1">&#39;grid_font_size&#39;</span><span class="p">:</span> <span class="n">gfz</span><span class="p">,</span>
           <span class="s1">&#39;grid_titles_color&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">}</span>
 
-<span class="n">sg</span> <span class="o">=</span> <a href="../../mod_signal.html#visbrain.Signal" title="View documentation for visbrain.Signal"><span class="n">Signal</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">sg</span> <span class="o">=</span> <a href="../../signal.html#visbrain.Signal" title="View documentation for visbrain.Signal"><span class="n">Signal</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 <span class="n">sg</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>

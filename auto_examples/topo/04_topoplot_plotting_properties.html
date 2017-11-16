@@ -193,7 +193,7 @@
 <img alt="../../_images/ex_topoplot_plotting_properties.png" src="../../_images/ex_topoplot_plotting_properties.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../mod_topo.html#visbrain.Topo" title="View documentation for visbrain.Topo"><span class="n">Topo</span></a>
+<span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../topo.html#visbrain.Topo" title="View documentation for visbrain.Topo"><span class="n">Topo</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 <span class="c1"># Load the data :</span>
@@ -206,7 +206,7 @@
           <span class="s1">&#39;chan_offset&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="s1">&#39;chan_size&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">}</span>
 
 <span class="c1"># Create a topoplot instance :</span>
-<span class="n">t</span> <span class="o">=</span> <a href="../../mod_topo.html#visbrain.Topo" title="View documentation for visbrain.Topo"><span class="n">Topo</span></a><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <a href="../../topo.html#visbrain.Topo" title="View documentation for visbrain.Topo"><span class="n">Topo</span></a><span class="p">()</span>
 
 <span class="c1"># Topoplot with 10 regulary spaced levels :</span>
 <span class="n">t</span><span class="o">.</span><span class="n">add_topoplot</span><span class="p">(</span><span class="s1">&#39;Topo_1&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
