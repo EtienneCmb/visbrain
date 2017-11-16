@@ -434,7 +434,7 @@ class BrainObj(VisbrainObject):
         # Set roi color to the mesh :
         sub_select = np.where(h_idx)[0]  # sub-hemisphere selection
         for i, k in enumerate(select):
-            sub_idx = np.where(u_idx == k)[0]  # index location in u_idx
+            sub_idx = np.where(u_idx == k)[0][0]  # index location in u_idx
             if sub_idx:
                 color_index = sub_select[u_idx[idx] == k]
                 if data_color is None:
@@ -508,8 +508,15 @@ class BrainObj(VisbrainObject):
         assert os.path.isfile(file)
         idx, u_col, labels = nibabel.freesurfer.read_annot(file)
         idx, labels = np.array(idx).astype(int), np.array(labels).astype(str)
+        color, u_idx = u_col[:, 0:4], u_col[..., -1]
         logger.info("Annot file loaded (%s)" % file)
-        return idx, u_col[:, 0:4], labels, u_col[..., -1]
+        if (len(u_idx) != color.shape[0]) or (len(u_idx) != len(labels)):
+            logger.warning("Labels and index doesn't have the same length.")
+            min_len = min(len(u_idx), color.shape[0], len(labels))
+            color = color[0:min_len]
+            labels = labels[0:min_len]
+            u_idx = u_idx[0:min_len]
+        return idx, color, labels, u_idx
 
     ###########################################################################
     ###########################################################################
