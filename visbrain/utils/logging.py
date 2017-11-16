@@ -123,6 +123,8 @@ def set_log_level(verbose=None, match=None):
     verbose : bool, str, int, or None
         The verbosity of messages to print. If a str, it can be either
         PROFILER, DEBUG, INFO, WARNING, ERROR, or CRITICAL.
+    match : string | None
+        Filter logs using a string pattern.
     """
     # if verbose is None:
     #     verbose = "INFO"
