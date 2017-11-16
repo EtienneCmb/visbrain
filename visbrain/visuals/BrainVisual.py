@@ -275,7 +275,8 @@ class BrainVisual(Visual):
         self._camratio = (v_max - v_min).astype(float)
 
         # ____________________ HEMISPHERE ____________________
-        if lr_index is None or len(lr_index) != vertices.shape[0]:
+        if lr_index is None:
+            logger.debug('Left/Right hemispheres inferred from verices')
             lr_index = vertices[:, 0] <= vertices[:, 0].mean()
         self._lr_index = lr_index.astype(bool)
 
