@@ -130,7 +130,9 @@ class UiAtlas(object):
     ###########################################################################
     def _fcn_brain_visible(self):
         """Display / hide the brain."""
-        self.atlas.visible_obj = self._brain_grp.isChecked()
+        visible = self._brain_grp.isChecked()
+        self.atlas.visible_obj = visible
+        logger.info("Set brain visible : %r" % visible)
 
     def _fcn_brain_template(self):
         """Control the type of brain to use."""
@@ -146,7 +148,9 @@ class UiAtlas(object):
 
     def _fcn_brain_hemisphere(self):
         """Change the hemisphere."""
-        self.atlas.mesh.hemisphere = str(self._brain_hemi.currentText())
+        hemi = str(self._brain_hemi.currentText())
+        self.atlas.mesh.hemisphere = hemi
+        logger.info('Select %s hemisphere(s' % hemi)
 
     def _fcn_brain_translucent(self):
         """Use translucent or opaque brain."""
@@ -157,7 +161,9 @@ class UiAtlas(object):
 
     def _fcn_brain_alpha(self):
         """Update brain transparency."""
-        self.atlas.alpha = self._brain_alpha.value() / 100.
+        alpha = self._brain_alpha.value() / 100.
+        self.atlas.alpha = alpha
+        # logger.info("Transparency level set to %f" % alpha)
 
     ###########################################################################
     ###########################################################################

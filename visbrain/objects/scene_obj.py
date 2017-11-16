@@ -3,7 +3,7 @@ from vispy import scene
 
 from ..utils import color2vb
 from ..visuals import CbarVisual
-from ..config import vispy_app
+from ..config import VISPY_APP
 
 
 class VisbrainCanvas(object):
@@ -77,7 +77,7 @@ class VisbrainCanvas(object):
 
         # ########################## MAIN CANVAS ##########################
         self.canvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
-                                        show=show, title=name, app=vispy_app,
+                                        show=show, title=name, app=VISPY_APP,
                                         **cargs)
 
         # ########################## AXIS ##########################
@@ -342,7 +342,7 @@ class SceneObj(object):
     def __init__(self, bgcolor='black', show=True):
         """Init."""
         self._canvas = scene.SceneCanvas(keys='interactive', show=show,
-                                         title='Object scene', app=vispy_app,
+                                         title='Object scene', app=VISPY_APP,
                                          bgcolor=color2vb(bgcolor))
         self._grid = self._canvas.central_widget.add_grid(margin=10)
 

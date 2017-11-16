@@ -5,7 +5,7 @@ from PyQt5 import QtGui
 import logging
 
 from .utils import set_widget_size, set_log_level, get_data_path
-from .config import profiler, app, vispy_app
+from .config import PROFILER, PYQT_APP, VISPY_APP, CONFIG
 from .io import is_faulthandler_installed
 
 sip.setdestroyonexit(False)
@@ -41,20 +41,21 @@ class PyQtModule(object):
         self._module_icon = icon
         self._show_settings = show_settings
 
-    def _pyqt_title(self, title, symbol='='):
+    def _pyqt_title(self, title, msg, symbol='='):
         """Define a PyQt title."""
         assert isinstance(title, str) and isinstance(symbol, str)
         n_symbol = 60
         start_title = int((n_symbol / 2) - (len(title) / 2)) - 1
-        print('\n' + symbol * n_symbol)
-        print(' ' * start_title + title)
-        print(symbol * n_symbol)
+        upper_bar = symbol * n_symbol
+        title_bar = ' ' * start_title + title
+        title_template = "\n%s\n%s\n\n{msg}" % (upper_bar, title_bar)
+        logger.profiler(title_template.format(msg=msg))
 
     def show(self):
         """Display the graphical user interface."""
         # Fixed size for the settings panel :
         if hasattr(self, 'q_widget'):
-            set_widget_size(app, self.q_widget, 23)
+            set_widget_size(PYQT_APP, self.q_widget, 23)
             self.q_widget.setVisible(self._show_settings)
         # Force the quick settings tab to be on the first tab :
         if hasattr(self, 'QuickSettings'):
@@ -71,18 +72,19 @@ class PyQtModule(object):
         else:
             logger.debug("No icon passed as an input.")
         # Tree description if log level is on debug :
-        if isinstance(self._need_description, list) and (logger.level == 10):
-            self._pyqt_title('Tree')
+        if isinstance(self._need_description, list):
             for k in self._need_description:
-                print(eval('self.%s.describe_tree()' % k))
+                self._pyqt_title('Tree', eval('self.%s.describe_tree()' % k))
         # Show and maximized the window :
-        if profiler:
-            self._pyqt_title('Profiler')
-            profiler.finish()
-        self.showMaximized()
-        vispy_app.run()
+        if PROFILER and logger.level == 1:
+            self._pyqt_title('Profiler', '')
+            PROFILER.finish()
+        # If PyQt GUI :
+        if CONFIG['SHOW_PYQT_APP']:
+            self.showMaximized()
+            VISPY_APP.run()
 
-    def closeEvent(self, event):
+    def closeEvent(self, event):  # noqa
         """Executed method when the GUI closed."""
-        app.quit()
+        PYQT_APP.quit()
         logger.debug("App closed.")

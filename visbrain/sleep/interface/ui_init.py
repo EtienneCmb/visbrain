@@ -14,7 +14,7 @@ import vispy.visuals.transforms as vist
 from .gui import Ui_MainWindow
 from ..visuals.marker import Markers
 from ...utils import color2vb
-from ...config import vispy_app
+from ...config import VISPY_APP
 
 
 class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
@@ -37,7 +37,7 @@ class TimeAxis(object):
         """Init."""
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=False, title=name, app=vispy_app,
+                                        show=False, title=name, app=VISPY_APP,
                                         **cargs)
         _ = [self.canvas.connect(k) for k in fcn]  # noqa
 
@@ -125,7 +125,7 @@ class AxisCanvas(object):
 
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=False, title=name, app=vispy_app,
+                                        show=False, title=name, app=VISPY_APP,
                                         **cargs)
         _ = [self.canvas.connect(k) for k in fcn]  # noqa
 

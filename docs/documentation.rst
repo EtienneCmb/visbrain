@@ -7,12 +7,12 @@ Documentation
     :maxdepth: 2
     :numbered:
 
-    mod_brain
-    mod_sleep
-    mod_signal
-    mod_topo
-    mod_colorbar
-    mod_figure
+    brain
+    sleep
+    signal
+    topo
+    colorbar
+    figure
     objects
     utils
     io

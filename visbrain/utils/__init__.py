@@ -3,6 +3,7 @@ from .color import *
 from .filtering import *
 from .gui import *
 from .guitools import *
+from .logging import *
 from .memory import *
 from .mesh import *
 from .others import *

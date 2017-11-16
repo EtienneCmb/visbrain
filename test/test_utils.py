@@ -1,5 +1,6 @@
 """Test utility functions."""
 import numpy as np
+import logging
 from itertools import product
 from PyQt5 import QtWidgets, QtCore
 import math
@@ -20,11 +21,12 @@ from visbrain.utils.guitools import (slider2opacity, textline2color,
                                      safely_set_spin, safely_set_slider,
                                      toggle_enable_tab, get_screen_size,
                                      set_widget_size)
+from visbrain.utils.logging import set_log_level
 from visbrain.utils.memory import arrays_share_data, id, code_timer
 from visbrain.utils.mesh import (add_brain_template, remove_brain_template,
                                  convert_meshdata, vispy_array, volume_to_mesh,
                                  mesh_edges, smoothing_matrix)
-from visbrain.utils.others import (set_log_level, get_dsf, set_if_not_none,
+from visbrain.utils.others import (get_dsf, set_if_not_none,
                                    get_data_path)
 from visbrain.utils.physio import (find_non_eeg, rereferencing, bipolarization,
                                    commonaverage, tal2mni, mni2tal,
@@ -43,6 +45,8 @@ from visbrain.utils.sleep.event import (_events_duration, _events_removal,
 from visbrain.utils.sleep.hypnoprocessing import (transient, sleepstats)
 from visbrain.utils.transform import (vprescale, vprecenter, vpnormalize,
                                       array_to_stt)
+
+logger = logging.getLogger('visbrain')
 
 ###############################################################################
 ###############################################################################
@@ -546,7 +550,30 @@ class TestGuitools(object):
         w = QtWidgets.QWidget()
         set_widget_size(app, w)
 
+        
+###############################################################################
+###############################################################################
+#                                memory.py
+###############################################################################
+###############################################################################
 
+
+class TestLogging(object):
+    """Test logging"""
+
+    def test_set_log_level(self):
+        """Test function set_log_level."""
+        levels = [True, False, 'warning', 'error', 'critical', 'debug', 'info',
+                  None]
+        for k in levels:
+            set_log_level(k)
+            logger.debug('debug')
+            logger.info('info')
+            logger.warning('warnning')
+            logger.error('error')
+            logger.critical('critical')
+
+        
 ###############################################################################
 ###############################################################################
 #                                memory.py
@@ -678,13 +705,6 @@ class TestOthers(object):
         assert set_if_not_none(a, None) == 5.
         assert set_if_not_none(a, 10., False) == 5.
         assert set_if_not_none(a, 10.) == 10.
-
-    def test_set_log_level(self):
-        """Test function set_log_level."""
-        levels = [True, False, 'warning', 'error', 'critical', 'debug', 'info',
-                  None]
-        for k in levels:
-            set_log_level(k)
 
     def test_get_data_path(self):
         """Test function get_data_path."""

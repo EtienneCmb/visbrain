@@ -7,7 +7,7 @@ from vispy import scene
 
 from .visbrain_obj import VisbrainObject
 from ..visuals import BrainMesh
-from ..utils import (get_data_path, mesh_edges, smoothing_matrix, color2vb,
+from ..utils import (get_data_path, mesh_edges, smoothing_matrix,
                      array2colormap)
 from ..io import download_file, is_nibabel_installed, is_pandas_installed
 
@@ -444,7 +444,7 @@ class BrainObj(VisbrainObject):
                 roi_labs.append(labels[sub_idx][0])
                 mask[color_index] = 1.
             else:
-                logger.error("An error occured for index %i" % k)
+                logger.warning("No corresponding parcellates for index %i" % k)
         logger.info("Selected parcellates : \n - %s" % "\n - ".join(roi_labs))
         # Keep an eye on data color and mask :
         self._data_color.append(color)

@@ -9,7 +9,7 @@ from .ui_detection import UiDetection
 from .ui_menu import UiMenu
 from .ui_annotate import UiAnnotate
 from .ui_screenshot import UiScreenshot
-from ....config import profiler
+from ....config import PROFILER
 
 
 class UiElements(UiSettings, UiPanels, UiInfo, UiTools, UiScoring,
@@ -21,4 +21,4 @@ class UiElements(UiSettings, UiPanels, UiInfo, UiTools, UiScoring,
         for k in ['UiSettings', 'UiPanels', 'UiInfo', 'UiTools', 'UiScoring',
                   'UiDetection', 'UiAnnotate', 'UiMenu', 'UiScreenshot']:
             eval(k + '.__init__(self)')
-            profiler("%s" % k, level=1)
+            PROFILER("%s" % k, level=1)

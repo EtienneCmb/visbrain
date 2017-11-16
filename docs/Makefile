@@ -67,6 +67,7 @@ clean:
 .PHONY: html
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	@python example_to_thumbnails.py
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 

@@ -15,7 +15,7 @@ from .marker import Markers
 from ...utils import (array2colormap, color2vb, PrepareData)
 from ...utils.sleep.event import _index_to_events
 from ...visuals import TopoMesh, TFmapsMesh
-from ...config import profiler
+from ...config import PROFILER
 
 logger = logging.getLogger('visbrain')
 
@@ -1093,7 +1093,7 @@ class Visuals(CanvasShortcuts):
                                  width=self._lw, color_detection=self._indicol,
                                  parent=self._chanCanvas,
                                  fcn=self._fcn_sliderMove)
-        profiler('Channels', level=1)
+        PROFILER('Channels', level=1)
 
         # =================== SPECTROGRAM ===================
         # Create a spectrogram object :
@@ -1101,12 +1101,12 @@ class Visuals(CanvasShortcuts):
                                  parent=self._specCanvas.wc.scene,
                                  use_tf=self._use_tf)
         self._spec.set_data(sf, data[0, ...], time, cmap=self._defcmap)
-        profiler('Spectrogram', level=1)
+        PROFILER('Spectrogram', level=1)
         # Create a visual indicator for spectrogram :
         self._specInd = Indicator(name='spectro_indic', visible=True, alpha=.3,
                                   parent=self._specCanvas.wc.scene)
         self._specInd.set_data(xlim=(0, 30), ylim=(0, 20))
-        profiler('Spectrogram indicator', level=1)
+        PROFILER('Spectrogram indicator', level=1)
 
         # =================== HYPNOGRAM ===================
         # Create a hypnogram object :
@@ -1114,12 +1114,12 @@ class Visuals(CanvasShortcuts):
                               width=self._lwhyp, hconv=self._hconv,
                               parent=self._hypCanvas.wc.scene)
         self._hyp.set_data(sf, hypno, time)
-        profiler('Hypnogram', level=1)
+        PROFILER('Hypnogram', level=1)
         # Create a visual indicator for hypnogram :
         self._hypInd = Indicator(name='hypno_indic', visible=True, alpha=.3,
                                  parent=self._hypCanvas.wc.scene)
         self._hypInd.set_data(xlim=(0., 30.), ylim=(-6., 2.))
-        profiler('Hypnogram indicator', level=1)
+        PROFILER('Hypnogram indicator', level=1)
 
         # =================== DETECTIONS ===================
         self._detect = Detection(self._channels.copy(), self._time,
@@ -1128,7 +1128,7 @@ class Visuals(CanvasShortcuts):
                                  self._spinsym, self._remsym, self._kcsym,
                                  self._swsym, self._peaksym, self._mtsym,
                                  self._chan.node, self._hypCanvas.wc.scene)
-        profiler('Detections', level=1)
+        PROFILER('Detections', level=1)
 
         # =================== TOPOPLOT ===================
         self._topo = TopoSleep(channels=self._channels, margin=.2,
@@ -1138,11 +1138,11 @@ class Visuals(CanvasShortcuts):
         cameras[3].aspect = 1.
         if not any(self._topo._keeponly):
             self.toolBox_2.setItemEnabled(2, False)
-        profiler('Topoplot', level=1)
+        PROFILER('Topoplot', level=1)
 
         # =================== SHORTCUTS ===================
         vbcanvas = self._chanCanvas + [self._specCanvas, self._hypCanvas]
         for k in vbcanvas:
             CanvasShortcuts.__init__(self, k.canvas)
         self._shpopup.set_shortcuts(self.sh)
-        profiler('Shortcuts', level=1)
+        PROFILER('Shortcuts', level=1)

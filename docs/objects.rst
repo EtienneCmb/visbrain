@@ -25,6 +25,7 @@ Here's the list of currently supported modules :
 * :ref:`TSObj`
 * :ref:`PicObj`
 * :ref:`RoiObj`
+* :ref:`VolumeObj`
 * :ref:`ImageObj`
 * :ref:`TFObj`
 * :ref:`SpecObj`
@@ -186,6 +187,28 @@ Region Of Interest object
         ~RoiObj.change_roi_object
         ~RoiObj.localize_sources
         ~RoiObj.get_roi_vertices
+
+.. _VolumeObj:
+
+Volume object
+-------------
+
+.. figure::  picture/picobjects/pic_vol_obj.png
+   :align:   center
+
+   Volume object example
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: VolumeObj
+  :members: __call__, set_data
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~VolumeObj.__call__
+        ~VolumeObj.set_data
+
 
 
 .. _ImageObj:

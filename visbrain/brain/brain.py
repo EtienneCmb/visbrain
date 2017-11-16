@@ -14,7 +14,7 @@ from .interface import UiInit, UiElements, BrainShortcuts
 from .base import BaseVisual, BrainCbar
 from .user import BrainUserMethods
 from ..pyqt_module import PyQtModule
-from ..config import profiler
+from ..config import PROFILER
 
 logger = logging.getLogger('visbrain')
 
@@ -94,15 +94,15 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
 
         # ====================== Canvas creation ======================
         UiInit.__init__(self, bgcolor)  # GUI creation + canvas
-        profiler("Canvas creation")
+        PROFILER("Canvas creation")
 
         # ====================== App creation ======================
-        profiler("Visual elements", as_type='title')
+        PROFILER("Visual elements", as_type='title')
         BaseVisual.__init__(self, self.view.wc, self._csGrid, **kwargs)
 
         # ====================== Ui interactions ======================
         UiElements.__init__(self)  # GUI interactions
-        profiler("Ui interactions")
+        PROFILER("Ui interactions")
         self._shpopup.set_shortcuts(self.sh)  # shortcuts dict
 
         # ====================== Cameras ======================
@@ -112,19 +112,19 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         self.atlas.camera = self._camera
         self.atlas.rotate('top')
         self.atlas.camera.set_default_state()
-        profiler("Cameras creation")
+        PROFILER("Cameras creation")
 
         # ====================== Colorbar ======================
         camera = viscam.PanZoomCamera(rect=(-.2, -2.5, 1, 5))
         BrainCbar.__init__(self, camera)
-        profiler("Colorbar and panzoom creation")
+        PROFILER("Colorbar and panzoom creation")
 
         # ====================== Colorbar ======================
         BrainShortcuts.__init__(self, self.cbqt.cbviz._canvas)
-        profiler("Set brain shortcuts")
+        PROFILER("Set brain shortcuts")
 
         self._fcn_on_load()
-        profiler("Functions on load")
+        PROFILER("Functions on load")
 
     def _fcn_on_load(self):
         """Function that need to be executed on load."""
