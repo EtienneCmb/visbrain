@@ -7,7 +7,7 @@ from vispy import scene
 
 from .visbrain_obj import VisbrainObject
 from ..visuals import BrainMesh
-from ..utils import (get_data_path, mesh_edges, smoothing_matrix, color2vb,
+from ..utils import (get_data_path, mesh_edges, smoothing_matrix,
                      array2colormap)
 from ..io import download_file, is_nibabel_installed, is_pandas_installed
 

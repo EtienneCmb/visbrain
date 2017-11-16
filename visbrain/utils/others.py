@@ -8,46 +8,7 @@ import numpy as np
 from vispy.util import profiler
 
 
-__all__ = ('set_log_level', 'Profiler', 'get_dsf', 'set_if_not_none',
-           'get_data_path')
-
-
-logger = logging.getLogger('visbrain')
-
-
-def set_log_level(verbose=None):
-    """Convenience function for setting the logging level.
-
-    This function comes from the PySurfer package. See :
-    https://github.com/nipy/PySurfer/blob/master/surfer/utils.py
-
-    Parameters
-    ----------
-    verbose : bool, str, int, or None
-        The verbosity of messages to print. If a str, it can be either DEBUG,
-        INFO, WARNING, ERROR, or CRITICAL. Note that these are for
-        convenience and are equivalent to passing in logging.DEBUG, etc.
-        For bool, True is the same as 'INFO', False is the same as 'WARNING'.
-        If None, the environment variable MNE_LOG_LEVEL is read, and if
-        it doesn't exist, defaults to INFO.
-    return_old_level : bool
-        If True, return the old verbosity level.
-    """
-    # if verbose is None:
-    #     verbose = "INFO"
-    if isinstance(verbose, bool):
-        verbose = 'INFO' if verbose else 'WARNING'
-    if isinstance(verbose, str):
-        verbose = verbose.upper()
-        logging_types = dict(DEBUG=logging.DEBUG, INFO=logging.INFO,
-                             WARNING=logging.WARNING, ERROR=logging.ERROR,
-                             CRITICAL=logging.CRITICAL)
-        if verbose not in logging_types:
-            raise ValueError('verbose must be of a valid type')
-        verbose = logging_types[verbose]
-        format = "%(levelname)s : %(message)s"
-        logging.basicConfig(format=format)
-        logger.setLevel(verbose)
+__all__ = ('Profiler', 'get_dsf', 'set_if_not_none', 'get_data_path')
 
 
 class Profiler(object):
