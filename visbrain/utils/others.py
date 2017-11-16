@@ -21,7 +21,7 @@ class Profiler(object):
         """Init."""
         self._delayed = delayed
         logger = logging.getLogger('visbrain')
-        enable = logger.level == 10  # enable for DEBUG
+        enable = logger.level == 1  # enable for PROFILER
         if enable and not hasattr(self, '_vp_profiler'):
             self._vp_profiler = profiler.Profiler(disabled=not enable,
                                                   delayed=self._delayed)
