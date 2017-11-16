@@ -5,7 +5,7 @@ from PyQt5 import QtGui
 import logging
 
 from .utils import set_widget_size, set_log_level, get_data_path
-from .config import PROFILER, PYQT_APP, VISPY_APP
+from .config import PROFILER, PYQT_APP, VISPY_APP, CONFIG
 from .io import is_faulthandler_installed
 
 sip.setdestroyonexit(False)
@@ -79,10 +79,12 @@ class PyQtModule(object):
         if PROFILER:
             self._pyqt_title('Profiler')
             PROFILER.finish()
-        self.showMaximized()
-        VISPY_APP.run()
+        # If PyQt GUI :
+        if CONFIG['SHOW_PYQT_APP']:
+            self.showMaximized()
+            VISPY_APP.run()
 
-    def closeEvent(self, event):
+    def closeEvent(self, event):  # noqa
         """Executed method when the GUI closed."""
         PYQT_APP.quit()
         logger.debug("App closed.")
