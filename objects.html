@@ -133,9 +133,10 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#region-of-interest-object">7.7. Region Of Interest object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#image-object">7.8. Image object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#time-frequency-map-object">7.9. Time-frequency map object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#spectrogram-object">7.10. Spectrogram object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#volume-object">7.8. Volume object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#image-object">7.9. Image object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#time-frequency-map-object">7.10. Time-frequency map object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectrogram-object">7.11. Spectrogram object</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">8. Utils</a></li>
@@ -344,6 +345,7 @@ background.</p>
 <li><a class="reference internal" href="#tsobj"><span class="std std-ref">Time-series object</span></a></li>
 <li><a class="reference internal" href="#picobj"><span class="std std-ref">Pictures object</span></a></li>
 <li><a class="reference internal" href="#roiobj"><span class="std std-ref">Region Of Interest object</span></a></li>
+<li><a class="reference internal" href="#volumeobj"><span class="std std-ref">Volume object</span></a></li>
 <li><a class="reference internal" href="#imageobj"><span class="std std-ref">Image object</span></a></li>
 <li><a class="reference internal" href="#tfobj"><span class="std std-ref">Time-frequency map object</span></a></li>
 <li><a class="reference internal" href="#specobj"><span class="std std-ref">Spectrogram object</span></a></li>
@@ -1731,9 +1733,104 @@ Must be a (4, 4) array.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="image-object">
-<span id="imageobj"></span><h2>7.8. Image object<a class="headerlink" href="#image-object" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="volume-object">
+<span id="volumeobj"></span><h2>7.8. Volume object<a class="headerlink" href="#volume-object" title="Permalink to this headline">¶</a></h2>
 <div class="figure align-center" id="id30">
+<img alt="_images/pic_vol_obj.png" src="_images/pic_vol_obj.png" />
+<p class="caption"><span class="caption-text">Volume object example</span></p>
+</div>
+<dl class="class">
+<dt id="visbrain.objects.VolumeObj">
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">VolumeObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>method='mip'</em>, <em>threshold=0.0</em>, <em>cmap='OpaqueGrays'</em>, <em>select=None</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L98-L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a 3-D volume object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>Name of the volume object. If name is ‘brodmann’, ‘aal’ or ‘talairach’
+a predefined volume object is used and vol, index and label are
+ignored.</p>
+</div></blockquote>
+<p><strong>vol</strong> : array_like</p>
+<blockquote>
+<div><p>The volume to use. Should be a 3-d array.</p>
+</div></blockquote>
+<p><strong>hdr</strong> : array_like | None</p>
+<blockquote>
+<div><p>Matrix transformation to apply. hdr should be a (4, 4) array.</p>
+</div></blockquote>
+<p><strong>method</strong> : {‘mip’, ‘translucent’, ‘additive’, ‘iso’}</p>
+<blockquote>
+<div><p>Volume rendering method. Default is ‘mip’.</p>
+</div></blockquote>
+<p><strong>threshold</strong> : float | 0.</p>
+<blockquote>
+<div><p>Threshold value for iso rendering method.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : {‘Opaquegrays’, ‘TransFire’, ‘OpaqueFire’, ‘TransGrays’}</p>
+<blockquote>
+<div><p>Colormap to use.</p>
+</div></blockquote>
+<p><strong>select</strong> : list | None</p>
+<blockquote>
+<div><p>Select some structures in the volume.</p>
+</div></blockquote>
+<p><strong>transform</strong> : VisPy.visuals.transforms | None</p>
+<blockquote>
+<div><p>VisPy transformation to set to the parent node.</p>
+</div></blockquote>
+<p><strong>parent</strong> : VisPy.parent | None</p>
+<blockquote class="last">
+<div><p>Volume object parent.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">VolumeObj</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">select</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>  <span class="c1"># select Brodmann area 4 and 6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">VolumeObj</span><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;iso&#39;</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.VolumeObj.__call__" title="visbrain.objects.VolumeObj.__call__"><code class="xref py py-obj docutils literal"><span class="pre">__call__</span></code></a>(name)</td>
+<td>Load a predefined volume.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.VolumeObj.set_data" title="visbrain.objects.VolumeObj.set_data"><code class="xref py py-obj docutils literal"><span class="pre">set_data</span></code></a>(name[,&nbsp;vol,&nbsp;hdr,&nbsp;threshold,&nbsp;cmap,&nbsp;…])</td>
+<td>Set data to the volume.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="method">
+<dt id="visbrain.objects.VolumeObj.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L69-L75"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a predefined volume.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.VolumeObj.set_data">
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>threshold=None</em>, <em>cmap=None</em>, <em>method=None</em>, <em>select=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L147-L166"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set data to the volume.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="image-object">
+<span id="imageobj"></span><h2>7.9. Image object<a class="headerlink" href="#image-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id31">
 <img alt="_images/pic_image_obj.png" src="_images/pic_image_obj.png" />
 <p class="caption"><span class="caption-text">Image object example</span></p>
 </div>
@@ -1846,8 +1943,8 @@ images.</p>
 
 </div>
 <div class="section" id="time-frequency-map-object">
-<span id="tfobj"></span><h2>7.9. Time-frequency map object<a class="headerlink" href="#time-frequency-map-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id31">
+<span id="tfobj"></span><h2>7.10. Time-frequency map object<a class="headerlink" href="#time-frequency-map-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id32">
 <img alt="_images/pic_tf_obj.png" src="_images/pic_tf_obj.png" />
 <p class="caption"><span class="caption-text">Time-frequency map object example</span></p>
 </div>
@@ -1990,8 +2087,8 @@ images.</p>
 
 </div>
 <div class="section" id="spectrogram-object">
-<span id="specobj"></span><h2>7.10. Spectrogram object<a class="headerlink" href="#spectrogram-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id32">
+<span id="specobj"></span><h2>7.11. Spectrogram object<a class="headerlink" href="#spectrogram-object" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id33">
 <img alt="_images/pic_spec_obj.png" src="_images/pic_spec_obj.png" />
 <p class="caption"><span class="caption-text">Spectrogram object example</span></p>
 </div>

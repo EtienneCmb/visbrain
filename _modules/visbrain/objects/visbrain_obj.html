@@ -173,7 +173,7 @@
 <span class="kn">from</span> <span class="nn">.scene_obj</span> <span class="k">import</span> <span class="n">VisbrainCanvas</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">set_log_level</span>
-<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">vispy_app</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">VISPY_APP</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
@@ -240,7 +240,7 @@
             <span class="n">vispy</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">XYZAxis</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">canvas</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span><span class="p">)</span>
         <span class="c1"># view.camera = camera</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">interactive</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">show</span><span class="p">:</span>
-            <span class="n">vispy_app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="n">VISPY_APP</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="c1"># Reset orignial parent :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent_bck</span></div>
 

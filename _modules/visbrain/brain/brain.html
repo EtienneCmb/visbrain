@@ -179,7 +179,7 @@
 <span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseVisual</span><span class="p">,</span> <span class="n">BrainCbar</span>
 <span class="kn">from</span> <span class="nn">.user</span> <span class="k">import</span> <span class="n">BrainUserMethods</span>
 <span class="kn">from</span> <span class="nn">..pyqt_module</span> <span class="k">import</span> <span class="n">PyQtModule</span>
-<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">profiler</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">PROFILER</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
@@ -259,15 +259,15 @@
 
         <span class="c1"># ====================== Canvas creation ======================</span>
         <span class="n">UiInit</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="p">)</span>  <span class="c1"># GUI creation + canvas</span>
-        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Canvas creation&quot;</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Canvas creation&quot;</span><span class="p">)</span>
 
         <span class="c1"># ====================== App creation ======================</span>
-        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Visual elements&quot;</span><span class="p">,</span> <span class="n">as_type</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Visual elements&quot;</span><span class="p">,</span> <span class="n">as_type</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
         <span class="n">BaseVisual</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">wc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_csGrid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># ====================== Ui interactions ======================</span>
         <span class="n">UiElements</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># GUI interactions</span>
-        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Ui interactions&quot;</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Ui interactions&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_shpopup</span><span class="o">.</span><span class="n">set_shortcuts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">)</span>  <span class="c1"># shortcuts dict</span>
 
         <span class="c1"># ====================== Cameras ======================</span>
@@ -277,19 +277,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
-        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Cameras creation&quot;</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Cameras creation&quot;</span><span class="p">)</span>
 
         <span class="c1"># ====================== Colorbar ======================</span>
         <span class="n">camera</span> <span class="o">=</span> <span class="n">viscam</span><span class="o">.</span><span class="n">PanZoomCamera</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-.</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
         <span class="n">BrainCbar</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
-        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Colorbar and panzoom creation&quot;</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Colorbar and panzoom creation&quot;</span><span class="p">)</span>
 
         <span class="c1"># ====================== Colorbar ======================</span>
         <span class="n">BrainShortcuts</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbqt</span><span class="o">.</span><span class="n">cbviz</span><span class="o">.</span><span class="n">_canvas</span><span class="p">)</span>
-        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Set brain shortcuts&quot;</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Set brain shortcuts&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_fcn_on_load</span><span class="p">()</span>
-        <span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;Functions on load&quot;</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s2">&quot;Functions on load&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_fcn_on_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Function that need to be executed on load.&quot;&quot;&quot;</span>
