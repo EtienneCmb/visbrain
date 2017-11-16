@@ -8,7 +8,10 @@ from vispy import app as visapp
 
 from .utils import Profiler, set_log_level
 
+"""Set 'info' as the default logging level
+"""
 logger = logging.getLogger('visbrain')
+set_log_level('info')
 
 """Configuration dict
 """
