@@ -37,8 +37,11 @@ VISPY_APP = visapp.application.Application()
 VISBRAIN_HELP = """
 Visbrain command line arguments:
 
-  --visbrain-log=(debug|info|warning|error|critical)
+  --visbrain-log=(profiler|debug|info|warning|error|critical)
     Sets the verbosity of logging output. The default is 'info'.
+
+  --visbrain-search=[search string]
+    Search string in logs.
 
   --visbrain-show=(True|False)
     Control if GUI have to be displayed.
@@ -53,7 +56,8 @@ def init_config(argv):
     """Initialize visbrain configuration."""
     global CONFIG
 
-    argnames = ['visbrain-log=', 'visbrain-show=', 'visbrain-help']
+    argnames = ['visbrain-log=', 'visbrain-show=', 'visbrain-help',
+                'visbrain-search=']
     try:
         opts, args = getopt.getopt(sys.argv[1:], '', argnames)
     except getopt.GetoptError:
@@ -68,5 +72,7 @@ def init_config(argv):
             if o == '--visbrain-show':
                 CONFIG['SHOW_PYQT_APP'] = eval(a)
                 logger.debug("Show PyQt app : %r" % CONFIG['SHOW_PYQT_APP'])
+            if o == '--visbrain-search':
+                set_log_level(match=a)
 
 init_config(sys.argv[1:])  # noqa
