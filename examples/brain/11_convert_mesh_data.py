@@ -38,7 +38,7 @@ vertices, faces, normals = convert_meshdata(vert, faces, invert_normals=True,
 # Add the template :
 add_brain_template('Custom', vertices, faces, normals)
 
-vb = Brain(a_template='Custom')
+vb = Brain(brain_template='Custom')
 vb.show()
 
 # If you want to remove the template :
