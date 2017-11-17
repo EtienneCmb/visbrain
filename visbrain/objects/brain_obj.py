@@ -214,13 +214,13 @@ class BrainObj(VisbrainObject):
     def set_state(self, azimuth=None, elevation=None, scale_factor=None,
                   distance=None, center=None, margin=1.08):
         """Set the camera state."""
-        distance = scale_factor * 4.
         if isinstance(azimuth, (int, float)):
             self.mesh._camera.azimuth = azimuth
         if isinstance(elevation, (int, float)):
             self.mesh._camera.elevation = elevation
         if isinstance(scale_factor, (int, float)):
             self.mesh._camera.scale_factor = margin * scale_factor * self.scale
+        distance = scale_factor * 4. if scale_factor is not None else distance
         if isinstance(distance, (int, float)):
             self.mesh._camera.distance = distance * self.scale
         if (center is not None) and len(center) == 3:
@@ -397,6 +397,19 @@ class BrainObj(VisbrainObject):
         hemisphere : string | None
             The hemisphere for the parcellation. If None, the hemisphere will
             be inferred from file name.
+        cmap : string | 'viridis'
+            The colormap to use.
+        clim : tuple | None
+            The colorbar limits. If None, (data.min(), data.max()) will be used
+            instead.
+        vmin : float | None
+            Minimum threshold.
+        vmax : float | None
+            Maximum threshold.
+        under : string/tuple/array_like | 'gray'
+            The color to use for values under vmin.
+        over : string/tuple/array_like | 'red'
+            The color to use for values over vmax.
         """
         idx, u_colors, labels, u_idx = self._load_annot_file(file)
         roi_labs = []
@@ -425,15 +438,17 @@ class BrainObj(VisbrainObject):
                 logger.info('Search parcellates using labels')
                 select_str = select.copy()
                 select = []
+                bad_select = []
                 for k in select_str:
                     label_idx = np.where(labels == k)[0]
                     if label_idx.size:
                         select.append(u_idx[label_idx])
                     else:
-                        logger.warning("%r ignored. Use `get_parcellates` "
-                                       "method to get the list of available "
-                                       "parcellates" % k)
                         roi_labs.append('%s (ignored)' % k)
+                        bad_select.append(k)
+                logger.warning("%s ignored. Use `get_parcellates` method to "
+                               "get the list of available "
+                               "parcellates" % ', '.join(bad_select))
                 select = np.array(select).ravel()
         if not select.size:
             raise ValueError("No parcellates found")
@@ -442,6 +457,7 @@ class BrainObj(VisbrainObject):
         mask = np.zeros((len(self.mesh),))
         # Set roi color to the mesh :
         sub_select = np.where(h_idx)[0]  # sub-hemisphere selection
+        no_parcellates = []
         for i, k in enumerate(select):
             sub_idx = np.where(u_idx == k)[0][0]  # index location in u_idx
             if sub_idx:
@@ -450,11 +466,14 @@ class BrainObj(VisbrainObject):
                     color[color_index, :] = u_colors[sub_idx, :]
                 else:
                     color[color_index, :] = data_color[i, :]
-                roi_labs.append(labels[sub_idx][0])
+                roi_labs.append(labels[sub_idx])
                 mask[color_index] = 1.
             else:
-                logger.warning("No corresponding parcellates for index %i" % k)
-        logger.info("Selected parcellates : \n - %s" % "\n - ".join(roi_labs))
+                no_parcellates.append(str(k))
+        if no_parcellates:
+            logger.warning("No corresponding parcellates for index "
+                           "%s" % ', '.join(np.unique(no_parcellates)))
+        logger.info("Selected parcellates : %s" % ", ".join(roi_labs))
         # Keep an eye on data color and mask :
         self._data_color.append(color)
         self._data_mask.append(mask)
@@ -474,8 +493,8 @@ class BrainObj(VisbrainObject):
         """
         assert is_pandas_installed()
         import pandas as pd
-        idx, u_colors, labels, u_idx = self._load_annot_file(file)
-        dico = dict(Index=u_idx, Labels=labels, Color=u_colors.tolist())
+        _, color, labels, u_idx = self._load_annot_file(file)
+        dico = dict(Index=u_idx, Labels=labels, Color=color.tolist())
         return pd.DataFrame(dico, columns=['Index', 'Labels', 'Color'])
 
     @staticmethod
@@ -500,9 +519,9 @@ class BrainObj(VisbrainObject):
             logger.warning("%s hemisphere(s) inferred from "
                            "filename" % hemisphere)
         # Get index :
-        if hemisphere == 'left':
+        if hemisphere in ['left', 'lh']:
             idx = self.mesh._lr_index
-        elif hemisphere == 'right':
+        elif hemisphere in ['right', 'rh']:
             idx = ~self.mesh._lr_index
         else:
             idx = np.ones((len(self.mesh),), dtype=bool)
@@ -511,21 +530,25 @@ class BrainObj(VisbrainObject):
     @staticmethod
     def _load_annot_file(file):
         """Load a .annot file."""
+        assert os.path.isfile(file)
         assert is_nibabel_installed()
         import nibabel
         # Get index and labels :
-        assert os.path.isfile(file)
-        idx, u_col, labels = nibabel.freesurfer.read_annot(file)
-        idx, labels = np.array(idx).astype(int), np.array(labels).astype(str)
-        color, u_idx = u_col[:, 0:4], u_col[..., -1]
+        id_vert, ctab, names = nibabel.freesurfer.read_annot(file)
+        names = np.array(names).astype(str)
+        color, u_idx = ctab[:, 0:4], ctab[..., -1]
         logger.info("Annot file loaded (%s)" % file)
-        if (len(u_idx) != color.shape[0]) or (len(u_idx) != len(labels)):
-            logger.warning("Labels and index doesn't have the same length.")
-            min_len = min(len(u_idx), color.shape[0], len(labels))
-            color = color[0:min_len]
-            labels = labels[0:min_len]
+        # Test if variables have the same size :
+        if len(u_idx) != len(names):
+            min_len = min(len(u_idx), color.shape[0], len(names))
+            logger.warning("Length of label names (%i) and index (%i) doesn't "
+                           "match. Following label index ignored : %s" % (
+                               len(names), len(u_idx),
+                               ", ".join(u_idx[min_len::].astype(str))))
+            color = color[0:min_len, :]
+            names = names[0:min_len]
             u_idx = u_idx[0:min_len]
-        return idx, color, labels, u_idx
+        return id_vert, color, names, u_idx
 
     ###########################################################################
     ###########################################################################
