@@ -100,6 +100,15 @@ class BrainObj(VisbrainObject):
 
         self._define_mesh(vertices, faces, normals, lr_index, hemisphere)
 
+    def clean(self):
+        """Clean brain object."""
+        self.hemisphere = 'both'
+        self.mask = 0.
+        self.rotate('top')
+        self._data_color = []
+        self._data_mask = []
+        logger.info("Brain object %s cleaned." % self.name)
+
     def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere):
         """Define brain mesh."""
         if not hasattr(self, 'mesh'):
