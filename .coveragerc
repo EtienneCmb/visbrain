@@ -8,4 +8,4 @@ omit =
 
 [report]
 show_missing = False
-sort = Cover
+# sort = Cover
