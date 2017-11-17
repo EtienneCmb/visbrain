@@ -61,7 +61,7 @@ class SpectrogramObj(ImageObj):
     >>> spec.preview(axis=True)
     """
 
-    def __init__(self, name, data, sf=1., nperseg=256, overlap=0.,
+    def __init__(self, name, data=None, sf=1., nperseg=256, overlap=0.,
                  window='hamming', cmap='viridis', clim=None, vmin=None,
                  under='gray', vmax=None, over='red', interpolation='nearest',
                  max_pts=-1, parent=None, transform=None, verbose=None,
