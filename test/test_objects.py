@@ -11,6 +11,9 @@ from visbrain.objects.picture_obj import PictureObj, CombinePictures
 from visbrain.objects.ts_obj import TimeSeriesObj, CombineTimeSeries
 from visbrain.objects.vector_obj import VectorObj, CombineVectors
 from visbrain.objects.brain_obj import BrainObj
+from visbrain.objects.image_obj import ImageObj
+from visbrain.objects.tf_obj import TimeFrequencyMapObj
+from visbrain.objects.spec_obj import SpectrogramObj
 
 from visbrain.io import path_to_visbrain_data, download_file, read_stc
 
@@ -121,6 +124,18 @@ v_comb = CombineVectors([v_obj, v_obj])
 b_obj = BrainObj('B1')
 
 ###############################################################################
+#                               IMAGE
+###############################################################################
+im_data = np.random.rand(10, 20)
+im_obj = ImageObj('IM1', im_data)
+
+###############################################################################
+#                            TF // Spectrogram
+###############################################################################
+tf_obj = TimeFrequencyMapObj('TF', np.random.rand(100))
+sp_obj = SpectrogramObj('Spec', np.random.rand(100))
+
+###############################################################################
 #                                  MESH
 ###############################################################################
 n_vertices, n_faces = 100, 50
@@ -136,13 +151,19 @@ class ObjectMethods(object):
     def _assert_and_test(obj, attr, to_set, to_test='NoAttr'):
         """Assert to obj and test."""
         # Set attribute :
-        value = exec("{}.{}".format(obj, attr))
-        value = to_set
+        if isinstance(to_set, str):
+            exec("{}.{}".format(obj, attr) + "='" + to_set + "'")
+        else:
+            exec("{}.{}".format(obj, attr) + ' = to_set')
+        value = eval("{}.{}".format(obj, attr))
         # Test either to_set or to_test :
         value_to_test = to_set if to_test == 'NoAttr' else to_test
         # Test according to data type :
         if isinstance(value_to_test, np.ndarray):
-            assert np.array_equal(value, value_to_test)
+            # Be sure that arrays have the same shape and dtype :
+            value = value.reshape(*value_to_test.shape)
+            value = value.astype(value_to_test.dtype)
+            np.testing.assert_allclose(value, value_to_test)
         else:
             assert value == value_to_test
 
@@ -224,7 +245,7 @@ class TestVisbrainCanvas(ObjectMethods):
         """Test function attributes."""
         for k in ['vb_can']:  # , 'vb_can_w']:
             self._assert_and_test(k, 'visible', False)
-            self._assert_and_test(k, 'axis', False)
+            self._assert_and_test(k, 'axis', True)
             self._assert_and_test(k, 'xlabel', 'new_xlab')
             self._assert_and_test(k, 'ylabel', 'new_xlab')
             self._assert_and_test(k, 'title', 'new_title')
@@ -285,21 +306,24 @@ class TestSourceObj(ObjectMethods):
         self._assert_and_test('s_obj', 'radius_min', 22.)
         self._assert_and_test('s_obj', 'symbol', 'disc')
         self._assert_and_test('s_obj', 'edge_width', .1)
-        self._assert_and_test('s_obj', 'edge_color', [.7] * 4)
+        edge_color = np.array([.7] * 4).astype(np.float32)
+        self._assert_and_test('s_obj', 'edge_color', edge_color)
         self._assert_and_test('s_obj', 'alpha', .4)
         new_color = np.random.uniform(.1, .9, (n_sources, 4))
         self._assert_and_test('s_obj', 'color', new_color)
         new_mask = s_data >= .4
         self._assert_and_test('s_obj', 'mask', new_mask)
         assert isinstance(s_obj.is_masked, bool)
-        self._assert_and_test('s_obj', 'mask_color', [0.] * 4)
+        mask_color = np.array([0.] * 4).astype(np.float32)
+        self._assert_and_test('s_obj', 'mask_color', mask_color)
         self._assert_and_test('s_obj', 'visible', new_mask)
-        self._assert_and_test('s_obj', 'hide', np.invert(new_mask))
+        np.testing.assert_array_equal(s_obj.hide, np.invert(new_mask))
         self._assert_and_test('s_obj', 'text_size', 10.)
-        self._assert_and_test('s_obj', 'text_color', [.5] * 4)
+        text_color = np.array([.5] * 4).astype(np.float32)
+        self._assert_and_test('s_obj', 'text_color', text_color)
         self._assert_and_test('s_obj', 'text_translate', [.1, .4, .5])
         self._assert_and_test('s_obj', 'parent', test_node)
-        self._assert_and_test('s_obj', 'name', 'S1')
+        assert s_obj.name == 'S1'
         self._assert_and_test('s_obj', 'visible_obj', False)
 
     def test_get_camera(self):
@@ -522,7 +546,8 @@ class TestTimeSeriesObj(ObjectMethods):
         """Test function attributes."""
         self._assert_and_test('ts_obj', 'width', 4.)
         self._assert_and_test('ts_obj', 'amplitude', 4.)
-        self._assert_and_test('ts_obj', 'color', [0.] * 4)
+        color = np.array([0.] * 4)
+        self._assert_and_test('ts_obj', 'color', color)
         self._assert_and_test('ts_obj', 'alpha', .7)
         self._assert_and_test('ts_obj', 'translate', (1., 2., 3.))
         self._assert_and_test('ts_obj', 'line_width', 1.4)
@@ -558,6 +583,12 @@ class TestVectorObj(ObjectMethods):
         arr['start'] = np.random.rand(10, 3)
         arr['end'] = np.random.rand(10, 3)
         VectorObj('V1_2', arr)
+        # Dtype (vertices, normals) :
+        dt_vn = np.dtype([('vertices', float, 3), ('normals', float, 3)])
+        arrows_vn = np.zeros(10, dtype=dt_vn)
+        arrows_vn['vertices'] = np.random.rand(10, 3)
+        arrows_vn['normals'] = np.random.rand(10, 3)
+        VectorObj('VN', arrows_vn, dynamic=(.3, .8))
 
     def test_preview(self):
         """Test function preview."""
@@ -641,7 +672,7 @@ class TestBrainObj(ObjectMethods):
     def test_attributes(self):
         """Test function attributes."""
         self._assert_and_test('b_obj', 'translucent', True)
-        self._assert_and_test('b_obj', 'alpha', .4)
+        self._assert_and_test('b_obj', 'alpha', .03)
         self._assert_and_test('b_obj', 'hemisphere', 'both')
         self._assert_and_test('b_obj', 'scale', 1.)
         assert b_obj.camera is not None
@@ -713,3 +744,92 @@ class TestBrainObj(ObjectMethods):
                          clim=(10, 40), cmap='Spectral_r', vmin=15, vmax=37,
                          under='blue', over='#ab4642')
         b_obj.parcellize(file, select=ids_labels, data=data[0:n_parcellates])
+
+
+###############################################################################
+###############################################################################
+#                              IMAGE
+###############################################################################
+###############################################################################
+
+
+class TestImageObj(ObjectMethods):
+    """Test image object."""
+
+    def test_definition(self):
+        """Test function definition."""
+        ImageObj('Im_Data_2D', np.random.rand(10, 20))
+        ImageObj('Im_Data_3D_RGB', np.random.rand(10, 20, 3))
+        ImageObj('Im_Data_3D_RGBA', np.random.rand(10, 20, 4))
+
+    def test_preview(self):
+        """Test function preview."""
+        im_obj.preview(show=False, axis=False)
+
+    def test_get_camera(self):
+        """Test function get_camera."""
+        im_obj._get_camera()
+
+    def test_set_data(self):
+        """Test set_data method."""
+        data = np.random.rand(10, 20)
+        y_axis = np.arange(10) / 10.
+        x_axis = np.arange(20) / 20.
+        im_obj.set_data(data, xaxis=x_axis, yaxis=y_axis, cmap='plasma',
+                        clim=(-1., 1.), vmin=-.8, vmax=.8, under='orange',
+                        over='blue')
+
+    def test_attributes(self):
+        """Test image object attributes."""
+        self._assert_and_test('im_obj', 'interpolation', 'bicubic')
+        self._assert_and_test('im_obj', 'cmap', 'inferno')
+        self._assert_and_test('im_obj', 'vmin', -1.)
+        self._assert_and_test('im_obj', 'clim', (-2., 2.))
+        self._assert_and_test('im_obj', 'vmax', 1.)
+        self._assert_and_test('im_obj', 'under', np.array([0., 0., 0., 0.]))
+        self._assert_and_test('im_obj', 'over', np.array([1., 1., 1., 1.]))
+
+
+###############################################################################
+###############################################################################
+#                                   TF
+###############################################################################
+###############################################################################
+
+
+class TestTFObj(ObjectMethods):
+    """Test image object."""
+
+    def test_definition(self):
+        """Test function definition."""
+        TimeFrequencyMapObj('TF_None')
+        TimeFrequencyMapObj('TF_Data1D', np.random.rand(100))
+
+    def test_set_data(self):
+        """Test set_data method."""
+        data = np.random.rand(200)
+        tf_obj.set_data(data, n_window=10, cmap='plasma', clim=(-1., 1.),
+                        vmin=-.8, vmax=.8, under='orange', over='blue', norm=3)
+
+
+###############################################################################
+###############################################################################
+#                                     SPEC
+###############################################################################
+###############################################################################
+
+
+class TestSpecObj(ObjectMethods):
+    """Test image object."""
+
+    def test_definition(self):
+        """Test function definition."""
+        SpectrogramObj('Spec_None')
+        SpectrogramObj('Spec_Data1D', np.random.rand(100))
+
+    def test_set_data(self):
+        """Test set_data method."""
+        data = np.random.rand(200)
+        sp_obj.set_data(data, nperseg=10, overlap=.5, cmap='plasma',
+                        clim=(-1., 1.), vmin=-.8, vmax=.8, under='orange',
+                        over='blue')
