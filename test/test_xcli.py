@@ -14,11 +14,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 
 
-def path_to_edf(name):
-    """Get path to the edf file."""
-    return os.path.jocli_fig_hypin(path_to_tmp, name)
-
-
 class TestCli(object):
     """Test cli.py."""
 
@@ -33,10 +28,6 @@ class TestCli(object):
     @staticmethod
     def _path_to_tmp(name):
         return os.path.join(*(path_to_tmp, name))
-
-    def test_download_file(self):
-        """Download the EDF dataset."""
-        download_file('sleep_edf.zip', to_path=path_to_tmp, unzip=True)
 
     ###########################################################################
     #                           HYPNO -> FIG
@@ -58,7 +49,7 @@ class TestCli(object):
         print('Result 1 :', r1.output)
         print('Result 2 :', r2.output)
 
-    @pytest.mark.skip('Segmentation fault')    
+    @pytest.mark.skip('Segmentation fault')
     def test_cli_sleep_stats(self):
         """Test function cli_sleep_stats."""
         runner = CliRunner()
@@ -67,7 +58,7 @@ class TestCli(object):
         r1 = runner.invoke(cli_sleep_stats, ['-h', hypno, '-o', out])
         print('Result : \n', r1.output)
 
-    @pytest.mark.skip('Segmentation fault')    
+    @pytest.mark.skip('Segmentation fault')
     def test_cli_sleep(self):
         """Test function cli_sleep."""
         runner = CliRunner()

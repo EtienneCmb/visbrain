@@ -1,5 +1,5 @@
 """Test visbrain objects."""
-import os
+# import os
 import numpy as np
 import vispy
 
@@ -12,8 +12,17 @@ from visbrain.objects.ts_obj import TimeSeriesObj, CombineTimeSeries
 from visbrain.objects.vector_obj import VectorObj, CombineVectors
 from visbrain.objects.brain_obj import BrainObj
 
-# from visbrain.utils import remove_brain_template, get_data_path
+from visbrain.io import path_to_visbrain_data, download_file, read_stc
 
+
+TO_DOWNLOAD = dict(ANNOT_FILE_1='lh.aparc.annot',
+                   ANNOT_FILE_2='rh.PALS_B12_Brodmann.annot',
+                   MEG_INVERSE='meg_source_estimate-lh.stc',
+                   OVERLAY_1='lh.sig.nii.gz',
+                   OVERLAY_2='lh.alt_sig.nii.gz'
+                   )
+for key, val in TO_DOWNLOAD.items():
+    TO_DOWNLOAD[key] = path_to_visbrain_data(download_file(val))
 
 ###############################################################################
 #                                  VISBRAIN
@@ -590,6 +599,10 @@ class TestCombineVector(ObjectMethods):
 class TestBrainObj(ObjectMethods):
     """Test brain object."""
 
+    def _prepare_brain(self, name='inflated'):
+        b_obj.set_data(name)
+        b_obj.clean()
+
     def test_definition(self):
         """Test function definition."""
         BrainObj('B1')
@@ -617,15 +630,86 @@ class TestBrainObj(ObjectMethods):
         f_rot = ['sagittal_0', 'left', 'sagittal_1', 'right', 'coronal_0',
                  'front', 'coronal_1', 'back', 'axial_0', 'top', 'axial_1',
                  'bottom']
+        assert 'distance' not in b_obj._optimal_camera_properties(False).keys()
         for k in f_rot:
             b_obj.rotate(k)
         # Test custom rotation :
         for k in [(0, 90), (170, 21), (45, 65)]:
             b_obj.rotate(custom=k)
+        b_obj.set_state(center=(0., 1., 0.))
 
     def test_attributes(self):
         """Test function attributes."""
         self._assert_and_test('b_obj', 'translucent', True)
         self._assert_and_test('b_obj', 'alpha', .4)
+        self._assert_and_test('b_obj', 'hemisphere', 'both')
+        self._assert_and_test('b_obj', 'scale', 1.)
         assert b_obj.camera is not None
         assert isinstance(b_obj.vertices, np.ndarray)
+        # Test if getting vertices and faces depends on the selected hemisphere
+        b_obj.hemisphere = 'both'
+        n_vertices_both = b_obj.vertices.shape[0]
+        n_faces_both = b_obj.faces.shape[0]
+        n_normals_both = b_obj.normals.shape[0]
+        for k in ['left', 'right']:
+            b_obj.hemisphere = k
+            assert b_obj.vertices.shape[0] < n_vertices_both
+            assert b_obj.faces.shape[0] < n_faces_both
+            assert b_obj.normals.shape[0] < n_normals_both
+
+    def test_clean(self):
+        """Test function clean."""
+        b_obj.clean()
+
+    def test_overlay_from_file(self):
+        """Test add_activation method."""
+        # Prepare the brain :
+        self._prepare_brain()
+        file_1 = TO_DOWNLOAD['OVERLAY_1']
+        file_2 = TO_DOWNLOAD['OVERLAY_2']
+        # Overlay :
+        b_obj.add_activation(file=file_1, clim=(4., 30.), hide_under=4,
+                             cmap='Reds_r', hemisphere='left')
+        b_obj.add_activation(file=file_2, clim=(4., 30.), hide_under=4,
+                             cmap='Blues_r', hemisphere='left', n_contours=10)
+        # Meg inverse :
+        file_3 = read_stc(TO_DOWNLOAD['MEG_INVERSE'])
+        data = file_3['data'][:, 2]
+        vertices = file_3['vertices']
+        b_obj.add_activation(data=data, vertices=vertices, smoothing_steps=3)
+        b_obj.add_activation(data=data, vertices=vertices, smoothing_steps=5,
+                             clim=(13., 22.), hide_under=13., cmap='plasma')
+
+    def test_get_parcellates(self):
+        """Test function get_parcellates."""
+        import pandas as pd
+        df_1 = b_obj.get_parcellates(TO_DOWNLOAD['ANNOT_FILE_1'])
+        df_2 = b_obj.get_parcellates(TO_DOWNLOAD['ANNOT_FILE_2'])
+        assert all([isinstance(k, pd.DataFrame) for k in [df_1, df_2]])
+
+    def test_parcellize(self):
+        """Test function parcellize."""
+        # Prepare the brain :
+        self._prepare_brain()
+        file = TO_DOWNLOAD['ANNOT_FILE_1']
+        df = b_obj.get_parcellates(TO_DOWNLOAD['ANNOT_FILE_1'])
+        n_data = len(df)
+        data = np.arange(n_data)
+        # Parcellize entire brain :
+        b_obj.parcellize(file)
+        b_obj.parcellize(file, hemisphere='left')
+        b_obj.parcellize(file, hemisphere='lh')
+        b_obj.parcellize(file, hemisphere='right')
+        b_obj.parcellize(file, hemisphere='rh')
+        # Parcellize selection :
+        n_parcellates = 5
+        ids_idx = np.array(df['Index'][0:n_parcellates]).astype(int)
+        ids_labels = np.array(df['Labels'][0:n_parcellates]).astype(str)
+        b_obj.parcellize(file, select=ids_idx)
+        b_obj.parcellize(file, select=ids_labels)
+        # Send data :
+        b_obj.parcellize(file, data=data)
+        b_obj.parcellize(file, select=ids_idx, data=data[0:n_parcellates],
+                         clim=(10, 40), cmap='Spectral_r', vmin=15, vmax=37,
+                         under='blue', over='#ab4642')
+        b_obj.parcellize(file, select=ids_labels, data=data[0:n_parcellates])

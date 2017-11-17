@@ -66,6 +66,7 @@ class TestIO(object):
     #                              MNE I/O
     ###########################################################################
 
+    @pytest.mark.slow
     def test_mne_switch(self):
         """Test function mne_switch."""
         download_file('sleep_edf.zip', to_path=path_to_tmp, unzip=True)
@@ -207,6 +208,7 @@ class TestIO(object):
         download_file("meg_source_estimate-lh.stc", to_path=path_to_tmp)
         read_stc(self._path_to_tmp("meg_source_estimate-lh.stc"))
 
+    @pytest.mark.slow
     def test_read_nifti(self):
         """Test function read_nifti."""
         download_file("GG-853-GM-0.7mm.nii.gz", to_path=path_to_tmp)

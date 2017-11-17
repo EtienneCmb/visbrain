@@ -1,6 +1,7 @@
 """Test command lines."""
 import os
 import shutil
+import pytest
 
 from visbrain import Figure
 from visbrain.io import download_file
@@ -25,6 +26,7 @@ class TestFigure(object):
     def _path_to_tmp(name):
         return os.path.join(*(path_to_tmp, name))
 
+    @pytest.mark.slow
     def test_download_file(self):
         """Download the EDF dataset."""
         download_file('figure.zip', to_path=path_to_tmp, unzip=True)
