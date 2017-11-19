@@ -1,9 +1,14 @@
 """Create a basic scene for objects."""
+import sys
+import logging
+
 from vispy import scene
 
-from ..utils import color2vb
+from ..utils import color2vb, set_log_level
 from ..visuals import CbarVisual
-from ..config import VISPY_APP
+from ..config import VISPY_APP, PROFILER
+
+logger = logging.getLogger('visbrain')
 
 
 class VisbrainCanvas(object):
@@ -339,12 +344,27 @@ class SceneObj(object):
         Background color of the scene.
     """
 
-    def __init__(self, bgcolor='black', show=True):
+    def __init__(self, bgcolor='black', show=True, verbose=None, **kwargs):
         """Init."""
+        set_log_level(verbose)
+        logger.info("Scene creation")
+        PROFILER('Scene creation')
         self._canvas = scene.SceneCanvas(keys='interactive', show=show,
                                          title='Object scene', app=VISPY_APP,
-                                         bgcolor=color2vb(bgcolor))
+                                         bgcolor=color2vb(bgcolor), **kwargs)
         self._grid = self._canvas.central_widget.add_grid(margin=10)
+        self._grid_desc = {}
+
+    def __getitem__(self, rowcol):
+        """Get an element of the grid.
+
+        Parameters
+        ----------
+        rowcol : tuple
+            Tuple of two integers to get the subplot of the grid.
+        """
+        assert len(rowcol) == 2
+        return self._grid[rowcol]
 
     def add_to_subplot(self, obj, row=0, col=0):
         """Add object to subplot.
@@ -358,9 +378,44 @@ class SceneObj(object):
         col : int | 0
             Columns location for the object.
         """
-        try:
-            cam = obj._get_camera()
-        except:
-            cam = 'turntable'
-        sub = self._grid.add_view(row=row, col=col, camera=cam)
+        if (row, col) not in self._grid_desc.keys():
+            try:
+                cam = obj._get_camera()
+            except:
+                cam = 'turntable'
+            sub = self._grid.add_view(row=row, col=col, camera=cam)
+            self._grid_desc[(row, col)] = len(self._grid.children)
+        else:
+            sub = self[(row, col)]
         sub.add(obj.parent)
+        PROFILER('%s added to the scene' % repr(obj))
+        logger.info('%s added to the scene' % repr(obj))
+
+    def link(self, *args):
+        """Link the camera of several objects of the scene.
+
+        Parameters
+        ----------
+        args : list
+            List of tuple describing subplot locations.
+
+        Examples
+        --------
+        >>> # Link cameras of subplots (0, 0), (0, 1) and (1, 0)
+        >>> sc.link((0, 0), (0, 1), (1, 0))
+        """
+        assert len(args) > 1
+        assert all([len(k) == 2 for k in args])
+        cam_obj_1 = self[args[0]].camera
+        for obj in args[1::]:
+            cam_obj_1.link(self[obj].camera)
+        PROFILER('Link cameras %s' % str(args))
+
+    def preview(self):
+        """Previsualize the result."""
+        if PROFILER and logger.level == 1:
+            logger.profiler("PARENT TREE \n%s" % self._grid.describe_tree())
+            logger.profiler(" ")
+            PROFILER.finish()
+        if sys.flags.interactive != 1:
+            VISPY_APP.run()
