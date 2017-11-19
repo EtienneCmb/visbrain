@@ -6,10 +6,12 @@ import logging
 from vispy import scene
 from vispy.scene import visuals
 from vispy.color import BaseColormap
+from vispy.visuals.transforms import MatrixTransform
 
 from .visbrain_obj import VisbrainObject
 from ..utils import (load_predefined_roi, array_to_stt, get_data_path,
                      wrap_properties, normalize)
+from ..io import read_nifti
 
 
 logger = logging.getLogger('visbrain')
@@ -103,7 +105,7 @@ class VolumeObj(VisbrainObject, _Volume):
     name : string
         Name of the volume object. If name is 'brodmann', 'aal' or 'talairach'
         a predefined volume object is used and vol, index and label are
-        ignored.
+        ignored. The name input can also be the path to an nii.gz file.
     vol : array_like
         The volume to use. Should be a 3-d array.
     hdr : array_like | None
@@ -133,6 +135,16 @@ class VolumeObj(VisbrainObject, _Volume):
                  cmap='OpaqueGrays', select=None, transform=None, parent=None,
                  verbose=None):
         """Init."""
+        # _______________________ NII.GZ _______________________
+        _, ext = os.path.splitext(name)
+        if ('.nii' in ext) or ('gz' in ext):
+            vol, _, hdr = read_nifti(name)
+            vol[50:100, 50:100, 50:100] = 1.
+            name = os.path.split(name)[1]
+            logger.info('Loading %s' % name)
+            # print(vol.max())
+            # 0/0
+
         VisbrainObject.__init__(self, name, parent, transform, verbose)
         _Volume.__init__(self)
 
@@ -152,7 +164,10 @@ class VolumeObj(VisbrainObject, _Volume):
         assert vol.ndim == 3
         if hdr is None:
             hdr = np.eye(4)
-        assert isinstance(hdr, np.ndarray) and hdr.shape == (4, 4)
+        if isinstance(hdr, np.ndarray):
+            hdr = array_to_stt(hdr)
+        assert isinstance(hdr, MatrixTransform)
+        # assert isinstance(hdr, np.ndarray) and hdr.shape == (4, 4)
         if isinstance(select, (list, tuple)):
             logger.info("Extract structures %r from the volume" % select)
             st = '(vol != %s) & '.join([''] * (len(select) + 1))[0:-3]
@@ -160,7 +175,7 @@ class VolumeObj(VisbrainObject, _Volume):
             threshold = 0.
         vol = normalize(vol)
         self._vol3d.set_data(np.transpose(vol, (2, 1, 0)))
-        self._vol3d.transform = array_to_stt(hdr)
+        self._vol3d.transform = hdr
         self.method = method
         self.threshold = threshold
         self.cmap = cmap
