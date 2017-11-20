@@ -44,8 +44,12 @@ data_l = np.random.uniform(-10, 10, s_xyz_l.shape[0])
 """Create a first source object with uniform red square markers
 """
 s_obj_l = SourceObj('S_left', s_xyz_l, data=data_l, color='red',
-                    edge_color='white', symbol='square', edge_width=2.,
+                    edge_color='white', symbol='disc', edge_width=2.,
                     radius_min=10., radius_max=20., alpha=.4)
+
+"""Color the sources according to data
+"""
+s_obj_l.color_sources(data=data_l, cmap='plasma')
 
 """Create a second source object. Then, we analyse where are located the
 sources using the AAL region of interest and used color according to gyrus
