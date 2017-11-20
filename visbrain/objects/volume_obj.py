@@ -139,11 +139,8 @@ class VolumeObj(VisbrainObject, _Volume):
         _, ext = os.path.splitext(name)
         if ('.nii' in ext) or ('gz' in ext):
             vol, _, hdr = read_nifti(name)
-            vol[50:100, 50:100, 50:100] = 1.
             name = os.path.split(name)[1]
             logger.info('Loading %s' % name)
-            # print(vol.max())
-            # 0/0
 
         VisbrainObject.__init__(self, name, parent, transform, verbose)
         _Volume.__init__(self)
