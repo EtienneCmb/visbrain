@@ -10,7 +10,8 @@ import vispy.visuals.transforms as vist
 
 from .visbrain_obj import VisbrainObject, CombineObjects
 from .roi_obj import RoiObj
-from ..utils import tal2mni, color2vb, normalize, vispy_array, wrap_properties
+from ..utils import (tal2mni, color2vb, normalize, vispy_array,
+                     wrap_properties, array2colormap)
 from ..visuals import CbarArgs
 
 
@@ -500,15 +501,27 @@ class SourceObj(VisbrainObject, SourceProjection):
         # Return the df if len == 1 :
         return df[0] if len(df) == 1 else df
 
-    def color_sources(self, analysis, color_by, roi_to_color=None,
-                      color_others='black', hide_others=False):
-        """Color sources according to ROI analysis.
+    def color_sources(self, analysis=None, color_by=None, data=None,
+                      roi_to_color=None, color_others='black',
+                      hide_others=False, cmap='viridis', clim=None, vmin=None,
+                      vmax=None, under='gray', over='red'):
+        """Custom color sources methods.
+
+        This method can be used to color sources :
+
+            * According to a data vector. In that case, source's colors are
+              inferred using colormap inputs (i.e cmap, vmin, vmax, clim, under
+              and over)
+            * According to ROI analysis (using the `analysis` and `color_by`
+              input parameters)
 
         Parameters
         ----------
-        analysis : pandas.DataFrames
+        data : array_like | None
+            A vector of data.
+        analysis : pandas.DataFrames | None
             ROI analysis runned using the analyse_sources method.
-        color_by : string
+        color_by : string | None
             A column name of the analysis DataFrames. This columns is then used
             to identify the color to set to each source inside ROI.
         roi_to_color : dict | None
@@ -522,33 +535,39 @@ class SourceObj(VisbrainObject, SourceProjection):
             Show or hide sources that are not found using the
             roi_to_color dictionary.
         """
-        # Group analysis :
-        assert color_by in list(analysis.columns)
-        logger.info("Color sources according to the %s" % color_by)
-        gp = analysis.groupby(color_by).groups
-        # Compute color :
-        if roi_to_color is None:  # random color
-            # Predefined colors and define unique color for each ROI :
-            colors = np.zeros((len(self), 3), dtype=np.float32)
-            u_col = np.random.uniform(.1, .8, (len(gp), 3)).astype(np.float32)
-            # Assign color to the ROI :
-            for k, index in enumerate(gp.values()):
-                colors[list(index), :] = u_col[k, :]
-        elif isinstance(roi_to_color, dict):  # user defined colors
-            colors = color2vb(color_others, length=len(self))
-            keep_visible = np.zeros(len(self), dtype=bool)
-            for roi_name, roi_col in roi_to_color.items():
-                if roi_name in list(gp.keys()):
-                    colors[list(gp[roi_name]), :] = color2vb(roi_col)
-                    keep_visible[list(gp[roi_name])] = True
-                else:
-                    warn(roi_name + " not found in the " + color_by + " column"
-                         " of analysis.")
-            if hide_others:
-                self.visible = keep_visible
-        else:
-            raise TypeError("roi_to_color must either be None or a dictionary "
-                            "like {'roi_name': 'red'}.")
+        if isinstance(data, np.ndarray):
+            assert len(data) == len(self) and (data.ndim == 1)
+            colors = array2colormap(data, cmap=cmap, vmin=vmin, vmax=vmax,
+                                    clim=clim, under=under, over=over)
+        elif (analysis is not None) and (color_by is not None):
+            # Group analysis :
+            assert color_by in list(analysis.columns)
+            logger.info("Color sources according to the %s" % color_by)
+            gp = analysis.groupby(color_by).groups
+            # Compute color :
+            if roi_to_color is None:  # random color
+                # Predefined colors and define unique color for each ROI :
+                colors = np.zeros((len(self), 3), dtype=np.float32)
+                u_col = np.random.uniform(.1, .8, (len(gp), 3))
+                u_col = u_col.astype(np.float32)
+                # Assign color to the ROI :
+                for k, index in enumerate(gp.values()):
+                    colors[list(index), :] = u_col[k, :]
+            elif isinstance(roi_to_color, dict):  # user defined colors
+                colors = color2vb(color_others, length=len(self))
+                keep_visible = np.zeros(len(self), dtype=bool)
+                for roi_name, roi_col in roi_to_color.items():
+                    if roi_name in list(gp.keys()):
+                        colors[list(gp[roi_name]), :] = color2vb(roi_col)
+                        keep_visible[list(gp[roi_name])] = True
+                    else:
+                        warn("%s not found in the %s column of analysis"
+                             "." % (roi_name, color_by))
+                if hide_others:
+                    self.visible = keep_visible
+            else:
+                raise TypeError("roi_to_color must either be None or a "
+                                "dictionary like {'roi_name': 'red'}.")
         self.color = colors
 
     def set_visible_sources(self, select='all', v=None, distance=5.):
