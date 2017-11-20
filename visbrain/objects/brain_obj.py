@@ -343,7 +343,7 @@ class BrainObj(VisbrainObject):
             if is_under:
                 mask[sm_mat.row[sm_data >= hide_under]] = 1.
             else:
-                mask[:] = 0.
+                mask[:] = 1.
         elif isinstance(file, str):
             assert os.path.isfile(file)
             logger.info("Add overlay to the {} brain template "
