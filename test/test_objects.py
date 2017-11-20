@@ -348,9 +348,9 @@ class TestSourceObj(ObjectMethods):
     def test_analyse_color(self):
         """Test function source_analyse_color."""
         df = s_obj.analyse_sources()
-        s_obj.color_sources(data=s_data)
+        s_obj.color_sources(data=s_data)                       # data
         s_obj.color_sources(analysis=df, color_by='brodmann')  # random
-        s_obj.color_sources(analysis=df, color_by='matter',  # predefined
+        s_obj.color_sources(analysis=df, color_by='matter',    # predefined
                             roi_to_color={'White': 'red', 'Gray': 'green'})
 
     def test_select(self):
