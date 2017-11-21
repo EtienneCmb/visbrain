@@ -427,9 +427,9 @@ class SceneObj(object):
             args = list(self._grid_desc.keys())
         assert len(args) > 1
         assert all([len(k) == 2 for k in args])
-        cam_obj_1 = self[(args[0][0] + 1, args[0][1] + 1)].camera
+        cam_obj_1 = self[args[0]].camera
         for obj in args[1::]:
-            cam_obj_1.link(self[(obj[0] + 1, obj[1] + 1)].camera)
+            cam_obj_1.link(self[obj].camera)
         PROFILER('Link cameras %s' % str(args))
 
     def preview(self):
