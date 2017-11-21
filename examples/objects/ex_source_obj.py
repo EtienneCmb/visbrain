@@ -21,7 +21,7 @@ import numpy as np
 
 from vispy.geometry import create_sphere
 
-from visbrain.objects import SourceObj, SceneObj
+from visbrain.objects import SourceObj, SceneObj, ColorbarObj
 from visbrain.io import download_file, path_to_visbrain_data
 
 """
@@ -35,11 +35,12 @@ text = ['S' + str(k) for k in range(n_sources)]
 
 """Create a scene. By default, we fix the top view of the camera
 """
-cam_state = dict(azimuth=0,        # azimuth angle
+CAM_STATE = dict(azimuth=0,        # azimuth angle
                  elevation=90,     # elevation angle
                  scale_factor=180  # ~distance to the camera
                  )
-sc = SceneObj(camera_state=cam_state, size=(1200, 1000))
+CBAR_STATE = dict(cbtxtsz=12, txtsz=10., rect=(1., -2., 1., 4.), width=.5)
+sc = SceneObj(camera_state=CAM_STATE, size=(1200, 1000))
 
 """Create the most basic source object
 """
@@ -64,20 +65,13 @@ s_obj_mask = SourceObj('S3', xyz, mask=mask, mask_color='orange',
 sc.add_to_subplot(s_obj_mask, row=0, col=2,
                   title='Mask sources between [-20., 20.]')
 
-"""Use a random data vector to color sources
-"""
-data = np.random.rand(n_sources)
-s_obj_data = SourceObj('S3', xyz, data=data)
-s_obj_data.color_sources(data=data, cmap='plasma')
-sc.add_to_subplot(s_obj_data, row=1, col=0, title='Color sources using data')
-
 """Analyse where sources are located using the Brodmann ROI template and color
 sources according to the Brodmann area
 """
 s_obj_ba = SourceObj('S4', xyz)
 df_brod = s_obj_ba.analyse_sources(roi_obj='brodmann')
 s_obj_ba.color_sources(analysis=df_brod, color_by='brodmann')
-sc.add_to_subplot(s_obj_ba, row=1, col=1,
+sc.add_to_subplot(s_obj_ba, row=1, col=0,
                   title='Color sources according to Brodmann area')
 
 """Analyse where sources are located using the AAL ROI template and color
@@ -91,8 +85,18 @@ aal_col = {'Precentral (R)': 'green',
            'Insula (R)': 'blue'}
 s_obj_aal.color_sources(analysis=df_aal, color_by='aal', roi_to_color=aal_col,
                         color_others='white')
-sc.add_to_subplot(s_obj_aal, row=1, col=2,
+sc.add_to_subplot(s_obj_aal, row=1, col=1,
                   title='Color only sources in precentral and insula')
+
+"""Use a random data vector to color sources
+"""
+data = np.random.uniform(low=-10., high=10., size=(n_sources,))
+s_obj_data = SourceObj('S3', xyz, data=data)
+s_obj_data.color_sources(data=data, cmap='plasma', clim=(-10, 10), vmin=-8.,
+                         vmax=8., under='gray', over='red')
+sc.add_to_subplot(s_obj_data, row=1, col=2, title='Color sources using data')
+cb_data = ColorbarObj(s_obj_data, cblabel='Random data', **CBAR_STATE)
+sc.add_to_subplot(cb_data, row=1, col=3, width_max=60)
 
 """Display only sources in the left hemisphere
 """
@@ -128,6 +132,11 @@ sc.add_to_subplot(s_obj_inside, row=2, col=2,
 considerably slow down visualization updates
 """
 # sc.link(-1)
+
+"""Screenshot of the scene
+"""
+# sc.screenshot('ex_source_obj.png', transparent=True)
+
 
 """Display the scene
 """
