@@ -140,6 +140,8 @@ class CbarVisual(CbarBase):
         try:
             # Check if clim is int/float :
             if self._clim is None:
+                if not hasattr(self, '_minmax'):
+                    self._minmax = (0., 1.)
                 self._clim = self._minmax
             assert all([isinstance(k, (int, float)) for k in self._clim])
             # Check vmin/vmax :

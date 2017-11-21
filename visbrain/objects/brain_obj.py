@@ -6,7 +6,7 @@ import logging
 from vispy import scene
 
 from .visbrain_obj import VisbrainObject
-from ..visuals import BrainMesh
+from ..visuals import BrainMesh, CbarArgs
 from ..utils import (get_data_path, mesh_edges, smoothing_matrix,
                      array2colormap)
 from ..io import download_file, is_nibabel_installed, is_pandas_installed
@@ -14,7 +14,7 @@ from ..io import download_file, is_nibabel_installed, is_pandas_installed
 logger = logging.getLogger('visbrain')
 
 
-class BrainObj(VisbrainObject):
+class BrainObj(VisbrainObject, CbarArgs):
     """Create a brain object.
 
     Parameters
@@ -63,12 +63,13 @@ class BrainObj(VisbrainObject):
 
     def __init__(self, name, vertices=None, faces=None, normals=None,
                  lr_index=None, hemisphere='both', translucent=True,
-                 transform=None, parent=None, verbose=None):
+                 transform=None, parent=None, verbose=None, _scale=1.):
         """Init."""
         # Init Visbrain object base class :
         VisbrainObject.__init__(self, name, parent, transform, verbose)
+        CbarArgs.__init__(self)
         # Load brain template :
-        self._scale = 1.
+        self._scale = _scale
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere)
         self.translucent = translucent
         self._data_color = []
@@ -421,10 +422,15 @@ class BrainObj(VisbrainObject):
         if isinstance(data, (np.ndarray, list, tuple)):
             data = np.asarray(data)
             assert data.ndim == 1 and len(data) == len(select)
+            clim = (data.min(), data.max()) if clim is None else clim
+            self._isvmax = isinstance(vmax, (int, float))
+            self._isvmin = isinstance(vmin, (int, float))
             logger.info("Color inferred from data")
             u_colors = np.zeros((len(u_idx), 4), dtype=float)
-            data_color = array2colormap(data, clim=clim, cmap=cmap, vmin=vmin,
-                                        vmax=vmax, under=under, over=over)
+            kw = dict(clim=clim, cmap=cmap, vmin=vmin, vmax=vmax, under=under,
+                      over=over)
+            data_color = array2colormap(data, **kw)
+            self.update_from_dict(kw)
         else:
             logger.info("Use default color included in the file")
             u_colors = u_colors.astype(float) / 255.
