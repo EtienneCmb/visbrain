@@ -10,6 +10,12 @@ class ColorbarObj(VisbrainObject, CbarArgs):
 
     Parameters
     ----------
+    name : str
+        Name of the colorbar object. Alternatively, you can pass an other
+        object (like BrainObj or SourceObj) to get their colorbar.
+    rect : tuple | (-.7, -2, 1.5, 4)
+        Camera rectangle. The `rect` input must be a tuple of four floats
+        describing where the camera (start_x, start_y, length_x, length_y).
     cmap : string | None
         Matplotlib colormap (like 'viridis', 'inferno'...).
     clim : tuple/list | None
@@ -49,21 +55,42 @@ class ColorbarObj(VisbrainObject, CbarArgs):
         Background color of the colorbar canvas.
     ndigits : int | 2
         Number of digits for the text.
+    width : float | 0.17
+        Colorbar width.
+    transform : VisPy.visuals.transforms | None
+        VisPy transformation to set to the parent node.
+    parent : VisPy.parent | None
+        Markers object parent.
+    verbose : string
+        Verbosity level.
+
+    Examples
+    --------
+    >>> from visbrain.objects import ColorbarObj
+    >>> cb = ColorbarObj('cbar', cmap='viridis', clim=(4., 78.2), vmin=10.,
+    >>>                  vmax=72., cblabel='Colorbar title', under='gray',
+    >>>                  over='red', txtcolor='black', cbtxtsz=40, cbtxtsh=2.,
+    >>>                  txtsz=20., width=.04)
+    >>> cb.preview()
     """
 
-    def __init__(self, name, transform=None,
+    def __init__(self, name, rect=(-.7, -2, 1.5, 4), transform=None,
                  parent=None, verbose=None, **kwargs):
         """Init."""
         # Init Visbrain object base class and SourceProjection :
         if not isinstance(name, str):
             kwargs = self._update_cbar_from_obj(name, update=False, **kwargs)
             name = name.name + 'Cbar'  # that's a lot of name
+        kwargs['isvmin'] = kwargs.get('vmin', None) is not None
+        kwargs['isvmax'] = kwargs.get('vmax', None) is not None
         VisbrainObject.__init__(self, name, parent, transform, verbose)
         self._cbar = CbarVisual(parent=self._node, **kwargs)
+        assert len(rect) == 4
+        self._rect = rect
 
     def _get_camera(self):
         """Get a panzoom camera."""
-        return scene.cameras.PanZoomCamera(rect=(-.7, -2, 1.5, 4))
+        return scene.cameras.PanZoomCamera(rect=self._rect)
 
     def _update_cbar_from_obj(self, obj, update=True, **kwargs):
         """Update colorbar from an object."""
