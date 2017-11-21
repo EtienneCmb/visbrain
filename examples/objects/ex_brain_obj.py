@@ -73,12 +73,13 @@ sc = SceneObj(camera_state=cam_state, bgcolor=(.1, .1, .1), size=(1200, 1000))
 """
 mat = np.load(download_file('Custom.npz'))
 vert, faces = mat['coord'], mat['tri']
-print(vert.shape, faces.shape)
 z90_rotation = vist.MatrixTransform()
 z90_rotation.rotate(90, (0, 0, 1))
+vert = z90_rotation.map(vert)[:, 0:-1]
 b_obj_custom = BrainObj('Custom', vertices=vert, faces=faces,
-                        translucent=False, transform=z90_rotation, _scale=1)
-sc.add_to_subplot(b_obj_custom, row=2, col=0, row_span=2, camera_state={'center': vert.mean(0)})
+                        translucent=False, _scale=10.)
+sc.add_to_subplot(b_obj_custom, row=2, col=0, row_span=1, rotate='top')#, rotate='top', camera_state={'center': vert.mean(0)})
+print(sc[(2, 0)].camera.get_state())
 
 """Link brain rotations
 """
