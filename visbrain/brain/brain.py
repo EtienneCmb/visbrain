@@ -85,7 +85,7 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
 
     def __init__(self, bgcolor='black', verbose=None, **kwargs):
         """Init."""
-        # ====================== Verbose ======================
+        # ====================== PyQt creation ======================
         PyQtModule.__init__(self, verbose=verbose, to_describe='view.wc',
                             icon='brain_icon.svg')
         self._userobj = {}
