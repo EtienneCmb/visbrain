@@ -4,6 +4,7 @@ import logging
 
 from vispy import scene
 
+from ..io import write_fig_canvas
 from ..utils import color2vb, set_log_level, rotate_turntable
 from ..visuals import CbarVisual
 from ..config import VISPY_APP, PROFILER
@@ -336,12 +337,18 @@ class VisbrainCanvas(object):
 
 
 class SceneObj(object):
-    """Create a scene for objects.
+    """Create a scene and add objects to it.
 
     Parameters
     ----------
     bgcolor : string | 'black'
         Background color of the scene.
+    show : bool | True
+        Display the canvas.
+    camera_state : dict | {}
+        The default camera state to use.
+    verbose : string
+        Verbosity level.
     """
 
     def __init__(self, bgcolor='black', show=True, camera_state={},
@@ -386,6 +393,25 @@ class SceneObj(object):
             Row location for the object.
         col : int | 0
             Columns location for the object.
+        row_span : int | 1
+            Number of rows to use.
+        col_span : int | 1
+            Number of columns to use.
+        title : string | None
+            Subplot title.
+        title_color : string/tuple/array_like | 'white'
+            Color of the title.
+        title_bold : bool | True
+            Use bold title.
+        rotate : string | None
+            Rotate the scene. Use 'top', 'bottom', 'left', 'right', 'front' or
+            'back'.
+        camera_state : dict | {}
+            Arguments to pass to the camera.
+        width_max : float | None
+            Maximum width of the subplot.
+        height_max : float | None
+            Maximum height of the subplot.
         """
         if (row + 1, col + 1) not in self._grid_desc.keys():
             try:
@@ -402,6 +428,7 @@ class SceneObj(object):
         sub.height_max = height_max
         sub.width_max = width_max
         if isinstance(title, str):
+            title_color = color2vb(title_color)
             tit = scene.visuals.Text(title, color=title_color, anchor_x='left',
                                      bold=title_bold)
             sub.add_subvisual(tit)
@@ -434,6 +461,59 @@ class SceneObj(object):
         for obj in args[1::]:
             cam_obj_1.link(self[obj].camera)
         PROFILER('Link cameras %s' % str(args))
+
+    def screenshot(self, saveas, print_size=None, dpi=300.,
+                   unit='centimeter', factor=None, region=None, autocrop=False,
+                   bgcolor=None, transparent=False):
+        """Take a screeshot of the scene.
+
+        By default, the rendered canvas will have the size of your screen.
+        The screenshot() method provides two ways to increase to exported image
+        resolution :
+
+            * Using print_size, unit and dpi inputs : specify the size of the
+              image at a specific dpi level. For example, you might want to
+              have an (10cm, 15cm) image at 300 dpi.
+            * Using the factor input : multiply the default image size by this
+              factor. For example, if you have a (1920, 1080) monitor and if
+              factor is 2, the exported image should have a shape of
+              (3840, 2160) pixels.
+
+        Parameters
+        ----------
+        saveas : str
+            The name of the file to be saved. This file must contains a
+            extension like .png, .tiff, .jpg...
+        print_size : tuple | None
+            The desired print size. This argument should be used in association
+            with the dpi and unit inputs. print_size describe should be a tuple
+            of two floats describing (width, height) of the exported image for
+            a specific dpi level. The final image might not have the exact
+            desired size but will try instead to find a compromize
+            regarding to the proportion of width/height of the original image.
+        dpi : float | 300.
+            Dots per inch for printing the image.
+        unit : {'centimeter', 'millimeter', 'pixel', 'inch'}
+            Unit of the printed size.
+        factor : float | None
+            If you don't want to use the print_size input, factor simply
+            multiply the resolution of your screen.
+        region : tuple | None
+            Select a specific region. Must be a tuple of four integers each one
+            describing (x_start, y_start, width, height).
+        autocrop : bool | False
+            Automaticaly crop the figure in order to have the smallest
+            space between the brain and the border of the picture.
+        bgcolor : array_like/string | None
+            The background color of the image.
+        transparent : bool | False
+            Specify if the exported figure have to contains a transparent
+            background.
+        """
+        kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
+                      autocrop=autocrop, unit=unit, region=region,
+                      bgcolor=bgcolor, transparent=transparent)
+        write_fig_canvas(saveas, self._canvas, **kwargs)
 
     def preview(self):
         """Previsualize the result."""
