@@ -287,7 +287,8 @@ class RoiObj(VisbrainObject):
 
     def _get_camera(self):
         """Get the most adapted camera."""
-        self.mesh._camera.scale_factor = self.mesh._camratio[0]
+        sc = self.mesh._opt_cam_state['scale_factor']
+        self.mesh._camera.scale_factor = sc
         return self.mesh._camera
 
     # ----------- TRANSLUCENT -----------
