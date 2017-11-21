@@ -300,6 +300,8 @@ class BrainObj(VisbrainObject, CbarArgs):
             col_kw['clim'] = clim
             # Contours :
             sm_data = self._data_to_contour(sm_data, clim, n_contours)
+            _, idx = self._hemisphere_from_file(hemisphere, None)
+            hemi_idx = np.where(idx)[0]
             # Convert into colormap :
             smooth_map = array2colormap(sm_data, **col_kw)
             color = np.ones((len(self.mesh), 4), dtype=np.float32)
@@ -478,7 +480,7 @@ class BrainObj(VisbrainObject, CbarArgs):
 
     def _hemisphere_from_file(self, hemisphere, file):
         """Infer hemisphere from filename."""
-        if hemisphere is None:
+        if (hemisphere is None) and isinstance(file, str):
             _, filename = os.path.split(file)
             if any(k in filename for k in ['left', 'lh']):
                 hemisphere = 'left'
