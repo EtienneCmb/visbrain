@@ -63,14 +63,16 @@ class BrainObj(VisbrainObject, CbarArgs):
 
     def __init__(self, name, vertices=None, faces=None, normals=None,
                  lr_index=None, hemisphere='both', translucent=True,
-                 transform=None, parent=None, verbose=None, _scale=1.):
+                 invert_normals=False, transform=None, parent=None,
+                 verbose=None, _scale=1.):
         """Init."""
         # Init Visbrain object base class :
         VisbrainObject.__init__(self, name, parent, transform, verbose)
         CbarArgs.__init__(self)
         # Load brain template :
         self._scale = _scale
-        self.set_data(name, vertices, faces, normals, lr_index, hemisphere)
+        self.set_data(name, vertices, faces, normals, lr_index, hemisphere,
+                      invert_normals)
         self.translucent = translucent
         self._data_color = []
         self._data_mask = []
@@ -80,7 +82,7 @@ class BrainObj(VisbrainObject, CbarArgs):
         return self.vertices.shape[0]
 
     def set_data(self, name=None, vertices=None, faces=None, normals=None,
-                 lr_index=None, hemisphere='both'):
+                 lr_index=None, hemisphere='both', invert_normals=False):
         """Load a brain template."""
         # _______________________ DEFAULT _______________________
         b_download = self._get_downloadable_templates()
@@ -99,7 +101,8 @@ class BrainObj(VisbrainObject, CbarArgs):
         assert (lr_index is None) or isinstance(lr_index, np.ndarray)
         assert hemisphere in ['both', 'left', 'right']
 
-        self._define_mesh(vertices, faces, normals, lr_index, hemisphere)
+        self._define_mesh(vertices, faces, normals, lr_index, hemisphere,
+                          invert_normals)
 
     def clean(self):
         """Clean brain object."""
@@ -110,14 +113,15 @@ class BrainObj(VisbrainObject, CbarArgs):
         self._data_mask = []
         logger.info("Brain object %s cleaned." % self.name)
 
-    def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere):
+    def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere,
+                     invert_normals):
         """Define brain mesh."""
         if not hasattr(self, 'mesh'):
             # Mesh brain :
             self.mesh = BrainMesh(vertices=vertices, faces=faces,
                                   normals=normals, lr_index=lr_index,
                                   hemisphere=hemisphere, parent=self._node,
-                                  name='Mesh')
+                                  invert_normals=invert_normals, name='Mesh')
         else:
             self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                                lr_index=lr_index, hemisphere=hemisphere)
