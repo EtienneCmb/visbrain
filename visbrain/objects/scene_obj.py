@@ -370,11 +370,12 @@ class SceneObj(object):
             Tuple of two integers to get the subplot of the grid.
         """
         assert len(rowcol) == 2
-        return self._grid[rowcol]
+        return self._grid[(rowcol[0] + 1, rowcol[1] + 1)]
 
     def add_to_subplot(self, obj, row=0, col=0, row_span=1, col_span=1,
                        title=None, title_color='white', title_bold=True,
-                       rotate=None, camera_state={}):
+                       rotate=None, camera_state={}, width_max=None,
+                       height_max=None):
         """Add object to subplot.
 
         Parameters
@@ -396,8 +397,10 @@ class SceneObj(object):
                                       camera=cam)
             self._grid_desc[(row + 1, col + 1)] = len(self._grid.children)
         else:
-            sub = self[(row + 1, col + 1)]
+            sub = self[(row, col)]
         sub.add(obj.parent)
+        sub.height_max = height_max
+        sub.width_max = width_max
         if isinstance(title, str):
             tit = scene.visuals.Text(title, color=title_color, anchor_x='left',
                                      bold=title_bold)
