@@ -271,8 +271,11 @@ class BrainVisual(Visual):
 
         # Find ratio for the camera :
         v_max, v_min = vertices.max(0), vertices.min(0)
-        self._center = (v_max + v_min).astype(float) / 2.
-        self._camratio = (v_max - v_min).astype(float)
+        cam_center = (v_max + v_min).astype(float) / 2.
+        cam_scale_factor = (v_max - v_min).astype(float)
+        self._opt_cam_state = dict(center=cam_center,
+                                   scale_factor=cam_scale_factor)
+        logger.debug("Optimal camera state : %r" % self._opt_cam_state)
 
         # ____________________ HEMISPHERE ____________________
         if lr_index is None:
