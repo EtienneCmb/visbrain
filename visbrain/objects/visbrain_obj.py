@@ -30,6 +30,7 @@ class VisbrainObject(object):
         """Init."""
         self._node = vispy.scene.Node(name=name)
         self._node.parent = parent
+        self._csize = None  # canvas size
         # Name :
         assert isinstance(name, str)
         self._name = name
@@ -54,6 +55,7 @@ class VisbrainObject(object):
         camera = self._get_camera()
         canvas = VisbrainCanvas(axis=axis, show=show, name=self._name,
                                 bgcolor=color2vb(bgcolor), camera=camera)
+        self._csize = canvas.canvas.size
         self._node.parent = canvas.wc.scene
         return canvas
 
