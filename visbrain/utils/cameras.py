@@ -76,7 +76,6 @@ def rotate_turntable(fixed=None, camera_state={}, camera=None,
             camera_state['scale_factor'] = optimal_scale_factor(sc, csize)
     if 'scale_factor' in camera_state:
         camera_state['scale_factor'] *= _scale * margin
-    print('SC : ', camera_state['scale_factor'])
     if camera_state and isinstance(camera, TurntableCamera):
         if 'distance' in camera_state.keys():
             dist = camera_state.pop('distance')

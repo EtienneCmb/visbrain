@@ -662,13 +662,11 @@ class TestBrainObj(ObjectMethods):
         f_rot = ['sagittal_0', 'left', 'sagittal_1', 'right', 'coronal_0',
                  'front', 'coronal_1', 'back', 'axial_0', 'top', 'axial_1',
                  'bottom']
-        assert 'distance' not in b_obj._optimal_camera_properties(False).keys()
         for k in f_rot:
             b_obj.rotate(k)
         # Test custom rotation :
         for k in [(0, 90), (170, 21), (45, 65)]:
             b_obj.rotate(custom=k)
-        b_obj.set_state(center=(0., 1., 0.))
 
     def test_attributes(self):
         """Test function attributes."""
