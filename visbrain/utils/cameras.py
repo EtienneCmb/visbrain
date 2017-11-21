@@ -1,8 +1,12 @@
 """This script contains some custom cameras behavior."""
+import logging
+import numpy as np
 
 from vispy.scene.cameras import PanZoomCamera, TurntableCamera
 
-__all__ = ['FixedCam', 'rotate_turntable']
+__all__ = ['FixedCam', 'rotate_turntable', 'optimal_scale_factor']
+
+logger = logging.getLogger('visbrain')
 
 
 class FixedCam(PanZoomCamera):
@@ -17,7 +21,22 @@ class FixedCam(PanZoomCamera):
         pass
 
 
-def rotate_turntable(fixed=None, camera_state={}, camera=None):
+def _default_cam_config(use_for, values):
+    for k in use_for:
+        FIXED_CAM[k] = values
+
+
+FIXED_CAM = {}
+_default_cam_config(['left', 'sagittal_0', 'sagittal'], (-90., 0., [1, 2], -1))
+_default_cam_config(['right', 'sagittal_1'], (90., 0., [1, 2], -1))
+_default_cam_config(['front', 'coronal_0', 'coronal'], (180., 0., [0, 2], -1))
+_default_cam_config(['back', 'coronal_1'], (0., 0., [0, 2], -1))
+_default_cam_config(['top', 'axial_0', 'axial'], (0., 90., [0, 1], 1))
+_default_cam_config(['bottom', 'axial_1'], (0., -90., [0, 1], 1))
+
+
+def rotate_turntable(fixed=None, camera_state={}, camera=None,
+                     xyz=None, csize=None, margin=1., _scale=1.):
     """Rotate a scene that contains a turntable camera.
 
     Parameters
@@ -28,27 +47,57 @@ def rotate_turntable(fixed=None, camera_state={}, camera=None):
         Dictionary to pass to the camera.
     camera : vispy.scene.cameras.TurntableCamera | None
         The camera to update.
+    xyz : array_like | None
+        The size of the object along the x, y and z axis.
+    csize : tuple | None
+        The canvas size.
+    margin : float | 1.
+        Add magin to the scale_factor.
+    _scale : float | 1.
+        Specifie if the scale_factor have to be rescaled.
 
     Returns
     -------
     camera_state : dict
         The camera state used.
     """
+    assert all([isinstance(k, (int, float)) for k in [margin, _scale]])
     if isinstance(fixed, str):
-        if fixed in ['sagittal_0', 'left']:     # left
-            azimuth, elevation = -90, 0
-        elif fixed in ['sagittal_1', 'right']:  # right
-            azimuth, elevation = 90, 0
-        elif fixed in ['coronal_0', 'front']:   # front
-            azimuth, elevation = 180, 0
-        elif fixed in ['coronal_1', 'back']:    # back
-            azimuth, elevation = 0, 0
-        elif fixed in ['axial_0', 'top']:       # top
-            azimuth, elevation = 0, 90
-        elif fixed in ['axial_1', 'bottom']:    # bottom
-            azimuth, elevation = 0, -90
+        azimuth, elevation, idx, priority = FIXED_CAM[fixed]
         camera_state['azimuth'] = azimuth
         camera_state['elevation'] = elevation
+    if (xyz is not None) and (len(xyz) == 3):
+        if csize is None:
+            camera_state['scale_factor'] = xyz[priority]
+        else:
+            logger.debug("Optimal scale factor using %r axis" % idx)
+            assert len(csize) == 2
+            sc = xyz[idx]
+            camera_state['scale_factor'] = optimal_scale_factor(sc, csize)
+    if 'scale_factor' in camera_state:
+        camera_state['scale_factor'] *= _scale * margin
+    print('SC : ', camera_state['scale_factor'])
     if camera_state and isinstance(camera, TurntableCamera):
+        if 'distance' in camera_state.keys():
+            dist = camera_state.pop('distance')
+            camera.distance = dist
         camera.set_state(**camera_state)
     return camera_state
+
+
+def optimal_scale_factor(axis_scale, csize):
+    """Get optimal scale_factor according to screen size.
+
+    Parameters
+    ----------
+    axis_scale : array_like
+        The scale along the two axis.
+    csize : tuple
+        The canvas size.
+    """
+    assert len(axis_scale) == len(csize)
+    x_ratio = axis_scale[0] / csize[0]
+    y_ratio = axis_scale[1] / csize[1]
+    # Get the optimal scaling factor :
+    opt_scale_factor = axis_scale[np.argmax([x_ratio, y_ratio])]
+    return opt_scale_factor
