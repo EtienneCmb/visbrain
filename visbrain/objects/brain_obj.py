@@ -280,8 +280,7 @@ class BrainObj(VisbrainObject, CbarArgs):
         over : string/tuple/array_like | 'red'
             The color to use for values over vmax.
         """
-        col_kw = dict(cmap=cmap, vmin=vmin, vmax=vmax, under=under, over=over,
-                      clim=clim)
+        col_kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
         is_under = isinstance(hide_under, (int, float))
         color = np.zeros((len(self.mesh), 4), dtype=np.float32)
         mask = np.zeros((len(self.mesh),), dtype=float)
@@ -305,10 +304,10 @@ class BrainObj(VisbrainObject, CbarArgs):
             # Convert into colormap :
             smooth_map = array2colormap(sm_data, **col_kw)
             color = np.ones((len(self.mesh), 4), dtype=np.float32)
-            color[sm_mat.row, :] = smooth_map
+            color[hemi_idx[sm_mat.row], :] = smooth_map
             # Mask :
             if is_under:
-                mask[sm_mat.row[sm_data >= hide_under]] = 1.
+                mask[hemi_idx[sm_mat.row[sm_data >= hide_under]]] = 1.
             else:
                 mask[:] = 1.
         elif isinstance(file, str):
@@ -391,14 +390,10 @@ class BrainObj(VisbrainObject, CbarArgs):
             data = np.asarray(data)
             assert data.ndim == 1 and len(data) == len(select)
             clim = (data.min(), data.max()) if clim is None else clim
-            self._isvmax = isinstance(vmax, (int, float))
-            self._isvmin = isinstance(vmin, (int, float))
             logger.info("Color inferred from data")
             u_colors = np.zeros((len(u_idx), 4), dtype=float)
-            kw = dict(clim=clim, cmap=cmap, vmin=vmin, vmax=vmax, under=under,
-                      over=over)
+            kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
             data_color = array2colormap(data, **kw)
-            self.update_from_dict(kw)
         else:
             logger.info("Use default color included in the file")
             u_colors = u_colors.astype(float) / 255.
