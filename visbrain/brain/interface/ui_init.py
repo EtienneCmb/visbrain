@@ -9,6 +9,7 @@ Grouped components :
 from PyQt5 import QtWidgets
 
 from vispy import app
+from vispy.scene.cameras import TurntableCamera
 
 from .gui import Ui_MainWindow
 from ...objects import VisbrainCanvas
@@ -98,7 +99,7 @@ class BrainShortcuts(object):
 
             :event: the trigger event
             """
-            if self.view.wc.camera.name == 'turntable':
+            if isinstance(self.view.wc.camera, TurntableCamera):
                 # Display the rotation panel and set informations :
                 self._fcn_gui_rotation()
 
@@ -108,7 +109,7 @@ class BrainShortcuts(object):
 
             :event: the trigger event
             """
-            if self.view.wc.camera.name == 'turntable':
+            if isinstance(self.view.wc.camera, TurntableCamera):
                 # Display the rotation panel :
                 self._fcn_gui_rotation()
                 self.userRotationPanel.setVisible(True)
