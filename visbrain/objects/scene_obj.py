@@ -344,7 +344,8 @@ class SceneObj(object):
         Background color of the scene.
     """
 
-    def __init__(self, bgcolor='black', show=True, verbose=None, **kwargs):
+    def __init__(self, bgcolor='black', show=True, camera_state={},
+                 verbose=None, **kwargs):
         """Init."""
         set_log_level(verbose)
         logger.info("Scene creation")
@@ -353,7 +354,12 @@ class SceneObj(object):
                                          title='Object scene', app=VISPY_APP,
                                          bgcolor=color2vb(bgcolor), **kwargs)
         self._grid = self._canvas.central_widget.add_grid(margin=10)
+        _rpad = self._grid.add_widget(row=0, col=0, row_span=1)
+        _rpad.width_max = 20
+        _rpad.height_max = 20
+        self._grid.spacing = 0
         self._grid_desc = {}
+        self._camera_state = camera_state
 
     def __getitem__(self, rowcol):
         """Get an element of the grid.
@@ -366,7 +372,9 @@ class SceneObj(object):
         assert len(rowcol) == 2
         return self._grid[rowcol]
 
-    def add_to_subplot(self, obj, row=0, col=0):
+    def add_to_subplot(self, obj, row=0, col=0, row_span=1, col_span=1,
+                       title=None, title_color='white', title_bold=True,
+                       camera_state={}):
         """Add object to subplot.
 
         Parameters
@@ -378,16 +386,26 @@ class SceneObj(object):
         col : int | 0
             Columns location for the object.
         """
-        if (row, col) not in self._grid_desc.keys():
+        if (row + 1, col + 1) not in self._grid_desc.keys():
             try:
                 cam = obj._get_camera()
             except:
                 cam = 'turntable'
-            sub = self._grid.add_view(row=row, col=col, camera=cam)
-            self._grid_desc[(row, col)] = len(self._grid.children)
+            sub = self._grid.add_view(row=row + 1, col=col + 1,
+                                      row_span=row_span, col_span=col_span,
+                                      camera=cam)
+            self._grid_desc[(row + 1, col + 1)] = len(self._grid.children)
         else:
-            sub = self[(row, col)]
+            sub = self[(row + 1, col + 1)]
         sub.add(obj.parent)
+        if isinstance(title, str):
+            tit = scene.visuals.Text(title, color=title_color, anchor_x='left',
+                                     bold=title_bold)
+            sub.add_subvisual(tit)
+        if camera_state == {}:
+            camera_state = self._camera_state
+        if camera_state and isinstance(camera_state, dict):
+            sub.camera.set_state(camera_state)
         PROFILER('%s added to the scene' % repr(obj))
         logger.info('%s added to the scene' % repr(obj))
 
@@ -397,13 +415,16 @@ class SceneObj(object):
         Parameters
         ----------
         args : list
-            List of tuple describing subplot locations.
+            List of tuple describing subplot locations. Alternatively, use `-1`
+            to link all cameras.
 
         Examples
         --------
         >>> # Link cameras of subplots (0, 0), (0, 1) and (1, 0)
         >>> sc.link((0, 0), (0, 1), (1, 0))
         """
+        if args[0] == -1:
+            args = list(self._grid_desc.keys())
         assert len(args) > 1
         assert all([len(k) == 2 for k in args])
         cam_obj_1 = self[args[0]].camera

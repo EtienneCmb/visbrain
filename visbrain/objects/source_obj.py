@@ -518,7 +518,9 @@ class SourceObj(VisbrainObject, SourceProjection):
         Parameters
         ----------
         data : array_like | None
-            A vector of data.
+            A vector of data with the same length as the number os sources.
+            The color is inferred from this data vector and can be controlled
+            using the cmap, clim, vmin, vmax, under and over parameters.
         analysis : pandas.DataFrames | None
             ROI analysis runned using the analyse_sources method.
         color_by : string | None
@@ -537,12 +539,13 @@ class SourceObj(VisbrainObject, SourceProjection):
         """
         if isinstance(data, np.ndarray):
             assert len(data) == len(self) and (data.ndim == 1)
+            logger.info("Color %s using a data vector" % self.name)
             colors = array2colormap(data, cmap=cmap, vmin=vmin, vmax=vmax,
                                     clim=clim, under=under, over=over)
         elif (analysis is not None) and (color_by is not None):
             # Group analysis :
             assert color_by in list(analysis.columns)
-            logger.info("Color sources according to the %s" % color_by)
+            logger.info("Color %s according to the %s" % (self.name, color_by))
             gp = analysis.groupby(color_by).groups
             # Compute color :
             if roi_to_color is None:  # random color
