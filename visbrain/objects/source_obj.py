@@ -540,8 +540,8 @@ class SourceObj(VisbrainObject, SourceProjection):
         if isinstance(data, np.ndarray):
             assert len(data) == len(self) and (data.ndim == 1)
             logger.info("Color %s using a data vector" % self.name)
-            colors = array2colormap(data, cmap=cmap, vmin=vmin, vmax=vmax,
-                                    clim=clim, under=under, over=over)
+            kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+            colors = array2colormap(data, **kw)
         elif (analysis is not None) and (color_by is not None):
             # Group analysis :
             assert color_by in list(analysis.columns)
