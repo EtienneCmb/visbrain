@@ -33,7 +33,7 @@ xyz = mat['xyz']
 n_sources = xyz.shape[0]
 text = ['S' + str(k) for k in range(n_sources)]
 
-"""Create a scene. By default, we fix the top viw of the camera
+"""Create a scene. By default, we fix the top view of the camera
 """
 cam_state = dict(azimuth=0,        # azimuth angle
                  elevation=90,     # elevation angle
@@ -50,48 +50,48 @@ sc.add_to_subplot(s_obj_basic, row=0, col=0,
 
 """Control the color and the symbol
 """
-s_obj_2 = SourceObj('S2', xyz, color='slategray', symbol='square')
-sc.add_to_subplot(s_obj_2, row=0, col=1, title='Change color and symbol')
+s_obj_col = SourceObj('S2', xyz, color='slategray', symbol='square')
+sc.add_to_subplot(s_obj_col, row=0, col=1, title='Change color and symbol')
 
 """Mask sources that have a x coordinate between [-20, 20] and color it into
 orange
 """
 mask = np.logical_and(xyz[:, 0] >= -20., xyz[:, 0] <= 20.)
 data = np.random.rand(n_sources)
-s_obj_32 = SourceObj('S3', xyz, mask=mask, mask_color='orange',
-                     color='slateblue', data=data, radius_min=2.,
-                     radius_max=20.)
-sc.add_to_subplot(s_obj_32, row=0, col=2,
+s_obj_mask = SourceObj('S3', xyz, mask=mask, mask_color='orange',
+                       color='slateblue', data=data, radius_min=2.,
+                       radius_max=20.)
+sc.add_to_subplot(s_obj_mask, row=0, col=2,
                   title='Mask sources between [-20., 20.]')
 
 """Use a random data vector to color sources
 """
 data = np.random.rand(n_sources)
-s_obj_3 = SourceObj('S3', xyz, data=data)
-s_obj_3.color_sources(data=data, cmap='plasma')
-sc.add_to_subplot(s_obj_3, row=1, col=0, title='Color sources using data')
+s_obj_data = SourceObj('S3', xyz, data=data)
+s_obj_data.color_sources(data=data, cmap='plasma')
+sc.add_to_subplot(s_obj_data, row=1, col=0, title='Color sources using data')
 
 """Analyse where sources are located using the Brodmann ROI template and color
 sources according to the Brodmann area
 """
-s_obj_4 = SourceObj('S4', xyz)
-df_brod = s_obj_4.analyse_sources(roi_obj='brodmann')
-s_obj_4.color_sources(analysis=df_brod, color_by='brodmann')
-sc.add_to_subplot(s_obj_4, row=1, col=1,
+s_obj_ba = SourceObj('S4', xyz)
+df_brod = s_obj_ba.analyse_sources(roi_obj='brodmann')
+s_obj_ba.color_sources(analysis=df_brod, color_by='brodmann')
+sc.add_to_subplot(s_obj_ba, row=1, col=1,
                   title='Color sources according to Brodmann area')
 
 """Analyse where sources are located using the AAL ROI template and color
 only the precentral left (green), right (orange), insula right (blue). Others
 ROI are turn into white.
 """
-s_obj_5 = SourceObj('S5', xyz)
-df_aal = s_obj_5.analyse_sources(roi_obj='aal')
-aal_color = {'Precentral (R)': 'green',
-             'Precentral (L)': 'orange',
-             'Insula (R)': 'blue'}
-s_obj_5.color_sources(analysis=df_aal, color_by='aal', roi_to_color=aal_color,
-                      color_others='white')
-sc.add_to_subplot(s_obj_5, row=1, col=2,
+s_obj_aal = SourceObj('S5', xyz)
+df_aal = s_obj_aal.analyse_sources(roi_obj='aal')
+aal_col = {'Precentral (R)': 'green',
+           'Precentral (L)': 'orange',
+           'Insula (R)': 'blue'}
+s_obj_aal.color_sources(analysis=df_aal, color_by='aal', roi_to_color=aal_col,
+                        color_others='white')
+sc.add_to_subplot(s_obj_aal, row=1, col=2,
                   title='Color only sources in precentral and insula')
 
 """Display only sources in the left hemisphere
