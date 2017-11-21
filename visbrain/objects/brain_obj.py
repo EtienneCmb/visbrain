@@ -8,7 +8,7 @@ from vispy import scene
 from .visbrain_obj import VisbrainObject
 from ..visuals import BrainMesh, CbarArgs
 from ..utils import (get_data_path, mesh_edges, smoothing_matrix,
-                     array2colormap)
+                     array2colormap, rotate_turntable)
 from ..io import download_file, is_nibabel_installed, is_pandas_installed
 
 logger = logging.getLogger('visbrain')
@@ -190,43 +190,22 @@ class BrainObj(VisbrainObject, CbarArgs):
             self.rotate('top')
         return self.camera
 
-    def _optimal_camera_properties(self, with_distance=True):
-        """Get the optimal camera properties."""
-        center = self.mesh._center * self._scale
-        sc = 1.08 * self.mesh._camratio[-1]
-        prop = {'center': center, 'scale_factor': sc, 'azimuth': 0.,
-                'elevation': 90, 'distance': 4 * sc}
-        if with_distance:
-            return prop
-        else:
-            del prop['distance']
-            return prop
-
     def reset_camera(self):
         """Reset the camera."""
-        cam_args = self._optimal_camera_properties()
-        self.mesh._camera.distance = cam_args['distance']
-        del cam_args['distance']
-        self.mesh._camera.set_state(cam_args)
+        # Get the optimal camera for the mesh :
+        cam_state = self.mesh._opt_cam_state.copy()
+        # Re-scale (OpenGL issue) :
+        cam_state['center'] *= self._scale
+        cam_state['scale_factor'] = cam_state['scale_factor'][-1] * self._scale
+        cam_state.update({'azimuth': 0., 'elevation': 90})
+        # Set distance :
+        distance = cam_state['scale_factor'] * 4.
+        self.mesh._camera.distance = distance
+        # Set camera :
+        self.mesh._camera.set_state(cam_state)
         self.mesh._camera.set_default_state()
 
-    def set_state(self, azimuth=None, elevation=None, scale_factor=None,
-                  distance=None, center=None, margin=1.08):
-        """Set the camera state."""
-        if isinstance(azimuth, (int, float)):
-            self.mesh._camera.azimuth = azimuth
-        if isinstance(elevation, (int, float)):
-            self.mesh._camera.elevation = elevation
-        if isinstance(scale_factor, (int, float)):
-            self.mesh._camera.scale_factor = margin * scale_factor * self.scale
-        distance = scale_factor * 4. if scale_factor is not None else distance
-        if isinstance(distance, (int, float)):
-            self.mesh._camera.distance = distance * self.scale
-        if (center is not None) and len(center) == 3:
-            self.mesh._camera.center = center
-        self.mesh._camera.update()
-
-    def rotate(self, fixed='top', custom=None, margin=.08):
+    def rotate(self, fixed='top', custom=None, margin=1.08):
         """Rotate the brain using predefined rotations or a custom one.
 
         Parameters
@@ -246,30 +225,13 @@ class BrainObj(VisbrainObject, CbarArgs):
         """
         # Create the camera if needed :
         self._get_camera()
-        scale_factor = None
-        if fixed in ['sagittal_0', 'left']:     # left
-            azimuth, elevation = -90, 0
-            scale_factor = self.mesh._camratio[-1]
-        elif fixed in ['sagittal_1', 'right']:  # right
-            azimuth, elevation = 90, 0
-            scale_factor = self.mesh._camratio[-1]
-        elif fixed in ['coronal_0', 'front']:   # front
-            azimuth, elevation = 180, 0
-            scale_factor = self.mesh._camratio[-1]
-        elif fixed in ['coronal_1', 'back']:    # back
-            azimuth, elevation = 0, 0
-            scale_factor = self.mesh._camratio[-1]
-        elif fixed in ['axial_0', 'top']:       # top
-            azimuth, elevation = 0, 90
-            scale_factor = self.mesh._camratio[1]
-        elif fixed in ['axial_1', 'bottom']:    # bottom
-            azimuth, elevation = 0, -90
-            scale_factor = self.mesh._camratio[1]
-
+        cam_state = self.mesh._opt_cam_state.copy()
+        xyz = cam_state['scale_factor']
         if isinstance(custom, (tuple, list)) and (len(custom) == 2):
-            azimuth, elevation = tuple(custom)
-
-        self.set_state(azimuth, elevation, scale_factor=scale_factor)
+            cam_state['azimuth'] = custom[0]
+            cam_state['elevation'] = custom[1]
+        rotate_turntable(fixed, cam_state, camera=self.camera, xyz=xyz,
+                         csize=self._csize, margin=margin, _scale=self._scale)
 
     def add_activation(self, data=None, vertices=None, smoothing_steps=20,
                        file=None, hemisphere=None, hide_under=None,
