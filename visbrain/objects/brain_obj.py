@@ -185,9 +185,7 @@ class BrainObj(VisbrainObject):
     def _get_camera(self):
         """Get the most adapted camera."""
         if self.mesh._camera is None:
-            camera = scene.cameras.TurntableCamera(name='turntable')
-            self.mesh.set_camera(camera)
-            self.reset_camera()
+            self.camera = scene.cameras.TurntableCamera(name='BrainTurntable')
             self.rotate('top')
         return self.camera
 

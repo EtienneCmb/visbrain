@@ -4,7 +4,7 @@ import logging
 
 from vispy import scene
 
-from ..utils import color2vb, set_log_level
+from ..utils import color2vb, set_log_level, rotate_turntable
 from ..visuals import CbarVisual
 from ..config import VISPY_APP, PROFILER
 
@@ -374,7 +374,7 @@ class SceneObj(object):
 
     def add_to_subplot(self, obj, row=0, col=0, row_span=1, col_span=1,
                        title=None, title_color='white', title_bold=True,
-                       camera_state={}):
+                       rotate=None, camera_state={}):
         """Add object to subplot.
 
         Parameters
@@ -404,8 +404,8 @@ class SceneObj(object):
             sub.add_subvisual(tit)
         if camera_state == {}:
             camera_state = self._camera_state
-        if camera_state and isinstance(camera_state, dict):
-            sub.camera.set_state(camera_state)
+        rotate_turntable(fixed=rotate, camera_state=camera_state,
+                         camera=sub.camera)
         PROFILER('%s added to the scene' % repr(obj))
         logger.info('%s added to the scene' % repr(obj))
 
@@ -427,9 +427,9 @@ class SceneObj(object):
             args = list(self._grid_desc.keys())
         assert len(args) > 1
         assert all([len(k) == 2 for k in args])
-        cam_obj_1 = self[args[0]].camera
+        cam_obj_1 = self[(args[0][0] + 1, args[0][1] + 1)].camera
         for obj in args[1::]:
-            cam_obj_1.link(self[obj].camera)
+            cam_obj_1.link(self[(obj[0] + 1, obj[1] + 1)].camera)
         PROFILER('Link cameras %s' % str(args))
 
     def preview(self):
