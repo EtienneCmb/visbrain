@@ -24,6 +24,8 @@ class VisbrainObject(object):
         Markers object parent.
     transform : VisPy.visuals.transforms | None
         VisPy transformation to set to the parent node.
+    verbose : string
+        Verbosity level.
     """
 
     def __init__(self, name, parent=None, transform=None, verbose=None):
@@ -58,6 +60,15 @@ class VisbrainObject(object):
         self._csize = canvas.canvas.size
         self._node.parent = canvas.wc.scene
         return canvas
+
+    def _update_cbar_args(self, cmap, clim, vmin, vmax, under, over):
+        """Update colorbar elements."""
+        kw = dict(clim=clim, cmap=cmap, vmin=vmin, vmax=vmax, under=under,
+                  over=over)
+        self._isvmax = isinstance(vmax, (int, float))
+        self._isvmin = isinstance(vmin, (int, float))
+        self.update_from_dict(kw)
+        return kw
 
     def preview(self, bgcolor='white', axis=False, xyz=False, show=True):
         """Previsualize the result.
