@@ -110,6 +110,7 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         self.view.wc.camera = self._camera
         self._vbNode.parent = self.view.wc.scene
         self.atlas.camera = self._camera
+        self.atlas._csize = self.view.canvas.size
         self.atlas.rotate('top')
         self.atlas.camera.set_default_state()
         PROFILER("Cameras creation")
