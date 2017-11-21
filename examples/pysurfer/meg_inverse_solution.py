@@ -29,7 +29,8 @@ vertices = file['vertices']
 # Define a brain object and add the data to the mesh :
 b_obj = BrainObj('inflated', translucent=False, hemisphere='left')
 b_obj.add_activation(data=data, vertices=vertices, smoothing_steps=5,
-                     clim=(13., 22.), hide_under=13., cmap='plasma')
+                     clim=(13., 22.), hide_under=13., cmap='plasma',
+                     hemisphere='left')
 
 # Finally, pass the brain object to the Brain module :
 vb = Brain(brain_obj=b_obj)
