@@ -183,7 +183,8 @@ class BrainVisual(Visual):
                  hemisphere='both', alpha=1., mask_color='orange',
                  light_position=[100.] * 3, light_color=[1.] * 4,
                  light_intensity=[1.] * 3, coef_ambient=.05, coef_specular=.5,
-                 vertfcn=None, camera=None, meshdata=None):
+                 vertfcn=None, camera=None, meshdata=None,
+                 invert_normals=False):
         """Init."""
         self._camera = None
         self._camera_transform = vist.NullTransform()
@@ -214,7 +215,8 @@ class BrainVisual(Visual):
         self.shared_program.frag['u_alpha'] = alpha
 
         # _________________ DATA / CAMERA / LIGHT _________________
-        self.set_data(vertices, faces, normals, hemisphere, lr_index)
+        self.set_data(vertices, faces, normals, hemisphere, lr_index,
+                      invert_normals, meshdata)
         self.set_camera(camera)
         self.mask_color = mask_color
         self.light_color = light_color
@@ -236,8 +238,8 @@ class BrainVisual(Visual):
     # =======================================================================
     # =======================================================================
     def set_data(self, vertices=None, faces=None, normals=None,
-                 hemisphere='both', lr_index=None, meshdata=None,
-                 invert_normals=False):
+                 hemisphere='both', lr_index=None, invert_normals=False,
+                 meshdata=None):
         """Set data to the mesh.
 
         Parameters
