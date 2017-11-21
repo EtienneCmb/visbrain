@@ -180,6 +180,7 @@ class RoiObj(VisbrainObject):
         """
         # Check xyz :
         assert (xyz.ndim == 2) and (xyz.shape[1] == 3)
+        xyz_untouched = xyz.copy()
         n_sources = xyz.shape[0]
         if self.system == 'tal':
             xyz = mni2tal(xyz)
@@ -200,19 +201,19 @@ class RoiObj(VisbrainObject):
             else:
                 location = None
             self.analysis.loc[k] = location
-        # Add Text and (X, Y, Z) to the table :
-        new_col = ['Text'] + self.analysis.columns.tolist() + ['X', 'Y', 'Z']
-        self.analysis['Text'] = source_name
-        self.analysis['X'] = xyz[0]
-        self.analysis['Y'] = xyz[1]
-        self.analysis['Z'] = xyz[2]
-        self.analysis = self.analysis[new_col]
         if replace_bad:
             # Replace NaN values :
             self.analysis.fillna(replace_with, inplace=True)
             # Replace bad patterns :
             for k in bad_patterns:
                 self.analysis.replace(k, replace_with, inplace=True)
+        # Add Text and (X, Y, Z) to the table :
+        new_col = ['Text'] + self.analysis.columns.tolist() + ['X', 'Y', 'Z']
+        self.analysis['Text'] = source_name
+        self.analysis['X'] = xyz_untouched[:, 0]
+        self.analysis['Y'] = xyz_untouched[:, 1]
+        self.analysis['Z'] = xyz_untouched[:, 2]
+        self.analysis = self.analysis[new_col]
         return self.analysis
 
     def _find_roi_label(self, vol_idx):
