@@ -6,10 +6,10 @@ import vispy.visuals.transforms as vist
 
 from .visbrain_obj import VisbrainObject, CombineObjects
 from ..utils import wrap_properties
-from ..visuals import PicMesh, CbarArgs
+from ..visuals import PicMesh
 
 
-class PictureObj(VisbrainObject, CbarArgs):
+class PictureObj(VisbrainObject):
     """Create a connectivity object.
 
     Parameters
@@ -49,6 +49,9 @@ class PictureObj(VisbrainObject, CbarArgs):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -70,12 +73,10 @@ class PictureObj(VisbrainObject, CbarArgs):
     def __init__(self, name, data, xyz, select=None, width=7., height=7.,
                  alpha=1., cmap='viridis', clim=None, vmin=None, vmax=None,
                  under='gray', over='red', translate=(0., 0., 1.),
-                 transform=None, parent=None, verbose=None, _z=-10.):
+                 transform=None, parent=None, verbose=None, _z=-10., **kw):
         """Init."""
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
-        isvmin, isvmax = vmin is not None, vmax is not None
-        CbarArgs.__init__(self, cmap, clim, isvmin, vmin, isvmax, vmax, under,
-                          over)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
+        self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
 
         # _______________________ CHECKING _______________________
         # Data :

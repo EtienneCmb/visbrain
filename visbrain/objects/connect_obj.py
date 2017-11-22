@@ -7,10 +7,9 @@ from vispy.scene import visuals
 
 from .visbrain_obj import VisbrainObject, CombineObjects
 from ..utils import array2colormap, normalize, color2vb, wrap_properties
-from ..visuals import CbarArgs
 
 
-class ConnectObj(VisbrainObject, CbarArgs):
+class ConnectObj(VisbrainObject):
     """Create a connectivity object.
 
     Parameters
@@ -59,6 +58,9 @@ class ConnectObj(VisbrainObject, CbarArgs):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -83,12 +85,10 @@ class ConnectObj(VisbrainObject, CbarArgs):
                  color_by='strength', custom_colors=None, alpha=1.,
                  antialias=False, dynamic=None, cmap='viridis', clim=None,
                  vmin=None, vmax=None, under='gray', over='red',
-                 transform=None, parent=None, verbose=None, _z=-10.):
+                 transform=None, parent=None, verbose=None, _z=-10., **kw):
         """Init."""
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
-        isvmin, isvmax = vmin is not None, vmax is not None
-        CbarArgs.__init__(self, cmap, clim, isvmin, vmin, isvmax, vmax, under,
-                          over)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
+        self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
 
         # _______________________ CHECKING _______________________
         # Nodes :

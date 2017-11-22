@@ -38,6 +38,9 @@ class RoiObj(VisbrainObject):
         ROI object parent.
     verbose : string
         Verbosity level.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -56,10 +59,11 @@ class RoiObj(VisbrainObject):
     ###########################################################################
 
     def __init__(self, name, vol=None, label=None, index=None, hdr=None,
-                 system='mni', transform=None, parent=None, verbose=None):
+                 system='mni', transform=None, parent=None, verbose=None,
+                 **kw):
         """Init."""
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         self.change_roi_object(name, vol, label, index, hdr, system)
 
     def __len__(self):

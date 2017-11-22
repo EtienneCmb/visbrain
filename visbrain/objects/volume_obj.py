@@ -122,6 +122,9 @@ class VolumeObj(VisbrainObject, _Volume):
         VisPy transformation to set to the parent node.
     parent : VisPy.parent | None
         Volume object parent.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -133,7 +136,7 @@ class VolumeObj(VisbrainObject, _Volume):
 
     def __init__(self, name, vol=None, hdr=None, method='mip', threshold=0.,
                  cmap='OpaqueGrays', select=None, transform=None, parent=None,
-                 verbose=None):
+                 verbose=None, **kw):
         """Init."""
         # _______________________ NII.GZ _______________________
         _, ext = os.path.splitext(name)
@@ -142,7 +145,7 @@ class VolumeObj(VisbrainObject, _Volume):
             name = os.path.split(name)[1]
             logger.info('Loading %s' % name)
 
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         _Volume.__init__(self)
 
         # _______________________ CHECKING _______________________

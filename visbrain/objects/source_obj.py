@@ -267,6 +267,9 @@ class SourceObj(VisbrainObject, SourceProjection):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -291,14 +294,13 @@ class SourceObj(VisbrainObject, SourceProjection):
 
     def __init__(self, name, xyz, data=None, color='red', alpha=1.,
                  symbol='disc', radius_min=5., radius_max=10., edge_width=0.,
-                 edge_color='black', system='mni', mask=None, mask_color='red',
-                 text=None, text_size=3., text_color='black', text_bold=False,
+                 edge_color='black', system='mni', mask=None,
+                 mask_color='gray', text=None, text_size=3.,
+                 text_color='black', text_bold=False,
                  text_translate=(0., 2., 0.), visible=True, transform=None,
-                 parent=None, verbose=None, _z=-10., **kwargs):
+                 parent=None, verbose=None, _z=-10., **kw):
         """Init."""
-        # Init Visbrain object base class and SourceProjection :
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
-        SourceProjection.__init__(self, **kwargs)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         # _______________________ CHECKING _______________________
         # XYZ :
         sh = xyz.shape

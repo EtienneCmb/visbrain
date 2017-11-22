@@ -45,6 +45,9 @@ class TimeSeriesObj(VisbrainObject):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -63,10 +66,10 @@ class TimeSeriesObj(VisbrainObject):
     def __init__(self, name, data, xyz, select=None, line_width=1.5,
                  color='white', amplitude=6., width=20., alpha=1.,
                  antialias=False, translate=(0., 0., 1.), transform=None,
-                 parent=None, verbose=None, _z=-10.):
+                 parent=None, verbose=None, _z=-10., **kw):
         """Init."""
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         # _______________________ CHECKING _______________________
         # Data :
         assert isinstance(data, np.ndarray) and data.ndim == 2
