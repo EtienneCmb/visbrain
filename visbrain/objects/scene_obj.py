@@ -7,7 +7,7 @@ from vispy import scene
 from ..io import write_fig_canvas
 from ..utils import color2vb, set_log_level, rotate_turntable
 from ..visuals import CbarVisual
-from ..config import VISPY_APP, PROFILER
+from ..config import CONFIG, PROFILER
 
 logger = logging.getLogger('visbrain')
 
@@ -83,8 +83,8 @@ class VisbrainCanvas(object):
 
         # ########################## MAIN CANVAS ##########################
         self.canvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
-                                        show=show, title=name, app=VISPY_APP,
-                                        **cargs)
+                                        show=show, title=name,
+                                        app=CONFIG['VISPY_APP'], **cargs)
 
         # ########################## AXIS ##########################
         if axis:  # add axis to canvas
@@ -358,7 +358,8 @@ class SceneObj(object):
         logger.info("Scene creation")
         PROFILER('Scene creation')
         self._canvas = scene.SceneCanvas(keys='interactive', show=show,
-                                         title='Object scene', app=VISPY_APP,
+                                         title='Object scene',
+                                         app=CONFIG['VISPY_APP'],
                                          bgcolor=color2vb(bgcolor), **kwargs)
         self._grid = self._canvas.central_widget.add_grid(margin=10)
         _rpad = self._grid.add_widget(row=0, col=0, row_span=1)

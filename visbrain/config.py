@@ -26,11 +26,18 @@ PROFILER = Profiler()
 PYQT_APP = QtWidgets.QApplication.instance()
 if PYQT_APP is None:
     PYQT_APP = QtWidgets.QApplication([''])
+CONFIG['PYQT_APP'] = PYQT_APP
 CONFIG['SHOW_PYQT_APP'] = True
 
 """VisPy application
 """
-VISPY_APP = visapp.application.Application()
+CONFIG['VISPY_APP'] = visapp.application.Application()
+
+
+def use_app(backend_name):
+    """Use a specific backend."""
+    CONFIG['VISPY_APP'] = visapp.application.Application(backend_name)
+
 
 """Input command line arguments
 """

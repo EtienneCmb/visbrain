@@ -397,7 +397,7 @@ class RoiObj(_Volume):
                         contribute=False, cmap='viridis', clim=None, vmin=None,
                         under='black', vmax=None, over='red',
                         mask_color=None):
-        """Project source's activity or repartition onto the brain object.
+        """Project source's activity or repartition onto ROI.
 
         Parameters
         ----------
