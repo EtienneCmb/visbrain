@@ -8,24 +8,20 @@ attach some data to sources and project this activity onto the surface
 (cortical projection). Alternatively, you can run the cortical repartition
 which is defined as the number of contributing sources per vertex.
 
-Download source's coordinates (xyz_sample.npz) :
-https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
-
 .. image:: ../../picture/picbrain/ex_sources.png
 """
 import numpy as np
 
 from visbrain import Brain
 from visbrain.objects import SourceObj
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.io import download_file
 
 kwargs = {}
 
 """
 Load the xyz coordinates and corresponding subject name
 """
-download_file('xyz_sample.npz')
-mat = np.load(path_to_visbrain_data('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz'))
 xyz, subjects = mat['xyz'], mat['subjects']
 
 """
@@ -60,27 +56,6 @@ kwargs['mask'] = mask
 kwargs['mask_color'] = 'orange'
 
 """
-After defining sources, it's possible to run the cortical projection and/or the
-cortical repartition. The lines bellow are used to control the colormap when
-opening the interface.
-Run the projection from the menu Project/Run projection, from the source's tab
-or using the shortcut CTRL + P (for projection) or CTRL + R (repartition)
-
-Use CTRL + D to hide/display the quick-settings panel, the shortcut C to
-display the colorbar.
-"""
-kw_proj = dict(project_radius=12.,
-               project_contribute=True,
-               project_mask_color='orange',
-               project_cmap='viridis',
-               project_clim=(kwargs['data'].min(), kwargs['data'].max()),
-               project_vmin=20,
-               project_vmax=500,
-               project_under='gray',
-               project_over='red'
-               )
-
-"""
 It's also possible to add text to each source. Here, we show the name of the
 subject in yellow.
 To avoid a superposition between the text and sources sphere, we introduce an
@@ -99,5 +74,5 @@ s_obj = SourceObj('SourceExample', xyz, **kwargs)
 # s_obj.preview()
 
 # Pass all arguments in the dictionnary :
-vb = Brain(source_obj=s_obj, brain_template='B3', **kw_proj)
+vb = Brain(source_obj=s_obj, brain_template='B3')
 vb.show()
