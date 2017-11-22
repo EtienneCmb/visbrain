@@ -1,16 +1,20 @@
 """Base class for objects of type ROI."""
+import logging
 import numpy as np
 
 from vispy import scene
 from vispy.geometry.isosurface import isosurface
 
-from .visbrain_obj import VisbrainObject, CombineObjects
+from .visbrain_obj import CombineObjects
+from .volume_obj import _Volume
 from ..io import is_pandas_installed
-from ..utils import load_predefined_roi, mni2tal, smooth_3d
+from ..utils import mni2tal, smooth_3d
 from ..visuals import BrainMesh
 
+logger = logging.getLogger('visbrain')
 
-class RoiObj(VisbrainObject):
+
+class RoiObj(_Volume):
     """Create a Region Of Interest (ROI) object.
 
     Parameters
@@ -60,11 +64,11 @@ class RoiObj(VisbrainObject):
 
     def __init__(self, name, vol=None, label=None, index=None, hdr=None,
                  system='mni', transform=None, parent=None, verbose=None,
-                 **kw):
+                 preload=True, **kw):
         """Init."""
-        # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
-        self.change_roi_object(name, vol, label, index, hdr, system)
+        _Volume.__init__(self, name, parent, transform, verbose, **kw)
+        if preload and (name in self._predefined_volumes()):
+            self.set_data(name, vol, label, index, hdr, system)
 
     def __len__(self):
         """Return the number of ROI."""
@@ -99,8 +103,8 @@ class RoiObj(VisbrainObject):
         sh = self.vol.shape
         return (sh[0] < idx[0]) and (sh[1] < idx[1]) and (sh[2] < idx[2])
 
-    def change_roi_object(self, name, vol=None, label=None, index=None,
-                          hdr=None, system='mni'):
+    def set_data(self, name, vol=None, label=None, index=None, hdr=None,
+                 system='mni'):
         """Load an roi object.
 
         Parameters
@@ -132,7 +136,7 @@ class RoiObj(VisbrainObject):
         import pandas as pd
         # _______________________ PREDEFINED _______________________
         if name in ['brodmann', 'talairach', 'aal']:
-            vol, label, index, hdr, system = load_predefined_roi(name)
+            vol, label, index, hdr, system = self(name)
         self._offset = -1 if name == 'talairach' else 0
 
         # _______________________ CHECKING _______________________
@@ -157,6 +161,8 @@ class RoiObj(VisbrainObject):
         cols = list(label_dict.keys())
         self.ref = pd.DataFrame(label_dict, columns=cols)
         self.analysis = pd.DataFrame({}, columns=cols)
+
+        logger.info("%s ROI loaded." % name)
 
     ###########################################################################
     ###########################################################################

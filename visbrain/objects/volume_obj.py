@@ -62,11 +62,15 @@ VOLUME_CMAPS = {'TransFire': TransFire(), 'OpaqueFire': OpaqueFire(),
 KNOWN_METHODS = ['mip', 'translucent', 'additive', 'iso']
 
 
-class _Volume(object):
+class _Volume(VisbrainObject):
     """Manage loaded volumes.
 
     Use : _Volume('aal')
     """
+
+    def __init__(self, name, parent, transform, verbose, **kw):
+        """Init."""
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
 
     def __call__(self, name):
         """Load a predefined volume."""
@@ -97,7 +101,7 @@ class _Volume(object):
         self._name = value
 
 
-class VolumeObj(VisbrainObject, _Volume):
+class VolumeObj(_Volume):
     """Create a 3-D volume object.
 
     Parameters
@@ -145,8 +149,7 @@ class VolumeObj(VisbrainObject, _Volume):
             name = os.path.split(name)[1]
             logger.info('Loading %s' % name)
 
-        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
-        _Volume.__init__(self)
+        _Volume.__init__(self, name, parent, transform, verbose, **kw)
 
         # _______________________ CHECKING _______________________
         # Create 3-D volume :
