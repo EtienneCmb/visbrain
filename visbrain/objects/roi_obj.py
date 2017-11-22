@@ -87,9 +87,10 @@ class RoiObj(_Volume):
 
     def __init__(self, name, vol=None, label=None, index=None, hdr=None,
                  system='mni', transform=None, parent=None, verbose=None,
-                 preload=True, **kw):
+                 preload=True, _scale=1., **kw):
         """Init."""
         _Volume.__init__(self, name, parent, transform, verbose, **kw)
+        self._scale = _scale
         if preload and (name in self._predefined_volumes()):
             self.set_data(name, vol, label, index, hdr, system)
 
@@ -380,8 +381,8 @@ class RoiObj(_Volume):
                            "before to control the ROI to display.")
             self.select_roi()
         self.mesh.set_camera(scene.cameras.TurntableCamera())
-        sc = self.mesh._opt_cam_state['scale_factor'][1]
-        center = self.mesh._opt_cam_state['center']
+        sc = self.mesh._opt_cam_state['scale_factor'][-1] * self._scale
+        center = self.mesh._opt_cam_state['center'] * self._scale
         self.mesh._camera.scale_factor = sc
         self.mesh._camera.distance = 4 * sc
         self.mesh._camera.center = center
