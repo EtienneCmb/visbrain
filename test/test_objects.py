@@ -7,7 +7,7 @@ from visbrain.objects.visbrain_obj import VisbrainObject, CombineObjects
 from visbrain.objects.scene_obj import VisbrainCanvas, SceneObj
 from visbrain.objects.source_obj import SourceObj, CombineSources
 from visbrain.objects.connect_obj import ConnectObj, CombineConnect
-from visbrain.objects.picture_obj import PictureObj, CombinePictures
+from visbrain.objects.picture_obj import Picture3DObj, CombinePictures
 from visbrain.objects.ts_obj import TimeSeriesObj, CombineTimeSeries
 from visbrain.objects.vector_obj import VectorObj, CombineVectors
 from visbrain.objects.brain_obj import BrainObj
@@ -91,7 +91,7 @@ pic_data = 100 * np.random.rand(n_sources, 10, 20)
 pic_xyz = np.random.uniform(-20, 20, (n_sources, 3))
 pic_select = np.random.randint(0, n_sources, (int(n_sources / 2),))
 
-p_obj = PictureObj('P1', pic_data, pic_xyz, select=pic_select, width=8.,
+p_obj = Picture3DObj('P1', pic_data, pic_xyz, select=pic_select, width=8.,
                    height=5., alpha=.7, cmap='inferno', clim=(1., 90.),
                    vmin=5.1, vmax=84.1, under='orange', over='blue')
 
@@ -482,12 +482,12 @@ class TestCombineConnect(ObjectMethods):
 ###############################################################################
 
 
-class TestPictureObj(ObjectMethods):
+class TestPicture3DObj(ObjectMethods):
     """Test picture object."""
 
     def test_definition(self):
         """Test function definition."""
-        PictureObj('P1', pic_data, pic_xyz, select=pic_select)
+        Picture3DObj('P1', pic_data, pic_xyz, select=pic_select)
 
     def test_preview(self):
         """Test function preview."""

@@ -11,7 +11,7 @@ from vispy.app.canvas import MouseEvent, KeyEvent
 # from vispy.util.keys import Key
 
 from visbrain import Brain
-from visbrain.objects import SourceObj, ConnectObj, TimeSeriesObj, PictureObj
+from visbrain.objects import SourceObj, ConnectObj, TimeSeriesObj, Picture3DObj
 from visbrain.io import download_file
 
 
@@ -60,8 +60,8 @@ ts_obj2 = TimeSeriesObj('TS2', ts_data, xyz_2, select=ts_select)
 # ---------------- Pictures ----------------
 pic_data = 100. * np.random.rand(10, 20, 17)
 
-p_obj1 = PictureObj('P1', pic_data, xyz_1)
-p_obj2 = PictureObj('P2', 2 * pic_data, xyz_2)
+p_obj1 = Picture3DObj('P1', pic_data, xyz_1)
+p_obj2 = Picture3DObj('P2', 2 * pic_data, xyz_2)
 
 # ---------------- Application  ----------------
 vb = Brain(source_obj=[s_obj1, s_obj2], connect_obj=[c_obj, c_obj2],
