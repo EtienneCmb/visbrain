@@ -33,7 +33,6 @@ from visbrain.io import download_file, read_stc
 print("-> Create a scene. By default, we fix the top view of the camera")
 CAM_STATE = dict(azimuth=0,        # azimuth angle
                  elevation=90,     # elevation angle
-                 scale_factor=180  # ~distance to the camera
                  )
 CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.1, cbtxtsh=3.)
 CBAR_CAM = dict(rect=(-.3, -2., 1., 4.))
