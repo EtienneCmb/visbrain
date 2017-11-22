@@ -6,7 +6,8 @@ import logging
 from vispy import scene
 
 from .visbrain_obj import VisbrainObject
-from ..visuals import BrainMesh, CbarArgs
+from ._projection import _project_sources_data
+from ..visuals import BrainMesh
 from ..utils import (get_data_path, mesh_edges, smoothing_matrix,
                      array2colormap, rotate_turntable)
 from ..io import download_file, is_nibabel_installed, is_pandas_installed
@@ -14,7 +15,7 @@ from ..io import download_file, is_nibabel_installed, is_pandas_installed
 logger = logging.getLogger('visbrain')
 
 
-class BrainObj(VisbrainObject, CbarArgs):
+class BrainObj(VisbrainObject):
     """Create a brain object.
 
     Parameters
@@ -47,6 +48,9 @@ class BrainObj(VisbrainObject, CbarArgs):
         Brain object parent.
     verbose : string
         Verbosity level.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -64,11 +68,10 @@ class BrainObj(VisbrainObject, CbarArgs):
     def __init__(self, name, vertices=None, faces=None, normals=None,
                  lr_index=None, hemisphere='both', translucent=True,
                  invert_normals=False, transform=None, parent=None,
-                 verbose=None, _scale=1.):
+                 verbose=None, _scale=1., **kw):
         """Init."""
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
-        CbarArgs.__init__(self)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         # Load brain template :
         self._scale = _scale
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere,
@@ -237,6 +240,51 @@ class BrainObj(VisbrainObject, CbarArgs):
         rotate_turntable(fixed, cam_state, camera=self.camera, xyz=xyz,
                          csize=self._csize, margin=margin, _scale=self._scale)
 
+    ###########################################################################
+    ###########################################################################
+    #                             PROJECTIONS
+    ###########################################################################
+    ###########################################################################
+
+    def project_sources(self, s_obj, project='modulation', radius=10.,
+                        contribute=False, cmap='viridis', clim=None, vmin=None,
+                        under='black', vmax=None, over='red',
+                        mask_color=None):
+        """Project source's activity or repartition onto the brain object.
+
+        Parameters
+        ----------
+        s_obj : SourceObj
+            The source object to project.
+        project : {'modulation', 'repartition'}
+            Project either the source's data ('modulation') or get the number
+            of contributing sources per vertex ('repartition').
+        radius : float
+            The radius under which activity is projected on vertices.
+        contribute: bool | False
+            Specify if sources contribute on both hemisphere.
+        cmap : string | 'viridis'
+            The colormap to use.
+        clim : tuple | None
+            The colorbar limits. If None, (data.min(), data.max()) will be used
+            instead.
+        vmin : float | None
+            Minimum threshold.
+        vmax : float | None
+            Maximum threshold.
+        under : string/tuple/array_like | 'gray'
+            The color to use for values under vmin.
+        over : string/tuple/array_like | 'red'
+            The color to use for values over vmax.
+        mask_color : string/tuple/array_like | 'gray'
+            The color to use for the projection of masked sources. If None,
+            the color of the masked sources is going to be used.
+        """
+        kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        self._default_cblabel = "Source's %s" % project
+        _project_sources_data(s_obj, self, project, radius, contribute,
+                              mask_color=mask_color, **kw)
+
     def add_activation(self, data=None, vertices=None, smoothing_steps=20,
                        file=None, hemisphere=None, hide_under=None,
                        n_contours=None, cmap='viridis', clim=None, vmin=None,
@@ -284,6 +332,7 @@ class BrainObj(VisbrainObject, CbarArgs):
         is_under = isinstance(hide_under, (int, float))
         color = np.zeros((len(self.mesh), 4), dtype=np.float32)
         mask = np.zeros((len(self.mesh),), dtype=float)
+        self._default_cblabel = "Activation"
         # ============================= METHOD =============================
         if isinstance(data, np.ndarray) and isinstance(vertices, np.ndarray):
             logger.info("Add data to secific vertices.")
@@ -394,6 +443,7 @@ class BrainObj(VisbrainObject, CbarArgs):
             u_colors = np.zeros((len(u_idx), 4), dtype=float)
             kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
             data_color = array2colormap(data, **kw)
+            self._default_cblabel = "Parcellate's data"
         else:
             logger.info("Use default color included in the file")
             u_colors = u_colors.astype(float) / 255.
@@ -516,6 +566,22 @@ class BrainObj(VisbrainObject, CbarArgs):
             names = names[0:min_len]
             u_idx = u_idx[0:min_len]
         return id_vert, color, names, u_idx
+
+    ###########################################################################
+    ###########################################################################
+    #                               CBAR
+    ###########################################################################
+    ###########################################################################
+
+    def _update_cbar(self):
+        if isinstance(self._cbar_data, np.ndarray):
+            color = array2colormap(self._cbar_data, **self.to_kwargs())
+            self.mesh.color = color
+        # else:
+        #     logger.error("No data to update for %s" % self.name)
+
+    def _update_cbar_minmax(self):
+        pass
 
     ###########################################################################
     ###########################################################################
