@@ -59,6 +59,15 @@ class CbarArgs(object):
             kwargs['isvmin'], kwargs['isvmax'] = self._isvmin, self._isvmax
         return kwargs
 
+    def _update_cbar_args(self, cmap, clim, vmin, vmax, under, over):
+        """Update colorbar elements."""
+        kw = dict(clim=clim, cmap=cmap, vmin=vmin, vmax=vmax, under=under,
+                  over=over)
+        self._isvmax = isinstance(vmax, (int, float))
+        self._isvmin = isinstance(vmin, (int, float))
+        self.update_from_dict(kw)
+        return kw
+
     def update_from_dict(self, kwargs):
         """Update attributes from a dictionary."""
         for k, i in kwargs.items():
