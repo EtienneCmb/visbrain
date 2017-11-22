@@ -351,13 +351,13 @@ class SceneObj(object):
         Verbosity level.
     """
 
-    def __init__(self, bgcolor='black', show=True, camera_state={},
-                 verbose=None, **kwargs):
+    def __init__(self, bgcolor='black', camera_state={}, verbose=None,
+                 **kwargs):
         """Init."""
         set_log_level(verbose)
         logger.info("Scene creation")
         PROFILER('Scene creation')
-        self._canvas = scene.SceneCanvas(keys='interactive', show=show,
+        self._canvas = scene.SceneCanvas(keys='interactive', show=False,
                                          title='Object scene',
                                          app=CONFIG['VISPY_APP'],
                                          bgcolor=color2vb(bgcolor), **kwargs)
@@ -525,9 +525,10 @@ class SceneObj(object):
 
     def preview(self):
         """Previsualize the result."""
+        self._canvas.show(visible=True)
         if PROFILER and logger.level == 1:
             logger.profiler("PARENT TREE \n%s" % self._grid.describe_tree())
             logger.profiler(" ")
             PROFILER.finish()
         if sys.flags.interactive != 1:
-            VISPY_APP.run()
+            CONFIG['VISPY_APP'].run()
