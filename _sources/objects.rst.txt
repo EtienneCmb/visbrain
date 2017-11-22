@@ -3,7 +3,25 @@
 Objects
 =======
 
-Visbrain's objects are small pieces that can be used to accomplish basic visualizations or can be pass to other Visbrain modules (like :ref:`BrainModule`). Each object inherit to the following methods :
+Visbrain's objects are small pieces that can be used to accomplish basic visualizations or can be pass to other Visbrain modules (like :ref:`BrainModule`).
+
+Here's the list of currently supported modules :
+
+* :ref:`SceneObj`
+* :ref:`BrainObj`
+* :ref:`ColorbarObj`
+* :ref:`SourceObj`
+* :ref:`ConnectObj`
+* :ref:`VectorObj`
+* :ref:`TSObj`
+* :ref:`PicObj`
+* :ref:`RoiObj`
+* :ref:`VolumeObj`
+* :ref:`ImageObj`
+* :ref:`TFObj`
+* :ref:`SpecObj`
+
+Each object inherit to the following methods :
 
 .. currentmodule:: visbrain.objects
 
@@ -16,19 +34,26 @@ Visbrain's objects are small pieces that can be used to accomplish basic visuali
 .. automethod:: VisbrainObject.preview
 .. automethod:: VisbrainObject.screenshot
 
-Here's the list of currently supported modules :
+.. _SceneObj:
 
-* :ref:`BrainObj`
-* :ref:`SourceObj`
-* :ref:`ConnectObj`
-* :ref:`VectorObj`
-* :ref:`TSObj`
-* :ref:`PicObj`
-* :ref:`RoiObj`
-* :ref:`VolumeObj`
-* :ref:`ImageObj`
-* :ref:`TFObj`
-* :ref:`SpecObj`
+Scene object
+------------
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: SceneObj
+  :members: add_to_subplot, link
+
+    .. rubric:: Methods
+
+    .. autosummary::
+        ~SceneObj.add_to_subplot
+        ~SceneObj.link
+
+.. include:: generated/visbrain.objects.SceneObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 .. _BrainObj:
 
@@ -43,19 +68,37 @@ Brain object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: BrainObj
-  :members: set_data, set_state, rotate, add_activation, get_parcellates, parcellize
+  :members: set_data, rotate, add_activation, get_parcellates, parcellize
 
     .. rubric:: Methods
 
     .. autosummary::
         ~BrainObj.set_data
-        ~BrainObj.set_state
         ~BrainObj.rotate
         ~BrainObj.add_activation
         ~BrainObj.get_parcellates
         ~BrainObj.parcellize
 
 .. include:: generated/visbrain.objects.BrainObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+.. _ColorbarObj:
+
+Colorbar object
+---------------
+
+.. figure::  picture/picobjects/pic_cbar_obj.png
+   :align:   center
+
+   Colorbar object example
+
+.. currentmodule:: visbrain.objects
+
+.. autoclass:: ColorbarObj
+
+.. include:: generated/visbrain.objects.ColorbarObj.examples
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -231,6 +274,10 @@ Image object
     .. autosummary::
         ~ImageObj.set_data
 
+.. include:: generated/visbrain.objects.ImageObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 
 .. _TFObj:
@@ -253,6 +300,11 @@ Time-frequency map object
     .. autosummary::
         ~TimeFrequencyMapObj.set_data
 
+.. include:: generated/visbrain.objects.TimeFrequencyMapObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
+
 
 .. _SpecObj:
 
@@ -273,3 +325,8 @@ Spectrogram object
 
     .. autosummary::
         ~SpectrogramObj.set_data
+
+.. include:: generated/visbrain.objects.SpectrogramObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>

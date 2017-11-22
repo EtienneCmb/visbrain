@@ -127,6 +127,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#objects-examples">Objects examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#pysurfer-examples">Pysurfer Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#signal-examples">Signal Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
@@ -239,8 +240,12 @@
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Create a first source object with uniform red square markers</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">s_obj_l</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">(</span><span class="s1">&#39;S_left&#39;</span><span class="p">,</span> <span class="n">s_xyz_l</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_l</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
-                    <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+                    <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
                     <span class="n">radius_min</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Color the sources according to data</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">s_obj_l</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data_l</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;Create a second source object. Then, we analyse where are located the</span>
 <span class="sd">sources using the AAL region of interest and used color according to gyrus</span>

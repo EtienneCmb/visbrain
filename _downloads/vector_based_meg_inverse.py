@@ -14,10 +14,15 @@ import numpy as np
 
 from visbrain import Brain
 from visbrain.objects import BrainObj, VectorObj
-from visbrain.io import path_to_visbrain_data, read_stc
+from visbrain.io import path_to_visbrain_data, read_stc, download_file
+
+"""Download file if needed
+"""
+file_name = 'meg_source_estimate-lh.stc'
+download_file(file_name)
 
 # Read the *.stc file :
-file = read_stc(path_to_visbrain_data(file='meg_source_estimate-lh.stc'))
+file = read_stc(path_to_visbrain_data(file=file_name))
 
 # Get the data and vertices from the file :
 data = file['data'][:, 2]

@@ -1,0 +1,757 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>visbrain.objects.scene_obj &mdash; visbrain 0.3.7 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>visbrain.objects.scene_obj</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for visbrain.objects.scene_obj</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Create a basic scene for objects.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
+
+<span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">set_log_level</span><span class="p">,</span> <span class="n">rotate_turntable</span>
+<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">CbarVisual</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">VISPY_APP</span><span class="p">,</span> <span class="n">PROFILER</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">VisbrainCanvas</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a canvas with an embeded axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    axis : bool | False</span>
+<span class="sd">        Add axis to canvas.</span>
+<span class="sd">    title : string | None</span>
+<span class="sd">        Title of the axis (only if axis=True).</span>
+<span class="sd">    xlabel : string | None</span>
+<span class="sd">        Label for the x-axis (only if axis=True).</span>
+<span class="sd">    ylabel : string | None</span>
+<span class="sd">        Label for the y-axis (only if axis=True).</span>
+<span class="sd">    title_font_size : float | 15.</span>
+<span class="sd">        Size of the title (only if axis=True).</span>
+<span class="sd">    axis_font_size : float | 12.</span>
+<span class="sd">        Size of x and y labels (only if axis=True).</span>
+<span class="sd">    axis_color : array_like/string/tuple | &#39;black&#39;</span>
+<span class="sd">        Label, title, axis and border color (only if axis=True).</span>
+<span class="sd">    tick_font_size : float | 10.</span>
+<span class="sd">        Size of ticks for the x and y-axis (only if axis=True).</span>
+<span class="sd">    name : string | None</span>
+<span class="sd">        Canvas name.</span>
+<span class="sd">    x_height_max : float | 80</span>
+<span class="sd">        Height max of the x-axis.</span>
+<span class="sd">    y_width_max : float | 80</span>
+<span class="sd">        Width max of the y-axis.</span>
+<span class="sd">    axis_label_margin : float | 50</span>
+<span class="sd">        Margin between axis and label.</span>
+<span class="sd">    tick_label_margin : float | 5</span>
+<span class="sd">        Margin between ticks and label.</span>
+<span class="sd">    rpad : float | 20.</span>
+<span class="sd">        Right padding (space between the right border of the axis and the end</span>
+<span class="sd">        of the canvas).</span>
+<span class="sd">    bgcolor : array_like/tuple/string | &#39;black&#39;</span>
+<span class="sd">        Background color of the canvas.</span>
+<span class="sd">    cargs : dict | {}</span>
+<span class="sd">        Further arguments to pass to the SceneCanvas class.</span>
+<span class="sd">    xargs : dict | {}</span>
+<span class="sd">        Further arguments to pass to the AxisWidget (x-axis).</span>
+<span class="sd">    yargs : dict | {}</span>
+<span class="sd">        Further arguments to pass to the AxisWidget (y-axis).</span>
+<span class="sd">    show : bool | False</span>
+<span class="sd">        Show the canvas.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">title_font_size</span><span class="o">=</span><span class="mf">15.</span><span class="p">,</span> <span class="n">axis_font_size</span><span class="o">=</span><span class="mf">12.</span><span class="p">,</span> <span class="n">axis_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                 <span class="n">tick_font_size</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_height_max</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                 <span class="n">y_width_max</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">axis_label_margin</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">tick_label_margin</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                 <span class="n">rpad</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">add_cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">xargs</span><span class="o">=</span><span class="p">{},</span>
+                 <span class="n">yargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">cbargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">camera</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span> <span class="o">=</span> <span class="n">axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xlabel</span> <span class="o">=</span> <span class="n">xlabel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ylabel</span> <span class="o">=</span> <span class="n">ylabel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_title_font_size</span> <span class="o">=</span> <span class="n">title_font_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_font_size</span> <span class="o">=</span> <span class="n">axis_font_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_color</span> <span class="o">=</span> <span class="n">axis_color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tick_font_size</span> <span class="o">=</span> <span class="n">tick_font_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x_height_max</span> <span class="o">=</span> <span class="n">x_height_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y_width_max</span> <span class="o">=</span> <span class="n">y_width_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_label_margin</span> <span class="o">=</span> <span class="n">axis_label_margin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tick_label_margin</span> <span class="o">=</span> <span class="n">tick_label_margin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bgcolor</span> <span class="o">=</span> <span class="n">bgcolor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_visible</span> <span class="o">=</span> <span class="n">show</span>
+
+        <span class="c1"># ########################## MAIN CANVAS ##########################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">SceneCanvas</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="s1">&#39;interactive&#39;</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span>
+                                        <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">VISPY_APP</span><span class="p">,</span>
+                                        <span class="o">**</span><span class="n">cargs</span><span class="p">)</span>
+
+        <span class="c1"># ########################## AXIS ##########################</span>
+        <span class="k">if</span> <span class="n">axis</span><span class="p">:</span>  <span class="c1"># add axis to canvas</span>
+            <span class="c1"># ----------- GRID -----------</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="o">.</span><span class="n">add_grid</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># ----------- COLOR -----------</span>
+            <span class="n">axcol</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">axis_color</span><span class="p">)</span>
+            <span class="n">kw</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;axis_label_margin&#39;</span><span class="p">:</span> <span class="n">axis_label_margin</span><span class="p">,</span>
+                  <span class="s1">&#39;tick_label_margin&#39;</span><span class="p">:</span> <span class="n">tick_label_margin</span><span class="p">,</span>
+                  <span class="s1">&#39;axis_font_size&#39;</span><span class="p">:</span> <span class="n">axis_font_size</span><span class="p">,</span> <span class="s1">&#39;axis_color&#39;</span><span class="p">:</span> <span class="n">axcol</span><span class="p">,</span>
+                  <span class="s1">&#39;tick_color&#39;</span><span class="p">:</span> <span class="n">axcol</span><span class="p">,</span> <span class="s1">&#39;text_color&#39;</span><span class="p">:</span> <span class="n">axcol</span><span class="p">,</span>
+                  <span class="s1">&#39;tick_font_size&#39;</span><span class="p">:</span> <span class="n">tick_font_size</span><span class="p">}</span>
+
+            <span class="c1"># ----------- TITLE -----------</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_titleObj</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">axcol</span><span class="p">,</span>
+                                         <span class="n">font_size</span><span class="o">=</span><span class="n">title_font_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_titleObj</span><span class="o">.</span><span class="n">height_max</span> <span class="o">=</span> <span class="mi">40</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_titleObj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col_span</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># ----------- Y-AXIS -----------</span>
+            <span class="n">yargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">AxisWidget</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">129</span><span class="p">),</span>
+                                          <span class="n">axis_label</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="o">**</span><span class="n">yargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">width_max</span> <span class="o">=</span> <span class="n">y_width_max</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># ----------- X-AXIS -----------</span>
+            <span class="n">xargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">AxisWidget</span><span class="p">(</span><span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span>
+                                          <span class="n">axis_label</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="o">**</span><span class="n">xargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">height_max</span> <span class="o">=</span> <span class="n">x_height_max</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># ----------- MAIN -----------</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wc</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">add_view</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span>
+
+            <span class="c1"># ----------- LINK -----------</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">link_view</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">link_view</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
+
+            <span class="c1"># ----------- CBAR -----------</span>
+            <span class="n">rpad_col</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">add_cbar</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wc_cbar</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">add_view</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wc_cbar</span><span class="o">.</span><span class="n">width_max</span> <span class="o">=</span> <span class="mf">150.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cbar</span> <span class="o">=</span> <span class="n">CbarVisual</span><span class="p">(</span><span class="n">width</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wc_cbar</span><span class="o">.</span><span class="n">scene</span><span class="p">)</span>
+                <span class="n">rpad_col</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># ----------- RIGHT PADDING -----------</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rpad</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span> <span class="o">+</span> <span class="n">rpad_col</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rpad</span><span class="o">.</span><span class="n">width_max</span> <span class="o">=</span> <span class="n">rpad</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Ignore axis</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="o">.</span><span class="n">add_view</span><span class="p">(</span><span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return if there&#39;s an axis attached to the canvas.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update canvas.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_update_subvisuals</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_update_subvisuals</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">set_default_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the default state of the camera.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">set_default_state</span><span class="p">()</span>
+
+    <span class="c1"># ----------- PARENT -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the parent value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">scene</span>
+
+    <span class="c1"># ----------- VISIBLE -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">visible</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the visible value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visible</span>
+
+    <span class="nd">@visible</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set visible value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visible</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">show</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="c1"># ----------- VISIBLE_AXIS -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">axis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the axis value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span>
+
+    <span class="nd">@axis</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set axis value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_titleObj</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rpad</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visible_axis</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_axis</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- XLABEL -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">xlabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the xlabel value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xlabel</span>
+
+    <span class="nd">@xlabel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">xlabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set xlabel value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">axis_label</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_update_subvisuals</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xlabel</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- YLABEL -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ylabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the ylabel value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ylabel</span>
+
+    <span class="nd">@ylabel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">ylabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set ylabel value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">axis_label</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_update_subvisuals</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ylabel</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- TITLE -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the title value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_title</span>
+
+    <span class="nd">@title</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set title value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_titleObj</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_titleObj</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_title</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- CAMERA -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the camera value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span>
+
+    <span class="nd">@camera</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set camera value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="c1"># Set camera to the main widget :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="c1"># Link transformations with axis :</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">link_view</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">link_view</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wc</span><span class="p">)</span>
+
+    <span class="c1"># ----------- AXIS_COLOR -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">axis_color</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the axis_color value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis_color</span>
+
+    <span class="nd">@axis_color</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">axis_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set axis_color value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_color</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="c1"># Title :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_titleObj</span><span class="o">.</span><span class="n">_text_visual</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">col</span>
+            <span class="c1"># X-axis :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">axis_color</span> <span class="o">=</span> <span class="n">col</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">tick_color</span> <span class="o">=</span> <span class="n">col</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">col</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_axis_label</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">col</span>
+            <span class="c1"># Y-axis :</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">axis_color</span> <span class="o">=</span> <span class="n">col</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">tick_color</span> <span class="o">=</span> <span class="n">col</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">col</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_axis_label</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">col</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="c1"># ----------- TITLE_FONT_SIZE -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">title_font_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the title_font_size value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_title_font_size</span>
+
+    <span class="nd">@title_font_size</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">title_font_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set title_font_size value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_titleObj</span><span class="o">.</span><span class="n">_text_visual</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_title_font_size</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- LABEL_FONT_SIZE -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">axis_font_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the axis_font_size value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis_font_size</span>
+
+    <span class="nd">@axis_font_size</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">axis_font_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set axis_font_size value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_axis_label</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_axis_label</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_axis_font_size</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- AXIS_FONT_SIZE -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tick_font_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the tick_font_size value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tick_font_size</span>
+
+    <span class="nd">@tick_font_size</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">tick_font_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set tick_font_size value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tick_font_size</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- BGCOLOR -----------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bgcolor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the bgcolor value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bgcolor</span>
+
+    <span class="nd">@bgcolor</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">bgcolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set bgcolor value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bgcolor</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SceneObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SceneObj">[docs]</a><span class="k">class</span> <span class="nc">SceneObj</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a scene and add objects to it.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bgcolor : string | &#39;black&#39;</span>
+<span class="sd">        Background color of the scene.</span>
+<span class="sd">    show : bool | True</span>
+<span class="sd">        Display the canvas.</span>
+<span class="sd">    camera_state : dict | {}</span>
+<span class="sd">        The default camera state to use.</span>
+<span class="sd">    verbose : string</span>
+<span class="sd">        Verbosity level.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">camera_state</span><span class="o">=</span><span class="p">{},</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="n">set_log_level</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Scene creation&quot;</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s1">&#39;Scene creation&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">SceneCanvas</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="s1">&#39;interactive&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
+                                         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Object scene&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">VISPY_APP</span><span class="p">,</span>
+                                         <span class="n">bgcolor</span><span class="o">=</span><span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="o">.</span><span class="n">add_grid</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">_rpad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">_rpad</span><span class="o">.</span><span class="n">width_max</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="n">_rpad</span><span class="o">.</span><span class="n">height_max</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_desc</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_state</span> <span class="o">=</span> <span class="n">camera_state</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rowcol</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get an element of the grid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rowcol : tuple</span>
+<span class="sd">            Tuple of two integers to get the subplot of the grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rowcol</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[(</span><span class="n">rowcol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rowcol</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+
+<div class="viewcode-block" id="SceneObj.add_to_subplot"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SceneObj.add_to_subplot">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_subplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col_span</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                       <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">title_bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">rotate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">camera_state</span><span class="o">=</span><span class="p">{},</span> <span class="n">width_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">height_max</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add object to subplot.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        obj : visbrain.object</span>
+<span class="sd">            The visbrain object to add.</span>
+<span class="sd">        row : int | 0</span>
+<span class="sd">            Row location for the object.</span>
+<span class="sd">        col : int | 0</span>
+<span class="sd">            Columns location for the object.</span>
+<span class="sd">        row_span : int | 1</span>
+<span class="sd">            Number of rows to use.</span>
+<span class="sd">        col_span : int | 1</span>
+<span class="sd">            Number of columns to use.</span>
+<span class="sd">        title : string | None</span>
+<span class="sd">            Subplot title.</span>
+<span class="sd">        title_color : string/tuple/array_like | &#39;white&#39;</span>
+<span class="sd">            Color of the title.</span>
+<span class="sd">        title_bold : bool | True</span>
+<span class="sd">            Use bold title.</span>
+<span class="sd">        rotate : string | None</span>
+<span class="sd">            Rotate the scene. Use &#39;top&#39;, &#39;bottom&#39;, &#39;left&#39;, &#39;right&#39;, &#39;front&#39; or</span>
+<span class="sd">            &#39;back&#39;. Only available for 3-D objects.</span>
+<span class="sd">        camera_state : dict | {}</span>
+<span class="sd">            Arguments to pass to the camera.</span>
+<span class="sd">        width_max : float | None</span>
+<span class="sd">            Maximum width of the subplot.</span>
+<span class="sd">        height_max : float | None</span>
+<span class="sd">            Maximum height of the subplot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_desc</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cam</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">cam</span> <span class="o">=</span> <span class="s1">&#39;turntable&#39;</span>
+            <span class="n">sub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">add_view</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                      <span class="n">row_span</span><span class="o">=</span><span class="n">row_span</span><span class="p">,</span> <span class="n">col_span</span><span class="o">=</span><span class="n">col_span</span><span class="p">,</span>
+                                      <span class="n">camera</span><span class="o">=</span><span class="n">cam</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_desc</span><span class="p">[(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sub</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)]</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">height_max</span> <span class="o">=</span> <span class="n">height_max</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">width_max</span> <span class="o">=</span> <span class="n">width_max</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">title_color</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">title_color</span><span class="p">)</span>
+            <span class="n">tit</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">title_color</span><span class="p">,</span> <span class="n">anchor_x</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                                     <span class="n">bold</span><span class="o">=</span><span class="n">title_bold</span><span class="p">)</span>
+            <span class="n">sub</span><span class="o">.</span><span class="n">add_subvisual</span><span class="p">(</span><span class="n">tit</span><span class="p">)</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">camera_state</span> <span class="o">==</span> <span class="p">{}:</span>
+            <span class="n">camera_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_state</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">TurntableCamera</span><span class="p">):</span>
+            <span class="n">rotate_turntable</span><span class="p">(</span><span class="n">fixed</span><span class="o">=</span><span class="n">rotate</span><span class="p">,</span> <span class="n">camera_state</span><span class="o">=</span><span class="n">camera_state</span><span class="p">,</span>
+                             <span class="n">camera</span><span class="o">=</span><span class="n">sub</span><span class="o">.</span><span class="n">camera</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> added to the scene&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> added to the scene&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SceneObj.link"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SceneObj.link">[docs]</a>    <span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Link the camera of several objects of the scene.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        args : list</span>
+<span class="sd">            List of tuple describing subplot locations. Alternatively, use `-1`</span>
+<span class="sd">            to link all cameras.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; # Link cameras of subplots (0, 0), (0, 1) and (1, 0)</span>
+<span class="sd">        &gt;&gt;&gt; sc.link((0, 0), (0, 1), (1, 0))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_desc</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">args</span><span class="p">])</span>
+        <span class="n">cam_obj_1</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">camera</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">::]:</span>
+            <span class="n">cam_obj_1</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span><span class="o">.</span><span class="n">camera</span><span class="p">)</span>
+        <span class="n">PROFILER</span><span class="p">(</span><span class="s1">&#39;Link cameras </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
+                   <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                   <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Take a screeshot of the scene.</span>
+
+<span class="sd">        By default, the rendered canvas will have the size of your screen.</span>
+<span class="sd">        The screenshot() method provides two ways to increase to exported image</span>
+<span class="sd">        resolution :</span>
+
+<span class="sd">            * Using print_size, unit and dpi inputs : specify the size of the</span>
+<span class="sd">              image at a specific dpi level. For example, you might want to</span>
+<span class="sd">              have an (10cm, 15cm) image at 300 dpi.</span>
+<span class="sd">            * Using the factor input : multiply the default image size by this</span>
+<span class="sd">              factor. For example, if you have a (1920, 1080) monitor and if</span>
+<span class="sd">              factor is 2, the exported image should have a shape of</span>
+<span class="sd">              (3840, 2160) pixels.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        saveas : str</span>
+<span class="sd">            The name of the file to be saved. This file must contains a</span>
+<span class="sd">            extension like .png, .tiff, .jpg...</span>
+<span class="sd">        print_size : tuple | None</span>
+<span class="sd">            The desired print size. This argument should be used in association</span>
+<span class="sd">            with the dpi and unit inputs. print_size describe should be a tuple</span>
+<span class="sd">            of two floats describing (width, height) of the exported image for</span>
+<span class="sd">            a specific dpi level. The final image might not have the exact</span>
+<span class="sd">            desired size but will try instead to find a compromize</span>
+<span class="sd">            regarding to the proportion of width/height of the original image.</span>
+<span class="sd">        dpi : float | 300.</span>
+<span class="sd">            Dots per inch for printing the image.</span>
+<span class="sd">        unit : {&#39;centimeter&#39;, &#39;millimeter&#39;, &#39;pixel&#39;, &#39;inch&#39;}</span>
+<span class="sd">            Unit of the printed size.</span>
+<span class="sd">        factor : float | None</span>
+<span class="sd">            If you don&#39;t want to use the print_size input, factor simply</span>
+<span class="sd">            multiply the resolution of your screen.</span>
+<span class="sd">        region : tuple | None</span>
+<span class="sd">            Select a specific region. Must be a tuple of four integers each one</span>
+<span class="sd">            describing (x_start, y_start, width, height).</span>
+<span class="sd">        autocrop : bool | False</span>
+<span class="sd">            Automaticaly crop the figure in order to have the smallest</span>
+<span class="sd">            space between the brain and the border of the picture.</span>
+<span class="sd">        bgcolor : array_like/string | None</span>
+<span class="sd">            The background color of the image.</span>
+<span class="sd">        transparent : bool | False</span>
+<span class="sd">            Specify if the exported figure have to contains a transparent</span>
+<span class="sd">            background.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">print_size</span><span class="o">=</span><span class="n">print_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="n">factor</span><span class="p">,</span>
+                      <span class="n">autocrop</span><span class="o">=</span><span class="n">autocrop</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
+                      <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="n">transparent</span><span class="p">)</span>
+        <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Previsualize the result.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">PROFILER</span> <span class="ow">and</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;PARENT TREE </span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">describe_tree</span><span class="p">())</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">profiler</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">PROFILER</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">interactive</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">VISPY_APP</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.3.7',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

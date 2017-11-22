@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#objects-examples">Objects examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#pysurfer-examples">Pysurfer Examples</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="conjunction_map.html">Display conjunction map</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Display fMRI activation</a></li>
@@ -191,9 +192,14 @@
 <img alt="../../_images/ex_pysurfer_fmri_activations.png" src="../../_images/ex_pysurfer_fmri_activations.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">path_to_visbrain_data</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">path_to_visbrain_data</span><span class="p">,</span> <span class="n">download_file</span>
 
-<span class="nb">file</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="s1">&#39;lh.sig.nii.gz&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Download file if needed</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">file_name</span> <span class="o">=</span> <span class="s1">&#39;lh.sig.nii.gz&#39;</span>
+<span class="n">download_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+<span class="nb">file</span> <span class="o">=</span> <span class="n">path_to_visbrain_data</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">file_name</span><span class="p">)</span>
+
 
 <span class="n">b_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">b_obj</span><span class="o">.</span><span class="n">add_activation</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">),</span> <span class="n">hide_under</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>

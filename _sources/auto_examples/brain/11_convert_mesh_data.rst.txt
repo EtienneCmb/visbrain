@@ -46,7 +46,7 @@ https://www.dropbox.com/s/phzptkbht4us33q/Custom.npz?dl=1
     # Add the template :
     add_brain_template('Custom', vertices, faces, normals)
 
-    vb = Brain(a_template='Custom')
+    vb = Brain(brain_template='Custom')
     vb.show()
 
     # If you want to remove the template :

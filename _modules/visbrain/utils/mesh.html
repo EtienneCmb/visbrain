@@ -168,6 +168,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="k">import</span> <span class="n">cdist</span>
 
 <span class="kn">from</span> <span class="nn">vispy.geometry</span> <span class="k">import</span> <span class="n">MeshData</span>
 <span class="kn">from</span> <span class="nn">vispy.geometry.isosurface</span> <span class="k">import</span> <span class="n">isosurface</span>
@@ -178,7 +179,7 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;vispy_array&#39;</span><span class="p">,</span> <span class="s1">&#39;convert_meshdata&#39;</span><span class="p">,</span> <span class="s1">&#39;volume_to_mesh&#39;</span><span class="p">,</span>
            <span class="s1">&#39;add_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_brain_template&#39;</span><span class="p">,</span> <span class="s1">&#39;smoothing_matrix&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;mesh_edges&#39;</span><span class="p">)</span>
+           <span class="s1">&#39;mesh_edges&#39;</span><span class="p">,</span> <span class="s1">&#39;laplacian_smoothing&#39;</span><span class="p">)</span>
 
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
@@ -440,6 +441,46 @@
     <span class="n">edges</span> <span class="o">=</span> <span class="n">edges</span> <span class="o">+</span> <span class="n">edges</span><span class="o">.</span><span class="n">T</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">edges</span><span class="o">.</span><span class="n">tocoo</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">edges</span>
+
+
+<span class="k">def</span> <span class="nf">laplacian_smoothing</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply a laplacian smoothing to vertices.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vertices : array_like</span>
+<span class="sd">        Array of vertices.</span>
+<span class="sd">    vertices : array_like</span>
+<span class="sd">        Array of faces.</span>
+<span class="sd">    n_neighbors : int | -1</span>
+<span class="sd">        Specify maximum number of closest neighbors to take into account in the</span>
+<span class="sd">        mean.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_vertices : array_like</span>
+<span class="sd">        New smoothed vertices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">vertices</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">faces</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">faces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">n_neighbors</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="n">n_vertices</span> <span class="o">=</span> <span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">new_vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_vertices</span><span class="p">):</span>
+        <span class="c1"># Find connected vertices :</span>
+        <span class="n">faces_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">faces</span> <span class="o">==</span> <span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">u_faces_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="n">faces_idx</span><span class="p">,</span> <span class="p">:]))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">u_faces_idx</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="c1"># Select closest connected vertices :</span>
+        <span class="k">if</span> <span class="n">n_neighbors</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">to_smooth</span> <span class="o">=</span> <span class="n">u_faces_idx</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">norms</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">vertices</span><span class="p">[[</span><span class="n">k</span><span class="p">],</span> <span class="p">:],</span> <span class="n">vertices</span><span class="p">[</span><span class="n">u_faces_idx</span><span class="p">,</span> <span class="p">:])</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+            <span class="n">n_norm</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">norms</span><span class="p">))</span>
+            <span class="n">to_smooth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u_faces_idx</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">norms</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="n">n_norm</span><span class="p">]]</span>
+        <span class="c1"># Take the mean of selected vertices :</span>
+        <span class="n">new_vertices</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="n">to_smooth</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_vertices</span>
 </pre></div>
 
            </div>

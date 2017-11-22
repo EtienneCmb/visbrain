@@ -444,6 +444,95 @@ Examples demonstrating figure layout.
 
     <div style='clear:both'></div>
 
+Objects examples
+----------------
+
+Examples demonstrating how to objects.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the brain object i.e :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_brain_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_brain_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_brain_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Futur title ">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_connectivity_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_connectivity_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_connectivity_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram.">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_im_tf_spec_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_im_tf_spec_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_im_tf_spec_obj
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_source_obj_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_source_obj.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_source_obj
+.. raw:: html
+
+    <div style='clear:both'></div>
+
 Pysurfer Examples
 -----------------
 

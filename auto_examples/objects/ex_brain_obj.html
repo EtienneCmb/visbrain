@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Brain object &mdash; visbrain 0.3.7 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
+        <link rel="up" title="Examples" href="../index.html"/>
+        <link rel="next" title="Connectivity object" href="ex_connectivity_obj.html"/>
+        <link rel="prev" title="Page layout example" href="../figure/1_LayoutExample.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> visbrain
+          
+
+          
+            
+            <img src="../../_static/visbrain_128x128.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../documentation.html">Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#brain-examples">Brain Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#colorbar-examples">Colorbar Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#figure-examples">Figure Examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#objects-examples">Objects examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Brain object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_connectivity_obj.html">Connectivity object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_im_tf_spec_obj.html">Image, time-frequency map and spectrogram objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_source_obj.html">Source object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#pysurfer-examples">Pysurfer Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#signal-examples">Signal Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#sleep-examples">Sleep Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#topoplot-examples">Topoplot Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog_futur.html">Changelog and future directions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">visbrain</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+      <li>Brain object</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/auto_examples/objects/ex_brain_obj.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="brain-object">
+<span id="sphx-glr-auto-examples-objects-ex-brain-obj-py"></span><h1>Brain object<a class="headerlink" href="#brain-object" title="Permalink to this headline">¶</a></h1>
+<p>This example illustrate the main functionalities and inputs of the brain
+object i.e :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Use a default brain template</li>
+<li>Select the hemisphere (‘both’, ‘left’, ‘right’)</li>
+<li>Use a translucent or opaque brain</li>
+<li>Parcellize the brain and send data to selected parcellates</li>
+<li>Add fMRI activation and MEG inverse solution</li>
+</ul>
+</div></blockquote>
+<p>List of the brain templates supported by default :</p>
+<blockquote>
+<div><ul class="simple">
+<li>B1</li>
+<li>B2</li>
+<li>B3</li>
+<li>Inflated (fsaverage)</li>
+<li>White</li>
+<li>Sphere</li>
+</ul>
+</div></blockquote>
+<img alt="../../_images/ex_brain_obj.png" src="../../_images/ex_brain_obj.png" />
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">vispy.visuals.transforms</span> <span class="kn">as</span> <span class="nn">vist</span>
+
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">,</span> <span class="n">ColorbarObj</span><span class="p">,</span> <span class="n">SceneObj</span>
+<span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">read_stc</span>
+
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;-&gt; Create a scene. By default, we fix the top view of the camera&quot;</span><span class="p">)</span>
+<span class="n">CAM_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">azimuth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>        <span class="c1"># azimuth angle</span>
+                 <span class="n">elevation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>     <span class="c1"># elevation angle</span>
+                 <span class="n">scale_factor</span><span class="o">=</span><span class="mi">180</span>  <span class="c1"># ~distance to the camera</span>
+                 <span class="p">)</span>
+<span class="n">CBAR_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-.</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="n">width</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span>
+                  <span class="n">cbtxtsh</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SceneObj</span><span class="p">(</span><span class="n">camera_state</span><span class="o">=</span><span class="n">CAM_STATE</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1400</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-&gt; Translucent inflated brain template&quot;</span><span class="p">)</span>
+<span class="n">b_obj_fs</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">b_obj_fs</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.03</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_fs</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Translucent inflated brain template&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-&gt; Left and right hemispheres of the white template&quot;</span><span class="p">)</span>
+<span class="n">b_obj_lw</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_lw</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span>
+                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Left hemisphere&#39;</span><span class="p">)</span>
+<span class="n">b_obj_rw</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_rw</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Right hemisphere&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-&gt; Parcellize the brain (using all parcellates)&quot;</span><span class="p">)</span>
+<span class="n">path_to_file1</span> <span class="o">=</span> <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;lh.aparc.a2009s.annot&#39;</span><span class="p">)</span>
+<span class="n">b_obj_parl</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="c1"># print(b_obj_parl.get_parcellates(path_to_file1))  # available parcellates</span>
+<span class="n">b_obj_parl</span><span class="o">.</span><span class="n">parcellize</span><span class="p">(</span><span class="n">path_to_file1</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_parl</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Parcellize using the Desikan Atlas&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-&gt; Send data to parcellates&quot;</span><span class="p">)</span>
+<span class="n">path_to_file2</span> <span class="o">=</span> <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;rh.aparc.annot&#39;</span><span class="p">)</span>
+<span class="n">b_obj_parr</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="c1"># print(b_obj_parr.get_parcellates(path_to_file2))  # available parcellates</span>
+<span class="n">select_par</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;paracentral&#39;</span><span class="p">,</span> <span class="s1">&#39;precentral&#39;</span><span class="p">,</span> <span class="s1">&#39;fusiform&#39;</span><span class="p">,</span> <span class="s1">&#39;postcentral&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;superiorparietal&#39;</span><span class="p">,</span> <span class="s1">&#39;superiortemporal&#39;</span><span class="p">,</span> <span class="s1">&#39;inferiorparietal&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;inferiortemporal&#39;</span><span class="p">]</span>
+<span class="n">data_par</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">7.</span><span class="p">,</span> <span class="mf">11.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">]</span>
+<span class="n">b_obj_parr</span><span class="o">.</span><span class="n">parcellize</span><span class="p">(</span><span class="n">path_to_file2</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">select_par</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span>
+                      <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_par</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                      <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;darkred&#39;</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_parr</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span>
+                  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Send data to Desikan-Killiany parcellates&#39;</span><span class="p">)</span>
+<span class="n">cb_parr</span> <span class="o">=</span> <span class="n">ColorbarObj</span><span class="p">(</span><span class="n">b_obj_parr</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Data to parcellates&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_parr</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-&gt; Add a custom brain template&quot;</span><span class="p">)</span>
+<span class="n">mat</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.load.html#numpy.load" title="View documentation for numpy.load"><span class="n">np</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;Custom.npz&#39;</span><span class="p">))</span>
+<span class="n">vert</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;coord&#39;</span><span class="p">],</span> <span class="n">mat</span><span class="p">[</span><span class="s1">&#39;tri&#39;</span><span class="p">]</span>
+<span class="n">z90_rotation</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">MatrixTransform</span><span class="p">()</span>
+<span class="n">z90_rotation</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">vert</span> <span class="o">=</span> <span class="n">z90_rotation</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">vert</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">b_obj_custom</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;Custom&#39;</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">,</span>
+                        <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">invert_normals</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_custom</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Use a custom template&#39;</span><span class="p">,</span>
+                  <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-&gt; fMRI activation&quot;</span><span class="p">)</span>
+<span class="nb">file</span> <span class="o">=</span> <span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;lh.sig.nii.gz&#39;</span><span class="p">)</span>
+<span class="n">b_obj_fmri</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">b_obj_fmri</span><span class="o">.</span><span class="n">add_activation</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">),</span> <span class="n">hide_under</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                          <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_fmri</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Add fMRI activation&#39;</span><span class="p">,</span>
+                  <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-&gt; MEG inverse solution&quot;</span><span class="p">)</span>
+<span class="nb">file</span> <span class="o">=</span> <span class="n">read_stc</span><span class="p">(</span><span class="n">download_file</span><span class="p">(</span><span class="s1">&#39;meg_source_estimate-rh.stc&#39;</span><span class="p">))</span>
+<span class="n">data</span> <span class="o">=</span> <span class="nb">file</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][:,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">vertices</span> <span class="o">=</span> <span class="nb">file</span><span class="p">[</span><span class="s1">&#39;vertices&#39;</span><span class="p">]</span>
+<span class="n">b_obj_meg</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.BrainObj" title="View documentation for visbrain.objects.BrainObj"><span class="n">BrainObj</span></a><span class="p">(</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+<span class="n">b_obj_meg</span><span class="o">.</span><span class="n">add_activation</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span>
+                         <span class="n">smoothing_steps</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">7.</span><span class="p">,</span> <span class="mf">17.</span><span class="p">),</span> <span class="n">hide_under</span><span class="o">=</span><span class="mf">7.</span><span class="p">,</span>
+                         <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">15.</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">b_obj_meg</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;MEG inverse solution&#39;</span><span class="p">,</span>
+                  <span class="n">rotate</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+<span class="n">cb_parr</span> <span class="o">=</span> <span class="n">ColorbarObj</span><span class="p">(</span><span class="n">b_obj_meg</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;MEG data&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_parr</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;Link brain rotations</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">link</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">link</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="sd">&quot;&quot;&quot;Screenshot of the scene</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># sc.screenshot(&#39;ex_brain_obj.png&#39;, transparent=True)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/ex_brain_obj.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">ex_brain_obj.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/ex_brain_obj.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">ex_brain_obj.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ex_connectivity_obj.html" class="btn btn-neutral float-right" title="Connectivity object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../figure/1_LayoutExample.html" class="btn btn-neutral" title="Page layout example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Etienne Combrisson.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.3.7',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
