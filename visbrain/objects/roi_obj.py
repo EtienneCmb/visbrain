@@ -1,5 +1,6 @@
 """Base class for objects of type ROI."""
 import logging
+from functools import wraps
 import numpy as np
 
 from vispy import scene
@@ -7,11 +8,33 @@ from vispy.geometry.isosurface import isosurface
 
 from .visbrain_obj import CombineObjects
 from .volume_obj import _Volume
+from ._projection import _project_sources_data
 from ..io import is_pandas_installed
-from ..utils import mni2tal, smooth_3d
+from ..utils import mni2tal, smooth_3d, color2vb, array_to_stt
 from ..visuals import BrainMesh
 
 logger = logging.getLogger('visbrain')
+
+
+def wrap_setter_properties(fn):
+    """Set properties if not None and if mesh is defined."""
+    @wraps(fn)
+    def wrapper(self, value):
+        if (value is not None) and self:
+            fn(self, value)
+    return wrapper
+
+
+def wrap_getter_properties(fn):
+    """Get properties if mesh is defined."""
+    @wraps(fn)
+    def wrapper(self):
+        if self:
+            return fn(self)
+        else:
+            raise ValueError("No mesh defined. Use the method `select_roi` "
+                             "before")
+    return wrapper
 
 
 class RoiObj(_Volume):
@@ -51,8 +74,8 @@ class RoiObj(_Volume):
     >>> import numpy as np
     >>> from visbrain.objects import RoiObj
     >>> r = RoiObj('brodmann')
-    >>> r.get_roi_vertices(level=[4, 6, 38], unique_color=True, plot=True,
-    >>>                    smooth=7)
+    >>> r.select_roi(level=[4, 6, 38], unique_color=True, plot=True,
+    >>>              smooth=7)
     >>> r.preview(axis=True)
     """
 
@@ -70,9 +93,23 @@ class RoiObj(_Volume):
         if preload and (name in self._predefined_volumes()):
             self.set_data(name, vol, label, index, hdr, system)
 
+    ###########################################################################
+    ###########################################################################
+    #                                BUILTIN
+    ###########################################################################
+    ###########################################################################
+
     def __len__(self):
         """Return the number of ROI."""
         return self._n_roi
+
+    def __call__(self, name):
+        """Call the set_data method."""
+        self.set_data(name)
+
+    def __bool__(self):
+        """Test if ROI have been selected."""
+        return hasattr(self, 'mesh')
 
     def __getitem__(self, index):
         """Get the ref item at index."""
@@ -102,6 +139,12 @@ class RoiObj(_Volume):
         assert len(idx) == 3
         sh = self.vol.shape
         return (sh[0] < idx[0]) and (sh[1] < idx[1]) and (sh[2] < idx[2])
+
+    ###########################################################################
+    ###########################################################################
+    #                                SET_DATA
+    ###########################################################################
+    ###########################################################################
 
     def set_data(self, name, vol=None, label=None, index=None, hdr=None,
                  system='mni'):
@@ -136,7 +179,7 @@ class RoiObj(_Volume):
         import pandas as pd
         # _______________________ PREDEFINED _______________________
         if name in ['brodmann', 'talairach', 'aal']:
-            vol, label, index, hdr, system = self(name)
+            vol, label, index, hdr, system = _Volume.__call__(self, name)
         self._offset = -1 if name == 'talairach' else 0
 
         # _______________________ CHECKING _______________________
@@ -160,9 +203,14 @@ class RoiObj(_Volume):
         label_dict['index'] = index
         cols = list(label_dict.keys())
         self.ref = pd.DataFrame(label_dict, columns=cols)
+        self.ref = self.ref.set_index(index)
         self.analysis = pd.DataFrame({}, columns=cols)
 
         logger.info("%s ROI loaded." % name)
+
+    def get_labels(self):
+        """Get the labels associated with the loaded ROI."""
+        return self.ref
 
     ###########################################################################
     ###########################################################################
@@ -242,76 +290,243 @@ class RoiObj(_Volume):
         except:
             return {'label': arr}
 
-    def get_roi_vertices(self, level=.5, unique_color=False, smooth=3,
-                         plot=False):
-        """Get the vertices of ROI's.
+    ###########################################################################
+    ###########################################################################
+    #                                MESH
+    ###########################################################################
+    ###########################################################################
+
+    def select_roi(self, select=.5, unique_color=False, roi_to_color=None,
+                   smooth=3):
+        """Select several Region Of Interest (ROI).
 
         Parameters
         ----------
-        level : int, float, list | .5
+        select : int, float, list | .5
             Threshold for extracting vertices from isosuface method.
         unique_color : bool | False
             Use a random unique color for each ROI.
         smooth : int | 3
             Smoothing level. Must be an odd integer (smooth % 2 = 1).
-        plot : bool | False
-            Specify if a mesh object have to be defined.
         """
         # Get vertices / faces :
+        vert = np.array([])
+        # Use specific colors :
+        if isinstance(roi_to_color, dict):
+            select = roi_to_color.keys()
+            unique_color = True
         if not unique_color:
-            vert, faces = self._get_roi_vertices(self.vol, level, smooth)
+            vert, faces = self._select_roi(self.vol, select, smooth)
+            logger.info("Same white color used across ROI(s)")
         else:
-            assert not isinstance(level, float)
-            level = [level] if isinstance(level, int) else level
+            assert not isinstance(select, float)
+            select = [select] if isinstance(select, int) else select
             vert, faces, color = np.array([]), np.array([]), np.array([])
-            # Generate a (n_levels, 3, 4) array of unique colors :
-            col_unique = np.random.uniform(.1, .9, (len(level), 4))
-            col_unique[..., -1] = 1.
-            for i, k in enumerate(level):
-                v, f = self._get_roi_vertices(self.vol, k, smooth)
+            # Generate a (n_levels, 4) array of unique colors :
+            if isinstance(roi_to_color, dict):
+                assert len(roi_to_color) == len(select)
+                col_unique = [color2vb(k) for k in roi_to_color.values()]
+                col_unique = np.array(col_unique).reshape(len(select), 4)
+                logger.info("Specific colors has been defined")
+            else:
+                col_unique = np.random.uniform(.1, .9, (len(select), 4))
+                col_unique[..., -1] = 1.
+                logger.info("Random color are going to be used.")
+            # Get vertices and faces of each ROI :
+            for i, k in enumerate(select):
+                v, f = self._select_roi(self.vol, k, smooth)
                 # Concatenate vertices / faces :
                 faces = np.r_[faces, f + faces.max() + 1] if faces.size else f
                 vert = np.r_[vert, v] if vert.size else v
                 # Concatenate color :
                 col = np.tile(col_unique[[i], ...], (v.shape[0], 1))
                 color = np.r_[color, col] if color.size else col
-        if plot and vert.size:
-            if not hasattr(self, 'mesh'):
+        if vert.size:
+            # Apply hdr transformation to vertices :
+            vert = array_to_stt(self.hdr).map(vert)[:, 0:-1]
+            logger.debug("Apply hdr transformation to vertices")
+            if not self:
+                logger.debug("ROI mesh defined")
                 self.mesh = BrainMesh(vertices=vert, faces=faces,
                                       parent=self._node)
-                self.mesh.set_camera(scene.cameras.TurntableCamera())
-                if unique_color:
-                    self.mesh.mask = 1.
-                    self.mesh.color = color
+            else:
+                logger.debug("ROI mesh already exist")
+                self.mesh.set_data(vertices=vert, faces=faces)
+            if unique_color:
+                self.mask = 1.
+                self.color = color
+        else:
+            raise ValueError("No vertices found for this ROI")
 
-    @staticmethod
-    def _get_roi_vertices(vol, level, smooth):
+    def _select_roi(self, vol, level, smooth):
         vol = vol.copy()
         if isinstance(level, int):
-            vol[vol != level] = 0
+            condition = vol != level
         elif isinstance(level, float):
-            vol[vol > level] = 0
+            condition = vol < level
         elif isinstance(level, (np.ndarray, list, tuple)):
-            vol[np.logical_and.reduce([vol != k for k in level])] = 0
+            condition = np.logical_and.reduce([vol != k for k in level])
+        # Set unused ROIs to 0 in the volume :
+        vol[condition] = 0
+        # Get the list of remaining ROIs :
+        unique_vol = np.unique(vol[vol != 0])
+        logger.info("Selected ROI(s) : \n%r" % self.ref.loc[unique_vol])
         return isosurface(smooth_3d(vol, smooth), level=.5)
 
     def _get_camera(self):
         """Get the most adapted camera."""
-        sc = self.mesh._opt_cam_state['scale_factor']
+        if not self:
+            logger.warning("Every ROI selected. Use the method `select_roi` "
+                           "before to control the ROI to display.")
+            self.select_roi()
+        self.mesh.set_camera(scene.cameras.TurntableCamera())
+        sc = self.mesh._opt_cam_state['scale_factor'][1]
+        center = self.mesh._opt_cam_state['center']
         self.mesh._camera.scale_factor = sc
+        self.mesh._camera.distance = 4 * sc
+        self.mesh._camera.center = center
         return self.mesh._camera
+
+    ###########################################################################
+    ###########################################################################
+    #                                PROJECTION
+    ###########################################################################
+    ###########################################################################
+
+    def project_sources(self, s_obj, project='modulation', radius=10.,
+                        contribute=False, cmap='viridis', clim=None, vmin=None,
+                        under='black', vmax=None, over='red',
+                        mask_color=None):
+        """Project source's activity or repartition onto the brain object.
+
+        Parameters
+        ----------
+        s_obj : SourceObj
+            The source object to project.
+        project : {'modulation', 'repartition'}
+            Project either the source's data ('modulation') or get the number
+            of contributing sources per vertex ('repartition').
+        radius : float
+            The radius under which activity is projected on vertices.
+        contribute: bool | False
+            Specify if sources contribute on both hemisphere.
+        cmap : string | 'viridis'
+            The colormap to use.
+        clim : tuple | None
+            The colorbar limits. If None, (data.min(), data.max()) will be used
+            instead.
+        vmin : float | None
+            Minimum threshold.
+        vmax : float | None
+            Maximum threshold.
+        under : string/tuple/array_like | 'gray'
+            The color to use for values under vmin.
+        over : string/tuple/array_like | 'red'
+            The color to use for values over vmax.
+        mask_color : string/tuple/array_like | 'gray'
+            The color to use for the projection of masked sources. If None,
+            the color of the masked sources is going to be used.
+        """
+        if self:
+            kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+            self._default_cblabel = "Source's %s" % project
+            _project_sources_data(s_obj, self, project, radius, contribute,
+                                  mask_color=mask_color, **kw)
+        else:
+            raise ValueError("Cannot project sources because no ROI selected. "
+                             "Use the `select_roi` method before.")
+
+    ###########################################################################
+    ###########################################################################
+    #                                PROPERTIES
+    ###########################################################################
+    ###########################################################################
 
     # ----------- TRANSLUCENT -----------
     @property
+    @wrap_getter_properties
     def translucent(self):
         """Get the translucent value."""
-        return self.mesh.translucent if hasattr(self, 'mesh') else False
+        return self.mesh.translucent
 
     @translucent.setter
+    @wrap_setter_properties
     def translucent(self, value):
         """Set translucent value."""
-        if hasattr(self, 'mesh'):
-            self.mesh.translucent = value
+        self.mesh.translucent = value
+
+    # ----------- ALPHA -----------
+    @property
+    @wrap_getter_properties
+    def alpha(self):
+        """Get the alpha value."""
+        return self.mesh.alpha
+
+    @alpha.setter
+    @wrap_setter_properties
+    def alpha(self, value):
+        """Set alpha value."""
+        self.mesh.alpha = value
+
+    # ----------- VERTICES -----------
+    @property
+    @wrap_getter_properties
+    def vertices(self):
+        """Get the vertices value."""
+        return self.mesh._vertices
+
+    # ----------- FACES -----------
+    @property
+    @wrap_getter_properties
+    def faces(self):
+        """Get the faces value."""
+        return self.mesh._faces
+
+    # ----------- NORMALS -----------
+    @property
+    @wrap_getter_properties
+    def normals(self):
+        """Get the normals value."""
+        return self._normals
+
+    # ----------- MASK -----------
+    @property
+    @wrap_getter_properties
+    def mask(self):
+        """Get the mask value."""
+        return self.mesh.mask
+
+    @mask.setter
+    @wrap_setter_properties
+    def mask(self, value):
+        """Set mask value."""
+        self.mesh.mask = value
+
+    # ----------- COLOR -----------
+    @property
+    @wrap_getter_properties
+    def color(self):
+        """Get the color value."""
+        return self.mesh.color
+
+    @color.setter
+    @wrap_setter_properties
+    def color(self, value):
+        """Set color value."""
+        self.mesh.color = value
+
+    # ----------- MASK_COLOR -----------
+    @property
+    @wrap_getter_properties
+    def mask_color(self):
+        """Get the mask_color value."""
+        return self.mesh.mask_color
+
+    @mask_color.setter
+    @wrap_setter_properties
+    def mask_color(self, value):
+        """Set mask_color value."""
+        self.mesh.mask_color = value
 
 
 class CombineRoi(CombineObjects):
