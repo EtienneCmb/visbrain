@@ -9,8 +9,8 @@ from ..utils import wrap_properties
 from ..visuals import PicMesh
 
 
-class PictureObj(VisbrainObject):
-    """Create a connectivity object.
+class Picture3DObj(VisbrainObject):
+    """Create a 3-D picture object.
 
     Parameters
     ----------
@@ -56,11 +56,11 @@ class PictureObj(VisbrainObject):
     Examples
     --------
     >>> import numpy as np
-    >>> from visbrain.objects import PictureObj
+    >>> from visbrain.objects import Picture3DObj
     >>> n_rows, n_cols, n_pic = 10, 20, 5
     >>> data = np.random.rand(n_pic, n_rows, n_cols)
     >>> xyz = np.random.uniform(-10, 10, (n_pic, 3))
-    >>> pic = PictureObj('Pic', data, xyz, cmap='plasma')
+    >>> pic = Picture3DObj('Pic', data, xyz, cmap='plasma')
     >>> pic.preview(axis=True)
     """
 
@@ -70,9 +70,9 @@ class PictureObj(VisbrainObject):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, data, xyz, select=None, width=7., height=7.,
-                 alpha=1., cmap='viridis', clim=None, vmin=None, vmax=None,
-                 under='gray', over='red', translate=(0., 0., 1.),
+    def __init__(self, name, data, xyz, select=None, pic_width=7.,
+                 pic_height=7., alpha=1., cmap='viridis', clim=None, vmin=None,
+                 vmax=None, under='gray', over='red', translate=(0., 0., 1.),
                  transform=None, parent=None, verbose=None, _z=-10., **kw):
         """Init."""
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
@@ -91,8 +91,9 @@ class PictureObj(VisbrainObject):
         # Select :
         assert (select is None) or isinstance(select, (list, np.ndarray))
         # Width, height :
-        assert all([isinstance(k, (int, float)) for k in (height, width)])
-        self._width, self._height = width, height
+        assert all([isinstance(k, (int, float)) for k in (pic_height,
+                                                          pic_width)])
+        self._pic_width, self._pic_height = pic_width, pic_height
         # Translate :
         assert len(translate) == 3
         tr = vist.STTransform(translate=translate)
@@ -102,7 +103,8 @@ class PictureObj(VisbrainObject):
         self._alpha = alpha
 
         # _______________________ IMAGE _______________________
-        self._pic = PicMesh(data, xyz, width, height, translate, select)
+        self._pic = PicMesh(data, xyz, pic_width, pic_height, translate,
+                            select)
         self._pic.transform = tr
         self._pic.parent = self._node
 
@@ -126,32 +128,32 @@ class PictureObj(VisbrainObject):
     ###########################################################################
     ###########################################################################
 
-    # ----------- WIDTH -----------
+    # ----------- PIC_WIDTH -----------
     @property
-    def width(self):
-        """Get the width value."""
-        return self._width
+    def pic_width(self):
+        """Get the pic_width value."""
+        return self._pic_width
 
-    @width.setter
+    @pic_width.setter
     @wrap_properties
-    def width(self, value):
-        """Set width value."""
+    def pic_width(self, value):
+        """Set pic_width value."""
         assert isinstance(value, (int, float))
-        self._width = value
+        self._pic_width = value
         self._pic.set_data(width=value)
 
-    # ----------- HEIGHT -----------
+    # ----------- PIC_HEIGHT -----------
     @property
-    def height(self):
+    def pic_height(self):
         """Get the height value."""
-        return self._height
+        return self._pic_height
 
-    @height.setter
+    @pic_height.setter
     @wrap_properties
-    def height(self, value):
-        """Set height value."""
+    def pic_height(self, value):
+        """Set pic_height value."""
         assert isinstance(value, (int, float))
-        self._height = value
+        self._pic_height = value
         self._pic.set_data(height=value)
 
     # ----------- TRANSLATE -----------
@@ -189,7 +191,7 @@ class CombinePictures(CombineObjects):
 
     Parameters
     ----------
-    pobjs : PictureObj/list | None
+    pobjs : Picture3DObj/list | None
         List of picture objects.
     select : string | None
         The name of the picture object to select.
@@ -199,4 +201,4 @@ class CombinePictures(CombineObjects):
 
     def __init__(self, pobjs=None, select=None, parent=None):
         """Init."""
-        CombineObjects.__init__(self, PictureObj, pobjs, select, parent)
+        CombineObjects.__init__(self, Picture3DObj, pobjs, select, parent)

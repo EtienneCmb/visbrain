@@ -3,7 +3,7 @@ from .brain_obj import BrainObj  # noqa
 from .cbar_obj import ColorbarObj  # noqa
 from .connect_obj import ConnectObj, CombineConnect  # noqa
 from .image_obj import ImageObj  # noqa
-from .picture_obj import PictureObj, CombinePictures  # noqa
+from .picture_obj import Picture3DObj, CombinePictures  # noqa
 from .roi_obj import RoiObj, CombineRoi  # noqa
 from .scene_obj import SceneObj, VisbrainCanvas  # noqa
 from .source_obj import SourceObj, CombineSources  # noqa

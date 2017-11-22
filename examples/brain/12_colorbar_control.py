@@ -43,7 +43,7 @@ from __future__ import print_function
 import numpy as np
 
 from visbrain import Brain, Colorbar
-from visbrain.objects import SourceObj, ConnectObj, PictureObj
+from visbrain.objects import SourceObj, ConnectObj, Picture3DObj
 from visbrain.io import download_file, path_to_visbrain_data
 
 
@@ -73,7 +73,7 @@ Define random pictures with values between [0, 50]. Each picture have 10 rows
 and 20 columns
 """
 pic_data = 50. * np.random.rand(n_sources, 10, 20)
-pic_obj = PictureObj('Pictures', pic_data, s_xyz)
+pic_obj = Picture3DObj('Pictures', pic_data, s_xyz)
 
 
 """
