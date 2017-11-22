@@ -274,6 +274,10 @@ Image object
     .. autosummary::
         ~ImageObj.set_data
 
+.. include:: generated/visbrain.objects.ImageObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 
 .. _TFObj:
@@ -296,6 +300,11 @@ Time-frequency map object
     .. autosummary::
         ~TimeFrequencyMapObj.set_data
 
+.. include:: generated/visbrain.objects.TimeFrequencyMapObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
+
 
 .. _SpecObj:
 
@@ -316,3 +325,8 @@ Spectrogram object
 
     .. autosummary::
         ~SpectrogramObj.set_data
+
+.. include:: generated/visbrain.objects.SpectrogramObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
