@@ -47,12 +47,6 @@ class UiSources(object):
         self._s_analyse_run.clicked.connect(self._fcn_analyse_sources)
 
         # ====================== PROJECTION ======================
-        self._s_proj_radius.setValue(self._proj_radius)
-        self._s_proj_contribute.setChecked(self._proj_contribute)
-        safely_set_cbox(self._s_proj_type, self._proj_type)
-        mask_color = color2tuple(self._proj_mask_color)
-        self.atlas.mesh.mask_color = mask_color
-        self._s_proj_mask_color.setText(str(mask_color))
         self._s_proj_mask_color.editingFinished.connect(
             self._fcn_proj_mask_color)
         self._s_proj_mask_color_p.clicked.connect(self._fcn_mask_color_p)

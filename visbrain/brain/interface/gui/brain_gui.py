@@ -832,6 +832,7 @@ class Ui_MainWindow(object):
         self.gridLayout_8.addWidget(self.label_15, 0, 0, 1, 1)
         self._s_proj_radius = QtWidgets.QDoubleSpinBox(self.groupBox_6)
         self._s_proj_radius.setDecimals(1)
+        self._s_proj_radius.setProperty("value", 10.0)
         self._s_proj_radius.setObjectName("_s_proj_radius")
         self.gridLayout_8.addWidget(self._s_proj_radius, 0, 2, 1, 1)
         self.line_52 = QtWidgets.QFrame(self.groupBox_6)
@@ -1895,6 +1896,7 @@ class Ui_MainWindow(object):
         self._s_proj_type.setItemText(1, _translate("MainWindow", "repartition"))
         self.label_117.setText(_translate("MainWindow", "Mask\n"
 "color"))
+        self._s_proj_mask_color.setText(_translate("MainWindow", "gray"))
         self._s_proj_mask_color_p.setText(_translate("MainWindow", "..."))
         self._s_proj_apply.setToolTip(_translate("MainWindow", "<html><head/><body><p>Run the source\'s projection using above parameters</p></body></html>"))
         self._s_proj_apply.setText(_translate("MainWindow", "Apply"))

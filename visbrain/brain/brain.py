@@ -89,6 +89,7 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         PyQtModule.__init__(self, verbose=verbose, to_describe='view.wc',
                             icon='brain_icon.svg')
         self._userobj = {}
+        self._proj_obj = {}
         self._gl_scale = 100.  # fix appearance for small meshes
         self._camera = viscam.TurntableCamera(name='MainBrainCamera')
 

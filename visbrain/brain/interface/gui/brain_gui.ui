@@ -1931,6 +1931,9 @@ name</string>
                            <property name="decimals">
                             <number>1</number>
                            </property>
+                           <property name="value">
+                            <double>10.000000000000000</double>
+                           </property>
                           </widget>
                          </item>
                          <item row="0" column="1">
@@ -2091,7 +2094,11 @@ color</string>
                          <item row="3" column="2">
                           <layout class="QHBoxLayout" name="horizontalLayout_19">
                            <item>
-                            <widget class="QLineEdit" name="_s_proj_mask_color"/>
+                            <widget class="QLineEdit" name="_s_proj_mask_color">
+                             <property name="text">
+                              <string>gray</string>
+                             </property>
+                            </widget>
                            </item>
                            <item>
                             <widget class="QToolButton" name="_s_proj_mask_color_p">
