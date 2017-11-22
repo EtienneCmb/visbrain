@@ -13,8 +13,8 @@ Here's the list of currently supported modules :
 * :ref:`SourceObj`
 * :ref:`ConnectObj`
 * :ref:`VectorObj`
-* :ref:`TSObj`
-* :ref:`PicObj`
+* :ref:`TS3DObj`
+* :ref:`Pic3DObj`
 * :ref:`RoiObj`
 * :ref:`VolumeObj`
 * :ref:`ImageObj`
@@ -171,10 +171,10 @@ Vector object
 
     <div style='clear:both'></div>
 
-.. _TSObj:
+.. _TS3DObj:
 
-Time-series object
-------------------
+Time-series 3D object
+---------------------
 
 .. figure::  picture/picobjects/pic_ts_obj.png
    :align:   center
@@ -183,17 +183,17 @@ Time-series object
 
 .. currentmodule:: visbrain.objects
 
-.. autoclass:: TimeSeriesObj
+.. autoclass:: TimeSeries3DObj
 
-.. include:: generated/visbrain.objects.TimeSeriesObj.examples
+.. include:: generated/visbrain.objects.TimeSeries3DObj.examples
 .. raw:: html
 
     <div style='clear:both'></div>
 
-.. _PicObj:
+.. _Pic3DObj:
 
-Pictures object
----------------
+Pictures 3D object
+------------------
 
 .. figure::  picture/picobjects/pic_picture_obj.png
    :align:   center
@@ -202,9 +202,9 @@ Pictures object
 
 .. currentmodule:: visbrain.objects
 
-.. autoclass:: PictureObj
+.. autoclass:: Picture3DObj
 
-.. include:: generated/visbrain.objects.PictureObj.examples
+.. include:: generated/visbrain.objects.Picture3DObj.examples
 .. raw:: html
 
     <div style='clear:both'></div>
