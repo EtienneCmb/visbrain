@@ -405,7 +405,7 @@ class SceneObj(object):
             Use bold title.
         rotate : string | None
             Rotate the scene. Use 'top', 'bottom', 'left', 'right', 'front' or
-            'back'.
+            'back'. Only available for 3-D objects.
         camera_state : dict | {}
             Arguments to pass to the camera.
         width_max : float | None
@@ -424,7 +424,6 @@ class SceneObj(object):
             self._grid_desc[(row + 1, col + 1)] = len(self._grid.children)
         else:
             sub = self[(row, col)]
-        sub.add(obj.parent)
         sub.height_max = height_max
         sub.width_max = width_max
         if isinstance(title, str):
@@ -432,10 +431,12 @@ class SceneObj(object):
             tit = scene.visuals.Text(title, color=title_color, anchor_x='left',
                                      bold=title_bold)
             sub.add_subvisual(tit)
+        sub.add(obj.parent)
         if camera_state == {}:
             camera_state = self._camera_state
-        rotate_turntable(fixed=rotate, camera_state=camera_state,
-                         camera=sub.camera)
+        if isinstance(sub.camera, scene.cameras.TurntableCamera):
+            rotate_turntable(fixed=rotate, camera_state=camera_state,
+                             camera=sub.camera)
         PROFILER('%s added to the scene' % repr(obj))
         logger.info('%s added to the scene' % repr(obj))
 
