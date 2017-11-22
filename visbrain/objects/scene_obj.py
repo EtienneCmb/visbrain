@@ -2,6 +2,7 @@
 import sys
 import logging
 
+import numpy as np
 from vispy import scene
 
 from ..io import write_fig_canvas
@@ -357,6 +358,7 @@ class SceneObj(object):
         set_log_level(verbose)
         logger.info("Scene creation")
         PROFILER('Scene creation')
+        # Create the canvas and the grid :
         self._canvas = scene.SceneCanvas(keys='interactive', show=False,
                                          title='Object scene',
                                          app=CONFIG['VISPY_APP'],
@@ -368,6 +370,9 @@ class SceneObj(object):
         self._grid.spacing = 0
         self._grid_desc = {}
         self._camera_state = camera_state
+        # OpenGL f***** up with small objects. So we need rescale scenes :
+        self._fix_gl = 100.
+        self._transformations = {}
 
     def __getitem__(self, rowcol):
         """Get an element of the grid.
@@ -415,16 +420,25 @@ class SceneObj(object):
             Maximum height of the subplot.
         """
         if (row + 1, col + 1) not in self._grid_desc.keys():
-            try:
-                cam = obj._get_camera()
-            except:
-                cam = 'turntable'
+            # Get the transformation to apply to objects :
+            if hasattr(obj, 'mesh'):
+                logger.debug("Object rescaled %s" % str([self._fix_gl] * 3))
+                obj._scale = self._fix_gl
+                sc = [self._fix_gl] * 3
+            else:
+                sc = [1.] * 3
+            tf = scene.transforms.STTransform(scale=sc)
+            obj._node.transform = tf
+            self._transformations[(row + 1, col + 1)] = tf
+            # Get the camera and add view to the grid :
+            cam = obj._get_camera()
             sub = self._grid.add_view(row=row + 1, col=col + 1,
                                       row_span=row_span, col_span=col_span,
                                       camera=cam)
             self._grid_desc[(row + 1, col + 1)] = len(self._grid.children)
         else:
             sub = self[(row, col)]
+            obj._node.transform = self._transformations[(row + 1, col + 1)]
             # For objects that have a mesh attribute, pass the camera :
             if hasattr(obj, 'mesh'):
                 obj.mesh.set_camera(sub.camera)
