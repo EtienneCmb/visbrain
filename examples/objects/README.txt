@@ -1,4 +1,4 @@
 Objects examples
 ----------------
 
-Examples demonstrating how to objects.
+Examples demonstrating how to use objects.
