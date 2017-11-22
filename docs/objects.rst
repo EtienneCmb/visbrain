@@ -68,13 +68,14 @@ Brain object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: BrainObj
-  :members: set_data, rotate, add_activation, get_parcellates, parcellize
+  :members: set_data, rotate, project_sources, add_activation, get_parcellates, parcellize
 
     .. rubric:: Methods
 
     .. autosummary::
         ~BrainObj.set_data
         ~BrainObj.rotate
+        ~BrainObj.project_sources
         ~BrainObj.add_activation
         ~BrainObj.get_parcellates
         ~BrainObj.parcellize
@@ -116,7 +117,7 @@ Source object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: SourceObj
-  :members: analyse_sources, color_sources, set_visible_sources, fit_to_vertices, project_modulation, project_repartition
+  :members: analyse_sources, color_sources, set_visible_sources, fit_to_vertices, project_sources
 
     .. rubric:: Methods
 
@@ -125,8 +126,7 @@ Source object
         ~SourceObj.color_sources
         ~SourceObj.set_visible_sources
         ~SourceObj.fit_to_vertices
-        ~SourceObj.project_modulation
-        ~SourceObj.project_repartition
+        ~SourceObj.project_sources
 
 .. include:: generated/visbrain.objects.SourceObj.examples
 .. raw:: html
