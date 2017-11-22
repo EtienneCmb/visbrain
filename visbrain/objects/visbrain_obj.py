@@ -9,11 +9,32 @@ from .scene_obj import VisbrainCanvas
 from ..io import write_fig_canvas
 from ..utils import color2vb, set_log_level
 from ..config import VISPY_APP
+from ..visuals import CbarBase
 
 logger = logging.getLogger('visbrain')
 
 
-class VisbrainObject(object):
+class _VisbrainObj(CbarBase):
+    """Class for VisbrainObjects and CombineObjects."""
+
+    def __init__(self, **kw):
+        """Init."""
+        CbarBase.__init__(self, **kw)
+        self._cbar_data = None
+        self._default_cblabel = ''
+        self._minmax = None
+
+    def _get_camera(self):
+        raise NotImplementedError
+
+    def _update_cbar(self):
+        raise NotImplementedError
+
+    def _update_cbar_minmax(self):
+        raise NotImplementedError
+
+
+class VisbrainObject(_VisbrainObj):
     """Base class inherited by all of the Visbrain objects.
 
     Parameters
@@ -28,8 +49,9 @@ class VisbrainObject(object):
         Verbosity level.
     """
 
-    def __init__(self, name, parent=None, transform=None, verbose=None):
+    def __init__(self, name, parent=None, transform=None, verbose=None, **kw):
         """Init."""
+        _VisbrainObj.__init__(self, **kw)
         self._node = vispy.scene.Node(name=name)
         self._node.parent = parent
         self._csize = None  # canvas size
@@ -60,15 +82,6 @@ class VisbrainObject(object):
         self._csize = canvas.canvas.size
         self._node.parent = canvas.wc.scene
         return canvas
-
-    def _update_cbar_args(self, cmap, clim, vmin, vmax, under, over):
-        """Update colorbar elements."""
-        kw = dict(clim=clim, cmap=cmap, vmin=vmin, vmax=vmax, under=under,
-                  over=over)
-        self._isvmax = isinstance(vmax, (int, float))
-        self._isvmin = isinstance(vmin, (int, float))
-        self.update_from_dict(kw)
-        return kw
 
     def preview(self, bgcolor='white', axis=False, xyz=False, show=True):
         """Previsualize the result.
@@ -182,7 +195,7 @@ class VisbrainObject(object):
         self._node.visible = value
 
 
-class CombineObjects(object):
+class CombineObjects(_VisbrainObj):
     """Combine Visbrain objects.
 
     Parameters
@@ -195,6 +208,7 @@ class CombineObjects(object):
 
     def __init__(self, obj_type, objects, select=None, parent=None):
         """Init."""
+        _VisbrainObj.__init__(self)
         # Parent node for combined objects :
         self._cnode = vispy.scene.Node(name='Combine ' + obj_type.__name__)
         self._cnode.parent = parent
