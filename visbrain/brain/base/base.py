@@ -33,7 +33,7 @@ class BaseVisual(Projections):
                   over=kwargs.get('project_over', 'red'))
 
         # Create a root node :
-        self._vbNode = scene.Node(name='*Brain*')
+        self._vbNode = scene.Node(name='Brain')
         self._vbNode.transform = vist.STTransform(scale=[self._gl_scale] * 3)
         logger.debug("Brain rescaled " + str([self._gl_scale] * 3))
         PROFILER("Root node", level=1)
