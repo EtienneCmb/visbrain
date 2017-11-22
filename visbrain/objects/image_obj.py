@@ -108,16 +108,9 @@ class ImageObj(VisbrainObject, CbarArgs):
                 data = data[::dsf_x, ::dsf_y]
                 xaxis, yaxis = xaxis[::dsf_x], yaxis[::dsf_y]
             # Set properties :
-            self.clim = clim
-            self.cmap = cmap
-            self.vmin = vmin
-            self._isvmin = isinstance(vmin, (int, float))
-            self.under = under
-            self.vmax = vmax
-            self._isvmax = isinstance(vmax, (int, float))
-            self.over = over
+            kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
             # Get color :
-            color = array2colormap(data, **self.to_kwargs())
+            color = array2colormap(data, **kw)
         else:  # data is already a compatible color
             assert data.shape[-1] in [3, 4]
             color = data
