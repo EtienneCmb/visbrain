@@ -9,7 +9,7 @@ from .scene_obj import SceneObj, VisbrainCanvas  # noqa
 from .source_obj import SourceObj, CombineSources  # noqa
 from .spec_obj import SpectrogramObj  # noqa
 from .tf_obj import TimeFrequencyMapObj  # noqa
-from .ts_obj import TimeSeriesObj, CombineTimeSeries  # noqa
+from .ts_obj import TimeSeries3DObj, CombineTimeSeries  # noqa
 from .vector_obj import VectorObj, CombineVectors  # noqa
 from .visbrain_obj import VisbrainObject, CombineObjects  # noqa
 from .volume_obj import VolumeObj  # noqa

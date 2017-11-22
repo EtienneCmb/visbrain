@@ -23,9 +23,9 @@ class Picture3DObj(VisbrainObject):
     select : array_like | None
         Select the pictures to display. Should be a vector of bolean values
         of shape (n_sources,).
-    width : float | 7.
+    pic_width : float | 7.
         Width of each picture.
-    height : float | 7.
+    pic_height : float | 7.
         Height of each picture.
     alpha : float | 1.
         Image transparency.

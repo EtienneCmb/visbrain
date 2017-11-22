@@ -49,8 +49,8 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         An object (or list of objects) of type source (SourceObj).
     connect_obj : ConnectObj | None
         An object (or list of objects) of type connectivity (ConnectObj).
-    time_series_obj : TimeSeriesObj | None
-        An object (or list of objects) of type time-series (TimeSeriesObj).
+    time_series_obj : TimeSeries3DObj | None
+        An object (or list of objects) of type time-series (TimeSeries3DObj).
     picture_obj : Picture3DObj | None
         An object (or list of objects) of type pictures (Picture3DObj).
     vector_obj : VectorObj | None

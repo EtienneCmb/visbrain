@@ -8,7 +8,7 @@ from visbrain.objects.scene_obj import VisbrainCanvas, SceneObj
 from visbrain.objects.source_obj import SourceObj, CombineSources
 from visbrain.objects.connect_obj import ConnectObj, CombineConnect
 from visbrain.objects.picture_obj import Picture3DObj, CombinePictures
-from visbrain.objects.ts_obj import TimeSeriesObj, CombineTimeSeries
+from visbrain.objects.ts_obj import TimeSeries3DObj, CombineTimeSeries
 from visbrain.objects.vector_obj import VectorObj, CombineVectors
 from visbrain.objects.brain_obj import BrainObj
 from visbrain.objects.image_obj import ImageObj
@@ -105,7 +105,7 @@ ts_data = 100 * np.random.rand(n_sources, 100)
 ts_xyz = np.random.uniform(-20, 20, (n_sources, 3))
 ts_select = np.random.randint(0, n_sources, (int(n_sources / 2),))
 
-ts_obj = TimeSeriesObj('TS1', ts_data, ts_xyz, select=ts_select, )
+ts_obj = TimeSeries3DObj('TS1', ts_data, ts_xyz, select=ts_select, )
 
 
 ###############################################################################
@@ -529,7 +529,7 @@ class TestTimeSeriesObj(ObjectMethods):
 
     def test_definition(self):
         """Test function definition."""
-        TimeSeriesObj('TS1', ts_data, ts_xyz)
+        TimeSeries3DObj('TS1', ts_data, ts_xyz)
 
     def test_preview(self):
         """Test function preview."""
