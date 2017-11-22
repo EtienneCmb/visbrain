@@ -424,14 +424,20 @@ class SceneObj(object):
             self._grid_desc[(row + 1, col + 1)] = len(self._grid.children)
         else:
             sub = self[(row, col)]
+            # For objects that have a mesh attribute, pass the camera :
+            if hasattr(obj, 'mesh'):
+                obj.mesh.set_camera(sub.camera)
+        # Fix the (height, width) max of the subplot :
         sub.height_max = height_max
         sub.width_max = width_max
+        # Add a title to the subplot :
         if isinstance(title, str):
             title_color = color2vb(title_color)
             tit = scene.visuals.Text(title, color=title_color, anchor_x='left',
                                      bold=title_bold)
             sub.add_subvisual(tit)
         sub.add(obj.parent)
+        # Camera :
         if camera_state == {}:
             camera_state = self._camera_state
         if isinstance(sub.camera, scene.cameras.TurntableCamera):
