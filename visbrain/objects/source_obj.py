@@ -53,7 +53,7 @@ class SourceObj(VisbrainObject):
     mask : array_like | None
         Array of boolean values to specify masked sources. For example, if data
         are p-values, mask could be non-significant sources.
-    mask_color : array_like/tuple/string | 'red'
+    mask_color : array_like/tuple/string | 'gray'
         Color to use for masked sources.
     text : list | None
         Text to attach to each source. For example, text could be the name of
@@ -261,6 +261,51 @@ class SourceObj(VisbrainObject):
         d_mean = self._xyz.mean(0)
         dist = 1.1 * np.linalg.norm(self._xyz, axis=1).max()
         return scene.cameras.TurntableCamera(center=d_mean, scale_factor=dist)
+
+    ###########################################################################
+    ###########################################################################
+    #                             PROJECTIONS
+    ###########################################################################
+    ###########################################################################
+
+    def project_sources(self, b_obj, project='modulation', radius=10.,
+                        contribute=False, cmap='viridis', clim=None, vmin=None,
+                        under='black', vmax=None, over='red',
+                        mask_color=None):
+        """Project source's activity or repartition onto the brain object.
+
+        Parameters
+        ----------
+        b_obj : {BrainObj, RoiObj}
+            The object on which to project sources.
+        project : {'modulation', 'repartition'}
+            Project either the source's data ('modulation') or get the number
+            of contributing sources per vertex ('repartition').
+        radius : float
+            The radius under which activity is projected on vertices.
+        contribute: bool | False
+            Specify if sources contribute on both hemisphere.
+        cmap : string | 'viridis'
+            The colormap to use.
+        clim : tuple | None
+            The colorbar limits. If None, (data.min(), data.max()) will be used
+            instead.
+        vmin : float | None
+            Minimum threshold.
+        vmax : float | None
+            Maximum threshold.
+        under : string/tuple/array_like | 'gray'
+            The color to use for values under vmin.
+        over : string/tuple/array_like | 'red'
+            The color to use for values over vmax.
+        mask_color : string/tuple/array_like | 'gray'
+            The color to use for the projection of masked sources. If None,
+            the color of the masked sources is going to be used.
+        """
+        kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        self._default_cblabel = "Source's %s" % project
+        _project_sources_data(self, b_obj, project, radius, contribute,
+                              mask_color=mask_color, **kw)
 
     ###########################################################################
     ###########################################################################
@@ -711,7 +756,7 @@ class SourceObj(VisbrainObject):
         self._sources_text.update()
 
 
-class CombineSources(CombineObjects, SourceProjection):
+class CombineSources(CombineObjects):
     """Combine sources objects.
 
     Parameters
@@ -727,7 +772,16 @@ class CombineSources(CombineObjects, SourceProjection):
     def __init__(self, sobjs=None, select=None, parent=None, **kwargs):
         """Init."""
         CombineObjects.__init__(self, SourceObj, sobjs, select, parent)
-        SourceProjection.__init__(self, **kwargs)
+
+    def project_sources(self, b_obj, project='modulation', radius=10.,
+                        contribute=False, cmap='viridis', clim=None, vmin=None,
+                        under='black', vmax=None, over='red',
+                        mask_color=None):
+        """Project source's activity or repartition onto the brain object."""
+        kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+        self._default_cblabel = "Source's %s" % project
+        _project_sources_data(self, b_obj, project, radius, contribute,
+                              mask_color=mask_color, **kw)
 
     def fit_to_vertices(self, v):
         """See sources doc."""
