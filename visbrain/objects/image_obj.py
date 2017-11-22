@@ -127,7 +127,8 @@ class ImageObj(VisbrainObject, CbarArgs):
         """Get the most adapted camera."""
         rect = (self._dim[0], self._dim[2], self._dim[1] - self._dim[0],
                 self._dim[3] - self._dim[2])
-        return scene.cameras.PanZoomCamera(rect=rect)
+        flip = (False, type(self).__name__ == 'ImageObj', False)
+        return scene.cameras.PanZoomCamera(rect=rect, flip=flip)
 
     ###########################################################################
     ###########################################################################
