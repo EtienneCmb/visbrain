@@ -39,7 +39,8 @@ CAM_STATE = dict(azimuth=0,        # azimuth angle
                  elevation=90,     # elevation angle
                  scale_factor=180  # ~distance to the camera
                  )
-CBAR_STATE = dict(cbtxtsz=12, txtsz=10., rect=(1., -2., 1., 4.), width=.5)
+CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.5)
+CBAR_CAM = dict(rect=(1., -2., 1., 4.))
 sc = SceneObj(camera_state=CAM_STATE, size=(1200, 1000))
 
 """Create the most basic source object
@@ -91,11 +92,12 @@ sc.add_to_subplot(s_obj_aal, row=1, col=1,
 """Use a random data vector to color sources
 """
 data = np.random.uniform(low=-10., high=10., size=(n_sources,))
-s_obj_data = SourceObj('S3', xyz, data=data)
+s_obj_data = SourceObj('S3', xyz, data=data, cblabel='Random data',
+                       **CBAR_STATE)
 s_obj_data.color_sources(data=data, cmap='plasma', clim=(-10, 10), vmin=-8.,
                          vmax=8., under='gray', over='red')
 sc.add_to_subplot(s_obj_data, row=1, col=2, title='Color sources using data')
-cb_data = ColorbarObj(s_obj_data, cblabel='Random data', **CBAR_STATE)
+cb_data = ColorbarObj(s_obj_data, **CBAR_CAM)
 sc.add_to_subplot(cb_data, row=1, col=3, width_max=60)
 
 """Display only sources in the left hemisphere
