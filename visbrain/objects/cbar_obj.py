@@ -2,10 +2,10 @@
 from vispy import scene
 
 from .visbrain_obj import VisbrainObject
-from ..visuals import CbarArgs, CbarVisual
+from ..visuals import CbarVisual
 
 
-class ColorbarObj(VisbrainObject, CbarArgs):
+class ColorbarObj(VisbrainObject):
     """Create a colorbar object.
 
     Parameters
@@ -80,6 +80,9 @@ class ColorbarObj(VisbrainObject, CbarArgs):
         # Init Visbrain object base class and SourceProjection :
         if not isinstance(name, str):
             kwargs = self._update_cbar_from_obj(name, update=False, **kwargs)
+            if hasattr(name, '_default_cblabel') and (
+                    'cblabel' not in kwargs.keys()):
+                kwargs['cblabel'] = name._default_cblabel
             name = name.name + 'Cbar'  # that's a lot of name
         kwargs['isvmin'] = kwargs.get('vmin', None) is not None
         kwargs['isvmax'] = kwargs.get('vmax', None) is not None
@@ -96,7 +99,7 @@ class ColorbarObj(VisbrainObject, CbarArgs):
         """Update colorbar from an object."""
         is_meth = hasattr(obj, 'to_kwargs') and callable(obj.to_kwargs)
         if is_meth:
-            kw = obj.to_kwargs(True)
+            kw = obj.to_dict()
             if update:
                 for name, val in kw.items():
                     exec('self._cbar._%s = val' % name)
