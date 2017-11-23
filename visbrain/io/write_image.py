@@ -4,8 +4,8 @@
 - write_fig_canvas : Export a canvas as a figure
 - write_fig_pyqt : Export a GUI window as a figure
 """
+import os
 import logging
-# from os.path import splitext
 import numpy as np
 from ..utils.color import color2vb
 
@@ -242,8 +242,6 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
         if widget is not None:
             widget.size = (new_width, new_height)
 
-    # Don't use transparency for jpg files :
-    # transparent = transparent if splitext(filename)[1] != '.jpg' else False
     # Background color and transparency :
     if bgcolor is not None:
         canvas.bgcolor = color2vb(bgcolor, alpha=1.)
@@ -256,6 +254,10 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
     except:
         raise ValueError("Can not render the canvas. Try to decrease the "
                          "resolution")
+
+    # Remove alpha for files that are not png or tiff :
+    if os.path.splitext(filename) not in ['.png', '.tiff']:
+        img = img[..., 0:-1]
 
     # Apply auto-cropping to the image :
     if autocrop:
