@@ -436,6 +436,10 @@ class SceneObj(object):
             Color of the title.
         title_bold : bool | True
             Use bold title.
+        use_this_cam : bool | False
+            If you add multiple objects to the same scene and if you want to
+            use the camera of an object as the reference, turn this parameter
+            to True.
         rotate : string | None
             Rotate the scene. Use 'top', 'bottom', 'left', 'right', 'front' or
             'back'. Only available for 3-D objects.
@@ -446,38 +450,32 @@ class SceneObj(object):
         height_max : float | None
             Maximum height of the subplot.
         """
+        # Apply to objects (GL issue for small mesh) :
+        self._gl_transform(obj)
+        title = '' if not isinstance(title, str) else title
         if (row + 1, col + 1) not in self._grid_desc.keys():
-            # Get the transformation to apply to objects :
-            if hasattr(obj, 'mesh'):
-                logger.debug("Object rescaled %s" % str([self._fix_gl] * 3))
-                obj._scale = self._fix_gl
-                sc = [self._fix_gl] * 3
-            else:
-                sc = [1.] * 3
-            tf = scene.transforms.STTransform(scale=sc)
-            obj._node.transform = tf
-            self._transformations[(row + 1, col + 1)] = tf
             # Get the camera and add view to the grid :
             cam = obj._get_camera()
             sub = self._grid.add_view(row=row + 1, col=col + 1,
                                       row_span=row_span, col_span=col_span,
                                       camera=cam)
             self._grid_desc[(row + 1, col + 1)] = len(self._grid.children)
-        else:
-            sub = self[(row, col)]
-            obj._node.transform = self._transformations[(row + 1, col + 1)]
-            # For objects that have a mesh attribute, pass the camera :
-            if hasattr(obj, 'mesh'):
-                obj.mesh.set_camera(sub.camera)
-        # Fix the (height, width) max of the subplot :
-        sub.height_max = height_max
-        sub.width_max = width_max
-        # Add a title to the subplot :
-        if isinstance(title, str):
             title_color = color2vb(title_color)
             tit = scene.visuals.Text(title, color=title_color, anchor_x='left',
                                      bold=title_bold)
             sub.add_subvisual(tit)
+        else:
+            sub = self[(row, col)]
+            if use_this_cam:
+                sub.camera = obj._get_camera()
+            # For objects that have a mesh attribute, pass the camera :
+            if hasattr(obj, 'mesh'):
+                obj.mesh.set_camera(sub.camera)
+            if title:
+                logger.error("A title is already set. '%s' ignored" % title)
+        # Fix the (height, width) max of the subplot :
+        sub.height_max = height_max
+        sub.width_max = width_max
         sub.add(obj.parent)
         # Camera :
         if camera_state == {}:
