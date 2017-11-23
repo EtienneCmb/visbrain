@@ -348,9 +348,11 @@ class SourceObj(VisbrainObject):
         if isinstance(roi_obj, (str, list, tuple)):
             if isinstance(roi_obj, str):
                 roi_obj = [roi_obj]
-            roi_obj = [RoiObj(k) for k in roi_obj if k in proi]
+            if all([isinstance(k, str) for k in roi_obj]):
+                roi_obj = [RoiObj(k) for k in roi_obj if k in proi]
         elif isinstance(roi_obj, RoiObj):
             roi_obj = [roi_obj]
+        assert all([isinstance(k, RoiObj) for k in roi_obj])
         # Convert predefined ROI into RoiObj objects :
         logger.info("Analyse source's locations using the %s "
                     "atlas" % ', '.join([k.name for k in roi_obj]))
@@ -362,7 +364,17 @@ class SourceObj(VisbrainObject):
         # Get all of the DataFrames :
         df = [k.localize_sources(self._xyz, self._text, replace_bad,
                                  bad_patterns, replace_with) for k in roi_obj]
-        df = df[0] if len(df) == 1 else df
+        # Merge multiple DataFrames :
+        if len(df) > 1:
+            import pandas as pd
+            df_full = df.copy()
+            df = df_full[0]
+            for i, k in enumerate(df_full[1::]):
+                df = pd.merge(df, k, on=['Text', 'X', 'Y', 'Z', 'hemisphere'],
+                              suffixes=('_' + roi_obj[0].name,
+                                        '_' + roi_obj[i + 1].name))
+        else:
+            df = df[0]
         # Keep only sources that match with patterns :
         if isinstance(keep_only, (list, tuple)):
             idx_to_keep = []
