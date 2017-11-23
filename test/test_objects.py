@@ -41,7 +41,7 @@ vb_can_w = VisbrainCanvas()
 vb_can = VisbrainCanvas(axis=True, title='tit', xlabel='xlab', ylabel='ylab',
                         name='Can1', add_cbar=True)
 
-sc_obj = SceneObj(bgcolor='#ab4642', show=False)
+sc_obj = SceneObj(bgcolor='#ab4642')
 
 ###############################################################################
 #                                  SOURCES
@@ -91,9 +91,9 @@ pic_data = 100 * np.random.rand(n_sources, 10, 20)
 pic_xyz = np.random.uniform(-20, 20, (n_sources, 3))
 pic_select = np.random.randint(0, n_sources, (int(n_sources / 2),))
 
-p_obj = Picture3DObj('P1', pic_data, pic_xyz, select=pic_select, width=8.,
-                   height=5., alpha=.7, cmap='inferno', clim=(1., 90.),
-                   vmin=5.1, vmax=84.1, under='orange', over='blue')
+p_obj = Picture3DObj('P1', pic_data, pic_xyz, select=pic_select, pic_width=8.,
+                     pic_height=5., alpha=.7, cmap='inferno', clim=(1., 90.),
+                     vmin=5.1, vmax=84.1, under='orange', over='blue')
 
 p_comb = CombinePictures([p_obj, p_obj])
 
@@ -262,7 +262,7 @@ class TestSceneObj(ObjectMethods):
 
     def test_definition(self):
         """Test function definition."""
-        SceneObj(bgcolor='red', show=False)
+        SceneObj(bgcolor='red')
 
     def test_add_subplot(self):
         """Test function add_subplot."""
@@ -343,6 +343,7 @@ class TestSourceObj(ObjectMethods):
     def test_analyse(self):
         """Test function source_analyse."""
         s_obj.analyse_sources()
+        s_obj.analyse_sources('brodmann', keep_only=['BA4', 'BA6', 'BA8'])
         s_obj.analyse_sources(roi_obj=['brodmann', 'all', 'talairach'])
 
     def test_analyse_color(self):
@@ -368,14 +369,8 @@ class TestSourceObj(ObjectMethods):
     def test_projection(self):
         """Test function source_projection."""
         s_obj.visible = True
-        # Simple vertices :
-        s_obj.project_modulation(vertices, 20.)
-        s_obj.project_repartition(vertices, 20., contribute=True)
-        s_obj.get_masked_index(vertices, 20.)
-        # Indexed faces :
-        s_obj.project_modulation(vertices_x3, 20.)
-        s_obj.project_repartition(vertices_x3, 20., contribute=True)
-        s_obj.get_masked_index(vertices_x3, 20.)
+        s_obj.project_sources(b_obj, project='modulation')
+        s_obj.project_sources(b_obj, project='repartition', contribute=True)
 
 
 class TestCombineSources(ObjectMethods):
