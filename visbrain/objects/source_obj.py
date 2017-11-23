@@ -2,6 +2,7 @@
 from warnings import warn
 import logging
 import numpy as np
+from itertools import product
 from scipy.spatial.distance import cdist
 
 from vispy import scene
@@ -315,7 +316,7 @@ class SourceObj(VisbrainObject):
 
     def analyse_sources(self, roi_obj='talairach', replace_bad=True,
                         bad_patterns=[-1, 'undefined', 'None'],
-                        replace_with='Not found'):
+                        replace_with='Not found', keep_only=None):
         """Analyse sources using Region of interest (ROI).
 
         This method can be used to identify in which structure is located a
@@ -333,6 +334,8 @@ class SourceObj(VisbrainObject):
             Bad patterns to replace if replace_bad is True.
         replace_with : string | 'Not found'
             Replace bad patterns with this string.
+        keep_only : list | None
+            List of string patterns to keep only sources that match.
 
         Returns
         -------
@@ -358,8 +361,19 @@ class SourceObj(VisbrainObject):
         # Get all of the DataFrames :
         df = [k.localize_sources(self._xyz, self._text, replace_bad,
                                  bad_patterns, replace_with) for k in roi_obj]
-        # Return the df if len == 1 :
-        return df[0] if len(df) == 1 else df
+        df = df[0] if len(df) == 1 else df
+        # Keep only sources that match with patterns :
+        if isinstance(keep_only, (list, tuple)):
+            idx_to_keep = []
+            for k, i in product(df.keys(), keep_only):
+                idx_to_keep.append(np.array(df[k], dtype=object) == i)
+            idx_to_keep = np.vstack(idx_to_keep).sum(0).astype(bool)
+            df = df.loc[idx_to_keep]
+            self.visible = idx_to_keep
+            logger.info("%i sources found in %s" % (len(df),
+                                                    ','.join(keep_only)))
+
+        return df
 
     def color_sources(self, analysis=None, color_by=None, data=None,
                       roi_to_color=None, color_others='black',
