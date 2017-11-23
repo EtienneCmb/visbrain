@@ -372,7 +372,6 @@ class SceneObj(object):
         self._camera_state = camera_state
         # OpenGL f***** up with small objects. So we need rescale scenes :
         self._fix_gl = 100.
-        self._transformations = {}
 
     def __getitem__(self, rowcol):
         """Get an element of the grid.
@@ -385,10 +384,38 @@ class SceneObj(object):
         assert len(rowcol) == 2
         return self._grid[(rowcol[0] + 1, rowcol[1] + 1)]
 
+    def _gl_uniform_transforms(self):
+        """Check that transforms are uniforms inside the grid."""
+        for k in self._grid.children:  # loop over viewbox
+            for i in k.children:  # loop over sub-scenes
+                objs, transforms = [], []
+                for j in i.children:  # loop of visuals in the scene
+                    # Don't consider the camera :
+                    if not isinstance(j, scene.cameras.BaseCamera):
+                        objs.append(j)
+                        transforms.append(j.transform)
+                        # Get scaling factor :
+                        sc = np.array([k.scale.sum() for k in transforms])
+                        if sc.size and not len(np.unique(sc)) == 1:
+                            unique_tf = transforms[sc.argmax()]
+                            for k in objs:
+                                k.transform = unique_tf
+                            logger.debug("Standardized transformations")
+
+    def _gl_transform(self, obj):
+        """Get the transformation to apply to the object."""
+        if hasattr(obj, 'mesh'):
+            logger.debug("Object rescaled %s" % str([self._fix_gl] * 3))
+            obj._scale = self._fix_gl
+            sc = [self._fix_gl] * 3
+        else:
+            sc = [1.] * 3
+        obj._node.transform = scene.transforms.STTransform(scale=sc)
+
     def add_to_subplot(self, obj, row=0, col=0, row_span=1, col_span=1,
                        title=None, title_color='white', title_bold=True,
-                       rotate=None, camera_state={}, width_max=None,
-                       height_max=None):
+                       use_this_cam=False, rotate=None, camera_state={},
+                       width_max=None, height_max=None):
         """Add object to subplot.
 
         Parameters
@@ -535,11 +562,13 @@ class SceneObj(object):
         kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
                       autocrop=autocrop, unit=unit, region=region,
                       bgcolor=bgcolor, transparent=transparent)
+        self._gl_uniform_transforms()
         write_fig_canvas(saveas, self._canvas,
                          widget=self._canvas.central_widget, **kwargs)
 
     def preview(self):
         """Previsualize the result."""
+        self._gl_uniform_transforms()
         self._canvas.show(visible=True)
         if PROFILER and logger.level == 1:
             logger.profiler("PARENT TREE \n%s" % self._grid.describe_tree())
