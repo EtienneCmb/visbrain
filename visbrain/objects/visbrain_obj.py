@@ -7,7 +7,7 @@ import vispy.visuals.transforms as vist
 
 from .scene_obj import VisbrainCanvas
 from ..io import write_fig_canvas
-from ..utils import color2vb, set_log_level
+from ..utils import color2vb, set_log_level, merge_cameras
 from ..config import CONFIG
 from ..visuals import CbarBase
 
@@ -264,6 +264,13 @@ class CombineObjects(_VisbrainObj):
         """Represent combined objects."""
         reprs = [repr(k) for k in self]
         return type(self).__name__ + "(" + ", ".join(reprs) + ")"
+
+    def _get_camera(self):
+        """Return a merged version of cameras."""
+        cams = []
+        for k in self:
+            cams.append(k._get_camera())
+        return merge_cameras(*tuple(cams))
 
     def update(self):
         """Update every objects."""
