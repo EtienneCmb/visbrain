@@ -345,8 +345,9 @@ class SourceObj(VisbrainObject):
         # List of predefined ROI objects :
         proi = ['brodmann', 'aal', 'talairach']
         # Define the ROI object if needed :
-        if isinstance(roi_obj, str):
-            roi_obj = [roi_obj]
+        if isinstance(roi_obj, (str, list, tuple)):
+            if isinstance(roi_obj, str):
+                roi_obj = [roi_obj]
             roi_obj = [RoiObj(k) for k in roi_obj if k in proi]
         elif isinstance(roi_obj, RoiObj):
             roi_obj = [roi_obj]
