@@ -455,6 +455,7 @@ class SourceObj(VisbrainObject):
         assert isinstance(distance, (int, float))
         xyz = self._xyz
         if select in ['inside', 'outside', 'close']:
+            logger.info("Select sources %s vertices" % select)
             if v.ndim == 2:  # index faced vertices
                 v = v[:, np.newaxis, :]
             # Predifined inside :
@@ -477,8 +478,13 @@ class SourceObj(VisbrainObject):
                     inside[i] = np.abs(xyz_t0 - v_t0) > distance
             self.visible = inside if select == 'inside' else np.invert(inside)
         elif select in ['all', 'none', None, True, False]:
-            self.visible = select in ['all', True]
+            cond = select in ['all', True]
+            self.visible = cond
+            self.visible_obj = cond
+            msg = 'Display' if cond else 'Hide'
+            logger.info("%s all sources" % msg)
         elif select in ['left', 'right']:
+            logger.info('Select sources in the %s hemisphere' % select)
             vec = xyz[:, 0]
             self.visible = vec <= 0 if select == 'left' else vec >= 0
 
