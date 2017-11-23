@@ -161,7 +161,8 @@ class VisbrainObject(_VisbrainObj):
                       autocrop=autocrop, unit=unit, region=region,
                       bgcolor=bgcolor, transparent=transparent)
         canvas = self._get_parent(bgcolor, False, False)
-        write_fig_canvas(saveas, canvas.canvas, **kwargs)
+        write_fig_canvas(saveas, canvas.canvas,
+                         widget=canvas.canvas.central_widget, **kwargs)
         self._node.parent = None
 
     # ----------- PARENT -----------

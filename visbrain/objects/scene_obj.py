@@ -535,7 +535,8 @@ class SceneObj(object):
         kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
                       autocrop=autocrop, unit=unit, region=region,
                       bgcolor=bgcolor, transparent=transparent)
-        write_fig_canvas(saveas, self._canvas, **kwargs)
+        write_fig_canvas(saveas, self._canvas,
+                         widget=self._canvas.central_widget, **kwargs)
 
     def preview(self):
         """Previsualize the result."""
