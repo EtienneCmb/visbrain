@@ -10,8 +10,7 @@ import numpy as np
 from visbrain.objects import (ImageObj, TimeFrequencyMapObj, SpectrogramObj,
                               ColorbarObj, SceneObj)
 
-CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.2)
-CBAR_CAM = dict(rect=(-0.2, -2., 1., 4.))
+CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.2, rect=(-0.2, -2., 1., 4.))
 sc = SceneObj(size=(1200, 1000))
 
 """Create a 2-D image
@@ -31,10 +30,9 @@ sc.add_to_subplot(im_interp, row=0, col=1, title='Interpolated image')
 
 print('\n-> Custom color properties')
 im_color = ImageObj('im', time, interpolation='bicubic', cmap='Spectral_r',
-                    vmin=5., vmax=20., under='gray', over='darkred',
-                    cblabel='Image data', **CBAR_STATE)
+                    vmin=5., vmax=20., under='gray', over='darkred')
 sc.add_to_subplot(im_color, row=0, col=2, title='Custom colors')
-cb_im_color = ColorbarObj(im_color, **CBAR_CAM)
+cb_im_color = ColorbarObj(im_color, cblabel='Image data', **CBAR_STATE)
 sc.add_to_subplot(cb_im_color, row=0, col=3, width_max=150)
 
 """Define a 25hz sine
@@ -54,9 +52,9 @@ sc.add_to_subplot(tf, row=1, col=1, title='Time-frequency map')
 print('\n-> Compute time-frequency map with windows')
 tf_win = TimeFrequencyMapObj('tf', data, sf, f_min=10., f_max=40., f_step=.5,
                              n_window=100, overlap=.7, interpolation='bicubic',
-                             cmap='Spectral_r', cblabel='Power', **CBAR_STATE)
+                             cmap='Spectral_r')
 sc.add_to_subplot(tf_win, row=1, col=2, title='Time-frequency map')
-cb_tf_win = ColorbarObj(tf_win, **CBAR_CAM)
+cb_tf_win = ColorbarObj(tf_win, cblabel='Power', **CBAR_STATE)
 sc.add_to_subplot(cb_tf_win, row=1, col=3, width_max=150)
 
 sc.preview()

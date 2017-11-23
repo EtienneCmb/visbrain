@@ -34,8 +34,8 @@ print("-> Create a scene. By default, we fix the top view of the camera")
 CAM_STATE = dict(azimuth=0,        # azimuth angle
                  elevation=90,     # elevation angle
                  )
-CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.1, cbtxtsh=3.)
-CBAR_CAM = dict(rect=(-.3, -2., 1., 4.))
+CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.1, cbtxtsh=3.,
+                  rect=(-.3, -2., 1., 4.))
 sc = SceneObj(camera_state=CAM_STATE, bgcolor=(.1, .1, .1), size=(1400, 1000))
 
 print("\n-> Translucent inflated brain template")
@@ -62,8 +62,7 @@ sc.add_to_subplot(b_obj_parl, row=1, col=1, rotate='left',
 
 print("\n-> Send data to parcellates")
 path_to_file2 = download_file('rh.aparc.annot')
-b_obj_parr = BrainObj('inflated', hemisphere='right', translucent=False,
-                      cblabel='Data to parcellates', **CBAR_STATE)
+b_obj_parr = BrainObj('inflated', hemisphere='right', translucent=False)
 # print(b_obj_parr.get_parcellates(path_to_file2))  # available parcellates
 select_par = ['paracentral', 'precentral', 'fusiform', 'postcentral',
               'superiorparietal', 'superiortemporal', 'inferiorparietal',
@@ -74,7 +73,7 @@ b_obj_parr.parcellize(path_to_file2, select=select_par, hemisphere='right',
                       under='gray', over='darkred')
 sc.add_to_subplot(b_obj_parr, row=1, col=2, rotate='right',
                   title='Send data to Desikan-Killiany parcellates')
-cb_parr = ColorbarObj(b_obj_parr, **CBAR_CAM)
+cb_parr = ColorbarObj(b_obj_parr, cblabel='Data to parcellates', **CBAR_STATE)
 sc.add_to_subplot(cb_parr, row=1, col=3, width_max=200)
 
 print("\n-> Add a custom brain template")
@@ -100,14 +99,13 @@ print("\n-> MEG inverse solution")
 file = read_stc(download_file('meg_source_estimate-rh.stc'))
 data = file['data'][:, 2]
 vertices = file['vertices']
-b_obj_meg = BrainObj('inflated', translucent=False, hemisphere='right',
-                     cblabel='MEG data', **CBAR_STATE)
+b_obj_meg = BrainObj('inflated', translucent=False, hemisphere='right')
 b_obj_meg.add_activation(data=data, vertices=vertices, hemisphere='right',
                          smoothing_steps=5, clim=(7., 17.), hide_under=7.,
                          cmap='plasma', vmin=9, vmax=15.)
 sc.add_to_subplot(b_obj_meg, row=2, col=2, title='MEG inverse solution',
                   rotate='right')
-cb_parr = ColorbarObj(b_obj_meg, **CBAR_CAM)
+cb_parr = ColorbarObj(b_obj_meg, cblabel='MEG data', **CBAR_STATE)
 sc.add_to_subplot(cb_parr, row=2, col=3, width_max=200)
 
 """Link brain rotations
