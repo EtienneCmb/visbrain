@@ -410,7 +410,11 @@ class SceneObj(object):
             sc = [self._fix_gl] * 3
         else:
             sc = [1.] * 3
-        obj._node.transform = scene.transforms.STTransform(scale=sc)
+        # Add transformation to the node :
+        if hasattr(obj, '_node'):  # VisbrainObject
+            obj._node.transform = scene.transforms.STTransform(scale=sc)
+        elif hasattr(obj, '_cnode'):  # combineObjects
+            obj._cnode.transform = scene.transforms.STTransform(scale=sc)
 
     def add_to_subplot(self, obj, row=0, col=0, row_span=1, col_span=1,
                        title=None, title_color='white', title_bold=True,
