@@ -1,8 +1,12 @@
 """Colorbar object."""
+import logging
+
 from vispy import scene
 
 from .visbrain_obj import VisbrainObject
 from ..visuals import CbarVisual
+
+logger = logging.getLogger('visbrain')
 
 
 class ColorbarObj(VisbrainObject):
@@ -97,17 +101,18 @@ class ColorbarObj(VisbrainObject):
 
     def _update_cbar_from_obj(self, obj, update=True, **kwargs):
         """Update colorbar from an object."""
-        is_meth = hasattr(obj, 'to_kwargs') and callable(obj.to_kwargs)
+        is_meth = hasattr(obj, 'to_dict') and callable(obj.to_dict)
         if is_meth:
+            logger.info("Get colorbar properties from %s object" % repr(obj))
+            # Get object cbar properties :
             kw = obj.to_dict()
-            if update:
+            if update:  # Update the colorbar visual
                 for name, val in kw.items():
                     exec('self._cbar._%s = val' % name)
                 self._cbar._build()
-            else:
-                for name, val in kw.items():
-                    kwargs[name] = val
-                return kwargs
+            for name, val in kwargs.items():
+                kw[name] = val
+            return kw
         else:
             raise ValueError("Can not get the colorbar of a %s "
                              "object" % type(obj).__name__)
