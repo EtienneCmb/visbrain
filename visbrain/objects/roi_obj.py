@@ -309,7 +309,7 @@ class RoiObj(_Volume):
         self.analysis['Z'] = xyz_untouched[:, 2]
         self.analysis = self.analysis[new_col]
         # Add hemisphere to the dataframe :
-        hemisphere = np.array(['Left'] * xyz_untouched.shape[0])
+        hemisphere = np.array(['Left'] * xyz_untouched.shape[0], dtype=object)
         hemisphere[xyz_untouched[:, 0] > 0] = 'Right'
         self.analysis['hemisphere'] = hemisphere
         return self.analysis
