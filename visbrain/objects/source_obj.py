@@ -366,6 +366,7 @@ class SourceObj(VisbrainObject):
                                  bad_patterns, replace_with) for k in roi_obj]
         # Merge multiple DataFrames :
         if len(df) > 1:
+            logger.info('Merging DataFrames')
             import pandas as pd
             df_full = df.copy()
             df = df_full[0]
