@@ -504,6 +504,7 @@ class SceneObj(object):
         >>> # Link cameras of subplots (0, 0), (0, 1) and (1, 0)
         >>> sc.link((0, 0), (0, 1), (1, 0))
         """
+        logger.info('Linking cameras')
         if args[0] == -1:
             args = list(self._grid_desc.keys())
         assert len(args) > 1
@@ -515,7 +516,7 @@ class SceneObj(object):
 
     def screenshot(self, saveas, print_size=None, dpi=300.,
                    unit='centimeter', factor=None, region=None, autocrop=False,
-                   bgcolor=None, transparent=False):
+                   bgcolor=None, transparent=False, line_width=1.):
         """Take a screeshot of the scene.
 
         By default, the rendered canvas will have the size of your screen.
@@ -560,11 +561,14 @@ class SceneObj(object):
         transparent : bool | False
             Specify if the exported figure have to contains a transparent
             background.
+        line_width : float | 1.
+            Width of line elements.
         """
         kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
                       autocrop=autocrop, unit=unit, region=region,
                       bgcolor=bgcolor, transparent=transparent)
         self._gl_uniform_transforms()
+        self._canvas._context.set_line_width(line_width)
         write_fig_canvas(saveas, self._canvas,
                          widget=self._canvas.central_widget, **kwargs)
 
