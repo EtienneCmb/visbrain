@@ -2,6 +2,7 @@
 import logging
 from functools import wraps
 import numpy as np
+from scipy.spatial.distance import cdist
 
 from vispy import scene
 from vispy.geometry.isosurface import isosurface
@@ -221,7 +222,7 @@ class RoiObj(_Volume):
 
     def localize_sources(self, xyz, source_name=None, replace_bad=True,
                          bad_patterns=[-1, 'undefined', 'None'],
-                         replace_with='Not found'):
+                         replace_with='Not found', distance=None):
         """Localize source's using this ROI object.
 
         Parameters
@@ -260,12 +261,46 @@ class RoiObj(_Volume):
             else:
                 location = None
             self.analysis.loc[k] = location
+        # Replace bad patterns :
         if replace_bad:
             # Replace NaN values :
             self.analysis.fillna(replace_with, inplace=True)
             # Replace bad patterns :
             for k in bad_patterns:
                 self.analysis.replace(k, replace_with, inplace=True)
+        # Replace unfound informations with the closest source info :
+        if isinstance(distance, (int, float)):
+            distance = float(distance)
+            # Find rows that contains the replace_with pattern :
+            bad_rows = []
+            analyse_cols = [k for k in self.analysis.keys() if self.analysis[
+                k].dtype == object]
+            for k in analyse_cols:
+                bad_rows.append(self.analysis[k] == replace_with)
+            bad_rows = np.where(np.array(bad_rows).sum(0))[0]
+            good_rows = np.arange(n_sources)
+            good_rows = np.delete(good_rows, bad_rows)
+            logger.info("%i rows containing the %r pattern "
+                        "found" % (len(bad_rows), replace_with))
+            # Get good and bad xyz and compute euclidian distance :
+            xyz_good = xyz_untouched[good_rows, :]
+            xyz_bad = xyz_untouched[bad_rows, :]
+            xyz_dist = cdist(xyz_bad, xyz_good)
+            xyz_dist_bool = np.any(xyz_dist <= distance, axis=1)
+            close_str = np.array(["None under %.1f" % distance] * n_sources)
+            if np.any(xyz_dist_bool):
+                n_replaced = 0
+                for k in np.where(xyz_dist_bool)[0]:
+                    close_idx = good_rows[xyz_dist[k, :].argmin()]
+                    bad_row = bad_rows[k]
+                    self.analysis.loc[bad_row] = self.analysis.loc[close_idx]
+                    close_str[bad_row] = source_name[close_idx]
+                    n_replaced += 1
+            close_str[good_rows] = -1
+            self.analysis["Replaced with"] = close_str
+            logger.info("Anatomical informations of %i sources have been "
+                        "replaced using a distance of "
+                        "%1.f" % (n_replaced, distance))
         # Add Text and (X, Y, Z) to the table :
         new_col = ['Text'] + self.analysis.columns.tolist() + ['X', 'Y', 'Z']
         self.analysis['Text'] = source_name

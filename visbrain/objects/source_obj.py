@@ -315,7 +315,7 @@ class SourceObj(VisbrainObject):
     ###########################################################################
 
     def analyse_sources(self, roi_obj='talairach', replace_bad=True,
-                        bad_patterns=[-1, 'undefined', 'None'],
+                        bad_patterns=[-1, 'undefined', 'None'], distance=None,
                         replace_with='Not found', keep_only=None):
         """Analyse sources using Region of interest (ROI).
 
@@ -363,7 +363,8 @@ class SourceObj(VisbrainObject):
                                 "'talairach' or a list or RoiObj objects.")
         # Get all of the DataFrames :
         df = [k.localize_sources(self._xyz, self._text, replace_bad,
-                                 bad_patterns, replace_with) for k in roi_obj]
+                                 bad_patterns, replace_with,
+                                 distance) for k in roi_obj]
         # Merge multiple DataFrames :
         if len(df) > 1:
             logger.info('Merging DataFrames')
