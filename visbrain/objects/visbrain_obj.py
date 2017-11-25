@@ -74,16 +74,20 @@ class VisbrainObject(_VisbrainObj):
         """Return the object name."""
         return self._name
 
-    def _get_parent(self, bgcolor, axis, show):
+    def _get_parent(self, bgcolor, axis, show, obj=None):
         """Get the object parent for preview and screenshot."""
-        camera = self._get_camera()
+        if hasattr(obj, '_get_camera'):
+            camera = obj._get_camera()
+        else:
+            camera = self._get_camera()
         canvas = VisbrainCanvas(axis=axis, show=show, name=self._name,
                                 bgcolor=color2vb(bgcolor), camera=camera)
         self._csize = canvas.canvas.size
         self._node.parent = canvas.wc.scene
         return canvas
 
-    def preview(self, bgcolor='white', axis=False, xyz=False, show=True):
+    def preview(self, bgcolor='white', axis=False, xyz=False, show=True,
+                obj=None):
         """Previsualize the result.
 
         Parameters
@@ -94,9 +98,12 @@ class VisbrainObject(_VisbrainObj):
             Add x and y axis with ticks.
         xyz : bool | False
             Add an (x, y, z) axis to the scene.
+        obj : VisbrainObj | None
+            Pass a Visbrain object if you want to use the camera of an other
+            object.
         """
         parent_bck = self._node.parent
-        canvas = self._get_parent(bgcolor, axis, show)
+        canvas = self._get_parent(bgcolor, axis, show, obj)
         if xyz:
             vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)
         # view.camera = camera
@@ -111,7 +118,7 @@ class VisbrainObject(_VisbrainObj):
 
     def screenshot(self, saveas, print_size=None, dpi=300.,
                    unit='centimeter', factor=None, region=None, autocrop=False,
-                   bgcolor=None, transparent=False):
+                   bgcolor=None, transparent=False, obj=None, line_width=1.):
         """Take a screeshot of the scene.
 
         By default, the rendered canvas will have the size of your screen.
@@ -156,11 +163,17 @@ class VisbrainObject(_VisbrainObj):
         transparent : bool | False
             Specify if the exported figure have to contains a transparent
             background.
+        obj : VisbrainObj | None
+            Pass a Visbrain object if you want to use the camera of an other
+            object for the sceen rendering.
+        line_width : float | 1.
+            Width of line elements.
         """
         kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
                       autocrop=autocrop, unit=unit, region=region,
                       bgcolor=bgcolor, transparent=transparent)
-        canvas = self._get_parent(bgcolor, False, False)
+        canvas = self._get_parent(bgcolor, False, False, obj)
+        canvas.canvas._context.set_line_width(line_width)
         write_fig_canvas(saveas, canvas.canvas,
                          widget=canvas.canvas.central_widget, **kwargs)
         self._node.parent = None
