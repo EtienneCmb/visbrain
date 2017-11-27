@@ -4,7 +4,8 @@ import numpy as np
 
 from vispy.scene.cameras import PanZoomCamera, TurntableCamera
 
-__all__ = ['FixedCam', 'rotate_turntable', 'optimal_scale_factor']
+__all__ = ['FixedCam', 'rotate_turntable', 'optimal_scale_factor',
+           'merge_cameras']
 
 logger = logging.getLogger('visbrain')
 
@@ -61,7 +62,6 @@ def rotate_turntable(fixed=None, camera_state={}, camera=None,
     camera_state : dict
         The camera state used.
     """
-    idx = priority = 0
     assert all([isinstance(k, (int, float)) for k in [margin, _scale]])
     if isinstance(fixed, str):
         azimuth, elevation, idx, priority = FIXED_CAM[fixed]
@@ -101,3 +101,39 @@ def optimal_scale_factor(axis_scale, csize):
     # Get the optimal scaling factor :
     opt_scale_factor = axis_scale[np.argmax([x_ratio, y_ratio])]
     return opt_scale_factor
+
+
+def merge_cameras(*args):
+    """Merge several TurnTable cameras.
+
+    This function returns the mean center and the max across scale_factor and
+    distances.
+
+    Parameter
+    ---------
+    args : TurnTableCamera
+        The turntable cameras to use.
+
+    Returns
+    -------
+    cam_state : dict
+        The dictionary of merged camera states.
+    """
+    assert all([isinstance(k, TurntableCamera) for k in args])
+    center = np.zeros((3,), dtype=np.float32)
+    scale_factor, distance = [], []
+    # Get the camera state of multiple cameras :
+    for k in args:
+        cam_state = k.get_state()
+        center += cam_state['center']
+        scale_factor.append(cam_state['scale_factor'])
+        if isinstance(k.distance, (int, float)):
+            distance.append(k.distance)
+    # Get mean center, max scale_factor and max distance :
+    center /= len(args)
+    scale_factor = np.max(scale_factor)
+    distance = np.max(distance) if len(distance) else None
+    # Create turntable camera :
+    cam = TurntableCamera(center=center, scale_factor=scale_factor,
+                          distance=distance)
+    return cam

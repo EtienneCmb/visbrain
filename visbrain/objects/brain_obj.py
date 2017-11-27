@@ -231,13 +231,19 @@ class BrainObj(VisbrainObject, CbarArgs):
         self._get_camera()
         cam_state = self.mesh._opt_cam_state.copy()
         xyz = cam_state['scale_factor']
+        if isinstance(scale_factor, (int, float)):
+            cam_state['scale_factor'] = scale_factor
         if isinstance(custom, (tuple, list)) and (len(custom) == 2):
             cam_state['azimuth'] = custom[0]
             cam_state['elevation'] = custom[1]
-        if isinstance(scale_factor, (int, float)):
-            cam_state['scale_factor'] = scale_factor
-        rotate_turntable(fixed, cam_state, camera=self.camera, xyz=xyz,
-                         csize=self._csize, margin=margin, _scale=self._scale)
+            is_sc_float = isinstance(cam_state['scale_factor'], (int, float))
+            if 'scale_factor' in cam_state.keys() and not is_sc_float:
+                del cam_state['scale_factor']
+            self.camera.set_state(**cam_state)
+        else:
+            rotate_turntable(fixed, cam_state, camera=self.camera, xyz=xyz,
+                             csize=self._csize, margin=margin,
+                             _scale=self._scale)
 
     def add_activation(self, data=None, vertices=None, smoothing_steps=20,
                        file=None, hemisphere=None, hide_under=None,
