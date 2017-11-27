@@ -61,6 +61,7 @@ def rotate_turntable(fixed=None, camera_state={}, camera=None,
     camera_state : dict
         The camera state used.
     """
+    idx = priority = 0
     assert all([isinstance(k, (int, float)) for k in [margin, _scale]])
     if isinstance(fixed, str):
         azimuth, elevation, idx, priority = FIXED_CAM[fixed]

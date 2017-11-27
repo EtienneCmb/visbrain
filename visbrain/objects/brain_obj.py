@@ -209,7 +209,7 @@ class BrainObj(VisbrainObject, CbarArgs):
         self.mesh._camera.set_state(cam_state)
         self.mesh._camera.set_default_state()
 
-    def rotate(self, fixed='top', custom=None, margin=1.08):
+    def rotate(self, fixed=None, scale_factor=None, custom=None, margin=1.08):
         """Rotate the brain using predefined rotations or a custom one.
 
         Parameters
@@ -234,6 +234,8 @@ class BrainObj(VisbrainObject, CbarArgs):
         if isinstance(custom, (tuple, list)) and (len(custom) == 2):
             cam_state['azimuth'] = custom[0]
             cam_state['elevation'] = custom[1]
+        if isinstance(scale_factor, (int, float)):
+            cam_state['scale_factor'] = scale_factor
         rotate_turntable(fixed, cam_state, camera=self.camera, xyz=xyz,
                          csize=self._csize, margin=margin, _scale=self._scale)
 
