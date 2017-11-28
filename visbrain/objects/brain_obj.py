@@ -281,7 +281,7 @@ class BrainObj(VisbrainObject):
             the color of the masked sources is going to be used.
         """
         kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
-        self._default_cblabel = "Source's %s" % project
+        self._default_cblabel = "Source %s" % project
         _project_sources_data(s_obj, self, project, radius, contribute,
                               mask_color=mask_color, **kw)
 
