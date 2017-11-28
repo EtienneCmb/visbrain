@@ -172,10 +172,9 @@
 
 <span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CombineObjects</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">array2colormap</span><span class="p">,</span> <span class="n">normalize</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">wrap_properties</span>
-<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">CbarArgs</span>
 
 
-<div class="viewcode-block" id="ConnectObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.connect_obj.ConnectObj">[docs]</a><span class="k">class</span> <span class="nc">ConnectObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CbarArgs</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.ConnectObj">[docs]</a><span class="k">class</span> <span class="nc">ConnectObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a connectivity object.</span>
 
 <span class="sd">    Parameters</span>
@@ -224,6 +223,9 @@
 <span class="sd">        Verbosity level.</span>
 <span class="sd">    _z : float | 10.</span>
 <span class="sd">        In case of (n_sources, 2) use _z to specify the elevation.</span>
+<span class="sd">    kw : dict | {}</span>
+<span class="sd">        Optional arguments are used to control the colorbar</span>
+<span class="sd">        (See :class:`ColorbarObj`).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -248,12 +250,10 @@
                  <span class="n">color_by</span><span class="o">=</span><span class="s1">&#39;strength&#39;</span><span class="p">,</span> <span class="n">custom_colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
                  <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
-                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">):</span>
+                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
-        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-        <span class="n">isvmin</span><span class="p">,</span> <span class="n">isvmax</span> <span class="o">=</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="n">CbarArgs</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">isvmin</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">isvmax</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span>
-                          <span class="n">over</span><span class="p">)</span>
+        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
 
         <span class="c1"># _______________________ CHECKING _______________________</span>
         <span class="c1"># Nodes :</span>
@@ -300,9 +300,9 @@
         <span class="sd">&quot;&quot;&quot;Get the number of nodes.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_nodes</span>
 
-<div class="viewcode-block" id="ConnectObj.update"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.connect_obj.ConnectObj.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the line.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_build_line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Build the connectivity line.&quot;&quot;&quot;</span>

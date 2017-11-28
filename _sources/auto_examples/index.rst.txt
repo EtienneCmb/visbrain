@@ -512,6 +512,26 @@ Examples demonstrating how to objects.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :">
+
+.. only:: html
+
+    .. figure:: /auto_examples/objects/images/thumb/sphx_glr_ex_roi_object_thumb.png
+
+        :ref:`sphx_glr_auto_examples_objects_ex_roi_object.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/objects/ex_roi_object
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the source object i.e :">
 
 .. only:: html

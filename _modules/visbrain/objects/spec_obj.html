@@ -214,6 +214,9 @@
 <span class="sd">        Markers object parent.</span>
 <span class="sd">    verbose : string</span>
 <span class="sd">        Verbosity level.</span>
+<span class="sd">    kw : dict | {}</span>
+<span class="sd">        Optional arguments are used to control the colorbar</span>
+<span class="sd">        (See :class:`ColorbarObj`).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -230,17 +233,17 @@
                  <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hamming&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
                  <span class="n">max_pts</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># Initialize the image object :</span>
         <span class="n">ImageObj</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">interpolation</span><span class="p">,</span>
                           <span class="n">max_pts</span><span class="o">=</span><span class="n">max_pts</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
-                          <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+                          <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
         <span class="c1"># Compute spectrogram and set data to the ImageObj :</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">nperseg</span><span class="p">,</span> <span class="n">overlap</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span>
-                          <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                          <span class="n">vmin</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SpectrogramObj.set_data"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SpectrogramObj.set_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">window</span><span class="o">=</span><span class="s1">&#39;hamming&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -251,17 +254,18 @@
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nperseg</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
         <span class="k">assert</span> <span class="mf">0.</span> <span class="o">&lt;=</span> <span class="n">overlap</span> <span class="o">&lt;</span> <span class="mf">1.</span>
         <span class="n">noverlap</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">overlap</span> <span class="o">*</span> <span class="n">nperseg</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
 
         <span class="c1"># Compute spectrogram :</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nperseg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nperseg</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;noverlap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">noverlap</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">window</span>
-        <span class="n">freqs</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">freqs</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">spectrogram</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sf</span><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span>
+                                      <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
 
         <span class="c1"># Set data to the image object :</span>
-        <span class="n">ImageObj</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xaxis</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="n">freqs</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="n">clim</span><span class="p">,</span>
-                          <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="n">under</span><span class="p">,</span>
-                          <span class="n">over</span><span class="o">=</span><span class="n">over</span><span class="p">)</span></div></div>
+        <span class="n">ImageObj</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tf</span><span class="p">,</span> <span class="n">xaxis</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">yaxis</span><span class="o">=</span><span class="n">freqs</span><span class="p">,</span>
+                          <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">to_kwargs</span><span class="p">())</span></div></div>
 </pre></div>
 
            </div>

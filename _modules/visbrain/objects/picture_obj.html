@@ -171,11 +171,11 @@
 
 <span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CombineObjects</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">wrap_properties</span>
-<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">PicMesh</span><span class="p">,</span> <span class="n">CbarArgs</span>
+<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">PicMesh</span>
 
 
-<div class="viewcode-block" id="PictureObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.picture_obj.PictureObj">[docs]</a><span class="k">class</span> <span class="nc">PictureObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CbarArgs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create a connectivity object.</span>
+<div class="viewcode-block" id="Picture3DObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.Picture3DObj">[docs]</a><span class="k">class</span> <span class="nc">Picture3DObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a 3-D picture object.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -188,9 +188,9 @@
 <span class="sd">    select : array_like | None</span>
 <span class="sd">        Select the pictures to display. Should be a vector of bolean values</span>
 <span class="sd">        of shape (n_sources,).</span>
-<span class="sd">    width : float | 7.</span>
+<span class="sd">    pic_width : float | 7.</span>
 <span class="sd">        Width of each picture.</span>
-<span class="sd">    height : float | 7.</span>
+<span class="sd">    pic_height : float | 7.</span>
 <span class="sd">        Height of each picture.</span>
 <span class="sd">    alpha : float | 1.</span>
 <span class="sd">        Image transparency.</span>
@@ -214,15 +214,18 @@
 <span class="sd">        Verbosity level.</span>
 <span class="sd">    _z : float | 10.</span>
 <span class="sd">        In case of (n_sources, 2) use _z to specify the elevation.</span>
+<span class="sd">    kw : dict | {}</span>
+<span class="sd">        Optional arguments are used to control the colorbar</span>
+<span class="sd">        (See :class:`ColorbarObj`).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; from visbrain.objects import PictureObj</span>
+<span class="sd">    &gt;&gt;&gt; from visbrain.objects import Picture3DObj</span>
 <span class="sd">    &gt;&gt;&gt; n_rows, n_cols, n_pic = 10, 20, 5</span>
 <span class="sd">    &gt;&gt;&gt; data = np.random.rand(n_pic, n_rows, n_cols)</span>
 <span class="sd">    &gt;&gt;&gt; xyz = np.random.uniform(-10, 10, (n_pic, 3))</span>
-<span class="sd">    &gt;&gt;&gt; pic = PictureObj(&#39;Pic&#39;, data, xyz, cmap=&#39;plasma&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pic = Picture3DObj(&#39;Pic&#39;, data, xyz, cmap=&#39;plasma&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; pic.preview(axis=True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -232,15 +235,13 @@
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">7.</span><span class="p">,</span>
-                 <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span>
-                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pic_width</span><span class="o">=</span><span class="mf">7.</span><span class="p">,</span>
+                 <span class="n">pic_height</span><span class="o">=</span><span class="mf">7.</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span>
+                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
-        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-        <span class="n">isvmin</span><span class="p">,</span> <span class="n">isvmax</span> <span class="o">=</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="n">CbarArgs</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">isvmin</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">isvmax</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span>
-                          <span class="n">over</span><span class="p">)</span>
+        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
 
         <span class="c1"># _______________________ CHECKING _______________________</span>
         <span class="c1"># Data :</span>
@@ -255,8 +256,9 @@
         <span class="c1"># Select :</span>
         <span class="k">assert</span> <span class="p">(</span><span class="n">select</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span>
         <span class="c1"># Width, height :</span>
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span> <span class="o">=</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pic_height</span><span class="p">,</span>
+                                                          <span class="n">pic_width</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pic_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pic_height</span> <span class="o">=</span> <span class="n">pic_width</span><span class="p">,</span> <span class="n">pic_height</span>
         <span class="c1"># Translate :</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">translate</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
         <span class="n">tr</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">STTransform</span><span class="p">(</span><span class="n">translate</span><span class="o">=</span><span class="n">translate</span><span class="p">)</span>
@@ -266,7 +268,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">alpha</span>
 
         <span class="c1"># _______________________ IMAGE _______________________</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pic</span> <span class="o">=</span> <span class="n">PicMesh</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">translate</span><span class="p">,</span> <span class="n">select</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pic</span> <span class="o">=</span> <span class="n">PicMesh</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">pic_width</span><span class="p">,</span> <span class="n">pic_height</span><span class="p">,</span> <span class="n">translate</span><span class="p">,</span>
+                            <span class="n">select</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pic</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">tr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pic</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node</span>
 
@@ -280,9 +283,9 @@
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xyz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">TurntableCamera</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">d_mean</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="n">dist</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PictureObj.update"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.picture_obj.PictureObj.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update image.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pic</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pic</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
@@ -290,32 +293,32 @@
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
 
-    <span class="c1"># ----------- WIDTH -----------</span>
+    <span class="c1"># ----------- PIC_WIDTH -----------</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the width value.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
+    <span class="k">def</span> <span class="nf">pic_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the pic_width value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pic_width</span>
 
-    <span class="nd">@width</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@pic_width</span><span class="o">.</span><span class="n">setter</span>
     <span class="nd">@wrap_properties</span>
-    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set width value.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">pic_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set pic_width value.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pic_width</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pic</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
 
-    <span class="c1"># ----------- HEIGHT -----------</span>
+    <span class="c1"># ----------- PIC_HEIGHT -----------</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pic_height</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the height value.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pic_height</span>
 
-    <span class="nd">@height</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@pic_height</span><span class="o">.</span><span class="n">setter</span>
     <span class="nd">@wrap_properties</span>
-    <span class="k">def</span> <span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set height value.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">pic_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set pic_height value.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_height</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pic_height</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pic</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
 
     <span class="c1"># ----------- TRANSLATE -----------</span>
@@ -353,7 +356,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    pobjs : PictureObj/list | None</span>
+<span class="sd">    pobjs : Picture3DObj/list | None</span>
 <span class="sd">        List of picture objects.</span>
 <span class="sd">    select : string | None</span>
 <span class="sd">        The name of the picture object to select.</span>
@@ -363,7 +366,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pobjs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
-        <span class="n">CombineObjects</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PictureObj</span><span class="p">,</span> <span class="n">pobjs</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">CombineObjects</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Picture3DObj</span><span class="p">,</span> <span class="n">pobjs</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 </pre></div>
 
            </div>

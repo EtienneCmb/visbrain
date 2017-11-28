@@ -167,6 +167,7 @@
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="k">import</span> <span class="n">cdist</span>
 
 <span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
@@ -174,206 +175,17 @@
 <span class="kn">import</span> <span class="nn">vispy.visuals.transforms</span> <span class="k">as</span> <span class="nn">vist</span>
 
 <span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CombineObjects</span>
+<span class="kn">from</span> <span class="nn">._projection</span> <span class="k">import</span> <span class="n">_project_sources_data</span>
 <span class="kn">from</span> <span class="nn">.roi_obj</span> <span class="k">import</span> <span class="n">RoiObj</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">tal2mni</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">normalize</span><span class="p">,</span> <span class="n">vispy_array</span><span class="p">,</span>
                      <span class="n">wrap_properties</span><span class="p">,</span> <span class="n">array2colormap</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">CbarArgs</span>
 
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 <span class="n">PROJ_STR</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%i</span><span class="s2"> sources visibles and not masked used for the </span><span class="si">%s</span><span class="s2">&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">SourceProjection</span><span class="p">(</span><span class="n">CbarArgs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Group cortical projection and cortical repartition projections.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
-                 <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
-        <span class="n">isvmin</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
-        <span class="n">isvmax</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vmax</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
-        <span class="c1"># Initialize colorbar arguments :</span>
-        <span class="n">CbarArgs</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">isvmin</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">isvmax</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span>
-                          <span class="n">over</span><span class="p">)</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_eucl_mask</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">,</span> <span class="n">xsign</span><span class="p">):</span>
-        <span class="c1"># Compute euclidian distance and get sources under radius :</span>
-        <span class="n">eucl</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">xyz</span><span class="p">)</span>
-        <span class="n">eucl</span> <span class="o">=</span> <span class="n">eucl</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">eucl</span> <span class="o">&lt;=</span> <span class="n">radius</span>
-        <span class="c1"># Contribute :</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">contribute</span><span class="p">:</span>
-            <span class="c1"># Get vertices sign :</span>
-            <span class="n">vsign</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">v</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="c1"># Find where vsign and xsign are equals :</span>
-            <span class="n">isign</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">vsign</span> <span class="o">!=</span> <span class="n">xsign</span><span class="p">,</span> <span class="n">xsign</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">mask</span><span class="p">[</span><span class="n">isign</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">return</span> <span class="n">eucl</span><span class="p">,</span> <span class="n">mask</span>
-
-    <span class="k">def</span> <span class="nf">_check_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">,</span> <span class="n">not_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="c1"># =============== CHECKING ===============</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">contribute</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># index faced vertices</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
-
-        <span class="c1"># =============== PRE-ALLOCATION ===============</span>
-        <span class="k">if</span> <span class="n">not_masked</span><span class="p">:</span>  <span class="c1"># get visible and not masked sources</span>
-            <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_and_not_masked</span>
-        <span class="k">else</span><span class="p">:</span>           <span class="c1"># get visible and masked sources</span>
-            <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible</span><span class="p">)</span>
-        <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xyz</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-        <span class="c1"># Get sign of the x coordinate :</span>
-        <span class="n">xsign</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">xsign</span>
-
-    <span class="k">def</span> <span class="nf">project_modulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Project source&#39;s data onto vertices.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        v : array_like</span>
-<span class="sd">            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.</span>
-<span class="sd">        radius : float</span>
-<span class="sd">            The radius under which activity is projected on vertices.</span>
-<span class="sd">        contribute: bool | False</span>
-<span class="sd">            Specify if sources contribute on both hemisphere.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        modulation : array_like</span>
-<span class="sd">            The modulations of shape (nv, 3) or (nv, 3, 3) if index faced. This</span>
-<span class="sd">            is a masked array where the mask refer to sources that are over the</span>
-<span class="sd">            radius.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Check inputs :</span>
-        <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">xsign</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_projection</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">PROJ_STR</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="s1">&#39;projection&#39;</span><span class="p">))</span>
-        <span class="n">index_faced</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="c1"># Modulation / proportion / (Min, Max) :</span>
-        <span class="n">modulation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index_faced</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="n">prop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">modulation</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">minmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">index_faced</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Projection ignored because no sources visibles and &quot;</span>
-                        <span class="s2">&quot;not masked&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">modulation</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
-
-        <span class="c1"># For each triangle :</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index_faced</span><span class="p">):</span>
-            <span class="c1"># =============== EUCLIDIAN DISTANCE ===============</span>
-            <span class="n">eucl</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_eucl_mask</span><span class="p">(</span><span class="n">v</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span>
-                                             <span class="n">contribute</span><span class="p">,</span> <span class="n">xsign</span><span class="p">)</span>
-            <span class="c1"># Invert euclidian distance for modulation and mask it :</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">eucl</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">eucl</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">out</span><span class="o">=</span><span class="n">eucl</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">eucl</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">eucl</span><span class="p">)</span>
-            <span class="n">eucl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">eucl</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-
-            <span class="c1"># =============== MODULATION ===============</span>
-            <span class="c1"># Modulate data by distance (only for sources under radius) :</span>
-            <span class="n">modulation</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">eucl</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-            <span class="c1"># =============== PROPORTIONS ===============</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">prop</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
-            <span class="n">nnz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-            <span class="n">minmax</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="n">nnz</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">data</span><span class="p">[</span><span class="n">nnz</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
-
-        <span class="c1"># Divide modulations by the number of contributing sources :</span>
-        <span class="n">prop</span><span class="p">[</span><span class="n">prop</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">modulation</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">modulation</span><span class="p">)</span>
-        <span class="c1"># Normalize inplace modulations between under radius data :</span>
-        <span class="n">normalize</span><span class="p">(</span><span class="n">modulation</span><span class="p">,</span> <span class="n">minmax</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">minmax</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_minmax</span> <span class="o">=</span> <span class="p">(</span><span class="n">modulation</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">modulation</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">modulation</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">project_repartition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Project source&#39;s repartition onto vertices.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        v : array_like</span>
-<span class="sd">            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.</span>
-<span class="sd">        radius : float</span>
-<span class="sd">            The radius under which activity is projected on vertices.</span>
-<span class="sd">        contribute: bool | False</span>
-<span class="sd">            Specify if sources contribute on both hemisphere.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        repartition: array_like</span>
-<span class="sd">            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced. This</span>
-<span class="sd">            is a masked array where the mask refer to sources that are over the</span>
-<span class="sd">            radius.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Check inputs :</span>
-        <span class="n">xyz</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">xsign</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_projection</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">PROJ_STR</span> <span class="o">%</span> <span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;repartition&#39;</span><span class="p">))</span>
-        <span class="n">index_faced</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="c1"># Corticale repartition :</span>
-        <span class="n">repartition</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index_faced</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">xyz</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Repartition ignored because no sources visibles and &quot;</span>
-                        <span class="s2">&quot;not masked&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">repartition</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
-
-        <span class="c1"># For each triangle :</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index_faced</span><span class="p">):</span>
-            <span class="c1"># =============== EUCLIDIAN DISTANCE ===============</span>
-            <span class="n">eucl</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_eucl_mask</span><span class="p">(</span><span class="n">v</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span>
-                                             <span class="n">contribute</span><span class="p">,</span> <span class="n">xsign</span><span class="p">)</span>
-
-            <span class="c1"># =============== REPARTITION ===============</span>
-            <span class="c1"># Sum over sources dimension :</span>
-            <span class="n">sm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
-            <span class="n">smmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">sm</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
-            <span class="n">repartition</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">smmask</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_minmax</span> <span class="o">=</span> <span class="p">(</span><span class="n">repartition</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">repartition</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">repartition</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">get_masked_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the index of masked source&#39;s under radius.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        v : array_like</span>
-<span class="sd">            The vertices of shape (nv, 3) or (nv, 3, 3) if index faced.</span>
-<span class="sd">        radius : float</span>
-<span class="sd">            The radius under which activity is projected on vertices.</span>
-<span class="sd">        contribute: bool | False</span>
-<span class="sd">            Specify if sources contribute on both hemisphere.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        idx: array_like</span>
-<span class="sd">            The repartition of shape (nv, 3) or (nv, 3, 3) if index faced.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Check inputs and get masked xyz / data :</span>
-        <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">xsign</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_projection</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">,</span>
-                                                     <span class="kc">False</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2"> sources visibles and masked found&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-        <span class="c1"># Predefined masked euclidian distance :</span>
-        <span class="n">nv</span><span class="p">,</span> <span class="n">index_faced</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">fmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index_faced</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
-
-        <span class="c1"># For each triangle :</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index_faced</span><span class="p">):</span>
-            <span class="c1"># =============== EUCLIDIAN DISTANCE ===============</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">fmask</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_eucl_mask</span><span class="p">(</span><span class="n">v</span><span class="p">[:,</span> <span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span>
-                                                    <span class="n">contribute</span><span class="p">,</span> <span class="n">xsign</span><span class="p">)</span>
-        <span class="c1"># Find where there&#39;s sources under radius and need to be masked :</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">fmask</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">fmask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">index_faced</span><span class="p">,</span> <span class="n">fmask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">idx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nv</span><span class="p">,</span> <span class="n">index_faced</span><span class="p">))</span>
-
-
-<div class="viewcode-block" id="SourceObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SourceObj">[docs]</a><span class="k">class</span> <span class="nc">SourceObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">SourceProjection</span><span class="p">):</span>
+<div class="viewcode-block" id="SourceObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SourceObj">[docs]</a><span class="k">class</span> <span class="nc">SourceObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a source object.</span>
 
 <span class="sd">    Parameters</span>
@@ -407,7 +219,7 @@
 <span class="sd">    mask : array_like | None</span>
 <span class="sd">        Array of boolean values to specify masked sources. For example, if data</span>
 <span class="sd">        are p-values, mask could be non-significant sources.</span>
-<span class="sd">    mask_color : array_like/tuple/string | &#39;red&#39;</span>
+<span class="sd">    mask_color : array_like/tuple/string | &#39;gray&#39;</span>
 <span class="sd">        Color to use for masked sources.</span>
 <span class="sd">    text : list | None</span>
 <span class="sd">        Text to attach to each source. For example, text could be the name of</span>
@@ -432,6 +244,9 @@
 <span class="sd">        Verbosity level.</span>
 <span class="sd">    _z : float | 10.</span>
 <span class="sd">        In case of (n_sources, 2) use _z to specify the elevation.</span>
+<span class="sd">    kw : dict | {}</span>
+<span class="sd">        Optional arguments are used to control the colorbar</span>
+<span class="sd">        (See :class:`ColorbarObj`).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -456,14 +271,13 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
                  <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;disc&#39;</span><span class="p">,</span> <span class="n">radius_min</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">radius_max</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s1">&#39;mni&#39;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
-                 <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text_size</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">text_bold</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s1">&#39;mni&#39;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">mask_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text_size</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span>
+                 <span class="n">text_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">text_bold</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">text_translate</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
-        <span class="c1"># Init Visbrain object base class and SourceProjection :</span>
-        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-        <span class="n">SourceProjection</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="c1"># _______________________ CHECKING _______________________</span>
         <span class="c1"># XYZ :</span>
         <span class="n">sh</span> <span class="o">=</span> <span class="n">xyz</span><span class="o">.</span><span class="n">shape</span>
@@ -616,13 +430,58 @@
 
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
+    <span class="c1">#                             PROJECTIONS</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+<div class="viewcode-block" id="SourceObj.project_sources"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SourceObj.project_sources">[docs]</a>    <span class="k">def</span> <span class="nf">project_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b_obj</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s1">&#39;modulation&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+                        <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">under</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                        <span class="n">mask_color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Project source&#39;s activity or repartition onto the brain object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        b_obj : {BrainObj, RoiObj}</span>
+<span class="sd">            The object on which to project sources.</span>
+<span class="sd">        project : {&#39;modulation&#39;, &#39;repartition&#39;}</span>
+<span class="sd">            Project either the source&#39;s data (&#39;modulation&#39;) or get the number</span>
+<span class="sd">            of contributing sources per vertex (&#39;repartition&#39;).</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius under which activity is projected on vertices.</span>
+<span class="sd">        contribute: bool | False</span>
+<span class="sd">            Specify if sources contribute on both hemisphere.</span>
+<span class="sd">        cmap : string | &#39;viridis&#39;</span>
+<span class="sd">            The colormap to use.</span>
+<span class="sd">        clim : tuple | None</span>
+<span class="sd">            The colorbar limits. If None, (data.min(), data.max()) will be used</span>
+<span class="sd">            instead.</span>
+<span class="sd">        vmin : float | None</span>
+<span class="sd">            Minimum threshold.</span>
+<span class="sd">        vmax : float | None</span>
+<span class="sd">            Maximum threshold.</span>
+<span class="sd">        under : string/tuple/array_like | &#39;gray&#39;</span>
+<span class="sd">            The color to use for values under vmin.</span>
+<span class="sd">        over : string/tuple/array_like | &#39;red&#39;</span>
+<span class="sd">            The color to use for values over vmax.</span>
+<span class="sd">        mask_color : string/tuple/array_like | &#39;gray&#39;</span>
+<span class="sd">            The color to use for the projection of masked sources. If None,</span>
+<span class="sd">            the color of the masked sources is going to be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Source&#39;s </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">project</span>
+        <span class="n">_project_sources_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b_obj</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">,</span>
+                              <span class="n">mask_color</span><span class="o">=</span><span class="n">mask_color</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
     <span class="c1">#                                  PHYSIO</span>
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
 
 <div class="viewcode-block" id="SourceObj.analyse_sources"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SourceObj.analyse_sources">[docs]</a>    <span class="k">def</span> <span class="nf">analyse_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roi_obj</span><span class="o">=</span><span class="s1">&#39;talairach&#39;</span><span class="p">,</span> <span class="n">replace_bad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">bad_patterns</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;undefined&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">],</span>
-                        <span class="n">replace_with</span><span class="o">=</span><span class="s1">&#39;Not found&#39;</span><span class="p">):</span>
+                        <span class="n">bad_patterns</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;undefined&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">],</span> <span class="n">distance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">replace_with</span><span class="o">=</span><span class="s1">&#39;Not found&#39;</span><span class="p">,</span> <span class="n">keep_only</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Analyse sources using Region of interest (ROI).</span>
 
 <span class="sd">        This method can be used to identify in which structure is located a</span>
@@ -640,6 +499,8 @@
 <span class="sd">            Bad patterns to replace if replace_bad is True.</span>
 <span class="sd">        replace_with : string | &#39;Not found&#39;</span>
 <span class="sd">            Replace bad patterns with this string.</span>
+<span class="sd">        keep_only : list | None</span>
+<span class="sd">            List of string patterns to keep only sources that match.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -649,10 +510,15 @@
         <span class="c1"># List of predefined ROI objects :</span>
         <span class="n">proi</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="s1">&#39;aal&#39;</span><span class="p">,</span> <span class="s1">&#39;talairach&#39;</span><span class="p">]</span>
         <span class="c1"># Define the ROI object if needed :</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roi_obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roi_obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roi_obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">roi_obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">roi_obj</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roi_obj</span><span class="p">]):</span>
+                <span class="n">roi_obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">RoiObj</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roi_obj</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">proi</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roi_obj</span><span class="p">,</span> <span class="n">RoiObj</span><span class="p">):</span>
             <span class="n">roi_obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">roi_obj</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">RoiObj</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roi_obj</span><span class="p">])</span>
         <span class="c1"># Convert predefined ROI into RoiObj objects :</span>
-        <span class="n">roi_obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">RoiObj</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roi_obj</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">proi</span><span class="p">]</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Analyse source&#39;s locations using the </span><span class="si">%s</span><span class="s2"> &quot;</span>
                     <span class="s2">&quot;atlas&quot;</span> <span class="o">%</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">k</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roi_obj</span><span class="p">]))</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roi_obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
@@ -662,9 +528,32 @@
                                 <span class="s2">&quot;&#39;talairach&#39; or a list or RoiObj objects.&quot;</span><span class="p">)</span>
         <span class="c1"># Get all of the DataFrames :</span>
         <span class="n">df</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">localize_sources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xyz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span> <span class="n">replace_bad</span><span class="p">,</span>
-                                 <span class="n">bad_patterns</span><span class="p">,</span> <span class="n">replace_with</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roi_obj</span><span class="p">]</span>
-        <span class="c1"># Return the df if len == 1 :</span>
-        <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">df</span></div>
+                                 <span class="n">bad_patterns</span><span class="p">,</span> <span class="n">replace_with</span><span class="p">,</span>
+                                 <span class="n">distance</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roi_obj</span><span class="p">]</span>
+        <span class="c1"># Merge multiple DataFrames :</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Merging DataFrames&#39;</span><span class="p">)</span>
+            <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+            <span class="n">df_full</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df_full</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df_full</span><span class="p">[</span><span class="mi">1</span><span class="p">::]):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;hemisphere&#39;</span><span class="p">],</span>
+                              <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">roi_obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                        <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">roi_obj</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Keep only sources that match with patterns :</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keep_only</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">keep_only</span><span class="p">):</span>
+                <span class="n">idx_to_keep</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">idx_to_keep</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_to_keep</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">idx_to_keep</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2"> sources found in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
+                                                    <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keep_only</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">df</span></div>
 
 <div class="viewcode-block" id="SourceObj.color_sources"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SourceObj.color_sources">[docs]</a>    <span class="k">def</span> <span class="nf">color_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analysis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">roi_to_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color_others</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
@@ -760,6 +649,7 @@
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
         <span class="n">xyz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xyz</span>
         <span class="k">if</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;inside&#39;</span><span class="p">,</span> <span class="s1">&#39;outside&#39;</span><span class="p">,</span> <span class="s1">&#39;close&#39;</span><span class="p">]:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Select sources </span><span class="si">%s</span><span class="s2"> vertices&quot;</span> <span class="o">%</span> <span class="n">select</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># index faced vertices</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
             <span class="c1"># Predifined inside :</span>
@@ -782,8 +672,13 @@
                     <span class="n">inside</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">xyz_t0</span> <span class="o">-</span> <span class="n">v_t0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">distance</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">inside</span> <span class="k">if</span> <span class="n">select</span> <span class="o">==</span> <span class="s1">&#39;inside&#39;</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">inside</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
+            <span class="n">cond</span> <span class="o">=</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">cond</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">visible_obj</span> <span class="o">=</span> <span class="n">cond</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Display&#39;</span> <span class="k">if</span> <span class="n">cond</span> <span class="k">else</span> <span class="s1">&#39;Hide&#39;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> all sources&quot;</span> <span class="o">%</span> <span class="n">msg</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">select</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Select sources in the </span><span class="si">%s</span><span class="s1"> hemisphere&#39;</span> <span class="o">%</span> <span class="n">select</span><span class="p">)</span>
             <span class="n">vec</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">vec</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">select</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span> <span class="k">else</span> <span class="n">vec</span> <span class="o">&gt;=</span> <span class="mi">0</span></div>
 
@@ -1063,7 +958,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_sources_text</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
 
-<span class="k">class</span> <span class="nc">CombineSources</span><span class="p">(</span><span class="n">CombineObjects</span><span class="p">,</span> <span class="n">SourceProjection</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">CombineSources</span><span class="p">(</span><span class="n">CombineObjects</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Combine sources objects.</span>
 
 <span class="sd">    Parameters</span>
@@ -1079,7 +974,16 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sobjs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="n">CombineObjects</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">SourceObj</span><span class="p">,</span> <span class="n">sobjs</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
-        <span class="n">SourceProjection</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">project_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b_obj</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s1">&#39;modulation&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+                        <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">under</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                        <span class="n">mask_color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Project source&#39;s activity or repartition onto the brain object.&quot;&quot;&quot;</span>
+        <span class="n">kw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Source&#39;s </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">project</span>
+        <span class="n">_project_sources_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b_obj</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">,</span>
+                              <span class="n">mask_color</span><span class="o">=</span><span class="n">mask_color</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">fit_to_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;See sources doc.&quot;&quot;&quot;</span>

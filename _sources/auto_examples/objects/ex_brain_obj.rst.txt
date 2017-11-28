@@ -34,17 +34,16 @@ List of the brain templates supported by default :
 
     import vispy.visuals.transforms as vist
 
-    from visbrain.objects import BrainObj, ColorbarObj, SceneObj
+    from visbrain.objects import BrainObj, ColorbarObj, SceneObj, SourceObj
     from visbrain.io import download_file, read_stc
 
 
     print("-> Create a scene. By default, we fix the top view of the camera")
     CAM_STATE = dict(azimuth=0,        # azimuth angle
                      elevation=90,     # elevation angle
-                     scale_factor=180  # ~distance to the camera
                      )
-    CBAR_STATE = dict(cbtxtsz=12, txtsz=10., rect=(-.3, -2., 1., 4.), width=.1,
-                      cbtxtsh=3.)
+    CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.1, cbtxtsh=3.,
+                      rect=(-.3, -2., 1., 4.))
     sc = SceneObj(camera_state=CAM_STATE, bgcolor=(.1, .1, .1), size=(1400, 1000))
 
     print("\n-> Translucent inflated brain template")
@@ -57,9 +56,18 @@ List of the brain templates supported by default :
     b_obj_lw = BrainObj('white', hemisphere='left', translucent=False)
     sc.add_to_subplot(b_obj_lw, row=0, col=1, rotate='right',
                       title='Left hemisphere')
-    b_obj_rw = BrainObj('white', hemisphere='right', translucent=False)
+    b_obj_rw = BrainObj('white', hemisphere='both', translucent=True)
+
+    # Define a source object and project data on the right hemisphere:
+    mat = np.load(download_file('xyz_sample.npz'))
+    xyz, subjects = mat['xyz'], mat['subjects']
+    data = np.random.rand(xyz.shape[0])
+    s_obj = SourceObj('Sources', xyz, data=data, cmap='inferno')
+    s_obj.color_sources(data=data)
+    b_obj_rw.project_sources(s_obj, cmap='viridis')
+    sc.add_to_subplot(s_obj, row=0, col=2)
     sc.add_to_subplot(b_obj_rw, row=0, col=2, rotate='left',
-                      title='Right hemisphere')
+                      title='Right hemisphere', use_this_cam=True)
 
     print("\n-> Parcellize the brain (using all parcellates)")
     path_to_file1 = download_file('lh.aparc.a2009s.annot')
@@ -120,7 +128,7 @@ List of the brain templates supported by default :
     """Link brain rotations
     """
     sc.link((0, 1), (1, 2))
-    sc.link((0, 2), (1, 1))
+    # sc.link((0, 2), (1, 1))
 
     """Screenshot of the scene
     """

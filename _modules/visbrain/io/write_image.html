@@ -169,8 +169,8 @@
 <span class="sd">- write_fig_canvas : Export a canvas as a figure</span>
 <span class="sd">- write_fig_pyqt : Export a GUI window as a figure</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="c1"># from os.path import splitext</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">..utils.color</span> <span class="k">import</span> <span class="n">color2vb</span>
 
@@ -360,23 +360,30 @@
     <span class="n">backup_size</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">physical_size</span>
     <span class="n">backup_bgcolor</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span>
 
+    <span class="c1"># dpi checking :</span>
+    <span class="k">if</span> <span class="n">print_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;dpi parameter is not active if `print_size` is None. &quot;</span>
+                       <span class="s2">&quot;Use for example `print_size=(5, 5)`&quot;</span><span class="p">)</span>
+
     <span class="c1"># User select a desired print size with at a specific dpi :</span>
     <span class="k">if</span> <span class="n">print_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Type checking :</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">print_size</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The print_size must either be a tuple, list or a &quot;</span>
-                            <span class="s2">&quot;NumPy array describing the (width, height) of the&quot;</span>
-                            <span class="s2">&quot; image in &quot;</span> <span class="o">+</span> <span class="n">unit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">print_size</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The print_size must either be a tuple or a list &quot;</span>
+                            <span class="s2">&quot;describing the (width, height) of the&quot;</span>
+                            <span class="s2">&quot; image in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">unit</span><span class="p">)</span>
         <span class="c1"># Check print size :</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">print_size</span><span class="p">]):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;print_size must be a tuple describing the &quot;</span>
-                            <span class="s2">&quot;(width, height) of the image in &quot;</span> <span class="o">+</span> <span class="n">unit</span><span class="p">)</span>
+                            <span class="s2">&quot;(width, height) of the image in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">unit</span><span class="p">)</span>
+
         <span class="n">print_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">print_size</span><span class="p">)</span>
         <span class="c1"># If the user select the auto-croping option, the canvas must be render</span>
         <span class="c1"># before :</span>
         <span class="k">if</span> <span class="n">autocrop</span><span class="p">:</span>
             <span class="n">img</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
             <span class="n">s_output</span> <span class="o">=</span> <span class="n">piccrop</span><span class="p">(</span><span class="n">img</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Image cropped to closest non-backround pixels&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">s_output</span> <span class="o">=</span> <span class="n">b_size</span>
         <span class="c1"># Unit conversion :</span>
@@ -407,8 +414,6 @@
         <span class="k">if</span> <span class="n">widget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">widget</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span><span class="p">)</span>
 
-    <span class="c1"># Don&#39;t use transparency for jpg files :</span>
-    <span class="c1"># transparent = transparent if splitext(filename)[1] != &#39;.jpg&#39; else False</span>
     <span class="c1"># Background color and transparency :</span>
     <span class="k">if</span> <span class="n">bgcolor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">canvas</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
@@ -422,12 +427,18 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can not render the canvas. Try to decrease the &quot;</span>
                          <span class="s2">&quot;resolution&quot;</span><span class="p">)</span>
 
+    <span class="c1"># Remove alpha for files that are not png or tiff :</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.png&#39;</span><span class="p">,</span> <span class="s1">&#39;.tiff&#39;</span><span class="p">]:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
     <span class="c1"># Apply auto-cropping to the image :</span>
     <span class="k">if</span> <span class="n">autocrop</span><span class="p">:</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">piccrop</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Image cropped to closest non-backround pixels&quot;</span><span class="p">)</span>
     <span class="c1"># Save it :</span>
     <span class="n">imsave</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Image successfully saved (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">px</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Image of size </span><span class="si">%r</span><span class="s2">px successfully saved (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
 
     <span class="c1"># Set to the canvas it&#39;s previous size :</span>
     <span class="n">canvas</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_physical_size</span> <span class="o">=</span> <span class="n">backup_size</span>

@@ -241,7 +241,7 @@ parameters to control each colorbar :</p>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">,</span> <span class="n">Colorbar</span>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.PictureObj" title="View documentation for visbrain.objects.PictureObj"><span class="n">PictureObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.SourceObj" title="View documentation for visbrain.objects.SourceObj"><span class="n">SourceObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.ConnectObj" title="View documentation for visbrain.objects.ConnectObj"><span class="n">ConnectObj</span></a><span class="p">,</span> <span class="n">Picture3DObj</span>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 
@@ -271,7 +271,7 @@ parameters to control each colorbar :</p>
 <span class="sd">and 20 columns</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="n">pic_data</span> <span class="o">=</span> <span class="mf">50.</span> <span class="o">*</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html#numpy.random.rand" title="View documentation for numpy.random.rand"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="n">n_sources</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="n">pic_obj</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.PictureObj" title="View documentation for visbrain.objects.PictureObj"><span class="n">PictureObj</span></a><span class="p">(</span><span class="s1">&#39;Pictures&#39;</span><span class="p">,</span> <span class="n">pic_data</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">)</span>
+<span class="n">pic_obj</span> <span class="o">=</span> <span class="n">Picture3DObj</span><span class="p">(</span><span class="s1">&#39;Pictures&#39;</span><span class="p">,</span> <span class="n">pic_data</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">)</span>
 
 
 <span class="sd">&quot;&quot;&quot;</span>

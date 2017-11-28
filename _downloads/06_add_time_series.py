@@ -13,7 +13,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
 import numpy as np
 
 from visbrain import Brain
-from visbrain.objects import TimeSeriesObj
+from visbrain.objects import TimeSeries3DObj
 from visbrain.io import download_file, path_to_visbrain_data
 
 # Load the xyz coordinates and corresponding subject name :
@@ -47,9 +47,9 @@ ts_color = 'orange'     # TS color
 ts_dxyz = (1., 2., 5.)  # TS offset along the (x, y, z) axes
 ts_lw = 2.2             # TS line-width
 
-ts = TimeSeriesObj('Ts1', ts_data, s_xyz, select=ts_select, amplitude=ts_amp,
-                   width=ts_width, line_width=ts_lw, translate=ts_dxyz,
-                   color=ts_color)
+ts = TimeSeries3DObj('Ts1', ts_data, s_xyz, select=ts_select, ts_amp=ts_amp,
+                     ts_width=ts_width, line_width=ts_lw, translate=ts_dxyz,
+                     color=ts_color)
 
 vb = Brain(time_series_obj=ts)
 vb.show()

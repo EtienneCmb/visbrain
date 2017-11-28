@@ -42,7 +42,7 @@
     <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
         <link rel="next" title="Display conjunction map" href="../pysurfer/conjunction_map.html"/>
-        <link rel="prev" title="Image, time-frequency map and spectrogram objects" href="ex_im_tf_spec_obj.html"/> 
+        <link rel="prev" title="Region Of Interest (ROI) object" href="ex_roi_object.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -109,6 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="ex_brain_obj.html">Brain object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_connectivity_obj.html">Connectivity object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_im_tf_spec_obj.html">Image, time-frequency map and spectrogram objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_roi_object.html">Region Of Interest (ROI) object</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Source object</a></li>
 </ul>
 </li>
@@ -224,7 +225,7 @@ Talairach atlas</li>
                  <span class="n">elevation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>     <span class="c1"># elevation angle</span>
                  <span class="n">scale_factor</span><span class="o">=</span><span class="mi">180</span>  <span class="c1"># ~distance to the camera</span>
                  <span class="p">)</span>
-<span class="n">CBAR_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="n">width</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">CBAR_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">))</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SceneObj</span><span class="p">(</span><span class="n">camera_state</span><span class="o">=</span><span class="n">CAM_STATE</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
 
 <span class="sd">&quot;&quot;&quot;Create the most basic source object</span>
@@ -280,7 +281,8 @@ Talairach atlas</li>
 <span class="n">s_obj_data</span><span class="o">.</span><span class="n">color_sources</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">8.</span><span class="p">,</span>
                          <span class="n">vmax</span><span class="o">=</span><span class="mf">8.</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">s_obj_data</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Color sources using data&#39;</span><span class="p">)</span>
-<span class="n">cb_data</span> <span class="o">=</span> <span class="n">ColorbarObj</span><span class="p">(</span><span class="n">s_obj_data</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Random data&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
+<span class="n">cb_data</span> <span class="o">=</span> <span class="n">ColorbarObj</span><span class="p">(</span><span class="n">s_obj_data</span><span class="p">,</span> <span class="n">cblabel</span><span class="o">=</span><span class="s1">&#39;Random data&#39;</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                      <span class="o">**</span><span class="n">CBAR_STATE</span><span class="p">)</span>
 <span class="n">sc</span><span class="o">.</span><span class="n">add_to_subplot</span><span class="p">(</span><span class="n">cb_data</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">width_max</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;Display only sources in the left hemisphere</span>
@@ -351,7 +353,7 @@ Talairach atlas</li>
         <a href="../pysurfer/conjunction_map.html" class="btn btn-neutral float-right" title="Display conjunction map" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ex_im_tf_spec_obj.html" class="btn btn-neutral" title="Image, time-frequency map and spectrogram objects" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ex_roi_object.html" class="btn btn-neutral" title="Region Of Interest (ROI) object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

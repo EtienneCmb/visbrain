@@ -174,7 +174,7 @@
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">normalize</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">wrap_properties</span>
 
 
-<div class="viewcode-block" id="TimeSeriesObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.ts_obj.TimeSeriesObj">[docs]</a><span class="k">class</span> <span class="nc">TimeSeriesObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
+<div class="viewcode-block" id="TimeSeries3DObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.TimeSeries3DObj">[docs]</a><span class="k">class</span> <span class="nc">TimeSeries3DObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a  3-D time-series object.</span>
 
 <span class="sd">    Parameters</span>
@@ -192,9 +192,9 @@
 <span class="sd">        Time-series&#39; line width.</span>
 <span class="sd">    color : array_like/tuple/string | &#39;white&#39;</span>
 <span class="sd">        Time-series&#39; color.</span>
-<span class="sd">    amplitude : float | 6.</span>
+<span class="sd">    ts_amp : float | 6.</span>
 <span class="sd">        Graphical amplitude of the time-series.</span>
-<span class="sd">    width : float | 20.</span>
+<span class="sd">    ts_width : float | 20.</span>
 <span class="sd">        Graphical width of the time-series.</span>
 <span class="sd">    alpha : float | 1.</span>
 <span class="sd">        Time-series transparency.</span>
@@ -210,28 +210,31 @@
 <span class="sd">        Verbosity level.</span>
 <span class="sd">    _z : float | 10.</span>
 <span class="sd">        In case of (n_sources, 2) use _z to specify the elevation.</span>
+<span class="sd">    kw : dict | {}</span>
+<span class="sd">        Optional arguments are used to control the colorbar</span>
+<span class="sd">        (See :class:`ColorbarObj`).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; from visbrain.objects import TimeSeriesObj</span>
+<span class="sd">    &gt;&gt;&gt; from visbrain.objects import TimeSeries3DObj</span>
 <span class="sd">    &gt;&gt;&gt; n_pts, n_ts = 100, 5</span>
 <span class="sd">    &gt;&gt;&gt; time = np.arange(n_pts)</span>
 <span class="sd">    &gt;&gt;&gt; phy = np.random.uniform(2, 30, (n_ts))</span>
 <span class="sd">    &gt;&gt;&gt; data = np.sin(2 * np.pi * time.reshape(1, -1) * phy.reshape(-1, 1))</span>
 <span class="sd">    &gt;&gt;&gt; xyz = np.random.uniform(-20, 20, (n_ts, 3))</span>
-<span class="sd">    &gt;&gt;&gt; ts = TimeSeriesObj(&#39;Ts&#39;, data, xyz, antialias=True, color=&#39;red&#39;,</span>
+<span class="sd">    &gt;&gt;&gt; ts = TimeSeries3DObj(&#39;Ts&#39;, data, xyz, antialias=True, color=&#39;red&#39;,</span>
 <span class="sd">    &gt;&gt;&gt;                    line_width=3.)</span>
 <span class="sd">    &gt;&gt;&gt; ts.preview(axis=True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">ts_amp</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span> <span class="n">ts_width</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
                  <span class="n">antialias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">):</span>
+                 <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_z</span><span class="o">=-</span><span class="mf">10.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># Init Visbrain object base class :</span>
-        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="c1"># _______________________ CHECKING _______________________</span>
         <span class="c1"># Data :</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span>
@@ -247,8 +250,8 @@
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_select</span> <span class="o">=</span> <span class="n">select</span>
         <span class="c1"># Amplitude / width :</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">amplitude</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_amplitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="n">amplitude</span><span class="p">,</span> <span class="n">width</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ts_amp</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ts_width</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ts_amp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ts_width</span> <span class="o">=</span> <span class="n">ts_amp</span><span class="p">,</span> <span class="n">ts_width</span>
         <span class="c1"># Translate :</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">translate</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
         <span class="n">tr</span> <span class="o">=</span> <span class="n">vist</span><span class="o">.</span><span class="n">STTransform</span><span class="p">(</span><span class="n">translate</span><span class="o">=</span><span class="n">translate</span><span class="p">)</span>
@@ -270,17 +273,18 @@
         <span class="sd">&quot;&quot;&quot;Get the number of nodes.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_nodes</span>
 
-<div class="viewcode-block" id="TimeSeriesObj.update"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.ts_obj.TimeSeriesObj.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update line.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ts</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ts</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_build_line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Get the number of sources :</span>
         <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1"># Build the position vector :</span>
         <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_pts</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_pts</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_amplitude</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_amplitude</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_ts_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ts_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">_n_pts</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_ts_amp</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ts_amp</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
             <span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xyz</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">time</span>
             <span class="n">pos</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xyz</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span>
@@ -303,32 +307,32 @@
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
 
-    <span class="c1"># ----------- WIDTH -----------</span>
+    <span class="c1"># ----------- TS_WIDTH -----------</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the width value.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span>
+    <span class="k">def</span> <span class="nf">ts_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the ts_width value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ts_width</span>
 
-    <span class="nd">@width</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@ts_width</span><span class="o">.</span><span class="n">setter</span>
     <span class="nd">@wrap_properties</span>
-    <span class="k">def</span> <span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set width value.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">ts_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set ts_width value.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ts_width</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_build_line</span><span class="p">()</span>
 
-    <span class="c1"># ----------- AMPLITUDE -----------</span>
+    <span class="c1"># ----------- TS_AMP -----------</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">amplitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the amplitude value.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_amplitude</span>
+    <span class="k">def</span> <span class="nf">ts_amp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the ts_amp value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ts_amp</span>
 
-    <span class="nd">@amplitude</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@ts_amp</span><span class="o">.</span><span class="n">setter</span>
     <span class="nd">@wrap_properties</span>
-    <span class="k">def</span> <span class="nf">amplitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set amplitude value.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">ts_amp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set ts_amp value.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_amplitude</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ts_amp</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_build_line</span><span class="p">()</span>
 
     <span class="c1"># ----------- COLOR -----------</span>
@@ -397,7 +401,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    tsobjs : TimeSeriesObj/list | None</span>
+<span class="sd">    tsobjs : TimeSeries3DObj/list | None</span>
 <span class="sd">        List of time-series objects.</span>
 <span class="sd">    select : string | None</span>
 <span class="sd">        The name of the time-series object to select.</span>
@@ -407,7 +411,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tsobjs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
-        <span class="n">CombineObjects</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">TimeSeriesObj</span><span class="p">,</span> <span class="n">tsobjs</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">CombineObjects</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">TimeSeries3DObj</span><span class="p">,</span> <span class="n">tsobjs</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
 </pre></div>
 
            </div>

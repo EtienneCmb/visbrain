@@ -164,18 +164,47 @@
             
   <h1>Source code for visbrain.objects.roi_obj</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Base class for objects of type ROI.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="k">import</span> <span class="n">cdist</span>
 
 <span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
 <span class="kn">from</span> <span class="nn">vispy.geometry.isosurface</span> <span class="k">import</span> <span class="n">isosurface</span>
 
-<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CombineObjects</span>
+<span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">CombineObjects</span>
+<span class="kn">from</span> <span class="nn">.volume_obj</span> <span class="k">import</span> <span class="n">_Volume</span>
+<span class="kn">from</span> <span class="nn">._projection</span> <span class="k">import</span> <span class="n">_project_sources_data</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">is_pandas_installed</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">load_predefined_roi</span><span class="p">,</span> <span class="n">mni2tal</span><span class="p">,</span> <span class="n">smooth_3d</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">mni2tal</span><span class="p">,</span> <span class="n">smooth_3d</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">array_to_stt</span>
 <span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">BrainMesh</span>
 
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RoiObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj">[docs]</a><span class="k">class</span> <span class="nc">RoiObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">wrap_setter_properties</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set properties if not None and if mesh is defined.&quot;&quot;&quot;</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="k">def</span> <span class="nf">wrap_getter_properties</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get properties if mesh is defined.&quot;&quot;&quot;</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No mesh defined. Use the method `select_roi` &quot;</span>
+                             <span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<div class="viewcode-block" id="RoiObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj">[docs]</a><span class="k">class</span> <span class="nc">RoiObj</span><span class="p">(</span><span class="n">_Volume</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a Region Of Interest (ROI) object.</span>
 
 <span class="sd">    Parameters</span>
@@ -203,14 +232,17 @@
 <span class="sd">        ROI object parent.</span>
 <span class="sd">    verbose : string</span>
 <span class="sd">        Verbosity level.</span>
+<span class="sd">    kw : dict | {}</span>
+<span class="sd">        Optional arguments are used to control the colorbar</span>
+<span class="sd">        (See :class:`ColorbarObj`).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; from visbrain.objects import RoiObj</span>
 <span class="sd">    &gt;&gt;&gt; r = RoiObj(&#39;brodmann&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; r.get_roi_vertices(level=[4, 6, 38], unique_color=True, plot=True,</span>
-<span class="sd">    &gt;&gt;&gt;                    smooth=7)</span>
+<span class="sd">    &gt;&gt;&gt; r.select_roi(select=[4, 6, 38], unique_color=True, plot=True,</span>
+<span class="sd">    &gt;&gt;&gt;              smooth=7)</span>
 <span class="sd">    &gt;&gt;&gt; r.preview(axis=True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -221,15 +253,31 @@
     <span class="c1">###########################################################################</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hdr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">system</span><span class="o">=</span><span class="s1">&#39;mni&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">system</span><span class="o">=</span><span class="s1">&#39;mni&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">_scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
-        <span class="c1"># Init Visbrain object base class :</span>
-        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">change_roi_object</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+        <span class="n">_Volume</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="n">_scale</span>
+        <span class="k">if</span> <span class="n">preload</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predefined_volumes</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                BUILTIN</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the number of ROI.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_roi</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call the set_data method.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test if ROI have been selected.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;mesh&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the ref item at index.&quot;&quot;&quot;</span>
@@ -260,8 +308,14 @@
         <span class="n">sh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 
-<div class="viewcode-block" id="RoiObj.change_roi_object"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj.change_roi_object">[docs]</a>    <span class="k">def</span> <span class="nf">change_roi_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                          <span class="n">hdr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="s1">&#39;mni&#39;</span><span class="p">):</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                SET_DATA</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hdr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">system</span><span class="o">=</span><span class="s1">&#39;mni&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load an roi object.</span>
 
 <span class="sd">        Parameters</span>
@@ -293,7 +347,7 @@
         <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
         <span class="c1"># _______________________ PREDEFINED _______________________</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="s1">&#39;talairach&#39;</span><span class="p">,</span> <span class="s1">&#39;aal&#39;</span><span class="p">]:</span>
-            <span class="n">vol</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">system</span> <span class="o">=</span> <span class="n">load_predefined_roi</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">vol</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">system</span> <span class="o">=</span> <span class="n">_Volume</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;talairach&#39;</span> <span class="k">else</span> <span class="mi">0</span>
 
         <span class="c1"># _______________________ CHECKING _______________________</span>
@@ -317,7 +371,28 @@
         <span class="n">label_dict</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
         <span class="n">cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">label_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">label_dict</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({},</span> <span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({},</span> <span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> ROI loaded.&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RoiObj.get_labels"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj.get_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_to_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the labels associated with the loaded ROI.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        save_to_path : str | None</span>
+<span class="sd">            Save labels to an excel file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">save_to_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">save_to_path</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="n">is_pandas_installed</span><span class="p">()</span>
+            <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+            <span class="n">save_as</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_to_path</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.xlsx&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">save_as</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saved as </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">save_as</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span></div>
 
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
@@ -327,7 +402,7 @@
 
 <div class="viewcode-block" id="RoiObj.localize_sources"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj.localize_sources">[docs]</a>    <span class="k">def</span> <span class="nf">localize_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">source_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replace_bad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                          <span class="n">bad_patterns</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;undefined&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">],</span>
-                         <span class="n">replace_with</span><span class="o">=</span><span class="s1">&#39;Not found&#39;</span><span class="p">):</span>
+                         <span class="n">replace_with</span><span class="o">=</span><span class="s1">&#39;Not found&#39;</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Localize source&#39;s using this ROI object.</span>
 
 <span class="sd">        Parameters</span>
@@ -366,12 +441,46 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">location</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">location</span>
+        <span class="c1"># Replace bad patterns :</span>
         <span class="k">if</span> <span class="n">replace_bad</span><span class="p">:</span>
             <span class="c1"># Replace NaN values :</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">replace_with</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="c1"># Replace bad patterns :</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bad_patterns</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">replace_with</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Replace unfound informations with the closest source info :</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+            <span class="c1"># Find rows that contains the replace_with pattern :</span>
+            <span class="n">bad_rows</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">analyse_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">[</span>
+                <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">object</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">analyse_cols</span><span class="p">:</span>
+                <span class="n">bad_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">replace_with</span><span class="p">)</span>
+            <span class="n">bad_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bad_rows</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">good_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_sources</span><span class="p">)</span>
+            <span class="n">good_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">good_rows</span><span class="p">,</span> <span class="n">bad_rows</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2"> rows containing the </span><span class="si">%r</span><span class="s2"> pattern &quot;</span>
+                        <span class="s2">&quot;found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bad_rows</span><span class="p">),</span> <span class="n">replace_with</span><span class="p">))</span>
+            <span class="c1"># Get good and bad xyz and compute euclidian distance :</span>
+            <span class="n">xyz_good</span> <span class="o">=</span> <span class="n">xyz_untouched</span><span class="p">[</span><span class="n">good_rows</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">xyz_bad</span> <span class="o">=</span> <span class="n">xyz_untouched</span><span class="p">[</span><span class="n">bad_rows</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">xyz_dist</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">xyz_bad</span><span class="p">,</span> <span class="n">xyz_good</span><span class="p">)</span>
+            <span class="n">xyz_dist_bool</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">xyz_dist</span> <span class="o">&lt;=</span> <span class="n">distance</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">close_str</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;None under </span><span class="si">%.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">distance</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_sources</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">xyz_dist_bool</span><span class="p">):</span>
+                <span class="n">n_replaced</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">xyz_dist_bool</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">close_idx</span> <span class="o">=</span> <span class="n">good_rows</span><span class="p">[</span><span class="n">xyz_dist</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">argmin</span><span class="p">()]</span>
+                    <span class="n">bad_row</span> <span class="o">=</span> <span class="n">bad_rows</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">bad_row</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">close_idx</span><span class="p">]</span>
+                    <span class="n">close_str</span><span class="p">[</span><span class="n">bad_row</span><span class="p">]</span> <span class="o">=</span> <span class="n">source_name</span><span class="p">[</span><span class="n">close_idx</span><span class="p">]</span>
+                    <span class="n">n_replaced</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">close_str</span><span class="p">[</span><span class="n">good_rows</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;Replaced with&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">close_str</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Anatomical informations of </span><span class="si">%i</span><span class="s2"> sources have been &quot;</span>
+                        <span class="s2">&quot;replaced using a distance of &quot;</span>
+                        <span class="s2">&quot;%1.f&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n_replaced</span><span class="p">,</span> <span class="n">distance</span><span class="p">))</span>
         <span class="c1"># Add Text and (X, Y, Z) to the table :</span>
         <span class="n">new_col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">source_name</span>
@@ -379,6 +488,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyz_untouched</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;Z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyz_untouched</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">[</span><span class="n">new_col</span><span class="p">]</span>
+        <span class="c1"># Add hemisphere to the dataframe :</span>
+        <span class="n">hemisphere</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;Left&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">xyz_untouched</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">hemisphere</span><span class="p">[</span><span class="n">xyz_untouched</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Right&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;hemisphere&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hemisphere</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span></div>
 
     <span class="k">def</span> <span class="nf">_find_roi_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vol_idx</span><span class="p">):</span>
@@ -397,76 +510,242 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">arr</span><span class="p">}</span>
 
-<div class="viewcode-block" id="RoiObj.get_roi_vertices"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj.get_roi_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">get_roi_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">unique_color</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                         <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the vertices of ROI&#39;s.</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                MESH</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">select_roi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">select</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">unique_color</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">roi_to_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">smooth</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Select several Region Of Interest (ROI).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        level : int, float, list | .5</span>
+<span class="sd">        select : int, float, list | .5</span>
 <span class="sd">            Threshold for extracting vertices from isosuface method.</span>
 <span class="sd">        unique_color : bool | False</span>
 <span class="sd">            Use a random unique color for each ROI.</span>
 <span class="sd">        smooth : int | 3</span>
 <span class="sd">            Smoothing level. Must be an odd integer (smooth % 2 = 1).</span>
-<span class="sd">        plot : bool | False</span>
-<span class="sd">            Specify if a mesh object have to be defined.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Get vertices / faces :</span>
+        <span class="n">vert</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="c1"># Use specific colors :</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roi_to_color</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">select</span> <span class="o">=</span> <span class="n">roi_to_color</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="n">unique_color</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">unique_color</span><span class="p">:</span>
-            <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_roi_vertices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
+            <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">select</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Same white color used across ROI(s)&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-            <span class="n">level</span> <span class="o">=</span> <span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">level</span>
+            <span class="k">assert</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+            <span class="n">select</span> <span class="o">=</span> <span class="p">[</span><span class="n">select</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">select</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">select</span>
             <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-            <span class="c1"># Generate a (n_levels, 3, 4) array of unique colors :</span>
-            <span class="n">col_unique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">level</span><span class="p">),</span> <span class="mi">4</span><span class="p">))</span>
-            <span class="n">col_unique</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">level</span><span class="p">):</span>
-                <span class="n">v</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_roi_vertices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
+            <span class="c1"># Generate a (n_levels, 4) array of unique colors :</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roi_to_color</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">roi_to_color</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">)</span>
+                <span class="n">col_unique</span> <span class="o">=</span> <span class="p">[</span><span class="n">color2vb</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">roi_to_color</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+                <span class="n">col_unique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col_unique</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Specific colors has been defined&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">col_unique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">select</span><span class="p">),</span> <span class="mi">4</span><span class="p">))</span>
+                <span class="n">col_unique</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Random color are going to be used.&quot;</span><span class="p">)</span>
+            <span class="c1"># Get vertices and faces of each ROI :</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">select</span><span class="p">):</span>
+                <span class="n">v</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">k</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
                 <span class="c1"># Concatenate vertices / faces :</span>
                 <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">faces</span><span class="p">,</span> <span class="n">f</span> <span class="o">+</span> <span class="n">faces</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">faces</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">f</span>
                 <span class="n">vert</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">vert</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="k">if</span> <span class="n">vert</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">v</span>
                 <span class="c1"># Concatenate color :</span>
                 <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">col_unique</span><span class="p">[[</span><span class="n">i</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
                 <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">color</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="k">if</span> <span class="n">color</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">col</span>
-        <span class="k">if</span> <span class="n">plot</span> <span class="ow">and</span> <span class="n">vert</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;mesh&#39;</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">BrainMesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vert</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">,</span>
+        <span class="k">if</span> <span class="n">vert</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="c1"># Apply hdr transformation to vertices :</span>
+            <span class="n">vert_hdr</span> <span class="o">=</span> <span class="n">array_to_stt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hdr</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">vert</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Apply hdr transformation to vertices&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;ROI mesh defined&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">BrainMesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vert_hdr</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">,</span>
                                       <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_node</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_camera</span><span class="p">(</span><span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">TurntableCamera</span><span class="p">())</span>
-                <span class="k">if</span> <span class="n">unique_color</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="mf">1.</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span></div>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;ROI mesh already exist&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vert_hdr</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">unique_color</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="mf">1.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No vertices found for this ROI&quot;</span><span class="p">)</span>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_roi_vertices</span><span class="p">(</span><span class="n">vol</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">smooth</span><span class="p">):</span>
-        <span class="n">vol</span> <span class="o">=</span> <span class="n">vol</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">smooth</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="n">vol</span><span class="p">[</span><span class="n">vol</span> <span class="o">!=</span> <span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">condition</span> <span class="o">=</span> <span class="n">vol</span> <span class="o">!=</span> <span class="n">level</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
-            <span class="n">vol</span><span class="p">[</span><span class="n">vol</span> <span class="o">&gt;</span> <span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">condition</span> <span class="o">=</span> <span class="n">vol</span> <span class="o">&lt;</span> <span class="n">level</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-            <span class="n">vol</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">([</span><span class="n">vol</span> <span class="o">!=</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">level</span><span class="p">])]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">condition</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">([</span><span class="n">vol</span> <span class="o">!=</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">level</span><span class="p">])</span>
+        <span class="c1"># Set unused ROIs to 0 in the volume :</span>
+        <span class="n">vol</span><span class="p">[</span><span class="n">condition</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Get the list of remaining ROIs :</span>
+        <span class="n">unique_vol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">vol</span><span class="p">[</span><span class="n">vol</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Selected ROI(s) : </span><span class="se">\n</span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">unique_vol</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">isosurface</span><span class="p">(</span><span class="n">smooth_3d</span><span class="p">(</span><span class="n">vol</span><span class="p">,</span> <span class="n">smooth</span><span class="p">),</span> <span class="n">level</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the most adapted camera.&quot;&quot;&quot;</span>
-        <span class="n">sc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_opt_cam_state</span><span class="p">[</span><span class="s1">&#39;scale_factor&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Every ROI selected. Use the method `select_roi` &quot;</span>
+                           <span class="s2">&quot;before to control the ROI to display.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">select_roi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_camera</span><span class="p">(</span><span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">TurntableCamera</span><span class="p">())</span>
+        <span class="n">sc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_opt_cam_state</span><span class="p">[</span><span class="s1">&#39;scale_factor&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_opt_cam_state</span><span class="p">[</span><span class="s1">&#39;center&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">scale_factor</span> <span class="o">=</span> <span class="n">sc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">sc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_camera</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_camera</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                PROJECTION</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">project_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s_obj</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s1">&#39;modulation&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+                        <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">under</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                        <span class="n">mask_color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Project source&#39;s activity or repartition onto ROI.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s_obj : SourceObj</span>
+<span class="sd">            The source object to project.</span>
+<span class="sd">        project : {&#39;modulation&#39;, &#39;repartition&#39;}</span>
+<span class="sd">            Project either the source&#39;s data (&#39;modulation&#39;) or get the number</span>
+<span class="sd">            of contributing sources per vertex (&#39;repartition&#39;).</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius under which activity is projected on vertices.</span>
+<span class="sd">        contribute: bool | False</span>
+<span class="sd">            Specify if sources contribute on both hemisphere.</span>
+<span class="sd">        cmap : string | &#39;viridis&#39;</span>
+<span class="sd">            The colormap to use.</span>
+<span class="sd">        clim : tuple | None</span>
+<span class="sd">            The colorbar limits. If None, (data.min(), data.max()) will be used</span>
+<span class="sd">            instead.</span>
+<span class="sd">        vmin : float | None</span>
+<span class="sd">            Minimum threshold.</span>
+<span class="sd">        vmax : float | None</span>
+<span class="sd">            Maximum threshold.</span>
+<span class="sd">        under : string/tuple/array_like | &#39;gray&#39;</span>
+<span class="sd">            The color to use for values under vmin.</span>
+<span class="sd">        over : string/tuple/array_like | &#39;red&#39;</span>
+<span class="sd">            The color to use for values over vmax.</span>
+<span class="sd">        mask_color : string/tuple/array_like | &#39;gray&#39;</span>
+<span class="sd">            The color to use for the projection of masked sources. If None,</span>
+<span class="sd">            the color of the masked sources is going to be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">kw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Source&#39;s </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">project</span>
+            <span class="n">_project_sources_data</span><span class="p">(</span><span class="n">s_obj</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">,</span>
+                                  <span class="n">mask_color</span><span class="o">=</span><span class="n">mask_color</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot project sources because no ROI selected. &quot;</span>
+                             <span class="s2">&quot;Use the `select_roi` method before.&quot;</span><span class="p">)</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                                PROPERTIES</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
 
     <span class="c1"># ----------- TRANSLUCENT -----------</span>
     <span class="nd">@property</span>
+    <span class="nd">@wrap_getter_properties</span>
     <span class="k">def</span> <span class="nf">translucent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the translucent value.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">translucent</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;mesh&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">translucent</span>
 
     <span class="nd">@translucent</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_setter_properties</span>
     <span class="k">def</span> <span class="nf">translucent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set translucent value.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;mesh&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">translucent</span> <span class="o">=</span> <span class="n">value</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">translucent</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- ALPHA -----------</span>
+    <span class="nd">@property</span>
+    <span class="nd">@wrap_getter_properties</span>
+    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the alpha value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">alpha</span>
+
+    <span class="nd">@alpha</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_setter_properties</span>
+    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set alpha value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- VERTICES -----------</span>
+    <span class="nd">@property</span>
+    <span class="nd">@wrap_getter_properties</span>
+    <span class="k">def</span> <span class="nf">vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the vertices value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_vertices</span>
+
+    <span class="c1"># ----------- FACES -----------</span>
+    <span class="nd">@property</span>
+    <span class="nd">@wrap_getter_properties</span>
+    <span class="k">def</span> <span class="nf">faces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the faces value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">_faces</span>
+
+    <span class="c1"># ----------- NORMALS -----------</span>
+    <span class="nd">@property</span>
+    <span class="nd">@wrap_getter_properties</span>
+    <span class="k">def</span> <span class="nf">normals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the normals value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normals</span>
+
+    <span class="c1"># ----------- MASK -----------</span>
+    <span class="nd">@property</span>
+    <span class="nd">@wrap_getter_properties</span>
+    <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the mask value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">mask</span>
+
+    <span class="nd">@mask</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_setter_properties</span>
+    <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set mask value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- COLOR -----------</span>
+    <span class="nd">@property</span>
+    <span class="nd">@wrap_getter_properties</span>
+    <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the color value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">color</span>
+
+    <span class="nd">@color</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_setter_properties</span>
+    <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set color value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># ----------- MASK_COLOR -----------</span>
+    <span class="nd">@property</span>
+    <span class="nd">@wrap_getter_properties</span>
+    <span class="k">def</span> <span class="nf">mask_color</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the mask_color value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">mask_color</span>
+
+    <span class="nd">@mask_color</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@wrap_setter_properties</span>
+    <span class="k">def</span> <span class="nf">mask_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set mask_color value.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">mask_color</span> <span class="o">=</span> <span class="n">value</span></div>
 
 
 <span class="k">class</span> <span class="nc">CombineRoi</span><span class="p">(</span><span class="n">CombineObjects</span><span class="p">):</span>

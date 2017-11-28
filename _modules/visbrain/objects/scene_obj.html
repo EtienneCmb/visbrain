@@ -167,12 +167,13 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
 
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">write_fig_canvas</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">set_log_level</span><span class="p">,</span> <span class="n">rotate_turntable</span>
 <span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">CbarVisual</span>
-<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">VISPY_APP</span><span class="p">,</span> <span class="n">PROFILER</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">CONFIG</span><span class="p">,</span> <span class="n">PROFILER</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
@@ -248,8 +249,8 @@
 
         <span class="c1"># ########################## MAIN CANVAS ##########################</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">SceneCanvas</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="s1">&#39;interactive&#39;</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span>
-                                        <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">VISPY_APP</span><span class="p">,</span>
-                                        <span class="o">**</span><span class="n">cargs</span><span class="p">)</span>
+                                        <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                                        <span class="n">app</span><span class="o">=</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;VISPY_APP&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">cargs</span><span class="p">)</span>
 
         <span class="c1"># ########################## AXIS ##########################</span>
         <span class="k">if</span> <span class="n">axis</span><span class="p">:</span>  <span class="c1"># add axis to canvas</span>
@@ -516,14 +517,16 @@
 <span class="sd">        Verbosity level.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">camera_state</span><span class="o">=</span><span class="p">{},</span>
-                 <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">camera_state</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="n">set_log_level</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Scene creation&quot;</span><span class="p">)</span>
         <span class="n">PROFILER</span><span class="p">(</span><span class="s1">&#39;Scene creation&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">SceneCanvas</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="s1">&#39;interactive&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
-                                         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Object scene&#39;</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="n">VISPY_APP</span><span class="p">,</span>
+        <span class="c1"># Create the canvas and the grid :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">SceneCanvas</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="s1">&#39;interactive&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Object scene&#39;</span><span class="p">,</span>
+                                         <span class="n">app</span><span class="o">=</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;VISPY_APP&#39;</span><span class="p">],</span>
                                          <span class="n">bgcolor</span><span class="o">=</span><span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="o">.</span><span class="n">add_grid</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
         <span class="n">_rpad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -532,6 +535,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_grid_desc</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_camera_state</span> <span class="o">=</span> <span class="n">camera_state</span>
+        <span class="c1"># OpenGL f***** up with small objects. So we need rescale scenes :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fix_gl</span> <span class="o">=</span> <span class="mf">100.</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rowcol</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get an element of the grid.</span>
@@ -544,10 +549,42 @@
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rowcol</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">[(</span><span class="n">rowcol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rowcol</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
 
+    <span class="k">def</span> <span class="nf">_gl_uniform_transforms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check that transforms are uniforms inside the grid.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>  <span class="c1"># loop over viewbox</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">k</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>  <span class="c1"># loop over sub-scenes</span>
+                <span class="n">objs</span><span class="p">,</span> <span class="n">transforms</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>  <span class="c1"># loop of visuals in the scene</span>
+                    <span class="c1"># Don&#39;t consider the camera :</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">BaseCamera</span><span class="p">):</span>
+                        <span class="n">objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                        <span class="n">transforms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
+                        <span class="c1"># Get scaling factor :</span>
+                        <span class="n">sc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">k</span><span class="o">.</span><span class="n">scale</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">sc</span><span class="o">.</span><span class="n">size</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">sc</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">unique_tf</span> <span class="o">=</span> <span class="n">transforms</span><span class="p">[</span><span class="n">sc</span><span class="o">.</span><span class="n">argmax</span><span class="p">()]</span>
+                            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+                                <span class="n">k</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">unique_tf</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Standardized transformations&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_gl_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the transformation to apply to the object.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;mesh&#39;</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Object rescaled </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_fix_gl</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fix_gl</span>
+            <span class="n">sc</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fix_gl</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sc</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+        <span class="c1"># Add transformation to the node :</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_node&#39;</span><span class="p">):</span>  <span class="c1"># VisbrainObject</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">_node</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">STTransform</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">sc</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_cnode&#39;</span><span class="p">):</span>  <span class="c1"># combineObjects</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">_cnode</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">STTransform</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">sc</span><span class="p">)</span>
+
 <div class="viewcode-block" id="SceneObj.add_to_subplot"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.SceneObj.add_to_subplot">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_subplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col_span</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                        <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">title_bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                       <span class="n">rotate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">camera_state</span><span class="o">=</span><span class="p">{},</span> <span class="n">width_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">height_max</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                       <span class="n">use_this_cam</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">camera_state</span><span class="o">=</span><span class="p">{},</span>
+                       <span class="n">width_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height_max</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add object to subplot.</span>
 
 <span class="sd">        Parameters</span>
@@ -568,6 +605,10 @@
 <span class="sd">            Color of the title.</span>
 <span class="sd">        title_bold : bool | True</span>
 <span class="sd">            Use bold title.</span>
+<span class="sd">        use_this_cam : bool | False</span>
+<span class="sd">            If you add multiple objects to the same scene and if you want to</span>
+<span class="sd">            use the camera of an object as the reference, turn this parameter</span>
+<span class="sd">            to True.</span>
 <span class="sd">        rotate : string | None</span>
 <span class="sd">            Rotate the scene. Use &#39;top&#39;, &#39;bottom&#39;, &#39;left&#39;, &#39;right&#39;, &#39;front&#39; or</span>
 <span class="sd">            &#39;back&#39;. Only available for 3-D objects.</span>
@@ -578,25 +619,34 @@
 <span class="sd">        height_max : float | None</span>
 <span class="sd">            Maximum height of the subplot.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Apply to objects (GL issue for small mesh) :</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gl_transform</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">title</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_desc</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">cam</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="n">cam</span> <span class="o">=</span> <span class="s1">&#39;turntable&#39;</span>
+            <span class="c1"># Get the camera and add view to the grid :</span>
+            <span class="n">cam</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
             <span class="n">sub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">add_view</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
                                       <span class="n">row_span</span><span class="o">=</span><span class="n">row_span</span><span class="p">,</span> <span class="n">col_span</span><span class="o">=</span><span class="n">col_span</span><span class="p">,</span>
                                       <span class="n">camera</span><span class="o">=</span><span class="n">cam</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_grid_desc</span><span class="p">[(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sub</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)]</span>
-        <span class="n">sub</span><span class="o">.</span><span class="n">height_max</span> <span class="o">=</span> <span class="n">height_max</span>
-        <span class="n">sub</span><span class="o">.</span><span class="n">width_max</span> <span class="o">=</span> <span class="n">width_max</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">title_color</span> <span class="o">=</span> <span class="n">color2vb</span><span class="p">(</span><span class="n">title_color</span><span class="p">)</span>
             <span class="n">tit</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">visuals</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">title_color</span><span class="p">,</span> <span class="n">anchor_x</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
                                      <span class="n">bold</span><span class="o">=</span><span class="n">title_bold</span><span class="p">)</span>
             <span class="n">sub</span><span class="o">.</span><span class="n">add_subvisual</span><span class="p">(</span><span class="n">tit</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sub</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">use_this_cam</span><span class="p">:</span>
+                <span class="n">sub</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_get_camera</span><span class="p">()</span>
+            <span class="c1"># For objects that have a mesh attribute, pass the camera :</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;mesh&#39;</span><span class="p">):</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">set_camera</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">camera</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;A title is already set. &#39;</span><span class="si">%s</span><span class="s2">&#39; ignored&quot;</span> <span class="o">%</span> <span class="n">title</span><span class="p">)</span>
+        <span class="c1"># Fix the (height, width) max of the subplot :</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">height_max</span> <span class="o">=</span> <span class="n">height_max</span>
+        <span class="n">sub</span><span class="o">.</span><span class="n">width_max</span> <span class="o">=</span> <span class="n">width_max</span>
         <span class="n">sub</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+        <span class="c1"># Camera :</span>
         <span class="k">if</span> <span class="n">camera_state</span> <span class="o">==</span> <span class="p">{}:</span>
             <span class="n">camera_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_state</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">TurntableCamera</span><span class="p">):</span>
@@ -619,6 +669,7 @@
 <span class="sd">        &gt;&gt;&gt; # Link cameras of subplots (0, 0), (0, 1) and (1, 0)</span>
 <span class="sd">        &gt;&gt;&gt; sc.link((0, 0), (0, 1), (1, 0))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Linking cameras&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid_desc</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
@@ -630,7 +681,7 @@
 
     <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saveas</span><span class="p">,</span> <span class="n">print_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span>
                    <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;centimeter&#39;</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">autocrop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                   <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                   <span class="n">bgcolor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Take a screeshot of the scene.</span>
 
 <span class="sd">        By default, the rendered canvas will have the size of your screen.</span>
@@ -675,20 +726,27 @@
 <span class="sd">        transparent : bool | False</span>
 <span class="sd">            Specify if the exported figure have to contains a transparent</span>
 <span class="sd">            background.</span>
+<span class="sd">        line_width : float | 1.</span>
+<span class="sd">            Width of line elements.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">print_size</span><span class="o">=</span><span class="n">print_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="n">factor</span><span class="p">,</span>
                       <span class="n">autocrop</span><span class="o">=</span><span class="n">autocrop</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
                       <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="n">transparent</span><span class="p">)</span>
-        <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gl_uniform_transforms</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">set_line_width</span><span class="p">(</span><span class="n">line_width</span><span class="p">)</span>
+        <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="p">,</span>
+                         <span class="n">widget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Previsualize the result.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gl_uniform_transforms</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">PROFILER</span> <span class="ow">and</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">profiler</span><span class="p">(</span><span class="s2">&quot;PARENT TREE </span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">describe_tree</span><span class="p">())</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">profiler</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
             <span class="n">PROFILER</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">flags</span><span class="o">.</span><span class="n">interactive</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">VISPY_APP</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+            <span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;VISPY_APP&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
 </pre></div>
 
            </div>

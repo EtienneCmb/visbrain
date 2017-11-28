@@ -41,7 +41,7 @@
         <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="visbrain 0.3.7 documentation" href="../../index.html"/>
         <link rel="up" title="Examples" href="../index.html"/>
-        <link rel="next" title="Source object" href="ex_source_obj.html"/>
+        <link rel="next" title="Region Of Interest (ROI) object" href="ex_roi_object.html"/>
         <link rel="prev" title="Connectivity object" href="ex_connectivity_obj.html"/> 
 
   
@@ -109,6 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="ex_brain_obj.html">Brain object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_connectivity_obj.html">Connectivity object</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Image, time-frequency map and spectrogram objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ex_roi_object.html">Region Of Interest (ROI) object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ex_source_obj.html">Source object</a></li>
 </ul>
 </li>
@@ -192,7 +193,7 @@
 <span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="p">(</span><a href="../../objects.html#visbrain.objects.ImageObj" title="View documentation for visbrain.objects.ImageObj"><span class="n">ImageObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.TimeFrequencyMapObj" title="View documentation for visbrain.objects.TimeFrequencyMapObj"><span class="n">TimeFrequencyMapObj</span></a><span class="p">,</span> <a href="../../objects.html#visbrain.objects.SpectrogramObj" title="View documentation for visbrain.objects.SpectrogramObj"><span class="n">SpectrogramObj</span></a><span class="p">,</span>
                               <span class="n">ColorbarObj</span><span class="p">,</span> <span class="n">SceneObj</span><span class="p">)</span>
 
-<span class="n">CBAR_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="n">width</span><span class="o">=.</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">CBAR_STATE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cbtxtsz</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">txtsz</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">width</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">))</span>
 <span class="n">sc</span> <span class="o">=</span> <span class="n">SceneObj</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
 
 <span class="sd">&quot;&quot;&quot;Create a 2-D image</span>
@@ -262,7 +263,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="ex_source_obj.html" class="btn btn-neutral float-right" title="Source object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ex_roi_object.html" class="btn btn-neutral float-right" title="Region Of Interest (ROI) object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="ex_connectivity_obj.html" class="btn btn-neutral" title="Connectivity object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

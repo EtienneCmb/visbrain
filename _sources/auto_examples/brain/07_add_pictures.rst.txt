@@ -21,7 +21,7 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     import numpy as np
 
     from visbrain import Brain
-    from visbrain.objects import PictureObj
+    from visbrain.objects import Picture3DObj
     from visbrain.io import download_file, path_to_visbrain_data
 
     kwargs = {}
@@ -48,17 +48,18 @@ https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1
     pic_select[pic_to_hide] = False
     kwargs['select'] = pic_select
 
-    kwargs['width'] = 5.            # Width
-    kwargs['height'] = 5.           # Height
+    kwargs['pic_width'] = 5.             # Width
+    kwargs['pic_height'] = 5.            # Height
     kwargs['translate'] = (4., 5., 1.)   # Offset along (x, y, z) axis
-    kwargs['clim'] = (.01, 1.12)    # Colorbar limits
-    kwargs['cmap'] = 'viridis'      # Colormap
-    kwargs['vmin'] = .1             # Vmin
-    kwargs['under'] = 'gray'        # Color under vmin
-    kwargs['vmax'] = .9             # Vmax
-    kwargs['over'] = '#ab4642'      # Color over vmax
+    kwargs['clim'] = (.01, 1.12)         # Colorbar limits
+    kwargs['cmap'] = 'viridis'           # Colormap
+    kwargs['vmin'] = .1                  # Vmin
+    kwargs['under'] = 'gray'             # Color under vmin
+    kwargs['vmax'] = .9                  # Vmax
+    kwargs['over'] = '#ab4642'           # Color over vmax
+    kwargs['cblabel'] = '3D Pictures'    # Color over vmax
 
-    pic = PictureObj('Pic', data, s_xyz, **kwargs)
+    pic = Picture3DObj('Pic', data, s_xyz, **kwargs)
 
     vb = Brain(picture_obj=pic)
     vb.pictures_control('Pic', width=22, height=32, cmap='inferno')

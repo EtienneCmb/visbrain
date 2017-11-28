@@ -18,7 +18,7 @@ Use and control image, time-frequency maps and spectrogram.
     from visbrain.objects import (ImageObj, TimeFrequencyMapObj, SpectrogramObj,
                                   ColorbarObj, SceneObj)
 
-    CBAR_STATE = dict(cbtxtsz=12, txtsz=10., rect=(-0.2, -2., 1., 4.), width=.2)
+    CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.2, rect=(-0.2, -2., 1., 4.))
     sc = SceneObj(size=(1200, 1000))
 
     """Create a 2-D image

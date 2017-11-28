@@ -171,7 +171,8 @@
 <span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
 
 <span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
-<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">BrainMesh</span><span class="p">,</span> <span class="n">CbarArgs</span>
+<span class="kn">from</span> <span class="nn">._projection</span> <span class="k">import</span> <span class="n">_project_sources_data</span>
+<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">BrainMesh</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">get_data_path</span><span class="p">,</span> <span class="n">mesh_edges</span><span class="p">,</span> <span class="n">smoothing_matrix</span><span class="p">,</span>
                      <span class="n">array2colormap</span><span class="p">,</span> <span class="n">rotate_turntable</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">is_nibabel_installed</span><span class="p">,</span> <span class="n">is_pandas_installed</span>
@@ -179,7 +180,7 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="BrainObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.BrainObj">[docs]</a><span class="k">class</span> <span class="nc">BrainObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CbarArgs</span><span class="p">):</span>
+<div class="viewcode-block" id="BrainObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.BrainObj">[docs]</a><span class="k">class</span> <span class="nc">BrainObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a brain object.</span>
 
 <span class="sd">    Parameters</span>
@@ -212,6 +213,9 @@
 <span class="sd">        Brain object parent.</span>
 <span class="sd">    verbose : string</span>
 <span class="sd">        Verbosity level.</span>
+<span class="sd">    kw : dict | {}</span>
+<span class="sd">        Optional arguments are used to control the colorbar</span>
+<span class="sd">        (See :class:`ColorbarObj`).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -229,11 +233,10 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">lr_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">translucent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">invert_normals</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="c1"># Init Visbrain object base class :</span>
-        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-        <span class="n">CbarArgs</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">VisbrainObject</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="c1"># Load brain template :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="n">_scale</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span class="n">lr_index</span><span class="p">,</span> <span class="n">hemisphere</span><span class="p">,</span>
@@ -402,6 +405,51 @@
         <span class="n">rotate_turntable</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">cam_state</span><span class="p">,</span> <span class="n">camera</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span>
                          <span class="n">csize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_csize</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="n">margin</span><span class="p">,</span> <span class="n">_scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">)</span></div>
 
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                             PROJECTIONS</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+<div class="viewcode-block" id="BrainObj.project_sources"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.BrainObj.project_sources">[docs]</a>    <span class="k">def</span> <span class="nf">project_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s_obj</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="s1">&#39;modulation&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+                        <span class="n">contribute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">under</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">over</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                        <span class="n">mask_color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Project source&#39;s activity or repartition onto the brain object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s_obj : SourceObj</span>
+<span class="sd">            The source object to project.</span>
+<span class="sd">        project : {&#39;modulation&#39;, &#39;repartition&#39;}</span>
+<span class="sd">            Project either the source&#39;s data (&#39;modulation&#39;) or get the number</span>
+<span class="sd">            of contributing sources per vertex (&#39;repartition&#39;).</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius under which activity is projected on vertices.</span>
+<span class="sd">        contribute: bool | False</span>
+<span class="sd">            Specify if sources contribute on both hemisphere.</span>
+<span class="sd">        cmap : string | &#39;viridis&#39;</span>
+<span class="sd">            The colormap to use.</span>
+<span class="sd">        clim : tuple | None</span>
+<span class="sd">            The colorbar limits. If None, (data.min(), data.max()) will be used</span>
+<span class="sd">            instead.</span>
+<span class="sd">        vmin : float | None</span>
+<span class="sd">            Minimum threshold.</span>
+<span class="sd">        vmax : float | None</span>
+<span class="sd">            Maximum threshold.</span>
+<span class="sd">        under : string/tuple/array_like | &#39;gray&#39;</span>
+<span class="sd">            The color to use for values under vmin.</span>
+<span class="sd">        over : string/tuple/array_like | &#39;red&#39;</span>
+<span class="sd">            The color to use for values over vmax.</span>
+<span class="sd">        mask_color : string/tuple/array_like | &#39;gray&#39;</span>
+<span class="sd">            The color to use for the projection of masked sources. If None,</span>
+<span class="sd">            the color of the masked sources is going to be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Source </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">project</span>
+        <span class="n">_project_sources_data</span><span class="p">(</span><span class="n">s_obj</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">contribute</span><span class="p">,</span>
+                              <span class="n">mask_color</span><span class="o">=</span><span class="n">mask_color</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="BrainObj.add_activation"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.BrainObj.add_activation">[docs]</a>    <span class="k">def</span> <span class="nf">add_activation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">smoothing_steps</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                        <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hemisphere</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hide_under</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">n_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -449,6 +497,7 @@
         <span class="n">is_under</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hide_under</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
         <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">),),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Activation&quot;</span>
         <span class="c1"># ============================= METHOD =============================</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Add data to secific vertices.&quot;</span><span class="p">)</span>
@@ -559,6 +608,7 @@
             <span class="n">u_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">u_idx</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
             <span class="n">kw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_args</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">clim</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">under</span><span class="p">,</span> <span class="n">over</span><span class="p">)</span>
             <span class="n">data_color</span> <span class="o">=</span> <span class="n">array2colormap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_default_cblabel</span> <span class="o">=</span> <span class="s2">&quot;Parcellate&#39;s data&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Use default color included in the file&quot;</span><span class="p">)</span>
             <span class="n">u_colors</span> <span class="o">=</span> <span class="n">u_colors</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span>
@@ -681,6 +731,22 @@
             <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">min_len</span><span class="p">]</span>
             <span class="n">u_idx</span> <span class="o">=</span> <span class="n">u_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">min_len</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">id_vert</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">u_idx</span>
+
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">#                               CBAR</span>
+    <span class="c1">###########################################################################</span>
+    <span class="c1">###########################################################################</span>
+
+    <span class="k">def</span> <span class="nf">_update_cbar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cbar_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">array2colormap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cbar_data</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">to_kwargs</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     logger.error(&quot;No data to update for %s&quot; % self.name)</span>
+
+    <span class="k">def</span> <span class="nf">_update_cbar_minmax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
 
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>

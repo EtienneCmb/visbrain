@@ -164,13 +164,17 @@
             
   <h1>Source code for visbrain.objects.cbar_obj</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Colorbar object.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
 <span class="kn">from</span> <span class="nn">vispy</span> <span class="k">import</span> <span class="n">scene</span>
 
 <span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
-<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">CbarArgs</span><span class="p">,</span> <span class="n">CbarVisual</span>
+<span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">CbarVisual</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ColorbarObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.ColorbarObj">[docs]</a><span class="k">class</span> <span class="nc">ColorbarObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">,</span> <span class="n">CbarArgs</span><span class="p">):</span>
+<div class="viewcode-block" id="ColorbarObj"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.ColorbarObj">[docs]</a><span class="k">class</span> <span class="nc">ColorbarObj</span><span class="p">(</span><span class="n">VisbrainObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a colorbar object.</span>
 
 <span class="sd">    Parameters</span>
@@ -245,6 +249,9 @@
         <span class="c1"># Init Visbrain object base class and SourceProjection :</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_cbar_from_obj</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;_default_cblabel&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="s1">&#39;cblabel&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cblabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">_default_cblabel</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;Cbar&#39;</span>  <span class="c1"># that&#39;s a lot of name</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;isvmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vmin&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;isvmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vmax&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
@@ -259,17 +266,18 @@
 
     <span class="k">def</span> <span class="nf">_update_cbar_from_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update colorbar from an object.&quot;&quot;&quot;</span>
-        <span class="n">is_meth</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;to_kwargs&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">to_kwargs</span><span class="p">)</span>
+        <span class="n">is_meth</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;to_dict&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">to_dict</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">is_meth</span><span class="p">:</span>
-            <span class="n">kw</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">to_kwargs</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Get colorbar properties from </span><span class="si">%s</span><span class="s2"> object&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+            <span class="c1"># Get object cbar properties :</span>
+            <span class="n">kw</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">update</span><span class="p">:</span>  <span class="c1"># Update the colorbar visual</span>
                 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kw</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="n">exec</span><span class="p">(</span><span class="s1">&#39;self._cbar._</span><span class="si">%s</span><span class="s1"> = val&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_cbar</span><span class="o">.</span><span class="n">_build</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kw</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="n">kwargs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-                <span class="k">return</span> <span class="n">kwargs</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">kw</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="k">return</span> <span class="n">kw</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can not get the colorbar of a </span><span class="si">%s</span><span class="s2"> &quot;</span>
                              <span class="s2">&quot;object&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>

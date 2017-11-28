@@ -13,8 +13,8 @@ Here's the list of currently supported modules :
 * :ref:`SourceObj`
 * :ref:`ConnectObj`
 * :ref:`VectorObj`
-* :ref:`TSObj`
-* :ref:`PicObj`
+* :ref:`TS3DObj`
+* :ref:`Pic3DObj`
 * :ref:`RoiObj`
 * :ref:`VolumeObj`
 * :ref:`ImageObj`
@@ -68,13 +68,14 @@ Brain object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: BrainObj
-  :members: set_data, rotate, add_activation, get_parcellates, parcellize
+  :members: set_data, rotate, project_sources, add_activation, get_parcellates, parcellize
 
     .. rubric:: Methods
 
     .. autosummary::
         ~BrainObj.set_data
         ~BrainObj.rotate
+        ~BrainObj.project_sources
         ~BrainObj.add_activation
         ~BrainObj.get_parcellates
         ~BrainObj.parcellize
@@ -116,7 +117,7 @@ Source object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: SourceObj
-  :members: analyse_sources, color_sources, set_visible_sources, fit_to_vertices, project_modulation, project_repartition
+  :members: analyse_sources, color_sources, set_visible_sources, fit_to_vertices, project_sources
 
     .. rubric:: Methods
 
@@ -125,8 +126,7 @@ Source object
         ~SourceObj.color_sources
         ~SourceObj.set_visible_sources
         ~SourceObj.fit_to_vertices
-        ~SourceObj.project_modulation
-        ~SourceObj.project_repartition
+        ~SourceObj.project_sources
 
 .. include:: generated/visbrain.objects.SourceObj.examples
 .. raw:: html
@@ -171,10 +171,10 @@ Vector object
 
     <div style='clear:both'></div>
 
-.. _TSObj:
+.. _TS3DObj:
 
-Time-series object
-------------------
+Time-series 3D object
+---------------------
 
 .. figure::  picture/picobjects/pic_ts_obj.png
    :align:   center
@@ -183,17 +183,17 @@ Time-series object
 
 .. currentmodule:: visbrain.objects
 
-.. autoclass:: TimeSeriesObj
+.. autoclass:: TimeSeries3DObj
 
-.. include:: generated/visbrain.objects.TimeSeriesObj.examples
+.. include:: generated/visbrain.objects.TimeSeries3DObj.examples
 .. raw:: html
 
     <div style='clear:both'></div>
 
-.. _PicObj:
+.. _Pic3DObj:
 
-Pictures object
----------------
+Pictures 3D object
+------------------
 
 .. figure::  picture/picobjects/pic_picture_obj.png
    :align:   center
@@ -202,9 +202,9 @@ Pictures object
 
 .. currentmodule:: visbrain.objects
 
-.. autoclass:: PictureObj
+.. autoclass:: Picture3DObj
 
-.. include:: generated/visbrain.objects.PictureObj.examples
+.. include:: generated/visbrain.objects.Picture3DObj.examples
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -222,12 +222,13 @@ Region Of Interest object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: RoiObj
-  :members: change_roi_object, localize_sources, get_roi_vertices
+  :members: change_roi_object, get_labels, localize_sources, get_roi_vertices
 
     .. rubric:: Methods
 
     .. autosummary::
         ~RoiObj.change_roi_object
+        ~RoiObj.get_labels
         ~RoiObj.localize_sources
         ~RoiObj.get_roi_vertices
 

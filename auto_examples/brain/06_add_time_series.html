@@ -206,7 +206,7 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">visbrain</span> <span class="kn">import</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a>
-<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <a href="../../objects.html#visbrain.objects.TimeSeriesObj" title="View documentation for visbrain.objects.TimeSeriesObj"><span class="n">TimeSeriesObj</span></a>
+<span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="kn">import</span> <span class="n">TimeSeries3DObj</span>
 <span class="kn">from</span> <span class="nn">visbrain.io</span> <span class="kn">import</span> <span class="n">download_file</span><span class="p">,</span> <span class="n">path_to_visbrain_data</span>
 
 <span class="c1"># Load the xyz coordinates and corresponding subject name :</span>
@@ -240,9 +240,9 @@ time-series can then be controlled from the GUI in the Sources/Time-series tab.<
 <span class="n">ts_dxyz</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">)</span>  <span class="c1"># TS offset along the (x, y, z) axes</span>
 <span class="n">ts_lw</span> <span class="o">=</span> <span class="mf">2.2</span>             <span class="c1"># TS line-width</span>
 
-<span class="n">ts</span> <span class="o">=</span> <a href="../../objects.html#visbrain.objects.TimeSeriesObj" title="View documentation for visbrain.objects.TimeSeriesObj"><span class="n">TimeSeriesObj</span></a><span class="p">(</span><span class="s1">&#39;Ts1&#39;</span><span class="p">,</span> <span class="n">ts_data</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">ts_select</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">ts_amp</span><span class="p">,</span>
-                   <span class="n">width</span><span class="o">=</span><span class="n">ts_width</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="n">ts_lw</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="n">ts_dxyz</span><span class="p">,</span>
-                   <span class="n">color</span><span class="o">=</span><span class="n">ts_color</span><span class="p">)</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">TimeSeries3DObj</span><span class="p">(</span><span class="s1">&#39;Ts1&#39;</span><span class="p">,</span> <span class="n">ts_data</span><span class="p">,</span> <span class="n">s_xyz</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="n">ts_select</span><span class="p">,</span> <span class="n">ts_amp</span><span class="o">=</span><span class="n">ts_amp</span><span class="p">,</span>
+                     <span class="n">ts_width</span><span class="o">=</span><span class="n">ts_width</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="n">ts_lw</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="n">ts_dxyz</span><span class="p">,</span>
+                     <span class="n">color</span><span class="o">=</span><span class="n">ts_color</span><span class="p">)</span>
 
 <span class="n">vb</span> <span class="o">=</span> <a href="../../brainAPI.html#visbrain.Brain" title="View documentation for visbrain.Brain"><span class="n">Brain</span></a><span class="p">(</span><span class="n">time_series_obj</span><span class="o">=</span><span class="n">ts</span><span class="p">)</span>
 <span class="n">vb</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
