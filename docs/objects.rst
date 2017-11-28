@@ -222,15 +222,15 @@ Region Of Interest object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: RoiObj
-  :members: change_roi_object, get_labels, localize_sources, get_roi_vertices
+  :members: get_labels, select_roi, localize_sources
 
     .. rubric:: Methods
 
     .. autosummary::
-        ~RoiObj.change_roi_object
         ~RoiObj.get_labels
+        ~RoiObj.select_roi
         ~RoiObj.localize_sources
-        ~RoiObj.get_roi_vertices
+        ~RoiObj.project_sources
 
 .. _VolumeObj:
 

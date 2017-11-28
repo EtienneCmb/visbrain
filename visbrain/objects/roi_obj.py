@@ -76,8 +76,7 @@ class RoiObj(_Volume):
     >>> import numpy as np
     >>> from visbrain.objects import RoiObj
     >>> r = RoiObj('brodmann')
-    >>> r.select_roi(select=[4, 6, 38], unique_color=True, plot=True,
-    >>>              smooth=7)
+    >>> r.select_roi(select=[4, 6, 38], unique_color=True, smooth=7)
     >>> r.preview(axis=True)
     """
 
