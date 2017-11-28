@@ -13,7 +13,7 @@ which is defined as the number of contributing sources per vertex.
 import numpy as np
 
 from visbrain import Brain
-from visbrain.objects import SourceObj
+from visbrain.objects import SourceObj, BrainObj
 from visbrain.io import download_file
 
 kwargs = {}
@@ -53,7 +53,7 @@ each source to orange
 """
 mask = np.logical_and(kwargs['data'] >= 20., kwargs['data'] <= 40)
 kwargs['mask'] = mask
-kwargs['mask_color'] = 'orange'
+kwargs['mask_color'] = 'gray'
 
 """
 It's also possible to add text to each source. Here, we show the name of the
@@ -73,6 +73,23 @@ opening Brain, use s_obj.preview()
 s_obj = SourceObj('SourceExample', xyz, **kwargs)
 # s_obj.preview()
 
-# Pass all arguments in the dictionnary :
-vb = Brain(source_obj=s_obj, brain_template='B3')
+"""Color sources according to the data
+"""
+# s_obj.color_sources(data=kwargs['data'], cmap='viridis')
+
+"""Colorbar properties
+"""
+cb_kw = dict(cblabel="Project source activity", cbtxtsz=3., border=False, )
+
+"""Define a brain object with the B3 template and project source's activity
+onto the surface
+"""
+b_obj = BrainObj('B3', **cb_kw)
+b_obj.project_sources(s_obj, cmap='viridis', vmin=50., under='orange',
+                      vmax=550., over='darkred')
+
+"""Create a Brain instance and pass both of the brain and source object defined
+After the interface is opened, press C to display the colorbar.
+"""
+vb = Brain(source_obj=s_obj, brain_obj=b_obj)
 vb.show()
