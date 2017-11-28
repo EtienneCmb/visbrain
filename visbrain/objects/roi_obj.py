@@ -1,4 +1,5 @@
 """Base class for objects of type ROI."""
+import os
 import logging
 from functools import wraps
 import numpy as np
@@ -210,8 +211,22 @@ class RoiObj(_Volume):
 
         logger.info("%s ROI loaded." % name)
 
-    def get_labels(self):
-        """Get the labels associated with the loaded ROI."""
+    def get_labels(self, save_to_path=None):
+        """Get the labels associated with the loaded ROI.
+
+        Parameters
+        ----------
+        save_to_path : str | None
+            Save labels to an excel file.
+        """
+        if isinstance(save_to_path, str) and os.path.isdir(save_to_path):
+            assert is_pandas_installed()
+            import pandas as pd
+            save_as = os.path.join(save_to_path, '%s.xlsx' % self.name)
+            writer = pd.ExcelWriter(save_as)
+            self.ref.to_excel(writer)
+            writer.save()
+            logger.info("Saved as %s" % save_as)
         return self.ref
 
     ###########################################################################
