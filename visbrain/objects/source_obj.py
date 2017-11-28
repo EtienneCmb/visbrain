@@ -386,7 +386,7 @@ class SourceObj(VisbrainObject):
             df = df.loc[idx_to_keep]
             self.visible = idx_to_keep
             logger.info("%i sources found in %s" % (len(df),
-                                                    ','.join(keep_only)))
+                                                    ', '.join(keep_only)))
 
         return df
 
