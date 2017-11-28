@@ -241,8 +241,7 @@
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; from visbrain.objects import RoiObj</span>
 <span class="sd">    &gt;&gt;&gt; r = RoiObj(&#39;brodmann&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; r.select_roi(select=[4, 6, 38], unique_color=True, plot=True,</span>
-<span class="sd">    &gt;&gt;&gt;              smooth=7)</span>
+<span class="sd">    &gt;&gt;&gt; r.select_roi(select=[4, 6, 38], unique_color=True, smooth=7)</span>
 <span class="sd">    &gt;&gt;&gt; r.preview(axis=True)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -516,7 +515,7 @@
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
 
-    <span class="k">def</span> <span class="nf">select_roi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">select</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">unique_color</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">roi_to_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="RoiObj.select_roi"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj.select_roi">[docs]</a>    <span class="k">def</span> <span class="nf">select_roi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">select</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">unique_color</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">roi_to_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">smooth</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select several Region Of Interest (ROI).</span>
 
@@ -576,7 +575,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="mf">1.</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No vertices found for this ROI&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No vertices found for this ROI&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">smooth</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>

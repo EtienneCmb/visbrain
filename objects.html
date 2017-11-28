@@ -140,7 +140,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-picture3dobj">7.8.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.Picture3DObj</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#region-of-interest-object">7.9. Region Of Interest object</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#region-of-interest-object">7.9. Region Of Interest object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-roiobj">7.9.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.RoiObj</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#volume-object">7.10. Volume object</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#image-object">7.11. Image object</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#examples-using-visbrain-objects-imageobj">7.11.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ImageObj</span></code></a></li>
@@ -2031,7 +2034,7 @@ of shape (n_sources,).</p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.RoiObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">RoiObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>label=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system='mni'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L42-L583"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">RoiObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>label=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system='mni'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L42-L582"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Region Of Interest (ROI) object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2091,8 +2094,7 @@ a (4, 4) array.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">visbrain.objects</span> <span class="k">import</span> <span class="n">RoiObj</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">RoiObj</span><span class="p">(</span><span class="s1">&#39;brodmann&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">38</span><span class="p">],</span> <span class="n">unique_color</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>             <span class="n">smooth</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">select_roi</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">38</span><span class="p">],</span> <span class="n">unique_color</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -2104,24 +2106,24 @@ a (4, 4) array.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">RoiObj.change_roi_object</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.get_labels" title="visbrain.objects.RoiObj.get_labels"><code class="xref py py-obj docutils literal"><span class="pre">get_labels</span></code></a>([save_to_path])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.RoiObj.get_labels" title="visbrain.objects.RoiObj.get_labels"><code class="xref py py-obj docutils literal"><span class="pre">get_labels</span></code></a>([save_to_path])</td>
 <td>Get the labels associated with the loaded ROI.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.select_roi" title="visbrain.objects.RoiObj.select_roi"><code class="xref py py-obj docutils literal"><span class="pre">select_roi</span></code></a>([select,&nbsp;unique_color,&nbsp;…])</td>
+<td>Select several Region Of Interest (ROI).</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.RoiObj.localize_sources" title="visbrain.objects.RoiObj.localize_sources"><code class="xref py py-obj docutils literal"><span class="pre">localize_sources</span></code></a>(xyz[,&nbsp;source_name,&nbsp;…])</td>
 <td>Localize source’s using this ROI object.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">RoiObj.get_roi_vertices</span></code></td>
-<td></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">project_sources</span></code>(s_obj[,&nbsp;project,&nbsp;radius,&nbsp;…])</td>
+<td>Project source’s activity or repartition onto ROI.</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.get_labels">
-<code class="descname">get_labels</code><span class="sig-paren">(</span><em>save_to_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.get_labels"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L214-L230"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.get_labels" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_labels</code><span class="sig-paren">(</span><em>save_to_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.get_labels"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L213-L229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.get_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the labels associated with the loaded ROI.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2139,7 +2141,7 @@ a (4, 4) array.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.localize_sources">
-<code class="descname">localize_sources</code><span class="sig-paren">(</span><em>xyz, source_name=None, replace_bad=True, bad_patterns=[-1, 'undefined', 'None'], replace_with='Not found', distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.localize_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L238-L330"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.localize_sources" title="Permalink to this definition">¶</a></dt>
+<code class="descname">localize_sources</code><span class="sig-paren">(</span><em>xyz, source_name=None, replace_bad=True, bad_patterns=[-1, 'undefined', 'None'], replace_with='Not found', distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.localize_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L237-L329"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.localize_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Localize source’s using this ROI object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2171,12 +2173,45 @@ a (4, 4) array.</p>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="visbrain.objects.RoiObj.select_roi">
+<code class="descname">select_roi</code><span class="sig-paren">(</span><em>select=0.5</em>, <em>unique_color=False</em>, <em>roi_to_color=None</em>, <em>smooth=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.select_roi"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L353-L413"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.select_roi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select several Region Of Interest (ROI).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>select</strong> : int, float, list | .5</p>
+<blockquote>
+<div><p>Threshold for extracting vertices from isosuface method.</p>
+</div></blockquote>
+<p><strong>unique_color</strong> : bool | False</p>
+<blockquote>
+<div><p>Use a random unique color for each ROI.</p>
+</div></blockquote>
+<p><strong>smooth</strong> : int | 3</p>
+<blockquote class="last">
+<div><p>Smoothing level. Must be an odd integer (smooth % 2 = 1).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+</dd></dl>
+
+<div class="section" id="examples-using-visbrain-objects-roiobj">
+<h3>7.9.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.RoiObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-roiobj" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="This example illustrate the main functionalities and inputs of the roi object i.e :"><div class="figure" id="id45">
+<img alt="_images/sphx_glr_ex_roi_object_thumb.png" src="_images/sphx_glr_ex_roi_object_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_roi_object.html#sphx-glr-auto-examples-objects-ex-roi-object-py"><span class="std std-ref">Region Of Interest (ROI) object</span></a></span></p>
+</div>
+</div><div style='clear:both'></div></div>
 </div>
 <div class="section" id="volume-object">
 <span id="volumeobj"></span><h2>7.10. Volume object<a class="headerlink" href="#volume-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id45">
+<div class="figure align-center" id="id46">
 <img alt="_images/pic_vol_obj.png" src="_images/pic_vol_obj.png" />
 <p class="caption"><span class="caption-text">Volume object example</span></p>
 </div>
@@ -2273,10 +2308,10 @@ ignored. The name input can also be the path to an nii.gz file.</p>
 
 </dd></dl>
 
-</div>
+<div style='clear:both'></div></div>
 <div class="section" id="image-object">
 <span id="imageobj"></span><h2>7.11. Image object<a class="headerlink" href="#image-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id46">
+<div class="figure align-center" id="id47">
 <img alt="_images/pic_image_obj.png" src="_images/pic_image_obj.png" />
 <p class="caption"><span class="caption-text">Image object example</span></p>
 </div>
@@ -2394,7 +2429,7 @@ images.</p>
 
 <div class="section" id="examples-using-visbrain-objects-imageobj">
 <h3>7.11.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.ImageObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-imageobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id47">
+<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id48">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
@@ -2402,7 +2437,7 @@ images.</p>
 </div>
 <div class="section" id="time-frequency-map-object">
 <span id="tfobj"></span><h2>7.12. Time-frequency map object<a class="headerlink" href="#time-frequency-map-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id48">
+<div class="figure align-center" id="id49">
 <img alt="_images/pic_tf_obj.png" src="_images/pic_tf_obj.png" />
 <p class="caption"><span class="caption-text">Time-frequency map object example</span></p>
 </div>
@@ -2550,7 +2585,7 @@ images.</p>
 
 <div class="section" id="examples-using-visbrain-objects-timefrequencymapobj">
 <h3>7.12.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.TimeFrequencyMapObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-timefrequencymapobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id49">
+<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id50">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
@@ -2558,7 +2593,7 @@ images.</p>
 </div>
 <div class="section" id="spectrogram-object">
 <span id="specobj"></span><h2>7.13. Spectrogram object<a class="headerlink" href="#spectrogram-object" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center" id="id50">
+<div class="figure align-center" id="id51">
 <img alt="_images/pic_spec_obj.png" src="_images/pic_spec_obj.png" />
 <p class="caption"><span class="caption-text">Spectrogram object example</span></p>
 </div>
@@ -2686,7 +2721,7 @@ images.</p>
 
 <div class="section" id="examples-using-visbrain-objects-spectrogramobj">
 <h3>7.13.1. Examples using <code class="docutils literal"><span class="pre">visbrain.objects.SpectrogramObj</span></code><a class="headerlink" href="#examples-using-visbrain-objects-spectrogramobj" title="Permalink to this headline">¶</a></h3>
-<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id51">
+<div class="sphx-glr-thumbcontainer" tooltip="Use and control image, time-frequency maps and spectrogram."><div class="figure" id="id52">
 <img alt="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" src="_images/sphx_glr_ex_im_tf_spec_obj_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/objects/ex_im_tf_spec_obj.html#sphx-glr-auto-examples-objects-ex-im-tf-spec-obj-py"><span class="std std-ref">Image, time-frequency map and spectrogram objects</span></a></span></p>
 </div>
