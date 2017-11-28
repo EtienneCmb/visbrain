@@ -76,7 +76,7 @@ class RoiObj(_Volume):
     >>> import numpy as np
     >>> from visbrain.objects import RoiObj
     >>> r = RoiObj('brodmann')
-    >>> r.select_roi(level=[4, 6, 38], unique_color=True, plot=True,
+    >>> r.select_roi(select=[4, 6, 38], unique_color=True, plot=True,
     >>>              smooth=7)
     >>> r.preview(axis=True)
     """
@@ -371,7 +371,7 @@ class RoiObj(_Volume):
             select = roi_to_color.keys()
             unique_color = True
         if not unique_color:
-            vert, faces = self._select_roi(self.vol, select, smooth)
+            vert, faces = self._select_roi(self.vol.copy(), select, smooth)
             logger.info("Same white color used across ROI(s)")
         else:
             assert not isinstance(select, float)
@@ -389,7 +389,7 @@ class RoiObj(_Volume):
                 logger.info("Random color are going to be used.")
             # Get vertices and faces of each ROI :
             for i, k in enumerate(select):
-                v, f = self._select_roi(self.vol, k, smooth)
+                v, f = self._select_roi(self.vol.copy(), k, smooth)
                 # Concatenate vertices / faces :
                 faces = np.r_[faces, f + faces.max() + 1] if faces.size else f
                 vert = np.r_[vert, v] if vert.size else v
@@ -398,15 +398,15 @@ class RoiObj(_Volume):
                 color = np.r_[color, col] if color.size else col
         if vert.size:
             # Apply hdr transformation to vertices :
-            vert = array_to_stt(self.hdr).map(vert)[:, 0:-1]
+            vert_hdr = array_to_stt(self.hdr.copy()).map(vert)[:, 0:-1]
             logger.debug("Apply hdr transformation to vertices")
             if not self:
                 logger.debug("ROI mesh defined")
-                self.mesh = BrainMesh(vertices=vert, faces=faces,
+                self.mesh = BrainMesh(vertices=vert_hdr, faces=faces,
                                       parent=self._node)
             else:
                 logger.debug("ROI mesh already exist")
-                self.mesh.set_data(vertices=vert, faces=faces)
+                self.mesh.set_data(vertices=vert_hdr, faces=faces)
             if unique_color:
                 self.mask = 1.
                 self.color = color
@@ -414,7 +414,6 @@ class RoiObj(_Volume):
             raise ValueError("No vertices found for this ROI")
 
     def _select_roi(self, vol, level, smooth):
-        vol = vol.copy()
         if isinstance(level, int):
             condition = vol != level
         elif isinstance(level, float):
