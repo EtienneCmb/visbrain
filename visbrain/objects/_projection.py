@@ -216,9 +216,9 @@ def _project_sources_data(s_obj, b_obj, project='modulation', radius=10.,
     logger.info("Project the source's %s (radius=%r, "
                 "contribute=%r)" % (project, radius, contribute))
     # Get mesh and vertices :
-    vertices = b_obj.vertices
     mesh = b_obj.mesh
-    mask = np.zeros((len(mesh)), dtype=np.float32)
+    vertices = mesh._vertices
+    mask = np.zeros((vertices.shape[0]), dtype=np.float32)
 
     # _____________________ GET MODULATION _____________________
     mod = project_fcn(s_obj, vertices, radius, contribute)
