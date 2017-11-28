@@ -232,6 +232,11 @@ Region Of Interest object
         ~RoiObj.localize_sources
         ~RoiObj.project_sources
 
+.. include:: generated/visbrain.objects.RoiObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
+
 .. _VolumeObj:
 
 Volume object
@@ -253,6 +258,10 @@ Volume object
         ~VolumeObj.__call__
         ~VolumeObj.set_data
 
+.. include:: generated/visbrain.objects.VolumeObj.examples
+.. raw:: html
+
+    <div style='clear:both'></div>
 
 
 .. _ImageObj:
