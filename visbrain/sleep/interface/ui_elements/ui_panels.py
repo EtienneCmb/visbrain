@@ -106,8 +106,7 @@ class UiPanels(object):
                                      name='Hypnogram', color='black',
                                      yargs={'text_color': 'black'},
                                      xargs={'text_color': 'black'},
-                                     fcn=[self.on_mouse_wheel],
-                                     line_width=self._lwhyp)
+                                     fcn=[self.on_mouse_wheel])
         self._HypW, self._HypLayout = self._createCompatibleW("HypW", "HypL")
         self._HypLayout.addWidget(self._hypCanvas.canvas.native)
         self._chanGrid.addWidget(self._HypW, len(self) + 2, 1, 1, 1)
@@ -278,8 +277,7 @@ class UiPanels(object):
                                              name='Canvas_' + k, color='black',
                                              yargs={'text_color': 'black'},
                                              xargs={'text_color': 'black'},
-                                             fcn=[self.on_mouse_wheel],
-                                             line_width=self._lw)
+                                             fcn=[self.on_mouse_wheel])
             # Add the canvas to the layout :
             self._chanLayout[i].addWidget(self._chanCanvas[i].canvas.native)
 
