@@ -14,7 +14,6 @@ import vispy.visuals.transforms as vist
 from .gui import Ui_MainWindow
 from ..visuals.marker import Markers
 from ...utils import color2vb
-from ...config import VISPY_APP
 
 
 class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas):
@@ -37,8 +36,7 @@ class TimeAxis(object):
         """Init."""
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=False, title=name, app=VISPY_APP,
-                                        **cargs)
+                                        show=False, title=name, **cargs)
         _ = [self.canvas.connect(k) for k in fcn]  # noqa
 
         # Create a grid :
@@ -115,8 +113,7 @@ class AxisCanvas(object):
     def __init__(self, axis=True, x_label='', x_heightmax=40, y_label='',
                  y_widthmax=80, font_size=14, color='white', title='',
                  axis_label_margin=50, tick_label_margin=5, name='',
-                 bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}, fcn=[],
-                 line_width=1.):
+                 bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}, fcn=[]):
         """Init."""
         # Save variables :
         self._axis = axis
@@ -126,9 +123,7 @@ class AxisCanvas(object):
 
         # Create the main canvas :
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
-                                        show=False, title=name,
-                                        app=CONFIG['VISPY_APP'], **cargs)
-        self.canvas._context.set_line_width(line_width)
+                                        show=False, title=name, **cargs)
         _ = [self.canvas.connect(k) for k in fcn]  # noqa
 
         # Add axis :
