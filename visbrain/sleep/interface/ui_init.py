@@ -115,7 +115,8 @@ class AxisCanvas(object):
     def __init__(self, axis=True, x_label='', x_heightmax=40, y_label='',
                  y_widthmax=80, font_size=14, color='white', title='',
                  axis_label_margin=50, tick_label_margin=5, name='',
-                 bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}, fcn=[]):
+                 bgcolor=(.9, .9, .9), cargs={}, xargs={}, yargs={}, fcn=[],
+                 line_width=1.):
         """Init."""
         # Save variables :
         self._axis = axis
@@ -127,6 +128,7 @@ class AxisCanvas(object):
         self.canvas = scene.SceneCanvas(keys=None, bgcolor=bgcolor,
                                         show=False, title=name,
                                         app=CONFIG['VISPY_APP'], **cargs)
+        self.canvas._context.set_line_width(line_width)
         _ = [self.canvas.connect(k) for k in fcn]  # noqa
 
         # Add axis :
