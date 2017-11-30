@@ -2,6 +2,7 @@
 import os
 import logging
 from functools import wraps
+
 import numpy as np
 from scipy.spatial.distance import cdist
 
@@ -227,6 +228,55 @@ class RoiObj(_Volume):
             writer.save()
             logger.info("Saved as %s" % save_as)
         return self.ref
+
+    def where_is(self, patterns, df=None, union=True, columns=None):
+        """Find a list of string patterns in a DataFrame.
+
+        Parameters
+        ----------
+        patterns : list
+            List of string patterns to search.
+        df : pd.DataFrame | None
+            The DataFrame to use. If None, the DataFrame of the ROI are going
+            to be used by default.
+
+        Returns
+        -------
+        idx : list
+            List of index that match with the list of patterns.
+        """
+        # Check inputs :
+        assert isinstance(patterns, (str, list, tuple))
+        df_to_use = self.ref if df is None else df
+        n_rows, _ = df_to_use.shape
+        assert is_pandas_installed()
+        import pandas as pd
+        assert isinstance(df_to_use, pd.DataFrame)
+        patterns = [patterns] if isinstance(patterns, str) else patterns
+        if columns is None:
+            columns = list(df_to_use.keys())
+        if isinstance(columns, str):
+            columns = [columns]
+        assert all([k in df_to_use.keys() for k in columns])
+        n_cols = len(columns)
+        # Locate patterns :
+        idx_to_keep = np.zeros((n_rows, len(patterns)), dtype=bool)
+        for p, k in enumerate(patterns):
+            pat_in_col = np.zeros((n_rows, n_cols), dtype=bool)
+            for c, i in enumerate(columns):
+                pat_in_col[:, c] = df_to_use[i].astype(str).str.contains(k)
+            idx_to_keep[:, p] = np.any(pat_in_col, 1)
+        # Return either the union or intersection across research :
+        if union:
+            idx_to_keep = np.any(idx_to_keep, 1)
+        else:
+            idx_to_keep = np.all(idx_to_keep, 1)
+        if not np.any(idx_to_keep):
+            logger.error("No corresponding entries in the %s ROI for "
+                         "%s" % (self.name, ', '.join(patterns)))
+            return []
+        else:
+            return df_to_use['index'].loc[idx_to_keep]
 
     ###########################################################################
     ###########################################################################
