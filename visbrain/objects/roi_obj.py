@@ -239,6 +239,12 @@ class RoiObj(_Volume):
         df : pd.DataFrame | None
             The DataFrame to use. If None, the DataFrame of the ROI are going
             to be used by default.
+        union : bool | True
+            Take either the union of matching patterns (True) or the
+            intersection (False).
+        columns : list | None
+            List of specific column names to search in. If None, this method
+            inspect every columns in the DataFrame.
 
         Returns
         -------
@@ -276,7 +282,7 @@ class RoiObj(_Volume):
                          "%s" % (self.name, ', '.join(patterns)))
             return []
         else:
-            return df_to_use['index'].loc[idx_to_keep]
+            return np.array(df_to_use['index'].loc[idx_to_keep]).astype(int)
 
     ###########################################################################
     ###########################################################################
@@ -438,7 +444,7 @@ class RoiObj(_Volume):
                 logger.info("Random color are going to be used.")
             # Get vertices and faces of each ROI :
             for i, k in enumerate(select):
-                v, f = self._select_roi(self.vol.copy(), k, smooth)
+                v, f = self._select_roi(self.vol.copy(), int(k), smooth)
                 # Concatenate vertices / faces :
                 faces = np.r_[faces, f + faces.max() + 1] if faces.size else f
                 vert = np.r_[vert, v] if vert.size else v
@@ -463,7 +469,7 @@ class RoiObj(_Volume):
             raise ValueError("No vertices found for this ROI")
 
     def _select_roi(self, vol, level, smooth):
-        if isinstance(level, int):
+        if isinstance(level, (int, np.int)):
             condition = vol != level
         elif isinstance(level, float):
             condition = vol < level
