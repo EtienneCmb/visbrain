@@ -84,8 +84,7 @@ class VisbrainCanvas(object):
 
         # ########################## MAIN CANVAS ##########################
         self.canvas = scene.SceneCanvas(keys='interactive', bgcolor=bgcolor,
-                                        show=show, title=name,
-                                        app=CONFIG['VISPY_APP'], **cargs)
+                                        show=show, title=name, **cargs)
 
         # ########################## AXIS ##########################
         if axis:  # add axis to canvas
@@ -361,7 +360,6 @@ class SceneObj(object):
         # Create the canvas and the grid :
         self._canvas = scene.SceneCanvas(keys='interactive', show=False,
                                          title='Object scene',
-                                         app=CONFIG['VISPY_APP'],
                                          bgcolor=color2vb(bgcolor), **kwargs)
         self._grid = self._canvas.central_widget.add_grid(margin=10)
         _rpad = self._grid.add_widget(row=0, col=0, row_span=1)
@@ -561,14 +559,11 @@ class SceneObj(object):
         transparent : bool | False
             Specify if the exported figure have to contains a transparent
             background.
-        line_width : float | 1.
-            Width of line elements.
         """
         kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
                       autocrop=autocrop, unit=unit, region=region,
                       bgcolor=bgcolor, transparent=transparent)
         self._gl_uniform_transforms()
-        self._canvas._context.set_line_width(line_width)
         write_fig_canvas(saveas, self._canvas,
                          widget=self._canvas.central_widget, **kwargs)
 

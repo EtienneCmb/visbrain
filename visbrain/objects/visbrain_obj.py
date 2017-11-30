@@ -166,14 +166,11 @@ class VisbrainObject(_VisbrainObj):
         obj : VisbrainObj | None
             Pass a Visbrain object if you want to use the camera of an other
             object for the sceen rendering.
-        line_width : float | 1.
-            Width of line elements.
         """
         kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
                       autocrop=autocrop, unit=unit, region=region,
                       bgcolor=bgcolor, transparent=transparent)
         canvas = self._get_parent(bgcolor, False, False, obj)
-        canvas.canvas._context.set_line_width(line_width)
         write_fig_canvas(saveas, canvas.canvas,
                          widget=canvas.canvas.central_widget, **kwargs)
         self._node.parent = None
