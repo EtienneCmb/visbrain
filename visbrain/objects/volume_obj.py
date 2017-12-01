@@ -9,8 +9,8 @@ from vispy.color import BaseColormap
 from vispy.visuals.transforms import MatrixTransform
 
 from .visbrain_obj import VisbrainObject
-from ..utils import (load_predefined_roi, array_to_stt, get_data_path,
-                     wrap_properties, normalize)
+from ..utils import (load_predefined_roi, array_to_stt, wrap_properties,
+                     normalize, get_files_in_data)
 from ..io import read_nifti
 
 
@@ -74,17 +74,11 @@ class _Volume(VisbrainObject):
 
     def __call__(self, name):
         """Load a predefined volume."""
-        if name in self._predefined_volumes():
+        if name in get_files_in_data('roi', with_ext=False):
             logger.debug("%s volume loaded" % name)
             return load_predefined_roi(name)
         else:
             logger.error("%s volume not in visbrain/data/roi/" % name)
-
-    @staticmethod
-    def _predefined_volumes():
-        """Get the list of predefined volumes."""
-        list_dir = os.listdir(get_data_path(folder='roi'))
-        return [os.path.splitext(k)[0] for k in list_dir]
 
     # ----------- NAME -----------
     @property
@@ -95,7 +89,7 @@ class _Volume(VisbrainObject):
     @name.setter
     def name(self, value):
         """Set name value."""
-        if value in self._predefined_volumes():
+        if value in get_files_in_data('roi', with_ext=False):
             self(value)
             self.update()
         self._name = value
@@ -162,7 +156,7 @@ class VolumeObj(_Volume):
     def set_data(self, name, vol=None, hdr=None, threshold=None, cmap=None,
                  method=None, select=None):
         """Set data to the volume."""
-        if name in self._predefined_volumes():
+        if name in get_files_in_data('roi', with_ext=False):
             vol, _, _, hdr, _ = self(name)
         assert vol.ndim == 3
         if hdr is None:
