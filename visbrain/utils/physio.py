@@ -402,7 +402,7 @@ def remove_predefined_roi(name):
         raise ValueError("Can not remove a default ROI template.")
     path_to_file = get_data_path(folder='roi', file=name + '.npz')
     os.remove(path_to_file)
-    logger.info("%s ROI object removed.")
+    logger.info("%s ROI object removed." % name)
 
 
 def generate_eeg(sf=512., n_pts=1000, n_channels=1, n_trials=1, n_sines=100,
