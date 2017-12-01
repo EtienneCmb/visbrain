@@ -222,7 +222,7 @@ Region Of Interest object
 .. currentmodule:: visbrain.objects
 
 .. autoclass:: RoiObj
-  :members: get_labels, where_is, select_roi, localize_sources
+  :members: get_labels, where_is, select_roi, localize_sources, save, remove
 
     .. rubric:: Methods
 
@@ -232,6 +232,8 @@ Region Of Interest object
         ~RoiObj.select_roi
         ~RoiObj.localize_sources
         ~RoiObj.project_sources
+        ~RoiObj.save
+        ~RoiObj.remove
 
 .. include:: generated/visbrain.objects.RoiObj.examples
 .. raw:: html
