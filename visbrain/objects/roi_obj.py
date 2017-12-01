@@ -213,15 +213,10 @@ class RoiObj(_Volume):
 
         logger.info("%s ROI loaded." % name)
 
-    def save(self, name):
+    def save(self):
         """Save the ROI object.
 
         Once saved, the RoiObj can then be created using only the name.
-
-        Parameters
-        ----------
-        name : string
-            Name of the ROI atlas to add.
         """
         df = self.ref.copy()
         # Get index and delete it from the DataFrame :
@@ -230,17 +225,11 @@ class RoiObj(_Volume):
         # Convert the DataFrame to struct array :
         labels = self._df_to_struct_array(df)
         # Save the ROI object :
-        save_as_predefined_roi(name, self.vol, labels, index, self.hdr)
+        save_as_predefined_roi(self.name, self.vol, labels, index, self.hdr)
 
-    def remove(self, name):
-        """Remove an ROI object.
-
-        Parameters
-        ----------
-        name : string
-            Name of the ROI atlas to remove.
-        """
-        remove_predefined_roi(name)
+    def remove(self):
+        """Remove an ROI object."""
+        remove_predefined_roi(self.name)
 
     def get_labels(self, save_to_path=None):
         """Get the labels associated with the loaded ROI.
