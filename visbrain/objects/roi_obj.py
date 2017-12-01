@@ -228,7 +228,7 @@ class RoiObj(_Volume):
         save_as_predefined_roi(self.name, self.vol, labels, index, self.hdr)
 
     def remove(self):
-        """Remove an ROI object."""
+        """Remove the ROI object."""
         remove_predefined_roi(self.name)
 
     def get_labels(self, save_to_path=None):
