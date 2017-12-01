@@ -306,7 +306,7 @@ object.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.VisbrainObject.screenshot">
-<code class="descclassname">VisbrainObject.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>obj=None</em>, <em>line_width=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L119-L179"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.screenshot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">VisbrainObject.</code><code class="descname">screenshot</code><span class="sig-paren">(</span><em>saveas</em>, <em>print_size=None</em>, <em>dpi=300.0</em>, <em>unit='centimeter'</em>, <em>factor=None</em>, <em>region=None</em>, <em>autocrop=False</em>, <em>bgcolor=None</em>, <em>transparent=False</em>, <em>obj=None</em>, <em>line_width=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/visbrain_obj.html#VisbrainObject.screenshot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/visbrain_obj.py#L119-L176"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VisbrainObject.screenshot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take a screeshot of the scene.</p>
 <p>By default, the rendered canvas will have the size of your screen.
 The screenshot() method provides two ways to increase to exported image
@@ -373,13 +373,9 @@ space between the brain and the border of the picture.</p>
 background.</p>
 </div></blockquote>
 <p><strong>obj</strong> : VisbrainObj | None</p>
-<blockquote>
+<blockquote class="last">
 <div><p>Pass a Visbrain object if you want to use the camera of an other
 object for the sceen rendering.</p>
-</div></blockquote>
-<p><strong>line_width</strong> : float | 1.</p>
-<blockquote class="last">
-<div><p>Width of line elements.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -391,7 +387,7 @@ object for the sceen rendering.</p>
 <span id="sceneobj"></span><h2>7.1. Scene object<a class="headerlink" href="#scene-object" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="visbrain.objects.SceneObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">SceneObj</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>camera_state={}</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L340-L584"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">SceneObj</code><span class="sig-paren">(</span><em>bgcolor='black'</em>, <em>camera_state={}</em>, <em>verbose=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L339-L579"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a scene and add objects to it.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -436,7 +432,7 @@ object for the sceen rendering.</p>
 </table>
 <dl class="method">
 <dt id="visbrain.objects.SceneObj.add_to_subplot">
-<code class="descname">add_to_subplot</code><span class="sig-paren">(</span><em>obj</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>title=None</em>, <em>title_color='white'</em>, <em>title_bold=True</em>, <em>use_this_cam=False</em>, <em>rotate=None</em>, <em>camera_state={}</em>, <em>width_max=None</em>, <em>height_max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj.add_to_subplot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L419-L491"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.add_to_subplot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_to_subplot</code><span class="sig-paren">(</span><em>obj</em>, <em>row=0</em>, <em>col=0</em>, <em>row_span=1</em>, <em>col_span=1</em>, <em>title=None</em>, <em>title_color='white'</em>, <em>title_bold=True</em>, <em>use_this_cam=False</em>, <em>rotate=None</em>, <em>camera_state={}</em>, <em>width_max=None</em>, <em>height_max=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj.add_to_subplot"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L417-L489"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.add_to_subplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add object to subplot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -505,7 +501,7 @@ to True.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.SceneObj.link">
-<code class="descname">link</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj.link"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L493-L515"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.link" title="Permalink to this definition">¶</a></dt>
+<code class="descname">link</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/scene_obj.html#SceneObj.link"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/scene_obj.py#L491-L513"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.SceneObj.link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Link the camera of several objects of the scene.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2034,7 +2030,7 @@ of shape (n_sources,).</p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.RoiObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">RoiObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>label=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system='mni'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L42-L582"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">RoiObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>label=None</em>, <em>index=None</em>, <em>hdr=None</em>, <em>system='mni'</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>preload=True</em>, <em>_scale=1.0</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L45-L677"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Region Of Interest (ROI) object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2109,21 +2105,30 @@ a (4, 4) array.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.RoiObj.get_labels" title="visbrain.objects.RoiObj.get_labels"><code class="xref py py-obj docutils literal"><span class="pre">get_labels</span></code></a>([save_to_path])</td>
 <td>Get the labels associated with the loaded ROI.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.select_roi" title="visbrain.objects.RoiObj.select_roi"><code class="xref py py-obj docutils literal"><span class="pre">select_roi</span></code></a>([select,&nbsp;unique_color,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.where_is" title="visbrain.objects.RoiObj.where_is"><code class="xref py py-obj docutils literal"><span class="pre">where_is</span></code></a>(patterns[,&nbsp;df,&nbsp;union,&nbsp;columns])</td>
+<td>Find a list of string patterns in a DataFrame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.RoiObj.select_roi" title="visbrain.objects.RoiObj.select_roi"><code class="xref py py-obj docutils literal"><span class="pre">select_roi</span></code></a>([select,&nbsp;unique_color,&nbsp;…])</td>
 <td>Select several Region Of Interest (ROI).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.RoiObj.localize_sources" title="visbrain.objects.RoiObj.localize_sources"><code class="xref py py-obj docutils literal"><span class="pre">localize_sources</span></code></a>(xyz[,&nbsp;source_name,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.localize_sources" title="visbrain.objects.RoiObj.localize_sources"><code class="xref py py-obj docutils literal"><span class="pre">localize_sources</span></code></a>(xyz[,&nbsp;source_name,&nbsp;…])</td>
 <td>Localize source’s using this ROI object.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">project_sources</span></code>(s_obj[,&nbsp;project,&nbsp;radius,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">project_sources</span></code>(s_obj[,&nbsp;project,&nbsp;radius,&nbsp;…])</td>
 <td>Project source’s activity or repartition onto ROI.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#visbrain.objects.RoiObj.save" title="visbrain.objects.RoiObj.save"><code class="xref py py-obj docutils literal"><span class="pre">save</span></code></a>()</td>
+<td>Save the ROI object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#visbrain.objects.RoiObj.remove" title="visbrain.objects.RoiObj.remove"><code class="xref py py-obj docutils literal"><span class="pre">remove</span></code></a>()</td>
+<td>Remove an ROI object.</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.get_labels">
-<code class="descname">get_labels</code><span class="sig-paren">(</span><em>save_to_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.get_labels"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L213-L229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.get_labels" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_labels</code><span class="sig-paren">(</span><em>save_to_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.get_labels"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L234-L250"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.get_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the labels associated with the loaded ROI.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2141,7 +2146,7 @@ a (4, 4) array.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.RoiObj.localize_sources">
-<code class="descname">localize_sources</code><span class="sig-paren">(</span><em>xyz, source_name=None, replace_bad=True, bad_patterns=[-1, 'undefined', 'None'], replace_with='Not found', distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.localize_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L237-L329"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.localize_sources" title="Permalink to this definition">¶</a></dt>
+<code class="descname">localize_sources</code><span class="sig-paren">(</span><em>xyz, source_name=None, replace_bad=True, bad_patterns=[-1, 'undefined', 'None'], replace_with='Not found', distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.localize_sources"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L313-L405"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.localize_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Localize source’s using this ROI object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2174,8 +2179,21 @@ a (4, 4) array.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="visbrain.objects.RoiObj.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.remove"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L230-L232"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove an ROI object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.RoiObj.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.save"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L216-L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the ROI object.</p>
+<p>Once saved, the RoiObj can then be created using only the name.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="visbrain.objects.RoiObj.select_roi">
-<code class="descname">select_roi</code><span class="sig-paren">(</span><em>select=0.5</em>, <em>unique_color=False</em>, <em>roi_to_color=None</em>, <em>smooth=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.select_roi"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L353-L413"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.select_roi" title="Permalink to this definition">¶</a></dt>
+<code class="descname">select_roi</code><span class="sig-paren">(</span><em>select=0.5</em>, <em>unique_color=False</em>, <em>roi_to_color=None</em>, <em>smooth=3</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.select_roi"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L448-L508"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.select_roi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select several Region Of Interest (ROI).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2192,6 +2210,45 @@ a (4, 4) array.</p>
 <p><strong>smooth</strong> : int | 3</p>
 <blockquote class="last">
 <div><p>Smoothing level. Must be an odd integer (smooth % 2 = 1).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="visbrain.objects.RoiObj.where_is">
+<code class="descname">where_is</code><span class="sig-paren">(</span><em>patterns</em>, <em>df=None</em>, <em>union=True</em>, <em>columns=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/roi_obj.html#RoiObj.where_is"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/roi_obj.py#L252-L305"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.RoiObj.where_is" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a list of string patterns in a DataFrame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>patterns</strong> : list</p>
+<blockquote>
+<div><p>List of string patterns to search.</p>
+</div></blockquote>
+<p><strong>df</strong> : pd.DataFrame | None</p>
+<blockquote>
+<div><p>The DataFrame to use. If None, the DataFrame of the ROI are going
+to be used by default.</p>
+</div></blockquote>
+<p><strong>union</strong> : bool | True</p>
+<blockquote>
+<div><p>Take either the union of matching patterns (True) or the
+intersection (False).</p>
+</div></blockquote>
+<p><strong>columns</strong> : list | None</p>
+<blockquote>
+<div><p>List of specific column names to search in. If None, this method
+inspect every columns in the DataFrame.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>idx</strong> : list</p>
+<blockquote class="last">
+<div><p>List of index that match with the list of patterns.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -2217,7 +2274,7 @@ a (4, 4) array.</p>
 </div>
 <dl class="class">
 <dt id="visbrain.objects.VolumeObj">
-<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">VolumeObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>method='mip'</em>, <em>threshold=0.0</em>, <em>cmap='OpaqueGrays'</em>, <em>select=None</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L104-L246"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">visbrain.objects.</code><code class="descname">VolumeObj</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>method='mip'</em>, <em>threshold=0.0</em>, <em>cmap='OpaqueGrays'</em>, <em>select=None</em>, <em>transform=None</em>, <em>parent=None</em>, <em>verbose=None</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L98-L240"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a 3-D volume object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2302,7 +2359,7 @@ ignored. The name input can also be the path to an nii.gz file.</p>
 
 <dl class="method">
 <dt id="visbrain.objects.VolumeObj.set_data">
-<code class="descname">set_data</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>threshold=None</em>, <em>cmap=None</em>, <em>method=None</em>, <em>select=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L162-L184"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj.set_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_data</code><span class="sig-paren">(</span><em>name</em>, <em>vol=None</em>, <em>hdr=None</em>, <em>threshold=None</em>, <em>cmap=None</em>, <em>method=None</em>, <em>select=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/visbrain/objects/volume_obj.html#VolumeObj.set_data"><span class="viewcode-link">[source]</span></a><a class="reference external" href="https://github.com/EtienneCmb/visbrain/tree/master/visbrain/objects/volume_obj.py#L156-L178"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#visbrain.objects.VolumeObj.set_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data to the volume.</p>
 </dd></dl>
 

@@ -174,8 +174,8 @@
 <span class="kn">from</span> <span class="nn">vispy.visuals.transforms</span> <span class="k">import</span> <span class="n">MatrixTransform</span>
 
 <span class="kn">from</span> <span class="nn">.visbrain_obj</span> <span class="k">import</span> <span class="n">VisbrainObject</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">load_predefined_roi</span><span class="p">,</span> <span class="n">array_to_stt</span><span class="p">,</span> <span class="n">get_data_path</span><span class="p">,</span>
-                     <span class="n">wrap_properties</span><span class="p">,</span> <span class="n">normalize</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">load_predefined_roi</span><span class="p">,</span> <span class="n">array_to_stt</span><span class="p">,</span> <span class="n">wrap_properties</span><span class="p">,</span>
+                     <span class="n">normalize</span><span class="p">,</span> <span class="n">get_files_in_data</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">read_nifti</span>
 
 
@@ -239,17 +239,11 @@
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a predefined volume.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predefined_volumes</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">with_ext</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> volume loaded&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">load_predefined_roi</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> volume not in visbrain/data/roi/&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_predefined_volumes</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;Get the list of predefined volumes.&quot;&quot;&quot;</span>
-        <span class="n">list_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">))</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">list_dir</span><span class="p">]</span>
 
     <span class="c1"># ----------- NAME -----------</span>
     <span class="nd">@property</span>
@@ -260,7 +254,7 @@
     <span class="nd">@name</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set name value.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predefined_volumes</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">with_ext</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="bp">self</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">value</span>
@@ -327,7 +321,7 @@
 <div class="viewcode-block" id="VolumeObj.set_data"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.VolumeObj.set_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hdr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set data to the volume.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predefined_volumes</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">with_ext</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="n">vol</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">vol</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span>
         <span class="k">if</span> <span class="n">hdr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

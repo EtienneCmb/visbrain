@@ -167,6 +167,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="k">import</span> <span class="n">cdist</span>
 
@@ -177,7 +178,9 @@
 <span class="kn">from</span> <span class="nn">.volume_obj</span> <span class="k">import</span> <span class="n">_Volume</span>
 <span class="kn">from</span> <span class="nn">._projection</span> <span class="k">import</span> <span class="n">_project_sources_data</span>
 <span class="kn">from</span> <span class="nn">..io</span> <span class="k">import</span> <span class="n">is_pandas_installed</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">mni2tal</span><span class="p">,</span> <span class="n">smooth_3d</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">array_to_stt</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">mni2tal</span><span class="p">,</span> <span class="n">smooth_3d</span><span class="p">,</span> <span class="n">color2vb</span><span class="p">,</span> <span class="n">array_to_stt</span><span class="p">,</span>
+                     <span class="n">save_as_predefined_roi</span><span class="p">,</span> <span class="n">remove_predefined_roi</span><span class="p">,</span>
+                     <span class="n">get_files_in_data</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..visuals</span> <span class="k">import</span> <span class="n">BrainMesh</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
@@ -257,7 +260,7 @@
         <span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
         <span class="n">_Volume</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="n">_scale</span>
-        <span class="k">if</span> <span class="n">preload</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predefined_volumes</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">preload</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
 
     <span class="c1">###########################################################################</span>
@@ -342,10 +345,10 @@
         <span class="c1"># Test if pandas is installed :</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_pandas_installed</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;In order to work properly, pandas package &quot;</span>
-                              <span class="s2">&quot;should be installed using *pip install pandas*&quot;</span><span class="p">)</span>
+                              <span class="s2">&quot;should be installed.&quot;</span><span class="p">)</span>
         <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
         <span class="c1"># _______________________ PREDEFINED _______________________</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="s1">&#39;talairach&#39;</span><span class="p">,</span> <span class="s1">&#39;aal&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">with_ext</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="n">vol</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">system</span> <span class="o">=</span> <span class="n">_Volume</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;talairach&#39;</span> <span class="k">else</span> <span class="mi">0</span>
 
@@ -375,6 +378,24 @@
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> ROI loaded.&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
 
+<div class="viewcode-block" id="RoiObj.save"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save the ROI object.</span>
+
+<span class="sd">        Once saved, the RoiObj can then be created using only the name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># Get index and delete it from the DataFrame :</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
+        <span class="c1"># Convert the DataFrame to struct array :</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df_to_struct_array</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="c1"># Save the ROI object :</span>
+        <span class="n">save_as_predefined_roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hdr</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RoiObj.remove"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove an ROI object.&quot;&quot;&quot;</span>
+        <span class="n">remove_predefined_roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="RoiObj.get_labels"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj.get_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_to_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the labels associated with the loaded ROI.</span>
 
@@ -392,6 +413,61 @@
             <span class="n">writer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saved as </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">save_as</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span></div>
+
+<div class="viewcode-block" id="RoiObj.where_is"><a class="viewcode-back" href="../../../objects.html#visbrain.objects.RoiObj.where_is">[docs]</a>    <span class="k">def</span> <span class="nf">where_is</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">union</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Find a list of string patterns in a DataFrame.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        patterns : list</span>
+<span class="sd">            List of string patterns to search.</span>
+<span class="sd">        df : pd.DataFrame | None</span>
+<span class="sd">            The DataFrame to use. If None, the DataFrame of the ROI are going</span>
+<span class="sd">            to be used by default.</span>
+<span class="sd">        union : bool | True</span>
+<span class="sd">            Take either the union of matching patterns (True) or the</span>
+<span class="sd">            intersection (False).</span>
+<span class="sd">        columns : list | None</span>
+<span class="sd">            List of specific column names to search in. If None, this method</span>
+<span class="sd">            inspect every columns in the DataFrame.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        idx : list</span>
+<span class="sd">            List of index that match with the list of patterns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check inputs :</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span>
+        <span class="n">df_to_use</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">df</span>
+        <span class="n">n_rows</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">df_to_use</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">assert</span> <span class="n">is_pandas_installed</span><span class="p">()</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df_to_use</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="n">patterns</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">patterns</span>
+        <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df_to_use</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">k</span> <span class="ow">in</span> <span class="n">df_to_use</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">])</span>
+        <span class="n">n_cols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+        <span class="c1"># Locate patterns :</span>
+        <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_rows</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">patterns</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">patterns</span><span class="p">):</span>
+            <span class="n">pat_in_col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">columns</span><span class="p">):</span>
+                <span class="n">pat_in_col</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_to_use</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">idx_to_keep</span><span class="p">[:,</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">pat_in_col</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Return either the union or intersection across research :</span>
+        <span class="k">if</span> <span class="n">union</span><span class="p">:</span>
+            <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">idx_to_keep</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">idx_to_keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">idx_to_keep</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">idx_to_keep</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No corresponding entries in the </span><span class="si">%s</span><span class="s2"> ROI for &quot;</span>
+                         <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">patterns</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df_to_use</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_to_keep</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></div>
 
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
@@ -509,6 +585,25 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="n">arr</span><span class="p">}</span>
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_df_to_struct_array</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert a pandas DataFrame object to a numpy structured array.</span>
+
+<span class="sd">        Credit to :</span>
+<span class="sd">        https://stackoverflow.com/questions/13187778/convert-pandas-dataframe-</span>
+<span class="sd">        to-numpy-array-preserving-index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get data and column names :</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+        <span class="c1"># Build the struct array :</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="p">[(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">)]</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">types</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">):</span>
+            <span class="n">z</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">z</span>
+
     <span class="c1">###########################################################################</span>
     <span class="c1">###########################################################################</span>
     <span class="c1">#                                MESH</span>
@@ -553,7 +648,7 @@
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Random color are going to be used.&quot;</span><span class="p">)</span>
             <span class="c1"># Get vertices and faces of each ROI :</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">select</span><span class="p">):</span>
-                <span class="n">v</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">k</span><span class="p">,</span> <span class="n">smooth</span><span class="p">)</span>
+                <span class="n">v</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vol</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">smooth</span><span class="p">)</span>
                 <span class="c1"># Concatenate vertices / faces :</span>
                 <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">faces</span><span class="p">,</span> <span class="n">f</span> <span class="o">+</span> <span class="n">faces</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">faces</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">f</span>
                 <span class="n">vert</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">vert</span><span class="p">,</span> <span class="n">v</span><span class="p">]</span> <span class="k">if</span> <span class="n">vert</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="n">v</span>
@@ -578,7 +673,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No vertices found for this ROI&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_select_roi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">smooth</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)):</span>
             <span class="n">condition</span> <span class="o">=</span> <span class="n">vol</span> <span class="o">!=</span> <span class="n">level</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
             <span class="n">condition</span> <span class="o">=</span> <span class="n">vol</span> <span class="o">&lt;</span> <span class="n">level</span>

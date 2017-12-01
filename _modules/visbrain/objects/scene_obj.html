@@ -249,8 +249,7 @@
 
         <span class="c1"># ########################## MAIN CANVAS ##########################</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">SceneCanvas</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="s1">&#39;interactive&#39;</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span>
-                                        <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-                                        <span class="n">app</span><span class="o">=</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;VISPY_APP&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">cargs</span><span class="p">)</span>
+                                        <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">cargs</span><span class="p">)</span>
 
         <span class="c1"># ########################## AXIS ##########################</span>
         <span class="k">if</span> <span class="n">axis</span><span class="p">:</span>  <span class="c1"># add axis to canvas</span>
@@ -526,7 +525,6 @@
         <span class="c1"># Create the canvas and the grid :</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">SceneCanvas</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="s1">&#39;interactive&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                          <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Object scene&#39;</span><span class="p">,</span>
-                                         <span class="n">app</span><span class="o">=</span><span class="n">CONFIG</span><span class="p">[</span><span class="s1">&#39;VISPY_APP&#39;</span><span class="p">],</span>
                                          <span class="n">bgcolor</span><span class="o">=</span><span class="n">color2vb</span><span class="p">(</span><span class="n">bgcolor</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="o">.</span><span class="n">add_grid</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
         <span class="n">_rpad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_span</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -726,14 +724,11 @@
 <span class="sd">        transparent : bool | False</span>
 <span class="sd">            Specify if the exported figure have to contains a transparent</span>
 <span class="sd">            background.</span>
-<span class="sd">        line_width : float | 1.</span>
-<span class="sd">            Width of line elements.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">print_size</span><span class="o">=</span><span class="n">print_size</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="n">factor</span><span class="p">,</span>
                       <span class="n">autocrop</span><span class="o">=</span><span class="n">autocrop</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
                       <span class="n">bgcolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="n">transparent</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gl_uniform_transforms</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">set_line_width</span><span class="p">(</span><span class="n">line_width</span><span class="p">)</span>
         <span class="n">write_fig_canvas</span><span class="p">(</span><span class="n">saveas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="p">,</span>
                          <span class="n">widget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="o">.</span><span class="n">central_widget</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 

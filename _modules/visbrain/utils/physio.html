@@ -164,17 +164,22 @@
             
   <h1>Source code for visbrain.utils.physio</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Group of functions for physiological processing.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">re</span> <span class="k">import</span> <span class="n">findall</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">zscore</span>
 
 <span class="kn">from</span> <span class="nn">.sigproc</span> <span class="k">import</span> <span class="n">smoothing</span>
-<span class="kn">from</span> <span class="nn">.others</span> <span class="k">import</span> <span class="n">get_data_path</span>
+<span class="kn">from</span> <span class="nn">.others</span> <span class="k">import</span> <span class="n">get_data_path</span><span class="p">,</span> <span class="n">get_files_in_data</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;find_non_eeg&#39;</span><span class="p">,</span> <span class="s1">&#39;rereferencing&#39;</span><span class="p">,</span> <span class="s1">&#39;bipolarization&#39;</span><span class="p">,</span> <span class="s1">&#39;commonaverage&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;tal2mni&#39;</span><span class="p">,</span> <span class="s1">&#39;mni2tal&#39;</span><span class="p">,</span> <span class="s1">&#39;load_predefined_roi&#39;</span><span class="p">,</span> <span class="s1">&#39;generate_eeg&#39;</span><span class="p">)</span>
+           <span class="s1">&#39;tal2mni&#39;</span><span class="p">,</span> <span class="s1">&#39;mni2tal&#39;</span><span class="p">,</span> <span class="s1">&#39;load_predefined_roi&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;save_as_predefined_roi&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_predefined_roi&#39;</span><span class="p">,</span> <span class="s1">&#39;generate_eeg&#39;</span><span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;visbrain&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">find_non_eeg</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;eog&#39;</span><span class="p">,</span> <span class="s1">&#39;emg&#39;</span><span class="p">,</span> <span class="s1">&#39;ecg&#39;</span><span class="p">,</span> <span class="s1">&#39;abd&#39;</span><span class="p">]):</span>
@@ -506,8 +511,10 @@
 <span class="sd">    system : {&#39;mni&#39;, &#39;tal&#39;}</span>
 <span class="sd">        The system used by the volume.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="s1">&#39;aal&#39;</span><span class="p">,</span> <span class="s1">&#39;talairach&#39;</span><span class="p">]</span>
+    <span class="n">all_rois</span> <span class="o">=</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">with_ext</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_rois</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> not in default ROI atalses &quot;</span>
+                         <span class="s2">&quot;(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">all_rois</span><span class="p">)))</span>
     <span class="c1"># Load archive :</span>
     <span class="n">file</span> <span class="o">=</span> <span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
     <span class="n">arch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
@@ -516,6 +523,51 @@
     <span class="n">labels</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">],</span> <span class="n">arch</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">vol</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hdr</span><span class="p">,</span> <span class="s1">&#39;tal&#39;</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;talairach&#39;</span> <span class="k">else</span> <span class="s1">&#39;mni&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">save_as_predefined_roi</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hdr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save as a predefined ROI atlas.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : string</span>
+<span class="sd">        Name of the ROI atlas.</span>
+<span class="sd">    vol : array_like</span>
+<span class="sd">        The volume of shape (nx, ny, nz).</span>
+<span class="sd">    labels : array_like</span>
+<span class="sd">        Array of labels of type object and of length n_labels.</span>
+<span class="sd">    index : array_like</span>
+<span class="sd">        Array of index corresponding to the labels of type np.int and of length</span>
+<span class="sd">        n_labels.</span>
+<span class="sd">    hdr : array_like</span>
+<span class="sd">        The matrix of transformation of shape (4, 4).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_rois</span> <span class="o">=</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">with_ext</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_rois</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is already a ROI template. Remove it before or &quot;</span>
+                         <span class="s2">&quot;use an other name.&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">path_to_save</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">),</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="n">path_to_save</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="n">vol</span><span class="p">,</span> <span class="n">hdr</span><span class="o">=</span><span class="n">hdr</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is now a default ROI object. Use `r_obj = RoiObj(&#39;</span><span class="si">%s</span><span class="s2">&#39;)` to&quot;</span>
+                <span class="s2">&quot; call it.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">remove_predefined_roi</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Remove a predefined ROI object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : string</span>
+<span class="sd">        Name of the ROI atlas.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_rois</span> <span class="o">=</span> <span class="n">get_files_in_data</span><span class="p">(</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">with_ext</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_rois</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not an ROI atlas name.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;brodmann&#39;</span><span class="p">,</span> <span class="s1">&#39;aal&#39;</span><span class="p">,</span> <span class="s1">&#39;talairach&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can not remove a default ROI template.&quot;</span><span class="p">)</span>
+    <span class="n">path_to_file</span> <span class="o">=</span> <span class="n">get_data_path</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="s1">&#39;roi&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.npz&#39;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> ROI object removed.&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="generate_eeg"><a class="viewcode-back" href="../../../utils.html#visbrain.utils.physio.generate_eeg">[docs]</a><span class="k">def</span> <span class="nf">generate_eeg</span><span class="p">(</span><span class="n">sf</span><span class="o">=</span><span class="mf">512.</span><span class="p">,</span> <span class="n">n_pts</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_sines</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
