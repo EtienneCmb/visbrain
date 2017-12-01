@@ -13,7 +13,9 @@ from .visbrain_obj import CombineObjects
 from .volume_obj import _Volume
 from ._projection import _project_sources_data
 from ..io import is_pandas_installed
-from ..utils import mni2tal, smooth_3d, color2vb, array_to_stt
+from ..utils import (mni2tal, smooth_3d, color2vb, array_to_stt,
+                     save_as_predefined_roi, remove_predefined_roi,
+                     get_files_in_data)
 from ..visuals import BrainMesh
 
 logger = logging.getLogger('visbrain')
@@ -93,7 +95,7 @@ class RoiObj(_Volume):
         """Init."""
         _Volume.__init__(self, name, parent, transform, verbose, **kw)
         self._scale = _scale
-        if preload and (name in self._predefined_volumes()):
+        if preload:
             self.set_data(name, vol, label, index, hdr, system)
 
     ###########################################################################
@@ -178,10 +180,10 @@ class RoiObj(_Volume):
         # Test if pandas is installed :
         if not is_pandas_installed():
             raise ImportError("In order to work properly, pandas package "
-                              "should be installed using *pip install pandas*")
+                              "should be installed.")
         import pandas as pd
         # _______________________ PREDEFINED _______________________
-        if name in ['brodmann', 'talairach', 'aal']:
+        if name in get_files_in_data('roi', with_ext=False):
             vol, label, index, hdr, system = _Volume.__call__(self, name)
         self._offset = -1 if name == 'talairach' else 0
 
@@ -210,6 +212,35 @@ class RoiObj(_Volume):
         self.analysis = pd.DataFrame({}, columns=cols)
 
         logger.info("%s ROI loaded." % name)
+
+    def save(self, name):
+        """Save the ROI object.
+
+        Once saved, the RoiObj can then be created using only the name.
+
+        Parameters
+        ----------
+        name : string
+            Name of the ROI atlas to add.
+        """
+        df = self.ref.copy()
+        # Get index and delete it from the DataFrame :
+        index = df['index']
+        del df['index']
+        # Convert the DataFrame to struct array :
+        labels = self._df_to_struct_array(df)
+        # Save the ROI object :
+        save_as_predefined_roi(name, self.vol, labels, index, self.hdr)
+
+    def remove(self, name):
+        """Remove an ROI object.
+
+        Parameters
+        ----------
+        name : string
+            Name of the ROI atlas to remove.
+        """
+        remove_predefined_roi(name)
 
     def get_labels(self, save_to_path=None):
         """Get the labels associated with the loaded ROI.
@@ -399,6 +430,25 @@ class RoiObj(_Volume):
                 return {k: arr[k] for k in arr.dtype.names}
         except:
             return {'label': arr}
+
+    @staticmethod
+    def _df_to_struct_array(df):
+        """Convert a pandas DataFrame object to a numpy structured array.
+
+        Credit to :
+        https://stackoverflow.com/questions/13187778/convert-pandas-dataframe-
+        to-numpy-array-preserving-index
+        """
+        # Get data and column names :
+        v = df.values
+        cols = df.columns
+        # Build the struct array :
+        types = [(cols[i], df[k].dtype.type) for (i, k) in enumerate(cols)]
+        dtype = np.dtype(types)
+        z = np.zeros(v.shape[0], dtype)
+        for (i, k) in enumerate(z.dtype.names):
+            z[k] = v[:, i]
+        return z
 
     ###########################################################################
     ###########################################################################
