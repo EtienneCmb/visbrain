@@ -381,7 +381,7 @@ class SourceObj(VisbrainObject):
         if isinstance(keep_only, (list, tuple)):
             idx_to_keep = []
             for k, i in product(df.keys(), keep_only):
-                idx_to_keep.append(df[k].astype(str).str.contains(i))
+                idx_to_keep.append(np.array(df[k], dtype=object) == i)
             idx_to_keep = np.vstack(idx_to_keep).sum(0).astype(bool)
             df = df.loc[idx_to_keep]
             self.visible = idx_to_keep
