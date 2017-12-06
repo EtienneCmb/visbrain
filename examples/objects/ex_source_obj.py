@@ -22,13 +22,12 @@ import numpy as np
 from vispy.geometry import create_sphere
 
 from visbrain.objects import SourceObj, SceneObj, ColorbarObj
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.io import download_file
 
 """
 Load the xyz coordinates and corresponding subject name
 """
-download_file('xyz_sample.npz')
-mat = np.load(path_to_visbrain_data('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz'))
 xyz = mat['xyz']
 n_sources = xyz.shape[0]
 text = ['S' + str(k) for k in range(n_sources)]
