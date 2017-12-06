@@ -76,6 +76,7 @@ class _Volume(VisbrainObject):
         """Load a predefined volume."""
         if name in get_files_in_data('roi', with_ext=False):
             logger.debug("%s volume loaded" % name)
+            self._name = name
             return load_predefined_roi(name)
         else:
             logger.error("%s volume not in visbrain/data/roi/" % name)
