@@ -443,7 +443,7 @@ class BrainObj(VisbrainObject):
             u_colors = np.zeros((len(u_idx), 4), dtype=float)
             kw = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
             data_color = array2colormap(data, **kw)
-            self._default_cblabel = "Parcellate's data"
+            self._default_cblabel = "Parcellates data"
         else:
             logger.info("Use default color included in the file")
             u_colors = u_colors.astype(float) / 255.
