@@ -362,6 +362,7 @@ class SceneObj(object):
                                          title='Object scene',
                                          bgcolor=color2vb(bgcolor), **kwargs)
         self._grid = self._canvas.central_widget.add_grid(margin=10)
+        # Padding at (0, 0) :
         _rpad = self._grid.add_widget(row=0, col=0, row_span=1)
         _rpad.width_max = 20
         _rpad.height_max = 20
@@ -458,6 +459,7 @@ class SceneObj(object):
         if (row + 1, col + 1) not in self._grid_desc.keys():
             # Get the camera and add view to the grid :
             cam = obj._get_camera()
+            cam.set_default_state()
             sub = self._grid.add_view(row=row + 1, col=col + 1,
                                       row_span=row_span, col_span=col_span,
                                       camera=cam)
@@ -470,6 +472,7 @@ class SceneObj(object):
             sub = self[(row, col)]
             if use_this_cam:
                 sub.camera = obj._get_camera()
+                sub.camera.set_default_state()
             # For objects that have a mesh attribute, pass the camera :
             if hasattr(obj, 'mesh'):
                 obj.mesh.set_camera(sub.camera)
@@ -502,9 +505,9 @@ class SceneObj(object):
         >>> # Link cameras of subplots (0, 0), (0, 1) and (1, 0)
         >>> sc.link((0, 0), (0, 1), (1, 0))
         """
-        logger.info('Linking cameras')
+        logger.info('Link cameras')
         if args[0] == -1:
-            args = list(self._grid_desc.keys())
+            args = [(k[0] - 1, k[1] - 1) for k in self._grid_desc.keys()]
         assert len(args) > 1
         assert all([len(k) == 2 for k in args])
         cam_obj_1 = self[args[0]].camera
