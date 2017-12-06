@@ -15,7 +15,7 @@ object i.e :
 import numpy as np
 
 from visbrain.objects import RoiObj, ColorbarObj, SceneObj, SourceObj, BrainObj
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.io import download_file, path_to_visbrain_data, read_nifti
 
 """Get the path to Visbrain data and download deep sources
 """
@@ -80,14 +80,36 @@ sc.add_to_subplot(roi_aal, row=0, col=1,
                   title='Select and plot multiple ROI with unique colors')
 
 # =============================================================================
-#                              SMA + FIXED COLORS
+#                              CUSTOM ROI + FIXED COLORS
 # =============================================================================
-print('\n-> Plot SMA with fixed colors')
-roi_aal_2 = RoiObj('aal')
-colors = {19: 'slateblue', 20: 'olive'}
-roi_aal_2.select_roi(select=[19, 20], smooth=11, roi_to_color=colors)
-sc.add_to_subplot(roi_aal_2, row=0, col=2,
-                  title='Plot SMA with fixed colors')
+print("\n-> Use a custom roi_object and plot dorsal and ventral thalamus with "
+      "fixed colors")
+# Download the MIST_ROI.zip archive. See the README inside the archive
+download_file('MIST_ROI.zip', unzip=True)
+nifti_file = path_to_visbrain_data('MIST_ROI.nii.gz')
+csv_file = path_to_visbrain_data('MIST_ROI.csv')
+# Read the .csv file :
+arr = np.genfromtxt(csv_file, delimiter=';', dtype=str)
+# Get column names, labels and index :
+column_names = arr[0, :]
+arr = np.delete(arr, 0, 0)
+n_roi = arr.shape[0]
+roi_index = arr[:, 0].astype(int)
+roi_labels = arr[:, [1, 2]].astype(object)
+# Build the struct array :
+label = np.zeros(n_roi, dtype=[('label', object), ('name', object)])
+label['label'] = roi_labels[:, 0]
+label['name'] = roi_labels[:, 1]
+# Get the volume and the hdr transformation :
+vol, _, hdr = read_nifti(nifti_file, hdr_as_array=True)
+# Define the ROI object and save it :
+roi_custom = RoiObj('mist_roi', vol=vol, label=label, index=roi_index, hdr=hdr)
+# Find thalamus entries :
+idx_thalamus = roi_custom.where_is('THALAMUS')
+colors = {55: 'slateblue', 56: 'olive', 63: 'darkred', 64: '#ab4642'}
+roi_custom.select_roi(idx_thalamus, smooth=11, roi_to_color=colors)
+sc.add_to_subplot(roi_custom, row=0, col=2,
+                  title='Plot dorsal and ventral thalamus with fixed colors')
 
 # =============================================================================
 #                        ANATOMICAL LOCATION OF SOURCES
