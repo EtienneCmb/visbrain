@@ -239,7 +239,8 @@ class RoiObj(_Volume):
         save_to_path : str | None
             Save labels to an excel file.
         """
-        if isinstance(save_to_path, str) and os.path.isdir(save_to_path):
+        if isinstance(save_to_path, str):
+            assert os.path.isdir(save_to_path)
             assert is_pandas_installed()
             import pandas as pd
             save_as = os.path.join(save_to_path, '%s.xlsx' % self.name)
