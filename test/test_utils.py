@@ -200,7 +200,7 @@ class TestDetections(object):
         # Get a dataset example :
         data, sf = self._get_eeg_dataset()
         hypno = self._get_eeg_hypno()
-        spindlesdetect(data, sf, .1, hypno, True)
+        spindlesdetect(data, sf, .3, hypno, False)
 
     def test_remdetect(self):
         """Test function remdetect."""

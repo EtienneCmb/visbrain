@@ -125,7 +125,7 @@ class UiDetection(object):
                 tMax = self._ToolSpinTmax.value()
                 nrem_only = self._ToolSpinRemOnly.isChecked()
                 # Get Spindles indices :
-                index, nb, dty, dur = spindlesdetect(
+                index, nb, dty, dur, pwr = spindlesdetect(
                     self._data[k, :], self._sf, thr, self._hypno, nrem_only,
                     fMin, fMax, tMin, tMax)
 
@@ -267,7 +267,7 @@ class UiDetection(object):
             self._DetectLocations.setEnabled(viz)
 
     def _fcn_rmLocation(self):
-        """Demove a detection."""
+        """Remove a detection."""
         # Get the currently selected channel and type :
         chan, types = self._getCurrentChanType()
         # Remove detection :
