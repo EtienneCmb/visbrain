@@ -24,7 +24,8 @@ sc.add_to_subplot(BrainObj('B1'), use_this_cam=True)
 c_count = ConnectObj('default', nodes, edges, select=edges > .7,
                      color_by='count', antialias=True, line_width=4.,
                      dynamic=(.1, 1.))
-s_obj_c = SourceObj('sources', nodes, color='olive', radius_min=10., symbol='square')
+s_obj_c = SourceObj('sources', nodes, color='olive', radius_min=10.,
+                    symbol='square')
 sc.add_to_subplot(c_count, row=0, col=1,
                   title='Color by number of connections per node')
 sc.add_to_subplot(s_obj_c, use_this_cam=True, row=0, col=1)
