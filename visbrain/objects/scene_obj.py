@@ -416,9 +416,9 @@ class SceneObj(object):
             obj._cnode.transform = scene.transforms.STTransform(scale=sc)
 
     def add_to_subplot(self, obj, row=0, col=0, row_span=1, col_span=1,
-                       title=None, title_color='white', title_bold=True,
-                       use_this_cam=False, rotate=None, camera_state={},
-                       width_max=None, height_max=None):
+                       title=None, title_size=12., title_color='white',
+                       title_bold=True, use_this_cam=False, rotate=None,
+                       camera_state={}, width_max=None, height_max=None):
         """Add object to subplot.
 
         Parameters
@@ -435,6 +435,8 @@ class SceneObj(object):
             Number of columns to use.
         title : string | None
             Subplot title.
+        title_size : float | 12.
+            Title font size.
         title_color : string/tuple/array_like | 'white'
             Color of the title.
         title_bold : bool | True
@@ -466,7 +468,7 @@ class SceneObj(object):
             self._grid_desc[(row + 1, col + 1)] = len(self._grid.children)
             title_color = color2vb(title_color)
             tit = scene.visuals.Text(title, color=title_color, anchor_x='left',
-                                     bold=title_bold)
+                                     bold=title_bold, font_size=title_size)
             sub.add_subvisual(tit)
         else:
             sub = self[(row, col)]
