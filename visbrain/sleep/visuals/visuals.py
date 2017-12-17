@@ -579,8 +579,7 @@ class Hypnogram(object):
         # Create a default line :
         pos = np.array([[0, 0], [0, 100]])
         self.mesh = scene.visuals.Line(pos, name='hypnogram', method='gl',
-                                       parent=parent, width=width)
-        self.mesh._width = width
+                                       parent=parent)
         self.mesh.set_gl_state('translucent')
         # Create a default marker (for edition):
         self.edit = Markers(parent=parent)
