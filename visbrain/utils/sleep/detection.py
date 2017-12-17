@@ -213,10 +213,10 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
     method: {'wavelet', 'hilbert'}
         Method to extract complex decomposition. Use either 'hilbert' or
         'wavelet'.
-    min_distance_ms : int | 500
+    min_distance_ms : int | 300
         Minimum distance (in ms) between two spindles to consider them as
         two distinct spindles
-    sigma_thr : float | 0.25
+    sigma_thr : float | 0.2
         Sigma band-wise normalized power threshold (between 0 and 1)
     adapt_band : bool | True
         If true, adapt sigma band limit by finding the peak sigma freq.
@@ -240,6 +240,21 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
     # Find if hypnogram is loaded :
     hyploaded = True if np.unique(hypno).size > 1 and nrem_only else False
 
+    # Pre-detection
+    if adapt_band:
+        # Find peak sigma frequency
+        f, Pxx_den = welch(elec, sf)
+        mfs = f[Pxx_den == Pxx_den[np.where((f >= 11) & (f < 16))].max()][0]
+        fmin = mfs - 1
+        fmax = mfs + 1
+
+    # Compute relative sigma power
+    freqs = np.array([0.5, 4., 8., fmin, fmax])
+    sigma_npow = morlet_power(elec, freqs, sf, norm=True)[-1]
+    sigma_nfpow = smoothing(sigma_npow, sf * (tmin / 1000))
+    # Vector of sigma power supra-threshold values
+    idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
+
     if hyploaded:
         data = elec.copy()
         data[(np.where(np.logical_or(hypno < 1, hypno == 4)))] = 0.
@@ -248,21 +263,6 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
     else:
         data = elec
         length = max(data.shape)
-
-    # Pre-detection
-    if adapt_band:
-        # Find peak sigma frequency
-        f, Pxx_den = welch(data, sf)
-        mfs = f[Pxx_den == Pxx_den[np.where((f >= 11) & (f < 16))].max()][0]
-        fmin = mfs - 1
-        fmax = mfs + 1
-
-    # Compute relative sigma power
-    freqs = np.array([0.5, 4., 8., fmin, fmax])
-    sigma_npow = morlet_power(data, freqs, sf, norm=True)[-1]
-    sigma_nfpow = smoothing(sigma_npow, sf * (tmin / 1000))
-    # Vector of sigma power supra-threshold values
-    idx_sigma = np.where(sigma_nfpow > sigma_thr)[0]
 
     # Get complex decomposition of filtered data :
     if method == 'hilbert':
@@ -369,9 +369,8 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
 ###########################################################################
 
 
-def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
-              min_distance_ms=200, smoothing_ms=200, deriv_ms=30,
-              amplitude_art=400):
+def remdetect(elec, sf, hypno, rem_only, threshold, tmin=300, tmax=800,
+              min_distance_ms=300, smoothing_ms=200, deriv_ms=50):
     """Perform a rapid eye movement (REM) detection.
 
     Function to perform a semi-automatic detection of rapid eye movements
@@ -380,7 +379,7 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
     Parameters
     ----------
     elec: array_like
-        EOG signal (preferably after artefact rejection using ICA)
+        EOG signal
     sf: int
         Downsampling frequency
     hypno: array_like
@@ -391,24 +390,22 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
     threshold: float
         Number of standard deviation of the derivative signal
         Threshold is defined as: mean + X * std(derivative)
-    tmin : int | 200
+    tmin : int | 300
         Minimum duration (ms) of rapid eye movement
     tmax : int | 1500
         Maximum duration (ms) of rapid eye movement
-    min_distance_ms : int | 200
+    min_distance_ms : int | 300
         Minimum distance (ms) between two saccades to consider them as two
         distinct events.
-    smoothing_ms : int | 200
+    smoothing_ms : int | 200 (= 5 Hz)
         Time (ms) window of the smoothing.
-    deriv_ms : int | 30
+    deriv_ms : int | 50
         Time (ms) window of derivative computation
-    amplitude_art : int | 400
-        Remove extreme values from the signal
 
     Returns
     -------
-    idx_sup_thr: array_like
-        Array of supra-threshold indices
+    idx_rem: array_like
+        Indices of detected REMs
     number: int
         Number of detected REMs
     density: float
@@ -416,47 +413,86 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=200, tmax=1500,
     duration_ms: float
         Duration (ms) of each REM detected
     """
-    if rem_only and 4 in hypno:
-        elec[(np.where(hypno < 4))] = 0
-        length = np.count_nonzero(elec)
-        idx_zero = np.where(elec == 0)
-    else:
-        length = max(elec.shape)
+    # Find if hypnogram is loaded :
+    hyploaded = True if rem_only and 4 in hypno else False
 
-    # Smooth signal
-    sm_sig = smoothing(elec, sf * (smoothing_ms / 1000))
-    # Compute first derivative
+    # Compute relative beta power
+    freqs = np.array([0.5, 4., 8., 12, 40])
+    beta_npow = morlet_power(elec, freqs, sf, norm=True)[-1]
+    beta_nfpow = smoothing(beta_npow, sf * (tmin / 1000))
+    # Vector of beta power supra-threshold values
+    idx_beta = np.where(beta_nfpow < np.percentile(beta_nfpow, 60))[0]
+
+    if hyploaded:
+        data = elec.copy()
+        data[(np.where(hypno < 4))] = 0
+        length = np.count_nonzero(data)
+        idx_zero = np.where(data == 0)
+    else:
+        data = elec
+        length = max(data.shape)
+
+    # Compute smoothed derivative
+    sm_sig = smoothing(data, sf * (smoothing_ms / 1000))
     deriv = derivative(sm_sig, deriv_ms, sf)
-    # Smooth derivative
     deriv = smoothing(deriv, sf * (smoothing_ms / 1000))
-    # Define threshold
-    if rem_only and 4 in hypno:
-        id_th = np.setdiff1d(np.arange(elec.size), idx_zero)
-    else:
-        id_th = np.arange(elec.size)
-    # Remove extreme values
-    id_th = np.setdiff1d(id_th, np.where(np.abs(sm_sig) > amplitude_art)[0])
-    # Find supra-threshold values
-    thresh = np.mean(deriv[id_th]) + threshold * np.std(deriv[id_th])
-    idx_sup_thr = np.where(deriv > thresh)[0]
+    if hyploaded:
+        deriv[idx_zero] = np.nan
 
-    if idx_sup_thr.size:
+    # Define hard and soft thresholds
+    hard_thr = np.nanmean(deriv) + threshold * np.nanstd(deriv)
+    soft_thr = 0.5 * hard_thr
 
-        # Find REMs separated by less than min_distance_ms
-        idx_sup_thr = _events_distance_fill(idx_sup_thr, min_distance_ms, sf)
+    with np.errstate(divide='ignore', invalid='ignore'):
+        idx_hard = np.where(deriv > hard_thr)[0]
+        idx_soft = np.where(deriv > soft_thr)[0]
 
-        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+    # Find threshold-crossing indices of soft threshold
+    idx_zc_soft = _events_to_index(idx_soft).flatten()
 
-        # Get where min_dur < REM duration < tmax
+    if idx_hard.size > 0:
+        # Initialize rem vector
+        idx_rem = np.array([], dtype=int)
+
+        # Keep only period with low relative beta power (i.e. remove artefact)
+        idx_hard = np.intersect1d(idx_hard, idx_beta, True)
+
+        # Fill gap between events separated by less than min_distance_ms
+        idx_hard = _events_distance_fill(idx_hard, min_distance_ms, sf)
+
+        # Get where spindles start / end :
+        idx_start, idx_stop = _events_to_index(idx_hard).T
+
+        # Find true beginning / end using soft threshold
+        for s in idx_start:
+            d = s - idx_zc_soft
+            # Find distance to nearest soft threshold crossing before start
+            soft_beg = d[d > 0].min()
+            # Find distance to nearest soft threshold crossing before start
+            soft_end = np.abs(d[d < 0]).min()
+            idx_rem = np.append(idx_rem, np.arange(
+                                        s - soft_beg, s + soft_end))
+
+        # Fill gap between events separated by less than min_distance_ms
+        idx_rem = _events_distance_fill(idx_rem, min_distance_ms, sf)
+
+        # Get duration
+        idx_start, idx_stop = _events_to_index(idx_rem).T
+        duration_ms = (idx_stop - idx_start) * (1000 / sf)
+
+        # Remove events with bad duration
         good_dur = np.where(np.logical_and(duration_ms > tmin,
                                            duration_ms < tmax))[0]
-        good_idx = _events_removal(idx_start, idx_stop, good_dur)
-        idx_sup_thr = idx_sup_thr[good_idx]
 
-        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
+        idx_rem = _index_to_events(np.c_[idx_start, idx_stop][good_dur])
+
+        # Compute number, duration, density
+        idx_start, idx_stop = _events_to_index(idx_rem).T
+        number = idx_start.size
+        duration_ms = (idx_stop - idx_start) * (1000 / sf)
         density = number / (length / sf / 60.)
 
-        return idx_sup_thr, number, density, duration_ms
+        return idx_rem, number, density, duration_ms
 
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)

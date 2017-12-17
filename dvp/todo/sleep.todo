@@ -66,6 +66,7 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
+	- Improve REM detect using MNE-Python function
 	- Suppression menu contextuel Settings > Clean hypnogram
 	- Spindles: write_fig_spindles à faire en version Cli?
 	- Spindles: calcul amplitude peak a peak (rejet d'artefact) et fréquence moyenne ?
