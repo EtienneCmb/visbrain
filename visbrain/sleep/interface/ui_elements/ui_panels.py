@@ -123,6 +123,8 @@ class UiPanels(object):
             self._hypYLabels.append(label)
         self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0, 1, 1)
         PROFILER("Hypnogram", level=2)
+        # Connect :
+        self._PanHypnoReset.clicked.connect(self.settCleanHyp)
 
         # =====================================================================
         # TOPOPLOT
@@ -459,6 +461,28 @@ class UiPanels(object):
         """Change the 2-D interpolation method."""
         # Interpolation :
         self._spec.interp = str(self._PanSpecInterp.currentText())
+
+    # =====================================================================
+    # HYPNOGRAM
+    # =====================================================================
+    def settCleanHyp(self):
+        """Clean the hypnogram."""
+
+        # Confirmation dialog
+        reply = QtWidgets.QMessageBox.question(self, 'Message',
+                "Are you sure you want to reset the program?",
+                QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+
+        if reply == QtWidgets.QMessageBox.Yes:
+            self._hypno = np.zeros((len(self._hyp),), dtype=np.float32)
+            self._hyp.clean(self._sf, self._time)
+            # Update info table :
+            self._fcn_infoUpdate()
+            # Update scoring table :
+            self._fcn_Hypno2Score()
+            self._fcn_Score2Hypno()
+        else:
+            pass
 
     # =====================================================================
     # TOPOPLOT

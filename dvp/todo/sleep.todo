@@ -66,6 +66,8 @@ Etienne
 	+5 Ajouter texte à hypnogram
 
 Raph
+	- Suppression menu contextuel Settings > Clean hypnogram
+	- Spindles: write_fig_spindles à faire en version Cli?
 	- Spindles: calcul amplitude peak a peak (rejet d'artefact) et fréquence moyenne ?
 	- Spindles: rajouter colonnes power, fréquence dans location table
 	- Detection : améliorer calcul idx_start, idx_stop, duration en utilisant les fonctions d'étienne
