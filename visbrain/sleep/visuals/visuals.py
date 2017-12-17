@@ -563,7 +563,7 @@ class Spectrogram(PrepareData):
 class Hypnogram(object):
     """Create a hypnogram object."""
 
-    def __init__(self, time, camera, color='darkblue', width=2., parent=None,
+    def __init__(self, time, camera, color='#292824', width=2., parent=None,
                  hconv=None):
         # Keep camera :
         self._camera = camera

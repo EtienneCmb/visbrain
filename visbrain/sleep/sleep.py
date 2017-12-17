@@ -118,7 +118,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         # ---------- Default line width ----------
         self._linemeth = line
         self._lw = 1.
-        self._lwhyp = 2.5
+        self._lwhyp = 2
         self._defwin = 30.
         self._defstd = 5.
         # ---------- Default colors ----------

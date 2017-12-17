@@ -1167,19 +1167,19 @@ channel</string>
                                 </sizepolicy>
                                </property>
                                <property name="toolTip">
-                                <string>Choose hypnogram line width [ 0.5 - 10 ]</string>
+                                <string>Change the line width of the hypnogram [ 1 - 10 ]</string>
                                </property>
                                <property name="decimals">
-                                <number>1</number>
+                                <number>0</number>
                                </property>
                                <property name="minimum">
-                                <double>0.500000000000000</double>
+                                <double>1.000000000000000</double>
                                </property>
                                <property name="maximum">
-                                <double>10.000000000000000</double>
+                                <double>9.000000000000000</double>
                                </property>
                                <property name="singleStep">
-                                <double>0.500000000000000</double>
+                                <double>1.000000000000000</double>
                                </property>
                                <property name="value">
                                 <double>2.000000000000000</double>
@@ -1249,7 +1249,7 @@ channel</string>
                 <item>
                  <widget class="QPushButton" name="_PanHypnoReset">
                   <property name="toolTip">
-                   <string>Reset the hypnogram to zero. Use with caution!</string>
+                   <string>Reset the hypnogram to an empty one</string>
                   </property>
                   <property name="text">
                    <string>Reset hypnogram</string>

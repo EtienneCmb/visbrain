@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import numpy as np
 
 from ..ui_init import AxisCanvas, TimeAxis
-from ....utils import mpl_cmap
+from ....utils import mpl_cmap, color2vb
 from ....config import PROFILER
 
 try:
@@ -124,7 +124,9 @@ class UiPanels(object):
         self._chanGrid.addWidget(self._hypLabel, len(self) + 2, 0, 1, 1)
         PROFILER("Hypnogram", level=2)
         # Connect :
-        self._PanHypnoReset.clicked.connect(self.settCleanHyp)
+        self._PanHypnoReset.clicked.connect(self._fcn_hypnoClean)
+        self._PanHypnoLw.valueChanged.connect(self._fcn_hypnoLw)
+        self._PanHypnoColor.clicked.connect(self._fcn_hypnoColor)
 
         # =====================================================================
         # TOPOPLOT
@@ -465,9 +467,26 @@ class UiPanels(object):
     # =====================================================================
     # HYPNOGRAM
     # =====================================================================
-    def settCleanHyp(self):
-        """Clean the hypnogram."""
+    def _fcn_hypnoLw(self):
+        """Change the line width of the hypnogram"""
+        self._hyp.width = self._PanHypnoLw.value()
+        self._hyp.set_data(self._sf, self._hypno, self._time)
 
+    def _fcn_hypnoColor(self):
+        """Change the color of the hypnogram"""
+        if not(self._PanHypnoColor.isChecked()):
+            color = {-1: '#292824', 0: '#292824', 1: '#292824',
+                      2: '#292824', 3: '#292824', 4: '#292824'}
+        else:
+            color = self._hypcolor
+        # Get color :
+        self._hyp.color = {k: color2vb(color=i) for k, i in zip(color.keys(),
+                                                           color.values())}
+        # Update hypnogram
+        self._hyp.set_data(self._sf, self._hypno, self._time)
+
+    def _fcn_hypnoClean(self):
+        """Clean the hypnogram."""
         # Confirmation dialog
         reply = QtWidgets.QMessageBox.question(self, 'Message',
                 "Are you sure you want to reset the program?",
