@@ -17,6 +17,8 @@ from ...utils.sleep.event import _index_to_events
 from ...visuals import TopoMesh, TFmapsMesh
 from ...config import PROFILER
 
+from lspopt import spectrogram_lspopt
+
 logger = logging.getLogger('visbrain')
 
 __all__ = ("Visuals")
@@ -485,9 +487,13 @@ class Spectrogram(PrepareData):
 
             # =================== COMPUTE ===================
             # Compute the spectrogram :
-            freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
-                                               noverlap=overlap,
-                                               window='hamming')
+            # freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
+            #                                    noverlap=overlap,
+            #                                    window='hamming')
+            # Using multitaper
+            freq, _, mesh = spectrogram_lspopt(data, fs=sf, nperseg=nperseg,
+                                               c_parameter=20,
+                                               noverlap=overlap)
             mesh = 20 * np.log10(mesh)
 
             # =================== FREQUENCY SELECTION ===================
