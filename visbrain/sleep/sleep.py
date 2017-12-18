@@ -55,9 +55,6 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         plateforms.
     hedit : bool | False
         Enable the drag and drop hypnogram edition.
-    use_tf : bool | False
-        Specify if the spectrogram has to be replaced by a time-frequency map
-        using morlet's wavelets.
     href : list | ['art', 'wake', 'rem', 'n1', 'n2', 'n3']
         List of sleep stages. This list can be used to changed the display
         order into the GUI.
@@ -77,7 +74,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
           (BrainVision), .eeg (Elan), .trc (Micromed) and .edf (European Data
           Format). If mne-python is installed, this default list of supported
           files is extended to .cnt, .egi, .mff, .edf, .bdf, .gdf, .set, .vhdr.
-        * Supproted hypnogram files : by default, Sleep support .txt, .csv and
+        * Supported hypnogram files : by default, Sleep support .txt, .csv and
           .hyp hypnogram files.
 
     .. deprecated:: 0.3.4
@@ -87,7 +84,7 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
 
     def __init__(self, data=None, hypno=None, config_file=None,
                  annotations=None, channels=None, sf=None, downsample=100.,
-                 axis=False, line='gl', hedit=False, use_tf=False,
+                 axis=False, line='gl', hedit=False,
                  href=['art', 'wake', 'rem', 'n1', 'n2', 'n3'],
                  preload=True, use_mne=False, kwargs_mne={}, verbose=None):
         """Init."""
@@ -114,7 +111,6 @@ class Sleep(PyQtModule, ReadSleepData, UiInit, Visuals, UiElements, Tools,
         self._hconvinv = {v: k for k, v in self._hconv.items()}
         self._ax = axis
         self._enabhypedit = hedit
-        self._use_tf = use_tf
         # ---------- Default line width ----------
         self._linemeth = line
         self._lw = 1.

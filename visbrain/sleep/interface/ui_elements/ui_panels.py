@@ -426,7 +426,7 @@ class UiPanels(object):
         # Get channel to get spectrogram :
         chan = self._PanSpecChan.currentIndex()
         # Use spectrogram / tf :
-        self._spec._use_tf = int(self._PanSpecMethod.currentIndex() == 1)
+        method = str(self._PanSpecMethod.currentText())
         # Interpolation :
         interp = str(self._PanSpecInterp.currentText())
         # Normalization :
@@ -439,7 +439,7 @@ class UiPanels(object):
         self._spec.set_data(self._sf, self._data[chan, ...], self._time,
                             nfft=nfft, overlap=over, fstart=fstart, fend=fend,
                             cmap=cmap, contrast=contrast, interp=interp,
-                            norm=norm)
+                            norm=norm, method=method)
         # Set apply button disable :
         self._PanSpecApply.setEnabled(False)
 
@@ -450,7 +450,7 @@ class UiPanels(object):
         # Get starting / ending frequency :
         _, fend = self._PanSpecFstart.value(), self._PanSpecFend.value()  # noqa
         # Enable / disable normalization :
-        use_tf = int(self._PanSpecMethod.currentIndex() == 1)
+        use_tf = 1 if str(self._PanSpecMethod.currentText()) == 'time-frequency' else 0
         self._PanSpecNormW.setEnabled(use_tf)
 
         self._PanSpecStep.setMaximum(nfft * .99)
