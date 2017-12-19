@@ -55,3 +55,18 @@ class _TestObjects(_TestVisbrain):
     def test_parent(self):
         """Test setting parent."""
         self.parent_testing(self.OBJ, self.PARENT)
+
+
+class _TestVolumeObject(_TestObjects):
+    """Methods for testing volumes (RoiObj, VolumeObj, CrossSections)."""
+
+    def test_call(self):
+        """Test function call."""
+        for k in ['aal', 'talairach', 'brodmann']:
+            self.OBJ(k)
+
+    def test_name(self):
+        """Test function name."""
+        for k in ['aal', 'talairach', 'brodmann']:
+            self.OBJ.name = k
+            assert self.OBJ.name == k
