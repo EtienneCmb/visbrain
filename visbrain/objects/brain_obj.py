@@ -400,6 +400,16 @@ class BrainObj(VisbrainObject):
         self.mesh.color = np.ma.array(self._data_color).mean(0)
         self.mesh.mask = np.array(self._data_mask).max(0)
 
+    def add_sulcus(self, sulcus):
+        """Add sulcus to the mesh.
+
+        Parameters
+        ----------
+        sulcus : array_like
+            Sulcus array filled with 0. and 1. (sulcus).
+        """
+        self.mesh.sulcus = sulcus
+
     def parcellize(self, file, select=None, hemisphere=None, data=None,
                    cmap='viridis', clim=None, vmin=None, under='gray',
                    vmax=None, over='red'):
