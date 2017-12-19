@@ -1,47 +1,31 @@
 """Test Sleep module and related methods."""
 import os
-import shutil
 
 import numpy as np
 from vispy.app.canvas import MouseEvent, KeyEvent
 from vispy.util.keys import Key
 
 from visbrain import Sleep
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.tests._tests_visbrain import _TestVisbrain
 
-# Create a tmp/ directory :
-dir_path = os.path.dirname(os.path.realpath(__file__))
-path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 
-# Create a random dataset :
-download_file('sleep_edf.zip', to_path=path_to_tmp, unzip=True)
+# File to load :
+sleep_file = path_to_visbrain_data('excerpt2.edf')
+hypno_file = path_to_visbrain_data('Hypnogram_excerpt2.txt')
+
+# Download sleep file :
+if not os.path.isfile(sleep_file):
+    download_file('sleep_edf.zip', unzip=True)
 onset = np.array([100, 2000, 5000])
 
-
-def path_to_edf(name):
-    """Get path to the edf file."""
-    return os.path.join(path_to_tmp, name)
-
 # Create Sleep application :
-sp = Sleep(data=path_to_edf('excerpt2.edf'),
-           hypno=path_to_edf('Hypnogram_excerpt2.txt'), axis=True, hedit=True,
+sp = Sleep(data=sleep_file, hypno=hypno_file, axis=True, hedit=True,
            annotations=onset)
 
 
-class TestSleep(object):
+class TestSleep(_TestVisbrain):
     """Test sleep.py."""
-
-    ###########################################################################
-    #                                 SETTINGS
-    ###########################################################################
-    def test_create_tmp_folder(self):
-        """Create tmp folder."""
-        if not os.path.exists(path_to_tmp):
-            os.makedirs(path_to_tmp)
-
-    @staticmethod
-    def _path_to_tmp(name):
-        return os.path.join(*(path_to_tmp, name))
 
     ###########################################################################
     #                                    GUI
@@ -69,68 +53,68 @@ class TestSleep(object):
     ###########################################################################
     def test_save_hyp_data(self):
         """Test saving hypnogram data."""
-        sp.saveHypData(filename=self._path_to_tmp('hyp_data.txt'))
-        sp.saveHypData(filename=self._path_to_tmp('hyp_data.hyp'))
+        sp.saveHypData(filename=self.to_tmp_dir('hyp_data.txt'))
+        sp.saveHypData(filename=self.to_tmp_dir('hyp_data.hyp'))
 
     def test_save_hyp_figure(self):
         """Test saving hypnogram figure."""
-        sp.saveHypFig(filename=self._path_to_tmp('black_and_white.png'))
-        sp.saveHypFig(filename=self._path_to_tmp('black_and_white.png'),
+        sp.saveHypFig(filename=self.to_tmp_dir('black_and_white.png'))
+        sp.saveHypFig(filename=self.to_tmp_dir('black_and_white.png'),
                       ascolor=True)
 
     def test_save_info_table(self):
         """Test saving info table."""
-        sp.saveInfoTable(filename=self._path_to_tmp('info_table.txt'))
-        sp.saveInfoTable(filename=self._path_to_tmp('info_table.csv'))
+        sp.saveInfoTable(filename=self.to_tmp_dir('info_table.txt'))
+        sp.saveInfoTable(filename=self.to_tmp_dir('info_table.csv'))
 
     def test_save_scoring_table(self):
         """Test saving scoring table."""
-        sp.saveScoringTable(filename=self._path_to_tmp('scoring_table.txt'))
-        sp.saveScoringTable(filename=self._path_to_tmp('scoring_table.csv'))
+        sp.saveScoringTable(filename=self.to_tmp_dir('scoring_table.txt'))
+        sp.saveScoringTable(filename=self.to_tmp_dir('scoring_table.csv'))
 
     def test_save_all_detections(self):
         """Test saving all detections."""
-        sp.saveAllDetect(filename=self._path_to_tmp('all_detections.npy'))
+        sp.saveAllDetect(filename=self.to_tmp_dir('all_detections.npy'))
 
     def test_save_selected_dection(self):
         """Test saving selected dection."""
-        sp.saveSelectDetect(filename=self._path_to_tmp('selected_detect.txt'))
-        sp.saveSelectDetect(filename=self._path_to_tmp('selected_detect.csv'))
+        sp.saveSelectDetect(filename=self.to_tmp_dir('selected_detect.txt'))
+        sp.saveSelectDetect(filename=self.to_tmp_dir('selected_detect.csv'))
 
     def test_save_config(self):
         """Test saving config."""
-        sp.saveConfig(filename=self._path_to_tmp('config.txt'))
+        sp.saveConfig(filename=self.to_tmp_dir('config.txt'))
 
     def test_save_annotations(self):
         """Test saving annotations."""
-        sp.saveAnnotationTable(filename=self._path_to_tmp('annotations.txt'))
-        sp.saveAnnotationTable(filename=self._path_to_tmp('annotations.csv'))
+        sp.saveAnnotationTable(filename=self.to_tmp_dir('annotations.txt'))
+        sp.saveAnnotationTable(filename=self.to_tmp_dir('annotations.csv'))
 
     ###########################################################################
     #                                LOAD
     ###########################################################################
     def test_load_hypno(self):
         """Test loading hypno."""
-        sp.loadHypno(filename=self._path_to_tmp('hyp_data.txt'))
-        sp.loadHypno(filename=self._path_to_tmp('hyp_data.hyp'))
+        sp.loadHypno(filename=self.to_tmp_dir('hyp_data.txt'))
+        sp.loadHypno(filename=self.to_tmp_dir('hyp_data.hyp'))
 
     def test_load_all_detections(self):
         """Test loading all detections."""
-        sp.loadDetectAll(filename=self._path_to_tmp('all_detections.npy'))
+        sp.loadDetectAll(filename=self.to_tmp_dir('all_detections.npy'))
 
     def test_load_selected_detection(self):
         """Test loading selected detection."""
-        sp.loadDetectSelect(filename=self._path_to_tmp("selected_detect_CZ-"
-                                                       "Spindles.txt"))
-        sp.loadDetectSelect(filename=self._path_to_tmp("selected_detect_CZ-"
-                                                       "Spindles.csv"))
+        sp.loadDetectSelect(filename=self.to_tmp_dir("selected_detect_CZ-"
+                                                     "Spindles.txt"))
+        sp.loadDetectSelect(filename=self.to_tmp_dir("selected_detect_CZ-"
+                                                     "Spindles.csv"))
 
     def test_load_annotations(self):
         """Test loading annotations."""
         # Txt :
-        sp.loadAnnotationTable(filename=self._path_to_tmp('annotations.txt'))
+        sp.loadAnnotationTable(filename=self.to_tmp_dir('annotations.txt'))
         # Csv :
-        sp.loadAnnotationTable(filename=self._path_to_tmp('annotations.csv'))
+        sp.loadAnnotationTable(filename=self.to_tmp_dir('annotations.csv'))
         # Onset only :
         sp.loadAnnotationTable(filename=np.array([10., 20., 3.]))
         # MNE annotations :
@@ -143,7 +127,7 @@ class TestSleep(object):
 
     def test_load_config(self):
         """Test load config."""
-        sp.loadConfig(filename=self._path_to_tmp('config.txt'))
+        sp.loadConfig(filename=self.to_tmp_dir('config.txt'))
 
     ###########################################################################
     #                             SHORTCUTS
@@ -152,13 +136,13 @@ class TestSleep(object):
     @staticmethod
     def _key_pressed(canvas, ktype='key_press', key='', **kwargs):
         """Test VisPy KeyEvent."""
-        k = KeyEvent(ktype, text=key, **kwargs)
+        k = KeyEvent(ktype, text=key, **kwargs)  # noqa
         eval('canvas.events.' + ktype + '(k)')
 
     @staticmethod
     def _mouse_event(canvas, etype='mouse_press', **kwargs):
         """Test a VisPy mouse event."""
-        e = MouseEvent(etype, **kwargs)
+        e = MouseEvent(etype, **kwargs)  # noqa
         eval('canvas.events.' + etype + '(e)')
 
     def test_key_window(self):
@@ -210,11 +194,3 @@ class TestSleep(object):
         """Test mouse release."""
         self._mouse_event(sp._chanCanvas[0].canvas, etype='mouse_release',
                           pos=(50, 100))
-
-    ###########################################################################
-    #                          DELETE TMP FOLDER
-    ###########################################################################
-
-    def test_delete_tmp_folder(self):
-        """Delete tmp/folder."""
-        shutil.rmtree(path_to_tmp)
