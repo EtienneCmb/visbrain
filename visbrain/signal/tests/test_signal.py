@@ -1,16 +1,9 @@
 """Test Signal module and related methods."""
-import os
-import shutil
-
 from vispy.app.canvas import MouseEvent, KeyEvent
 
 from visbrain import Signal
 from visbrain.utils import generate_eeg
-
-
-# Create a tmp/ directory :
-dir_path = os.path.dirname(os.path.realpath(__file__))
-path_to_tmp = os.path.join(*(dir_path, 'tmp'))
+from visbrain.tests._tests_visbrain import _TestVisbrain
 
 # Generate random EEG dataset :
 sf = 512.
@@ -27,20 +20,8 @@ kwargs = {'xlabel': 'My xlabel', 'ylabel': 'My ylabel', 'title': 'My title',
 sig = Signal(data, sf=sf, axis=-1, time=time)
 
 
-class TestSignal(object):
+class TestSignal(_TestVisbrain):
     """Test signal.py."""
-
-    ###########################################################################
-    #                                 SETTINGS
-    ###########################################################################
-    def test_create_tmp_folder(self):
-        """Create tmp folder."""
-        if not os.path.exists(path_to_tmp):
-            os.makedirs(path_to_tmp)
-
-    @staticmethod
-    def _path_to_tmp(name):
-        return os.path.join(*(path_to_tmp, name))
 
     ###########################################################################
     #                                 LABELS
@@ -248,13 +229,13 @@ class TestSignal(object):
 
     def test_save_annotations(self):
         """Test save annotations."""
-        sig._fcn_save_annotations(filename=self._path_to_tmp('annot.csv'))
-        sig._fcn_save_annotations(filename=self._path_to_tmp('annot.txt'))
+        sig._fcn_save_annotations(filename=self.to_tmp_dir('annot.csv'))
+        sig._fcn_save_annotations(filename=self.to_tmp_dir('annot.txt'))
 
     def test_load_annotations(self):
         """Test load annotations."""
-        sig._fcn_load_annotations(filename=self._path_to_tmp('annot.csv'))
-        sig._fcn_load_annotations(filename=self._path_to_tmp('annot.txt'))
+        sig._fcn_load_annotations(filename=self.to_tmp_dir('annot.csv'))
+        sig._fcn_load_annotations(filename=self.to_tmp_dir('annot.txt'))
 
     ###########################################################################
     #                              DISPLAY
@@ -295,7 +276,3 @@ class TestSignal(object):
         """Test function mouse_double_click for grid."""
         ev = MouseEvent('mouse_double_click', pos=(200, 300))
         sig._grid_canvas.canvas.events.mouse_double_click(ev)
-
-    def test_delete_tmp_folder(self):
-        """Delete tmp/folder."""
-        shutil.rmtree(path_to_tmp)
