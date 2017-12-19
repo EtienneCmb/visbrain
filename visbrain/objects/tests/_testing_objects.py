@@ -1,28 +1,58 @@
-"""Class 
-"""
+"""Base class for testing visbrain objects."""
+import pytest
 import numpy as np
+import vispy
+
+from visbrain.tests._tests_visbrain import _TestVisbrain
 
 
-class _TestObjects(object):
+class _TestObjects(_TestVisbrain):
     """Test visbrain objects."""
 
-    @staticmethod
-    def _assert_and_test(obj, attr, to_set, to_test='NoAttr'):
-        """Assert to obj and test."""
-        # Set attribute :
-        if isinstance(to_set, str):
-            exec("{}.{}".format(obj, attr) + "='" + to_set + "'")
-        else:
-            print("{}.{}".format(obj, attr) + ' = to_set')
-            exec("{}.{}".format(obj, attr) + ' = to_set')
-        value = eval("{}.{}".format(obj, attr))
-        # Test either to_set or to_test :
-        value_to_test = to_set if to_test == 'NoAttr' else to_test
-        # Test according to data type :
-        if isinstance(value_to_test, np.ndarray):
-            # Be sure that arrays have the same shape and dtype :
-            value = value.reshape(*value_to_test.shape)
-            value = value.astype(value_to_test.dtype)
-            np.testing.assert_allclose(value, value_to_test)
-        else:
-            assert value == value_to_test
+    PARENT = vispy.scene.Node(name='TestNode')
+    TRANSFORM = vispy.visuals.transforms.STTransform(scale=[1., 2., 3.],
+                                                     translate=[4., 5., 6.])
+
+    def test_get_camera(self):
+        """Test if the camera is defined."""
+        self.OBJ._get_camera()
+
+    def test_object_name(self):
+        """Test if the object name is correct."""
+        assert isinstance(self.OBJ.name, str)
+
+    def test_visible_obj(self):
+        """Test setting the object visible or hide."""
+        for k in [False, True]:
+            self.OBJ.visible_obj = k
+            assert self.OBJ.visible_obj == k
+
+    def test_preview(self):
+        """Test function preview."""
+        self.OBJ.preview(show=False, axis=True, xyz=True, bgcolor='black')
+
+    def test_parent(self):
+        """Test setting parent."""
+        self.parent_testing(self.OBJ, self.PARENT)
+
+    def test_transform(self):
+        """Test setting transformation."""
+        self.OBJ.transform = self.TRANSFORM
+
+    def test_repr(self):
+        """Test string representation."""
+        assert isinstance(repr(self.OBJ), str)
+
+    def test_str(self):
+        """Test string representation."""
+        assert str(self.OBJ) == self.OBJ.name
+
+    def test_describe_tree(self):
+        assert isinstance(self.OBJ.describe_tree(), str)
+
+    @pytest.mark.xfail(reason="Failed if display not correctly configured",
+                       run=True, strict=False)
+    def test_screenshot(self):
+        """Test screenshot rendering."""
+        basename = self.to_tmp_dir(repr(self.OBJ))
+        self.OBJ.screenshot(basename + '.png')
