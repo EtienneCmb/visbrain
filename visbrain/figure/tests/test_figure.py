@@ -1,35 +1,24 @@
 """Test command lines."""
 import os
-import shutil
-import pytest
 
 from visbrain import Figure
-from visbrain.io import download_file
+from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.tests._tests_visbrain import _TestVisbrain
+
+# List of image files to test with :
+_FILES = ['default.png', 'inside.png', 'count.png', 'density.png',
+          'repartition.jpg', 'roi.jpg']
+all_downloaded = [os.path.isfile(path_to_visbrain_data(k)) for k in _FILES]
+if not all(all_downloaded):
+    download_file('figure.zip', unzip=True)
 
 # Create a tmp/ directory :
 dir_path = os.path.dirname(os.path.realpath(__file__))
 path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 
 
-class TestFigure(object):
+class TestFigure(_TestVisbrain):
     """Test figure.py."""
-
-    ###########################################################################
-    #                                 SETTINGS
-    ###########################################################################
-    def test_create_tmp_folder(self):
-        """Create tmp folder."""
-        if not os.path.exists(path_to_tmp):
-            os.makedirs(path_to_tmp)
-
-    @staticmethod
-    def _path_to_tmp(name):
-        return os.path.join(*(path_to_tmp, name))
-
-    @pytest.mark.slow
-    def test_download_file(self):
-        """Download the EDF dataset."""
-        download_file('figure.zip', to_path=path_to_tmp, unzip=True)
 
     ###########################################################################
     #                                 FIGURE
@@ -37,9 +26,7 @@ class TestFigure(object):
     def test_figure(self):
         """Test function figure."""
         # Get files :
-        _files = ['default.png', 'inside.png', 'count.png', 'density.png',
-                  'repartition.jpg', 'roi.jpg']
-        files = [self._path_to_tmp(k) for k in _files]
+        files = [path_to_visbrain_data(k) for k in _FILES]
 
         # Titles :
         titles = ['Default', 'Sources inside', 'Connectivity',
@@ -83,8 +70,4 @@ class TestFigure(object):
                           fz_ticks=15, pltmargin=.1)
 
         # Save the picture :
-        f.save(self._path_to_tmp('figure.png'), dpi=100)
-
-    def test_delete_tmp_folder(self):
-        """Delete tmp/folder."""
-        shutil.rmtree(path_to_tmp)
+        f.save(self.to_tmp_dir('figure.png'), dpi=100)
