@@ -5,7 +5,6 @@ from vispy import scene
 import vispy.visuals.transforms as vist
 
 from .VolumeBase import VolumeBase
-from .projection import Projections
 from ...objects import (CombineSources, CombineConnect, CombineTimeSeries,
                         CombinePictures, CombineVectors, BrainObj)
 from ...config import PROFILER
@@ -13,7 +12,7 @@ from ...config import PROFILER
 logger = logging.getLogger('visbrain')
 
 
-class BaseVisual(Projections):
+class BaseVisual(object):
     """Initialize Brain objects.
 
     Initialize sources / connectivity / areas / colorbar / projections.
@@ -24,22 +23,14 @@ class BaseVisual(Projections):
 
     def __init__(self, canvas, parent_sp, **kwargs):
         """Init."""
-        # Projection arguments :
-        pj = dict(cmap=kwargs.get('project_cmap', 'inferno'),
-                  clim=kwargs.get('project_clim', (0., 1.)),
-                  vmin=kwargs.get('project_vmin', None),
-                  vmax=kwargs.get('project_vmax', None),
-                  under=kwargs.get('project_under', 'gray'),
-                  over=kwargs.get('project_over', 'red'))
-
         # Create a root node :
-        self._vbNode = scene.Node(name='*Brain*')
+        self._vbNode = scene.Node(name='Brain')
         self._vbNode.transform = vist.STTransform(scale=[self._gl_scale] * 3)
         logger.debug("Brain rescaled " + str([self._gl_scale] * 3))
         PROFILER("Root node", level=1)
 
         # ========================= SOURCES =========================
-        self.sources = CombineSources(kwargs.get('source_obj', None), **pj)
+        self.sources = CombineSources(kwargs.get('source_obj', None))
         if self.sources.name is None:
             self._obj_type_lst.model().item(0).setEnabled(False)
             # Disable menu :
@@ -93,12 +84,8 @@ class BaseVisual(Projections):
             self.atlas = kwargs['brain_obj']
         self.atlas.scale = self._gl_scale
         self.atlas.parent = self._vbNode
-        PROFILER("Brain object", level=1)
-
-        # Add projections :
-        Projections.__init__(self, **kwargs)
         self._proj_obj['brain'] = self.atlas
-        PROFILER("Initialize projection", level=1)
+        PROFILER("Brain object", level=1)
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)
         # scene.visuals.XYZAxis(parent=self._vbNode)

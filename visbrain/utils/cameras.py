@@ -68,6 +68,7 @@ def rotate_turntable(fixed=None, camera_state={}, camera=None,
         camera_state['azimuth'] = azimuth
         camera_state['elevation'] = elevation
     if (xyz is not None) and (len(xyz) == 3):
+        xyz = np.asarray(xyz)
         if csize is None:
             camera_state['scale_factor'] = xyz[priority]
         else:

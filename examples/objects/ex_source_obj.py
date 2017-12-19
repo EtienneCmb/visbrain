@@ -22,13 +22,12 @@ import numpy as np
 from vispy.geometry import create_sphere
 
 from visbrain.objects import SourceObj, SceneObj, ColorbarObj
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.io import download_file
 
 """
 Load the xyz coordinates and corresponding subject name
 """
-download_file('xyz_sample.npz')
-mat = np.load(path_to_visbrain_data('xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz'))
 xyz = mat['xyz']
 n_sources = xyz.shape[0]
 text = ['S' + str(k) for k in range(n_sources)]
@@ -39,7 +38,7 @@ CAM_STATE = dict(azimuth=0,        # azimuth angle
                  elevation=90,     # elevation angle
                  scale_factor=180  # ~distance to the camera
                  )
-CBAR_STATE = dict(cbtxtsz=12, txtsz=10., rect=(1., -2., 1., 4.), width=.5)
+CBAR_STATE = dict(cbtxtsz=12, txtsz=10., width=.5, rect=(1., -2., 1., 4.))
 sc = SceneObj(camera_state=CAM_STATE, size=(1200, 1000))
 
 """Create the most basic source object
@@ -95,7 +94,8 @@ s_obj_data = SourceObj('S3', xyz, data=data)
 s_obj_data.color_sources(data=data, cmap='plasma', clim=(-10, 10), vmin=-8.,
                          vmax=8., under='gray', over='red')
 sc.add_to_subplot(s_obj_data, row=1, col=2, title='Color sources using data')
-cb_data = ColorbarObj(s_obj_data, cblabel='Random data', **CBAR_STATE)
+cb_data = ColorbarObj(s_obj_data, cblabel='Random data', border=False,
+                      **CBAR_STATE)
 sc.add_to_subplot(cb_data, row=1, col=3, width_max=60)
 
 """Display only sources in the left hemisphere

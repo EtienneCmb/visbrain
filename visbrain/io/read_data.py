@@ -56,7 +56,7 @@ def read_json(path):
     pass
 
 
-def read_nifti(path):
+def read_nifti(path, hdr_as_array=False):
     """Read data from a NIFTI file using Nibabel.
 
     Parameters
@@ -81,7 +81,10 @@ def read_nifti(path):
         vol = img.get_data()
         affine = img.affine
         # Define the transformation :
-        transform = array_to_stt(affine)
+        if hdr_as_array:
+            transform = affine
+        else:
+            transform = array_to_stt(affine)
 
         return vol, img.header, transform
     else:

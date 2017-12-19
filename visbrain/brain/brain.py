@@ -49,10 +49,10 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         An object (or list of objects) of type source (SourceObj).
     connect_obj : ConnectObj | None
         An object (or list of objects) of type connectivity (ConnectObj).
-    time_series_obj : TimeSeriesObj | None
-        An object (or list of objects) of type time-series (TimeSeriesObj).
-    picture_obj : PictureObj | None
-        An object (or list of objects) of type pictures (PictureObj).
+    time_series_obj : TimeSeries3DObj | None
+        An object (or list of objects) of type time-series (TimeSeries3DObj).
+    picture_obj : Picture3DObj | None
+        An object (or list of objects) of type pictures (Picture3DObj).
     vector_obj : VectorObj | None
         An object (or list of objects) of type vector (VectorObj).
     project_radius : float | 10.
@@ -89,6 +89,7 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         PyQtModule.__init__(self, verbose=verbose, to_describe='view.wc',
                             icon='brain_icon.svg')
         self._userobj = {}
+        self._proj_obj = {}
         self._gl_scale = 100.  # fix appearance for small meshes
         self._camera = viscam.TurntableCamera(name='MainBrainCamera')
 

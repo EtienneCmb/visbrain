@@ -47,12 +47,6 @@ class UiSources(object):
         self._s_analyse_run.clicked.connect(self._fcn_analyse_sources)
 
         # ====================== PROJECTION ======================
-        self._s_proj_radius.setValue(self._proj_radius)
-        self._s_proj_contribute.setChecked(self._proj_contribute)
-        safely_set_cbox(self._s_proj_type, self._proj_type)
-        mask_color = color2tuple(self._proj_mask_color)
-        self.atlas.mesh.mask_color = mask_color
-        self._s_proj_mask_color.setText(str(mask_color))
         self._s_proj_mask_color.editingFinished.connect(
             self._fcn_proj_mask_color)
         self._s_proj_mask_color_p.clicked.connect(self._fcn_mask_color_p)
@@ -201,28 +195,13 @@ class UiSources(object):
 
     def _fcn_source_proj(self):
         """Apply source projection."""
-        # Get projection radius :
-        new_radius = self._s_proj_radius.value()
-        if self._proj_radius != new_radius:
-            self._proj_radius = new_radius
-            self._clean_source_projection()
-        # Get if activity has to be projected on surface / ROI :
-        new_projecton = str(self._s_proj_on.currentText())
-        if self._proj_on != new_projecton:
-            self._proj_on = new_projecton
-            self._clean_source_projection()
-        # Get if projection has to contribute on both hemisphere :
-        new_contribute = self._s_proj_contribute.isChecked()
-        if self._proj_contribute != new_contribute:
-            self._proj_contribute = new_contribute
-            self._clean_source_projection()
-        # Run either the activity / repartition projection :
-        idxproj = int(self._s_proj_type.currentIndex())
-        if idxproj == 0:
-            self._proj_type = 'activity'
-        elif idxproj == 1:
-            self._proj_type = 'repartition'
-        # Mask color :
-        color = textline2color(str(self._s_proj_mask_color.text()))[1]
-        self._proj_mask_color = color
-        self._run_source_projection()
+        kw = self.cbqt.cbobjs._objs['Brain'].to_kwargs(False)
+        radius = self._s_proj_radius.value()
+        contribute = self._s_proj_contribute.isChecked()
+        mask_color = textline2color(str(self._s_proj_mask_color.text()))[1]
+        project = str(self._s_proj_type.currentText())
+        project_on = str(self._s_proj_on.currentText())
+        b_obj = self._proj_obj[project_on]
+        self.sources.project_sources(b_obj, project=project, radius=radius,
+                                     contribute=contribute,
+                                     mask_color=mask_color, **kw)

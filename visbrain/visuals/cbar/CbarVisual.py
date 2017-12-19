@@ -104,6 +104,7 @@ class CbarVisual(CbarBase):
         self._mBorder = visuals.Line(parent=self._cbNode, name='Border')
         self._mBorder.set_data(pos=pos, width=2., connect='segments',
                                color=self._txtcolor)
+        self._mBorder.visible = self._border
 
         # --------------------- Labels ---------------------
         # Clim labels :

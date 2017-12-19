@@ -49,6 +49,9 @@ class SpectrogramObj(ImageObj):
         Markers object parent.
     verbose : string
         Verbosity level.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -65,17 +68,17 @@ class SpectrogramObj(ImageObj):
                  window='hamming', cmap='viridis', clim=None, vmin=None,
                  under='gray', vmax=None, over='red', interpolation='nearest',
                  max_pts=-1, parent=None, transform=None, verbose=None,
-                 **kwargs):
+                 **kw):
         """Init."""
         # Initialize the image object :
         ImageObj.__init__(self, name, interpolation=interpolation,
                           max_pts=max_pts, parent=parent, transform=transform,
-                          verbose=verbose)
+                          verbose=verbose, **kw)
 
         # Compute spectrogram and set data to the ImageObj :
         if isinstance(data, np.ndarray):
             self.set_data(data, sf, nperseg, overlap, window, clim, cmap,
-                          vmin, under, vmax, over, **kwargs)
+                          vmin, under, vmax, over)
 
     def set_data(self, data, sf=1., nperseg=None, overlap=None,
                  window='hamming', clim=None, cmap=None, vmin=None, under=None,
@@ -86,14 +89,15 @@ class SpectrogramObj(ImageObj):
         assert isinstance(nperseg, int)
         assert 0. <= overlap < 1.
         noverlap = int(round(overlap * nperseg))
+        self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
 
         # Compute spectrogram :
         kwargs['nperseg'] = nperseg
         kwargs['noverlap'] = noverlap
         kwargs['window'] = window
-        freqs, time, tf = spectrogram(data, sf, **kwargs)
+        freqs, time, tf = spectrogram(data, sf, nperseg=nperseg,
+                                      noverlap=noverlap, window=window)
 
         # Set data to the image object :
-        ImageObj.set_data(self, tf, xaxis=time, yaxis=freqs, clim=clim,
-                          cmap=cmap, vmin=vmin, vmax=vmax, under=under,
-                          over=over)
+        ImageObj.set_data(self, tf, xaxis=time, yaxis=freqs,
+                          **self.to_kwargs())

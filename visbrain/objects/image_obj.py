@@ -6,12 +6,11 @@ from vispy import scene
 
 from .visbrain_obj import VisbrainObject
 from ..utils import array2colormap, wrap_properties, color2vb
-from ..visuals import CbarArgs
 
 logger = logging.getLogger('visbrain')
 
 
-class ImageObj(VisbrainObject, CbarArgs):
+class ImageObj(VisbrainObject):
     """Create a single image object.
 
     Parameters
@@ -51,6 +50,9 @@ class ImageObj(VisbrainObject, CbarArgs):
         Markers object parent.
     verbose : string
         Verbosity level.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -66,11 +68,10 @@ class ImageObj(VisbrainObject, CbarArgs):
     def __init__(self, name, data=None, xaxis=None, yaxis=None, cmap='viridis',
                  clim=None, vmin=None, under='gray', vmax=None, over='red',
                  interpolation='nearest', max_pts=-1, parent=None,
-                 transform=None, verbose=None):
+                 transform=None, verbose=None, **kw):
         """Init."""
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
-        CbarArgs.__init__(self, clim=clim, cmap=cmap, vmin=vmin, vmax=vmax,
-                          under=under, over=over)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
+        self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
 
         # _______________________ CHECKING _______________________
         assert isinstance(max_pts, int)

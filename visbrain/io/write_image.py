@@ -4,8 +4,8 @@
 - write_fig_canvas : Export a canvas as a figure
 - write_fig_pyqt : Export a GUI window as a figure
 """
+import os
 import logging
-# from os.path import splitext
 import numpy as np
 from ..utils.color import color2vb
 
@@ -304,23 +304,30 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
     backup_size = canvas.physical_size
     backup_bgcolor = canvas.bgcolor
 
+    # dpi checking :
+    if print_size is None:
+        logger.warning("dpi parameter is not active if `print_size` is None. "
+                       "Use for example `print_size=(5, 5)`")
+
     # User select a desired print size with at a specific dpi :
     if print_size is not None:
         # Type checking :
-        if not isinstance(print_size, (tuple, list, np.ndarray)):
-            raise TypeError("The print_size must either be a tuple, list or a "
-                            "NumPy array describing the (width, height) of the"
-                            " image in " + unit)
+        if not isinstance(print_size, (tuple, list)):
+            raise TypeError("The print_size must either be a tuple or a list "
+                            "describing the (width, height) of the"
+                            " image in %s" % unit)
         # Check print size :
         if not all([isinstance(k, (int, float)) for k in print_size]):
             raise TypeError("print_size must be a tuple describing the "
-                            "(width, height) of the image in " + unit)
+                            "(width, height) of the image in %s" % unit)
+
         print_size = np.asarray(print_size)
         # If the user select the auto-croping option, the canvas must be render
         # before :
         if autocrop:
             img = canvas.render()
             s_output = piccrop(img)[:, :, 0].shape
+            logger.info("Image cropped to closest non-backround pixels")
         else:
             s_output = b_size
         # Unit conversion :
@@ -351,8 +358,6 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
         if widget is not None:
             widget.size = (new_width, new_height)
 
-    # Don't use transparency for jpg files :
-    # transparent = transparent if splitext(filename)[1] != '.jpg' else False
     # Background color and transparency :
     if bgcolor is not None:
         canvas.bgcolor = color2vb(bgcolor, alpha=1.)
@@ -366,12 +371,18 @@ def write_fig_canvas(filename, canvas, widget=None, autocrop=False,
         raise ValueError("Can not render the canvas. Try to decrease the "
                          "resolution")
 
+    # Remove alpha for files that are not png or tiff :
+    if os.path.splitext(filename)[1] not in ['.png', '.tiff']:
+        img = img[..., 0:-1]
+
     # Apply auto-cropping to the image :
     if autocrop:
         img = piccrop(img)
+        logger.info("Image cropped to closest non-backround pixels")
     # Save it :
     imsave(filename, img)
-    logger.info('Image successfully saved (%s)' % filename)
+    px = tuple(img[:, :, 0].T.shape)
+    logger.info("Image of size %rpx successfully saved (%s)" % (px, filename))
 
     # Set to the canvas it's previous size :
     canvas._backend._physical_size = backup_size

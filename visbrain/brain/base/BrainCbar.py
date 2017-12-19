@@ -17,21 +17,18 @@ class BrainCbar(object):
         # Create the cbar objects manager :
         self.cbobjs = CbarObjetcs()
 
-        logger.debug("Cbar should directly update objects that inherit from "
-                     "CbarArgs")
         # ------------------- CBARBASE -------------------
-        # ________ Projection ________
-        if self.sources.name is not None:
-            cbproj = CbarBase(**self.sources.to_kwargs(True))
-            self.cbobjs.add_object('Projection', cbproj)
-            obj = self.cbobjs._objs['Projection']
-            obj._fcn = self._fcn_link_proj
-            obj._minmaxfcn = self._fcn_minmax_proj
+        # ________ BRAIN ________
+        cbproj = CbarBase(**self.atlas.to_dict())
+        self.cbobjs.add_object('Brain', cbproj)
+        obj = self.cbobjs._objs['Brain']
+        obj._fcn = self._fcn_link_brain
+        obj._minmaxfcn = self._fcn_minmax_brain
 
         # ________ Connectivity ________
         if self.connect.name is not None:
             for k in self.connect:
-                cbconnect = CbarBase(**self.connect[k.name].to_kwargs(True))
+                cbconnect = CbarBase(**self.connect[k.name].to_dict())
                 self.cbobjs.add_object(k.name, cbconnect)
                 obj = self.cbobjs._objs[k.name]
                 obj._fcn = self._fcn_link_connect(k.name)
@@ -40,7 +37,7 @@ class BrainCbar(object):
         # ________ Pictures ________
         if self.pic.name is not None:
             for k in self.pic:
-                cbpic = CbarBase(**self.pic[k.name].to_kwargs(True))
+                cbpic = CbarBase(**self.pic[k.name].to_dict())
                 self.cbobjs.add_object(k.name, cbpic)
                 obj = self.cbobjs._objs[k.name]
                 obj._fcn = self._fcn_link_pic(k.name)
@@ -65,18 +62,19 @@ class BrainCbar(object):
         self.cbqt.add_camera(camera)
 
     ###########################################################################
-    #                              PROJECTION
+    #                              BRAIN
     ###########################################################################
-    def _fcn_link_proj(self):
+    def _fcn_link_brain(self):
         """Executed function when projection need updates."""
-        if hasattr(self.sources, '_minmax'):
-            self._projection_to_color()
+        kwargs = self.cbqt.cbobjs._objs['Brain'].to_kwargs(True)
+        self.atlas.update_from_dict(kwargs)
+        self.atlas._update_cbar()
 
-    def _fcn_minmax_proj(self):
+    def _fcn_minmax_brain(self):
         """Executed function for autoscale projections."""
-        if hasattr(self.sources, '_minmax'):
-            self.cbqt.cbobjs._objs['Projection']._clim = self.sources._minmax
-            self._projection_to_color()
+        self.cbqt.cbobjs._objs['Brain']._clim = self.atlas._minmax
+        self.atlas._clim = self.atlas._minmax
+        self.atlas._update_cbar()
 
     ###########################################################################
     #                              CONNECTIVITY

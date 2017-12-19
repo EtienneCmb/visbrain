@@ -29,7 +29,8 @@ path_to_file1 = path_to_visbrain_data(file1)
 path_to_file2 = path_to_visbrain_data(file2)
 
 # Define a brain object :
-b_obj = BrainObj('inflated', hemisphere='both', translucent=False)
+b_obj = BrainObj('inflated', hemisphere='both', translucent=False,
+                 cblabel='Parcellates example', cbtxtsz=4.)
 
 """Parcellize the left hemisphere using the Destrieux Atlas. By default, no
 parcellates are selected

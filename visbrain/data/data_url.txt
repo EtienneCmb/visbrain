@@ -1,5 +1,6 @@
 {
 "xyz_sample.npz": "https://www.dropbox.com/s/whogfxutyxoir1t/xyz_sample.npz?dl=1",
+"phase_sync_delta.npz": "https://www.dropbox.com/s/08xaq1lkj7rnuf6/phase_sync_delta.npz?dl=1",
 "thalamus.txt": "https://www.dropbox.com/s/sw7vkplwd9zbns1/thalamus.txt?dl=1",
 "Px.npy": "https://www.dropbox.com/s/qzwjavhz5lg13km/Px.npy?dl=1",
 "meg_source_estimate-lh.stc": "https://www.dropbox.com/s/q6cw5gf3edjqqcc/meg_source_estimate-lh.stc?dl=1",
@@ -26,5 +27,6 @@
 "sleep_brainvision.zip": "https://www.dropbox.com/s/t2bo9ufvc3f8mbj/sleep_brainvision.zip?dl=1",
 "sleep_elan.zip": "https://www.dropbox.com/s/95xvdqivpgk90hg/sleep_elan.zip?dl=1",
 "sleep_matlab.zip": "https://www.dropbox.com/s/bmfc2u55xsejbaf/sleep_matlab.zip?dl=1",
-"topoplot_data.npz": "https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1"
+"topoplot_data.npz": "https://www.dropbox.com/s/m76y3p0fyj6lxht/topoplot_data.npz?dl=1",
+"MIST_ROI.zip": "https://www.dropbox.com/s/3v24xqrc715e2w5/MIST_ROI.zip?dl=1"
 }

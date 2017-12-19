@@ -25,8 +25,8 @@ class UiTimeSeries(object):
         """Send time-series object properties to the GUI."""
         obj = self._get_select_object()
         self._ts_grp.setChecked(obj.visible_obj)
-        self._ts_width.setValue(obj.width)
-        self._ts_amp.setValue(obj.amplitude)
+        self._ts_width.setValue(obj.ts_width)
+        self._ts_amp.setValue(obj.ts_amp)
         self._ts_line_width.setValue(obj.line_width)
         self._ts_color.setText(str(obj.color))
         self._ts_alpha.setValue(obj.alpha * 100.)
@@ -43,12 +43,12 @@ class UiTimeSeries(object):
     @_run_method_if_needed
     def _fcn_ts_width(self):
         """Time series width."""
-        self._get_select_object().width = self._ts_width.value()
+        self._get_select_object().ts_width = self._ts_width.value()
 
     @_run_method_if_needed
     def _fcn_ts_amp(self):
         """Time series amplitude."""
-        self._get_select_object().amplitude = self._ts_amp.value()
+        self._get_select_object().ts_amp = self._ts_amp.value()
 
     @_run_method_if_needed
     def _fcn_ts_line_width(self):

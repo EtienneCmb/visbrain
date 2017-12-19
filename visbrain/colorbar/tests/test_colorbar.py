@@ -1,15 +1,9 @@
 """Test Colorbar module and related methods."""
-import os
-import shutil
 import pytest
 
-
 from visbrain import Colorbar
+from visbrain.tests._tests_visbrain import _TestVisbrain
 
-
-# Create a tmp/ directory :
-dir_path = os.path.dirname(os.path.realpath(__file__))
-path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 
 # ---------------- Variables  ----------------
 kw = {}
@@ -34,20 +28,8 @@ kw['ndigits'] = 4
 cb = Colorbar(**kw)
 
 
-class TestColorbar(object):
+class TestColorbar(_TestVisbrain):
     """Test brain.py."""
-
-    ###########################################################################
-    #                                 SETTINGS
-    ###########################################################################
-    def test_create_tmp_folder(self):
-        """Create tmp folder."""
-        if not os.path.exists(path_to_tmp):
-            os.makedirs(path_to_tmp)
-
-    @staticmethod
-    def _path_to_tmp(name):
-        return os.path.join(*(path_to_tmp, name))
 
     ###########################################################################
     #                                 GUI
@@ -55,18 +37,14 @@ class TestColorbar(object):
     @pytest.mark.skip('Not configured')
     def test_save_config(self):
         """Test function save_config."""
-        cb._fcn_saveCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
+        cb._fcn_saveCbarConfig(filename=self.to_tmp_dir('cb_config.txt'))
 
     @pytest.mark.skip('Not configured')
     def test_load_config(self):
         """Test function load_config."""
-        cb._fcn_loadCbarConfig(filename=self._path_to_tmp('cb_config.txt'))
+        cb._fcn_loadCbarConfig(filename=self.to_tmp_dir('cb_config.txt'))
 
     @pytest.mark.skip('Not configured')
     def test_screenshot(self):
         """Test function screenshot."""
         pass
-
-    def test_delete_tmp_folder(self):
-        """Delete tmp/folder."""
-        shutil.rmtree(path_to_tmp)

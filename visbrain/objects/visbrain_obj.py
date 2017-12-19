@@ -7,13 +7,34 @@ import vispy.visuals.transforms as vist
 
 from .scene_obj import VisbrainCanvas
 from ..io import write_fig_canvas
-from ..utils import color2vb, set_log_level
-from ..config import VISPY_APP
+from ..utils import color2vb, set_log_level, merge_cameras
+from ..config import CONFIG
+from ..visuals import CbarBase
 
 logger = logging.getLogger('visbrain')
 
 
-class VisbrainObject(object):
+class _VisbrainObj(CbarBase):
+    """Class for VisbrainObjects and CombineObjects."""
+
+    def __init__(self, **kw):
+        """Init."""
+        CbarBase.__init__(self, **kw)
+        self._cbar_data = None
+        self._default_cblabel = ''
+        self._minmax = None
+
+    def _get_camera(self):
+        raise NotImplementedError
+
+    def _update_cbar(self):
+        raise NotImplementedError
+
+    def _update_cbar_minmax(self):
+        raise NotImplementedError
+
+
+class VisbrainObject(_VisbrainObj):
     """Base class inherited by all of the Visbrain objects.
 
     Parameters
@@ -28,8 +49,9 @@ class VisbrainObject(object):
         Verbosity level.
     """
 
-    def __init__(self, name, parent=None, transform=None, verbose=None):
+    def __init__(self, name, parent=None, transform=None, verbose=None, **kw):
         """Init."""
+        _VisbrainObj.__init__(self, **kw)
         self._node = vispy.scene.Node(name=name)
         self._node.parent = parent
         self._csize = None  # canvas size
@@ -52,25 +74,22 @@ class VisbrainObject(object):
         """Return the object name."""
         return self._name
 
-    def _get_parent(self, bgcolor, axis, show):
+    def _get_parent(self, bgcolor, axis, show, obj=None, **kwargs):
         """Get the object parent for preview and screenshot."""
-        camera = self._get_camera()
+        if hasattr(obj, '_get_camera'):
+            camera = obj._get_camera()
+        else:
+            camera = self._get_camera()
         canvas = VisbrainCanvas(axis=axis, show=show, name=self._name,
-                                bgcolor=color2vb(bgcolor), camera=camera)
+                                bgcolor=color2vb(bgcolor), camera=camera,
+                                **kwargs)
         self._csize = canvas.canvas.size
-        self._node.parent = canvas.wc.scene
+        if not hasattr(self._node.parent, 'name'):
+            self._node.parent = canvas.wc.scene
         return canvas
 
-    def _update_cbar_args(self, cmap, clim, vmin, vmax, under, over):
-        """Update colorbar elements."""
-        kw = dict(clim=clim, cmap=cmap, vmin=vmin, vmax=vmax, under=under,
-                  over=over)
-        self._isvmax = isinstance(vmax, (int, float))
-        self._isvmin = isinstance(vmin, (int, float))
-        self.update_from_dict(kw)
-        return kw
-
-    def preview(self, bgcolor='white', axis=False, xyz=False, show=True):
+    def preview(self, bgcolor='white', axis=False, xyz=False, show=True,
+                obj=None, **kwargs):
         """Previsualize the result.
 
         Parameters
@@ -81,14 +100,19 @@ class VisbrainObject(object):
             Add x and y axis with ticks.
         xyz : bool | False
             Add an (x, y, z) axis to the scene.
+        obj : VisbrainObj | None
+            Pass a Visbrain object if you want to use the camera of an other
+            object.
+        kwargs : dict | {}
+            Optional arguments are passed to the VisbrainCanvas class.
         """
         parent_bck = self._node.parent
-        canvas = self._get_parent(bgcolor, axis, show)
+        canvas = self._get_parent(bgcolor, axis, show, obj, **kwargs)
         if xyz:
             vispy.scene.visuals.XYZAxis(parent=canvas.wc.scene)
         # view.camera = camera
         if (sys.flags.interactive != 1) and show:
-            VISPY_APP.run()
+            CONFIG['VISPY_APP'].run()
         # Reset orignial parent :
         self._node.parent = parent_bck
 
@@ -96,9 +120,9 @@ class VisbrainObject(object):
         """Tree description."""
         return self._node.describe_tree()
 
-    def screenshot(self, saveas, print_size=None, dpi=300.,
-                   unit='centimeter', factor=None, region=None, autocrop=False,
-                   bgcolor=None, transparent=False):
+    def screenshot(self, saveas, print_size=None, dpi=300., unit='centimeter',
+                   factor=None, region=None, autocrop=False, bgcolor=None,
+                   transparent=False, obj=None, line_width=1., **kwargs):
         """Take a screeshot of the scene.
 
         By default, the rendered canvas will have the size of your screen.
@@ -143,12 +167,18 @@ class VisbrainObject(object):
         transparent : bool | False
             Specify if the exported figure have to contains a transparent
             background.
+        obj : VisbrainObj | None
+            Pass a Visbrain object if you want to use the camera of an other
+            object for the sceen rendering.
+        kwargs : dict | {}
+            Optional arguments are passed to the VisbrainCanvas class.
         """
-        kwargs = dict(print_size=print_size, dpi=dpi, factor=factor,
-                      autocrop=autocrop, unit=unit, region=region,
-                      bgcolor=bgcolor, transparent=transparent)
-        canvas = self._get_parent(bgcolor, False, False)
-        write_fig_canvas(saveas, canvas.canvas, **kwargs)
+        kw = dict(print_size=print_size, dpi=dpi, factor=factor,
+                  autocrop=autocrop, unit=unit, region=region,
+                  bgcolor=bgcolor, transparent=transparent)
+        canvas = self._get_parent(bgcolor, False, False, obj, **kwargs)
+        write_fig_canvas(saveas, canvas.canvas,
+                         widget=canvas.canvas.central_widget, **kw)
         self._node.parent = None
 
     # ----------- PARENT -----------
@@ -162,6 +192,17 @@ class VisbrainObject(object):
     def parent(self, value):
         """Set parent value."""
         self._node.parent = value
+
+    # ----------- TRANSFORM -----------
+    @property
+    def transform(self):
+        """Get the transform value."""
+        return self._node.transform
+
+    @transform.setter
+    def transform(self, value):
+        """Set transform value."""
+        self._node.transform = value
 
     # ----------- NAME -----------
     @property
@@ -182,7 +223,7 @@ class VisbrainObject(object):
         self._node.visible = value
 
 
-class CombineObjects(object):
+class CombineObjects(_VisbrainObj):
     """Combine Visbrain objects.
 
     Parameters
@@ -195,6 +236,7 @@ class CombineObjects(object):
 
     def __init__(self, obj_type, objects, select=None, parent=None):
         """Init."""
+        _VisbrainObj.__init__(self)
         # Parent node for combined objects :
         self._cnode = vispy.scene.Node(name='Combine ' + obj_type.__name__)
         self._cnode.parent = parent
@@ -249,6 +291,13 @@ class CombineObjects(object):
         """Represent combined objects."""
         reprs = [repr(k) for k in self]
         return type(self).__name__ + "(" + ", ".join(reprs) + ")"
+
+    def _get_camera(self):
+        """Return a merged version of cameras."""
+        cams = []
+        for k in self:
+            cams.append(k._get_camera())
+        return merge_cameras(*tuple(cams))
 
     def update(self):
         """Update every objects."""

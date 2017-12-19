@@ -59,6 +59,15 @@ class CbarArgs(object):
             kwargs['isvmin'], kwargs['isvmax'] = self._isvmin, self._isvmax
         return kwargs
 
+    def _update_cbar_args(self, cmap, clim, vmin, vmax, under, over):
+        """Update colorbar elements."""
+        kw = dict(clim=clim, cmap=cmap, vmin=vmin, vmax=vmax, under=under,
+                  over=over)
+        self._isvmax = isinstance(vmax, (int, float))
+        self._isvmin = isinstance(vmin, (int, float))
+        self.update_from_dict(kw)
+        return kw
+
     def update_from_dict(self, kwargs):
         """Update attributes from a dictionary."""
         for k, i in kwargs.items():
@@ -146,33 +155,23 @@ class CbarBase(CbarArgs):
     # -------------------------------------------------------------------------
     def to_dict(self):
         """Return a dictionary of all colorbar args."""
-        todict = {}
-        # cmap/clim/vmin/vmax/under/over :
-        todict['cmap'] = self._cmap
-        todict['clim'] = [float(k) for k in self._clim]
-        todict['isvmin'] = self._isvmin
-        todict['vmin'] = self._vmin
-        todict['under'] = list(color2tuple(self._under, float))
-        todict['isvmax'] = self._isvmax
-        todict['vmax'] = self._vmax
-        todict['over'] = list(color2tuple(self._over, float))
-        # Cblabel :
-        todict['cblabel'] = self._cblabel
-        todict['cbtxtsz'] = float(self._cbtxtsz)
-        todict['cbtxtsh'] = float(self._cbtxtsh)
-        # Text :
-        todict['txtcolor'] = list(color2tuple(self._txtcolor, float))
-        todict['txtsz'] = float(self._txtsz)
-        todict['txtsh'] = float(self._txtsh)
-        # Settings :
-        todict['border'] = self._border
-        todict['bw'] = float(self._bw)
-        todict['limtxt'] = self._limtxt
-        todict['bgcolor'] = list(color2tuple(self._bgcolor, float))
-        todict['ndigits'] = int(self._ndigits)
-        todict['width'] = float(self._width)
-
-        return todict
+        cblab = self._cblabel
+        if not cblab and hasattr(self, '_default_cblabel'):
+            cblab = self._default_cblabel
+        if self._clim is None:
+            self._clim = (0., 1.)
+        to = dict(cmap=self._cmap, clim=[float(k) for k in self._clim],
+                  isvmin=self._isvmin, vmin=self._vmin, vmax=self._vmax,
+                  under=list(color2tuple(self._under, float)),
+                  over=list(color2tuple(self._over, float)),
+                  isvmax=self._isvmax, cblabel=cblab,
+                  cbtxtsz=float(self._cbtxtsz), cbtxtsh=float(self._cbtxtsh),
+                  txtcolor=list(color2tuple(self._txtcolor, float)),
+                  txtsz=float(self._txtsz), txtsh=float(self._txtsh),
+                  border=self._border, bw=float(self._bw), limtxt=self._limtxt,
+                  bgcolor=list(color2tuple(self._bgcolor, float)),
+                  ndigits=int(self._ndigits), width=float(self._width))
+        return to
 
     def update(self):
         """Fonction to run when an update is needed."""

@@ -6,7 +6,7 @@ from vispy import scene
 
 from .visbrain_obj import VisbrainObject, CombineObjects
 from ..utils import array2colormap, color2vb, wrap_properties, normalize
-from ..visuals import CbarArgs, Arrow
+from ..visuals import Arrow
 from ..visuals.arrow import ARROW_TYPES
 
 
@@ -15,7 +15,7 @@ ARROW_DTYPES = [np.dtype([('start', float, 3), ('end', float, 3)]),
                 np.dtype([('vertices', float, 3), ('normals', float, 3)])]
 
 
-class VectorObj(VisbrainObject, CbarArgs):
+class VectorObj(VisbrainObject):
     """Create a vector object.
 
     Parameters
@@ -83,6 +83,9 @@ class VectorObj(VisbrainObject, CbarArgs):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
@@ -106,15 +109,12 @@ class VectorObj(VisbrainObject, CbarArgs):
                  arrow_size=10., arrow_type='stealth', arrow_coef=1.,
                  antialias=False, cmap='viridis', clim=None, vmin=None,
                  under='gray', vmax=None, over='red', transform=None,
-                 parent=None, verbose=None, _z=-10.):
+                 parent=None, verbose=None, _z=-10., **kw):
         """Init."""
         # Init Visbrain object base class and SourceProjection :
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
-        # Initialize colorbar arguments :
-        isvmin = isinstance(vmin, (int, float))
-        isvmax = isinstance(vmax, (int, float))
-        CbarArgs.__init__(self, cmap, clim, isvmin, vmin, isvmax, vmax, under,
-                          over)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
+        self._update_cbar_args(cmap, clim, vmin, vmax, under, over)
+
         # _______________________ START // END _______________________
         if isinstance(arrows, (list, tuple)) and len(arrows) == 2:
             arr = list(arrows).copy()

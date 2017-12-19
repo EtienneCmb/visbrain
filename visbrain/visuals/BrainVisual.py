@@ -38,19 +38,28 @@ void main() {
     v_position = $a_position;
     v_normal = $a_normal;
 
-    // Custom colors (0. = white, 1. = color, 2. = mask_color)
+    // Mask : (0. = (white, sulcus), 1. = color, 2. = mask_color)
+    // Sulcus : (0. = white, sulcus = gray)
     if ($a_mask == 0.)
     {
-        v_color = vec4(1., 1., 1., 1.) * $u_light_color;
+        if ($a_sulcus == 0.)
+        {
+            v_color = vec4(1., 1., 1., 1.);
+        }
+        else if ($a_sulcus == 1.)
+        {
+        v_color = vec4(.5, .5, .5, 1.);
+        }
     }
     else if ($a_mask == 1.)
     {
-        v_color = $a_color * $u_light_color;
+        v_color = $a_color;
     }
     else if ($a_mask == 2.)
     {
-        v_color = $u_mask_color * $u_light_color;
+        v_color = $u_mask_color;
     }
+    v_color *= $u_light_color;
     gl_Position = $transform(vec4($a_position, 1));
 }
 """
@@ -206,6 +215,7 @@ class BrainVisual(Visual):
         self._color_buffer = gloo.VertexBuffer(def_4)
         self._normals_buffer = gloo.VertexBuffer(def_3)
         self._mask_buffer = gloo.VertexBuffer()
+        self._sulcus_buffer = gloo.VertexBuffer()
         self._index_buffer = gloo.IndexBuffer()
 
         # _________________ PROGRAMS _________________
@@ -294,6 +304,9 @@ class BrainVisual(Visual):
         self._mask = np.zeros((len(self),), dtype=np.float32)
         self._mask_buffer.set_data(self._mask, convert=True)
         self.shared_program.vert['a_mask'] = self._mask_buffer
+        # Sulcus :
+        self._sulcus_buffer.set_data(self._mask.copy(), convert=True)
+        self.shared_program.vert['a_sulcus'] = self._sulcus_buffer
         # Color :
         self.color = np.ones((len(self), 4), dtype=np.float32)
 
@@ -469,6 +482,22 @@ class BrainVisual(Visual):
         self._mask_buffer.set_data(value.astype(np.float32), convert=True)
         self.update()
         # self._mask = value
+
+    # ----------- SULCUS -----------
+    @property
+    def sulcus(self):
+        """Get the sulcus value."""
+        pass
+        # return self._sulcus
+
+    @sulcus.setter
+    def sulcus(self, value):
+        """Set sulcus value."""
+        assert isinstance(value, np.ndarray) and len(value) == len(self)
+        value = value.astype(np.float32)
+        assert (value.min() == 0.) and (value.max() == 1.)
+        self._sulcus_buffer.set_data(value, convert=True)
+        self.update()
 
     # ----------- TRANSPARENT -----------
     @property

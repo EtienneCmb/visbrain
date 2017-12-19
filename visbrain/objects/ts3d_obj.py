@@ -9,7 +9,7 @@ from .visbrain_obj import VisbrainObject, CombineObjects
 from ..utils import normalize, color2vb, wrap_properties
 
 
-class TimeSeriesObj(VisbrainObject):
+class TimeSeries3DObj(VisbrainObject):
     """Create a  3-D time-series object.
 
     Parameters
@@ -27,9 +27,9 @@ class TimeSeriesObj(VisbrainObject):
         Time-series' line width.
     color : array_like/tuple/string | 'white'
         Time-series' color.
-    amplitude : float | 6.
+    ts_amp : float | 6.
         Graphical amplitude of the time-series.
-    width : float | 20.
+    ts_width : float | 20.
         Graphical width of the time-series.
     alpha : float | 1.
         Time-series transparency.
@@ -45,28 +45,31 @@ class TimeSeriesObj(VisbrainObject):
         Verbosity level.
     _z : float | 10.
         In case of (n_sources, 2) use _z to specify the elevation.
+    kw : dict | {}
+        Optional arguments are used to control the colorbar
+        (See :class:`ColorbarObj`).
 
     Examples
     --------
     >>> import numpy as np
-    >>> from visbrain.objects import TimeSeriesObj
+    >>> from visbrain.objects import TimeSeries3DObj
     >>> n_pts, n_ts = 100, 5
     >>> time = np.arange(n_pts)
     >>> phy = np.random.uniform(2, 30, (n_ts))
     >>> data = np.sin(2 * np.pi * time.reshape(1, -1) * phy.reshape(-1, 1))
     >>> xyz = np.random.uniform(-20, 20, (n_ts, 3))
-    >>> ts = TimeSeriesObj('Ts', data, xyz, antialias=True, color='red',
+    >>> ts = TimeSeries3DObj('Ts', data, xyz, antialias=True, color='red',
     >>>                    line_width=3.)
     >>> ts.preview(axis=True)
     """
 
     def __init__(self, name, data, xyz, select=None, line_width=1.5,
-                 color='white', amplitude=6., width=20., alpha=1.,
+                 color='white', ts_amp=6., ts_width=20., alpha=1.,
                  antialias=False, translate=(0., 0., 1.), transform=None,
-                 parent=None, verbose=None, _z=-10.):
+                 parent=None, verbose=None, _z=-10., **kw):
         """Init."""
         # Init Visbrain object base class :
-        VisbrainObject.__init__(self, name, parent, transform, verbose)
+        VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         # _______________________ CHECKING _______________________
         # Data :
         assert isinstance(data, np.ndarray) and data.ndim == 2
@@ -82,8 +85,8 @@ class TimeSeriesObj(VisbrainObject):
         assert isinstance(select, (list, np.ndarray))
         self._select = select
         # Amplitude / width :
-        assert isinstance(amplitude, float) and isinstance(width, float)
-        self._amplitude, self._width = amplitude, width
+        assert isinstance(ts_amp, float) and isinstance(ts_width, float)
+        self._ts_amp, self._ts_width = ts_amp, ts_width
         # Translate :
         assert len(translate) == 3
         tr = vist.STTransform(translate=translate)
@@ -114,8 +117,9 @@ class TimeSeriesObj(VisbrainObject):
         n_nodes = len(self)
         # Build the position vector :
         pos = np.zeros((n_nodes, self._n_pts, 3), dtype=np.float32)
-        time = np.linspace(-self._width / 2, self._width / 2, self._n_pts)
-        data = normalize(self._data, -self._amplitude / 2, self._amplitude / 2)
+        time = np.linspace(-self._ts_width / 2, self._ts_width / 2,
+                           self._n_pts)
+        data = normalize(self._data, -self._ts_amp / 2, self._ts_amp / 2)
         for k in range(n_nodes):
             pos[k, :, 0] = self._xyz[k, 0] + time
             pos[k, :, 1] = self._xyz[k, 1] + data[k, :]
@@ -138,32 +142,32 @@ class TimeSeriesObj(VisbrainObject):
     ###########################################################################
     ###########################################################################
 
-    # ----------- WIDTH -----------
+    # ----------- TS_WIDTH -----------
     @property
-    def width(self):
-        """Get the width value."""
-        return self._width
+    def ts_width(self):
+        """Get the ts_width value."""
+        return self._ts_width
 
-    @width.setter
+    @ts_width.setter
     @wrap_properties
-    def width(self, value):
-        """Set width value."""
+    def ts_width(self, value):
+        """Set ts_width value."""
         assert isinstance(value, (int, float))
-        self._width = value
+        self._ts_width = value
         self._build_line()
 
-    # ----------- AMPLITUDE -----------
+    # ----------- TS_AMP -----------
     @property
-    def amplitude(self):
-        """Get the amplitude value."""
-        return self._amplitude
+    def ts_amp(self):
+        """Get the ts_amp value."""
+        return self._ts_amp
 
-    @amplitude.setter
+    @ts_amp.setter
     @wrap_properties
-    def amplitude(self, value):
-        """Set amplitude value."""
+    def ts_amp(self, value):
+        """Set ts_amp value."""
         assert isinstance(value, (int, float))
-        self._amplitude = value
+        self._ts_amp = value
         self._build_line()
 
     # ----------- COLOR -----------
@@ -232,7 +236,7 @@ class CombineTimeSeries(CombineObjects):
 
     Parameters
     ----------
-    tsobjs : TimeSeriesObj/list | None
+    tsobjs : TimeSeries3DObj/list | None
         List of time-series objects.
     select : string | None
         The name of the time-series object to select.
@@ -242,4 +246,4 @@ class CombineTimeSeries(CombineObjects):
 
     def __init__(self, tsobjs=None, select=None, parent=None):
         """Init."""
-        CombineObjects.__init__(self, TimeSeriesObj, tsobjs, select, parent)
+        CombineObjects.__init__(self, TimeSeries3DObj, tsobjs, select, parent)
