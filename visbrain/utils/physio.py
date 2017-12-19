@@ -379,8 +379,9 @@ def save_as_predefined_roi(name, vol, labels, index, hdr):
     """
     all_rois = get_files_in_data('roi', with_ext=False)
     if name in all_rois:
-        raise ValueError("%s is already a ROI template. Remove it before or "
-                         "use an other name." % name)
+        logger.error("%s is already a ROI template. Remove it before or "
+                     "use an other name." % name)
+        return None
     path_to_save = os.path.join(get_data_path(folder='roi'), name + '.npz')
     np.savez(path_to_save, vol=vol, hdr=hdr, index=index, labels=labels)
     logger.info("%s is now a default ROI object. Use `r_obj = RoiObj('%s')` to"
