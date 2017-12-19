@@ -158,6 +158,8 @@ class CbarBase(CbarArgs):
         cblab = self._cblabel
         if not cblab and hasattr(self, '_default_cblabel'):
             cblab = self._default_cblabel
+        if self._clim is None:
+            self._clim = (0., 1.)
         to = dict(cmap=self._cmap, clim=[float(k) for k in self._clim],
                   isvmin=self._isvmin, vmin=self._vmin, vmax=self._vmax,
                   under=list(color2tuple(self._under, float)),
