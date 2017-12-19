@@ -46,7 +46,7 @@ install:
     - source activate testenv
     # Install dependencies :
     - if [ "${TEST}" == "standard" ]; then
-        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold;
+        pip install codecov pytest pytest-cov pytest-sugar pytest-travis-fold openpyxl;
         pip install mne nibabel pandas;
       fi;
     - if [ "${TEST}" == "minimal" ]; then
