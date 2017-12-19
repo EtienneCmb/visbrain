@@ -1,4 +1,5 @@
 """Test command lines."""
+import pytest
 import os
 
 from click.testing import CliRunner
@@ -23,7 +24,7 @@ class TestCli(_TestVisbrain):
     ###########################################################################
     #                           HYPNO -> FIG
     ###########################################################################
-    # @pytest.mark.skip('Segmentation fault')
+    @pytest.mark.skip('Segmentation fault')
     def test_cli_fig_hyp(self):
         """Test function cli_fig_hyp."""
         import matplotlib
@@ -39,7 +40,7 @@ class TestCli(_TestVisbrain):
         print('Result 1 :', r1.output)
         print('Result 2 :', r2.output)
 
-    # @pytest.mark.skip('Segmentation fault')
+    @pytest.mark.skip('Segmentation fault')
     def test_cli_sleep_stats(self):
         """Test function cli_sleep_stats."""
         runner = CliRunner()
@@ -47,7 +48,7 @@ class TestCli(_TestVisbrain):
         r1 = runner.invoke(cli_sleep_stats, ['-h', hypno_file, '-o', out])
         print('Result : \n', r1.output)
 
-    # @pytest.mark.skip('Segmentation fault')
+    @pytest.mark.skip('Segmentation fault')
     def test_cli_sleep(self):
         """Test function cli_sleep."""
         runner = CliRunner()
