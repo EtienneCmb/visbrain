@@ -1,8 +1,5 @@
 """Test Brain module and related methods."""
-import os
-import shutil
 import pytest
-from warnings import warn
 
 import numpy as np
 from itertools import product
@@ -14,15 +11,11 @@ from visbrain import Brain
 from visbrain.objects import (SourceObj, ConnectObj, TimeSeries3DObj,
                               Picture3DObj)
 from visbrain.io import download_file
+from visbrain.tests._tests_visbrain import _TestVisbrain
 
-
-# Create a tmp/ directory :
-dir_path = os.path.dirname(os.path.realpath(__file__))
-path_to_tmp = os.path.join(*(dir_path, 'tmp'))
 
 # Download intrcranial xyz :
-download_file('xyz_sample.npz', to_path=path_to_tmp)
-mat = np.load(os.path.join(path_to_tmp, 'xyz_sample.npz'))
+mat = np.load(download_file('xyz_sample.npz'))
 xyz_full = mat['xyz']
 mat.close()
 xyz_1, xyz_2 = xyz_full[20:30, :], xyz_full[10:20, :]
@@ -70,20 +63,8 @@ vb = Brain(source_obj=[s_obj1, s_obj2], connect_obj=[c_obj, c_obj2],
            verbose='debug')
 
 
-class TestBrain(object):
+class TestBrain(_TestVisbrain):
     """Test brain.py."""
-
-    ###########################################################################
-    #                                 SETTINGS
-    ###########################################################################
-    def test_create_tmp_folder(self):
-        """Create tmp folder."""
-        if not os.path.exists(path_to_tmp):
-            os.makedirs(path_to_tmp)
-
-    @staticmethod
-    def _path_to_tmp(name):
-        return os.path.join(*(path_to_tmp, name))
 
     ###########################################################################
     #                                 BRAIN
@@ -224,7 +205,7 @@ class TestBrain(object):
     ###########################################################################
     #                                 ROI
     ###########################################################################
-    @pytest.mark.slow
+    @pytest.mark.skip('ROI objects need to be included')
     def test_roi_control(self):
         """Test method roi_control."""
         # vb.roi_control([10], roi_type='Talairach', smooth=3,
@@ -233,15 +214,18 @@ class TestBrain(object):
                        name='Roi_3-5_Brodmann', translucent=True, alpha=.05)
         vb.roi_control([7], roi_type='AAL', smooth=3, name='Roi_7_AAL')
 
+    @pytest.mark.skip('ROI objects need to be included')
     def test_roi_fit(self):
         """Test method roi_fit."""
         vb.sources_fit_to_vertices(fit_to='Roi_7_AAL')
 
+    @pytest.mark.skip('ROI objects need to be included')
     def test_roi_projection(self):
         """Test method roi_projection."""
         vb.sources_display(select='all')
         vb.cortical_projection(radius=20., project_on='Roi_7_AAL')
 
+    @pytest.mark.skip('ROI objects need to be included')
     def test_roi_repartition(self):
         """Test method roi_repartition."""
         vb.sources_display(select='all')
@@ -305,26 +289,26 @@ class TestBrain(object):
         unit = ['centimeter', 'millimeter', 'pixel', 'inch']
         # Standard screenshot :
         for k, i in zip(canvas, formats):
-            name = self._path_to_tmp(k + '_transparent_' + i)
+            name = self.to_tmp_dir(k + '_transparent_' + i)
             vb.screenshot(name, canvas=k, transparent=True, dpi=50)
         # Test print_size and unit at 50 dpi :
         for k, i in zip(print_size, unit):
-            name = self._path_to_tmp('main_' + i + '.png')
+            name = self.to_tmp_dir('main_' + i + '.png')
             vb.screenshot(name, print_size=k, unit=i, dpi=50)
         # Test factor :
-        name = self._path_to_tmp('main_factor.png')
+        name = self.to_tmp_dir('main_factor.png')
         vb.screenshot(name, factor=2., region=(100, 100, 1000, 1000),
                       bgcolor='#ab4642', dpi=50)
 
     @pytest.mark.skip('Not configured')
     def test_save_config(self):
         """Test method save_config."""
-        vb.save_config(self._path_to_tmp('config.txt'))
+        vb.save_config(self.to_tmp_dir('config.txt'))
 
     @pytest.mark.skip('Not configured')
     def test_load_config(self):
         """Test method load_config."""
-        vb.load_config(self._path_to_tmp('config.txt'))
+        vb.load_config(self.to_tmp_dir('config.txt'))
 
     ###########################################################################
     #                                  UI_FILES
@@ -433,10 +417,6 @@ class TestBrain(object):
         vb._fcn_connect_dyn_alpha()
         vb._fcn_connect_lw()
 
-    def test_delete_tmp_folder(self):
-        """Delete tmp/folder."""
-        shutil.rmtree(path_to_tmp)
-
     ###########################################################################
     #                             SHORTCUTS
     ###########################################################################
@@ -444,13 +424,13 @@ class TestBrain(object):
     @staticmethod
     def _key_pressed(canvas, ktype='key_press', key='', **kwargs):
         """Test VisPy KeyEvent."""
-        k = KeyEvent(ktype, text=key, **kwargs)
+        k = KeyEvent(ktype, text=key, **kwargs)  # noqa
         eval('canvas.events.' + ktype + '(k)')
 
     @staticmethod
     def _mouse_event(canvas, etype='mouse_press', **kwargs):
         """Test a VisPy mouse event."""
-        e = MouseEvent(etype, **kwargs)
+        e = MouseEvent(etype, **kwargs)  # noqa
         eval('canvas.events.' + etype + '(e)')
 
     def test_key_events(self):
