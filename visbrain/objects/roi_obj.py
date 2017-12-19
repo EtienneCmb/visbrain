@@ -379,8 +379,8 @@ class RoiObj(_Volume):
             xyz_dist = cdist(xyz_bad, xyz_good)
             xyz_dist_bool = np.any(xyz_dist <= distance, axis=1)
             close_str = np.array(["None under %.1f" % distance] * n_sources)
+            n_replaced = 0
             if np.any(xyz_dist_bool):
-                n_replaced = 0
                 for k in np.where(xyz_dist_bool)[0]:
                     close_idx = good_rows[xyz_dist[k, :].argmin()]
                     bad_row = bad_rows[k]
@@ -456,6 +456,9 @@ class RoiObj(_Volume):
             Threshold for extracting vertices from isosuface method.
         unique_color : bool | False
             Use a random unique color for each ROI.
+        roi_to_color : dict | None
+            Color of specific ROI using a dictionary i.e
+            {1: 'red', 2: 'orange'}.
         smooth : int | 3
             Smoothing level. Must be an odd integer (smooth % 2 = 1).
         """
@@ -636,7 +639,7 @@ class RoiObj(_Volume):
     @wrap_getter_properties
     def normals(self):
         """Get the normals value."""
-        return self._normals
+        return self.mesh._normals
 
     # ----------- MASK -----------
     @property
