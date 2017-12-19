@@ -337,11 +337,16 @@ class BrainObj(VisbrainObject):
         if isinstance(data, np.ndarray) and isinstance(vertices, np.ndarray):
             logger.info("Add data to secific vertices.")
             assert (data.ndim == 1) and (vertices.ndim == 1)
-            assert isinstance(smoothing_steps, int)
+            assert smoothing_steps is None or isinstance(smoothing_steps, int)
             # Get smoothed vertices // data :
-            edges = mesh_edges(self.mesh._faces)
-            sm_mat = smoothing_matrix(vertices, edges, smoothing_steps)
-            sm_data = data[sm_mat.col]
+            if isinstance(smoothing_steps, int):
+                edges = mesh_edges(self.mesh._faces)
+                sm_mat = smoothing_matrix(vertices, edges, smoothing_steps)
+                sm_data = data[sm_mat.col]
+                rows = sm_mat.row
+            else:
+                sm_data = data
+                rows = vertices
             # Clim :
             clim = (sm_data.min(), sm_data.max()) if clim is None else clim
             assert len(clim) == 2
@@ -353,10 +358,10 @@ class BrainObj(VisbrainObject):
             # Convert into colormap :
             smooth_map = array2colormap(sm_data, **col_kw)
             color = np.ones((len(self.mesh), 4), dtype=np.float32)
-            color[hemi_idx[sm_mat.row], :] = smooth_map
+            color[hemi_idx[rows], :] = smooth_map
             # Mask :
             if is_under:
-                mask[hemi_idx[sm_mat.row[sm_data >= hide_under]]] = 1.
+                mask[hemi_idx[rows[sm_data >= hide_under]]] = 1.
             else:
                 mask[:] = 1.
         elif isinstance(file, str):
