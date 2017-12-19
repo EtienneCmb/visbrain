@@ -380,7 +380,7 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=300, tmax=800,
     ----------
     elec: array_like
         EOG signal
-    sf: int
+    sf: float
         Downsampling frequency
     hypno: array_like
         Hypnogram vector, same length as data
@@ -503,8 +503,8 @@ def remdetect(elec, sf, hypno, rem_only, threshold, tmin=300, tmax=800,
 ###########################################################################
 
 
-def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.1,
-                   fmax=4., smoothing_s=30, min_duration_ms=500.):
+def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., tmin=1000.,
+                   fmin=.5, fmax=4., smoothing_s=20):
     """Perform a Slow Wave detection.
 
     Parameters
@@ -521,14 +521,14 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.1,
         Slow waves are generally defined by amplitude > 70 uV.
     max_amp : float | 400.
         Maximum amplitude of slow wave
+    tmin : float | 1000.
+        Minimum duration (ms) of slow waves
     fmin  : float | .5
         High-pass frequency
     fmax  : float | 2.
-        Lowpass frequency
-    smoothing_s  : int | 30
+        Low-pass frequency
+    smoothing_s  : int | 20
         Smoothing window in seconds
-    min_duration_ms : float | 500.
-        Minimum duration (ms) of slow waves
 
     Returns
     -------
@@ -536,37 +536,44 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., fmin=.1,
         Array of supra-threshold indices
     number : int
         Number of detected slow-wave
+    density: float
+        Number of slow waves per minute
     duration_ms : float
         Duration (ms) of each slow wave period detected
     """
-    length = max(elec.shape)
-
-    delta_nfpow = morlet_power(elec, [fmin, fmax, 8, 12, 16, 30], sf,
+    filt_fmax = np.minimum(45, sf / 2.0 - 0.75) # protect Nyquist
+    data = filt(sf, [.1, filt_fmax], elec)
+    
+    # Compute relative delta band-power
+    delta_nfpow = morlet_power(data, [fmin, fmax, 8, 12, 16, 30], sf,
                                norm=True)[0, :]
-
     delta_nfpow = smoothing(delta_nfpow, smoothing_s * sf)
 
     # Normalized power criteria
     idx_sup_thr = np.where(delta_nfpow > threshold)[0]
 
     if idx_sup_thr.size:
+        # Get where slow waves start / end :
+        idx_start, idx_stop = _events_to_index(idx_sup_thr).T
+        duration_ms = (idx_stop - idx_start) * (1000 / sf)
 
-        _, duration_ms, idx_start, idx_stop = _events_duration(idx_sup_thr, sf)
+        # Check amplitude and duration
+        event_amp = np.zeros(shape=idx_start.shape)
+        for idx, (i, j) in enumerate(zip(idx_start, idx_stop)):
+            event_amp[idx] = np.ptp(data[np.arange(i, j)])
 
-        sw_amp, _ = _events_amplitude(elec, idx_sup_thr, idx_start,
-                                      idx_stop, sf)
-
-        good_amp = np.where(np.logical_and(sw_amp > min_amp,
-                                           sw_amp < max_amp))[0]
-
-        good_dur = np.where(duration_ms > min_duration_ms)[0]
+        good_amp = np.where(np.logical_and(event_amp > min_amp,
+                                           event_amp < max_amp))[0]
+        good_dur = np.where(duration_ms > tmin)[0]
         good_event = np.intersect1d(good_amp, good_dur, True)
-        good_idx = _events_removal(idx_start, idx_stop, good_event)
-        idx_sup_thr = idx_sup_thr[good_idx]
+        idx_sup_thr = _index_to_events(np.c_[idx_start, idx_stop][good_event])
 
         # Export info
-        number, duration_ms, _, _ = _events_duration(idx_sup_thr, sf)
-        density = number / (length / sf / 60.)
+        idx_start, idx_stop = _events_to_index(idx_sup_thr).T
+        number = idx_start.size
+        duration_ms = (idx_stop - idx_start) * (1000 / sf)
+        density = number / (len(elec) / sf / 60.)
+
         return idx_sup_thr, number, density, duration_ms
 
     else:
