@@ -63,7 +63,7 @@ class TestDetections(object):
         """Test function slowwavedetect."""
         # Get a dataset example :
         data, sf = self._get_eeg_dataset(n=10000, sine=True, offset=300., f=.7)
-        slowwavedetect(data, sf, .8, min_duration_ms=5.)
+        slowwavedetect(data, sf, .8)
 
     def test_mtdetect(self):
         """Test function mtdetect."""
