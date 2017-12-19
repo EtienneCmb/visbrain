@@ -116,9 +116,9 @@ class VisbrainObject(_VisbrainObj):
         """Tree description."""
         return self._node.describe_tree()
 
-    def screenshot(self, saveas, print_size=None, dpi=300.,
-                   unit='centimeter', factor=None, region=None, autocrop=False,
-                   bgcolor=None, transparent=False, obj=None, line_width=1.):
+    def screenshot(self, saveas, print_size=None, dpi=300., unit='centimeter',
+                   factor=None, region=None, autocrop=False, bgcolor=None,
+                   transparent=False, obj=None, line_width=1.):
         """Take a screeshot of the scene.
 
         By default, the rendered canvas will have the size of your screen.
