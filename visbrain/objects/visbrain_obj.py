@@ -187,6 +187,17 @@ class VisbrainObject(_VisbrainObj):
         """Set parent value."""
         self._node.parent = value
 
+    # ----------- TRANSFORM -----------
+    @property
+    def transform(self):
+        """Get the transform value."""
+        return self._node.transform
+
+    @transform.setter
+    def transform(self, value):
+        """Set transform value."""
+        self._node.transform = value
+
     # ----------- NAME -----------
     @property
     def name(self):
