@@ -81,6 +81,7 @@ AAL_label_bck.npz
 inflated.npz
 white.npz
 sphere.npz
+sulcus.npy
 
 docs/generated/
 docs/auto_examples/
