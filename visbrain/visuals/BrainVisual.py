@@ -189,7 +189,7 @@ class BrainVisual(Visual):
         pass
 
     def __init__(self, vertices=None, faces=None, normals=None, lr_index=None,
-                 hemisphere='both', alpha=1., mask_color='orange',
+                 hemisphere='both', sulcus=None, alpha=1., mask_color='orange',
                  light_position=[100.] * 3, light_color=[1.] * 4,
                  light_intensity=[1.] * 3, coef_ambient=.05, coef_specular=.5,
                  vertfcn=None, camera=None, meshdata=None,
@@ -226,7 +226,7 @@ class BrainVisual(Visual):
 
         # _________________ DATA / CAMERA / LIGHT _________________
         self.set_data(vertices, faces, normals, hemisphere, lr_index,
-                      invert_normals, meshdata)
+                      invert_normals, sulcus, meshdata)
         self.set_camera(camera)
         self.mask_color = mask_color
         self.light_color = light_color
@@ -249,7 +249,7 @@ class BrainVisual(Visual):
     # =======================================================================
     def set_data(self, vertices=None, faces=None, normals=None,
                  hemisphere='both', lr_index=None, invert_normals=False,
-                 meshdata=None):
+                 sulcus=None, meshdata=None):
         """Set data to the mesh.
 
         Parameters
@@ -305,7 +305,12 @@ class BrainVisual(Visual):
         self._mask_buffer.set_data(self._mask, convert=True)
         self.shared_program.vert['a_mask'] = self._mask_buffer
         # Sulcus :
-        self._sulcus_buffer.set_data(self._mask.copy(), convert=True)
+        sulcus = self._mask.copy() if sulcus is None else sulcus
+        sulcus = sulcus.astype(np.float32)
+        assert isinstance(sulcus, np.ndarray)
+        assert len(sulcus) == vertices.shape[0]
+        assert (sulcus.min() == 0.) and (sulcus.max() <= 1.)
+        self._sulcus_buffer.set_data(sulcus, convert=True)
         self.shared_program.vert['a_sulcus'] = self._sulcus_buffer
         # Color :
         self.color = np.ones((len(self), 4), dtype=np.float32)

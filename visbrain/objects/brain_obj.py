@@ -67,15 +67,15 @@ class BrainObj(VisbrainObject):
 
     def __init__(self, name, vertices=None, faces=None, normals=None,
                  lr_index=None, hemisphere='both', translucent=True,
-                 invert_normals=False, transform=None, parent=None,
-                 verbose=None, _scale=1., **kw):
+                 sulcus=False, invert_normals=False, transform=None,
+                 parent=None, verbose=None, _scale=1., **kw):
         """Init."""
         # Init Visbrain object base class :
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
         # Load brain template :
         self._scale = _scale
         self.set_data(name, vertices, faces, normals, lr_index, hemisphere,
-                      invert_normals)
+                      invert_normals, sulcus)
         self.translucent = translucent
         self._data_color = []
         self._data_mask = []
@@ -85,7 +85,8 @@ class BrainObj(VisbrainObject):
         return self.vertices.shape[0]
 
     def set_data(self, name=None, vertices=None, faces=None, normals=None,
-                 lr_index=None, hemisphere='both', invert_normals=False):
+                 lr_index=None, hemisphere='both', invert_normals=False,
+                 sulcus=False):
         """Load a brain template."""
         # _______________________ DEFAULT _______________________
         b_download = self._get_downloadable_templates()
@@ -96,6 +97,19 @@ class BrainObj(VisbrainObject):
         if name in self._get_installed_templates():  # predefined
             (vertices, faces, normals,
              lr_index) = self._load_brain_template(name)
+        # Sulcus :
+        if sulcus is True:
+            if name not in b_download:
+                logger.error("Sulcus only available for inflated, white and "
+                             "sphere templates")
+                sulcus = None
+            else:
+                to_path = self._get_template_path()
+                sulcus = np.load(download_file('sulcus.npy', to_path=to_path))
+        elif isinstance(sulcus, np.ndarray):
+            assert len(sulcus) == vertices.shape[0]
+        else:
+            sulcus = None
 
         # _______________________ CHECKING _______________________
         assert all([isinstance(k, np.ndarray) for k in (vertices, faces)])
@@ -105,7 +119,7 @@ class BrainObj(VisbrainObject):
         assert hemisphere in ['both', 'left', 'right']
 
         self._define_mesh(vertices, faces, normals, lr_index, hemisphere,
-                          invert_normals)
+                          invert_normals, sulcus)
 
     def clean(self):
         """Clean brain object."""
@@ -117,14 +131,15 @@ class BrainObj(VisbrainObject):
         logger.info("Brain object %s cleaned." % self.name)
 
     def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere,
-                     invert_normals):
+                     invert_normals, sulcus):
         """Define brain mesh."""
         if not hasattr(self, 'mesh'):
             # Mesh brain :
             self.mesh = BrainMesh(vertices=vertices, faces=faces,
                                   normals=normals, lr_index=lr_index,
                                   hemisphere=hemisphere, parent=self._node,
-                                  invert_normals=invert_normals, name='Mesh')
+                                  invert_normals=invert_normals, sulcus=sulcus,
+                                  name='Mesh')
         else:
             self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                                lr_index=lr_index, hemisphere=hemisphere)
@@ -177,12 +192,12 @@ class BrainObj(VisbrainObject):
         surf_list.sort()
         return surf_list
 
-    def _add_downloadable_templates(self, name):
+    def _add_downloadable_templates(self, name, ext='.npz'):
         """Download then install a brain template."""
         assert name in self._get_downloadable_templates()
         to_path = self._get_template_path()
         # Download the file :
-        download_file(name + '.npz', to_path=to_path)
+        download_file(name + ext, to_path=to_path)
 
     ###########################################################################
     ###########################################################################
@@ -407,16 +422,6 @@ class BrainObj(VisbrainObject):
         # Set color and mask to the mesh :
         self.mesh.color = np.ma.array(self._data_color).mean(0)
         self.mesh.mask = np.array(self._data_mask).max(0)
-
-    def add_sulcus(self, sulcus):
-        """Add sulcus to the mesh.
-
-        Parameters
-        ----------
-        sulcus : array_like
-            Sulcus array filled with 0. and 1. (sulcus).
-        """
-        self.mesh.sulcus = sulcus
 
     def parcellize(self, file, select=None, hemisphere=None, data=None,
                    cmap='viridis', clim=None, vmin=None, under='gray',

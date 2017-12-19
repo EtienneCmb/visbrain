@@ -21,7 +21,7 @@ download_file(file_name)
 file = path_to_visbrain_data(file=file_name)
 
 
-b_obj = BrainObj('inflated', translucent=False)
+b_obj = BrainObj('inflated', translucent=False, sulcus=True)
 b_obj.add_activation(file=file, clim=(5., 20.), hide_under=5, cmap='viridis',
                      hemisphere='left')
 
