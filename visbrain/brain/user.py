@@ -568,7 +568,7 @@ class BrainUserMethods(object):
         safely_set_cbox(self._s_proj_on, project_on)
         # Colormap control :
         self._fcn_source_proj()
-        self.cbar_control('Projection', **kwargs)
+        self.cbar_control('Brain', **kwargs)
 
     def cortical_repartition(self, radius=10., project_on='brain',
                              contribute=False, mask_color='orange', **kwargs):
@@ -596,7 +596,7 @@ class BrainUserMethods(object):
         safely_set_cbox(self._s_proj_on, project_on)
         # Colormap control :
         self._fcn_source_proj()
-        self.cbar_control('Projection', **kwargs)
+        self.cbar_control('Brain', **kwargs)
 
     def sources_fit_to_vertices(self, name=None, fit_to='brain'):
         """Force sources coordinates to fit to a selected object.
@@ -609,7 +609,8 @@ class BrainUserMethods(object):
             The object name to fit. Use 'brain' or 'roi'.
         """
         obj = self.sources[name] if name is not None else self.sources
-        v = self._get_obj_vertices(fit_to)
+        print(self._proj_obj)
+        v = self._proj_obj[fit_to].vertices
         obj.fit_to_vertices(v)
 
     def sources_to_convex_hull(self, xyz):
