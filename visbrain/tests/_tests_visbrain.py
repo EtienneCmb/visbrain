@@ -15,7 +15,7 @@ class _TestVisbrain(object):
         """Path to a needed file from visbrain-data."""
         return download_file(file)
 
-    def to_tmp_dir(self, file):
+    def to_tmp_dir(self, file=None):
         """Path to a tmp dir in visbrain-data."""
         vb_path = os.path.join(path_to_visbrain_data(), 'tmp')
         if not os.path.exists(vb_path):
