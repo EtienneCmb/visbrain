@@ -237,7 +237,7 @@ def welch_power(x, freqs, sf, window_s=10, norm=True):
 
     for i in np.arange(0, len(x), window_s * sf):
         f, Pxx_spec = welch(x[int(i):int(i + window_s * sf)], sf,
-                            nperseg=sf * (1 / freq_spacing),
+                            nperseg=sf * (1. / freq_spacing),
                             scaling='spectrum')
         epoch = int(i / (window_s * sf))
 
