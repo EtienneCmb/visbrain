@@ -30,10 +30,6 @@ class _TestObjects(_TestVisbrain):
         """Test function preview."""
         self.OBJ.preview(show=False, axis=True, xyz=True, bgcolor='black')
 
-    def test_parent(self):
-        """Test setting parent."""
-        self.parent_testing(self.OBJ, self.PARENT)
-
     def test_transform(self):
         """Test setting transformation."""
         self.OBJ.transform = self.TRANSFORM
@@ -55,3 +51,7 @@ class _TestObjects(_TestVisbrain):
         """Test screenshot rendering."""
         basename = self.to_tmp_dir(repr(self.OBJ))
         self.OBJ.screenshot(basename + '.png')
+
+    def test_parent(self):
+        """Test setting parent."""
+        self.parent_testing(self.OBJ, self.PARENT)
