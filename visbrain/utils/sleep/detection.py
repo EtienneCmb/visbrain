@@ -331,28 +331,38 @@ def spindlesdetect(elec, sf, threshold, hypno, nrem_only, fmin=12., fmax=14.,
 
         idx_spindles = _index_to_events(np.c_[idx_start, idx_stop][good_dur])
 
-        # Compute number, duration, density
-        idx_start, idx_stop = _events_to_index(idx_spindles).T
-        number = idx_start.size
-        duration_ms = (idx_stop - idx_start) * (1000 / sf)
-        density = number / (data.size / sf / 60.)
+        if idx_spindles.size:
+            # Compute number, duration, density
+            idx_start, idx_stop = _events_to_index(idx_spindles).T
+            number = idx_start.size
+            duration_ms = (idx_stop - idx_start) * (1000 / sf)
+            density = number / (data.size / sf / 60.)
 
-        # Compute mean power of each spindles
-        pwrs = np.zeros(shape=number)
-        for i, (start, stop) in enumerate(zip(idx_start, idx_stop)):
-            data_sp = data[start:stop]
-            # Using Morlet
-            ind_pwr = morlet_power(data_sp, [fmin, fmax], sf, norm=False)[0]
-            pwrs[i] = np.mean(ind_pwr)
-        # Normalize by dividing by the mean
-        normalization(pwrs, norm = 2)
+            # Compute mean power of each spindles
+            pwrs = np.zeros(shape=number)
+            for i, (start, stop) in enumerate(zip(idx_start, idx_stop)):
+                data_sp = data[start:stop]
+                # Using Morlet
+                ind_pwr = morlet_power(data_sp, [fmin, fmax], sf, norm=False)[0]
+                pwrs[i] = np.mean(ind_pwr)
+            # Normalize by dividing by the mean
+            normalization(pwrs, norm = 2)
 
-        if return_full:
-            return idx_spindles, number, density, duration_ms, pwrs, idx_start,\
-            idx_stop, hard_thr, soft_thr, idx_sigma, fmin, fmax, sigma_nfpow,\
-            amplitude, sigma_thr
+            if return_full:
+                return idx_spindles, number, density, duration_ms, pwrs, idx_start,
+                idx_stop, hard_thr, soft_thr, idx_sigma, fmin, fmax, sigma_nfpow,
+                amplitude, sigma_thr
+            else:
+                return idx_spindles, number, density, duration_ms, pwrs
+
         else:
-            return idx_spindles, number, density, duration_ms, pwrs
+            if return_full:
+                return np.array([], dtype=int), 0., 0., np.array([], dtype=int),
+                np.array([]), np.array([], dtype=int), np.array([], dtype=int),
+                hard_thr, soft_thr, idx_sigma, fmin, fmax, sigma_nfpow, amplitude, sigma_thr
+            else:
+                return np.array([], dtype=int), 0., 0., np.array([], dtype=int), np.array([])
+
     else:
         if return_full:
             return np.array([], dtype=int), 0., 0., np.array([], dtype=int), \
@@ -543,7 +553,7 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., tmin=1000.,
     """
     filt_fmax = np.minimum(45, sf / 2.0 - 0.75) # protect Nyquist
     data = filt(sf, [.1, filt_fmax], elec)
-    
+
     # Compute relative delta band-power
     delta_nfpow = morlet_power(data, [fmin, fmax, 8, 12, 16, 30], sf,
                                norm=True)[0, :]
@@ -568,13 +578,17 @@ def slowwavedetect(elec, sf, threshold, min_amp=70., max_amp=400., tmin=1000.,
         good_event = np.intersect1d(good_amp, good_dur, True)
         idx_sup_thr = _index_to_events(np.c_[idx_start, idx_stop][good_event])
 
-        # Export info
-        idx_start, idx_stop = _events_to_index(idx_sup_thr).T
-        number = idx_start.size
-        duration_ms = (idx_stop - idx_start) * (1000 / sf)
-        density = number / (len(elec) / sf / 60.)
+        if idx_sup_thr.size:
+            # Export info
+            idx_start, idx_stop = _events_to_index(idx_sup_thr).T
+            number = idx_start.size
+            duration_ms = (idx_stop - idx_start) * (1000 / sf)
+            density = number / (len(elec) / sf / 60.)
 
-        return idx_sup_thr, number, density, duration_ms
+            return idx_sup_thr, number, density, duration_ms
+
+        else:
+            return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
 
     else:
         return np.array([], dtype=int), 0., 0., np.array([], dtype=int)
