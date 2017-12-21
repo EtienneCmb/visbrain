@@ -14,8 +14,8 @@ from __future__ import print_function
 import numpy as np
 
 from visbrain import Brain
-from visbrain.utils import (add_brain_template, remove_brain_template)
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.io import (download_file, path_to_visbrain_data,
+                         add_brain_template, remove_brain_template)
 
 """Download the brain template. Use either 'white', 'inflated' or 'sphere'
 """
