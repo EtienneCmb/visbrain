@@ -8,7 +8,7 @@ Use and control image, time-frequency maps and spectrogram.
 """
 import numpy as np
 from visbrain.objects import (ImageObj, TimeFrequencyMapObj, SpectrogramObj,
-                              ColorbarObj, SceneObj)
+                              MultiTaperObj, ColorbarObj, SceneObj)
 
 CBAR_STATE = dict(cbtxtsz=12, txtsz=10., rect=(-0.2, -2., 1., 4.), width=.2)
 sc = SceneObj(size=(1200, 1000))
@@ -50,11 +50,10 @@ tf = TimeFrequencyMapObj('tf', data, sf)
 sc.add_to_subplot(tf, row=1, col=1, title='Time-frequency map')
 
 print('\n-> Compute time-frequency map with windows')
-tf_win = TimeFrequencyMapObj('tf', data, sf, f_min=10., f_max=40., f_step=.5,
-                             n_window=100, overlap=.7, interpolation='bicubic',
-                             cmap='Spectral_r')
-sc.add_to_subplot(tf_win, row=1, col=2, title='Time-frequency map')
-cb_tf_win = ColorbarObj(tf_win, cblabel='Power', **CBAR_STATE)
+tf_mt = MultiTaperObj('mt', data, sf, overlap=.7, interpolation='bicubic',
+                      cmap='Spectral_r')
+sc.add_to_subplot(tf_mt, row=1, col=2, title='Multi-taper')
+cb_tf_win = ColorbarObj(tf_mt, cblabel='Power', **CBAR_STATE)
 sc.add_to_subplot(cb_tf_win, row=1, col=3, width_max=150)
 
 sc.preview()
