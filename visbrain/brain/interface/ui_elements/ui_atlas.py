@@ -7,6 +7,7 @@ import numpy as np
 import logging
 from PyQt5 import QtCore
 
+from ....objects.volume_obj import VOLUME_CMAPS
 from ....utils import mpl_cmap, mpl_cmap_index
 
 
@@ -60,7 +61,7 @@ class UiAtlas(object):
         self._roiButApply.clicked.connect(self._fcn_apply_roi_selection)
         # Internal/external projection :
         self._roiTransp.clicked.connect(self._fcn_area_translucent)
-        self._fcn_build_roi_list()
+        # self._fcn_build_roi_list()
 
         #######################################################################
         #                           CROSS-SECTIONS
@@ -75,15 +76,11 @@ class UiAtlas(object):
         self._csDiv.currentIndexChanged.connect(self._fcn_crossec_change)
         # Cmap :
         self._csCmap.addItems(mpl_cmap())
-        idx = mpl_cmap_index(self.volume._cmap_cs)
+        idx = mpl_cmap_index(self.cross_sec.to_kwargs()['cmap'])
         self._csCmap.setCurrentIndex(idx[0])
-        self._csCmap.currentIndexChanged.connect(self._fcn_crossec_move)
-        # Transparency :
-        self._csTransp.clicked.connect(self._fcn_crossec_move)
+        self._csCmap.currentIndexChanged.connect(self._fcn_crossec_cmap)
         # Visibility :
         self.grpSec.clicked.connect(self._fcn_crossec_viz)
-        # Split view :
-        self._csSplit.clicked.connect(self._fcn_crossec_split)
 
         #######################################################################
         #                           VOLUME
@@ -93,9 +90,9 @@ class UiAtlas(object):
         # Rendering method :
         self._volRendering.currentIndexChanged.connect(self._fcn_vol3d_change)
         # Cmap :
-        cmaps = list(self.volume._cmaps.keys())
+        cmaps = list(VOLUME_CMAPS.keys())
         self._volCmap.addItems(cmaps)
-        self._volCmap.setCurrentIndex(cmaps.index(self.volume._cmap_vol))
+        self._volCmap.setCurrentIndex(cmaps.index(self.volume.cmap))
         self._volCmap.currentIndexChanged.connect(self._fcn_vol3d_change)
         # Visibility :
         self.grpVol.clicked.connect(self._fcn_vol3d_change)
@@ -240,32 +237,23 @@ class UiAtlas(object):
     def _fcn_crossec_sl_limits(self):
         """Define (min, max) of sliders."""
         # Sagittal / Coronal / Axial :
-        self._csSagit.setMaximum(self.volume._nx + 5)
-        self._csCoron.setMaximum(self.volume._ny + 5)
-        self._csAxial.setMaximum(self.volume._nz + 5)
+        self._csSagit.setMaximum(self.cross_sec._vol.shape[0] - 1)
+        self._csCoron.setMaximum(self.cross_sec._vol.shape[1] - 1)
+        self._csAxial.setMaximum(self.cross_sec._vol.shape[2] - 1)
 
-    def _fcn_crossec_move(self):
+    def _fcn_crossec_move(self, *args, update=False):
         """Trigged when a slider move."""
         # Get center position :
-        dx = min(max(0, self._csSagit.value()), self.volume._nx)
-        dy = min(max(0, self._csCoron.value()), self.volume._ny)
-        dz = min(max(0, self._csAxial.value()), self.volume._nz)
-        # Transform slices -> position :
-        pos = self.volume.transform.map(np.array([dx, dy, dz]))
+        dx = min(max(0, self._csSagit.value()), self.cross_sec._vol.shape[0])
+        dy = min(max(0, self._csCoron.value()), self.cross_sec._vol.shape[1])
+        dz = min(max(0, self._csAxial.value()), self.cross_sec._vol.shape[2])
         # Get selected colormap :
         cmap = str(self._csCmap.currentText())
-        # Set background color :
-        bgd = self.view.canvas.bgcolor.rgb
-        # Get transparency level :
-        alpha = 1. - float(self._csTransp.isChecked())
-        self.volume.set_cs_data(dx, dy, dz, bgcolor=bgd, alpha=alpha,
-                                cmap=cmap)
-        # Split view
-        if self._csSplit.isChecked():
-            self.volume.set_csp_data(self.volume.sagit._data,
-                                     self.volume.coron._data,
-                                     self.volume.axial._data)
-            self.volume._set_csp_camera((dx, dy, dz), pos)
+        self.cross_sec.set_data((dx, dy, dz), cmap=cmap, update=update)
+
+    def _fcn_crossec_cmap(self):
+        """Change cross-sections colormap."""
+        self._fcn_crossec_move(update=True)
 
     def _fcn_crossec_viz(self):
         """Control cross-sections visibility."""
@@ -277,22 +265,10 @@ class UiAtlas(object):
         # Get selected volume :
         name = str(self._csDiv.currentText())
         # Select the volume :
-        self.volume.select_volume(name)
+        self.cross_sec(name)
         # Update clim and minmax :
         self._fcn_crossec_sl_limits()
-        self._fcn_crossec_move()
-
-    def _fcn_crossec_split(self):
-        """Toggle split view."""
-        if self._csSplit.isChecked():  # Split view
-            self._objsPage.setCurrentIndex(1)
-            # self.view.canvas.show(False)
-            # [k.canvas.show(True) for k in self._csView]
-        else:  # Intersection
-            self._objsPage.setCurrentIndex(0)
-            self.view.canvas.show(True)
-            # [k.canvas.show(False) for k in self._csView]
-        self._fcn_crossec_move()
+        self._fcn_crossec_move(update=True)
 
     ###########################################################################
     ###########################################################################
