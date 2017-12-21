@@ -1,7 +1,8 @@
 """Test if dependencies are installed."""
 
 __all__ = ('is_mne_installed', 'is_nibabel_installed', 'is_opengl_installed',
-           'is_pandas_installed', 'is_faulthandler_installed')
+           'is_pandas_installed', 'is_faulthandler_installed',
+           'is_lspopt_installed')
 
 
 def is_mne_installed():
@@ -44,6 +45,14 @@ def is_faulthandler_installed():
     """Test if faulthandler is installed."""
     try:
         import faulthandler  # noqa
+        return True
+    except:
+        return False
+
+def is_lspopt_installed():
+    """Test if lspopt is installed."""
+    try:
+        import lspopt  # noqa
         return True
     except:
         return False

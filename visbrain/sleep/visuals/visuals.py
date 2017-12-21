@@ -7,7 +7,6 @@ import numpy as np
 import scipy.signal as scpsig
 import itertools
 import logging
-import pip
 
 from vispy import scene
 import vispy.visuals.transforms as vist
@@ -487,22 +486,11 @@ class Spectrogram(PrepareData):
             overlap = int(round(overlap * nperseg))
 
             if method == 'multitaper':
-                installed_packages = pip.get_installed_distributions()
-                flat_installed_packages = [package.project_name for
-                package in installed_packages]
-
-                if 'lspopt' in flat_installed_packages:
-                    from lspopt import spectrogram_lspopt
-                    freq, _, mesh = spectrogram_lspopt(data, fs=sf,
-                                    nperseg=nperseg,c_parameter=20,
-                                    noverlap=overlap)
-                else:
-                    logger.warning(""" To use multitaper you must first install
-                    lspopt package (https://github.com/hbldh/lspopt) -
-                    switching to SciPy spectrogram instead""")
-                    method = 'spectrogram'
-
-            if method == 'spectrogram':
+                from lspopt import spectrogram_lspopt
+                freq, _, mesh = spectrogram_lspopt(data, fs=sf,
+                                nperseg=nperseg,c_parameter=20,
+                                noverlap=overlap)
+            elif method == 'spectrogram':
                 freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
                                                noverlap=overlap,
                                                window='hamming')
