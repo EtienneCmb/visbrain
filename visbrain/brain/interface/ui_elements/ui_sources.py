@@ -159,13 +159,12 @@ class UiSources(object):
         self.grpSec.setChecked(True)
         self._fcn_crossec_viz()
         # Get transformation and apply to xyz :
-        ixyz = self.volume.transform.imap(xyz)[0:-1]
-        ixyz = np.round(ixyz).astype(int)
+        self.cross_sec.localize_source(xyz)
         # Set it to cross-sections sliders :
-        self._csSagit.setValue(ixyz[0])
-        self._csCoron.setValue(ixyz[1])
-        self._csAxial.setValue(ixyz[2])
-        self._fcn_crossec_move()
+        self._csSagit.setValue(self.cross_sec.sagittal)
+        self._csCoron.setValue(self.cross_sec.coronal)
+        self._csAxial.setValue(self.cross_sec.axial)
+        self._fcn_crossec_move(update=True)
 
     def _fcn_analyse_sources(self):
         """Analyse sources locations."""
