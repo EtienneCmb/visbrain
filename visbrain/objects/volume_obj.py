@@ -68,18 +68,17 @@ class _Volume(VisbrainObject):
     Use : _Volume('aal')
     """
 
-    def __init__(self, name, parent, transform, verbose, **kw):
+    def __init__(self, name, vol, hdr, parent, transform, verbose, **kw):
         """Init."""
         # _______________________ NII.GZ _______________________
         _, ext = os.path.splitext(name)
         if name in get_files_in_data('roi', with_ext=False):
+            print('NAME : ', name)
             vol, _, _, hdr, _ = self(name)
         elif ('.nii' in ext) or ('gz' in ext):
             vol, _, hdr = read_nifti(name)
             name = os.path.split(name)[1]
             logger.info('Loading %s' % name)
-        else:
-            vol, hdr = None, None
 
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
 
@@ -184,8 +183,8 @@ class VolumeObj(_Volume):
                  cmap='OpaqueGrays', select=None, transform=None, parent=None,
                  verbose=None, **kw):
         """Init."""
-        name, vol, hdr = _Volume.__init__(self, name, parent, transform,
-                                          verbose, **kw)
+        name, vol, hdr = _Volume.__init__(self, name, vol, hdr, parent,
+                                          transform, verbose, **kw)
 
         # _______________________ CHECKING _______________________
         # Create 3-D volume :

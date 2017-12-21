@@ -93,7 +93,8 @@ class RoiObj(_Volume):
                  system='mni', transform=None, parent=None, verbose=None,
                  preload=True, _scale=1., **kw):
         """Init."""
-        _Volume.__init__(self, name, parent, transform, verbose, **kw)
+        _Volume.__init__(self, name, None, None, parent, transform, verbose,
+                         **kw)
         self._scale = _scale
         if preload:
             self.set_data(name, vol, label, index, hdr, system)
@@ -111,6 +112,7 @@ class RoiObj(_Volume):
     def __call__(self, name):
         """Call the set_data method."""
         self.set_data(name)
+        return [None] * 5
 
     def __bool__(self):
         """Test if ROI have been selected."""

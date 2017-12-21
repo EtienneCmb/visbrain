@@ -3,6 +3,7 @@ import numpy as np
 
 from visbrain.objects.tests._testing_objects import _TestVolumeObject
 from visbrain.objects import VolumeObj
+from visbrain.io import download_file
 
 
 v_obj = VolumeObj('aal')
@@ -26,3 +27,7 @@ class TestVolumeObj(_TestVolumeObject):
         for k in ['OpaqueGrays', 'TransFire', 'OpaqueFire', 'TransGrays']:
             self.assert_and_test('cmap', k)
         self.assert_and_test('threshlod', 5)
+
+    def test_nii_definition(self):
+        """Test function nii_definition."""
+        VolumeObj(download_file('GG-853-GM-0.7mm.nii.gz'))

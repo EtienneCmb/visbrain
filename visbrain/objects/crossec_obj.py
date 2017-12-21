@@ -92,14 +92,14 @@ class CrossSecObj(_Volume):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, vol=None, section=(0, 0, 0),
+    def __init__(self, name, vol=None, hdr=None, section=(0, 0, 0),
                  interpolation='bilinear', text_size=15., text_color='white',
                  text_bold=True, transform=None, parent=None, verbose=None,
                  preload=True, **kw):
         """Init."""
         # __________________________ VOLUME __________________________
-        name, vol, hdr = _Volume.__init__(self, name, parent, transform,
-                                          verbose, **kw)
+        name, vol, hdr = _Volume.__init__(self, name, vol, hdr, parent,
+                                          transform, verbose, **kw)
         vol, hdr = self._check_volume(vol, hdr)
         sh = vol.shape
         self._sh = sh
