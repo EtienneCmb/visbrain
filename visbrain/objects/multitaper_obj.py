@@ -1,10 +1,14 @@
 """Multitaper spectrogram object."""
+import logging
 import numpy as np
+
 from visbrain.io.dependencies import is_lspopt_installed
 from .image_obj import ImageObj
 
+logger = logging.getLogger('visbrain')
 
-class MultitaperObj(ImageObj):
+
+class MultiTaperObj(ImageObj):
     """Create a multitaper spectrogram object.
 
     Parameters
@@ -54,11 +58,11 @@ class MultitaperObj(ImageObj):
     Examples
     --------
     >>> import numpy as np
-    >>> from visbrain.objects import MultitaperObj
+    >>> from visbrain.objects import MultiTaperObj
     >>> n, sf = 512, 256  # number of time-points and sampling frequency
     >>> time = np.arange(n) / sf  # time vector
     >>> data = np.sin(2 * np.pi * 25. * time) + np.random.rand(n)
-    >>> spec = MultitaperObj('multitaper', data, sf)
+    >>> spec = MultiTaperObj('multitaper', data, sf)
     >>> spec.preview(axis=True)
     """
 
@@ -98,8 +102,9 @@ class MultitaperObj(ImageObj):
             from lspopt import spectrogram_lspopt
             freqs, time, tf = spectrogram_lspopt(data, sf, **kwargs)
         else:
-            logger.error("Error: lspopt package must be installed to compute "
-                         " multitaper spectrogram")
+            raise ValueError("lspopt package must be installed to compute "
+                             " multitaper spectrogram "
+                             "(see https://github.com/hbldh/lspopt)")
 
         # Set data to the image object :
         ImageObj.set_data(self, tf, xaxis=time, yaxis=freqs, clim=clim,
