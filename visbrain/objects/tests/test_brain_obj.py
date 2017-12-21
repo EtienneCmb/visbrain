@@ -60,6 +60,20 @@ class TestBrainObj(_TestObjects):
         BrainObj('Custom', vertices=vertices, faces=faces)
         BrainObj('Custom', vertices=vertices, faces=faces, normals=normals)
 
+    def test_save(self):
+        """Test function save."""
+        b_cust = BrainObj('Custom', vertices=vertices, faces=faces)
+        b_cust.save()
+
+    def test_reload_saved_template(self):
+        """Test function reload_saved_template."""
+        BrainObj('Custom')
+
+    def test_remove(self):
+        """Test function remove."""
+        b_cust = BrainObj('Custom')
+        b_cust.remove()
+
     def test_get_parcellates(self):
         """Test function get_parcellates."""
         import pandas as pd
