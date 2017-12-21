@@ -99,7 +99,7 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
 
         # ====================== App creation ======================
         PROFILER("Visual elements", as_type='title')
-        BaseVisual.__init__(self, self.view.wc, self._csGrid, **kwargs)
+        BaseVisual.__init__(self, self.view.wc, **kwargs)
 
         # ====================== Ui interactions ======================
         UiElements.__init__(self)  # GUI interactions
