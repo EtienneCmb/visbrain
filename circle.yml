@@ -57,6 +57,6 @@ dependencies:
 
 test:
   override:
-    - make test;
+    - py.test --cov;
   post:
     - codecov;

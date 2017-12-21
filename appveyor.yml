@@ -25,4 +25,4 @@ install:
   - pip install -e .
 
 test_script:
-  - py.test --cov --verbose 
+  - py.test --cov 

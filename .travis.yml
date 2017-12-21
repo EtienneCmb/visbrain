@@ -67,7 +67,7 @@ before_script:
 
 script:
     - if [[ "${TEST}" == "standard" ]]; then
-          py.test --cov --verbose;
+          py.test --cov;
       elif [[ "${TEST}" == "minimal" ]]; then
           make flake;
       elif [[ "${TEST}" == "examples" ]]; then
