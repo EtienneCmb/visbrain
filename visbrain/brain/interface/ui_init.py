@@ -137,14 +137,6 @@ class UiInit(QtWidgets.QMainWindow, Ui_MainWindow, app.Canvas, BrainShortcuts):
         #                         CROSS-SECTIONS CANVAS
         #######################################################################
         self._csView = VisbrainCanvas(name='SplittedCrossSections', **cdict)
-        self._csGrid = {'grid': self._csView.canvas.central_widget.add_grid()}
-        self._csGrid['Sagit'] = self._csGrid['grid'].add_view(row=0, col=0)
-        self._csGrid['Coron'] = self._csGrid['grid'].add_view(row=0, col=1)
-        self._csGrid['Axial'] = self._csGrid['grid'].add_view(row=1, col=0,
-                                                              col_span=2)
-        self._csGrid['Axial'].border_color = (1., 1., 1., 1.)
-        self._csGrid['Coron'].border_color = (1., 1., 1., 1.)
-        self._csGrid['Sagit'].border_color = (1., 1., 1., 1.)
         self._axialLayout.addWidget(self._csView.canvas.native)
 
         # Initialize shortcuts :
