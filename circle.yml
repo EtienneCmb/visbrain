@@ -43,7 +43,7 @@ dependencies:
       fi;
     - conda install -n circleenv --yes numpy scipy pip;
     - pip install codecov pytest pytest-cov pytest-travis-fold;
-    - pip install mne nibabel pandas;
+    - pip install mne nibabel pandas openpyxl;
     - ls -al /home/ubuntu/miniconda3;
     - ls -al /home/ubuntu/miniconda3/bin;
     - echo $PATH;
