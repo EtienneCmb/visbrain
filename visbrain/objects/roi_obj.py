@@ -12,10 +12,9 @@ from vispy.geometry.isosurface import isosurface
 from .visbrain_obj import CombineObjects
 from .volume_obj import _Volume
 from ._projection import _project_sources_data
-from ..io import is_pandas_installed
-from ..utils import (mni2tal, smooth_3d, color2vb, array_to_stt,
-                     save_as_predefined_roi, remove_predefined_roi,
-                     get_files_in_data)
+from ..io import (is_pandas_installed, get_files_in_data,
+                  save_as_predefined_roi, remove_predefined_roi)
+from ..utils import (mni2tal, smooth_3d, color2vb, array_to_stt)
 from ..visuals import BrainMesh
 
 logger = logging.getLogger('visbrain')
@@ -93,8 +92,7 @@ class RoiObj(_Volume):
                  system='mni', transform=None, parent=None, verbose=None,
                  preload=True, _scale=1., **kw):
         """Init."""
-        _Volume.__init__(self, name, None, None, parent, transform, verbose,
-                         **kw)
+        _Volume.__init__(self, name, parent, transform, verbose, **kw)
         self._scale = _scale
         if preload:
             self.set_data(name, vol, label, index, hdr, system)
@@ -185,7 +183,7 @@ class RoiObj(_Volume):
                               "should be installed.")
         import pandas as pd
         # _______________________ PREDEFINED _______________________
-        if name in get_files_in_data('roi', with_ext=False):
+        if not isinstance(vol, np.ndarray):
             vol, label, index, hdr, system = _Volume.__call__(self, name)
         self._offset = -1 if name == 'talairach' else 0
 

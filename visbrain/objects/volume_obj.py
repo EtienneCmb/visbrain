@@ -10,8 +10,9 @@ from vispy.visuals.transforms import MatrixTransform
 
 from .visbrain_obj import VisbrainObject
 from ..utils import (load_predefined_roi, array_to_stt, wrap_properties,
-                     normalize, get_files_in_data)
-from ..io import read_nifti
+                     normalize)
+from ..io import (read_nifti, get_files_in_data, get_files_in_folders,
+                  path_to_visbrain_data, get_data_path)
 
 
 logger = logging.getLogger('visbrain')
@@ -65,33 +66,32 @@ KNOWN_METHODS = ['mip', 'translucent', 'additive', 'iso']
 class _Volume(VisbrainObject):
     """Manage loaded volumes.
 
-    Use : _Volume('aal')
+    This class is shared by volume classes (VolumeObj, RoiObj, CrossSecObj).
     """
 
-    def __init__(self, name, vol, hdr, parent, transform, verbose, **kw):
+    def __init__(self, name, parent, transform, verbose, **kw):
         """Init."""
-        # _______________________ NII.GZ _______________________
-        _, ext = os.path.splitext(name)
-        if name in get_files_in_data('roi', with_ext=False):
-            print('NAME : ', name)
-            vol, _, _, hdr, _ = _Volume.__call__(self, name)
-        elif ('.nii' in ext) or ('gz' in ext):
-            vol, _, hdr = read_nifti(name)
-            name = os.path.split(name)[1]
-            logger.info('Loading %s' % name)
-
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
-
-        return name, vol, hdr
 
     def __call__(self, name):
         """Load a predefined volume."""
-        if name in get_files_in_data('roi', with_ext=False):
-            logger.debug("%s volume loaded" % name)
+        _, ext = os.path.splitext(name)
+        _vb_data = path_to_visbrain_data(folder='roi')
+        _data = get_data_path(folder='roi')
+        if ('.nii' in ext) or ('gz' in ext):
+            vol, _, hdr = read_nifti(name)
+            name = os.path.split(name)[1]
             self._name = name
-            return load_predefined_roi(name)
+            logger.info('Loading %s' % name)
+            return vol, None, None, hdr, None
         else:
-            logger.error("%s volume not in visbrain/data/roi/" % name)
+            path = get_files_in_folders(_vb_data, _data, file=name + '.npz')
+            if len(path) == 1:
+                self._name = os.path.split(path[0])[1].split('.npz')[0]
+                logger.debug("%s volume loaded" % name)
+                return load_predefined_roi(path[0])
+            else:
+                logger.error("Cannot load the volume %s" % name)
 
     @staticmethod
     def slice_to_pos(hdr, sl, axis=None):
@@ -181,10 +181,9 @@ class VolumeObj(_Volume):
 
     def __init__(self, name, vol=None, hdr=None, method='mip', threshold=0.,
                  cmap='OpaqueGrays', select=None, transform=None, parent=None,
-                 verbose=None, **kw):
+                 preload=True, verbose=None, **kw):
         """Init."""
-        name, vol, hdr = _Volume.__init__(self, name, vol, hdr, parent,
-                                          transform, verbose, **kw)
+        _Volume.__init__(self, name, parent, transform, verbose, **kw)
 
         # _______________________ CHECKING _______________________
         # Create 3-D volume :
@@ -192,9 +191,12 @@ class VolumeObj(_Volume):
         self._vol3d = visuals.Volume(vol_d, parent=self._node,
                                      threshold=threshold, name='3-D Volume',
                                      cmap=VOLUME_CMAPS[cmap])
-        self.set_data(name, vol, hdr, threshold, cmap, method, select)
+        if preload:
+            if not isinstance(vol, np.ndarray):
+                vol, _, _, hdr, _ = self(name)
+            self.set_data(vol, hdr, threshold, cmap, method, select)
 
-    def set_data(self, name, vol=None, hdr=None, threshold=None, cmap=None,
+    def set_data(self, vol, hdr=None, threshold=None, cmap=None,
                  method=None, select=None):
         """Set data to the volume."""
         vol, hdr = self._check_volume(vol, hdr)

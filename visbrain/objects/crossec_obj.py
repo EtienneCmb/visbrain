@@ -116,13 +116,7 @@ class CrossSecObj(_Volume):
         """Init."""
         # __________________________ VOLUME __________________________
         kw['cmap'] = kw.get('cmap', 'gist_stern')
-        name, vol, hdr = _Volume.__init__(self, name, vol, hdr, parent,
-                                          transform, verbose, **kw)
-        vol, hdr = self._check_volume(vol, hdr)
-        sh = vol.shape
-        self._sh = sh
-        self._vol = vol
-        self._hdr = hdr
+        _Volume.__init__(self, name, parent, transform, verbose, **kw)
         self._sagittal = 0
         self._coronal = 0
         self._axial = 0
@@ -139,8 +133,6 @@ class CrossSecObj(_Volume):
         self._im_sagit = _ImageSection('Sagit', **kwi)
         self._im_coron = _ImageSection('Coron', **kwi)
         self._im_axial = _ImageSection('Axial', **kwi)
-        # Define transformations :
-        self._define_transformation()
         # Add text (sagit, coron, axial, left, right) :
         txt_pos = np.array([[-.99, -.1, 0.], [.01, -.1, 0.], [-.99, -1.99, 0.],
                             [.9, -.2, 0.], [0.1, .9, 0.], [.9, -1.8, 0.],
@@ -152,12 +144,15 @@ class CrossSecObj(_Volume):
                                        bold=text_bold, parent=self._node)
 
         if preload:
+            self(name, vol, hdr)
             self.set_data(section=section, **kw)
 
-    def __call__(self, name):
+    def __call__(self, name, vol=None, hdr=None):
         """Change the volume object."""
-        vol, _, _, hdr, _ = _Volume.__call__(self, name)
+        if not isinstance(vol, np.ndarray):
+            vol, _, _, hdr, _ = _Volume.__call__(self, name)
         self._vol, self._hdr = self._check_volume(vol, hdr)
+        self._sh = self._vol.shape
         self._define_transformation()
         self.update()
 
