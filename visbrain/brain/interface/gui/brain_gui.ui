@@ -70,7 +70,7 @@
            <bool>true</bool>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <property name="documentMode">
            <bool>true</bool>
@@ -184,7 +184,7 @@ type</string>
                </sizepolicy>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>2</number>
               </property>
               <widget class="QWidget" name="page_6">
                <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -738,17 +738,17 @@ type</string>
                       <widget class="QComboBox" name="_csDiv">
                        <item>
                         <property name="text">
-                         <string>Brodmann</string>
+                         <string>brodmann</string>
                         </property>
                        </item>
                        <item>
                         <property name="text">
-                         <string>AAL</string>
+                         <string>aal</string>
                         </property>
                        </item>
                        <item>
                         <property name="text">
-                         <string>Talairach</string>
+                         <string>talairach</string>
                         </property>
                        </item>
                       </widget>
@@ -863,23 +863,6 @@ type</string>
                         <property name="margin">
                          <number>0</number>
                         </property>
-                        <item>
-                         <widget class="QCheckBox" name="_csTransp">
-                          <property name="text">
-                           <string>Transparent</string>
-                          </property>
-                          <property name="checked">
-                           <bool>true</bool>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QCheckBox" name="_csSplit">
-                          <property name="text">
-                           <string>Split view</string>
-                          </property>
-                         </widget>
-                        </item>
                        </layout>
                       </widget>
                      </item>
@@ -1304,8 +1287,8 @@ name</string>
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>316</width>
-                         <height>569</height>
+                         <width>312</width>
+                         <height>392</height>
                         </rect>
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_12">
