@@ -4,9 +4,10 @@ import sip
 from PyQt5 import QtGui
 import logging
 
-from .utils import set_widget_size, set_log_level, get_data_path
+from .utils import set_widget_size, set_log_level
 from .config import PROFILER, CONFIG
-from .io import is_faulthandler_installed
+from .io import (is_faulthandler_installed, get_data_path, path_to_tmp,
+                 clean_tmp)
 
 sip.setdestroyonexit(False)
 logger = logging.getLogger('visbrain')
@@ -31,6 +32,7 @@ class PyQtModule(object):
         """Init."""
         # Log level and profiler creation (if verbose='debug')
         set_log_level(verbose)
+        self._create_tmp_folder()
         if (logger.level == 10) and is_faulthandler_installed():
             import faulthandler
             faulthandler.enable()
@@ -41,6 +43,24 @@ class PyQtModule(object):
         self._module_icon = icon
         self._show_settings = show_settings
 
+    ###########################################################################
+    #                               TMP FOLDER
+    ###########################################################################
+
+    def _path_to_tmp_folder(self):
+        return path_to_tmp()
+
+    def _create_tmp_folder(self):
+        tmp_path = path_to_tmp()
+        logger.debug("tmp folder created (%s)." % tmp_path)
+
+    def _clean_tmp_folder(self):
+        tmp_path = clean_tmp()
+        logger.debug("tmp folder cleaned (%s)." % tmp_path)
+
+    ###########################################################################
+    #                            SHOW // CLOSE
+    ###########################################################################
     def _pyqt_title(self, title, msg, symbol='='):
         """Define a PyQt title."""
         assert isinstance(title, str) and isinstance(symbol, str)
@@ -83,6 +103,8 @@ class PyQtModule(object):
         if CONFIG['SHOW_PYQT_APP']:
             self.showMaximized()
             CONFIG['VISPY_APP'].run()
+        # Finally clean the tmp folder :
+        self._clean_tmp_folder()
 
     def closeEvent(self, event):  # noqa
         """Executed method when the GUI closed."""
