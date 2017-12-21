@@ -74,7 +74,7 @@ class _Volume(VisbrainObject):
         _, ext = os.path.splitext(name)
         if name in get_files_in_data('roi', with_ext=False):
             print('NAME : ', name)
-            vol, _, _, hdr, _ = self(name)
+            vol, _, _, hdr, _ = _Volume.__call__(self, name)
         elif ('.nii' in ext) or ('gz' in ext):
             vol, _, hdr = read_nifti(name)
             name = os.path.split(name)[1]
