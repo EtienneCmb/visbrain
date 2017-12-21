@@ -8,9 +8,11 @@ from vispy import scene
 from .visbrain_obj import VisbrainObject
 from ._projection import _project_sources_data
 from ..visuals import BrainMesh
-from ..utils import (get_data_path, mesh_edges, smoothing_matrix,
-                     array2colormap, rotate_turntable)
-from ..io import download_file, is_nibabel_installed, is_pandas_installed
+from ..utils import (mesh_edges, smoothing_matrix, array2colormap,
+                     rotate_turntable)
+from ..io import (download_file, is_nibabel_installed, is_pandas_installed,
+                  get_data_path, get_files_in_data, add_brain_template,
+                  remove_brain_template)
 
 logger = logging.getLogger('visbrain')
 
@@ -90,11 +92,11 @@ class BrainObj(VisbrainObject):
         """Load a brain template."""
         # _______________________ DEFAULT _______________________
         b_download = self._get_downloadable_templates()
-        b_installed = self._get_installed_templates()
+        b_installed = get_files_in_data('templates')
         # Need to download the brain template :
         if (name in b_download) and (name not in b_installed):
             self._add_downloadable_templates(name)
-        if name in self._get_installed_templates():  # predefined
+        if name in get_files_in_data('templates'):  # predefined
             (vertices, faces, normals,
              lr_index) = self._load_brain_template(name)
         # Sulcus :
@@ -129,6 +131,19 @@ class BrainObj(VisbrainObject):
         self._data_color = []
         self._data_mask = []
         logger.info("Brain object %s cleaned." % self.name)
+
+    def save(self):
+        """Save the brain template (if not already saved)."""
+        save_as = self.name + '.npz'
+        v = self.mesh._vertices
+        f = self.mesh._faces
+        n = self.mesh._normals
+        l = self.mesh._lr_index
+        add_brain_template(save_as, v, f, normals=n, lr_index=l)
+
+    def remove(self):
+        """"""
+        pass
 
     def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere,
                      invert_normals, sulcus):
@@ -171,8 +186,9 @@ class BrainObj(VisbrainObject):
         """Get all available brain templates (e.g defaults and downloadable."""
         b_def = self._get_default_templates()
         b_down = self._get_downloadable_templates()
-        b_installed = self._get_installed_templates()
-        b_all = list(set(b_def + b_down + b_installed))
+        b_installed = get_files_in_data('templates')
+        b_tmp = get_files_in_data('tmp')
+        b_all = list(set(b_def + b_down + b_installed + b_tmp))
         b_all.sort()
         return b_all
 
@@ -184,13 +200,6 @@ class BrainObj(VisbrainObject):
         """Get the list of brain that can be downloaded."""
         logger.debug("hdr transformation missing for downloadable templates")
         return ['white', 'inflated', 'sphere']
-
-    def _get_installed_templates(self):
-        """Get the list of available brain templates."""
-        all_files = os.listdir(self._get_template_path())
-        surf_list = [os.path.splitext(k)[0] for k in all_files]
-        surf_list.sort()
-        return surf_list
 
     def _add_downloadable_templates(self, name, ext='.npz'):
         """Download then install a brain template."""
