@@ -1,15 +1,11 @@
 """This script contains some other utility functions."""
-
-import sys
-import os
 import logging
 
 import numpy as np
 from vispy.util import profiler
 
 
-__all__ = ('Profiler', 'get_dsf', 'set_if_not_none', 'get_data_path',
-           'get_files_in_data')
+__all__ = ('Profiler', 'get_dsf', 'set_if_not_none')
 
 
 class Profiler(object):
@@ -94,49 +90,3 @@ def set_if_not_none(to_set, value, cond=True):
         The value if not None else to_set
     """
     return value if (value is not None) and cond else to_set
-
-
-def get_data_path(folder=None, file=None):
-    """Get the path to the visbrain data folder.
-
-    This function can find a file in visbrain/data or visbrain/data/folder.
-
-    Parameters
-    ----------
-    folder : string | None
-        Sub-folder of visbrain/data.
-    file : string | None
-        File name.
-
-    Returns
-    -------
-    path : string
-        Path to the data folder or to the file if file is not None.
-    """
-    cur_path = sys.modules[__name__].__file__.split('utils')[0]
-    folder = '' if not isinstance(folder, str) else folder
-    file = '' if not isinstance(file, str) else file
-    return os.path.join(*(cur_path, 'data', folder, file))
-
-
-def get_files_in_data(folder, with_ext=False):
-    """Get the list of files in a folder of visbrain/data.
-
-    Parameters
-    ----------
-    folder : string
-        Sub-folder of visbrain/data.
-    with_ext : bool | False
-        Return the list of files with or without extensions.
-
-    Returns
-    -------
-    all_files : list
-        List of files in visbrain/data/folder.
-    """
-    assert os.path.isdir(get_data_path(folder=folder))
-    all_files = os.listdir(get_data_path(folder=folder))
-    if with_ext:
-        return all_files
-    else:
-        return [os.path.splitext(k)[0] for k in all_files]

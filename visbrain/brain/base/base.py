@@ -77,7 +77,8 @@ class BaseVisual(object):
         self.roi = CombineRoi()
         PROFILER("ROI object", level=1)
         # Cross-sections :
-        self.cross_sec = CrossSecObj('brodmann', parent=self._csView.wc.scene, section=(100, 100, 100), text_size=2.)
+        self.cross_sec = CrossSecObj('brodmann', parent=self._csView.wc.scene,
+                                     text_size=2.)
         self._csView.camera = self.cross_sec._get_camera()
         PROFILER("Cross-sections object", level=1)
 
