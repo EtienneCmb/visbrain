@@ -8,6 +8,7 @@ from .roi_obj import RoiObj, CombineRoi  # noqa
 from .scene_obj import SceneObj, VisbrainCanvas  # noqa
 from .source_obj import SourceObj, CombineSources  # noqa
 from .spec_obj import SpectrogramObj  # noqa
+from .multitaper_obj import MultitaperObj  # noqa
 from .tf_obj import TimeFrequencyMapObj  # noqa
 from .ts_obj import TimeSeriesObj, CombineTimeSeries  # noqa
 from .vector_obj import VectorObj, CombineVectors  # noqa

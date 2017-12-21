@@ -488,7 +488,7 @@ class Spectrogram(PrepareData):
             if method == 'multitaper':
                 from lspopt import spectrogram_lspopt
                 freq, _, mesh = spectrogram_lspopt(data, fs=sf,
-                                nperseg=nperseg,c_parameter=20,
+                                nperseg=nperseg, c_parameter=20,
                                 noverlap=overlap)
             elif method == 'spectrogram':
                 freq, _, mesh = scpsig.spectrogram(data, fs=sf, nperseg=nperseg,
