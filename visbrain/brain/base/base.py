@@ -4,9 +4,9 @@ import logging
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from .VolumeBase import VolumeBase
 from ...objects import (CombineSources, CombineConnect, CombineTimeSeries,
-                        CombinePictures, CombineVectors, BrainObj)
+                        CombinePictures, CombineVectors, BrainObj, VolumeObj,
+                        CombineRoi, CrossSecObj)
 from ...config import PROFILER
 
 logger = logging.getLogger('visbrain')
@@ -21,7 +21,7 @@ class BaseVisual(object):
     GUI has to be deactivate).
     """
 
-    def __init__(self, canvas, parent_sp, **kwargs):
+    def __init__(self, canvas, **kwargs):
         """Init."""
         # Create a root node :
         self._vbNode = scene.Node(name='Brain')
@@ -69,9 +69,17 @@ class BaseVisual(object):
         PROFILER("Vectors object", level=1)
 
         # ========================= VOLUME =========================
-        self.volume = VolumeBase(parent_sp=parent_sp)
-        self.volume.parent = self._vbNode
+        # Volume :
+        self.volume = VolumeObj('brodmann', parent=self._vbNode)
+        self.volume.visible_obj = False
         PROFILER("Volume object", level=1)
+        # ROI :
+        self.roi = CombineRoi()
+        PROFILER("ROI object", level=1)
+        # Cross-sections :
+        self.cross_sec = CrossSecObj('brodmann', parent=self._csView.wc.scene, section=(100, 100, 100), text_size=2.)
+        self._csView.camera = self.cross_sec._get_camera()
+        PROFILER("Cross-sections object", level=1)
 
         # ========================= BRAIN =========================
         if kwargs.get('brain_obj', None) is None:
