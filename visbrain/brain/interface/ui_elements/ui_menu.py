@@ -88,16 +88,12 @@ class UiMenu(HelpMenu):
     def _fcn_menu_disp_crossec(self):
         """Display/hide the Cross-sections."""
         viz = self.menuDispCrossec.isChecked()
-        # Split view :
-        self._fcn_crossec_split()
         # Set cross-sections visible/hide :
-        self.volume.visible_cs = viz
         self.grpSec.setChecked(viz)
         # Disable split view if not visible :
-        if not viz:
-            self._objsPage.setCurrentIndex(0)
-            self.view.canvas.show(True)
-        # Check (min, max) of slider :
+        idx = 0 if not viz else 2
+        self._objsPage.setCurrentIndex(int(viz))
+        self._3dobj_type_lst.setCurrentIndex(idx)
         self._fcn_crossec_sl_limits()
 
     def _fcn_menu_disp_vol(self):
