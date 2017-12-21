@@ -68,9 +68,21 @@ class _Volume(VisbrainObject):
     Use : _Volume('aal')
     """
 
-    def __init__(self, name, parent, transform, verbose, **kw):
+    def __init__(self, name, vol, hdr, parent, transform, verbose, **kw):
         """Init."""
+        # _______________________ NII.GZ _______________________
+        _, ext = os.path.splitext(name)
+        if name in get_files_in_data('roi', with_ext=False):
+            print('NAME : ', name)
+            vol, _, _, hdr, _ = self(name)
+        elif ('.nii' in ext) or ('gz' in ext):
+            vol, _, hdr = read_nifti(name)
+            name = os.path.split(name)[1]
+            logger.info('Loading %s' % name)
+
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
+
+        return name, vol, hdr
 
     def __call__(self, name):
         """Load a predefined volume."""
@@ -80,6 +92,40 @@ class _Volume(VisbrainObject):
             return load_predefined_roi(name)
         else:
             logger.error("%s volume not in visbrain/data/roi/" % name)
+
+    @staticmethod
+    def slice_to_pos(hdr, sl, axis=None):
+        """Return the position from slice in the volume space."""
+        single_val = isinstance(axis, int) and isinstance(sl, int)
+        if single_val:
+            val = sl
+            sl = [0.] * 3
+            sl[axis] = val
+        assert len(sl) == 3 and isinstance(hdr, MatrixTransform)
+        pos = hdr.map(sl)[0:-1]
+        return pos[axis] if single_val else pos
+
+    @staticmethod
+    def pos_to_slice(hdr, pos, axis=None):
+        """Return the slice from position."""
+        single_val = isinstance(axis, int) and isinstance(pos, int)
+        if single_val:
+            val = pos
+            pos = [0.] * 3
+            pos[axis] = val
+        assert len(pos) == 3 and isinstance(hdr, MatrixTransform)
+        sl = hdr.imap(pos).astype(int)[0:-1]
+        return sl[axis] if single_val else sl
+
+    @staticmethod
+    def _check_volume(vol, hdr):
+        assert vol.ndim == 3
+        if hdr is None:
+            hdr = np.eye(4)
+        if isinstance(hdr, np.ndarray):
+            hdr = array_to_stt(hdr)
+        assert isinstance(hdr, MatrixTransform)
+        return vol, hdr
 
     # ----------- NAME -----------
     @property
@@ -137,14 +183,8 @@ class VolumeObj(_Volume):
                  cmap='OpaqueGrays', select=None, transform=None, parent=None,
                  verbose=None, **kw):
         """Init."""
-        # _______________________ NII.GZ _______________________
-        _, ext = os.path.splitext(name)
-        if ('.nii' in ext) or ('gz' in ext):
-            vol, _, hdr = read_nifti(name)
-            name = os.path.split(name)[1]
-            logger.info('Loading %s' % name)
-
-        _Volume.__init__(self, name, parent, transform, verbose, **kw)
+        name, vol, hdr = _Volume.__init__(self, name, vol, hdr, parent,
+                                          transform, verbose, **kw)
 
         # _______________________ CHECKING _______________________
         # Create 3-D volume :
@@ -157,20 +197,14 @@ class VolumeObj(_Volume):
     def set_data(self, name, vol=None, hdr=None, threshold=None, cmap=None,
                  method=None, select=None):
         """Set data to the volume."""
-        if name in get_files_in_data('roi', with_ext=False):
-            vol, _, _, hdr, _ = self(name)
-        assert vol.ndim == 3
-        if hdr is None:
-            hdr = np.eye(4)
-        if isinstance(hdr, np.ndarray):
-            hdr = array_to_stt(hdr)
-        assert isinstance(hdr, MatrixTransform)
+        vol, hdr = self._check_volume(vol, hdr)
         # assert isinstance(hdr, np.ndarray) and hdr.shape == (4, 4)
         if isinstance(select, (list, tuple)):
             logger.info("Extract structures %r from the volume" % select)
             st = '(vol != %s) & '.join([''] * (len(select) + 1))[0:-3]
             vol[eval(st % tuple(select))] = 0.
             threshold = 0.
+        self._max_vol = vol.max()
         vol = normalize(vol)
         self._vol3d.set_data(np.transpose(vol, (2, 1, 0)))
         self._vol3d.transform = hdr
@@ -186,7 +220,10 @@ class VolumeObj(_Volume):
         """Get the most adapted camera."""
         sh = self._vol3d._vol_shape
         dist = np.linalg.norm(self._vol3d.transform.map(sh)[0:-1])
-        return scene.cameras.TurntableCamera(scale_factor=dist)
+        cam = scene.cameras.TurntableCamera(scale_factor=dist, azimuth=0.,
+                                            elevation=90.)
+        cam.set_default_state()
+        return cam
 
     ###########################################################################
     ###########################################################################
@@ -236,7 +273,7 @@ class VolumeObj(_Volume):
         """Set threshold value."""
         assert isinstance(value, (int, float))
         if self.method == 'iso':
-            self._vol3d.shared_program['u_threshold'] = value
+            self._vol3d.shared_program['u_threshold'] = value / self._max_vol
             self.update()
             self._threshold = value
 

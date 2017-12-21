@@ -2,6 +2,7 @@
 from .brain_obj import BrainObj  # noqa
 from .cbar_obj import ColorbarObj  # noqa
 from .connect_obj import ConnectObj, CombineConnect  # noqa
+from .crossec_obj import CrossSecObj  # noqa
 from .image_obj import ImageObj  # noqa
 from .picture3d_obj import Picture3DObj, CombinePictures  # noqa
 from .roi_obj import RoiObj, CombineRoi  # noqa
