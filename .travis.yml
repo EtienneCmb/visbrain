@@ -69,7 +69,7 @@ script:
     - if [[ "${TEST}" == "standard" ]]; then
           py.test --cov;
       elif [[ "${TEST}" == "minimal" ]]; then
-          make flake;
+          flake8;
       elif [[ "${TEST}" == "examples" ]]; then
           make examples;
       fi;
