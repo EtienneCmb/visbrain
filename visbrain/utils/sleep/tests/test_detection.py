@@ -6,6 +6,9 @@ from visbrain.utils.sleep.detection import (kcdetect, spindlesdetect,
                                             mtdetect, peakdetect)
 from visbrain.utils import generate_eeg
 
+"""If tests continue to failed, one idea could be to save in a npz file the
+signal to test.
+"""
 sf, n_pts, _rnd = 100., 10014, 1
 signal = np.squeeze(generate_eeg(sf=sf, n_pts=n_pts, random_state=_rnd)[0])
 
