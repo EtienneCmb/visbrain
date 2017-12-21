@@ -1,5 +1,4 @@
 """Group of functions for physiological processing."""
-import os
 from re import findall
 import logging
 
@@ -8,11 +7,10 @@ from itertools import product
 from scipy.stats import zscore
 
 from .sigproc import smoothing
-from .others import get_data_path, get_files_in_data
+from ..io.path import get_data_path, get_files_in_data
 
 __all__ = ('find_non_eeg', 'rereferencing', 'bipolarization', 'commonaverage',
-           'tal2mni', 'mni2tal', 'load_predefined_roi',
-           'save_as_predefined_roi', 'remove_predefined_roi', 'generate_eeg')
+           'tal2mni', 'mni2tal', 'load_predefined_roi', 'generate_eeg')
 
 logger = logging.getLogger('visbrain')
 
@@ -346,64 +344,17 @@ def load_predefined_roi(name):
     system : {'mni', 'tal'}
         The system used by the volume.
     """
-    all_rois = get_files_in_data('roi', with_ext=False)
-    if name not in all_rois:
-        raise ValueError("%s not in default ROI atalses "
-                         "(%s)" % (name, ', '.join(all_rois)))
+    if name in get_files_in_data('roi', with_ext=False):
+        file = get_data_path(folder='roi', file=name + '.npz')
+    else:
+        file = name
     # Load archive :
-    file = get_data_path(folder='roi', file=name + '.npz')
     arch = np.load(file)
     # Extract informations :
     vol, hdr = arch['vol'], arch['hdr']
     labels, index = arch['labels'], arch['index']
 
     return vol, labels, index, hdr, 'tal' if name == 'talairach' else 'mni'
-
-
-def save_as_predefined_roi(name, vol, labels, index, hdr):
-    """Save as a predefined ROI atlas.
-
-    Parameters
-    ----------
-    name : string
-        Name of the ROI atlas.
-    vol : array_like
-        The volume of shape (nx, ny, nz).
-    labels : array_like
-        Array of labels of type object and of length n_labels.
-    index : array_like
-        Array of index corresponding to the labels of type np.int and of length
-        n_labels.
-    hdr : array_like
-        The matrix of transformation of shape (4, 4).
-    """
-    all_rois = get_files_in_data('roi', with_ext=False)
-    if name in all_rois:
-        logger.error("%s is already a ROI template. Remove it before or "
-                     "use an other name." % name)
-        return None
-    path_to_save = os.path.join(get_data_path(folder='roi'), name + '.npz')
-    np.savez(path_to_save, vol=vol, hdr=hdr, index=index, labels=labels)
-    logger.info("%s is now a default ROI object. Use `r_obj = RoiObj('%s')` to"
-                " call it." % (name, name))
-
-
-def remove_predefined_roi(name):
-    """Remove a predefined ROI object.
-
-    Parameters
-    ----------
-    name : string
-        Name of the ROI atlas.
-    """
-    all_rois = get_files_in_data('roi', with_ext=False)
-    if name not in all_rois:
-        raise ValueError("%s is not an ROI atlas name.")
-    if name in ['brodmann', 'aal', 'talairach']:
-        raise ValueError("Can not remove a default ROI template.")
-    path_to_file = get_data_path(folder='roi', file=name + '.npz')
-    os.remove(path_to_file)
-    logger.info("%s ROI object removed." % name)
 
 
 def generate_eeg(sf=512., n_pts=1000, n_channels=1, n_trials=1, n_sines=100,

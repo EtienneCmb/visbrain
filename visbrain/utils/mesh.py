@@ -1,5 +1,4 @@
 """Surfaces (mesh) and volume utility functions."""
-import os
 import logging
 
 import numpy as np
@@ -9,12 +8,10 @@ from vispy.geometry import MeshData
 from vispy.geometry.isosurface import isosurface
 
 from .sigproc import smooth_3d
-from .others import get_data_path
 
 
 __all__ = ('vispy_array', 'convert_meshdata', 'volume_to_mesh',
-           'add_brain_template', 'remove_brain_template', 'smoothing_matrix',
-           'mesh_edges', 'laplacian_smoothing')
+           'smoothing_matrix', 'mesh_edges', 'laplacian_smoothing')
 
 
 logger = logging.getLogger('visbrain')
@@ -140,53 +137,6 @@ def volume_to_mesh(vol, smooth_factor=3, level=None, **kwargs):
     # Convert to meshdata :
     vertices, faces, normals = convert_meshdata(vert_n, faces_n, **kwargs)
     return vertices, faces, normals
-
-
-def add_brain_template(name, vertices, faces, normals=None, lr_index=None):
-    """Add a brain template to the default list.
-
-    Parameters
-    ----------
-    name : string
-        Name of the template.
-    vertices : array_like
-        Vertices of the template of shape (N, 3) or (N, 3, 3) if indexed by
-        faces.
-    faces : array_like
-        Faces of the template of shape (M, 3)
-    normals : array_like
-        The normals of the template, with the same shape as vertices.
-    lr_index : int | None
-        Specify where to cut vertices for left and right hemisphere so that
-        x_left <= lr_index and right > lr_index
-    """
-    # Convert meshdata :
-    vertices, faces, normals = convert_meshdata(vertices, faces, normals)
-    # Get path to the templates/ folder :
-    name = os.path.splitext(name)[0]
-    path = get_data_path(folder='templates', file=name + '.npz')
-    # Save the template :
-    np.savez(path, vertices=vertices, faces=faces, normals=normals,
-             lr_index=lr_index)
-
-
-def remove_brain_template(name):
-    """Remove brain template from the default list.
-
-    Parameters
-    ----------
-    name : string
-        Name of the template to remove.
-    """
-    assert name not in ['B1', 'B2', 'B3']
-    # Get path to the templates/ folder :
-    name = os.path.splitext(name)[0]
-    path = get_data_path(folder='templates', file=name + '.npz')
-    # Remove the file from templates/ folder :
-    if os.path.isfile(path):
-        os.remove(path)
-    else:
-        raise ValueError("No file " + path)
 
 
 def smoothing_matrix(vertices, adj_mat, smoothing_steps=20):
