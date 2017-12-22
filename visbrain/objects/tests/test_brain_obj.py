@@ -3,7 +3,7 @@ import numpy as np
 
 from visbrain.objects import BrainObj, SourceObj
 from visbrain.objects.tests._testing_objects import _TestObjects
-from visbrain.io import read_stc
+from visbrain.io import read_stc, clean_tmp
 
 
 NEEDED_FILES = dict(ANNOT_FILE_1='lh.aparc.annot',
@@ -59,20 +59,6 @@ class TestBrainObj(_TestObjects):
         """Test passing vertices, faces and normals."""
         BrainObj('Custom', vertices=vertices, faces=faces)
         BrainObj('Custom', vertices=vertices, faces=faces, normals=normals)
-
-    def test_save(self):
-        """Test function save."""
-        b_cust = BrainObj('Custom', vertices=vertices, faces=faces)
-        b_cust.save()
-
-    def test_reload_saved_template(self):
-        """Test function reload_saved_template."""
-        BrainObj('Custom')
-
-    def test_remove(self):
-        """Test function remove."""
-        b_cust = BrainObj('Custom')
-        b_cust.remove()
 
     def test_get_parcellates(self):
         """Test function get_parcellates."""
@@ -130,3 +116,25 @@ class TestBrainObj(_TestObjects):
     def test_clean(self):
         """Test function clean."""
         b_obj.clean()
+
+    def test_list(self):
+        """Test function list."""
+        assert isinstance(b_obj.list(), list)
+
+    def test_save(self):
+        """Test function save."""
+        b_cust = BrainObj('Custom', vertices=vertices, faces=faces)
+        b_cust.save()
+        b_cust_tmp = BrainObj('CustomTmp', vertices=vertices, faces=faces)
+        b_cust_tmp.save(tmpfile=True)
+
+    def test_reload_saved_template(self):
+        """Test function reload_saved_template."""
+        BrainObj('Custom')
+        BrainObj('CustomTmp')
+
+    def test_remove(self):
+        """Test function remove."""
+        b_cust = BrainObj('Custom')
+        b_cust.remove()
+        clean_tmp()
