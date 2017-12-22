@@ -22,7 +22,8 @@ from vispy.scene import visuals
 import vispy.visuals.transforms as vist
 
 from ..utils import (array2colormap, color2vb, mpl_cmap, normalize,
-                     vpnormalize, vprecenter, get_data_path)
+                     vpnormalize, vprecenter)
+from ..io import get_data_path
 from .cbar import CbarVisual
 
 logger = logging.getLogger('visbrain')

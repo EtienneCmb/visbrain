@@ -14,8 +14,8 @@ import numpy as np
 import vispy.visuals.transforms as vist
 
 from visbrain import Brain
-from visbrain.utils import (convert_meshdata, add_brain_template,
-                            remove_brain_template)
+from visbrain.objects import BrainObj
+from visbrain.utils import convert_meshdata
 from visbrain.io import download_file, path_to_visbrain_data
 
 # Define path to the template and load it :
@@ -36,10 +36,11 @@ vertices, faces, normals = convert_meshdata(vert, faces, invert_normals=True,
                                             transform=z90_rotation)
 
 # Add the template :
-add_brain_template('Custom', vertices, faces, normals)
+b_obj = BrainObj('Custom', vertices=vertices, faces=faces, normals=normals)
+b_obj.save()
 
-vb = Brain(brain_template='Custom')
+vb = Brain(brain_obj=b_obj)
 vb.show()
 
 # If you want to remove the template :
-remove_brain_template('Custom')
+b_obj.remove()

@@ -8,9 +8,12 @@ from vispy import scene
 from .visbrain_obj import VisbrainObject
 from ._projection import _project_sources_data
 from ..visuals import BrainMesh
-from ..utils import (get_data_path, mesh_edges, smoothing_matrix,
-                     array2colormap, rotate_turntable)
-from ..io import download_file, is_nibabel_installed, is_pandas_installed
+from ..utils import (mesh_edges, smoothing_matrix, array2colormap,
+                     rotate_turntable)
+from ..io import (download_file, is_nibabel_installed, is_pandas_installed,
+                  get_data_path, get_files_in_data, add_brain_template,
+                  remove_brain_template, path_to_tmp, get_files_in_folders,
+                  path_to_visbrain_data)
 
 logger = logging.getLogger('visbrain')
 
@@ -90,11 +93,11 @@ class BrainObj(VisbrainObject):
         """Load a brain template."""
         # _______________________ DEFAULT _______________________
         b_download = self._get_downloadable_templates()
-        b_installed = self._get_installed_templates()
+        b_installed = get_files_in_data('templates')
         # Need to download the brain template :
         if (name in b_download) and (name not in b_installed):
             self._add_downloadable_templates(name)
-        if name in self._get_installed_templates():  # predefined
+        if not isinstance(vertices, np.ndarray):  # predefined
             (vertices, faces, normals,
              lr_index) = self._load_brain_template(name)
         # Sulcus :
@@ -130,6 +133,25 @@ class BrainObj(VisbrainObject):
         self._data_mask = []
         logger.info("Brain object %s cleaned." % self.name)
 
+    def save(self, tmpfile=False):
+        """Save the brain template (if not already saved)."""
+        save_as = self.name + '.npz'
+        v = self.mesh._vertices
+        f = self.mesh._faces
+        n = self.mesh._normals
+        l = self.mesh._lr_index
+        add_brain_template(save_as, v, f, normals=n, lr_index=l,
+                           tmpfile=tmpfile)
+
+    def remove(self):
+        """Remove a brain template."""
+        remove_brain_template(self.name + '.npz')
+
+    def list(self, file=None):
+        """Get the list of all installed templates."""
+        path = self._search_in_path()
+        return get_files_in_folders(*path, file=file)
+
     def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere,
                      invert_normals, sulcus):
         """Define brain mesh."""
@@ -144,13 +166,17 @@ class BrainObj(VisbrainObject):
             self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                                lr_index=lr_index, hemisphere=hemisphere)
 
-    def _load_brain_template(self, name, path=None):
-        """Load the brain template.
+    def _search_in_path(self):
+        """Specify where to find brain templates."""
+        _vb_path = path_to_visbrain_data(folder='templates')
+        _data_path = get_data_path(folder='templates')
+        _tmp_path = path_to_tmp(folder='templates')
+        return _vb_path, _data_path, _tmp_path
 
-        If path is None, use the default visbrain/data folder.
-        """
-        if path is None:
-            name = os.path.join(self._get_template_path(), name + '.npz')
+    def _load_brain_template(self, name):
+        """Load the brain template."""
+        path = self._search_in_path()
+        name = get_files_in_folders(*path, file=name + '.npz')[0]
         arch = np.load(name)
         vertices, faces = arch['vertices'], arch['faces']
         normals = arch['normals']
@@ -171,8 +197,9 @@ class BrainObj(VisbrainObject):
         """Get all available brain templates (e.g defaults and downloadable."""
         b_def = self._get_default_templates()
         b_down = self._get_downloadable_templates()
-        b_installed = self._get_installed_templates()
-        b_all = list(set(b_def + b_down + b_installed))
+        b_installed = get_files_in_data('templates')
+        b_tmp = get_files_in_data('tmp')
+        b_all = list(set(b_def + b_down + b_installed + b_tmp))
         b_all.sort()
         return b_all
 
@@ -184,13 +211,6 @@ class BrainObj(VisbrainObject):
         """Get the list of brain that can be downloaded."""
         logger.debug("hdr transformation missing for downloadable templates")
         return ['white', 'inflated', 'sphere']
-
-    def _get_installed_templates(self):
-        """Get the list of available brain templates."""
-        all_files = os.listdir(self._get_template_path())
-        surf_list = [os.path.splitext(k)[0] for k in all_files]
-        surf_list.sort()
-        return surf_list
 
     def _add_downloadable_templates(self, name, ext='.npz'):
         """Download then install a brain template."""

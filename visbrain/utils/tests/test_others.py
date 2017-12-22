@@ -1,6 +1,6 @@
 """Test functions in others.py."""
-from visbrain.utils.others import (get_dsf, set_if_not_none,
-                                   get_data_path)
+from visbrain.utils.others import (get_dsf, set_if_not_none)
+from visbrain.io.path import get_data_path
 
 
 class TestOthers(object):

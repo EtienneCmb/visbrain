@@ -14,14 +14,13 @@ from __future__ import print_function
 import numpy as np
 
 from visbrain import Brain
-from visbrain.utils import (add_brain_template, remove_brain_template)
-from visbrain.io import download_file, path_to_visbrain_data
+from visbrain.objects import BrainObj
+from visbrain.io import download_file
 
 """Download the brain template. Use either 'white', 'inflated' or 'sphere'
 """
 template = 'white'
-download_file(template + '.npz')
-mat = np.load(path_to_visbrain_data(template + '.npz'))
+mat = np.load(download_file(template + '.npz'))
 
 """
 Get variables for defining a new template. Vertices are nodes connected by the
@@ -33,20 +32,24 @@ can be set to None.
 vert, faces, norm = mat['vertices'], mat['faces'], mat['normals']
 lr_index = mat['lr_index']
 
+"""Define a brain object instance
+"""
+b_obj = BrainObj('NewWhite', vertices=vert, faces=faces, normals=norm,
+                 lr_index=lr_index)
+
 """
 Add the template to visbrain. After adding this template, it will always be
-accessible unless you use the remove_brain_template() function
+accessible unless you use the remove() method
 """
-add_brain_template(template, vert, faces, norm, lr_index)
+# b_obj.save()
 
 """
 Open the interface and select the added template
 """
-vb = Brain(a_template=template)
-print('Brain templates : ', vb.brain_list())
+vb = Brain(brain_obj=b_obj)
 vb.show()
 
 """
 Finally, and this is not a necessity, remove the template
 """
-remove_brain_template(template)
+# b_obj.remove()

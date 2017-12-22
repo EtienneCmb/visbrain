@@ -9,16 +9,15 @@ The nibabel package should also be installed.
 .. image:: ../../picture/picbrain/ex_crossec_and_volume.png
 """
 from visbrain import Brain
-from visbrain.io import read_nifti, download_file, path_to_visbrain_data
+from visbrain.io import read_nifti, download_file
 
 """Import the volume and the associated affine transformation
 """
 volume_name = 'GG-853-WM-0.7mm.nii.gz'
 
-"""Download the file. 
+"""Download the file.
 """
-download_file(volume_name)
-data, header, tf = read_nifti(path_to_visbrain_data(volume_name))
+data, header, tf = read_nifti(download_file(volume_name))
 
 vb = Brain()
 

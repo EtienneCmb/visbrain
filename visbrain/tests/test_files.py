@@ -1,7 +1,7 @@
 """Test if needed files are successfully installed with visbrain."""
 import os
 
-from visbrain.utils import get_data_path
+from visbrain.io import get_data_path
 
 
 def _test_file(name, path):

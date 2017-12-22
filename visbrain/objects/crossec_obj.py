@@ -18,13 +18,11 @@ class _ImageSection(object):
     This class instantiate an image, markers and line for source location.
     """
 
-    def __init__(self, name, parent=None, loc_parent=None, transform=None,
-                 _im={}, _mark={}, _line={}):
+    def __init__(self, name, parent=None, loc_parent=None, _im={}, _mark={},
+                 _line={}):
         """Init."""
         self.node = scene.Node(name='Node_', parent=parent)
         self.loc_node = scene.Node(name='LocNode_', parent=loc_parent)
-        self.node.transform = transform
-        self.loc_node.transform = transform
         self.image = scene.visuals.Image(name='Im_' + name, parent=self.node,
                                          **_im)
         pos = np.zeros((10, 3))
@@ -44,6 +42,25 @@ class _ImageSection(object):
                         [center[0], 0], [center[0], limits[1]]])
         pos = np.c_[pos, [10.] * 4]
         self.line.set_data(pos=pos)
+
+    def update(self):
+        self.node.update()
+        self.loc_node.update()
+        self.image.update()
+        self.markers.update()
+        self.line.update()
+
+    # ----------- TRANSFORM -----------
+    @property
+    def transform(self):
+        """Get the transform value."""
+        return self.node.transform
+
+    @transform.setter
+    def transform(self, value):
+        """Set transform value."""
+        self.node.transform = value
+        self.loc_node.transform = value
 
 
 class CrossSecObj(_Volume):
@@ -98,13 +115,8 @@ class CrossSecObj(_Volume):
                  preload=True, **kw):
         """Init."""
         # __________________________ VOLUME __________________________
-        name, vol, hdr = _Volume.__init__(self, name, vol, hdr, parent,
-                                          transform, verbose, **kw)
-        vol, hdr = self._check_volume(vol, hdr)
-        sh = vol.shape
-        self._sh = sh
-        self._vol = vol
-        self._hdr = hdr
+        kw['cmap'] = kw.get('cmap', 'gist_stern')
+        _Volume.__init__(self, name, parent, transform, verbose, **kw)
         self._sagittal = 0
         self._coronal = 0
         self._axial = 0
@@ -114,29 +126,13 @@ class CrossSecObj(_Volume):
         self._loc_node.visible = False
 
         # __________________________ TRANSFORMATION __________________________
-        # Rotations :
-        r90 = vist.MatrixTransform()
-        r90.rotate(90, (0, 0, 1))
-        rx180 = vist.MatrixTransform()
-        rx180.rotate(180, (1, 0, 0))
-        # Rescale and translate images :
-        norm_sagit = vist.STTransform(scale=(1. / sh[1], 1. / sh[2], 1.),
-                                      translate=(-1., 0., 0.))
-        tf_sagit = vist.ChainTransform([norm_sagit, r90, rx180])
-        norm_coron = vist.STTransform(scale=(1. / sh[0], 1. / sh[2], 1.),
-                                      translate=(0., 0., 0.))
-        tf_coron = vist.ChainTransform([norm_coron, r90, rx180])
-        norm_axis = vist.STTransform(scale=(2. / sh[1], 2. / sh[0], 1.),
-                                     translate=(-1., 0., 0.))
-        tf_axial = vist.ChainTransform([norm_axis, rx180])
-
         # Define three images (Sagittal, Coronal, Axial), markers and line :
         kwi = dict(parent=self._im_node, loc_parent=self._loc_node,
                    _im=dict(interpolation=interpolation), _mark=dict(size=20.),
                    _line=dict(width=3., color='white'))
-        self._im_sagit = _ImageSection('Sagit', transform=tf_sagit, **kwi)
-        self._im_coron = _ImageSection('Coron', transform=tf_coron, **kwi)
-        self._im_axial = _ImageSection('Axial', transform=tf_axial, **kwi)
+        self._im_sagit = _ImageSection('Sagit', **kwi)
+        self._im_coron = _ImageSection('Coron', **kwi)
+        self._im_axial = _ImageSection('Axial', **kwi)
         # Add text (sagit, coron, axial, left, right) :
         txt_pos = np.array([[-.99, -.1, 0.], [.01, -.1, 0.], [-.99, -1.99, 0.],
                             [.9, -.2, 0.], [0.1, .9, 0.], [.9, -1.8, 0.],
@@ -148,7 +144,39 @@ class CrossSecObj(_Volume):
                                        bold=text_bold, parent=self._node)
 
         if preload:
+            self(name, vol, hdr)
             self.set_data(section=section, **kw)
+
+    def __call__(self, name, vol=None, hdr=None):
+        """Change the volume object."""
+        if not isinstance(vol, np.ndarray):
+            vol, _, _, hdr, _ = _Volume.__call__(self, name)
+        self._vol, self._hdr = self._check_volume(vol, hdr)
+        self._sh = self._vol.shape
+        self._define_transformation()
+        self.update()
+
+    def _define_transformation(self):
+        sh = self._vol.shape
+        r90 = vist.MatrixTransform()
+        r90.rotate(90, (0, 0, 1))
+        rx180 = vist.MatrixTransform()
+        rx180.rotate(180, (1, 0, 0))
+        # Sagittal transformation :
+        norm_sagit = vist.STTransform(scale=(1. / sh[1], 1. / sh[2], 1.),
+                                      translate=(-1., 0., 0.))
+        tf_sagit = vist.ChainTransform([norm_sagit, r90, rx180])
+        self._im_sagit.transform = tf_sagit
+        # Coronal transformation :
+        norm_coron = vist.STTransform(scale=(1. / sh[0], 1. / sh[2], 1.),
+                                      translate=(0., 0., 0.))
+        tf_coron = vist.ChainTransform([norm_coron, r90, rx180])
+        self._im_coron.transform = tf_coron
+        # Axial transformation :
+        norm_axis = vist.STTransform(scale=(2. / sh[1], 2. / sh[0], 1.),
+                                     translate=(-1., 0., 0.))
+        tf_axial = vist.ChainTransform([norm_axis, rx180])
+        self._im_axial.transform = tf_axial
 
     def _get_camera(self):
         """Get the camera."""
@@ -160,15 +188,19 @@ class CrossSecObj(_Volume):
         if event.type == 'mouse_wheel':
             pass
         elif event.type == 'mouse_press':
-            logger.info("NOT CONFIGURED")
+            logger.info("Mouse press not configured for cross-sections")
 
     def update(self):
         """Update the root node."""
         self._im_node.update()
-        self._txt_node.update()
+        self._loc_node.update()
+        self._im_sagit.update()
+        self._im_coron.update()
+        self._im_axial.update()
+        self._txt.update()
 
     def set_data(self, section=(0, 0, 0), clim=None, cmap=None, vmin=None,
-                 under=None, vmax=None, over=None):
+                 under=None, vmax=None, over=None, update=False):
         """Set data to the cross-section.
 
         Parameters
@@ -180,11 +212,12 @@ class CrossSecObj(_Volume):
         assert len(section) == 3 and all([k <= i for k, i in zip(section,
                                                                  self._sh)])
         clim = (self._vol.min(), self._vol.max()) if clim is None else clim
-        logger.info("Select sections %s" % str(section))
         _ = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)  # noqa
+        self._update = update
         self.sagittal = section[0]
         self.coronal = section[1]
         self.axial = section[2]
+        self._update = False
 
     def _set_section(self, im_visual, image, section, pos, nb):
         # Get colormap elements and get RgBA image :
@@ -193,8 +226,10 @@ class CrossSecObj(_Volume):
         # Set image and text :
         im_visual.image.set_data(im_rgba)
         txt = 'Slice %i | Position %.2f'
-        self._txt.text[nb] = txt % (section, pos)
-        self._txt.update()
+        text = self._txt.text.copy()
+        text[nb] = txt % (section, pos)
+        self._txt.text = text
+        self.update()
 
     def localize_source(self, xyz):
         """Center the cross-sections arround a source location.
@@ -218,6 +253,7 @@ class CrossSecObj(_Volume):
         self._im_coron.set_location([sl[2], sl[0]], limits=sh[[2, 0]])
         self._im_axial.set_location([sl[1], sl[0]], limits=sh[[1, 0]])
         self._loc_node.visible = True
+        self.update()
 
     # ----------- SAGITTAL -----------
     @property
@@ -228,7 +264,8 @@ class CrossSecObj(_Volume):
     @sagittal.setter
     def sagittal(self, value):
         """Set sagittal value."""
-        if value != self._sagittal and isinstance(value, int):
+        val_cond = value != self._sagittal and isinstance(value, int)
+        if val_cond or self._update:
             if value <= self._sh[0]:
                 pos = self.slice_to_pos(self._hdr, value, axis=0)
                 self._set_section(self._im_sagit, self._vol[value, ...],
@@ -247,7 +284,8 @@ class CrossSecObj(_Volume):
     @coronal.setter
     def coronal(self, value):
         """Set coronal value."""
-        if value != self._coronal and isinstance(value, int):
+        val_cond = value != self._coronal and isinstance(value, int)
+        if val_cond or self._update:
             if value <= self._sh[1]:
                 pos = self.slice_to_pos(self._hdr, value, axis=1)
                 self._set_section(self._im_coron, self._vol[:, value, :],
@@ -266,7 +304,8 @@ class CrossSecObj(_Volume):
     @axial.setter
     def axial(self, value):
         """Set axial value."""
-        if value != self._axial and isinstance(value, int):
+        val_cond = value != self._axial and isinstance(value, int)
+        if val_cond or self._update:
             if value <= self._sh[2]:
                 pos = self.slice_to_pos(self._hdr, value, axis=2)
                 self._set_section(self._im_axial, self._vol[..., value],
@@ -291,3 +330,18 @@ class CrossSecObj(_Volume):
         self._im_coron.interpolation = value
         self._im_axial.interpolation = value
         self.update()
+
+    # ----------- TEXT_SIZE -----------
+    @property
+    def text_size(self):
+        """Get the text_size value."""
+        return self._text_size
+
+    @text_size.setter
+    @wrap_properties
+    def text_size(self, value):
+        """Set text_size value."""
+        assert isinstance(value, (int, float))
+        self._text_size = value
+        self._txt.font_size = value
+        self._txt.update()

@@ -89,4 +89,6 @@ class TestRoiObj(_TestVolumeObject):
         roi_custom = RoiObj('mist_roi', vol=vol, label=label, index=roi_index,
                             hdr=hdr)
         roi_custom.save()
-        roi_custom.remove()
+        # Test reloading roi from name only :
+        roi_sec = RoiObj('mist_roi')
+        roi_sec.remove()

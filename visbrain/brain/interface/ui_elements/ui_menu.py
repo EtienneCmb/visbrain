@@ -84,53 +84,59 @@ class UiMenu(HelpMenu):
         viz = self.menuDispBrain.isChecked()
         self._brain_grp.setChecked(viz)
         self.atlas.visible_obj = viz
+        self._fcn_menu_set_object(0)
 
-    def _fcn_menu_disp_crossec(self):
-        """Display/hide the Cross-sections."""
-        viz = self.menuDispCrossec.isChecked()
-        # Split view :
-        self._fcn_crossec_split()
-        # Set cross-sections visible/hide :
-        self.volume.visible_cs = viz
-        self.grpSec.setChecked(viz)
-        # Disable split view if not visible :
-        if not viz:
-            self._objsPage.setCurrentIndex(0)
-            self.view.canvas.show(True)
-        # Check (min, max) of slider :
-        self._fcn_crossec_sl_limits()
+    def _fcn_menu_disp_roi(self):
+        """Display/hide ROI."""
+        viz = self.menuDispROI.isChecked()
+        self.roi.visible_obj = viz
+        self._roi_grp.setChecked(viz)
+        self._fcn_menu_set_object(1)
 
     def _fcn_menu_disp_vol(self):
         """Display/hide the volume."""
         viz = self.menuDispVol.isChecked()
         # Set volume visible/hide :
-        self.volume.visible_vol = viz
-        self.grpVol.setChecked(viz)
+        self.volume.visible_obj = viz
+        self._vol_grp.setChecked(viz)
+        self._fcn_menu_set_object(2)
+
+    def _fcn_menu_disp_crossec(self):
+        """Display/hide the Cross-sections."""
+        viz = self.menuDispCrossec.isChecked()
+        # Set cross-sections visible/hide :
+        self._sec_grp.setChecked(viz)
+        self.cross_sec.visible_obj = viz
+        # Disable split view if not visible :
+        self._objsPage.setCurrentIndex(int(viz))
+        self._fcn_crossec_sl_limits()
+        self._fcn_menu_set_object(3)
 
     def _fcn_menu_disp_sources(self):
         """Display/hide sources."""
         viz = self.menuDispSources.isChecked()
         self.sources.visible_obj = viz
         self._s_grp.setChecked(viz)
+        self._fcn_menu_set_object(4)
 
     def _fcn_menu_disp_connect(self):
         """Display/hide connectivity."""
         viz = self.menuDispConnect.isChecked()
         self.connect.visible_obj = viz
         self._c_grp.setChecked(viz)
-
-    def _fcn_menu_disp_roi(self):
-        """Display/hide ROI."""
-        try:
-            self.volume.mesh.visible = self.menuDispROI.isChecked()
-        except:
-            pass
+        self._fcn_menu_set_object(5)
 
     def _fcn_menu_disp_cbar(self):
         """Display/hide the colorbar."""
         viz = self.menuDispCbar.isChecked()
         toggle_enable_tab(self.QuickSettings, 'Cbar', viz)
         self.cbpanelW.setVisible(viz)
+
+    def _fcn_menu_set_object(self, nb):
+        """Select object in the list."""
+        need_change = self._obj_type_lst.currentIndex() == nb
+        if self._obj_type_lst.model().item(nb).isEnabled() and not need_change:
+            self._obj_type_lst.setCurrentIndex(nb)
 
     ###########################################################################
     #                                ROTATION

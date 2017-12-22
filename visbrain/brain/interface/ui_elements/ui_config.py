@@ -198,7 +198,7 @@ class UiConfig(object):
             _try("self._volCmap.setCurrentIndex(config['VolCmap'])")
             _try("self._volIsoTh.setValue(config['VolTh'])")
             _try("self.grpVol.setChecked(config['VolGrp'])")
-            _try("self._fcn_vol3d_change()")
+            _try("self._fcn_vol_change()")
 
             # ----------------- SOURCES -----------------
             # Sources object :
