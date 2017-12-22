@@ -9,10 +9,11 @@ from vispy.color import BaseColormap
 from vispy.visuals.transforms import MatrixTransform
 
 from .visbrain_obj import VisbrainObject, CombineObjects
-from ..utils import (load_predefined_roi, array_to_stt, wrap_properties,
-                     normalize)
+from ..utils import (load_predefined_roi, wrap_properties, normalize,
+                     array_to_stt, stt_to_array)
 from ..io import (read_nifti, get_files_in_data, get_files_in_folders,
-                  path_to_visbrain_data, get_data_path, path_to_tmp)
+                  path_to_visbrain_data, get_data_path, path_to_tmp,
+                  save_volume_template, remove_volume_template)
 
 
 logger = logging.getLogger('visbrain')
@@ -73,23 +74,36 @@ class _Volume(VisbrainObject):
         """Init."""
         VisbrainObject.__init__(self, name, parent, transform, verbose, **kw)
 
-    def __call__(self, name):
+    def __call__(self, name, vol=None, hdr=None, labels=None, index=None,
+                 system=None):
         """Load a predefined volume."""
         _, ext = os.path.splitext(name)
         if ('.nii' in ext) or ('gz' in ext):
             vol, _, hdr = read_nifti(name)
-            name = os.path.split(name)[1]
+            name = os.path.split(name)[1].split('.nii')[0]
             self._name = name
             logger.info('Loading %s' % name)
-            return vol, None, None, hdr, None
-        else:
+            labels = index = system = None
+        elif isinstance(name, str):
             path = self.list(file=name + '.npz')
-            if len(path) == 1:
+            if len(path):
                 self._name = os.path.split(path[0])[1].split('.npz')[0]
                 logger.debug("%s volume loaded" % name)
-                return load_predefined_roi(path[0])
-            else:
-                logger.error("Cannot load the volume %s" % name)
+                vol, labels, index, hdr, system = load_predefined_roi(path[0])
+
+        self._vol, self._hdr = self._check_volume(vol, hdr)
+        self._labels, self._index, self._system = labels, index, system
+        self._sh = vol.shape
+
+    def save(self, tmpfile=False):
+        """Save the volume template."""
+        hdr = self._stt_to_array(self._hdr)
+        save_volume_template(self.name, vol=self._vol, labels=self._labels,
+                             index=self._index, hdr=hdr, tmpfile=tmpfile)
+
+    def remove(self):
+        """Remove the volume template."""
+        remove_volume_template(self.name)
 
     def _search_in_path(self):
         """Specify where to find volume templates."""
@@ -126,9 +140,15 @@ class _Volume(VisbrainObject):
         sl = np.round(hdr.imap(pos)).astype(int)[0:-1]
         return sl[axis] if single_val else sl
 
-    def _to_matrixtransform(self, hdr):
+    @staticmethod
+    def _array_to_stt(hdr):
         """Convert an hdr to MatrixTransform."""
         return array_to_stt(hdr)
+
+    @staticmethod
+    def _stt_to_array(arr):
+        """Convert a MatrixTransform to hdr."""
+        return stt_to_array(arr)
 
     @staticmethod
     def _check_volume(vol, hdr):
