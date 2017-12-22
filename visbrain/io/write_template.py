@@ -3,7 +3,7 @@ import logging
 import os
 import numpy as np
 
-from .path import path_to_visbrain_data
+from .path import path_to_visbrain_data, path_to_tmp
 from ..utils.mesh import convert_meshdata
 
 logger = logging.getLogger('visbrain')
@@ -12,7 +12,8 @@ __all__ = ['add_brain_template', 'remove_brain_template',
            'save_as_predefined_roi', 'remove_predefined_roi']
 
 
-def add_brain_template(name, vertices, faces, normals=None, lr_index=None):
+def add_brain_template(name, vertices, faces, normals=None, lr_index=None,
+                       tmpfile=False):
     """Add a brain template to the default list.
 
     Parameters
@@ -29,6 +30,9 @@ def add_brain_template(name, vertices, faces, normals=None, lr_index=None):
     lr_index : int | None
         Specify where to cut vertices for left and right hemisphere so that
         x_left <= lr_index and right > lr_index
+    tmpfile : bool | False
+        Specify if the saved brain template is a temporary file (in that case,
+        saved in visbrain/data/tmp/templates).
     """
     # Convert meshdata :
     vertices, faces, normals = convert_meshdata(vertices, faces, normals)
@@ -38,7 +42,10 @@ def add_brain_template(name, vertices, faces, normals=None, lr_index=None):
         os.mkdir(vb_path)
     # Get path to the templates/ folder :
     name = os.path.splitext(name)[0]
-    path = path_to_visbrain_data(folder='templates', file=name + '.npz')
+    if tmpfile:
+        path = path_to_tmp(folder='templates', file=name + '.npz')
+    else:
+        path = path_to_visbrain_data(folder='templates', file=name + '.npz')
     # Save the template :
     np.savez(path, vertices=vertices, faces=faces, normals=normals,
              lr_index=lr_index)
@@ -64,7 +71,7 @@ def remove_brain_template(name):
         raise ValueError("No file " + path)
 
 
-def save_as_predefined_roi(name, vol, labels, index, hdr):
+def save_as_predefined_roi(name, vol, labels, index, hdr, tmpfile=False):
     """Save as a predefined ROI atlas.
 
     Parameters
@@ -84,7 +91,10 @@ def save_as_predefined_roi(name, vol, labels, index, hdr):
     path_to_save = path_to_visbrain_data(folder='roi')
     if not os.path.exists(path_to_save):
         os.mkdir(path_to_save)
-    path_to_save = path_to_visbrain_data(folder='roi', file=name + '.npz')
+    if tmpfile:
+        path_to_save = path_to_tmp(folder='roi', file=name + '.npz')
+    else:
+        path_to_save = path_to_visbrain_data(folder='roi', file=name + '.npz')
     np.savez(path_to_save, vol=vol, hdr=hdr, index=index, labels=labels)
     logger.info("%s is now a default ROI object. Use `r_obj = RoiObj('%s')` to"
                 " call it." % (name, name))
