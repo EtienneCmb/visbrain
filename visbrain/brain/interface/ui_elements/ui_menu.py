@@ -187,8 +187,7 @@ class UiMenu(HelpMenu):
         # Add camera to the mesh and to the canvas :
         self.view.wc.camera = camera
         self.atlas.mesh.set_camera(camera)
-        if self.volume.name_roi == 'ROI':
-            self.volume.mesh.set_camera(camera)
+        self.roi.camera = camera
         self.view.wc.update()
         if camera.name == 'turntable':
             self.atlas.rotate(fixed='axial_0')
