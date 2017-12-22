@@ -27,12 +27,13 @@ def path_to_visbrain_data(file=None, folder=None):
         Path to the file or to the visbrain_data.
     """
     vb_path = os.path.join(os.path.expanduser('~'), 'visbrain_data')
+    folder = '' if not isinstance(folder, str) else folder
+    vb_path = os.path.join(vb_path, folder)
     if not os.path.exists(vb_path):
         os.mkdir(vb_path)
         logger.info("visbrain_data has been added to %s" % vb_path)
-    folder = '' if not isinstance(folder, str) else folder
     file = '' if not isinstance(file, str) else file
-    return os.path.join(*(vb_path, folder, file))
+    return os.path.join(vb_path, file)
 
 
 def get_data_path(folder=None, file=None):
@@ -78,20 +79,21 @@ def get_files_in_folders(*args, with_ext=False, with_path=False, file=None):
         List of files in selected folders if no file is provided. If file is a
         string, return the path to it, None if the file doesn't exist.
     """
-    assert all([os.path.exists(k) for k in args])
     # Search the file :
     files = []
     if isinstance(file, str):
         import glob
         for k in args:
-            files += glob.glob(os.path.join(k, file))
+            if os.path.exists(k):
+                files += glob.glob(os.path.join(k, file))
         return files
     # Get the list of files :
     for k in args:
-        if with_path:
-            files += [os.path.join(k, i) for i in os.listdir(k)]
-        else:
-            files += os.listdir(k)
+        if os.path.exists(k):
+            if with_path:
+                files += [os.path.join(k, i) for i in os.listdir(k)]
+            else:
+                files += os.listdir(k)
     # Keep only a selected file :
     if isinstance(file, str) and (file in files):
         files = [files[files.index(file)]]
@@ -126,13 +128,18 @@ def get_files_in_data(folder, with_ext=False):
         return [os.path.splitext(k)[0] for k in all_files]
 
 
-def path_to_tmp():
+def path_to_tmp(file=None, folder=None):
     """Get the path to the tmp folder."""
     vb_path = os.path.join(os.path.expanduser('~'), 'visbrain_data')
     tmp_path = os.path.join(vb_path, 'tmp')
     if not os.path.exists(tmp_path):
         os.mkdir(tmp_path)
-    return tmp_path
+    folder = '' if not isinstance(folder, str) else folder
+    file = '' if not isinstance(file, str) else file
+    tmp_path = os.path.join(tmp_path, folder)
+    if not os.path.exists(tmp_path):
+        os.mkdir(tmp_path)
+    return os.path.join(tmp_path, file)
 
 
 def clean_tmp():
