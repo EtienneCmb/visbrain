@@ -3,8 +3,7 @@ import logging
 import numpy as np
 
 from .ui_objects import _run_method_if_needed
-from ....utils import (textline2color, safely_set_cbox, fill_pyqt_table,
-                       color2tuple)
+from ....utils import (textline2color, safely_set_cbox, fill_pyqt_table)
 from ....io import dialog_color
 
 

@@ -350,7 +350,7 @@ class BrainUserMethods(object):
 
         # Extend the list of volumes for 3-D volume and cross-section :
         extend_combo_list(self._csDiv, name, self._fcn_crossec_change)
-        extend_combo_list(self._volDiv, name, self._fcn_vol3d_change)
+        extend_combo_list(self._volDiv, name, self._fcn_vol_change)
 
         # Extend the list of ROI volumes if possible :
         if self.volume._vols[name]._is_roi:
@@ -461,20 +461,20 @@ class BrainUserMethods(object):
         """
         # Set volume :
         if volume in self.volume_list():
-            safely_set_cbox(self._volDiv, volume, [self._fcn_vol3d_change])
+            safely_set_cbox(self._volDiv, volume, [self._fcn_vol_change])
         # Threshold :
-        safely_set_spin(self._volIsoTh, threshold, [self._fcn_vol3d_change],
+        safely_set_spin(self._volIsoTh, threshold, [self._fcn_vol_change],
                         False)
         # Set cmap :
-        safely_set_cbox(self._volCmap, cmap, [self._fcn_vol3d_change])
+        safely_set_cbox(self._volCmap, cmap, [self._fcn_vol_change])
         # Set rendering :
         if rendering in ['mip', 'translucent', 'additive', 'iso']:
             safely_set_cbox(self._volRendering, rendering,
-                            [self._fcn_vol3d_change])
+                            [self._fcn_vol_change])
         # Visible :
         self.menuDispVol.setChecked(visible)
         self.grpVol.setChecked(visible)
-        self._fcn_vol3d_change()
+        self._fcn_vol_change()
 
     # =========================================================================
     # =========================================================================

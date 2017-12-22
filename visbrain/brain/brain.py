@@ -111,6 +111,7 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         self.view.wc.camera = self._camera
         self._vbNode.parent = self.view.wc.scene
         self.atlas.camera = self._camera
+        self.roi.camera = self._camera
         self.atlas._csize = self.view.canvas.size
         self.atlas.rotate('top')
         self.atlas.camera.set_default_state()
@@ -140,8 +141,6 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         # Display menu :
         self.menuDispBrain.setChecked(self.atlas.mesh.visible)
         # Objects :
-        self._fcn_3dobj_type()
-        self._all_object_are_none()
         self._fcn_obj_type()
         # Colorbar :
         self._fcn_menu_disp_cbar()
