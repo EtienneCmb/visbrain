@@ -320,7 +320,7 @@ class RoiObj(_Volume):
         # Loop over sources :
         for k in range(n_sources):
             # Apply HDR transformation :
-            sub = self.pos_to_slice(self._hdr, xyz[k, :])
+            sub = self.pos_to_slice(xyz[k, :])
             # Find where is the point if inside the volume :
             if self > sub:  # use __gt__ of RoiObj
                 idx_vol = self._vol[sub[0], sub[1], sub[2]] + self._offset
