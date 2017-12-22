@@ -81,8 +81,7 @@ class UiSources(object):
     def _fcn_source_select(self):
         """Select the source to display."""
         txt = self._s_select.currentText().split(' ')[0].lower()
-        v = self._proj_obj['brain'].mesh.get_vertices
-        self.sources.set_visible_sources(txt, v)
+        self.sources.set_visible_sources(txt, self.atlas.vertices)
 
     @_run_method_if_needed
     def _fcn_source_symbol(self):
@@ -155,7 +154,7 @@ class UiSources(object):
         row = self._s_table.currentRow()
         xyz = self.sources._xyz[row, :]
         # Set menu cross-sections menu checked :
-        self.grpSec.setChecked(True)
+        self._sec_grp.setChecked(True)
         self._fcn_crossec_viz()
         # Get transformation and apply to xyz :
         self.cross_sec.localize_source(xyz)
@@ -175,11 +174,6 @@ class UiSources(object):
     # =====================================================================
     # PROJECTION
     # =====================================================================
-    def _fcn_update_proj_list(self):
-        """Update the available projection list objects."""
-        self._s_proj_on.clear()
-        self._s_proj_on.addItems(list(self._proj_obj.keys()))
-
     def _fcn_proj_mask_color(self):
         """Change the color for projected masked sources."""
         color = textline2color(str(self._s_proj_mask_color.text()))[1]
@@ -199,7 +193,7 @@ class UiSources(object):
         mask_color = textline2color(str(self._s_proj_mask_color.text()))[1]
         project = str(self._s_proj_type.currentText())
         project_on = str(self._s_proj_on.currentText())
-        b_obj = self._proj_obj[project_on]
+        b_obj = self.atlas if project_on == 'brain' else self.roi
         self.sources.project_sources(b_obj, project=project, radius=radius,
                                      contribute=contribute,
                                      mask_color=mask_color, **kw)

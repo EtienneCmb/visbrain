@@ -149,15 +149,12 @@ class CrossSecObj(_Volume):
 
     def __call__(self, name, vol=None, hdr=None):
         """Change the volume object."""
-        if not isinstance(vol, np.ndarray):
-            vol, _, _, hdr, _ = _Volume.__call__(self, name)
-        self._vol, self._hdr = self._check_volume(vol, hdr)
-        self._sh = self._vol.shape
+        _Volume.__call__(self, name, vol=vol, hdr=hdr)
         self._define_transformation()
         self.update()
 
     def _define_transformation(self):
-        sh = self._vol.shape
+        sh = self._sh
         r90 = vist.MatrixTransform()
         r90.rotate(90, (0, 0, 1))
         rx180 = vist.MatrixTransform()
@@ -208,9 +205,9 @@ class CrossSecObj(_Volume):
         section : tuple | (0, 0, 0)
             The section to take (sagittal, coronal and axial slices).
         """
-        assert all([isinstance(k, int) for k in section])
         assert len(section) == 3 and all([k <= i for k, i in zip(section,
                                                                  self._sh)])
+        self._section = section
         clim = (self._vol.min(), self._vol.max()) if clim is None else clim
         _ = self._update_cbar_args(cmap, clim, vmin, vmax, under, over)  # noqa
         self._update = update
@@ -241,7 +238,7 @@ class CrossSecObj(_Volume):
             array.
         """
         # Convert position into slice :
-        sl = self.pos_to_slice(self._hdr, xyz)
+        sl = self.pos_to_slice(xyz)
         logger.info("Center cross-sections at position %s" % str(xyz))
         # Set image slices :
         self.sagittal = int(sl[0])
@@ -267,7 +264,7 @@ class CrossSecObj(_Volume):
         val_cond = value != self._sagittal and isinstance(value, int)
         if val_cond or self._update:
             if value <= self._sh[0]:
-                pos = self.slice_to_pos(self._hdr, value, axis=0)
+                pos = self.slice_to_pos(value, axis=0)
                 self._set_section(self._im_sagit, self._vol[value, ...],
                                   value, pos, 0)
                 self._sagittal = value
@@ -287,7 +284,7 @@ class CrossSecObj(_Volume):
         val_cond = value != self._coronal and isinstance(value, int)
         if val_cond or self._update:
             if value <= self._sh[1]:
-                pos = self.slice_to_pos(self._hdr, value, axis=1)
+                pos = self.slice_to_pos(value, axis=1)
                 self._set_section(self._im_coron, self._vol[:, value, :],
                                   value, pos, 1)
                 self._coronal = value
@@ -307,7 +304,7 @@ class CrossSecObj(_Volume):
         val_cond = value != self._axial and isinstance(value, int)
         if val_cond or self._update:
             if value <= self._sh[2]:
-                pos = self.slice_to_pos(self._hdr, value, axis=2)
+                pos = self.slice_to_pos(value, axis=2)
                 self._set_section(self._im_axial, self._vol[..., value],
                                   value, pos, 2)
                 self._axial = value

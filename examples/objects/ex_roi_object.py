@@ -103,7 +103,8 @@ label['name'] = roi_labels[:, 1]
 # Get the volume and the hdr transformation :
 vol, _, hdr = read_nifti(nifti_file, hdr_as_array=True)
 # Define the ROI object and save it :
-roi_custom = RoiObj('mist_roi', vol=vol, label=label, index=roi_index, hdr=hdr)
+roi_custom = RoiObj('mist_roi', vol=vol, labels=label, index=roi_index,
+                    hdr=hdr)
 # Find thalamus entries :
 idx_thalamus = roi_custom.where_is('THALAMUS')
 colors = {55: 'slateblue', 56: 'olive', 63: 'darkred', 64: '#ab4642'}

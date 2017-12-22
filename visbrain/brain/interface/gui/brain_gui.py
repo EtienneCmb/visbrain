@@ -1699,9 +1699,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.QuickSettings.setCurrentIndex(0)
-        self._obj_stack.setCurrentIndex(3)
+        self._obj_stack.setCurrentIndex(4)
         self._brain_hemi.setCurrentIndex(0)
-        self._source_tab.setCurrentIndex(0)
+        self._source_tab.setCurrentIndex(1)
         self._c_alpha_stack.setCurrentIndex(0)
         self._objsPage.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

@@ -61,8 +61,6 @@ class _TestObjects(_TestVisbrain):
 class _TestVolumeObject(_TestObjects):
     """Methods for testing volumes (RoiObj, VolumeObj, CrossSections)."""
 
-    HDR = np.eye(4)
-
     def test_call(self):
         """Test function call."""
         for k in ['aal', 'talairach', 'brodmann']:
@@ -81,11 +79,9 @@ class _TestVolumeObject(_TestObjects):
     def test_slice_to_pos(self):
         """Convert slices into position."""
         pos = [10., 21., 32.]
-        hdr = self.OBJ._to_matrixtransform(self.HDR)
-        self.OBJ.slice_to_pos(hdr, pos)
+        self.OBJ.slice_to_pos(pos)
 
     def test_pos_to_slice(self):
         """Convert position into slices."""
         pos = [10., 21., 32.]
-        hdr = self.OBJ._to_matrixtransform(self.HDR)
-        self.OBJ.pos_to_slice(hdr, pos)
+        self.OBJ.pos_to_slice(pos)

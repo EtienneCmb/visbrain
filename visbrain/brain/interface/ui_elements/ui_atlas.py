@@ -73,6 +73,9 @@ class UiAtlas(object):
         # Set (min, max) for sliders :
         self._fcn_crossec_sl_limits()
         # Sagittal, coronal and axial slider :
+        self._csSagit.setValue(self.cross_sec._section[0])
+        self._csCoron.setValue(self.cross_sec._section[1])
+        self._csAxial.setValue(self.cross_sec._section[2])
         self._csSagit.sliderMoved.connect(self._fcn_crossec_move)
         self._csCoron.sliderMoved.connect(self._fcn_crossec_move)
         self._csAxial.sliderMoved.connect(self._fcn_crossec_move)

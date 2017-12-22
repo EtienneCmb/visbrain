@@ -1,7 +1,7 @@
 """Colorbar management for the Brain module."""
 import logging
 
-from ...visuals import CbarQt, CbarObjetcs, CbarBase
+from ..visuals import CbarQt, CbarObjetcs, CbarBase
 
 logger = logging.getLogger('visbrain')
 

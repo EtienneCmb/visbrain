@@ -1,8 +1,7 @@
 """Test functions in mesh.py."""
 import numpy as np
 
-from visbrain.utils.mesh import (add_brain_template, remove_brain_template,
-                                 convert_meshdata, vispy_array, volume_to_mesh,
+from visbrain.utils.mesh import (convert_meshdata, vispy_array, volume_to_mesh,
                                  mesh_edges, smoothing_matrix)
 
 
@@ -55,21 +54,6 @@ class TestMesh(object):
         """Test function volume_to_mesh."""
         x = np.random.rand(10, 20, 30)
         volume_to_mesh(x)
-
-    def test_add_brain_template(self):
-        """Test add_brain_template function."""
-        # Force creation of vertices, faces and normals :
-        self._creation()
-        tup = (self.vertices, self.faces, self.normals)
-        # Get converted vertices, faces and normals :
-        mesh1 = convert_meshdata(*tup)
-        add_brain_template(self.template, *mesh1)
-
-    def test_remove_brain_template(self):
-        """Test remove_brain_template function."""
-        # Force creation of vertices, faces and normals :
-        self._creation()
-        remove_brain_template(self.template)
 
     def test_mesh_edges(self):
         """Test function mesh_edges."""

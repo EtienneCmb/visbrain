@@ -9,7 +9,7 @@ from vispy.app.canvas import MouseEvent, KeyEvent
 
 from visbrain import Brain
 from visbrain.objects import (SourceObj, ConnectObj, TimeSeries3DObj,
-                              Picture3DObj)
+                              Picture3DObj, RoiObj, VolumeObj, CrossSecObj)
 from visbrain.io import download_file
 from visbrain.tests._tests_visbrain import _TestVisbrain
 
@@ -57,9 +57,20 @@ pic_data = 100. * np.random.rand(10, 20, 17)
 p_obj1 = Picture3DObj('P1', pic_data, xyz_1)
 p_obj2 = Picture3DObj('P2', 2 * pic_data, xyz_2)
 
+# ---------------- ROI // Volume // Cross-sections ----------------
+# ROI :
+roi_obj = RoiObj('brodmann')
+roi_obj.select_roi([4, 6])
+# Volume :
+vol_obj = VolumeObj('aal')
+# Cross-sections :
+cs_obj = CrossSecObj('aal')
+cs_obj.set_data((50, 60, 70))
+
 # ---------------- Application  ----------------
 vb = Brain(source_obj=[s_obj1, s_obj2], connect_obj=[c_obj, c_obj2],
            time_series_obj=[ts_obj1, ts_obj2], picture_obj=[p_obj1, p_obj2],
+           roi_obj=roi_obj, vol_obj=vol_obj, cross_sec_obj=cs_obj,
            verbose='debug')
 
 
@@ -98,33 +109,6 @@ class TestBrain(_TestVisbrain):
     def test_brain_list(self):
         """Test method brain_list."""
         vb.brain_list() == ['B1', 'B2', 'B3']
-
-    ###########################################################################
-    #                                 VOLUME
-    ###########################################################################
-    @pytest.mark.skip
-    def test_add_volume(self):
-        """Test method add_volume."""
-        pass
-
-    def test_volume_list(self):
-        """Test method volume_list."""
-        assert vb.volume_list() == ['Brodmann', 'AAL', 'Talairach']
-
-    def test_cross_sections_control(self):
-        """Test method cross_sections_control."""
-        vb.cross_sections_control()
-        vb.cross_sections_control(pos=(10.8, 12.1, 11.))
-        vb.cross_sections_control(center=(90, 90, 90), visible=False)
-        vb.cross_sections_control(volume='AAL', split_view=False,
-                                  transparent=False, cmap='Spectral',
-                                  show_text=False)
-
-    def test_volume_control(self):
-        """Test method volume_control."""
-        vb.volume_control()
-        for k in ['mip', 'translucent', 'additive', 'iso']:
-            vb.volume_control(rendering=k, threshold=0.95)
 
     ###########################################################################
     #                                 SOURCES
@@ -205,37 +189,19 @@ class TestBrain(_TestVisbrain):
     ###########################################################################
     #                                 ROI
     ###########################################################################
-    @pytest.mark.skip('ROI objects need to be included')
-    def test_roi_control(self):
-        """Test method roi_control."""
-        # vb.roi_control([10], roi_type='Talairach', smooth=3,
-        #                name='Tal_10&11', translucent=True)
-        vb.roi_control([3], roi_type='Brodmann', smooth=3,
-                       name='Roi_3-5_Brodmann', translucent=True, alpha=.05)
-        vb.roi_control([7], roi_type='AAL', smooth=3, name='Roi_7_AAL')
-
-    @pytest.mark.skip('ROI objects need to be included')
     def test_roi_fit(self):
         """Test method roi_fit."""
-        vb.sources_fit_to_vertices(fit_to='Roi_7_AAL')
+        vb.sources_fit_to_vertices(fit_to='roi')
 
-    @pytest.mark.skip('ROI objects need to be included')
     def test_roi_projection(self):
         """Test method roi_projection."""
         vb.sources_display(select='all')
-        vb.cortical_projection(radius=20., project_on='Roi_7_AAL')
+        vb.cortical_projection(radius=50., project_on='roi')
 
-    @pytest.mark.skip('ROI objects need to be included')
     def test_roi_repartition(self):
         """Test method roi_repartition."""
         vb.sources_display(select='all')
-        vb.cortical_repartition(radius=20., project_on='Roi_7_AAL')
-
-    def test_roi_list(self):
-        """Test function roi_list."""
-        vb.roi_list('Brodmann')
-        vb.roi_list('AAL')
-        vb.roi_list('Talairach')
+        vb.cortical_repartition(radius=50., project_on='roi')
 
     ###########################################################################
     #                                 COLORBAR
@@ -357,13 +323,15 @@ class TestBrain(_TestVisbrain):
     @staticmethod
     def _preselect_object(name):
         if name == 'sources':
-            vb._obj_type_lst.setCurrentIndex(0)
+            vb._obj_type_lst.setCurrentIndex(4)
         elif name == 'connectivity':
-            vb._obj_type_lst.setCurrentIndex(1)
+            vb._obj_type_lst.setCurrentIndex(5)
         elif name == 'time-series':
-            vb._obj_type_lst.setCurrentIndex(2)
+            vb._obj_type_lst.setCurrentIndex(6)
         elif name == 'pictures':
-            vb._obj_type_lst.setCurrentIndex(3)
+            vb._obj_type_lst.setCurrentIndex(7)
+        elif name == 'vector':
+            vb._obj_type_lst.setCurrentIndex(7)
         vb._fcn_obj_type()
 
     def test_gui_uisources_markers(self):

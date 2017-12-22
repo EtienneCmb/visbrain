@@ -4,15 +4,15 @@ import logging
 from vispy import scene
 import vispy.visuals.transforms as vist
 
-from ...objects import (CombineSources, CombineConnect, CombineTimeSeries,
-                        CombinePictures, CombineVectors, BrainObj, VolumeObj,
-                        RoiObj, CrossSecObj)
-from ...config import PROFILER
+from ..objects import (CombineSources, CombineConnect, CombineTimeSeries,
+                       CombinePictures, CombineVectors, BrainObj, VolumeObj,
+                       RoiObj, CrossSecObj)
+from ..config import PROFILER
 
 logger = logging.getLogger('visbrain')
 
 
-class BaseVisual(object):
+class Visuals(object):
     """Initialize Brain objects.
 
     Initialize sources / connectivity / areas / colorbar / projections.
@@ -75,8 +75,8 @@ class BaseVisual(object):
             self.volume.visible_obj = False
         else:
             self.volume = kwargs.get('vol_obj')
-        # if self.volume.name not in self.volume.list():
-            # self.volume.save(tmpfile=True)
+        if self.volume.name not in self.volume.list():
+            self.volume.save(tmpfile=True)
         self.volume.parent = self._vbNode
         PROFILER("Volume object", level=1)
         # ----------------- ROI -----------------
@@ -94,8 +94,8 @@ class BaseVisual(object):
             self.cross_sec = CrossSecObj('brodmann')
         else:
             self.cross_sec = kwargs.get('cross_sec_obj')
-        # if self.cross_sec.name not in self.cross_sec.list():
-            # self.cross_sec.save(tmpfile=True)
+        if self.cross_sec.name not in self.cross_sec.list():
+            self.cross_sec.save(tmpfile=True)
         self.cross_sec.visible_obj = False
         self.cross_sec.text_size = 2.
         self.cross_sec.parent = self._csView.wc.scene
@@ -104,18 +104,13 @@ class BaseVisual(object):
 
         # ========================= BRAIN =========================
         if kwargs.get('brain_obj', None) is None:
-            template = kwargs.get('brain_template', 'B1')
-            translucent = kwargs.get('brain_translucent', True)
-            hemisphere = kwargs.get('brain_hemisphere', 'both')
-            self.atlas = BrainObj(template, translucent=translucent,
-                                  hemisphere=hemisphere)
+            self.atlas = BrainObj('B1')
         else:
             self.atlas = kwargs['brain_obj']
         if self.atlas.name not in self.atlas.list():
             self.atlas.save(tmpfile=True)
         self.atlas.scale = self._gl_scale
         self.atlas.parent = self._vbNode
-        self._proj_obj['brain'] = self.atlas
         PROFILER("Brain object", level=1)
 
         # Add XYZ axis (debugging : x=red, y=green, z=blue)

@@ -238,7 +238,7 @@ name</string>
                </sizepolicy>
               </property>
               <property name="currentIndex">
-               <number>3</number>
+               <number>4</number>
               </property>
               <widget class="QWidget" name="_brain_page">
                <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1108,7 +1108,7 @@ type</string>
                 <item>
                  <widget class="QTabWidget" name="_source_tab">
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>1</number>
                   </property>
                   <widget class="QWidget" name="tab_2">
                    <attribute name="title">

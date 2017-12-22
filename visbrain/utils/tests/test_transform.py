@@ -2,7 +2,7 @@
 import numpy as np
 
 from visbrain.utils.transform import (vprescale, vprecenter, vpnormalize,
-                                      array_to_stt)
+                                      array_to_stt, stt_to_array)
 
 
 class TestTransform(object):
@@ -47,4 +47,6 @@ class TestTransform(object):
                         [0., 0., scale[2], translate[2]],
                         [0., 0., 0., 1.]
                         ])
-        assert np.array_equal(array_to_stt(mat).matrix, mat)
+        tf = array_to_stt(mat)
+        _mat = stt_to_array(tf)
+        assert np.array_equal(mat, _mat)

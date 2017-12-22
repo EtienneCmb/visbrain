@@ -3,7 +3,8 @@ import numpy as np
 
 from visbrain.objects.tests._testing_objects import _TestVolumeObject
 from visbrain.objects import SourceObj, RoiObj
-from visbrain.io import download_file, path_to_visbrain_data, read_nifti
+from visbrain.io import (download_file, path_to_visbrain_data, read_nifti,
+                         clean_tmp)
 
 
 roi_obj = RoiObj('brodmann')
@@ -87,7 +88,7 @@ class TestRoiObj(_TestVolumeObject):
     def test_save_and_remove(self):
         """Test methods save, reload and remove."""
         # Define the ROI object and save it :
-        roi_custom = RoiObj('mist_roi', vol=vol, label=label, index=roi_index,
+        roi_custom = RoiObj('mist_roi', vol=vol, labels=label, index=roi_index,
                             hdr=hdr)
         roi_custom.save()
         # Test reloading roi from name only :
@@ -97,8 +98,9 @@ class TestRoiObj(_TestVolumeObject):
     def test_save_and_remove_tmp(self):
         """Test methods save, reload and remove for tmp files."""
         # Define the ROI object and save it :
-        roi_custom = RoiObj('tmp_roi', vol=vol, label=label, index=roi_index,
+        roi_custom = RoiObj('tmp_roi', vol=vol, labels=label, index=roi_index,
                             hdr=hdr)
         roi_custom.save(tmpfile=True)
         # Test reloading roi from name only :
         RoiObj('tmp_roi')
+        clean_tmp()
