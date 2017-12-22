@@ -8,11 +8,11 @@ from vispy.scene import visuals
 from vispy.color import BaseColormap
 from vispy.visuals.transforms import MatrixTransform
 
-from .visbrain_obj import VisbrainObject
+from .visbrain_obj import VisbrainObject, CombineObjects
 from ..utils import (load_predefined_roi, array_to_stt, wrap_properties,
                      normalize)
 from ..io import (read_nifti, get_files_in_data, get_files_in_folders,
-                  path_to_visbrain_data, get_data_path)
+                  path_to_visbrain_data, get_data_path, path_to_tmp)
 
 
 logger = logging.getLogger('visbrain')
@@ -76,8 +76,6 @@ class _Volume(VisbrainObject):
     def __call__(self, name):
         """Load a predefined volume."""
         _, ext = os.path.splitext(name)
-        _vb_data = path_to_visbrain_data(folder='roi')
-        _data = get_data_path(folder='roi')
         if ('.nii' in ext) or ('gz' in ext):
             vol, _, hdr = read_nifti(name)
             name = os.path.split(name)[1]
@@ -85,13 +83,24 @@ class _Volume(VisbrainObject):
             logger.info('Loading %s' % name)
             return vol, None, None, hdr, None
         else:
-            path = get_files_in_folders(_vb_data, _data, file=name + '.npz')
+            path = self.list(file=name + '.npz')
             if len(path) == 1:
                 self._name = os.path.split(path[0])[1].split('.npz')[0]
                 logger.debug("%s volume loaded" % name)
                 return load_predefined_roi(path[0])
             else:
                 logger.error("Cannot load the volume %s" % name)
+
+    def _search_in_path(self):
+        """Specify where to find volume templates."""
+        _vb_data = path_to_visbrain_data(folder='roi')
+        _data = get_data_path(folder='roi')
+        _tmp = path_to_tmp(folder='roi')
+        return _vb_data, _data, _tmp
+
+    def list(self, file=None):
+        """Get the list of installed volumes."""
+        return get_files_in_folders(*self._search_in_path(), file=file)
 
     @staticmethod
     def slice_to_pos(hdr, sl, axis=None):
@@ -114,8 +123,11 @@ class _Volume(VisbrainObject):
             pos = [0.] * 3
             pos[axis] = val
         assert len(pos) == 3 and isinstance(hdr, MatrixTransform)
-        sl = hdr.imap(pos).astype(int)[0:-1]
+        sl = np.round(hdr.imap(pos)).astype(int)[0:-1]
         return sl[axis] if single_val else sl
+
+    def _to_matrixtransform(self, hdr):
+        return array_to_stt(hdr)
 
     @staticmethod
     def _check_volume(vol, hdr):
@@ -140,6 +152,23 @@ class _Volume(VisbrainObject):
             self(value)
             self.update()
         self._name = value
+
+
+class _CombineVolume(CombineObjects):
+    """Combine Volume objects."""
+
+    def __init__(self, vol_type, objs=None, select=None, parent=None):
+        """Init."""
+        CombineObjects.__init__(self, vol_type, objs, select, parent)
+
+    def list(self, file=None):
+        """Get the list of installed volumes."""
+        return get_files_in_folders(*_Volume._search_in_path(self), file=file)
+
+    def save(self, tmpfile=False):
+        for k in self:
+            if k.name not in k.list():
+                k.save(tmpfile=tmpfile)
 
 
 class VolumeObj(_Volume):
@@ -192,9 +221,14 @@ class VolumeObj(_Volume):
                                      threshold=threshold, name='3-D Volume',
                                      cmap=VOLUME_CMAPS[cmap])
         if preload:
-            if not isinstance(vol, np.ndarray):
-                vol, _, _, hdr, _ = self(name)
-            self.set_data(vol, hdr, threshold, cmap, method, select)
+            self(name, vol=vol, hdr=hdr, threshold=threshold, cmap=cmap,
+                 method=method, select=select)
+
+    def __call__(self, name, vol=None, hdr=None, **kwargs):
+        """Change volume."""
+        if not isinstance(vol, np.ndarray):
+            vol, _, _, hdr, _ = _Volume.__call__(self, name)
+        self.set_data(vol, hdr, **kwargs)
 
     def set_data(self, vol, hdr=None, threshold=None, cmap=None,
                  method=None, select=None):
@@ -275,7 +309,7 @@ class VolumeObj(_Volume):
         """Set threshold value."""
         assert isinstance(value, (int, float))
         if self.method == 'iso':
-            self._vol3d.shared_program['u_threshold'] = value / self._max_vol
+            self._vol3d.shared_program['u_threshold'] = value
             self.update()
             self._threshold = value
 
