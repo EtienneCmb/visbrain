@@ -81,11 +81,11 @@ class _TestVolumeObject(_TestObjects):
     def test_slice_to_pos(self):
         """Convert slices into position."""
         pos = [10., 21., 32.]
-        hdr = self.OBJ._to_matrixtransform(self.HDR)
+        hdr = self.OBJ._array_to_stt(self.HDR)
         self.OBJ.slice_to_pos(hdr, pos)
 
     def test_pos_to_slice(self):
         """Convert position into slices."""
         pos = [10., 21., 32.]
-        hdr = self.OBJ._to_matrixtransform(self.HDR)
+        hdr = self.OBJ._array_to_stt(self.HDR)
         self.OBJ.pos_to_slice(hdr, pos)
