@@ -135,6 +135,7 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         self._objsPage.setCurrentIndex(0)
         self.menuDispQuickSettings.setChecked(True)
         self._source_tab.setCurrentIndex(0)
+        self._obj_type_lst.setCurrentIndex(0)
         # Progress bar and rotation panel :
         self.progressBar.hide()
         self.userRotationPanel.setVisible(False)
