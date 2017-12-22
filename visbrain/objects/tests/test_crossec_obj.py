@@ -3,7 +3,7 @@ import numpy as np
 
 from visbrain.objects import CrossSecObj
 from visbrain.objects.tests._testing_objects import _TestObjects
-from visbrain.io import download_file
+from visbrain.io import download_file, clean_tmp
 
 
 cs_obj = CrossSecObj('brodmann')
@@ -31,3 +31,15 @@ class TestCrossSecObj(_TestObjects):
     def test_nii_definition(self):
         """Test function nii_definition."""
         CrossSecObj(download_file('GG-853-GM-0.7mm.nii.gz'))
+
+    def test_save(self):
+        """Test function save."""
+        v_obj = CrossSecObj(download_file('GG-853-GM-0.7mm.nii.gz'))
+        v_obj.save()
+        v_obj.save(tmpfile=True)
+
+    def test_remove(self):
+        """Test function remove."""
+        v_obj = CrossSecObj('GG-853-GM-0.7mm')
+        v_obj.remove()
+        clean_tmp()
