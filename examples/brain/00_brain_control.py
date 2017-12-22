@@ -26,8 +26,11 @@ elevation.
 """
 from visbrain import Brain
 
+from visbrain.objects import CrossSecObj
+cs = CrossSecObj('aal')
+
 # Define the Brain instance :
-vb = Brain()
+vb = Brain(cross_sec_obj=cs)
 
 """
 Display opaque right hemisphere of B3 :
