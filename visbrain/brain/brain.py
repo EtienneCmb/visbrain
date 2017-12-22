@@ -11,7 +11,8 @@ import logging
 import vispy.scene.cameras as viscam
 
 from .interface import UiInit, UiElements, BrainShortcuts
-from .base import BaseVisual, BrainCbar
+from .visuals import Visuals
+from .cbar import BrainCbar
 from .user import BrainUserMethods
 from ..pyqt_module import PyQtModule
 from ..config import PROFILER
@@ -19,32 +20,36 @@ from ..config import PROFILER
 logger = logging.getLogger('visbrain')
 
 
-class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
+class Brain(PyQtModule, UiInit, UiElements, Visuals, BrainCbar,
             BrainUserMethods):
     """Visualization of brain-data on a standard MNI brain.
 
     By default the Brain module display a standard MNI brain. Then, this brain
     can interact with several objects :
 
+        * Brain (brain_obj)
         * Sources (source_obj)
         * Connectivity (connect_obj)
         * Time-series (time_series_obj)
         * Pictures (picture_obj)
         * Vectors (vector_obj)
+        * Volume (vol_obj)
+        * Cross-sections (cross_sec_obj)
+        * Region Of Interest (roi_obj)
 
     Alternatively, if an other brain template is needed, a brain object
     (BrainObj) can also be used (see brain_obj).
 
     Parameters
     ----------
-    brain_template : string | 'B1'
-        The MNI brain template to use. Switch between 'B1', 'B2' or 'B3'
-    brain_translucent : bool | True
-        Use translucent or opaque brain.
-    brain_hemisphere : {'left', 'both', 'right'}
-        Specify which brain hemisphere to use. Default is 'both'.
     brain_obj : BrainObj | None
         A brain object.
+    vol_obj : VolumeObj | None
+        A volume object.
+    cross_sec_obj : CrossSecObj | None
+        A cross-sections object.
+    roi_obj : RoiObj | None
+        A Region Of Interest (ROI) object.
     source_obj : SourceObj | None
         An object (or list of objects) of type source (SourceObj).
     connect_obj : ConnectObj | None
@@ -89,7 +94,6 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
         PyQtModule.__init__(self, verbose=verbose, to_describe='view.wc',
                             icon='brain_icon.svg')
         self._userobj = {}
-        self._proj_obj = {}
         self._gl_scale = 100.  # fix appearance for small meshes
         self._camera = viscam.TurntableCamera(name='MainBrainCamera')
 
@@ -99,7 +103,7 @@ class Brain(PyQtModule, UiInit, UiElements, BaseVisual, BrainCbar,
 
         # ====================== App creation ======================
         PROFILER("Visual elements", as_type='title')
-        BaseVisual.__init__(self, self.view.wc, **kwargs)
+        Visuals.__init__(self, self.view.wc, **kwargs)
 
         # ====================== Ui interactions ======================
         UiElements.__init__(self)  # GUI interactions
