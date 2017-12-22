@@ -9,7 +9,7 @@ from ..utils.mesh import convert_meshdata
 logger = logging.getLogger('visbrain')
 
 __all__ = ['add_brain_template', 'remove_brain_template',
-           'save_as_predefined_roi', 'remove_predefined_roi']
+           'save_volume_template', 'remove_volume_template']
 
 
 def add_brain_template(name, vertices, faces, normals=None, lr_index=None,
@@ -47,8 +47,8 @@ def add_brain_template(name, vertices, faces, normals=None, lr_index=None,
     else:
         path = path_to_visbrain_data(folder='templates', file=name + '.npz')
     # Save the template :
-    np.savez(path, vertices=vertices, faces=faces, normals=normals,
-             lr_index=lr_index)
+    np.savez_compressed(path, vertices=vertices, faces=faces, normals=normals,
+                        lr_index=lr_index)
     logger.info("Brain template saved (%s)." % path)
 
 
@@ -71,7 +71,7 @@ def remove_brain_template(name):
         raise ValueError("No file " + path)
 
 
-def save_as_predefined_roi(name, vol, labels, index, hdr, tmpfile=False):
+def save_volume_template(name, vol, labels, index, hdr, tmpfile=False):
     """Save as a predefined ROI atlas.
 
     Parameters
@@ -95,12 +95,13 @@ def save_as_predefined_roi(name, vol, labels, index, hdr, tmpfile=False):
         path_to_save = path_to_tmp(folder='roi', file=name + '.npz')
     else:
         path_to_save = path_to_visbrain_data(folder='roi', file=name + '.npz')
-    np.savez(path_to_save, vol=vol, hdr=hdr, index=index, labels=labels)
+    np.savez_compressed(path_to_save, vol=vol, hdr=hdr, index=index,
+                        labels=labels)
     logger.info("%s is now a default ROI object. Use `r_obj = RoiObj('%s')` to"
                 " call it." % (name, name))
 
 
-def remove_predefined_roi(name):
+def remove_volume_template(name):
     """Remove a predefined ROI object.
 
     Parameters
