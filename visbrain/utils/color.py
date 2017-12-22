@@ -51,7 +51,7 @@ def color2vb(color=None, default=(1., 1., 1.), length=1, alpha=1.0,
         if color is None:  # Default
             coltuple = default
         elif isinstance(color, (tuple, list, np.ndarray)):  # Static
-            color = np.squeeze(color)
+            color = np.squeeze(color).ravel()
             if len(color) == 4:
                 alpha = color[-1]
                 color = color[0:-1]
