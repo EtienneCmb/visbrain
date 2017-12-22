@@ -12,7 +12,8 @@ from ..utils import (mesh_edges, smoothing_matrix, array2colormap,
                      rotate_turntable)
 from ..io import (download_file, is_nibabel_installed, is_pandas_installed,
                   get_data_path, get_files_in_data, add_brain_template,
-                  remove_brain_template)
+                  remove_brain_template, path_to_tmp, get_files_in_folders,
+                  path_to_visbrain_data)
 
 logger = logging.getLogger('visbrain')
 
@@ -96,7 +97,7 @@ class BrainObj(VisbrainObject):
         # Need to download the brain template :
         if (name in b_download) and (name not in b_installed):
             self._add_downloadable_templates(name)
-        if name in get_files_in_data('templates'):  # predefined
+        if not isinstance(vertices, np.ndarray):  # predefined
             (vertices, faces, normals,
              lr_index) = self._load_brain_template(name)
         # Sulcus :
@@ -132,18 +133,24 @@ class BrainObj(VisbrainObject):
         self._data_mask = []
         logger.info("Brain object %s cleaned." % self.name)
 
-    def save(self):
+    def save(self, tmpfile=False):
         """Save the brain template (if not already saved)."""
         save_as = self.name + '.npz'
         v = self.mesh._vertices
         f = self.mesh._faces
         n = self.mesh._normals
         l = self.mesh._lr_index
-        add_brain_template(save_as, v, f, normals=n, lr_index=l)
+        add_brain_template(save_as, v, f, normals=n, lr_index=l,
+                           tmpfile=tmpfile)
 
     def remove(self):
-        """"""
-        pass
+        """Remove a brain template."""
+        remove_brain_template(self.name + '.npz')
+
+    def list(self, file=None):
+        """Get the list of all installed templates."""
+        path = self._search_in_path()
+        return get_files_in_folders(*path, file=file)
 
     def _define_mesh(self, vertices, faces, normals, lr_index, hemisphere,
                      invert_normals, sulcus):
@@ -159,13 +166,17 @@ class BrainObj(VisbrainObject):
             self.mesh.set_data(vertices=vertices, faces=faces, normals=normals,
                                lr_index=lr_index, hemisphere=hemisphere)
 
-    def _load_brain_template(self, name, path=None):
-        """Load the brain template.
+    def _search_in_path(self):
+        """Specify where to find brain templates."""
+        _vb_path = path_to_visbrain_data(folder='templates')
+        _data_path = get_data_path(folder='templates')
+        _tmp_path = path_to_tmp(folder='templates')
+        return _vb_path, _data_path, _tmp_path
 
-        If path is None, use the default visbrain/data folder.
-        """
-        if path is None:
-            name = os.path.join(self._get_template_path(), name + '.npz')
+    def _load_brain_template(self, name):
+        """Load the brain template."""
+        path = self._search_in_path()
+        name = get_files_in_folders(*path, file=name + '.npz')[0]
         arch = np.load(name)
         vertices, faces = arch['vertices'], arch['faces']
         normals = arch['normals']
