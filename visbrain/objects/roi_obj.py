@@ -9,11 +9,10 @@ from scipy.spatial.distance import cdist
 from vispy import scene
 from vispy.geometry.isosurface import isosurface
 
-from .visbrain_obj import CombineObjects
-from .volume_obj import _Volume
+from .volume_obj import _Volume, _CombineVolume
 from ._projection import _project_sources_data
-from ..io import (is_pandas_installed, get_files_in_data,
-                  save_as_predefined_roi, remove_predefined_roi)
+from ..io import (is_pandas_installed, save_as_predefined_roi,
+                  remove_predefined_roi)
 from ..utils import (mni2tal, smooth_3d, color2vb, array_to_stt)
 from ..visuals import BrainMesh
 
@@ -213,7 +212,7 @@ class RoiObj(_Volume):
 
         logger.info("%s ROI loaded." % name)
 
-    def save(self):
+    def save(self, tmpfile=False):
         """Save the ROI object.
 
         Once saved, the RoiObj can then be created using only the name.
@@ -225,7 +224,8 @@ class RoiObj(_Volume):
         # Convert the DataFrame to struct array :
         labels = self._df_to_struct_array(df)
         # Save the ROI object :
-        save_as_predefined_roi(self.name, self.vol, labels, index, self.hdr)
+        save_as_predefined_roi(self.name, self.vol, labels, index, self.hdr,
+                               tmpfile=tmpfile)
 
     def remove(self):
         """Remove the ROI object."""
@@ -340,13 +340,12 @@ class RoiObj(_Volume):
             source_name = ['s' + str(k) for k in range(n_sources)]
         assert len(source_name) == n_sources
         # Loop over sources :
-        xyz = np.c_[xyz, np.ones((n_sources,), dtype=xyz.dtype)].T
+        hdr = self._to_matrixtransform(self.hdr)
         for k in range(n_sources):
             # Apply HDR transformation :
-            pos = np.linalg.lstsq(self.hdr, xyz[:, k])[0][0:-1]
-            sub = np.round(pos).astype(int)
+            sub = self.pos_to_slice(hdr, xyz[k, :])
             # Find where is the point if inside the volume :
-            if self >= sub:  # use __ge__ of RoiObj
+            if self > sub:  # use __gt__ of RoiObj
                 idx_vol = self.vol[sub[0], sub[1], sub[2]] + self._offset
                 location = self._find_roi_label(idx_vol)
             else:
@@ -680,8 +679,20 @@ class RoiObj(_Volume):
         """Set mask_color value."""
         self.mesh.mask_color = value
 
+    # ----------- CAMERA -----------
+    @property
+    def camera(self):
+        """Get the camera value."""
+        return self._camera
 
-class CombineRoi(CombineObjects):
+    @camera.setter
+    @wrap_setter_properties
+    def camera(self, value):
+        """Set camera value."""
+        self.mesh.set_camera(value)
+
+
+class CombineRoi(_CombineVolume):
     """Combine Roi objects.
 
     Parameters
