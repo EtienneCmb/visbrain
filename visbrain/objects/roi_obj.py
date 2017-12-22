@@ -696,4 +696,16 @@ class CombineRoi(CombineObjects):
 
     def __init__(self, robjs=None, select=None, parent=None):
         """Init."""
-        CombineObjects.__init__(self, RoiObj, robjs, select, parent)
+        _CombineVolume.__init__(self, RoiObj, robjs, select, parent)
+
+    # ----------- CAMERA -----------
+    @property
+    def camera(self):
+        """Get the camera value."""
+        return self._camera
+
+    @camera.setter
+    def camera(self, value):
+        """Set camera value."""
+        for k in self:
+            k.mesh.set_camera(value)
