@@ -14,6 +14,24 @@ xyz[:, 0] -= 50.
 xyz[:, 1] -= 50.
 s_obj = SourceObj('S1', xyz)
 
+download_file('MIST_ROI.zip', unzip=True)
+nifti_file = path_to_visbrain_data('MIST_ROI.nii.gz')
+csv_file = path_to_visbrain_data('MIST_ROI.csv')
+# Read the .csv file :
+arr = np.genfromtxt(csv_file, delimiter=';', dtype=str)
+# Get column names, labels and index :
+column_names = arr[0, :]
+arr = np.delete(arr, 0, 0)
+n_roi = arr.shape[0]
+roi_index = arr[:, 0].astype(int)
+roi_labels = arr[:, [1, 2]].astype(object)
+# Build the struct array :
+label = np.zeros(n_roi, dtype=[('label', object), ('name', object)])
+label['label'] = roi_labels[:, 0]
+label['name'] = roi_labels[:, 1]
+# Get the volume and the hdr transformation :
+vol, _, hdr = read_nifti(nifti_file, hdr_as_array=True)
+
 
 class TestRoiObj(_TestVolumeObject):
     """Test BrainObj."""
@@ -67,24 +85,7 @@ class TestRoiObj(_TestVolumeObject):
         roi_obj.select_roi([1, 2], roi_to_color={1: 'red', 2: (1., 0., 0.)})
 
     def test_save_and_remove(self):
-        """Test function save."""
-        download_file('MIST_ROI.zip', unzip=True)
-        nifti_file = path_to_visbrain_data('MIST_ROI.nii.gz')
-        csv_file = path_to_visbrain_data('MIST_ROI.csv')
-        # Read the .csv file :
-        arr = np.genfromtxt(csv_file, delimiter=';', dtype=str)
-        # Get column names, labels and index :
-        column_names = arr[0, :]
-        arr = np.delete(arr, 0, 0)
-        n_roi = arr.shape[0]
-        roi_index = arr[:, 0].astype(int)
-        roi_labels = arr[:, [1, 2]].astype(object)
-        # Build the struct array :
-        label = np.zeros(n_roi, dtype=[('label', object), ('name', object)])
-        label['label'] = roi_labels[:, 0]
-        label['name'] = roi_labels[:, 1]
-        # Get the volume and the hdr transformation :
-        vol, _, hdr = read_nifti(nifti_file, hdr_as_array=True)
+        """Test methods save, reload and remove."""
         # Define the ROI object and save it :
         roi_custom = RoiObj('mist_roi', vol=vol, label=label, index=roi_index,
                             hdr=hdr)
@@ -92,3 +93,12 @@ class TestRoiObj(_TestVolumeObject):
         # Test reloading roi from name only :
         roi_sec = RoiObj('mist_roi')
         roi_sec.remove()
+
+    def test_save_and_remove_tmp(self):
+        """Test methods save, reload and remove for tmp files."""
+        # Define the ROI object and save it :
+        roi_custom = RoiObj('tmp_roi', vol=vol, label=label, index=roi_index,
+                            hdr=hdr)
+        roi_custom.save(tmpfile=True)
+        # Test reloading roi from name only :
+        RoiObj('tmp_roi')

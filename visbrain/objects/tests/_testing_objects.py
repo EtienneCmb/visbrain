@@ -1,6 +1,7 @@
 """Base class for testing visbrain objects."""
 import pytest
 import vispy
+import numpy as np
 
 from visbrain.tests._tests_visbrain import _TestVisbrain
 
@@ -60,6 +61,8 @@ class _TestObjects(_TestVisbrain):
 class _TestVolumeObject(_TestObjects):
     """Methods for testing volumes (RoiObj, VolumeObj, CrossSections)."""
 
+    HDR = np.eye(4)
+
     def test_call(self):
         """Test function call."""
         for k in ['aal', 'talairach', 'brodmann']:
@@ -70,3 +73,19 @@ class _TestVolumeObject(_TestObjects):
         for k in ['aal', 'talairach', 'brodmann']:
             self.OBJ.name = k
             assert self.OBJ.name == k
+
+    def test_list(self):
+        """Test getting list of path to search files."""
+        assert isinstance(self.OBJ.list(), list)
+
+    def test_slice_to_pos(self):
+        """Convert slices into position."""
+        pos = [10., 21., 32.]
+        hdr = self.OBJ._to_matrixtransform(self.HDR)
+        self.OBJ.slice_to_pos(hdr, pos)
+
+    def test_pos_to_slice(self):
+        """Convert position into slices."""
+        pos = [10., 21., 32.]
+        hdr = self.OBJ._to_matrixtransform(self.HDR)
+        self.OBJ.pos_to_slice(hdr, pos)

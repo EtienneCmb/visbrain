@@ -127,6 +127,7 @@ class _Volume(VisbrainObject):
         return sl[axis] if single_val else sl
 
     def _to_matrixtransform(self, hdr):
+        """Convert an hdr to MatrixTransform."""
         return array_to_stt(hdr)
 
     @staticmethod
