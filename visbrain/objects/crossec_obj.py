@@ -330,3 +330,18 @@ class CrossSecObj(_Volume):
         self._im_coron.interpolation = value
         self._im_axial.interpolation = value
         self.update()
+
+    # ----------- TEXT_SIZE -----------
+    @property
+    def text_size(self):
+        """Get the text_size value."""
+        return self._text_size
+
+    @text_size.setter
+    @wrap_properties
+    def text_size(self, value):
+        """Set text_size value."""
+        assert isinstance(value, (int, float))
+        self._text_size = value
+        self._txt.font_size = value
+        self._txt.update()
