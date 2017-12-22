@@ -1,5 +1,5 @@
 """Most basic colorbar class."""
-from ...utils import color2tuple
+from ...utils import color2tuple, wrap_properties
 
 __all__ = ('CbarArgs', 'CbarBase')
 
@@ -71,10 +71,23 @@ class CbarArgs(object):
     def update_from_dict(self, kwargs):
         """Update attributes from a dictionary."""
         for k, i in kwargs.items():
+            off = '_' if k != 'cmap' else ''
             if not isinstance(i, str):
-                exec('self._' + k + '=' + str(i))
+                exec('self.' + off + k + '=' + str(i))
             else:
-                exec("self._" + k + "='" + str(i) + "'")
+                exec("self." + off + k + "='" + str(i) + "'")
+
+    # ----------- CMAP -----------
+    @property
+    def cmap(self):
+        """Get the cmap value."""
+        return self._cmap
+
+    @cmap.setter
+    @wrap_properties
+    def cmap(self, value):
+        """Set cmap value."""
+        self._cmap = value
 
 
 class CbarBase(CbarArgs):
