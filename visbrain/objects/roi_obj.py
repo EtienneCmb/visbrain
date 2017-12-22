@@ -11,9 +11,8 @@ from vispy.geometry.isosurface import isosurface
 
 from .volume_obj import _Volume, _CombineVolume
 from ._projection import _project_sources_data
-from ..io import (is_pandas_installed, save_as_predefined_roi,
-                  remove_predefined_roi)
-from ..utils import (mni2tal, smooth_3d, color2vb, array_to_stt)
+from ..io import is_pandas_installed
+from ..utils import (mni2tal, smooth_3d, color2vb)
 from ..visuals import BrainMesh
 
 logger = logging.getLogger('visbrain')
@@ -50,7 +49,7 @@ class RoiObj(_Volume):
         predefined ROI object is used and vol, index and label are ignored.
     vol : array_like | None
         ROI volume. Sould be an array with three dimensions.
-    label : array_like | None
+    labels : array_like | None
         Array of labels. A structured array can be used (i.e
         label=np.zeros(n_sources, dtype=[('brodmann', int), ('aal', object)])).
     index : array_like | None
@@ -87,14 +86,14 @@ class RoiObj(_Volume):
     ###########################################################################
     ###########################################################################
 
-    def __init__(self, name, vol=None, label=None, index=None, hdr=None,
+    def __init__(self, name, vol=None, labels=None, index=None, hdr=None,
                  system='mni', transform=None, parent=None, verbose=None,
                  preload=True, _scale=1., **kw):
         """Init."""
         _Volume.__init__(self, name, parent, transform, verbose, **kw)
         self._scale = _scale
         if preload:
-            self.set_data(name, vol, label, index, hdr, system)
+            self(name, vol, labels, index, hdr, system)
 
     ###########################################################################
     ###########################################################################
@@ -106,10 +105,13 @@ class RoiObj(_Volume):
         """Return the number of ROI."""
         return self._n_roi
 
-    def __call__(self, name):
+    def __call__(self, name, vol=None, labels=None, index=None, hdr=None,
+                 system='mni'):
         """Call the set_data method."""
-        self.set_data(name)
-        return [None] * 5
+        _Volume.__call__(self, name, vol=vol, labels=labels, index=index,
+                         hdr=hdr, system=system)
+        self.set_data(name, self._vol, self._labels, self._index, self._hdr,
+                      self._system)
 
     def __bool__(self):
         """Test if ROI have been selected."""
@@ -123,25 +125,25 @@ class RoiObj(_Volume):
     def __ge__(self, idx):
         """Test if x >= idx."""
         assert len(idx) == 3
-        sh = self.vol.shape
+        sh = self._sh
         return (sh[0] >= idx[0]) and (sh[1] >= idx[1]) and (sh[2] >= idx[2])
 
     def __gt__(self, idx):
         """Test if x > idx."""
         assert len(idx) == 3
-        sh = self.vol.shape
+        sh = self._sh
         return (sh[0] > idx[0]) and (sh[1] > idx[1]) and (sh[2] > idx[2])
 
     def __le__(self, idx):
         """Test if x <= idx."""
         assert len(idx) == 3
-        sh = self.vol.shape
+        sh = self._sh
         return (sh[0] <= idx[0]) and (sh[1] <= idx[1]) and (sh[2] <= idx[2])
 
     def __lt__(self, idx):
         """Test if x < idx."""
         assert len(idx) == 3
-        sh = self.vol.shape
+        sh = self._sh
         return (sh[0] < idx[0]) and (sh[1] < idx[1]) and (sh[2] < idx[2])
 
     ###########################################################################
@@ -150,7 +152,7 @@ class RoiObj(_Volume):
     ###########################################################################
     ###########################################################################
 
-    def set_data(self, name, vol=None, label=None, index=None, hdr=None,
+    def set_data(self, name, vol=None, labels=None, index=None, hdr=None,
                  system='mni'):
         """Load an roi object.
 
@@ -159,16 +161,16 @@ class RoiObj(_Volume):
         name : string
             Name of the ROI object. If name is 'brodmann', 'aal' or
             'talairach' a predefined ROI object is used and vol, index and
-            label are ignored.
+            labels are ignored.
         vol : array_like | None
             ROI volume. Sould be an array with three dimensions.
-        label : array_like | None
+        labels : array_like | None
             Array of labels. A structured array can be used (i.e
-            label=np.zeros(n_sources, dtype=[('brodmann', int),
+            labels=np.zeros(n_sources, dtype=[('brodmann', int),
             ('aal', object)])).
         index : array_like | None
             Array of index that make the correspondance between the volumne
-            values and labels. The length of index must be the same as label.
+            values and labels. The length of index must be the same as labels.
         hdr : array_like | None
             Array of transform source's coordinates into the volume space.
             Must be a (4, 4) array.
@@ -183,27 +185,22 @@ class RoiObj(_Volume):
         import pandas as pd
         # _______________________ PREDEFINED _______________________
         if not isinstance(vol, np.ndarray):
-            vol, label, index, hdr, system = _Volume.__call__(self, name)
+            vol, labels, index, hdr, system = _Volume.__call__(self, name)
         self._offset = -1 if name == 'talairach' else 0
 
         # _______________________ CHECKING _______________________
         # vol :
         assert vol.ndim == 3
-        # Index and label :
-        assert len(index) == len(label)
+        # Index and labels :
+        assert len(index) == len(labels)
         index = np.asarray(index).astype(int)
-        label = np.asarray(label)
-        self.vol = vol
+        labels = np.asarray(labels)
         self._n_roi = len(index)
-        # hdr :
-        self.hdr = np.eye(4) if hdr is None else hdr
-        assert self.hdr.shape == (4, 4)
         # System :
         assert system in ['mni', 'tal']
-        self.system = system
 
         # _______________________ REFERENCE _______________________
-        label_dict = self._struct_array_to_dict(label)
+        label_dict = self._struct_array_to_dict(labels)
         label_dict['index'] = index
         cols = list(label_dict.keys())
         self.ref = pd.DataFrame(label_dict, columns=cols)
@@ -211,25 +208,6 @@ class RoiObj(_Volume):
         self.analysis = pd.DataFrame({}, columns=cols)
 
         logger.info("%s ROI loaded." % name)
-
-    def save(self, tmpfile=False):
-        """Save the ROI object.
-
-        Once saved, the RoiObj can then be created using only the name.
-        """
-        df = self.ref.copy()
-        # Get index and delete it from the DataFrame :
-        index = df['index']
-        del df['index']
-        # Convert the DataFrame to struct array :
-        labels = self._df_to_struct_array(df)
-        # Save the ROI object :
-        save_as_predefined_roi(self.name, self.vol, labels, index, self.hdr,
-                               tmpfile=tmpfile)
-
-    def remove(self):
-        """Remove the ROI object."""
-        remove_predefined_roi(self.name)
 
     def get_labels(self, save_to_path=None):
         """Get the labels associated with the loaded ROI.
@@ -333,20 +311,19 @@ class RoiObj(_Volume):
         assert (xyz.ndim == 2) and (xyz.shape[1] == 3)
         xyz_untouched = xyz.copy()
         n_sources = xyz.shape[0]
-        if self.system == 'tal':
+        if self._system == 'tal':
             xyz = mni2tal(xyz)
         # Check source_name :
         if source_name is None:
             source_name = ['s' + str(k) for k in range(n_sources)]
         assert len(source_name) == n_sources
         # Loop over sources :
-        hdr = self._to_matrixtransform(self.hdr)
         for k in range(n_sources):
             # Apply HDR transformation :
-            sub = self.pos_to_slice(hdr, xyz[k, :])
+            sub = self.pos_to_slice(self._hdr, xyz[k, :])
             # Find where is the point if inside the volume :
             if self > sub:  # use __gt__ of RoiObj
-                idx_vol = self.vol[sub[0], sub[1], sub[2]] + self._offset
+                idx_vol = self._vol[sub[0], sub[1], sub[2]] + self._offset
                 location = self._find_roi_label(idx_vol)
             else:
                 location = None
@@ -468,7 +445,7 @@ class RoiObj(_Volume):
             select = roi_to_color.keys()
             unique_color = True
         if not unique_color:
-            vert, faces = self._select_roi(self.vol.copy(), select, smooth)
+            vert, faces = self._select_roi(self._vol.copy(), select, smooth)
             logger.info("Same white color used across ROI(s)")
         else:
             assert not isinstance(select, float)
@@ -486,7 +463,7 @@ class RoiObj(_Volume):
                 logger.info("Random color are going to be used.")
             # Get vertices and faces of each ROI :
             for i, k in enumerate(select):
-                v, f = self._select_roi(self.vol.copy(), int(k), smooth)
+                v, f = self._select_roi(self._vol.copy(), int(k), smooth)
                 # Concatenate vertices / faces :
                 faces = np.r_[faces, f + faces.max() + 1] if faces.size else f
                 vert = np.r_[vert, v] if vert.size else v
@@ -495,7 +472,7 @@ class RoiObj(_Volume):
                 color = np.r_[color, col] if color.size else col
         if vert.size:
             # Apply hdr transformation to vertices :
-            vert_hdr = array_to_stt(self.hdr.copy()).map(vert)[:, 0:-1]
+            vert_hdr = self._hdr.map(vert)[:, 0:-1]
             logger.debug("Apply hdr transformation to vertices")
             if not self:
                 logger.debug("ROI mesh defined")

@@ -149,15 +149,12 @@ class CrossSecObj(_Volume):
 
     def __call__(self, name, vol=None, hdr=None):
         """Change the volume object."""
-        if not isinstance(vol, np.ndarray):
-            vol, _, _, hdr, _ = _Volume.__call__(self, name)
-        self._vol, self._hdr = self._check_volume(vol, hdr)
-        self._sh = self._vol.shape
+        _Volume.__call__(self, name, vol=vol, hdr=hdr)
         self._define_transformation()
         self.update()
 
     def _define_transformation(self):
-        sh = self._vol.shape
+        sh = self._sh
         r90 = vist.MatrixTransform()
         r90.rotate(90, (0, 0, 1))
         rx180 = vist.MatrixTransform()

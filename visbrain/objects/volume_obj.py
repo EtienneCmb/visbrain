@@ -222,20 +222,18 @@ class VolumeObj(_Volume):
                                      threshold=threshold, name='3-D Volume',
                                      cmap=VOLUME_CMAPS[cmap])
         if preload:
-            self(name, vol=vol, hdr=hdr, threshold=threshold, cmap=cmap,
-                 method=method, select=select)
+            self(name, vol, hdr, threshold, cmap, method, select)
 
-    def __call__(self, name, vol=None, hdr=None, **kwargs):
-        """Change volume."""
-        if not isinstance(vol, np.ndarray):
-            vol, _, _, hdr, _ = _Volume.__call__(self, name)
-        self.set_data(vol, hdr, **kwargs)
+    def __call__(self, name, vol=None, hdr=None, threshold=None, cmap=None,
+                 method=None, select=None):
+        """Change the volume."""
+        _Volume.__call__(self, name, vol=vol, hdr=hdr)
+        self.set_data(self._vol, hdr=self._hdr, threshold=threshold, cmap=cmap,
+                      method=method, select=select)
 
     def set_data(self, vol, hdr=None, threshold=None, cmap=None,
                  method=None, select=None):
         """Set data to the volume."""
-        vol, hdr = self._check_volume(vol, hdr)
-        # assert isinstance(hdr, np.ndarray) and hdr.shape == (4, 4)
         if isinstance(select, (list, tuple)):
             logger.info("Extract structures %r from the volume" % select)
             st = '(vol != %s) & '.join([''] * (len(select) + 1))[0:-3]
